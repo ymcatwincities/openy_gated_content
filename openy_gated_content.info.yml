@@ -4,3 +4,5 @@ description: 'Provides Open Y Gated Content functionality.'
 package: Open Y Gated Content
 version: 0.1
 core: 8.x
+dependencies:
+  - drupal:openy_system
