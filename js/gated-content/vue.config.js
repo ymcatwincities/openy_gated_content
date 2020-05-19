@@ -2,10 +2,10 @@ const path = require('path');
 
 module.exports = {
   lintOnSave: false,
+  productionSourceMap: false,
   configureWebpack: {
     externals: {
       axios: 'axios',
-      'bootstrap-vue': 'BootstrapVue',
       'vue-router': 'VueRouter',
       vuex: 'Vuex',
       'vuex-persist': 'VuexPersistence',
