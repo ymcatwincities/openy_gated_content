@@ -4,3 +4,14 @@
  * @file
  * The openy_gated_content module routines.
  */
+
+/**
+ * Implements hook_theme().
+ */
+function openy_gated_content_theme() {
+  return [
+    'paragraph__gated_content' => [
+      'base hook' => 'paragraph',
+    ],
+  ];
+}
