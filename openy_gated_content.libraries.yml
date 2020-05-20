@@ -1,0 +1,28 @@
+gated-content-vue:
+  version: 0.1
+  js:
+    js/gated-content/dist/gated-content.umd.min.js: { minified: true }
+  css:
+    theme:
+      js/gated-content/dist/gated-content.css: { minified: true }
+  dependencies:
+    - openy_system/polyfill
+    - openy_system/axios
+    - openy_system/vue
+    - openy_system/vue-router
+    - openy_system/vuex
+    - openy_gated_content/vuex-persist
+
+lodash:
+  version: 4.17.15
+  js:
+    'https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.15/lodash.min.js': { type: external, minified: true }
+
+vuex-persist:
+  version: 2.2.0
+  js:
+    'https://cdn.jsdelivr.net/npm/vuex-persist@2.2.0/dist/umd/index.min.js': { type: external, minified: true }
+  dependencies:
+    - openy_system/vue
+    - openy_system/polyfill
+    - openy_gated_content/lodash

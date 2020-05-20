@@ -1,0 +1,10 @@
+{
+    "name": "ymcatwincities/openy_gated_content",
+    "description": "Open Y Gated Content",
+    "type": "drupal-module",
+    "require": {
+        "drupal/default_content": "*"
+    },
+    "license": "GPL-2.0+",
+    "minimum-stability": "dev"
+}
