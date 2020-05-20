@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 'GC Instructor'
+vid: gc_instructor
+description: 'Instructor for Open Y Gated Content'
+weight: 0
