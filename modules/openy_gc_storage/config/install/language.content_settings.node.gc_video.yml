@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.gc_video
+id: node.gc_video
+target_entity_type_id: node
+target_bundle: gc_video
+default_langcode: site_default
+language_alterable: false

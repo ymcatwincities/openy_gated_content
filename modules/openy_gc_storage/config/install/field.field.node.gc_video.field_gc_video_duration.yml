@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_gc_video_duration
+    - node.type.gc_video
+  module:
+    - datalayer
+third_party_settings:
+  datalayer:
+    expose: 0
+    label: field_gc_video_duration
+id: node.gc_video.field_gc_video_duration
+field_name: field_gc_video_duration
+entity_type: node
+bundle: gc_video
+label: Duration
+description: 'Video duration in seconds'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.gc_equipment
+id: taxonomy_term.gc_equipment
+target_entity_type_id: taxonomy_term
+target_bundle: gc_equipment
+default_langcode: site_default
+language_alterable: false
