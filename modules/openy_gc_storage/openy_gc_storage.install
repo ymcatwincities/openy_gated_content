@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * @file
+ * Installation file for Open Y Gated Content Storage.
+ */
+
+use Drupal\user\Entity\Role;
+
+/**
+ * Implements hook_install().
+ */
+function openy_gc_storage_install() {
+  $role_object = Role::load('anonymous');
+  // Allow anonymous view events entities (for JSON API).
+  $role_object->grantPermission('view eventinstance entity');
+  $role_object->grantPermission('view eventseries entity');
+  $role_object->save();
+}
