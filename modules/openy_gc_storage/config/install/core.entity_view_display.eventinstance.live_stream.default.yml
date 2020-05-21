@@ -1,0 +1,74 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.eventinstance.live_stream.field_ls_category
+    - field.field.eventinstance.live_stream.field_ls_media
+    - recurring_events.eventinstance_type.live_stream
+  module:
+    - datetime_range
+id: eventinstance.live_stream.default
+targetEntityType: eventinstance
+bundle: live_stream
+mode: default
+content:
+  category:
+    label: above
+    weight: 51
+    region: content
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+  date:
+    label: above
+    type: daterange_custom
+    weight: -4
+    settings:
+      separator: '-'
+      date_format: 'Y-m-d\TH:i:s'
+      timezone_override: ''
+    region: content
+    third_party_settings: {  }
+  description:
+    label: above
+    weight: 50
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+    type: text_default
+  field_ls_category:
+    weight: 52
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_ls_media:
+    type: entity_reference_entity_view
+    weight: 53
+    label: above
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    region: content
+  media:
+    label: above
+    weight: 50
+    region: content
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+  title:
+    label: above
+    weight: 51
+    region: content
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+hidden:
+  body: true

@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies: {  }
+id: eventinstance_live_stream_description
+label: Description
+type: append
+sourceEntityType: eventseries
+destinationEntityType: eventinstance
+sourceEntityBundle: live_stream
+destinationEntityBundle: live_stream
+sourceField: body
+destinationField: body
+plugin: default_inheritance

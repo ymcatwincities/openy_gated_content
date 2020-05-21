@@ -2,10 +2,13 @@ name: 'Open Y Gated Content Storage'
 description: 'Provides a node types and taxonomy vocabularies for Open Y Gated Content.'
 type: module
 core: 8.x
+version: 8.x-1.0
+core_incompatible: false
 dependencies:
   - drupal:datalayer
-  - drupal:openy_gated_content
+  - drupal:datetime_range
   - drupal:field
+  - drupal:field_inheritance
   - drupal:language
   - drupal:media
   - drupal:menu_ui
@@ -13,10 +16,10 @@ dependencies:
   - drupal:openy_focal_point
   - drupal:openy_media_image
   - drupal:openy_media_video
+  - drupal:options
   - drupal:path
+  - drupal:recurring_events
   - drupal:scheduler
   - drupal:taxonomy
   - drupal:text
   - drupal:user
-version: 8.x-1.0
-core_incompatible: false
