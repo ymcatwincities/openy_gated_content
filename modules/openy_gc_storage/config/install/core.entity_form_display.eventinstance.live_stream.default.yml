@@ -1,0 +1,73 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - entity_browser.browser.videos_library
+    - field.field.eventinstance.live_stream.field_ls_category
+    - field.field.eventinstance.live_stream.field_ls_media
+    - recurring_events.eventinstance_type.live_stream
+  module:
+    - datetime_range
+    - openy_focal_point
+    - text
+id: eventinstance.live_stream.default
+targetEntityType: eventinstance
+bundle: live_stream
+mode: default
+content:
+  body:
+    type: text_textarea
+    weight: 0
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  date:
+    type: daterange_default
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_ls_category:
+    weight: 2
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: entity_reference_autocomplete
+    region: content
+  field_ls_media:
+    type: openy_focal_point_entity_browser_entity_reference
+    weight: 3
+    settings:
+      entity_browser: videos_library
+      field_widget_display: label
+      field_widget_edit: '1'
+      field_widget_remove: '1'
+      selection_mode: selection_append
+      field_widget_replace: 0
+      open: 0
+      field_widget_display_settings: {  }
+    third_party_settings: {  }
+    region: content
+  status:
+    type: boolean_checkbox
+    settings:
+      display_label: true
+    weight: 5
+    region: content
+    third_party_settings: {  }
+  uid:
+    type: entity_reference_autocomplete
+    weight: 4
+    settings:
+      match_operator: CONTAINS
+      size: 60
+      placeholder: ''
+      match_limit: 10
+    region: content
+    third_party_settings: {  }
+hidden: {  }

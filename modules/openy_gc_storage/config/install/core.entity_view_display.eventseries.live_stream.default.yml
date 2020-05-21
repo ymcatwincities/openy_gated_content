@@ -1,0 +1,80 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.eventseries.live_stream.field_ls_category
+    - field.field.eventseries.live_stream.field_ls_host_name
+    - field.field.eventseries.live_stream.field_ls_media
+    - recurring_events.eventseries_type.live_stream
+  module:
+    - options
+    - recurring_events
+    - text
+id: eventseries.live_stream.default
+targetEntityType: eventseries
+bundle: live_stream
+mode: default
+content:
+  body:
+    label: above
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+    type: text_default
+  event_instances:
+    type: recurring_events_eventinstance_date
+    label: above
+    weight: 3
+    settings:
+      link: '1'
+      date_format: 'F jS, Y h:iA'
+      separator: ' - '
+    region: content
+    third_party_settings: {  }
+  field_ls_category:
+    weight: 4
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_ls_host_name:
+    weight: 6
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_ls_media:
+    type: entity_reference_entity_view
+    weight: 5
+    label: above
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    region: content
+  recur_type:
+    label: above
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+    type: list_default
+  title:
+    label: above
+    weight: 0
+    region: content
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+hidden:
+  consecutive_recurring_date: true
+  custom_date: true
+  daily_recurring_date: true
+  monthly_recurring_date: true
+  weekly_recurring_date: true
