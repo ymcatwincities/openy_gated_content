@@ -1,0 +1,96 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - recurring_events.eventseries_type.default
+  module:
+    - datetime_range
+    - recurring_events
+    - text
+id: eventseries.default.default
+targetEntityType: eventseries
+bundle: default
+mode: default
+content:
+  body:
+    type: text_textarea
+    weight: 1
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  consecutive_recurring_date:
+    type: consecutive_recurring_date
+    weight: 3
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  custom_date:
+    type: daterange_default
+    weight: 7
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  daily_recurring_date:
+    type: daily_recurring_date
+    weight: 4
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  excluded_dates:
+    type: daterange_default
+    weight: 8
+    settings: {  }
+    region: content
+    third_party_settings: {  }
+  included_dates:
+    type: daterange_default
+    weight: 9
+    settings: {  }
+    region: content
+    third_party_settings: {  }
+  monthly_recurring_date:
+    type: monthly_recurring_date
+    weight: 6
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  recur_type:
+    type: options_buttons
+    settings: {  }
+    weight: 2
+    region: content
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    settings:
+      display_label: true
+    weight: 12
+    region: content
+    third_party_settings: {  }
+  title:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  uid:
+    type: entity_reference_autocomplete
+    weight: 11
+    settings:
+      match_operator: CONTAINS
+      size: 60
+      placeholder: ''
+      match_limit: 10
+    region: content
+    third_party_settings: {  }
+  weekly_recurring_date:
+    type: weekly_recurring_date
+    weight: 5
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden: {  }
