@@ -4,7 +4,7 @@
       <router-link :to="{ name: 'Home' }">Home</router-link>
     </div>
     <div class="plugin">
-      {{ authPlugin }}
+      Current auth plugin in use: {{ authPlugin }}
     </div>
     <DummyAuth v-if="authPlugin === 'dummy'"/>
     <DummyAuth v-else-if="authPlugin === 'dummy2'"/>
