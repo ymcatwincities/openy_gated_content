@@ -9,3 +9,4 @@ dependencies:
   - drupal:jsonapi
   - drupal:openy_gated_content
   - drupal:openy_gc_storage
+  - drupal:openy_gc_auth_example

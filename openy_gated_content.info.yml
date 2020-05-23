@@ -6,3 +6,4 @@ version: 0.1
 core: 8.x
 dependencies:
   - drupal:openy_system
+  - drupal:openy_gc_auth
