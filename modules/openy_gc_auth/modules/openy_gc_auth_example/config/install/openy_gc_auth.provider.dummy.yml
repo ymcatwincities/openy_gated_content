@@ -1,0 +1,5 @@
+id: dummy
+user: dummy@test.com
+token: 7Ln3ljjlh8TA9N96cCNiLnxvP1m79MdL
+password: password
+redirect_url: 'http://rose.openy.docksal/dummy/provider/redirect'

@@ -1,0 +1,4 @@
+services:
+  plugin.manager.gc_identity_provider:
+    class: Drupal\openy_gc_auth\GCIdentityProviderManager
+    parent: default_plugin_manager
