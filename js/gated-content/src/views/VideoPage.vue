@@ -9,8 +9,21 @@
     <div v-else>
       <h1>{{ video.attributes.title }}</h1>
       <div v-html="video.attributes.field_gc_video_description.processed"></div>
-      <div>{{ video.attributes.field_gc_video_category }}</div>
-      <pre>{{ video.attributes }}</pre>
+      <div>Category: {{ video.attributes.field_gc_video_category.name }}</div>
+      <div>Level: {{ video.attributes.field_gc_video_level.name }}</div>
+      <div>Equipment:
+        <ul>
+          <li v-for="equip in video.attributes.field_gc_video_equipment"
+              :key="equip.drupal_internal__tid">
+            {{ equip.name }}
+          </li>
+        </ul>
+      </div>
+      <div>Instructor: {{ video.attributes.field_gc_video_instructor }}</div>
+      <div>Duration: {{ video.attributes.field_gc_video_duration }}</div>
+      <hr />
+      <pre>Media: {{ video.attributes.field_gc_video_media }}</pre>
+      <pre>Video: {{ video.attributes }}</pre>
     </div>
   </div>
 </template>
@@ -32,7 +45,12 @@ export default {
       error: false,
       video: null,
       response: null,
-      params: ['field_gc_video_category', 'field_gc_video_media', 'field_gc_video_equipment'],
+      params: [
+        'field_gc_video_category',
+        'field_gc_video_media',
+        'field_gc_video_equipment',
+        'field_gc_video_level',
+      ],
     };
   },
   mounted() {
@@ -59,8 +77,8 @@ export default {
       if (!data.included) return;
       this.params.forEach((field) => {
         const rel = data.data.relationships[field].data;
+        // Multi-value fields.
         if (Array.isArray(rel)) {
-          // Multi-value fields.
           this.video.attributes[field] = [];
           rel.forEach((relItem) => {
             this.video.attributes[field].push(
