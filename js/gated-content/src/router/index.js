@@ -4,6 +4,7 @@ import Store from '@/store';
 import Home from '@/views/Home.vue';
 import Login from '@/views/Login.vue';
 import NotFound from '@/views/NotFound.vue';
+import VideoPage from '@/views/VideoPage.vue';
 
 Vue.use(VueRouter);
 
@@ -19,6 +20,13 @@ const routes = [
     name: 'Login',
     component: Login,
     meta: { requiresGuest: true },
+  },
+  {
+    path: '/video/:id',
+    name: 'Video',
+    component: VideoPage,
+    props: true,
+    meta: { requiresAuth: true },
   },
   {
     path: '*',
