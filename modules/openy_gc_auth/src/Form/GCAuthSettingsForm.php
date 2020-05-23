@@ -47,7 +47,7 @@ class GCAuthSettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'interaction_type_edit';
+    return 'openy_gc_auth_settings';
   }
 
   /**

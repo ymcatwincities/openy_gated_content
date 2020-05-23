@@ -12,6 +12,28 @@ function openy_gated_content_theme() {
   return [
     'paragraph__gated_content' => [
       'base hook' => 'paragraph',
+      'variables' => [
+        'auth_provider_id' => '',
+        'auth_configuration' => '',
+      ],
     ],
   ];
+}
+
+/**
+ * Implements hook_preprocess_paragraph().
+ */
+function openy_gated_content_preprocess_paragraph(&$variables) {
+  if (!isset($variables['paragraph']) || $variables['paragraph']->getType() != 'gated_content') {
+    return;
+  }
+  $active_provider = \Drupal::config('openy_gc_auth.settings')->get('active_provider');
+  $identityProviderManager = \Drupal::service('plugin.manager.gc_identity_provider');
+  $plugin_definition = $identityProviderManager->getDefinition($active_provider, FALSE);
+  if (!$plugin_definition) {
+    return;
+  }
+  $plugin_instance = $identityProviderManager->createInstance($active_provider);
+  $variables['auth_provider_id'] = $plugin_instance->getId();
+  $variables['auth_configuration'] = json_encode($plugin_instance->getDataForApp());
 }
