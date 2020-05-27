@@ -7,7 +7,7 @@
       Current auth plugin in use: {{ authPlugin }}
     </div>
     <DummyAuth v-if="authPlugin === 'dummy'"/>
-    <DummyAuth v-else-if="authPlugin === 'dummy2'"/>
+    <CustomAuth v-else-if="authPlugin === 'custom'"/>
     <div v-else>
       No auth plugin was set.
     </div>
@@ -16,11 +16,13 @@
 
 <script>
 import DummyAuth from '@/components/auth/DummyAuth.vue';
+import CustomAuth from '@/components/auth/CustomAuth.vue';
 
 export default {
   name: 'Login',
   components: {
     DummyAuth,
+    CustomAuth,
   },
   data() {
     return {

@@ -1,0 +1,17 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - openy_gc_auth_custom
+    - serialization
+    - user
+id: openy_gc_auth_custom
+plugin_id: openy_gc_auth_custom
+granularity: resource
+configuration:
+  methods:
+    - POST
+  formats:
+    - json
+  authentication:
+    - cookie

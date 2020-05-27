@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import VuexPersistence from 'vuex-persist';
 import auth from './modules/auth';
 import authDummy from './modules/auth/dummy';
+import authCustom from './modules/auth/custom';
 
 Vue.use(Vuex);
 
@@ -24,6 +25,7 @@ export default new Vuex.Store({
   modules: {
     auth,
     authDummy,
+    authCustom,
   },
   plugins: [vuexLocalStorage.plugin],
 });
