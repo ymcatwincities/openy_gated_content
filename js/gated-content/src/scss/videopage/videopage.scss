@@ -1,0 +1,119 @@
+.gated-content-video-page {
+  .video {
+    padding: 0 40px;
+  }
+
+  .video-footer {
+    padding: 30px 40px 0;
+
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+
+    .video-footer__title {
+      font-size: 24px;
+      line-height: 20px;
+    }
+
+    .video-footer__description {
+      padding-top: 40px;
+      font-size: 16px;
+      line-height: 12px;
+
+    }
+
+    .video-footer__block {
+      border: 1px solid $gray;
+      padding: 15px;
+      margin: 0 10px 20px 10px;
+      font-size: 14px;
+      line-height: 14px;
+      border-radius: 5px;
+
+
+    }
+
+    .video-footer__equipment {
+      margin: 10px;
+
+      font-size: 12px;
+      line-height: 12px;
+
+      ul {
+        padding-top: 5px;
+      }
+    }
+  }
+
+  .video-category {
+    margin-top: 30px;
+    padding: 20px 40px;
+    background-color: $dark-blue;
+    color: $white;
+    font-size: 14px;
+    line-height: 14px;
+  }
+
+  .video-up-next {
+    padding: 30px 40px 0;
+
+    .header {
+
+      font-size: 24px;
+      line-height: 24px;
+    }
+
+    .list {
+      padding-top: 30px;
+      display: flex;
+
+      > div {
+        width: 350px;
+        margin-right: 30px;
+
+        .preview {
+          position: relative;
+          padding-bottom: 56.25%;
+          background-image: url("https://i.ytimg.com/vi/B2bW0DIs0hA/maxresdefault.jpg");
+          background-size: contain;
+
+
+          .duration {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            padding: 10px 15px;
+            font-size: 10px;
+            line-height: 10px;
+            text-align: center;
+            background-color: $black;
+            opacity: .7;
+          }
+        }
+
+        .meta {
+          padding: 15px 0;
+          font-size: 14px;
+          line-height: 14px;
+        }
+      }
+    }
+  }
+
+  .play-button {
+
+  }
+
+  .video-level {
+    border-radius: 5px;
+    width: 30px;
+    height: 30px;
+    margin: -8px 10px -8px 0;
+    float: left;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $gray-400;
+    color: $white;
+    font-weight: bold;
+  }
+}

@@ -12,3 +12,5 @@ new Vue({
     App,
   },
 }).$mount('#gated-content');
+
+Vue.config.devtools = true;
