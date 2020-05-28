@@ -58,6 +58,7 @@
               <YoutubePlayButton></YoutubePlayButton>
               <div class="duration">00:0{{item}}</div>
             </div>
+            <div class="title">Video Title</div>
             <div class="meta">
               <div class="video-level">M</div> Moderate
             </div>

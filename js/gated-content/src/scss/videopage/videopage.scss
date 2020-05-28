@@ -19,8 +19,7 @@
     .video-footer__description {
       padding-top: 40px;
       font-size: 16px;
-      line-height: 12px;
-
+      line-height: 16px;
     }
 
     .video-footer__block {
@@ -30,8 +29,6 @@
       font-size: 14px;
       line-height: 14px;
       border-radius: 5px;
-
-
     }
 
     .video-footer__equipment {
@@ -59,7 +56,6 @@
     padding: 30px 40px 0;
 
     .header {
-
       font-size: 24px;
       line-height: 24px;
     }
@@ -71,7 +67,6 @@
 
       > div {
         flex: none;
-
         width: 320px;
         margin-right: 30px;
         border: solid 1px $gray;
@@ -95,8 +90,14 @@
           }
         }
 
+        .title {
+          padding: 10px;
+          font-size: 22px;
+          line-height: 20px;
+        }
+
         .meta {
-          padding: 15px 5px;
+          padding: 15px 10px;
           font-size: 14px;
           line-height: 14px;
         }
