@@ -21,7 +21,9 @@
         </div>
         <div>
           <div class="video-footer__block">
-            <div class="video-level">{{ video.attributes.field_gc_video_level.name | first_letter }}</div>
+            <div class="video-level">
+              {{ video.attributes.field_gc_video_level.name | first_letter }}
+            </div>
             {{ video.attributes.field_gc_video_level.name | capitalize }}
           </div>
           <div class="video-footer__block">
@@ -41,7 +43,7 @@
         </div>
       </div>
       <div class="video-category">
-        < {{ video.attributes.field_gc_video_category.name }}
+        &lt; {{ video.attributes.field_gc_video_category.name }}
       </div>
 
       <div class="video-up-next">
@@ -51,8 +53,10 @@
 
         <div class="list">
           <div>
-            <div class="preview">
-              <button type="button" aria-label="Play video" class="y-video__button"><svg viewBox="0 0 68 48" width="100%" height="100%"><path d="M66.5 7.7c-.8-2.9-2.5-5.4-5.4-6.2C55.8.1 34 0 34 0S12.2.1 6.9 1.6c-3 .7-4.6 3.2-5.4 6.1a89.6 89.6 0 0 0 0 32.5c.8 3 2.5 5.5 5.4 6.3C12.2 47.9 34 48 34 48s21.8-.1 27.1-1.6c3-.7 4.6-3.2 5.4-6.1C68 35 68 24 68 24s0-11-1.5-16.3z" class="y-video__button-shape"></path><path d="M45 24L27 14v20" class="y-video__button-icon"></path></svg></button>
+            <div class="preview" v-bind:style="{
+              backgroundImage: 'url(//i.ytimg.com/vi/B2bW0DIs0hA/maxresdefault.jpg)'
+            }">
+              <YoutubePlayButton></YoutubePlayButton>
               <div class="duration">00:00</div>
             </div>
             <div class="meta">
@@ -61,8 +65,10 @@
           </div>
 
           <div>
-            <div class="preview">
-              <button type="button" aria-label="Play video" class="y-video__button"><svg viewBox="0 0 68 48" width="100%" height="100%"><path d="M66.5 7.7c-.8-2.9-2.5-5.4-5.4-6.2C55.8.1 34 0 34 0S12.2.1 6.9 1.6c-3 .7-4.6 3.2-5.4 6.1a89.6 89.6 0 0 0 0 32.5c.8 3 2.5 5.5 5.4 6.3C12.2 47.9 34 48 34 48s21.8-.1 27.1-1.6c3-.7 4.6-3.2 5.4-6.1C68 35 68 24 68 24s0-11-1.5-16.3z" class="y-video__button-shape"></path><path d="M45 24L27 14v20" class="y-video__button-icon"></path></svg></button>
+            <div class="preview" v-bind:style="{
+              backgroundImage: 'url(//i.ytimg.com/vi/B2bW0DIs0hA/maxresdefault.jpg)'
+            }">
+              <YoutubePlayButton></YoutubePlayButton>
               <div class="duration">00:00</div>
             </div>
             <div class="meta">
@@ -71,8 +77,10 @@
           </div>
 
           <div>
-            <div class="preview">
-              <button type="button" aria-label="Play video" class="y-video__button"><svg viewBox="0 0 68 48" width="100%" height="100%"><path d="M66.5 7.7c-.8-2.9-2.5-5.4-5.4-6.2C55.8.1 34 0 34 0S12.2.1 6.9 1.6c-3 .7-4.6 3.2-5.4 6.1a89.6 89.6 0 0 0 0 32.5c.8 3 2.5 5.5 5.4 6.3C12.2 47.9 34 48 34 48s21.8-.1 27.1-1.6c3-.7 4.6-3.2 5.4-6.1C68 35 68 24 68 24s0-11-1.5-16.3z" class="y-video__button-shape"></path><path d="M45 24L27 14v20" class="y-video__button-icon"></path></svg></button>
+            <div class="preview" v-bind:style="{
+              backgroundImage: 'url(//i.ytimg.com/vi/B2bW0DIs0hA/maxresdefault.jpg)'
+            }">
+              <YoutubePlayButton></YoutubePlayButton>
               <div class="duration">00:00</div>
             </div>
             <div class="meta">
@@ -91,11 +99,13 @@
 import client from '@/client';
 import 'vue-lazy-youtube-video/dist/style.css';
 import LazyYoutubeVideo from 'vue-lazy-youtube-video';
+import YoutubePlayButton from '../components/YoutubePlayButton.vue';
 
 export default {
   name: 'VideoPage',
   components: {
     LazyYoutubeVideo,
+    YoutubePlayButton,
   },
   props: {
     id: {
@@ -163,8 +173,8 @@ export default {
   filters: {
     capitalize(value) {
       if (!value) return '';
-      value = value.toString().toLowerCase();
-      return value.charAt(0).toUpperCase() + value.slice(1);
+      const newValue = value.toString().toLowerCase();
+      return newValue.charAt(0).toUpperCase() + newValue.slice(1);
     },
     first_letter(value) {
       if (!value) return '';

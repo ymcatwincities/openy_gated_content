@@ -1,4 +1,6 @@
 .gated-content-video-page {
+  padding-bottom: 30px;
+
   .video {
     padding: 0 40px;
   }
@@ -69,13 +71,13 @@
       > div {
         width: 350px;
         margin-right: 30px;
+        border: solid 1px $gray;
+        border-top: solid 5px $indigo;
 
         .preview {
           position: relative;
           padding-bottom: 56.25%;
-          background-image: url("https://i.ytimg.com/vi/B2bW0DIs0hA/maxresdefault.jpg");
           background-size: contain;
-
 
           .duration {
             position: absolute;
@@ -91,16 +93,12 @@
         }
 
         .meta {
-          padding: 15px 0;
+          padding: 15px 5px;
           font-size: 14px;
           line-height: 14px;
         }
       }
     }
-  }
-
-  .play-button {
-
   }
 
   .video-level {
@@ -112,7 +110,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: $gray-400;
+    background-color: $gray;
     color: $white;
     font-weight: bold;
   }
