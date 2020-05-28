@@ -67,9 +67,12 @@
     .list {
       padding-top: 30px;
       display: flex;
+      flex-wrap: nowrap;
 
       > div {
-        width: 350px;
+        flex: none;
+
+        width: 320px;
         margin-right: 30px;
         border: solid 1px $gray;
         border-top: solid 5px $indigo;

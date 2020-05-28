@@ -88,6 +88,30 @@
             </div>
           </div>
 
+          <div>
+            <div class="preview" v-bind:style="{
+              backgroundImage: 'url(//i.ytimg.com/vi/B2bW0DIs0hA/maxresdefault.jpg)'
+            }">
+              <YoutubePlayButton></YoutubePlayButton>
+              <div class="duration">00:00</div>
+            </div>
+            <div class="meta">
+              <div class="video-level">M</div> Moderate
+            </div>
+          </div>
+
+          <div>
+            <div class="preview" v-bind:style="{
+              backgroundImage: 'url(//i.ytimg.com/vi/B2bW0DIs0hA/maxresdefault.jpg)'
+            }">
+              <YoutubePlayButton></YoutubePlayButton>
+              <div class="duration">00:00</div>
+            </div>
+            <div class="meta">
+              <div class="video-level">M</div> Moderate
+            </div>
+          </div>
+
         </div>
       </div>
 
