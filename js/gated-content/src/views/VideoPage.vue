@@ -26,12 +26,16 @@
             {{ video.attributes.field_gc_video_level.name | capitalize }}
           </div>
           <div class="video-footer__block">
+            <i class="fa fa-user"></i>
             {{ video.attributes.field_gc_video_instructor }}
           </div>
           <div class="video-footer__block">
+            <i class="fa fa-hand-o-right"></i>
             {{ video.attributes.field_gc_video_category.name }}
           </div>
-          <div class="video-footer__equipment">Equipment:
+          <div class="video-footer__equipment">
+            <i class="fa fa-cubes"></i>
+            Equipment:
             <ul>
               <li v-for="equip in video.attributes.field_gc_video_equipment"
                   :key="equip.drupal_internal__tid">
