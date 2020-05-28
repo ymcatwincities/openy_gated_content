@@ -3,7 +3,6 @@
     <div class="text-center my-4">
       <router-link :to="{ name: 'Home' }">Home</router-link>
     </div>
-    Video page.
     <div v-if="loading">Loading</div>
     <div v-else-if="error">Error loading</div>
     <div v-else>
@@ -52,69 +51,19 @@
         </div>
 
         <div class="list">
-          <div>
+          <div v-for="item in [1,2,3,4]" :key="item">
             <div class="preview" v-bind:style="{
               backgroundImage: 'url(//i.ytimg.com/vi/B2bW0DIs0hA/maxresdefault.jpg)'
             }">
               <YoutubePlayButton></YoutubePlayButton>
-              <div class="duration">00:00</div>
+              <div class="duration">00:0{{item}}</div>
             </div>
             <div class="meta">
               <div class="video-level">M</div> Moderate
             </div>
           </div>
-
-          <div>
-            <div class="preview" v-bind:style="{
-              backgroundImage: 'url(//i.ytimg.com/vi/B2bW0DIs0hA/maxresdefault.jpg)'
-            }">
-              <YoutubePlayButton></YoutubePlayButton>
-              <div class="duration">00:00</div>
-            </div>
-            <div class="meta">
-              <div class="video-level">M</div> Moderate
-            </div>
-          </div>
-
-          <div>
-            <div class="preview" v-bind:style="{
-              backgroundImage: 'url(//i.ytimg.com/vi/B2bW0DIs0hA/maxresdefault.jpg)'
-            }">
-              <YoutubePlayButton></YoutubePlayButton>
-              <div class="duration">00:00</div>
-            </div>
-            <div class="meta">
-              <div class="video-level">M</div> Moderate
-            </div>
-          </div>
-
-          <div>
-            <div class="preview" v-bind:style="{
-              backgroundImage: 'url(//i.ytimg.com/vi/B2bW0DIs0hA/maxresdefault.jpg)'
-            }">
-              <YoutubePlayButton></YoutubePlayButton>
-              <div class="duration">00:00</div>
-            </div>
-            <div class="meta">
-              <div class="video-level">M</div> Moderate
-            </div>
-          </div>
-
-          <div>
-            <div class="preview" v-bind:style="{
-              backgroundImage: 'url(//i.ytimg.com/vi/B2bW0DIs0hA/maxresdefault.jpg)'
-            }">
-              <YoutubePlayButton></YoutubePlayButton>
-              <div class="duration">00:00</div>
-            </div>
-            <div class="meta">
-              <div class="video-level">M</div> Moderate
-            </div>
-          </div>
-
         </div>
       </div>
-
     </div>
   </div>
 </template>
