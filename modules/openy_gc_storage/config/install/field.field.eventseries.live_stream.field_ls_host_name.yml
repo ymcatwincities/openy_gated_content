@@ -15,8 +15,8 @@ field_name: field_ls_host_name
 entity_type: eventseries
 bundle: live_stream
 label: 'Host’s name'
-description: ''
-required: false
+description: 'Instructor name'
+required: true
 translatable: false
 default_value: {  }
 default_value_callback: ''
