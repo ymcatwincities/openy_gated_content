@@ -5,7 +5,7 @@
               backgroundImage: `url(${image})`
             }">
           <YoutubePlayButton></YoutubePlayButton>
-          <div class="duration">00:0{{item}}</div>
+          <div v-if="duration" class="duration">{{duration}}</div>
         </div>
         <div class="title">{{ video.attributes.title }}</div>
         <div class="meta">
@@ -38,6 +38,18 @@ export default {
       // sddefault.jpg
       // maxresdefault.jpg
       return `https://img.youtube.com/vi/${vid}/mqdefault.jpg`;
+    },
+    duration() {
+      const sec = this.video.attributes.field_gc_video_duration;
+      if (sec === null) {
+        return '';
+      }
+
+      function appendZero(n) {
+        return (n < 10) ? `0${n}` : n;
+      }
+
+      return `${appendZero(Math.floor(sec / 60))}:${appendZero(sec % 60)}`;
     },
   },
   mounted() {

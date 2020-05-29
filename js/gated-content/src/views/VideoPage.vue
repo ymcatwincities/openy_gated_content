@@ -54,8 +54,8 @@
           UP NEXT
         </div>
 
-        <div class="list">
-          <div v-for="item in [1,2,3,4]" :key="item">
+        <div class="video-listing">
+          <div class="video-teaser" v-for="item in [1,2,3,4]" :key="item">
             <div class="preview" v-bind:style="{
               backgroundImage: 'url(//i.ytimg.com/vi/B2bW0DIs0hA/maxresdefault.jpg)'
             }">

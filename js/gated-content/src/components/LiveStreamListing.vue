@@ -3,10 +3,12 @@
     <h2 class="title">Live streams</h2>
     <div v-if="loading">Loading...</div>
     <div v-else-if="error">Error loading</div>
-    <div v-else>
-      <div v-for="video in listing" :key="video.id">
-        <LiveStreamTeaser :video="video" />
-      </div>
+    <div v-else class="video-listing live-stream-listing">
+        <LiveStreamTeaser
+          v-for="video in listing"
+          :key="video.id"
+          :video="video"
+        />
     </div>
   </div>
 </template>
