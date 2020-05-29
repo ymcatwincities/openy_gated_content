@@ -1,0 +1,60 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - openy_gc_auth_custom
+id: gc_auth_custom_users
+migration_tags:
+  - gc_auth
+migration_group: gc_auth
+label: 'Import Customers'
+source:
+  plugin: csv_limit
+  path: 'private://gc_auth/import/gc_auth_custom_users.csv'
+  delimiter: ','
+  enclosure: '"'
+  header_row_count: 1
+  track_changes: true
+  keys: [member_id]
+  column_names:
+    -
+      member_id: 'Member ID'
+    -
+      first_name: 'Member First Name'
+    -
+      primary: 'Primary Member'
+    -
+      email: 'Member Email'
+    -
+      package_name: 'Package Name'
+    -
+      package_site: 'Package Site'
+process:
+  member_id:
+    plugin: get
+    source: member_id
+  first_name:
+    plugin: get
+    source: first_name
+  primary:
+    plugin: static_map
+    source: primary
+    map:
+      'Yes': 1
+      'No': 0
+    default_value: NULL
+  email:
+    plugin: get
+    source: email
+  package_name:
+    plugin: get
+    source: package_name
+  package_site:
+    plugin: get
+    source: package_site
+  field_mail:
+    plugin: get
+    source: field_mail
+destination:
+  plugin: 'entity:gc_auth_custom_user'
