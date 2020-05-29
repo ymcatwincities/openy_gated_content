@@ -1,11 +1,11 @@
 <template>
   <div class="gated-content-videos">
-    <h2>Videos</h2>
+    <h2>Live streams</h2>
     <div v-if="loading">Loading...</div>
     <div v-else-if="error">Error loading</div>
     <div v-else>
       <div v-for="video in listing" :key="video.id">
-        <VideoTeaser :video="video" />
+        <LiveStreamTeaser :video="video" />
       </div>
     </div>
   </div>
@@ -13,12 +13,12 @@
 
 <script>
 import client from '@/client';
-import VideoTeaser from '@/components/VideoTeaser.vue';
+import LiveStreamTeaser from '@/components/LiveStreamTeaser.vue';
 
 export default {
-  name: 'VideoListing',
+  name: 'LiveStreamListing',
   components: {
-    VideoTeaser,
+    LiveStreamTeaser,
   },
   props: {
     msg: String,
@@ -32,7 +32,8 @@ export default {
   },
   mounted() {
     client
-      .get('jsonapi/node/gc_video')
+      // TODO: maybe we need sort or filter here.
+      .get('jsonapi/eventinstance/live_stream')
       .then((response) => {
         this.loading = false;
         this.listing = response.data.data;

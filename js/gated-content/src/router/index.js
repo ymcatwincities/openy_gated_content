@@ -5,6 +5,7 @@ import Home from '@/views/Home.vue';
 import Login from '@/views/Login.vue';
 import NotFound from '@/views/NotFound.vue';
 import VideoPage from '@/views/VideoPage.vue';
+import LiveStreamPage from '@/views/LiveStreamPage.vue';
 
 Vue.use(VueRouter);
 
@@ -25,6 +26,13 @@ const routes = [
     path: '/video/:id',
     name: 'Video',
     component: VideoPage,
+    props: true,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/live-stream/:id',
+    name: 'LiveStream',
+    component: LiveStreamPage,
     props: true,
     meta: { requiresAuth: true },
   },
