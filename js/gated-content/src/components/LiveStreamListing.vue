@@ -1,11 +1,11 @@
 <template>
   <div class="gated-content-videos">
-    <h2 class="title">Videos</h2>
+    <h2 class="title">Live streams</h2>
     <div v-if="loading">Loading...</div>
     <div v-else-if="error">Error loading</div>
     <div v-else>
       <div v-for="video in listing" :key="video.id">
-        <VideoTeaser :video="video" />
+        <LiveStreamTeaser :video="video" />
       </div>
     </div>
   </div>
@@ -13,12 +13,12 @@
 
 <script>
 import client from '@/client';
-import VideoTeaser from '@/components/VideoTeaser.vue';
+import LiveStreamTeaser from '@/components/LiveStreamTeaser.vue';
 
 export default {
-  name: 'VideoListing',
+  name: 'LiveStreamListing',
   components: {
-    VideoTeaser,
+    LiveStreamTeaser,
   },
   props: {
     msg: String,
@@ -29,7 +29,8 @@ export default {
       error: false,
       listing: null,
       params: [
-        'field_gc_video_media',
+        'field_ls_media',
+        'media',
       ],
     };
   },
@@ -39,7 +40,8 @@ export default {
       params.include = this.params.join(',');
     }
     client
-      .get('jsonapi/node/gc_video', { params })
+      // TODO: maybe we need sort or filter here.
+      .get('jsonapi/eventinstance/live_stream', { params })
       .then((response) => {
         this.loading = false;
         this.listing = response.data.data;
@@ -53,13 +55,15 @@ export default {
       });
   },
   methods: {
-    // TODO: maybe we need to move this method to mixin?
-    // (note: this can be singe or multiple values, compare LiveStreamListing and LiveStreamPage)
     combine(data) {
       if (!data.included) return;
       this.listing.forEach((video, key) => {
         this.params.forEach((field) => {
           const rel = video.relationships[field].data;
+          if (rel === null) {
+            this.listing[key].attributes[field] = null;
+            return;
+          }
           // Multi-value fields.
           if (Array.isArray(rel)) {
             this.listing[key].attributes[field] = [];
@@ -87,9 +91,6 @@ export default {
 .gated-content-videos {
   h1 {
     color: red;
-  }
-  h2.title {
-    clear: both;
   }
 }
 </style>
