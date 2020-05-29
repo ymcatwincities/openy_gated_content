@@ -3,11 +3,15 @@
     <h2 class="title">Videos</h2>
     <div v-if="loading">Loading...</div>
     <div v-else-if="error">Error loading</div>
-    <div v-else>
-      <div v-for="video in listing" :key="video.id">
-        <VideoTeaser :video="video" />
+    <template v-else>
+      <div>
+        <VideoTeaser
+          v-for="video in listing" :key="video.id"
+          :video="video"
+        />
       </div>
-    </div>
+      <pre>{{ listing }}</pre>
+    </template>
   </div>
 </template>
 

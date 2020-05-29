@@ -4,4 +4,7 @@
 @import "../../node_modules/bootstrap/scss/mixins";
 
 @import "variables";
-@import "videopage/videopage";
+@import "widgets/video-level";
+@import "components/video-listing";
+@import "components/video-teaser";
+@import "views/video-page";

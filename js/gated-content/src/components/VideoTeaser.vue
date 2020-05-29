@@ -1,16 +1,28 @@
 <template>
   <div class="video-teaser">
     <router-link :to="{ name: 'Video', params: { id: video.id } }">
-      <img :src="image" :alt="video.attributes.title">
-      <h3>{{ video.attributes.title }}</h3>
+        <div class="preview" v-bind:style="{
+              backgroundImage: `url(${image})`
+            }">
+          <YoutubePlayButton></YoutubePlayButton>
+          <div class="duration">00:0{{item}}</div>
+        </div>
+        <div class="title">{{ video.attributes.title }}</div>
+        <div class="meta">
+          <div class="video-level">M</div> Moderate
+        </div>
     </router-link>
   </div>
 </template>
 
 <script>
+import YoutubePlayButton from './YoutubePlayButton.vue';
 
 export default {
   name: 'VideoTeaser',
+  components: {
+    YoutubePlayButton,
+  },
   props: {
     video: {
       type: Object,
