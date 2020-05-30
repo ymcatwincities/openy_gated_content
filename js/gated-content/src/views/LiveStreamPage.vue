@@ -55,7 +55,6 @@
                          :title="'UP NEXT'"
                          :excluded-video-id="video.id"
       />
-      <pre><b>Media:</b> {{ video }}</pre>
     </div>
   </div>
 </template>
