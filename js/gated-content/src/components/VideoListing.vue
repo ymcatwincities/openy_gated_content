@@ -5,7 +5,8 @@
     <div v-else-if="error">Error loading</div>
     <div v-else class="video-listing">
       <VideoTeaser
-        v-for="video in listing" :key="video.id"
+        v-for="video in filteredListing"
+        :key="video.id"
         :video="video"
       />
     </div>
@@ -26,6 +27,7 @@ export default {
       type: String,
       default: 'Videos',
     },
+    excludedVideoId: Number,
     msg: String,
   },
   data() {
@@ -56,6 +58,11 @@ export default {
         console.error(error);
         throw error;
       });
+  },
+  computed: {
+    filteredListing() {
+      return this.listing.filter((video) => video.id !== this.excludedVideoId);
+    },
   },
   methods: {
     // TODO: maybe we need to move this method to mixin?

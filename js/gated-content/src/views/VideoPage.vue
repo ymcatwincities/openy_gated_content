@@ -45,11 +45,13 @@
           </div>
         </div>
       </div>
-      <div class="video-category">
+      <!--div class="video-category">
         &lt; {{ video.attributes.field_gc_video_category.name }}
-      </div>
-
-      <VideoListing class="videos" :title="'UP NEXT'"/>
+      </div-->
+      <VideoListing class="videos"
+        :title="'UP NEXT'"
+        :excluded-video-id="video.id"
+      />
     </div>
   </div>
 </template>
