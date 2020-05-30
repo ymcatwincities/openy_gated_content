@@ -3,30 +3,75 @@
     <div class="text-center my-4">
       <router-link :to="{ name: 'Home' }">Home</router-link>
     </div>
-    Live stream page.
     <div v-if="loading">Loading</div>
     <div v-else-if="error">Error loading</div>
     <div v-else>
-      <h1>{{ video.attributes.title }}</h1>
-      <div><b>Start:</b> {{ video.attributes.date.value }}</div>
-      <div><b>End:</b> {{ video.attributes.date.end_value }}</div>
-      <div><b>Description:</b></div>
-      <div><b>Level:</b> {{ level }}</div>
-      <div><b>Description:</b></div>
-      <div v-html="video.attributes.description.processed"></div>
-      <div><b>Equipment:</b></div>
-      <div v-html="video.attributes.equipment"></div>
-      <div><b>Category:</b> {{ category }}</div>
-      <pre><b>Media:</b> {{ media }}</pre>
+      <div class="video">
+        <LazyYoutubeVideo
+          :src="'https://www.youtube.com/embed/' + media.field_media_video_id"
+        />
+      </div>
+      <div class="video-footer">
+        <div>
+          <div class="video-footer__title">{{ video.attributes.title }}</div>
+          <div class="video-footer__description"
+               v-html="video.attributes.description.processed"
+          ></div>
+        </div>
+        <div>
+          <div class="video-footer__block"
+            v-if="level"
+          >
+            <div class="video-level">
+              {{ level | first_letter }}
+            </div>
+            {{ level | capitalize }}
+          </div>
+          <div class="video-footer__block">
+            <i class="fa fa-user"></i>
+            {{ params.field_ls_host_name || 'Field is not provided' }}
+          </div>
+          <div class="video-footer__block">
+            <i class="fa fa-hand-o-right"></i>
+            {{ category }}
+          </div>
+          <div class="video-footer__equipment"
+            v-if="video.attributes.equipment"
+          >
+            <i class="fa fa-cubes"></i>
+            Equipment:
+            <ul>
+              <li>
+                {{ video.attributes.equipment }}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <!--div class="video-category">
+        &lt; {{ video.attributes.field_gc_video_category.name }}
+      </div-->
+      <LiveStreamListing class="videos"
+                         :title="'UP NEXT'"
+                         :excluded-video-id="video.id"
+      />
+      <pre><b>Media:</b> {{ video }}</pre>
     </div>
   </div>
 </template>
 
 <script>
 import client from '@/client';
+import 'vue-lazy-youtube-video/dist/style.css';
+import LazyYoutubeVideo from 'vue-lazy-youtube-video';
+import LiveStreamListing from '../components/LiveStreamListing.vue';
 
 export default {
   name: 'LiveStreamPage',
+  components: {
+    LazyYoutubeVideo,
+    LiveStreamListing,
+  },
   props: {
     id: {
       type: String,
@@ -43,6 +88,7 @@ export default {
         'field_ls_category',
         'field_ls_media',
         'field_ls_level',
+        // 'field_ls_host_name',
         // Data from parent (series).
         'category',
         'media',

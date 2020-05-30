@@ -131,17 +131,6 @@ export default {
       });
     },
   },
-  filters: {
-    capitalize(value) {
-      if (!value) return '';
-      const newValue = value.toString().toLowerCase();
-      return newValue.charAt(0).toUpperCase() + newValue.slice(1);
-    },
-    first_letter(value) {
-      if (!value) return '';
-      return value.charAt(0).toUpperCase();
-    },
-  },
 };
 </script>
 

@@ -1,11 +1,11 @@
 <template>
   <div>
-    <h2 class="title">Live streams</h2>
+    <h2 class="title">{{ title }}</h2>
     <div v-if="loading">Loading...</div>
     <div v-else-if="error">Error loading</div>
     <div v-else class="video-listing live-stream-listing">
         <LiveStreamTeaser
-          v-for="video in listing"
+          v-for="video in filteredListing"
           :key="video.id"
           :video="video"
         />
@@ -23,6 +23,11 @@ export default {
     LiveStreamTeaser,
   },
   props: {
+    title: {
+      type: String,
+      default: 'Live streams',
+    },
+    excludedVideoId: Number,
     msg: String,
   },
   data() {
@@ -55,6 +60,14 @@ export default {
         console.error(error);
         throw error;
       });
+  },
+  computed: {
+    filteredListing() {
+      let listing = this.listing.filter((video) => video.id !== this.excludedVideoId);
+      // filter expired live streams
+      listing = listing.filter((video) => new Date(video.attributes.date.end_value) > new Date());
+      return listing;
+    },
   },
   methods: {
     combine(data) {
