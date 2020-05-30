@@ -45,30 +45,13 @@
           </div>
         </div>
       </div>
-      <div class="video-category">
+      <!--div class="video-category">
         &lt; {{ video.attributes.field_gc_video_category.name }}
-      </div>
-
-      <div class="video-up-next">
-        <div class="header">
-          UP NEXT
-        </div>
-
-        <div class="list">
-          <div v-for="item in [1,2,3,4]" :key="item">
-            <div class="preview" v-bind:style="{
-              backgroundImage: 'url(//i.ytimg.com/vi/B2bW0DIs0hA/maxresdefault.jpg)'
-            }">
-              <YoutubePlayButton></YoutubePlayButton>
-              <div class="duration">00:0{{item}}</div>
-            </div>
-            <div class="title">Video Title</div>
-            <div class="meta">
-              <div class="video-level">M</div> Moderate
-            </div>
-          </div>
-        </div>
-      </div>
+      </div-->
+      <VideoListing class="videos"
+        :title="'UP NEXT'"
+        :excluded-video-id="video.id"
+      />
     </div>
   </div>
 </template>
@@ -77,13 +60,13 @@
 import client from '@/client';
 import 'vue-lazy-youtube-video/dist/style.css';
 import LazyYoutubeVideo from 'vue-lazy-youtube-video';
-import YoutubePlayButton from '../components/YoutubePlayButton.vue';
+import VideoListing from '../components/VideoListing.vue';
 
 export default {
   name: 'VideoPage',
   components: {
     LazyYoutubeVideo,
-    YoutubePlayButton,
+    VideoListing,
   },
   props: {
     id: {
@@ -146,17 +129,6 @@ export default {
             .attributes;
         }
       });
-    },
-  },
-  filters: {
-    capitalize(value) {
-      if (!value) return '';
-      const newValue = value.toString().toLowerCase();
-      return newValue.charAt(0).toUpperCase() + newValue.slice(1);
-    },
-    first_letter(value) {
-      if (!value) return '';
-      return value.charAt(0).toUpperCase();
     },
   },
 };

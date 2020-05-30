@@ -1,16 +1,28 @@
 <template>
   <div class="video-teaser">
     <router-link :to="{ name: 'Video', params: { id: video.id } }">
-      <img :src="image" :alt="video.attributes.title">
-      <h3>{{ video.attributes.title }}</h3>
+        <div class="preview" v-bind:style="{
+              backgroundImage: `url(${image})`
+            }">
+          <YoutubePlayButton></YoutubePlayButton>
+          <div v-if="duration" class="duration">{{duration}}</div>
+        </div>
+        <div class="title">{{ video.attributes.title }}</div>
+        <div class="meta">
+          <div class="video-level">M</div> Moderate
+        </div>
     </router-link>
   </div>
 </template>
 
 <script>
+import YoutubePlayButton from './YoutubePlayButton.vue';
 
 export default {
   name: 'VideoTeaser',
+  components: {
+    YoutubePlayButton,
+  },
   props: {
     video: {
       type: Object,
@@ -26,6 +38,18 @@ export default {
       // sddefault.jpg
       // maxresdefault.jpg
       return `https://img.youtube.com/vi/${vid}/mqdefault.jpg`;
+    },
+    duration() {
+      const sec = this.video.attributes.field_gc_video_duration;
+      if (sec === null) {
+        return '';
+      }
+
+      function appendZero(n) {
+        return (n < 10) ? `0${n}` : n;
+      }
+
+      return `${appendZero(Math.floor(sec / 60))}:${appendZero(sec % 60)}`;
     },
   },
   mounted() {

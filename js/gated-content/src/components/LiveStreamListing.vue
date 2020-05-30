@@ -1,12 +1,14 @@
 <template>
-  <div class="gated-content-videos">
-    <h2 class="title">Live streams</h2>
+  <div>
+    <h2 class="title">{{ title }}</h2>
     <div v-if="loading">Loading...</div>
     <div v-else-if="error">Error loading</div>
-    <div v-else>
-      <div v-for="video in listing" :key="video.id">
-        <LiveStreamTeaser :video="video" />
-      </div>
+    <div v-else class="video-listing live-stream-listing">
+        <LiveStreamTeaser
+          v-for="video in computedListing"
+          :key="video.id"
+          :video="video"
+        />
     </div>
   </div>
 </template>
@@ -21,6 +23,11 @@ export default {
     LiveStreamTeaser,
   },
   props: {
+    title: {
+      type: String,
+      default: 'Live streams',
+    },
+    excludedVideoId: Number,
     msg: String,
   },
   data() {
@@ -53,6 +60,28 @@ export default {
         console.error(error);
         throw error;
       });
+  },
+  computed: {
+    computedListing() {
+      let listing = this.listing.filter((video) => video.id !== this.excludedVideoId);
+      // filter expired live streams
+      listing = listing.filter((video) => new Date(video.attributes.date.end_value) > new Date());
+
+      function compareDates(video1, video2) {
+        const date1 = new Date(video1.attributes.date.value);
+        const date2 = new Date(video2.attributes.date.value);
+
+        if (date1 < date2) {
+          return -1;
+        }
+        if (date1 > date2) {
+          return 1;
+        }
+        return 0;
+      }
+
+      return listing.sort(compareDates);
+    },
   },
   methods: {
     combine(data) {
@@ -88,9 +117,4 @@ export default {
 </script>
 
 <style lang="scss">
-.gated-content-videos {
-  h1 {
-    color: red;
-  }
-}
 </style>

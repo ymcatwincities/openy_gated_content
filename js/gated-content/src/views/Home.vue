@@ -1,8 +1,8 @@
 <template>
   <div class="home">
     <LogoutLink />
-    <VideoListing />
-    <LiveStreamListing />
+    <VideoListing class="videos" />
+    <LiveStreamListing class="videos" />
   </div>
 </template>
 
