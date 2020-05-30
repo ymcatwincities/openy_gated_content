@@ -55,7 +55,7 @@ export default {
       const dateEnd = new Date(this.video.attributes.date.end_value);
       const startHours = dateStart.getHours() % 12 || 12;
       const startMinutes = dateStart.getMinutes();
-      const startMorning = dateStart.getHours() < 12 ? 'am' : 'pm';
+      const startMorning = dateStart.getHours() < 12 ? 'a.m.' : 'p.m.';
       const endHours = dateEnd.getHours() % 12 || 12;
       const endMinutes = dateEnd.getMinutes();
       const endMorning = dateEnd.getHours() < 12 ? 'a.m.' : 'p.m.';
