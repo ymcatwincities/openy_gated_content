@@ -29,7 +29,7 @@
           </div>
           <div class="video-footer__block">
             <i class="fa fa-user"></i>
-            {{ params.field_ls_host_name || 'Field is not provided' }}
+            {{ video.attributes.host_name }}
           </div>
           <div class="video-footer__block">
             <i class="fa fa-hand-o-right"></i>
@@ -87,7 +87,6 @@ export default {
         'field_ls_category',
         'field_ls_media',
         'field_ls_level',
-        // 'field_ls_host_name',
         // Data from parent (series).
         'category',
         'media',

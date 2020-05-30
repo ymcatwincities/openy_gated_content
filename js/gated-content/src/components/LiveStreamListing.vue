@@ -5,7 +5,7 @@
     <div v-else-if="error">Error loading</div>
     <div v-else class="video-listing live-stream-listing">
         <LiveStreamTeaser
-          v-for="video in filteredListing"
+          v-for="video in computedListing"
           :key="video.id"
           :video="video"
         />
@@ -62,11 +62,25 @@ export default {
       });
   },
   computed: {
-    filteredListing() {
+    computedListing() {
       let listing = this.listing.filter((video) => video.id !== this.excludedVideoId);
       // filter expired live streams
       listing = listing.filter((video) => new Date(video.attributes.date.end_value) > new Date());
-      return listing;
+
+      function compareDates(video1, video2) {
+        const date1 = new Date(video1.attributes.date.value);
+        const date2 = new Date(video2.attributes.date.value);
+
+        if (date1 < date2) {
+          return -1;
+        }
+        if (date1 > date2) {
+          return 1;
+        }
+        return 0;
+      }
+
+      return listing.sort(compareDates);
     },
   },
   methods: {
