@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - recurring_events
+id: eventseries.field_ls_equipment
+field_name: field_ls_equipment
+entity_type: eventseries
+type: string_long
+settings:
+  case_sensitive: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
