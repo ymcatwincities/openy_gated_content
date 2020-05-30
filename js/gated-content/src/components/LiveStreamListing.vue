@@ -1,5 +1,5 @@
 <template>
-  <div class="gated-content-videos">
+  <div>
     <h2 class="title">Live streams</h2>
     <div v-if="loading">Loading...</div>
     <div v-else-if="error">Error loading</div>
@@ -90,9 +90,4 @@ export default {
 </script>
 
 <style lang="scss">
-.gated-content-videos {
-  h1 {
-    color: red;
-  }
-}
 </style>

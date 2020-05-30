@@ -1,6 +1,6 @@
 <template>
-  <div class="gated-content-videos">
-    <h2 class="title">Videos</h2>
+  <div>
+    <h2 class="title">{{ title }}</h2>
     <div v-if="loading">Loading...</div>
     <div v-else-if="error">Error loading</div>
     <div v-else class="video-listing">
@@ -22,6 +22,10 @@ export default {
     VideoTeaser,
   },
   props: {
+    title: {
+      type: String,
+      default: 'Videos',
+    },
     msg: String,
   },
   data() {
@@ -85,12 +89,4 @@ export default {
 </script>
 
 <style lang="scss">
-.gated-content-videos {
-  h1 {
-    color: red;
-  }
-  h2.title {
-    clear: both;
-  }
-}
 </style>
