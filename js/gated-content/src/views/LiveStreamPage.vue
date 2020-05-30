@@ -8,12 +8,16 @@
     <div v-else-if="error">Error loading</div>
     <div v-else>
       <h1>{{ video.attributes.title }}</h1>
-      <div>Start: {{ video.attributes.date.value }}</div>
-      <div>End: {{ video.attributes.date.end_value }}</div>
-      <div>Description:</div>
+      <div><b>Start:</b> {{ video.attributes.date.value }}</div>
+      <div><b>End:</b> {{ video.attributes.date.end_value }}</div>
+      <div><b>Description:</b></div>
+      <div><b>Level:</b> {{ level }}</div>
+      <div><b>Description:</b></div>
       <div v-html="video.attributes.description.processed"></div>
-      <div>Category: {{ category }}</div>
-      <pre>Media: {{ media }}</pre>
+      <div><b>Equipment:</b></div>
+      <div v-html="video.attributes.equipment"></div>
+      <div><b>Category:</b> {{ category }}</div>
+      <pre><b>Media:</b> {{ media }}</pre>
     </div>
   </div>
 </template>
@@ -38,21 +42,26 @@ export default {
       params: [
         'field_ls_category',
         'field_ls_media',
+        'field_ls_level',
         // Data from parent (series).
         'category',
         'media',
+        'level',
       ],
     };
   },
   computed: {
+    // This values most of all from parent (series), but can be overridden by item,
+    // so ve need to check this here and use correct value.
+    level() {
+      return this.video.attributes.field_ls_level ? this.video.attributes.field_ls_level.name
+        : this.video.attributes.level.name;
+    },
     media() {
-      // This value most of all from parent (series), but can be overridden by item,
-      // so ve need to check this here and use correct media value.
       return this.video.attributes.field_ls_media ? this.video.attributes.field_ls_media
         : this.video.attributes.media;
     },
     category() {
-      // Same for category.
       return this.video.attributes.field_ls_category ? this.video.attributes.field_ls_category.name
         : this.video.attributes.category.name;
     },

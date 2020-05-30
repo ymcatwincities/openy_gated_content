@@ -4,7 +4,9 @@ dependencies:
   config:
     - entity_browser.browser.videos_library
     - field.field.eventseries.live_stream.field_ls_category
+    - field.field.eventseries.live_stream.field_ls_equipment
     - field.field.eventseries.live_stream.field_ls_host_name
+    - field.field.eventseries.live_stream.field_ls_level
     - field.field.eventseries.live_stream.field_ls_media
     - recurring_events.eventseries_type.live_stream
   module:
@@ -19,7 +21,7 @@ mode: default
 content:
   body:
     type: text_textarea
-    weight: 4
+    weight: 6
     region: content
     settings:
       rows: 5
@@ -27,25 +29,25 @@ content:
     third_party_settings: {  }
   consecutive_recurring_date:
     type: consecutive_recurring_date
-    weight: 6
+    weight: 8
     region: content
     settings: {  }
     third_party_settings: {  }
   custom_date:
     type: daterange_default
-    weight: 10
+    weight: 12
     region: content
     settings: {  }
     third_party_settings: {  }
   daily_recurring_date:
     type: daily_recurring_date
-    weight: 7
+    weight: 9
     region: content
     settings: {  }
     third_party_settings: {  }
   excluded_dates:
     type: daterange_default
-    weight: 11
+    weight: 13
     settings: {  }
     region: content
     third_party_settings: {  }
@@ -59,6 +61,14 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  field_ls_equipment:
+    weight: 5
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textarea
+    region: content
   field_ls_host_name:
     type: string_textfield
     weight: 1
@@ -67,9 +77,15 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  field_ls_level:
+    weight: 3
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
   field_ls_media:
     type: openy_focal_point_entity_browser_entity_reference
-    weight: 3
+    weight: 4
     region: content
     settings:
       entity_browser: videos_library
@@ -83,19 +99,19 @@ content:
     third_party_settings: {  }
   included_dates:
     type: daterange_default
-    weight: 12
+    weight: 14
     settings: {  }
     region: content
     third_party_settings: {  }
   monthly_recurring_date:
     type: monthly_recurring_date
-    weight: 9
+    weight: 11
     region: content
     settings: {  }
     third_party_settings: {  }
   recur_type:
     type: options_buttons
-    weight: 5
+    weight: 7
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -103,7 +119,7 @@ content:
     type: boolean_checkbox
     settings:
       display_label: true
-    weight: 14
+    weight: 16
     region: content
     third_party_settings: {  }
   title:
@@ -116,7 +132,7 @@ content:
     third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
-    weight: 13
+    weight: 15
     settings:
       match_operator: CONTAINS
       size: 60
@@ -126,7 +142,7 @@ content:
     third_party_settings: {  }
   weekly_recurring_date:
     type: weekly_recurring_date
-    weight: 8
+    weight: 10
     region: content
     settings: {  }
     third_party_settings: {  }
