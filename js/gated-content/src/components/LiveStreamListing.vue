@@ -1,5 +1,5 @@
 <template>
-  <div v-if="listing">
+  <div v-if="listing.length > 0">
     <h2 class="title">{{ title }}</h2>
     <div v-if="loading">Loading...</div>
     <div v-else-if="error">Error loading</div>
