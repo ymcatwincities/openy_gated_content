@@ -1,0 +1,3 @@
+view gated content entities pages:
+  title: 'View gated content entities pages'
+  description: 'Users with this permission can access gated content node/eventseries/eventinstance pages.'
