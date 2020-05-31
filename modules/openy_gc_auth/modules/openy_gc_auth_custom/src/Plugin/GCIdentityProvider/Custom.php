@@ -77,8 +77,11 @@ class Custom extends GCIdentityProviderPluginBase {
     $data = parent::getDataForApp();
     $data['enableRecaptcha'] = (bool) $this->configuration['enable_recaptcha'];
     $data['apiEndpoint'] = $this->configuration['api_endpoint'];
-    // TODO: load reCaptchaKey from site config.
-    $data['reCaptchaKey'] = 'TEST';
+    $this->configFactory->get('recaptcha.settings')->get('site_key');
+    $data['reCaptchaKey'] = $this->configFactory
+      ->get('recaptcha.settings')
+      ->get('site_key');
+
     return $data;
   }
 

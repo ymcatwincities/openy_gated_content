@@ -3,9 +3,7 @@
     <div class="text-center my-4">
       <router-link :to="{ name: 'Home' }">Home</router-link>
     </div>
-    <div class="plugin">
-      Current auth plugin in use: {{ authPlugin }}
-    </div>
+    <h2 class="title">Sign In</h2>
     <DummyAuth v-if="authPlugin === 'dummy'"/>
     <CustomAuth v-else-if="authPlugin === 'custom'"/>
     <div v-else>

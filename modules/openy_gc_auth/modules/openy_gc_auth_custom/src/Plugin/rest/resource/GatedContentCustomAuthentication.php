@@ -3,12 +3,15 @@
 namespace Drupal\openy_gc_auth_custom\Plugin\rest\resource;
 
 use Drupal\Component\Utility\EmailValidatorInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\rest\ModifiedResourceResponse;
 use Drupal\rest\Plugin\ResourceBase;
 use Psr\Log\LoggerInterface;
+use ReCaptcha\ReCaptcha;
+use ReCaptcha\RequestMethod\Drupal8Post;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -42,6 +45,13 @@ class GatedContentCustomAuthentication extends ResourceBase implements Container
   protected $emailValidator;
 
   /**
+   * The config factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * Constructs a GatedContentCustomAuthentication.
    *
    * @param array $configuration
@@ -58,6 +68,8 @@ class GatedContentCustomAuthentication extends ResourceBase implements Container
    *   A logger instance.
    * @param \Drupal\Component\Utility\EmailValidatorInterface $validator
    *   Validates email addresses.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The factory for configuration objects.
    */
   public function __construct(
     array $configuration,
@@ -66,10 +78,12 @@ class GatedContentCustomAuthentication extends ResourceBase implements Container
     EntityTypeManagerInterface $entity_type_manager,
     array $serializer_formats,
     LoggerInterface $logger,
-    EmailValidatorInterface $validator) {
+    EmailValidatorInterface $validator,
+    ConfigFactoryInterface $config_factory) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->entityTypeManager = $entity_type_manager;
     $this->emailValidator = $validator;
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -83,7 +97,8 @@ class GatedContentCustomAuthentication extends ResourceBase implements Container
       $container->get('entity_type.manager'),
       $container->getParameter('serializer.formats'),
       $container->get('logger.factory')->get('rest'),
-      $container->get('email.validator')
+      $container->get('email.validator'),
+      $container->get('config.factory')
     );
   }
 
@@ -101,9 +116,24 @@ class GatedContentCustomAuthentication extends ResourceBase implements Container
    */
   public function post(Request $request) {
     $content = json_decode($request->getContent(), TRUE);
-    // TODO: validate recaptcha.
+
+    if (!$content['recaptchaToken']) {
+      return $this->errorResponse($this->t('ReCaptcha token required.'), 400);
+    }
+
+    $config = $this->configFactory->get('recaptcha.settings');
+    $recaptcha_secret_key = $config->get('secret_key');
+    $recaptcha = new ReCaptcha($recaptcha_secret_key, new Drupal8Post());
+    if ($config->get('verify_hostname')) {
+      $recaptcha->setExpectedHostname($_SERVER['SERVER_NAME']);
+    }
+    $resp = $recaptcha->verify($content['recaptchaToken'], $request->getClientIp());
+    if (!$resp->isSuccess()) {
+      return $this->errorResponse($this->t('ReCaptcha token invalid.'), 400);
+    }
+
     if (!$this->emailValidator->isValid($content['email'])) {
-      return $this->errorResponse($this->t('Email @email invalid.', [
+      return $this->errorResponse($this->t('Email @email is invalid.', [
         '@email' => $content['email'],
       ]), 400);
     }

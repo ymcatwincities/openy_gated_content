@@ -12,6 +12,8 @@ gated-content-vue:
     - openy_system/vue-router
     - openy_system/vuex
     - openy_gated_content/vuex-persist
+    - openy_gated_content/recaptcha
+    - openy_gated_content/vue-recaptcha
 
 lodash:
   version: 4.17.15
@@ -26,3 +28,21 @@ vuex-persist:
     - openy_system/vue
     - openy_system/polyfill
     - openy_gated_content/lodash
+
+recaptcha:
+  js:
+    'https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit':
+      type: external
+      minified: true
+      attributes:
+        async: true
+        defer: true
+
+vue-recaptcha:
+  version: 1.3.0
+  js:
+    'https://unpkg.com/vue-recaptcha@1.3.0/dist/vue-recaptcha.min.js': { type: external, minified: true }
+  dependencies:
+    - openy_system/vue
+    - openy_system/polyfill
+    - openy_gated_content/recaptcha
