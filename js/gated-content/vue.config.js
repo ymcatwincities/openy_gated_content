@@ -9,6 +9,7 @@ module.exports = {
       'vue-router': 'VueRouter',
       vuex: 'Vuex',
       'vuex-persist': 'VuexPersistence',
+      'vue-recaptcha': 'VueRecaptcha',
     },
   },
   pluginOptions: {
