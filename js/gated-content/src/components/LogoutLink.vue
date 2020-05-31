@@ -1,7 +1,7 @@
 <template>
-  <div class="menu">
-    <a @click.prevent="logout">sign out</a>
-  </div>
+  <span class="menu">
+    <a @click.prevent="logout">Sign out</a>
+  </span>
 </template>
 
 <script>

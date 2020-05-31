@@ -9,7 +9,10 @@
         </div>
         <div class="title">{{ video.attributes.title }}</div>
         <div class="meta">
-          <div class="video-level">M</div> Moderate
+          <div class="video-level">
+            {{ video.attributes.field_gc_video_level.name | first_letter }}
+          </div>
+          {{ video.attributes.field_gc_video_level.name | capitalize }}
         </div>
     </router-link>
   </div>

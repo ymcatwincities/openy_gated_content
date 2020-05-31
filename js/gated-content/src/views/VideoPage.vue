@@ -1,8 +1,5 @@
 <template>
   <div class="gated-content-video-page">
-    <div class="text-center my-4">
-      <router-link :to="{ name: 'Home' }">Home</router-link>
-    </div>
     <div v-if="loading">Loading</div>
     <div v-else-if="error">Error loading</div>
     <div v-else>
@@ -88,26 +85,32 @@ export default {
       ],
     };
   },
-  mounted() {
-    const params = {};
-    if (this.params) {
-      params.include = this.params.join(',');
-    }
-    client
-      .get(`jsonapi/node/gc_video/${this.id}`, { params })
-      .then((response) => {
-        this.loading = false;
-        this.video = response.data.data;
-        this.combine(response.data);
-      })
-      .catch((error) => {
-        this.error = true;
-        this.loading = false;
-        console.error(error);
-        throw error;
-      });
+  watch: {
+    $route: 'load',
+  },
+  async mounted() {
+    await this.load();
   },
   methods: {
+    load() {
+      const params = {};
+      if (this.params) {
+        params.include = this.params.join(',');
+      }
+      client
+        .get(`jsonapi/node/gc_video/${this.id}`, { params })
+        .then((response) => {
+          this.loading = false;
+          this.video = response.data.data;
+          this.combine(response.data);
+        })
+        .catch((error) => {
+          this.error = true;
+          this.loading = false;
+          console.error(error);
+          throw error;
+        });
+    },
     combine(data) {
       if (!data.included) return;
       this.params.forEach((field) => {

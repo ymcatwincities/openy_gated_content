@@ -1,8 +1,5 @@
 <template>
   <div class="gated-content-video-page">
-    <div class="text-center my-4">
-      <router-link :to="{ name: 'Home' }">Home</router-link>
-    </div>
     <div v-if="loading">Loading</div>
     <div v-else-if="error">Error loading</div>
     <div v-else>
@@ -27,9 +24,9 @@
             </div>
             {{ level | capitalize }}
           </div>
-          <div class="video-footer__block">
+          <div class="video-footer__block" v-if="video.attributes.instructor">
             <i class="fa fa-user"></i>
-            {{ video.attributes.host_name }}
+            {{ video.attributes.instructor }}
           </div>
           <div class="video-footer__block">
             <i class="fa fa-hand-o-right"></i>
@@ -110,26 +107,32 @@ export default {
         : this.video.attributes.category.name;
     },
   },
-  mounted() {
-    const params = {};
-    if (this.params) {
-      params.include = this.params.join(',');
-    }
-    client
-      .get(`jsonapi/eventinstance/live_stream/${this.id}`, { params })
-      .then((response) => {
-        this.video = response.data.data;
-        this.combine(response.data);
-        this.loading = false;
-      })
-      .catch((error) => {
-        this.error = true;
-        this.loading = false;
-        console.error(error);
-        throw error;
-      });
+  watch: {
+    $route: 'load',
+  },
+  async mounted() {
+    await this.load();
   },
   methods: {
+    load() {
+      const params = {};
+      if (this.params) {
+        params.include = this.params.join(',');
+      }
+      client
+        .get(`jsonapi/eventinstance/live_stream/${this.id}`, { params })
+        .then((response) => {
+          this.video = response.data.data;
+          this.combine(response.data);
+          this.loading = false;
+        })
+        .catch((error) => {
+          this.error = true;
+          this.loading = false;
+          console.error(error);
+          throw error;
+        });
+    },
     combine(data) {
       if (!data.included) return;
       this.params.forEach((field) => {

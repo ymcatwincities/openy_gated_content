@@ -1,6 +1,6 @@
 <template>
   <div class="video-teaser live-stream-teaser">
-
+    <router-link :to="{ name: 'LiveStream', params: { id: video.id } }">
       <div class="preview" v-bind:style="{
               backgroundImage: `url(${image})`
             }">
@@ -20,9 +20,12 @@
         </router-link>
       </div>
       <div v-else class="controls subscribe">
-        <div><div class="video-level">M</div> Moderate</div>
+        <div>
+          <div class="video-level">{{ level | first_letter }}</div>{{ level | capitalize }}
+        </div>
         <div class="fa fa-calendar-plus-o"></div>
       </div>
+    </router-link>
   </div>
 </template>
 
@@ -50,14 +53,18 @@ export default {
       // maxresdefault.jpg
       return `https://img.youtube.com/vi/${vid}/mqdefault.jpg`;
     },
+    level() {
+      return this.video.attributes.field_ls_level ? this.video.attributes.field_ls_level.name
+        : this.video.attributes.level.name;
+    },
     schedule() {
       const dateStart = new Date(this.video.attributes.date.value);
       const dateEnd = new Date(this.video.attributes.date.end_value);
       const startHours = dateStart.getHours() % 12 || 12;
-      const startMinutes = dateStart.getMinutes();
+      const startMinutes = (dateStart.getMinutes() < 10 ? '0' : '') + dateStart.getMinutes();
       const startMorning = dateStart.getHours() < 12 ? 'a.m.' : 'p.m.';
       const endHours = dateEnd.getHours() % 12 || 12;
-      const endMinutes = dateEnd.getMinutes();
+      const endMinutes = (dateEnd.getMinutes() < 10 ? '0' : '') + dateEnd.getMinutes();
       const endMorning = dateEnd.getHours() < 12 ? 'a.m.' : 'p.m.';
 
       let start = `${startHours}:${startMinutes} ${startMorning} - `;

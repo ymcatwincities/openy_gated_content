@@ -27,6 +27,8 @@ function openy_gated_content_preprocess_paragraph(&$variables) {
   if (!isset($variables['paragraph']) || $variables['paragraph']->getType() != 'gated_content') {
     return;
   }
+
+  $variables['#cache']['tags'][] = 'config:openy_gc_auth.settings';
   $active_provider = \Drupal::config('openy_gc_auth.settings')->get('active_provider');
   $identityProviderManager = \Drupal::service('plugin.manager.gc_identity_provider');
   $plugin_definition = $identityProviderManager->getDefinition($active_provider, FALSE);
@@ -36,4 +38,5 @@ function openy_gated_content_preprocess_paragraph(&$variables) {
   $plugin_instance = $identityProviderManager->createInstance($active_provider);
   $variables['auth_provider_id'] = $plugin_instance->getId();
   $variables['auth_configuration'] = json_encode($plugin_instance->getDataForApp());
+  $variables['#cache']['tags'][] = 'config:' . $plugin_instance->getConfigName();
 }
