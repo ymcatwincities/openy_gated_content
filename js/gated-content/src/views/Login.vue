@@ -1,8 +1,5 @@
 <template>
   <div class="login">
-    <div class="text-center my-4">
-      <router-link :to="{ name: 'Home' }">Home</router-link>
-    </div>
     <h2 class="title">Sign In</h2>
     <DummyAuth v-if="authPlugin === 'dummy'"/>
     <CustomAuth v-else-if="authPlugin === 'custom'"/>

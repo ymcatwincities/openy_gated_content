@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="listing">
     <h2 class="title">{{ title }}</h2>
     <div v-if="loading">Loading...</div>
     <div v-else-if="error">Error loading</div>
@@ -27,7 +27,7 @@ export default {
       type: String,
       default: 'Videos',
     },
-    excludedVideoId: Number,
+    excludedVideoId: String,
     msg: String,
   },
   data() {
@@ -37,6 +37,7 @@ export default {
       listing: null,
       params: [
         'field_gc_video_media',
+        'field_gc_video_level',
       ],
     };
   },
