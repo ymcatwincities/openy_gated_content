@@ -11,7 +11,9 @@
       <div class="video-footer">
         <div>
           <div class="video-footer__title">{{ video.attributes.title }}</div>
-          <div class="video-footer__description"
+          <div
+            v-if="video.attributes.description"
+            class="video-footer__description"
                v-html="video.attributes.description.processed"
           ></div>
         </div>
