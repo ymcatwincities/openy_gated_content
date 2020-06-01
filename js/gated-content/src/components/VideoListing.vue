@@ -1,11 +1,11 @@
 <template>
-  <div v-if="listing.length > 0">
+  <div>
     <h2 class="title">{{ title }}</h2>
     <div v-if="loading">Loading...</div>
     <div v-else-if="error">Error loading</div>
     <div v-else class="video-listing">
       <VideoTeaser
-        v-for="video in filteredListing"
+        v-for="video in listing"
         :key="video.id"
         :video="video"
       />
@@ -27,7 +27,10 @@ export default {
       type: String,
       default: 'Videos',
     },
-    excludedVideoId: String,
+    excludedVideoId: {
+      type: String,
+      default: '',
+    },
     msg: String,
   },
   data() {
@@ -46,6 +49,19 @@ export default {
     if (this.params) {
       params.include = this.params.join(',');
     }
+
+    if (this.excludedVideoId.length > 0) {
+      params.filter = {
+        excludeSelf: {
+          condition: {
+            path: 'id',
+            operator: '<>',
+            value: this.excludedVideoId,
+          },
+        },
+      };
+    }
+
     client
       .get('jsonapi/node/gc_video', { params })
       .then((response) => {
@@ -61,8 +77,8 @@ export default {
       });
   },
   computed: {
-    filteredListing() {
-      return this.listing.filter((video) => video.id !== this.excludedVideoId);
+    listingIsNotEmpty() {
+      return this.listing !== null && this.listing.length > 0;
     },
   },
   methods: {

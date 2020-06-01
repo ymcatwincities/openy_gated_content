@@ -1,11 +1,11 @@
 <template>
-  <div v-if="listing.length > 0">
+  <div v-if="listingIsNotEmpty">
     <h2 class="title">{{ title }}</h2>
     <div v-if="loading">Loading...</div>
     <div v-else-if="error">Error loading</div>
     <div v-else class="video-listing live-stream-listing">
         <LiveStreamTeaser
-          v-for="video in computedListing"
+          v-for="video in listing"
           :key="video.id"
           :video="video"
         />
@@ -27,7 +27,10 @@ export default {
       type: String,
       default: 'Live streams',
     },
-    excludedVideoId: String,
+    excludedVideoId: {
+      type: String,
+      default: '',
+    },
     msg: String,
   },
   data() {
@@ -48,6 +51,34 @@ export default {
     if (this.params) {
       params.include = this.params.join(',');
     }
+
+    params.filter = {
+      dateFilter: {
+        condition: {
+          path: 'date.end_value',
+          operator: '>=',
+          value: new Date().toISOString(),
+        },
+      },
+    };
+
+    if (this.excludedVideoId.length > 0) {
+      params.filter.excludeSelf = {
+        condition: {
+          path: 'id',
+          operator: '<>',
+          value: this.excludedVideoId,
+        },
+      };
+    }
+
+    params.sort = {
+      sortByDate: {
+        path: 'date.end_value',
+        direction: 'ASC',
+      },
+    };
+
     client
       // TODO: maybe we need sort or filter here.
       .get('jsonapi/eventinstance/live_stream', { params })
@@ -64,25 +95,8 @@ export default {
       });
   },
   computed: {
-    computedListing() {
-      let listing = this.listing.filter((video) => video.id !== this.excludedVideoId);
-      // filter expired live streams
-      listing = listing.filter((video) => new Date(video.attributes.date.end_value) > new Date());
-
-      function compareDates(video1, video2) {
-        const date1 = new Date(video1.attributes.date.value);
-        const date2 = new Date(video2.attributes.date.value);
-
-        if (date1 < date2) {
-          return -1;
-        }
-        if (date1 > date2) {
-          return 1;
-        }
-        return 0;
-      }
-
-      return listing.sort(compareDates);
+    listingIsNotEmpty() {
+      return this.listing !== null && this.listing.length > 0;
     },
   },
   methods: {
