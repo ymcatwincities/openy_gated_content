@@ -10,7 +10,7 @@
       <div class="meta">
         <div class="schedule">
           <i class="fa fa-clock-o" aria-hidden="true"></i>
-          {{ schedule}}
+          {{ this.video.attributes.date | schedule }}
         </div>
       </div>
       <div v-if="isOnAir" class="controls join">
@@ -56,23 +56,6 @@ export default {
     level() {
       return this.video.attributes.field_ls_level ? this.video.attributes.field_ls_level.name
         : this.video.attributes.level.name;
-    },
-    schedule() {
-      const dateStart = new Date(this.video.attributes.date.value);
-      const dateEnd = new Date(this.video.attributes.date.end_value);
-      const startHours = dateStart.getHours() % 12 || 12;
-      const startMinutes = (dateStart.getMinutes() < 10 ? '0' : '') + dateStart.getMinutes();
-      const startMorning = dateStart.getHours() < 12 ? 'a.m.' : 'p.m.';
-      const endHours = dateEnd.getHours() % 12 || 12;
-      const endMinutes = (dateEnd.getMinutes() < 10 ? '0' : '') + dateEnd.getMinutes();
-      const endMorning = dateEnd.getHours() < 12 ? 'a.m.' : 'p.m.';
-
-      let start = `${startHours}:${startMinutes} ${startMorning} - `;
-      if (this.isOnAir) {
-        start = 'Until ';
-      }
-
-      return `${start} ${endHours}:${endMinutes} ${endMorning}`;
     },
     month() {
       const date = new Date(this.video.attributes.date.value);

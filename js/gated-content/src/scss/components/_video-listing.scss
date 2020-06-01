@@ -5,6 +5,10 @@
   grid-template-columns: 1fr;
 
   @media all and (min-width: 600px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media all and (min-width: 1200px) {
     grid-template-columns: repeat(3, 1fr);
   }
 }

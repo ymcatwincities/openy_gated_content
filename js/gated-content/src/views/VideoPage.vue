@@ -11,18 +11,24 @@
       <div class="video-footer">
         <div>
           <div class="video-footer__title">{{ video.attributes.title }}</div>
-          <div class="video-footer__description"
+          <div
+            v-if="video.attributes.field_gc_video_description"
+            class="video-footer__description"
                v-html="video.attributes.field_gc_video_description.processed"
           ></div>
         </div>
         <div>
-          <div class="video-footer__block">
+          <div
+            v-if="video.attributes.field_gc_video_level"
+            class="video-footer__block">
             <div class="video-level">
               {{ video.attributes.field_gc_video_level.name | first_letter }}
             </div>
             {{ video.attributes.field_gc_video_level.name | capitalize }}
           </div>
-          <div class="video-footer__block">
+          <div
+            v-if="video.attributes.field_gc_video_instructor"
+            class="video-footer__block">
             <i class="fa fa-user"></i>
             {{ video.attributes.field_gc_video_instructor }}
           </div>
@@ -30,7 +36,9 @@
             <i class="fa fa-hand-o-right"></i>
             {{ video.attributes.field_gc_video_category.name }}
           </div>
-          <div class="video-footer__equipment">
+          <div
+            v-if="video.attributes.field_gc_video_equipment"
+            class="video-footer__equipment">
             <i class="fa fa-cubes"></i>
             Equipment:
             <ul>

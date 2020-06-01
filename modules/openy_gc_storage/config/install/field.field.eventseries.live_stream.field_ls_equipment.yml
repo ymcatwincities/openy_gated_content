@@ -16,7 +16,7 @@ entity_type: eventseries
 bundle: live_stream
 label: Equipment
 description: ''
-required: false
+required: true
 translatable: false
 default_value: {  }
 default_value_callback: ''

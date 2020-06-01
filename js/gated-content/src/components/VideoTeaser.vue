@@ -8,7 +8,9 @@
           <div v-if="duration" class="duration">{{duration}}</div>
         </div>
         <div class="title">{{ video.attributes.title }}</div>
-        <div class="meta">
+        <div
+          v-if="video.attributes.field_gc_video_level"
+          class="meta">
           <div class="video-level">
             {{ video.attributes.field_gc_video_level.name | first_letter }}
           </div>
