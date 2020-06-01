@@ -44,37 +44,12 @@ export default {
       ],
     };
   },
-  mounted() {
-    const params = {};
-    if (this.params) {
-      params.include = this.params.join(',');
-    }
-
-    if (this.excludedVideoId.length > 0) {
-      params.filter = {
-        excludeSelf: {
-          condition: {
-            path: 'id',
-            operator: '<>',
-            value: this.excludedVideoId,
-          },
-        },
-      };
-    }
-
-    client
-      .get('jsonapi/node/gc_video', { params })
-      .then((response) => {
-        this.loading = false;
-        this.listing = response.data.data;
-        this.combine(response.data);
-      })
-      .catch((error) => {
-        this.error = true;
-        this.loading = false;
-        console.error(error);
-        throw error;
-      });
+  watch: {
+    $route: 'load',
+    excludedVideoId: 'load',
+  },
+  async mounted() {
+    await this.load();
   },
   computed: {
     listingIsNotEmpty() {
@@ -82,6 +57,38 @@ export default {
     },
   },
   methods: {
+    async load() {
+      const params = {};
+      if (this.params) {
+        params.include = this.params.join(',');
+      }
+
+      if (this.excludedVideoId.length > 0) {
+        params.filter = {
+          excludeSelf: {
+            condition: {
+              path: 'id',
+              operator: '<>',
+              value: this.excludedVideoId,
+            },
+          },
+        };
+      }
+
+      client
+        .get('jsonapi/node/gc_video', { params })
+        .then((response) => {
+          this.loading = false;
+          this.listing = response.data.data;
+          this.combine(response.data);
+        })
+        .catch((error) => {
+          this.error = true;
+          this.loading = false;
+          console.error(error);
+          throw error;
+        });
+    },
     // TODO: maybe we need to move this method to mixin?
     // (note: this can be singe or multiple values, compare LiveStreamListing and LiveStreamPage)
     combine(data) {
@@ -89,6 +96,10 @@ export default {
       this.listing.forEach((video, key) => {
         this.params.forEach((field) => {
           const rel = video.relationships[field].data;
+          if (rel === null) {
+            this.listing[key].attributes[field] = null;
+            return;
+          }
           // Multi-value fields.
           if (Array.isArray(rel)) {
             this.listing[key].attributes[field] = [];

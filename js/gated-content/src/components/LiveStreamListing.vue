@@ -46,53 +46,12 @@ export default {
       ],
     };
   },
-  mounted() {
-    const params = {};
-    if (this.params) {
-      params.include = this.params.join(',');
-    }
-
-    params.filter = {
-      dateFilter: {
-        condition: {
-          path: 'date.end_value',
-          operator: '>=',
-          value: new Date().toISOString(),
-        },
-      },
-    };
-
-    if (this.excludedVideoId.length > 0) {
-      params.filter.excludeSelf = {
-        condition: {
-          path: 'id',
-          operator: '<>',
-          value: this.excludedVideoId,
-        },
-      };
-    }
-
-    params.sort = {
-      sortByDate: {
-        path: 'date.value',
-        direction: 'ASC',
-      },
-    };
-
-    client
-      // TODO: maybe we need sort or filter here.
-      .get('jsonapi/eventinstance/live_stream', { params })
-      .then((response) => {
-        this.loading = false;
-        this.listing = response.data.data;
-        this.combine(response.data);
-      })
-      .catch((error) => {
-        this.error = true;
-        this.loading = false;
-        console.error(error);
-        throw error;
-      });
+  watch: {
+    $route: 'load',
+    excludedVideoId: 'load',
+  },
+  async mounted() {
+    await this.load();
   },
   computed: {
     listingIsNotEmpty() {
@@ -100,6 +59,54 @@ export default {
     },
   },
   methods: {
+    async load() {
+      const params = {};
+      if (this.params) {
+        params.include = this.params.join(',');
+      }
+
+      params.filter = {
+        dateFilter: {
+          condition: {
+            path: 'date.end_value',
+            operator: '>=',
+            value: new Date().toISOString(),
+          },
+        },
+      };
+
+      if (this.excludedVideoId.length > 0) {
+        params.filter.excludeSelf = {
+          condition: {
+            path: 'id',
+            operator: '<>',
+            value: this.excludedVideoId,
+          },
+        };
+      }
+
+      params.sort = {
+        sortByDate: {
+          path: 'date.value',
+          direction: 'ASC',
+        },
+      };
+
+      client
+        // TODO: maybe we need sort or filter here.
+        .get('jsonapi/eventinstance/live_stream', { params })
+        .then((response) => {
+          this.loading = false;
+          this.listing = response.data.data;
+          this.combine(response.data);
+        })
+        .catch((error) => {
+          this.error = true;
+          this.loading = false;
+          console.error(error);
+          throw error;
+        });
+    },
     combine(data) {
       if (!data.included) return;
       this.listing.forEach((video, key) => {

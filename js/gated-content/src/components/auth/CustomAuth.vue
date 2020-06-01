@@ -17,7 +17,7 @@
     <div v-if="config.enableRecaptcha">
       <ReCaptcha ref="recaptcha" v-model="form.recaptchaToken" />
     </div>
-    <button @click.prevent="login" class="btn btn-lg btn-primary">Login!</button>
+    <button @click.prevent="login" class="btn btn-lg btn-primary">Login</button>
   </form>
 </template>
 

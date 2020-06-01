@@ -20,6 +20,8 @@
         <div>
           <div class="video-footer__block">
             <i class="fa fa-clock-o" aria-hidden="true"></i>
+            {{ video.attributes.date.value | month }}
+            {{ video.attributes.date.value | day }},
             {{ video.attributes.date | schedule }}
           </div>
           <div class="video-footer__block"
@@ -120,7 +122,7 @@ export default {
     await this.load();
   },
   methods: {
-    load() {
+    async load() {
       const params = {};
       if (this.params) {
         params.include = this.params.join(',');

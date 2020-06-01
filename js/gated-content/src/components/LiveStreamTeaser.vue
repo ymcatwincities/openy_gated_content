@@ -4,7 +4,10 @@
       <div class="preview" v-bind:style="{
               backgroundImage: `url(${image})`
             }">
-        <div class="month"><p>{{ month }}</p><p>{{ day }}</p></div>
+        <div class="month">
+          <p>{{ video.attributes.date.value | month }}</p>
+          <p>{{ video.attributes.date.value | day }}</p>
+        </div>
       </div>
       <div class="title">{{ video.attributes.title }}</div>
       <div class="meta">
@@ -56,17 +59,6 @@ export default {
     level() {
       return this.video.attributes.field_ls_level ? this.video.attributes.field_ls_level.name
         : this.video.attributes.level.name;
-    },
-    month() {
-      const date = new Date(this.video.attributes.date.value);
-      const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
-      ];
-
-      return monthNames[date.getMonth()];
-    },
-    day() {
-      return new Date(this.video.attributes.date.value).getDate();
     },
     isOnAir() {
       const dateStart = new Date(this.video.attributes.date.value);
