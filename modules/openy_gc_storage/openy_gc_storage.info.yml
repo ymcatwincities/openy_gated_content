@@ -9,11 +9,11 @@ dependencies:
   - drupal:datetime_range
   - drupal:field
   - drupal:field_inheritance
+  - drupal:entity_browser
   - drupal:language
   - drupal:media
   - drupal:menu_ui
   - drupal:node
-  - drupal:openy_focal_point
   - drupal:openy_media_image
   - drupal:openy_media_video
   - drupal:options

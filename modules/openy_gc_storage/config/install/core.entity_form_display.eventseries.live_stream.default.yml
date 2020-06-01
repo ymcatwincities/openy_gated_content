@@ -11,7 +11,7 @@ dependencies:
     - recurring_events.eventseries_type.live_stream
   module:
     - datetime_range
-    - openy_focal_point
+    - entity_browser
     - recurring_events
     - text
 id: eventseries.live_stream.default
@@ -84,17 +84,17 @@ content:
     type: options_select
     region: content
   field_ls_media:
-    type: openy_focal_point_entity_browser_entity_reference
+    type: entity_browser_entity_reference
     weight: 4
     region: content
     settings:
       entity_browser: videos_library
       field_widget_display: label
-      field_widget_edit: '1'
-      field_widget_remove: '1'
+      field_widget_edit: true
+      field_widget_remove: true
       selection_mode: selection_append
-      field_widget_replace: 0
-      open: 0
+      field_widget_replace: false
+      open: false
       field_widget_display_settings: {  }
     third_party_settings: {  }
   included_dates:
