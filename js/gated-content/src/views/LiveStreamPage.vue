@@ -16,6 +16,10 @@
           ></div>
         </div>
         <div>
+          <div class="video-footer__block">
+            <i class="fa fa-clock-o" aria-hidden="true"></i>
+            {{ video.attributes.date | schedule }}
+          </div>
           <div class="video-footer__block"
             v-if="level"
           >
