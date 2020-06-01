@@ -6,7 +6,5 @@ export default axios.create({
   headers: {
     'Content-type': 'application/json',
   },
-  paramsSerializer: (params) => {
-    return qs.stringify(params);
-  },
+  paramsSerializer: (params) => qs.stringify(params),
 });
