@@ -100,7 +100,7 @@ export default {
     await this.load();
   },
   methods: {
-    load() {
+    async load() {
       const params = {};
       if (this.params) {
         params.include = this.params.join(',');

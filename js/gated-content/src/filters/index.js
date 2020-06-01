@@ -38,6 +38,21 @@ const filters = [
       return `${start} ${endHours}:${endMinutes} ${endMorning}`;
     },
   },
+  {
+    name: 'day',
+    execute: (value) => new Date(value).getDate(),
+  },
+  {
+    name: 'month',
+    execute: (value) => {
+      const date = new Date(value);
+      const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+      ];
+
+      return monthNames[date.getMonth()];
+    },
+  },
 ];
 
 export default filters;
