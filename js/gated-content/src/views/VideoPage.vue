@@ -123,6 +123,10 @@ export default {
       if (!data.included) return;
       this.params.forEach((field) => {
         const rel = data.data.relationships[field].data;
+        if (rel === null) {
+          this.video.attributes[field] = null;
+          return;
+        }
         // Multi-value fields.
         if (Array.isArray(rel)) {
           this.video.attributes[field] = [];

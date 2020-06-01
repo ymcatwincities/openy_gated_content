@@ -89,6 +89,10 @@ export default {
       this.listing.forEach((video, key) => {
         this.params.forEach((field) => {
           const rel = video.relationships[field].data;
+          if (rel === null) {
+            this.listing[key].attributes[field] = null;
+            return;
+          }
           // Multi-value fields.
           if (Array.isArray(rel)) {
             this.listing[key].attributes[field] = [];
