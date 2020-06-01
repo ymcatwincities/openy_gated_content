@@ -8,3 +8,4 @@ dependencies:
   - drupal:openy_system
   - drupal:openy_gc_auth
   - drupal:recaptcha
+  - drupal:jsonapi

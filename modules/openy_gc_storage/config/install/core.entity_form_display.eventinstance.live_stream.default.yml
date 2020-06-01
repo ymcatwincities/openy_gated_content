@@ -3,13 +3,13 @@ status: true
 dependencies:
   config:
     - entity_browser.browser.videos_library
-    - field.field.eventinstance.live_stream.field_ls_level
     - field.field.eventinstance.live_stream.field_ls_category
+    - field.field.eventinstance.live_stream.field_ls_level
     - field.field.eventinstance.live_stream.field_ls_media
     - recurring_events.eventinstance_type.live_stream
   module:
     - datetime_range
-    - openy_focal_point
+    - entity_browser
     - text
 id: eventinstance.live_stream.default
 targetEntityType: eventinstance
@@ -30,12 +30,6 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-  field_ls_level:
-    weight: 26
-    settings: {  }
-    third_party_settings: {  }
-    type: options_select
-    region: content
   field_ls_category:
     weight: 2
     settings:
@@ -46,17 +40,23 @@ content:
     third_party_settings: {  }
     type: entity_reference_autocomplete
     region: content
+  field_ls_level:
+    weight: 26
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
   field_ls_media:
-    type: openy_focal_point_entity_browser_entity_reference
+    type: entity_browser_entity_reference
     weight: 3
     settings:
       entity_browser: videos_library
       field_widget_display: label
-      field_widget_edit: '1'
-      field_widget_remove: '1'
+      field_widget_edit: true
+      field_widget_remove: true
       selection_mode: selection_append
-      field_widget_replace: 0
-      open: 0
+      field_widget_replace: false
+      open: false
       field_widget_display_settings: {  }
     third_party_settings: {  }
     region: content
