@@ -74,7 +74,7 @@ export default {
 
     params.sort = {
       sortByDate: {
-        path: 'date.end_value',
+        path: 'date.value',
         direction: 'ASC',
       },
     };

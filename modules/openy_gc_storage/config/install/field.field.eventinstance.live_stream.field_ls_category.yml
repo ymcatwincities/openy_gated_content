@@ -1,4 +1,3 @@
-uuid: 6e59cb0b-bddd-4071-88d4-ff946979c641
 langcode: en
 status: true
 dependencies:
@@ -12,8 +11,6 @@ third_party_settings:
   datalayer:
     expose: 0
     label: field_ls_category
-_core:
-  default_config_hash: Vw_JfaKOubWbLF_js4E6DgeiGhRHNrneYn-Ib9ET-Vs
 id: eventinstance.live_stream.field_ls_category
 field_name: field_ls_category
 entity_type: eventinstance

@@ -1,4 +1,3 @@
-uuid: 7cf0ccdd-0ea7-4e09-b6d7-45153872a938
 langcode: en
 status: true
 dependencies:
@@ -11,8 +10,6 @@ third_party_settings:
   datalayer:
     expose: 0
     label: field_ls_equipment
-_core:
-  default_config_hash: jAU41TckzcN5SgwDIfOj8J6Mrdud5D5gIXJBABg6zjc
 id: eventseries.live_stream.field_ls_equipment
 field_name: field_ls_equipment
 entity_type: eventseries
