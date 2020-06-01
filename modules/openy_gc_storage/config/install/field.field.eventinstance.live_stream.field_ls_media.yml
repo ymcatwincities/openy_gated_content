@@ -1,3 +1,4 @@
+uuid: 01cb6032-a189-47ff-a616-31e9a0999669
 langcode: en
 status: true
 dependencies:
@@ -11,13 +12,15 @@ third_party_settings:
   datalayer:
     expose: 0
     label: field_ls_media
+_core:
+  default_config_hash: 1nPebNg1PEGxSTPN3SXxkzbWmhARSqQH18jQXr7fKUo
 id: eventinstance.live_stream.field_ls_media
 field_name: field_ls_media
 entity_type: eventinstance
 bundle: live_stream
 label: Media
 description: ''
-required: false
+required: true
 translatable: false
 default_value: {  }
 default_value_callback: ''

@@ -1,3 +1,4 @@
+uuid: c14f3b9c-c1c2-4f7c-9c6e-2d42c8889c54
 langcode: en
 status: true
 dependencies:
@@ -11,13 +12,15 @@ third_party_settings:
   datalayer:
     expose: 0
     label: field_ls_level
+_core:
+  default_config_hash: qJsM1bkhz9NfZ1OiZmAsMLLJPq4uVFTQmLKRBr_Blvw
 id: eventseries.live_stream.field_ls_level
 field_name: field_ls_level
 entity_type: eventseries
 bundle: live_stream
 label: Level
 description: ''
-required: false
+required: true
 translatable: false
 default_value: {  }
 default_value_callback: ''
