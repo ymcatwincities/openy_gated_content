@@ -16,9 +16,11 @@
 <script>
 import client from '@/client';
 import VideoTeaser from '@/components/VideoTeaser.vue';
+import { JsonApiCombineMixin } from '../mixins/JsonApiCombineMixin';
 
 export default {
   name: 'VideoListing',
+  mixins: [JsonApiCombineMixin],
   components: {
     VideoTeaser,
   },
@@ -78,9 +80,12 @@ export default {
       client
         .get('jsonapi/node/gc_video', { params })
         .then((response) => {
+          this.listing = this.combineMultiple(
+            response.data.data,
+            response.data.included,
+            this.params,
+          );
           this.loading = false;
-          this.listing = response.data.data;
-          this.combine(response.data);
         })
         .catch((error) => {
           this.error = true;
@@ -88,36 +93,6 @@ export default {
           console.error(error);
           throw error;
         });
-    },
-    // TODO: maybe we need to move this method to mixin?
-    // (note: this can be singe or multiple values, compare LiveStreamListing and LiveStreamPage)
-    combine(data) {
-      if (!data.included) return;
-      this.listing.forEach((video, key) => {
-        this.params.forEach((field) => {
-          const rel = video.relationships[field].data;
-          if (rel === null) {
-            this.listing[key].attributes[field] = null;
-            return;
-          }
-          // Multi-value fields.
-          if (Array.isArray(rel)) {
-            this.listing[key].attributes[field] = [];
-            rel.forEach((relItem) => {
-              this.listing[key].attributes[field].push(
-                data.included
-                  .find((obj) => obj.type === relItem.type && obj.id === relItem.id)
-                  .attributes,
-              );
-            });
-          } else {
-            // Single-value fields.
-            this.listing[key].attributes[field] = data.included
-              .find((obj) => obj.type === rel.type && obj.id === rel.id)
-              .attributes;
-          }
-        });
-      });
     },
   },
 };
