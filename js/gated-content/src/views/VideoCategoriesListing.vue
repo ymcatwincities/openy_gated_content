@@ -38,8 +38,9 @@ export default {
       listing: null,
       params: [
         'field_gc_category_media',
-        // TODO: looks like we need here field_gc_category_media.field_media_image
-        // Think about how to add it to the attributes
+        // Sub-relationship should be after parent field.
+        // @see JsonApiCombineMixin
+        'field_gc_category_media.field_media_image',
       ],
     };
   },
