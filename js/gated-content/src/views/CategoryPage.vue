@@ -1,0 +1,76 @@
+<template>
+  <div class="gated-content-category-page">
+    <div v-if="loading">Loading</div>
+    <div v-else-if="error">Error loading</div>
+    <div v-else>
+      <div class="category-details">
+        <h2>{{ category.attributes.name }}</h2>
+        <div
+          v-if="category.attributes.description"
+          v-html="category.attributes.description.processed"
+        ></div>
+      </div>
+      <!-- TODO: limit listing by category id -->
+      <VideoListing class="videos"
+        :title="'Videos'"
+        :category="category.id"
+      />
+    </div>
+  </div>
+</template>
+
+<script>
+import client from '@/client';
+import 'vue-lazy-youtube-video/dist/style.css';
+import VideoListing from '../components/VideoListing.vue';
+import { JsonApiCombineMixin } from '../mixins/JsonApiCombineMixin';
+
+export default {
+  name: 'CategoryPage',
+  mixins: [JsonApiCombineMixin],
+  components: {
+    VideoListing,
+  },
+  props: {
+    cid: {
+      type: String,
+      required: true,
+    },
+  },
+  data() {
+    return {
+      loading: true,
+      error: false,
+      category: null,
+      response: null,
+    };
+  },
+  watch: {
+    $route: 'load',
+  },
+  async mounted() {
+    await this.load();
+  },
+  methods: {
+    async load() {
+      client
+        .get(`jsonapi/taxonomy_term/gc_category/${this.cid}`)
+        .then((response) => {
+          this.category = response.data.data;
+          console.log(this.category);
+          this.loading = false;
+        })
+        .catch((error) => {
+          this.error = true;
+          this.loading = false;
+          console.error(error);
+          throw error;
+        });
+    },
+  },
+};
+</script>
+
+<style>
+
+</style>

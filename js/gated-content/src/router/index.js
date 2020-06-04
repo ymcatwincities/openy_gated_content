@@ -5,6 +5,8 @@ import Home from '@/views/Home.vue';
 import Login from '@/views/Login.vue';
 import NotFound from '@/views/NotFound.vue';
 import VideoPage from '@/views/VideoPage.vue';
+import CategoryPage from '@/views/CategoryPage.vue';
+import VideoCategoriesListing from '@/views/VideoCategoriesListing.vue';
 import LiveStreamPage from '@/views/LiveStreamPage.vue';
 
 Vue.use(VueRouter);
@@ -21,6 +23,18 @@ const routes = [
     name: 'Login',
     component: Login,
     meta: { requiresGuest: true },
+  },
+  {
+    path: '/categories',
+    name: 'CategoryListing',
+    component: VideoCategoriesListing,
+    props: true,
+  },
+  {
+    path: '/category/:cid',
+    name: 'Category',
+    component: CategoryPage,
+    props: true,
   },
   {
     path: '/video/:id',

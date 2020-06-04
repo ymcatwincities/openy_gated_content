@@ -50,12 +50,20 @@
           </div>
         </div>
       </div>
-      <!--div class="video-category">
-        &lt; {{ video.attributes.field_gc_video_category.name }}
-      </div-->
+      <div class="video-category">
+        <router-link :to="{
+          name: 'Category',
+          params: {
+            cid: video.relationships.field_gc_video_category.data.id
+          }
+        }">
+          {{ video.attributes.field_gc_video_category.name }}
+        </router-link>
+      </div>
       <VideoListing class="videos"
         :title="'UP NEXT'"
         :excluded-video-id="video.id"
+        :category="video.relationships.field_gc_video_category.data.id"
       />
     </div>
   </div>
