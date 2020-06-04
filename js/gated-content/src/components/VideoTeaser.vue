@@ -57,8 +57,6 @@ export default {
       return `${appendZero(Math.floor(sec / 60))}:${appendZero(sec % 60)}`;
     },
   },
-  mounted() {
-  },
 };
 </script>
 

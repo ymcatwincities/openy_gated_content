@@ -69,9 +69,11 @@ import client from '@/client';
 import 'vue-lazy-youtube-video/dist/style.css';
 import LazyYoutubeVideo from 'vue-lazy-youtube-video';
 import LiveStreamListing from '../components/LiveStreamListing.vue';
+import { JsonApiCombineMixin } from '../mixins/JsonApiCombineMixin';
 
 export default {
   name: 'LiveStreamPage',
+  mixins: [JsonApiCombineMixin],
   components: {
     LazyYoutubeVideo,
     LiveStreamListing,
@@ -130,8 +132,7 @@ export default {
       client
         .get(`jsonapi/eventinstance/live_stream/${this.id}`, { params })
         .then((response) => {
-          this.video = response.data.data;
-          this.combine(response.data);
+          this.video = this.combine(response.data.data, response.data.included, this.params);
           this.loading = false;
         })
         .catch((error) => {
@@ -140,32 +141,6 @@ export default {
           console.error(error);
           throw error;
         });
-    },
-    combine(data) {
-      if (!data.included) return;
-      this.params.forEach((field) => {
-        const rel = data.data.relationships[field].data;
-        if (rel === null) {
-          this.video.attributes[field] = null;
-          return;
-        }
-        // Multi-value fields.
-        if (Array.isArray(rel)) {
-          this.video.attributes[field] = [];
-          rel.forEach((relItem) => {
-            this.video.attributes[field].push(
-              data.included
-                .find((obj) => obj.type === relItem.type && obj.id === relItem.id)
-                .attributes,
-            );
-          });
-        } else {
-          // Single-value fields.
-          this.video.attributes[field] = data.included
-            .find((obj) => obj.type === rel.type && obj.id === rel.id)
-            .attributes;
-        }
-      });
     },
   },
 };

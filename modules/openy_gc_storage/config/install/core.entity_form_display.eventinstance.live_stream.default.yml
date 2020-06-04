@@ -4,6 +4,7 @@ dependencies:
   config:
     - entity_browser.browser.videos_library
     - field.field.eventinstance.live_stream.field_ls_category
+    - field.field.eventinstance.live_stream.field_ls_featured
     - field.field.eventinstance.live_stream.field_ls_level
     - field.field.eventinstance.live_stream.field_ls_media
     - recurring_events.eventinstance_type.live_stream
@@ -40,8 +41,15 @@ content:
     third_party_settings: {  }
     type: entity_reference_autocomplete
     region: content
+  field_ls_featured:
+    weight: 7
+    settings:
+      display_label: true
+    third_party_settings: {  }
+    type: boolean_checkbox
+    region: content
   field_ls_level:
-    weight: 26
+    weight: 6
     settings: {  }
     third_party_settings: {  }
     type: options_select

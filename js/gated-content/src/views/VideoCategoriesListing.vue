@@ -1,16 +1,13 @@
 <template>
   <div v-if="listingIsNotEmpty">
     <h2 class="title">{{ title }}</h2>
-    <router-link :to="{ name: 'CategoryListing' }" v-if="viewAll">
-      View All
-    </router-link>
     <div v-if="loading">Loading...</div>
     <div v-else-if="error">Error loading</div>
-    <div v-else class="video-listing">
-      <VideoTeaser
-        v-for="video in listing"
-        :key="video.id"
-        :video="video"
+    <div v-else class="video-listing category-lising">
+      <CategoryTeaser
+        v-for="category in listing"
+        :key="category.id"
+        :category="category"
       />
     </div>
   </div>
@@ -18,37 +15,21 @@
 
 <script>
 import client from '@/client';
-import VideoTeaser from '@/components/VideoTeaser.vue';
+import CategoryTeaser from '@/components/CategoryTeaser.vue';
 import { JsonApiCombineMixin } from '../mixins/JsonApiCombineMixin';
 
 export default {
-  name: 'VideoListing',
+  name: 'VideoCategoriesListing',
   mixins: [JsonApiCombineMixin],
   components: {
-    VideoTeaser,
+    CategoryTeaser,
   },
   props: {
     title: {
       type: String,
-      default: 'Videos',
-    },
-    excludedVideoId: {
-      type: String,
-      default: '',
+      default: 'Categories',
     },
     msg: String,
-    category: {
-      type: String,
-      default: '',
-    },
-    featured: {
-      type: Boolean,
-      default: false,
-    },
-    viewAll: {
-      type: Boolean,
-      default: false,
-    },
   },
   data() {
     return {
@@ -56,15 +37,11 @@ export default {
       error: false,
       listing: null,
       params: [
-        'field_gc_video_media',
-        'field_gc_video_level',
-        'field_gc_video_category',
+        'field_gc_category_media',
+        // TODO: looks like we need here field_gc_category_media.field_media_image
+        // Think about how to add it to the attributes
       ],
     };
-  },
-  watch: {
-    $route: 'load',
-    excludedVideoId: 'load',
   },
   async mounted() {
     await this.load();
@@ -81,23 +58,8 @@ export default {
         params.include = this.params.join(',');
       }
 
-      // TODO: if featured = true - add filter by field_gc_video_featured=true
-      // condition and limit to 6.
-      // TODO: if category not empty - add filter by category.
-      if (this.excludedVideoId.length > 0) {
-        params.filter = {
-          excludeSelf: {
-            condition: {
-              path: 'id',
-              operator: '<>',
-              value: this.excludedVideoId,
-            },
-          },
-        };
-      }
-
       client
-        .get('jsonapi/node/gc_video', { params })
+        .get('jsonapi/taxonomy_term/gc_category', { params })
         .then((response) => {
           this.listing = this.combineMultiple(
             response.data.data,

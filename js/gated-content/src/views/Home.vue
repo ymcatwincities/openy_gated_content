@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <VideoListing class="videos" />
+    <VideoListing class="videos" :viewAll="true"/>
     <LiveStreamListing class="videos" />
   </div>
 </template>

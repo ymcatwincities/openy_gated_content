@@ -67,8 +67,6 @@ export default {
       return dateStart < now && now < dateEnd;
     },
   },
-  mounted() {
-  },
 };
 </script>
 

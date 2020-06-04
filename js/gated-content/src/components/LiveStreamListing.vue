@@ -16,9 +16,11 @@
 <script>
 import client from '@/client';
 import LiveStreamTeaser from '@/components/LiveStreamTeaser.vue';
+import { JsonApiCombineMixin } from '../mixins/JsonApiCombineMixin';
 
 export default {
   name: 'LiveStreamListing',
+  mixins: [JsonApiCombineMixin],
   components: {
     LiveStreamTeaser,
   },
@@ -30,6 +32,10 @@ export default {
     excludedVideoId: {
       type: String,
       default: '',
+    },
+    featured: {
+      type: Boolean,
+      default: false,
     },
     msg: String,
   },
@@ -75,6 +81,7 @@ export default {
         },
       };
 
+      // TODO: if featured = true - add filter by field_ls_featured=true condition and limit to 6.
       if (this.excludedVideoId.length > 0) {
         params.filter.excludeSelf = {
           condition: {
@@ -93,12 +100,14 @@ export default {
       };
 
       client
-        // TODO: maybe we need sort or filter here.
         .get('jsonapi/eventinstance/live_stream', { params })
         .then((response) => {
+          this.listing = this.combineMultiple(
+            response.data.data,
+            response.data.included,
+            this.params,
+          );
           this.loading = false;
-          this.listing = response.data.data;
-          this.combine(response.data);
         })
         .catch((error) => {
           this.error = true;
@@ -106,34 +115,6 @@ export default {
           console.error(error);
           throw error;
         });
-    },
-    combine(data) {
-      if (!data.included) return;
-      this.listing.forEach((video, key) => {
-        this.params.forEach((field) => {
-          const rel = video.relationships[field].data;
-          if (rel === null) {
-            this.listing[key].attributes[field] = null;
-            return;
-          }
-          // Multi-value fields.
-          if (Array.isArray(rel)) {
-            this.listing[key].attributes[field] = [];
-            rel.forEach((relItem) => {
-              this.listing[key].attributes[field].push(
-                data.included
-                  .find((obj) => obj.type === relItem.type && obj.id === relItem.id)
-                  .attributes,
-              );
-            });
-          } else {
-            // Single-value fields.
-            this.listing[key].attributes[field] = data.included
-              .find((obj) => obj.type === rel.type && obj.id === rel.id)
-              .attributes;
-          }
-        });
-      });
     },
   },
 };
