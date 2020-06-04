@@ -4,7 +4,8 @@
     "type": "drupal-module",
     "require": {
         "drupal/default_content": "*",
-        "drupal/recurring_events": "*"
+        "drupal/recurring_events": "*",
+        "drupal/jsonapi_image_styles": "^1.0@beta"
     },
     "license": "GPL-2.0+",
     "minimum-stability": "dev"
