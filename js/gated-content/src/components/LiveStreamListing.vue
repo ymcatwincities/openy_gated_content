@@ -33,6 +33,10 @@ export default {
       type: String,
       default: '',
     },
+    featured: {
+      type: Boolean,
+      default: false,
+    },
     msg: String,
   },
   data() {
@@ -77,6 +81,7 @@ export default {
         },
       };
 
+      // TODO: if featured = true - add filter by field_ls_featured=true condition and limit to 6.
       if (this.excludedVideoId.length > 0) {
         params.filter.excludeSelf = {
           condition: {
@@ -95,7 +100,6 @@ export default {
       };
 
       client
-        // TODO: maybe we need sort or filter here.
         .get('jsonapi/eventinstance/live_stream', { params })
         .then((response) => {
           this.listing = this.combineMultiple(
