@@ -22,4 +22,9 @@ function openy_gc_storage_install() {
   // Allow authenticated users access gated content entities pages.
   $role2_object->grantPermission('view gated content entities pages');
   $role2_object->save();
+
+  $config_factory = \Drupal::configFactory();
+  $config = $config_factory->getEditable('jsonapi_image_styles.settings');
+  $config->set('image_styles.gated_content_teaser', 'gated_content_teaser');
+  $config->save(TRUE);
 }

@@ -22,9 +22,11 @@ export default {
   },
   computed: {
     image() {
-      // const vid = this.category.attributes.field_gc_category_media;
-      return this.category.attributes.field_media_image
-        ? this.category.attributes.field_media_image.uri.url : null;
+      if (!this.category.attributes.field_media_image) {
+        return null;
+      }
+
+      return this.category.attributes.field_media_image.image_style_uri[0].gated_content_teaser;
     },
   },
 };

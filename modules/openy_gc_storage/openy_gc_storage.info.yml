@@ -7,6 +7,8 @@ core_incompatible: false
 dependencies:
   - drupal:datalayer
   - drupal:datetime_range
+  - drupal:image
+  - drupal:jsonapi_image_styles
   - drupal:field
   - drupal:field_inheritance
   - drupal:entity_browser
