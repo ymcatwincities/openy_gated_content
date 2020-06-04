@@ -2,70 +2,69 @@
   <div class="gated-content-video-page">
     <div v-if="loading">Loading</div>
     <div v-else-if="error">Error loading</div>
-    <div v-else>
+    <template v-else>
       <div class="video">
         <LazyYoutubeVideo
           :src="'https://www.youtube.com/embed/' + video.attributes.field_gc_video_media.field_media_video_id"
         />
       </div>
-      <div class="video-footer">
-        <div>
-          <div class="video-footer__title">{{ video.attributes.title }}</div>
-          <div
-            v-if="video.attributes.field_gc_video_description"
-            class="video-footer__description"
-               v-html="video.attributes.field_gc_video_description.processed"
-          ></div>
-        </div>
-        <div>
-          <div
-            v-if="video.attributes.field_gc_video_level"
-            class="video-footer__block">
-            <div class="video-level">
-              {{ video.attributes.field_gc_video_level.name | first_letter }}
+      <div class="video-footer-wrapper">
+        <div class="video-footer">
+          <div>
+            <div class="video-footer__title">{{ video.attributes.title }}</div>
+            <div
+              v-if="video.attributes.field_gc_video_description"
+              class="video-footer__description"
+                 v-html="video.attributes.field_gc_video_description.processed"
+            ></div>
+          </div>
+          <div>
+            <div
+              v-if="video.attributes.field_gc_video_level"
+              class="video-footer__block">
+              Level: {{ video.attributes.field_gc_video_level.name | capitalize }}
             </div>
-            {{ video.attributes.field_gc_video_level.name | capitalize }}
-          </div>
-          <div
-            v-if="video.attributes.field_gc_video_instructor"
-            class="video-footer__block">
-            <i class="fa fa-user"></i>
-            {{ video.attributes.field_gc_video_instructor }}
-          </div>
-          <div class="video-footer__block">
-            <i class="fa fa-hand-o-right"></i>
-            {{ video.attributes.field_gc_video_category.name }}
-          </div>
-          <div
-            v-if="video.attributes.field_gc_video_equipment"
-            class="video-footer__equipment">
-            <i class="fa fa-cubes"></i>
-            Equipment:
-            <ul>
-              <li v-for="equip in video.attributes.field_gc_video_equipment"
-                  :key="equip.drupal_internal__tid">
-                {{ equip.name }}
-              </li>
-            </ul>
+            <div
+              v-if="video.attributes.field_gc_video_instructor"
+              class="video-footer__block">
+              Instructor: {{ video.attributes.field_gc_video_instructor }}
+            </div>
+            <div class="video-footer__block">
+              Category: {{ video.attributes.field_gc_video_category.name }}
+            </div>
+            <div
+              v-if="video.attributes.field_gc_video_equipment"
+              class="video-footer__equipment">
+              <i class="fa fa-cubes"></i>
+              Equipment:
+              <ul>
+                <li v-for="equip in video.attributes.field_gc_video_equipment"
+                    :key="equip.drupal_internal__tid">
+                  {{ equip.name }}
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
-      <div class="video-category">
-        <router-link :to="{
-          name: 'Category',
-          params: {
-            cid: video.relationships.field_gc_video_category.data.id
-          }
-        }">
-          {{ video.attributes.field_gc_video_category.name }}
-        </router-link>
+      <div class="video-category-wrapper">
+        <div class="video-category">
+          <router-link :to="{
+            name: 'Category',
+            params: {
+              cid: video.relationships.field_gc_video_category.data.id
+            }
+          }">
+            {{ video.attributes.field_gc_video_category.name }}
+          </router-link>
+        </div>
       </div>
       <VideoListing class="videos"
         :title="'UP NEXT'"
         :excluded-video-id="video.id"
         :category="video.relationships.field_gc_video_category.data.id"
       />
-    </div>
+    </template>
   </div>
 </template>
 

@@ -81,18 +81,25 @@ export default {
         params.include = this.params.join(',');
       }
 
-      // TODO: if featured = true - add filter by field_gc_video_featured=true
-      // condition and limit to 6.
-      // TODO: if category not empty - add filter by category.
+      params.filter = {};
       if (this.excludedVideoId.length > 0) {
-        params.filter = {
-          excludeSelf: {
-            condition: {
-              path: 'id',
-              operator: '<>',
-              value: this.excludedVideoId,
-            },
+        params.filter.excludeSelf = {
+          condition: {
+            path: 'id',
+            operator: '<>',
+            value: this.excludedVideoId,
           },
+        };
+      }
+
+      if (this.category.length > 0) {
+        params.filter['field_gc_video_category.id'] = this.category;
+      }
+
+      if (this.featured) {
+        params.filter.field_gc_video_featured = 1;
+        params.page = {
+          limit: 6,
         };
       }
 

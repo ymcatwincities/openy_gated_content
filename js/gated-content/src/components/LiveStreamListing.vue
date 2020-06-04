@@ -81,7 +81,6 @@ export default {
         },
       };
 
-      // TODO: if featured = true - add filter by field_ls_featured=true condition and limit to 6.
       if (this.excludedVideoId.length > 0) {
         params.filter.excludeSelf = {
           condition: {
@@ -91,6 +90,21 @@ export default {
           },
         };
       }
+
+      // TODO: if featured = true - add filter by field_ls_featured=true condition and limit to 6.
+      // this filter is not working currently
+      // if (this.featured) {
+      //   params.filter.isFeatured = {
+      //     condition: {
+      //       path: 'field_ls_featured',
+      //       operator: '=',
+      //       value: 1,
+      //     },
+      //   };
+      //   params.page = {
+      //     limit: 6,
+      //   };
+      // }
 
       params.sort = {
         sortByDate: {

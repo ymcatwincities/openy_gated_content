@@ -8,48 +8,46 @@
           :src="'https://www.youtube.com/embed/' + media.field_media_video_id"
         />
       </div>
-      <div class="video-footer">
-        <div>
-          <div class="video-footer__title">{{ video.attributes.title }}</div>
-          <div
-            v-if="video.attributes.description"
-            class="video-footer__description"
-               v-html="video.attributes.description.processed"
-          ></div>
-        </div>
-        <div>
-          <div class="video-footer__block">
-            <i class="fa fa-clock-o" aria-hidden="true"></i>
-            {{ video.attributes.date.value | month }}
-            {{ video.attributes.date.value | day }},
-            {{ video.attributes.date | schedule }}
+      <div class="video-footer-wrapper">
+        <div class="video-footer">
+          <div>
+            <div class="video-footer__title">{{ video.attributes.title }}</div>
+            <div
+              v-if="video.attributes.description"
+              class="video-footer__description"
+                 v-html="video.attributes.description.processed"
+            ></div>
           </div>
-          <div class="video-footer__block"
-            v-if="level"
-          >
-            <div class="video-level">
-              {{ level | first_letter }}
+          <div>
+            <div class="video-footer__block">
+              <i class="fa fa-clock-o" aria-hidden="true"></i>
+              {{ video.attributes.date.value | month }}
+              {{ video.attributes.date.value | day }},
+              {{ video.attributes.date | schedule }}
             </div>
-            {{ level | capitalize }}
-          </div>
-          <div class="video-footer__block" v-if="video.attributes.instructor">
-            <i class="fa fa-user"></i>
-            {{ video.attributes.instructor }}
-          </div>
-          <div class="video-footer__block">
-            <i class="fa fa-hand-o-right"></i>
-            {{ category }}
-          </div>
-          <div class="video-footer__equipment"
-            v-if="video.attributes.equipment"
-          >
-            <i class="fa fa-cubes"></i>
-            Equipment:
-            <ul>
-              <li>
-                {{ video.attributes.equipment }}
-              </li>
-            </ul>
+            <div class="video-footer__block"
+              v-if="level"
+            >
+              Level: {{ level | capitalize }}
+            </div>
+            <div class="video-footer__block" v-if="video.attributes.instructor">
+              Instructor: {{ video.attributes.instructor }}
+            </div>
+            <div class="video-footer__block">
+              Category:
+              {{ category }}
+            </div>
+            <div class="video-footer__equipment"
+              v-if="video.attributes.equipment"
+            >
+              <i class="fa fa-cubes"></i>
+              Equipment:
+              <ul>
+                <li>
+                  {{ video.attributes.equipment }}
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
