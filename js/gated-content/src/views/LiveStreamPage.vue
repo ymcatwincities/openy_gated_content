@@ -4,7 +4,7 @@
     <div v-else-if="error">Error loading</div>
     <template v-else>
       <div class="video-wrapper">
-        <div class="video">
+        <div class="video gated-container">
           <LazyYoutubeVideo
             :src="'https://www.youtube.com/embed/' + media.field_media_video_id"
           />
