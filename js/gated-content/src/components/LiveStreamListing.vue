@@ -1,14 +1,19 @@
 <template>
-  <div v-if="listingIsNotEmpty">
+  <div>
     <h2 class="title">{{ title }}</h2>
-    <div v-if="loading">Loading...</div>
-    <div v-else-if="error">Error loading</div>
-    <div v-else class="video-listing live-stream-listing">
-        <LiveStreamTeaser
-          v-for="video in listing"
-          :key="video.id"
-          :video="video"
-        />
+    <template v-if="listingIsNotEmpty">
+      <div v-if="loading">Loading...</div>
+      <div v-else-if="error">Error loading</div>
+      <div v-else class="video-listing live-stream-listing">
+          <LiveStreamTeaser
+            v-for="video in listing"
+            :key="video.id"
+            :video="video"
+          />
+      </div>
+    </template>
+    <div v-else class="empty-listing">
+      Listing is empty.
     </div>
   </div>
 </template>
@@ -33,7 +38,7 @@ export default {
       type: String,
       default: '',
     },
-    featured: {
+    viewAll: {
       type: Boolean,
       default: false,
     },
@@ -81,7 +86,6 @@ export default {
         },
       };
 
-      // TODO: if featured = true - add filter by field_ls_featured=true condition and limit to 6.
       if (this.excludedVideoId.length > 0) {
         params.filter.excludeSelf = {
           condition: {
@@ -89,6 +93,12 @@ export default {
             operator: '<>',
             value: this.excludedVideoId,
           },
+        };
+      }
+
+      if (!this.viewAll) {
+        params.page = {
+          limit: 6,
         };
       }
 

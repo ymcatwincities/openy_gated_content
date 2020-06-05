@@ -1,9 +1,9 @@
 <template>
   <div v-if="listingIsNotEmpty">
-    <h2 class="title">{{ title }}</h2>
+    <h2 class="title container">{{ title }}</h2>
     <div v-if="loading">Loading...</div>
     <div v-else-if="error">Error loading</div>
-    <div v-else class="video-listing category-lising">
+    <div v-else class="video-listing category-listing">
       <CategoryTeaser
         v-for="category in listing"
         :key="category.id"
