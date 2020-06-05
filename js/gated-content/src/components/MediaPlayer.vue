@@ -8,7 +8,7 @@
 <script>
 import LazyYoutubeVideo from 'vue-lazy-youtube-video';
 import 'vue-lazy-youtube-video/dist/style.css';
-import { vueVimeoPlayer } from 'vue-vimeo-player'
+import { vueVimeoPlayer } from 'vue-vimeo-player';
 
 export default {
   name: 'MediaPlayer',
@@ -27,7 +27,7 @@ export default {
       return this.media.field_media_source;
     },
     youtubeSrc() {
-      return 'https://www.youtube.com/embed/' + this.media.field_media_video_id;
+      return `https://www.youtube.com/embed/${this.media.field_media_video_id}`;
     },
     vimeoOptions() {
       return {
@@ -40,9 +40,9 @@ export default {
         playerWidth: undefined,
         playerHeight: undefined,
         options: {
-          responsive: true
-        }
-      }
+          responsive: true,
+        },
+      };
     },
   },
 };

@@ -52,9 +52,8 @@ export default {
         return this.video.attributes['media.thumbnail']
           .image_style_uri[0].gated_content_teaser;
       }
-      else {
-        return null;
-      }
+
+      return null;
     },
     level() {
       return this.video.attributes.field_ls_level ? this.video.attributes.field_ls_level.name
