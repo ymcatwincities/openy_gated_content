@@ -3,11 +3,7 @@
     <div v-if="loading">Loading</div>
     <div v-else-if="error">Error loading</div>
     <div v-else>
-      <div class="video">
-        <LazyYoutubeVideo
-          :src="'https://www.youtube.com/embed/' + video.attributes.field_gc_video_media.field_media_video_id"
-        />
-      </div>
+      <MediaPlayer :media="video.attributes.field_gc_video_media"/>
       <div class="video-footer">
         <div>
           <div class="video-footer__title">{{ video.attributes.title }}</div>
@@ -71,16 +67,15 @@
 
 <script>
 import client from '@/client';
-import 'vue-lazy-youtube-video/dist/style.css';
-import LazyYoutubeVideo from 'vue-lazy-youtube-video';
 import VideoListing from '../components/VideoListing.vue';
+import MediaPlayer from '../components/MediaPlayer.vue';
 import { JsonApiCombineMixin } from '../mixins/JsonApiCombineMixin';
 
 export default {
   name: 'VideoPage',
   mixins: [JsonApiCombineMixin],
   components: {
-    LazyYoutubeVideo,
+    MediaPlayer,
     VideoListing,
   },
   props: {

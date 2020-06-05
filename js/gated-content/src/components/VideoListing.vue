@@ -57,6 +57,7 @@ export default {
       listing: null,
       params: [
         'field_gc_video_media',
+        'field_gc_video_media.thumbnail',
         'field_gc_video_level',
         'field_gc_video_category',
       ],

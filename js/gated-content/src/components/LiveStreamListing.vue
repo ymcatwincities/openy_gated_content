@@ -46,8 +46,10 @@ export default {
       listing: null,
       params: [
         'field_ls_media',
+        'field_ls_media.thumbnail',
         'field_ls_level',
         'media',
+        'media.thumbnail',
         'level',
       ],
     };
