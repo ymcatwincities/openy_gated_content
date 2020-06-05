@@ -2,7 +2,8 @@
   <div class="gated-content-category-page">
     <div v-if="loading">Loading</div>
     <div v-else-if="error">Error loading</div>
-    <div v-else>
+    <template v-else>
+      <router-link :to="{ name: 'CategoryListing' }">← Back to all categories</router-link>
       <div class="category-details">
         <h2>{{ category.attributes.name }}</h2>
         <div
@@ -10,12 +11,11 @@
           v-html="category.attributes.description.processed"
         ></div>
       </div>
-      <!-- TODO: limit listing by category id -->
       <VideoListing class="videos"
         :title="'Videos'"
         :category="category.id"
       />
-    </div>
+    </template>
   </div>
 </template>
 

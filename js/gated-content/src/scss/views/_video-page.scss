@@ -3,8 +3,19 @@
 
   .video {
     @media all and (min-width: 1060px) {
-      padding: 40px;
+      width: 970px;
+      max-width: 970px;
+      margin-left: auto;
+      margin-right: auto;
     }
+  }
+
+  .video-wrapper {
+    background-color: $black;
+  }
+
+  .video-footer-wrapper {
+    background-color: $mine-shaft;
   }
 
   .video-footer {
@@ -13,10 +24,18 @@
     grid-gap: 10px;
     grid-template-columns: 1fr;
 
+    color: $gallery;
+
     @media all and (min-width: 600px) {
       padding: 30px 40px 0;
       grid-template-columns: 2fr 1fr;
       grid-gap: 30px;
+    }
+
+    @media all and (min-width: 1060px) {
+      max-width: 970px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .video-footer__title {
@@ -35,14 +54,20 @@
     }
 
     .video-footer__block {
-      border: 1px solid $gray;
-      padding: 15px;
-      margin-bottom: 20px;
+      padding: 15px 0;
       font-size: 14px;
       line-height: 14px;
       border-radius: 5px;
       display: flex;
       align-items: center;
+
+      @media all and (min-width: 600px) {
+        padding: 15px;
+      }
+
+      &:first-child {
+        padding-top: 0;
+      }
 
       .fa {
         font-size: 20px;
@@ -51,7 +76,11 @@
     }
 
     .video-footer__equipment {
-      margin: 10px;
+      padding: 15px 0;
+
+      @media all and (min-width: 600px) {
+        padding: 15px;
+      }
 
       font-size: 12px;
       line-height: 12px;
@@ -67,13 +96,25 @@
     }
   }
 
-  .video-category {
-    margin-top: 30px;
-    padding: 20px 40px;
+  .video-category-wrapper {
     background-color: $dark-blue;
+  }
+
+  .video-category {
+    padding: 20px 10px;
     color: $white;
     font-size: 14px;
     line-height: 14px;
+
+    @media all and (min-width: 600px) {
+      padding: 20px 40px;
+    }
+
+    @media all and (min-width: 1060px) {
+      max-width: 970px;
+      margin-left: auto;
+      margin-right: auto;
+    }
 
     a {
       color: $white;

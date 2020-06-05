@@ -8,6 +8,13 @@
 @import "components/video-listing";
 @import "components/video-teaser";
 @import "components/live-stream-teaser";
+@import "components/category-listing";
+@import "components/category-teaser";
 @import "views/home";
 @import "views/video-page";
+@import "views/category-page";
 @import "views/login";
+
+#gated-content {
+  padding-bottom: 30px;
+}

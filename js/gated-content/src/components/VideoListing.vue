@@ -1,6 +1,7 @@
 <template>
-  <div v-if="listingIsNotEmpty">
+  <div>
     <h2 class="title">{{ title }}</h2>
+    <template v-if="listingIsNotEmpty">
     <router-link :to="{ name: 'CategoryListing' }" v-if="viewAll">
       View All
     </router-link>
@@ -12,6 +13,10 @@
         :key="video.id"
         :video="video"
       />
+    </div>
+    </template>
+    <div v-else class="empty-listing">
+      Listing is empty.
     </div>
   </div>
 </template>
@@ -82,18 +87,28 @@ export default {
         params.include = this.params.join(',');
       }
 
-      // TODO: if featured = true - add filter by field_gc_video_featured=true
-      // condition and limit to 6.
-      // TODO: if category not empty - add filter by category.
+      params.filter = {};
       if (this.excludedVideoId.length > 0) {
-        params.filter = {
-          excludeSelf: {
-            condition: {
-              path: 'id',
-              operator: '<>',
-              value: this.excludedVideoId,
-            },
+        params.filter.excludeSelf = {
+          condition: {
+            path: 'id',
+            operator: '<>',
+            value: this.excludedVideoId,
           },
+        };
+      }
+
+      if (this.category.length > 0) {
+        params.filter['field_gc_video_category.id'] = this.category;
+      }
+
+      if (this.featured) {
+        params.filter.field_gc_video_featured = 1;
+      }
+
+      if (!this.viewAll) {
+        params.page = {
+          limit: 6,
         };
       }
 

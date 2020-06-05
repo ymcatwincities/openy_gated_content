@@ -29,12 +29,14 @@ const routes = [
     name: 'CategoryListing',
     component: VideoCategoriesListing,
     props: true,
+    meta: { requiresAuth: true },
   },
   {
     path: '/category/:cid',
     name: 'Category',
     component: CategoryPage,
     props: true,
+    meta: { requiresAuth: true },
   },
   {
     path: '/video/:id',

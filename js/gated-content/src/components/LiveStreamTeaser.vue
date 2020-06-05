@@ -26,7 +26,7 @@
         <div>
           <div class="video-level">{{ level | first_letter }}</div>{{ level | capitalize }}
         </div>
-        <div class="fa fa-calendar-plus-o"></div>
+<!--        <div class="fa fa-calendar-plus-o"></div>-->
       </div>
     </router-link>
   </div>
