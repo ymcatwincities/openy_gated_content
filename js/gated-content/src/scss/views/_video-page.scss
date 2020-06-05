@@ -1,12 +1,13 @@
-.gated-content-video-page {
+#gated-content .gated-content-video-page {
   padding-bottom: 30px;
 
   .video {
-    @media all and (min-width: 1060px) {
-      width: 970px;
-      max-width: 970px;
-      margin-left: auto;
-      margin-right: auto;
+    padding-bottom: 0;
+    padding-top: 0;
+
+    @media all and (max-width: 768px) {
+      padding: 0;
+      width: 100%;
     }
   }
 
@@ -19,7 +20,7 @@
   }
 
   .video-footer {
-    padding: 30px 10px 0;
+    padding-bottom: 0;
     display: grid;
     grid-gap: 10px;
     grid-template-columns: 1fr;
@@ -27,15 +28,8 @@
     color: $gallery;
 
     @media all and (min-width: 600px) {
-      padding: 30px 40px 0;
-      grid-template-columns: 2fr 1fr;
+      grid-template-columns: 3fr 1fr;
       grid-gap: 30px;
-    }
-
-    @media all and (min-width: 1060px) {
-      max-width: 970px;
-      margin-left: auto;
-      margin-right: auto;
     }
 
     .video-footer__title {
@@ -54,12 +48,9 @@
     }
 
     .video-footer__block {
-      padding: 15px 0;
+      padding: 5px 0;
       font-size: 14px;
       line-height: 14px;
-      border-radius: 5px;
-      display: flex;
-      align-items: center;
 
       @media all and (min-width: 600px) {
         padding: 15px;
@@ -76,7 +67,7 @@
     }
 
     .video-footer__equipment {
-      padding: 15px 0;
+      padding: 5px 0;
 
       @media all and (min-width: 600px) {
         padding: 15px;
@@ -101,20 +92,11 @@
   }
 
   .video-category {
-    padding: 20px 10px;
+    padding-top: 20px;
+    padding-bottom: 20px;
     color: $white;
     font-size: 14px;
     line-height: 14px;
-
-    @media all and (min-width: 600px) {
-      padding: 20px 40px;
-    }
-
-    @media all and (min-width: 1060px) {
-      max-width: 970px;
-      margin-left: auto;
-      margin-right: auto;
-    }
 
     a {
       color: $white;

@@ -1,7 +1,7 @@
 <template>
   <div class="home">
-    <VideoListing class="videos" :featured="true" :viewAll="true"/>
-    <LiveStreamListing class="videos"/>
+    <VideoListing class="videos gated-container" :featured="true" :viewAll="true"/>
+    <LiveStreamListing class="videos gated-container"/>
   </div>
 </template>
 

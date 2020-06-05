@@ -3,15 +3,15 @@
     <div v-if="loading">Loading</div>
     <div v-else-if="error">Error loading</div>
     <template v-else>
-      <router-link :to="{ name: 'CategoryListing' }">← Back to all categories</router-link>
-      <div class="category-details">
+      <div class="category-details gated-container">
+        <router-link :to="{ name: 'CategoryListing' }">← Back to all categories</router-link>
         <h2>{{ category.attributes.name }}</h2>
         <div
           v-if="category.attributes.description"
           v-html="category.attributes.description.processed"
         ></div>
       </div>
-      <VideoListing class="videos"
+      <VideoListing class="videos gated-container"
         :title="'Videos'"
         :category="category.id"
       />
