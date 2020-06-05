@@ -3,12 +3,12 @@
     <div v-if="loading">Loading</div>
     <div v-else-if="error">Error loading</div>
     <template v-else>
-      <div class="video">
-        <LazyYoutubeVideo
-          :src="'https://www.youtube.com/embed/' + video.attributes.field_gc_video_media.field_media_video_id"
-        />
-      </div>
-      <div class="video-footer-wrapper">
+      <div class="video-wrapper">
+        <div class="video">
+          <LazyYoutubeVideo
+            :src="'https://www.youtube.com/embed/' + video.attributes.field_gc_video_media.field_media_video_id"
+          />
+        </div>
         <div class="video-footer">
           <div>
             <div class="video-footer__title">{{ video.attributes.title }}</div>
@@ -63,6 +63,7 @@
         :title="'UP NEXT'"
         :excluded-video-id="video.id"
         :category="video.relationships.field_gc_video_category.data.id"
+        :viewAll="true"
       />
     </template>
   </div>

@@ -1,6 +1,7 @@
 <template>
-  <div v-if="listingIsNotEmpty">
+  <div>
     <h2 class="title">{{ title }}</h2>
+    <template v-if="listingIsNotEmpty">
     <router-link :to="{ name: 'CategoryListing' }" v-if="viewAll">
       View All
     </router-link>
@@ -12,6 +13,10 @@
         :key="video.id"
         :video="video"
       />
+    </div>
+    </template>
+    <div v-else class="empty-listing">
+      Listing is empty.
     </div>
   </div>
 </template>
@@ -98,6 +103,9 @@ export default {
 
       if (this.featured) {
         params.filter.field_gc_video_featured = 1;
+      }
+
+      if (!this.viewAll) {
         params.page = {
           limit: 6,
         };

@@ -3,7 +3,6 @@
 
   .video {
     @media all and (min-width: 1060px) {
-      padding: 40px 40px 0;
       width: 970px;
       max-width: 970px;
       margin-left: auto;
@@ -11,7 +10,7 @@
     }
   }
 
-  .video-footer-wrapper {
+  .video-wrapper {
     background-color: $mine-shaft;
   }
 

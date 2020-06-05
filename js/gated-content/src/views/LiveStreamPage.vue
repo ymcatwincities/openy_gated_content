@@ -2,13 +2,13 @@
   <div class="gated-content-video-page">
     <div v-if="loading">Loading</div>
     <div v-else-if="error">Error loading</div>
-    <div v-else>
-      <div class="video">
-        <LazyYoutubeVideo
-          :src="'https://www.youtube.com/embed/' + media.field_media_video_id"
-        />
-      </div>
-      <div class="video-footer-wrapper">
+    <template v-else>
+      <div class="video-wrapper">
+        <div class="video">
+          <LazyYoutubeVideo
+            :src="'https://www.youtube.com/embed/' + media.field_media_video_id"
+          />
+        </div>
         <div class="video-footer">
           <div>
             <div class="video-footer__title">{{ video.attributes.title }}</div>
@@ -57,8 +57,9 @@
       <LiveStreamListing class="videos"
                          :title="'UP NEXT'"
                          :excluded-video-id="video.id"
+                         :viewAll="true"
       />
-    </div>
+    </template>
   </div>
 </template>
 

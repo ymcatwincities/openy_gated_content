@@ -1,14 +1,19 @@
 <template>
-  <div v-if="listingIsNotEmpty">
+  <div>
     <h2 class="title">{{ title }}</h2>
-    <div v-if="loading">Loading...</div>
-    <div v-else-if="error">Error loading</div>
-    <div v-else class="video-listing live-stream-listing">
-        <LiveStreamTeaser
-          v-for="video in listing"
-          :key="video.id"
-          :video="video"
-        />
+    <template v-if="listingIsNotEmpty">
+      <div v-if="loading">Loading...</div>
+      <div v-else-if="error">Error loading</div>
+      <div v-else class="video-listing live-stream-listing">
+          <LiveStreamTeaser
+            v-for="video in listing"
+            :key="video.id"
+            :video="video"
+          />
+      </div>
+    </template>
+    <div v-else class="empty-listing">
+      Listing is empty.
     </div>
   </div>
 </template>
@@ -33,7 +38,7 @@ export default {
       type: String,
       default: '',
     },
-    featured: {
+    viewAll: {
       type: Boolean,
       default: false,
     },
@@ -91,20 +96,11 @@ export default {
         };
       }
 
-      // TODO: if featured = true - add filter by field_ls_featured=true condition and limit to 6.
-      // this filter is not working currently
-      // if (this.featured) {
-      //   params.filter.isFeatured = {
-      //     condition: {
-      //       path: 'field_ls_featured',
-      //       operator: '=',
-      //       value: 1,
-      //     },
-      //   };
-      //   params.page = {
-      //     limit: 6,
-      //   };
-      // }
+      if (!this.viewAll) {
+        params.page = {
+          limit: 6,
+        };
+      }
 
       params.sort = {
         sortByDate: {
