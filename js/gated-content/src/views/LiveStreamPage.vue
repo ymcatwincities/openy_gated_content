@@ -9,6 +9,8 @@
             :src="'https://www.youtube.com/embed/' + media.field_media_video_id"
           />
         </div>
+      </div>
+      <div class="video-footer-wrapper">
         <div class="video-footer">
           <div>
             <div class="video-footer__title">{{ video.attributes.title }}</div>
