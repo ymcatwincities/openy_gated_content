@@ -12,11 +12,11 @@
   }
 
   a {
-    text-decoration: none;
     color: $gray;
 
     &:hover {
       color: $blue-hover;
+      text-decoration: none;
     }
   }
 

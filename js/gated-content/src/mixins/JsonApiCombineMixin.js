@@ -11,26 +11,26 @@ export const JsonApiCombineMixin = {
           // Example - field_gc_category_media.field_media_image = field_media_image
           fieldName = field.split('.').pop();
         }
-        const rel = item.relationships[fieldName] ? item.relationships[fieldName].data : null;
+        const rel = item.relationships[field] ? item.relationships[field].data : null;
         const subRel = params.filter((fieldWithParent) => fieldWithParent.search(`${fieldName}.`) !== -1);
         if (rel === null) {
-          item.attributes[fieldName] = null;
+          item.attributes[field] = null;
           return;
         }
         // Multi-value fields.
         if (Array.isArray(rel)) {
-          item.attributes[fieldName] = [];
+          item.attributes[field] = [];
           rel.forEach((relItem) => {
             const includedItem = included
               .find((obj) => obj.type === relItem.type && obj.id === relItem.id);
-            item.attributes[fieldName].push(includedItem.attributes);
+            item.attributes[field].push(includedItem.attributes);
 
             if (subRel.length > 0) {
               // In case this field contains sub-relationship add this relationship to parent.
               // On next iteration with sub-relationship it well be in rel.
               subRel.forEach((subRelItem) => {
                 const subRelItemName = subRelItem.split('.').pop();
-                item.relationships[subRelItemName] = includedItem.relationships[subRelItemName]
+                item.relationships[field] = includedItem.relationships[subRelItemName]
                   ? includedItem.relationships[subRelItemName] : null;
               });
             }
@@ -39,14 +39,14 @@ export const JsonApiCombineMixin = {
           // Single-value fields.
           const includedItem = included
             .find((obj) => obj.type === rel.type && obj.id === rel.id);
-          item.attributes[fieldName] = includedItem.attributes;
+          item.attributes[field] = includedItem.attributes;
 
           if (subRel.length > 0) {
             // In case this field contains sub-relationship add this relationship to parent.
             // On next iteration with sub-relationship it well be in rel.
             subRel.forEach((subRelItem) => {
               const subRelItemName = subRelItem.split('.').pop();
-              item.relationships[subRelItemName] = includedItem.relationships[subRelItemName]
+              item.relationships[subRelItem] = includedItem.relationships[subRelItemName]
                 ? includedItem.relationships[subRelItemName] : null;
             });
           }

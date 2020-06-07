@@ -5,9 +5,7 @@
     <template v-else>
       <div class="video-wrapper">
         <div class="video">
-          <LazyYoutubeVideo
-            :src="'https://www.youtube.com/embed/' + video.attributes.field_gc_video_media.field_media_video_id"
-          />
+          <MediaPlayer :media="video.attributes.field_gc_video_media"/>
         </div>
       </div>
       <div class="video-footer-wrapper">
@@ -73,16 +71,15 @@
 
 <script>
 import client from '@/client';
-import 'vue-lazy-youtube-video/dist/style.css';
-import LazyYoutubeVideo from 'vue-lazy-youtube-video';
 import VideoListing from '../components/VideoListing.vue';
+import MediaPlayer from '../components/MediaPlayer.vue';
 import { JsonApiCombineMixin } from '../mixins/JsonApiCombineMixin';
 
 export default {
   name: 'VideoPage',
   mixins: [JsonApiCombineMixin],
   components: {
-    LazyYoutubeVideo,
+    MediaPlayer,
     VideoListing,
   },
   props: {
