@@ -49,3 +49,25 @@ wget -N https://raw.githubusercontent.com/fivejars/openy-project/8.2.x-gated-con
 docker volume create --name=composer_cache
 fin init
 ```
+
+### Vimeo private videos
+
+For videos, protected from embed by "Specific domains" you can have an issue
+with thumbnails download to drupal media. For fixing this issue use this code:
+
+_core/modules/media/src/OEmbed/ResourceFetcher.php_
+
+instead of
+```php
+$response = $this->httpClient->get($url);
+```
+
+use
+
+```php
+$response = $this->httpClient->get($url, [
+  'headers' => [
+    'Referer' => $_SERVER['HTTP_REFERER'],
+  ],
+]);
+```
