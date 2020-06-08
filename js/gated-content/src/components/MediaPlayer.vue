@@ -30,19 +30,22 @@ export default {
       return `https://www.youtube.com/embed/${this.media.field_media_video_id}`;
     },
     vimeoOptions() {
-      return {
+      const options = {
         videoId: this.media.field_media_video_id,
-        // TODO:
-        // https://www.npmjs.com/package/vue-vimeo-player
-        // According to doc we can use "video-url" (if using private links) - need to test this.
-        // Also there an issue about Private Videos:
-        // https://github.com/dobromir-hristov/vue-vimeo-player/issues/13
         playerWidth: undefined,
         playerHeight: undefined,
         options: {
           responsive: true,
         },
       };
+
+      if (/https:\/\/vimeo\.com\/\d+\/[a-z0-9]+/i.test(this.media.field_media_video_embed_field)) {
+        // In case we have private video - set video-url option.
+        // Example of private url - https://vimeo.com/426932693/cfbe98b981
+        options['video-url'] = this.media.field_media_video_embed_field;
+      }
+
+      return options;
     },
   },
 };
