@@ -24,16 +24,16 @@
     @media (min-width: 768px) {
       margin-left: auto;
       margin-right: auto;
-      padding: 30px 15px;
-      width: 750px;
+      padding: 15px 15px;
+      max-width: 750px;
     }
 
     @media (min-width: 992px) {
-      width: 970px;
+      max-width: 970px;
     }
 
     @media (min-width: 1200px) {
-      width: 1170px;
+      max-width: 1170px;
     }
   }
 }
