@@ -44,17 +44,16 @@ export default {
   },
   computed: {
     image() {
-      const vid = this.video.attributes.field_ls_media
-        // Use event instance value.
-        ? this.video.attributes.field_gc_video_media.field_media_video_id
-        // Use parent (series) value.
-        : this.video.attributes.media.field_media_video_id;
-      // Possible images resolutions here:
-      // default.jpg
-      // hqdefault.jpg
-      // sddefault.jpg
-      // maxresdefault.jpg
-      return `https://img.youtube.com/vi/${vid}/mqdefault.jpg`;
+      if (this.video.attributes['field_ls_media.thumbnail']) {
+        return this.video.attributes['field_ls_media.thumbnail']
+          .image_style_uri[0].gated_content_teaser;
+      }
+      if (this.video.attributes['media.thumbnail']) {
+        return this.video.attributes['media.thumbnail']
+          .image_style_uri[0].gated_content_teaser;
+      }
+
+      return null;
     },
     level() {
       return this.video.attributes.field_ls_level ? this.video.attributes.field_ls_level.name
