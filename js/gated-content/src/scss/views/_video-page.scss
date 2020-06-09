@@ -2,7 +2,8 @@
   padding-bottom: 30px;
 
   .video {
-    padding: 0;
+    padding-top: 0;
+    padding-bottom: 0;
 
     @media all and (max-width: 768px) {
       padding: 0;
@@ -23,7 +24,6 @@
     display: grid;
     grid-gap: 10px;
     grid-template-columns: 1fr;
-
     color: $gallery;
 
     @media all and (min-width: 600px) {
@@ -33,7 +33,7 @@
 
     .video-footer__title {
       font-size: 24px;
-      line-height: 24px;
+      line-height: 20px;
     }
 
     .video-footer__description {
@@ -91,6 +91,23 @@
 
     a {
       color: $white;
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  .one-column {
+    #gated-content {
+      .gated-content-video-page {
+        .video {
+          padding: 0;
+        }
+      }
+
+      .videos {
+        padding-left: 0;
+        padding-right: 0;
+      }
     }
   }
 }
