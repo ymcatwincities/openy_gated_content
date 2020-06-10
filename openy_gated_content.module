@@ -5,6 +5,10 @@
  * The openy_gated_content module routines.
  */
 
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Access\AccessResult;
+
 /**
  * Implements hook_theme().
  */
@@ -39,4 +43,20 @@ function openy_gated_content_preprocess_paragraph(&$variables) {
   $variables['auth_provider_id'] = $plugin_instance->getId();
   $variables['auth_configuration'] = json_encode($plugin_instance->getDataForApp());
   $variables['#cache']['tags'][] = 'config:' . $plugin_instance->getConfigName();
+}
+
+/**
+ * Implements hook_jsonapi_ENTITY_TYPE_filter_access().
+ *
+ * Without this hook there no access to filter by date in
+ * JSON API for eventinstance.
+ *
+ * @see https://www.drupal.org/project/jsonapi/issues/3037519
+ */
+function openy_gated_content_jsonapi_eventinstance_filter_access(EntityTypeInterface $entity_type, AccountInterface $account) {
+  return ([
+    JSONAPI_FILTER_AMONG_ALL => AccessResult::allowed(),
+    JSONAPI_FILTER_AMONG_PUBLISHED => AccessResult::allowed(),
+    JSONAPI_FILTER_AMONG_OWN => AccessResult::allowed(),
+  ]);
 }
