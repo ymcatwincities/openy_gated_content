@@ -33,7 +33,7 @@
               Category: {{ video.attributes.field_gc_video_category.name }}
             </div>
             <div
-              v-if="video.attributes.field_gc_video_equipment"
+              v-if="video.attributes.field_gc_video_equipment.length > 0"
               class="video-footer__equipment">
               <i class="fa fa-cubes"></i>
               Equipment:
