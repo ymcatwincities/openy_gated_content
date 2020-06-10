@@ -8,6 +8,7 @@ import VideoPage from '@/views/VideoPage.vue';
 import CategoryPage from '@/views/CategoryPage.vue';
 import VideoCategoriesListing from '@/views/VideoCategoriesListing.vue';
 import LiveStreamPage from '@/views/LiveStreamPage.vue';
+import LiveStreamListingPage from '@/views/LiveStreamListingPage.vue';
 
 Vue.use(VueRouter);
 
@@ -42,6 +43,13 @@ const routes = [
     path: '/video/:id',
     name: 'Video',
     component: VideoPage,
+    props: true,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/live-stream',
+    name: 'LiveStreamListing',
+    component: LiveStreamListingPage,
     props: true,
     meta: { requiresAuth: true },
   },
