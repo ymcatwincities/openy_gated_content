@@ -4,12 +4,12 @@
     <div v-else-if="error">Error loading</div>
     <template v-else>
       <div class="video-wrapper">
-        <div class="video">
+        <div class="video gated-container">
           <MediaPlayer :media="video.attributes.field_gc_video_media"/>
         </div>
       </div>
       <div class="video-footer-wrapper">
-        <div class="video-footer">
+        <div class="video-footer gated-container">
           <div>
             <div class="video-footer__title">{{ video.attributes.title }}</div>
             <div
@@ -48,7 +48,7 @@
         </div>
       </div>
       <div class="video-category-wrapper">
-        <div class="video-category">
+        <div class="gated-container video-category">
           <router-link :to="{
             name: 'Category',
             params: {
@@ -59,7 +59,7 @@
           </router-link>
         </div>
       </div>
-      <VideoListing class="videos"
+      <VideoListing class="videos gated-container"
         :title="'UP NEXT'"
         :excluded-video-id="video.id"
         :category="video.relationships.field_gc_video_category.data.id"

@@ -17,4 +17,23 @@
 
 #gated-content {
   padding-bottom: 30px;
+
+  .gated-container {
+    padding: 10px;
+
+    @media (min-width: 768px) {
+      margin-left: auto;
+      margin-right: auto;
+      padding: 30px 15px;
+      max-width: 750px;
+    }
+
+    @media (min-width: 992px) {
+      max-width: 970px;
+    }
+
+    @media (min-width: 1200px) {
+      max-width: 1170px;
+    }
+  }
 }

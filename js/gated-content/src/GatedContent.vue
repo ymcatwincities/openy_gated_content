@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav class="text-right" v-if="isLoggedIn">
+    <nav class="text-right gated-container" v-if="isLoggedIn">
       <router-link :to="{ name: 'Home' }">Home</router-link> |
       <LogoutLink />
     </nav>

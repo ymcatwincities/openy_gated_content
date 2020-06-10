@@ -4,12 +4,12 @@
     <div v-else-if="error">Error loading</div>
     <template v-else>
       <div class="video-wrapper">
-        <div class="video">
+        <div class="video gated-container">
           <MediaPlayer :media="media"/>
         </div>
       </div>
       <div class="video-footer-wrapper">
-        <div class="video-footer">
+        <div class="video-footer gated-container">
           <div>
             <div class="video-footer__title">{{ video.attributes.title }}</div>
             <div
@@ -54,10 +54,10 @@
       <!--div class="video-category">
         &lt; {{ video.attributes.field_gc_video_category.name }}
       </div-->
-      <LiveStreamListing class="videos"
-                         :title="'UP NEXT'"
-                         :excluded-video-id="video.id"
-                         :viewAll="true"
+      <LiveStreamListing class="videos gated-container"
+        :title="'UP NEXT'"
+        :excluded-video-id="video.id"
+        :viewAll="true"
       />
     </template>
   </div>
