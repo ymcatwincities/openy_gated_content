@@ -1,6 +1,8 @@
 <template>
-  <LazyYoutubeVideo ref="youtube-player" v-if="source === 'youtube'" :src="youtubeSrc"/>
-  <vueVimeoPlayer ref="vimeo-player" v-if="source === 'vimeo'" v-bind="vimeoOptions"/>
+  <div>
+    <LazyYoutubeVideo ref="youtube-player" v-if="source === 'youtube'" :src="youtubeSrc"/>
+    <vueVimeoPlayer ref="vimeo-player" v-if="source === 'vimeo'" v-bind="vimeoOptions"/>
+  </div>
 </template>
 
 <script>
