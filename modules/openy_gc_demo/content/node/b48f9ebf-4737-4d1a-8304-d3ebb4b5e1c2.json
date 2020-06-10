@@ -1,23 +1,29 @@
 {
     "_links": {
         "self": {
-            "href": "http:\/\/default\/gate-content?_format=hal_json"
+            "href": "http:\/\/rose.openy.docksal\/gated-content?_format=hal_json"
         },
         "type": {
             "href": "http:\/\/drupal.org\/rest\/type\/node\/landing_page"
         },
         "http:\/\/drupal.org\/rest\/relation\/node\/landing_page\/revision_uid": [
             {
-                "href": "http:\/\/default\/user\/1?_format=hal_json"
+                "href": "http:\/\/rose.openy.docksal\/user\/1?_format=hal_json"
             }
         ],
         "http:\/\/drupal.org\/rest\/relation\/node\/landing_page\/uid": [
             {
-                "href": "http:\/\/default\/user\/1?_format=hal_json",
+                "href": "http:\/\/rose.openy.docksal\/user\/1?_format=hal_json",
                 "lang": "en"
             }
         ],
         "http:\/\/drupal.org\/rest\/relation\/node\/landing_page\/field_content": [
+            {
+                "href": "",
+                "lang": "en"
+            }
+        ],
+        "http:\/\/drupal.org\/rest\/relation\/node\/landing_page\/field_header_content": [
             {
                 "href": "",
                 "lang": "en"
@@ -36,7 +42,7 @@
     ],
     "vid": [
         {
-            "value": 2
+            "value": 10
         }
     ],
     "langcode": [
@@ -52,7 +58,7 @@
     ],
     "revision_timestamp": [
         {
-            "value": "2020-05-18T19:21:21+00:00",
+            "value": "2020-06-10T09:09:43+00:00",
             "format": "Y-m-d\\TH:i:sP"
         }
     ],
@@ -61,7 +67,7 @@
             {
                 "_links": {
                     "self": {
-                        "href": "http:\/\/default\/user\/1?_format=hal_json"
+                        "href": "http:\/\/rose.openy.docksal\/user\/1?_format=hal_json"
                     },
                     "type": {
                         "href": "http:\/\/drupal.org\/rest\/type\/user\/user"
@@ -78,7 +84,7 @@
             {
                 "_links": {
                     "self": {
-                        "href": "http:\/\/default\/user\/1?_format=hal_json"
+                        "href": "http:\/\/rose.openy.docksal\/user\/1?_format=hal_json"
                     },
                     "type": {
                         "href": "http:\/\/drupal.org\/rest\/type\/user\/user"
@@ -108,7 +114,26 @@
                     }
                 ],
                 "lang": "en",
-                "target_revision_id": "2"
+                "target_revision_id": "7"
+            }
+        ],
+        "http:\/\/drupal.org\/rest\/relation\/node\/landing_page\/field_header_content": [
+            {
+                "_links": {
+                    "self": {
+                        "href": ""
+                    },
+                    "type": {
+                        "href": "http:\/\/drupal.org\/rest\/type\/paragraph\/small_banner"
+                    }
+                },
+                "uuid": [
+                    {
+                        "value": "ef77ce1c-d8e6-4eb4-9842-cd6b8ad92cd2"
+                    }
+                ],
+                "lang": "en",
+                "target_revision_id": "8"
             }
         ]
     },
@@ -133,7 +158,7 @@
     ],
     "changed": [
         {
-            "value": "2020-05-18T19:21:21+00:00",
+            "value": "2020-06-10T09:09:43+00:00",
             "lang": "en",
             "format": "Y-m-d\\TH:i:sP"
         }
@@ -165,8 +190,8 @@
     "metatag": [
         {
             "value": {
-                "title": "Gate Content | Open Y Sandbox - Rose",
-                "og_title": "Gate Content"
+                "title": "Gated Content | Open Y Sandbox - Rose",
+                "og_title": "Gated Content"
             }
         }
     ],
