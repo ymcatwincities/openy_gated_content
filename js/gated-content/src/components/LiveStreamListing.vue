@@ -66,11 +66,11 @@ export default {
       listing: null,
       featuredLocal: false,
       params: [
-        'field_ls_media',
-        'field_ls_media.thumbnail',
+        'field_ls_image',
+        'field_ls_image.field_media_image',
         'field_ls_level',
-        'media',
-        'media.thumbnail',
+        'image',
+        'image.field_media_image',
         'level',
       ],
     };
