@@ -117,7 +117,7 @@ export default {
               this.date.getDate(),
               0,
               0,
-              1
+              1,
             ),
           },
         };
@@ -131,7 +131,7 @@ export default {
               this.date.getDate(),
               23,
               59,
-              59
+              59,
             ),
           },
         };
