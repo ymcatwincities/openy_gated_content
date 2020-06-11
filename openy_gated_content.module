@@ -8,6 +8,7 @@
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Implements hook_theme().
@@ -59,4 +60,12 @@ function openy_gated_content_jsonapi_eventinstance_filter_access(EntityTypeInter
     JSONAPI_FILTER_AMONG_PUBLISHED => AccessResult::allowed(),
     JSONAPI_FILTER_AMONG_OWN => AccessResult::allowed(),
   ]);
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function openy_gated_content_form_eventinstance_live_stream_edit_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Collapse field_inheritance by default in event instance edit form.
+  $form['field_inheritance']['#open'] = FALSE;
 }
