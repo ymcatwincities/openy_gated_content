@@ -49,6 +49,14 @@ export default {
       type: String,
       default: '',
     },
+    featured: {
+      type: Boolean,
+      default: false,
+    },
+    limit: {
+      type: Number,
+      default: 0,
+    },
     msg: String,
   },
   data() {
@@ -56,6 +64,7 @@ export default {
       loading: true,
       error: false,
       listing: null,
+      featuredLocal: false,
       params: [
         'field_ls_media',
         'field_ls_media.thumbnail',
@@ -71,6 +80,7 @@ export default {
     excludedVideoId: 'load',
   },
   async mounted() {
+    this.featuredLocal = this.featured;
     await this.load();
   },
   computed: {
@@ -109,10 +119,14 @@ export default {
         };
       }
 
-      if (this.viewAll) {
+      if (this.limit !== 0) {
         params.page = {
           limit: 6,
         };
+      }
+
+      if (this.featuredLocal) {
+        params.filter.field_ls_featured = 1;
       }
 
       params.sort = {
@@ -130,6 +144,11 @@ export default {
             response.data.included,
             this.params,
           );
+          if (this.featuredLocal === true && this.listing.length === 0) {
+            // Load one more time without featured filter.
+            this.featuredLocal = false;
+            this.load();
+          }
           this.loading = false;
         })
         .catch((error) => {

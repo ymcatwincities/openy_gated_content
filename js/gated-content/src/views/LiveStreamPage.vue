@@ -58,6 +58,7 @@
         :title="'UP NEXT'"
         :excluded-video-id="video.id"
         :viewAll="true"
+        :limit="6"
       />
     </template>
   </div>
