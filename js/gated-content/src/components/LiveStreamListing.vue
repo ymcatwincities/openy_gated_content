@@ -1,6 +1,9 @@
 <template>
   <div>
     <h2 class="title">{{ title }}</h2>
+    <router-link :to="{ name: 'LiveStreamListing' }" v-if="viewAll">
+      View All
+    </router-link>
     <template v-if="listingIsNotEmpty">
       <div v-if="loading">Loading...</div>
       <div v-else-if="error">Error loading</div>
@@ -41,6 +44,10 @@ export default {
     viewAll: {
       type: Boolean,
       default: false,
+    },
+    date: {
+      type: String,
+      default: '',
     },
     msg: String,
   },
@@ -88,6 +95,10 @@ export default {
         },
       };
 
+      if (this.date) {
+        // TODO: add filter date.end_value < {selected end of the day} Example < 23:59:59.
+      }
+
       if (this.excludedVideoId.length > 0) {
         params.filter.excludeSelf = {
           condition: {
@@ -98,7 +109,7 @@ export default {
         };
       }
 
-      if (!this.viewAll) {
+      if (this.viewAll) {
         params.page = {
           limit: 6,
         };
