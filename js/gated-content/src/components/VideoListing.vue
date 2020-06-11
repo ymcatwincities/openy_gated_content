@@ -54,12 +54,17 @@ export default {
       type: Boolean,
       default: false,
     },
+    limit: {
+      type: Number,
+      default: 0,
+    },
   },
   data() {
     return {
       loading: true,
       error: false,
       listing: null,
+      featuredLocal: false,
       params: [
         'field_gc_video_media',
         'field_gc_video_media.thumbnail',
@@ -73,6 +78,7 @@ export default {
     excludedVideoId: 'load',
   },
   async mounted() {
+    this.featuredLocal = this.featured;
     await this.load();
   },
   computed: {
@@ -86,6 +92,13 @@ export default {
       if (this.params) {
         params.include = this.params.join(',');
       }
+
+      params.sort = {
+        sortByDate: {
+          path: 'created',
+          direction: 'DESC',
+        },
+      };
 
       params.filter = {};
       if (this.excludedVideoId.length > 0) {
@@ -102,13 +115,13 @@ export default {
         params.filter['field_gc_video_category.id'] = this.category;
       }
 
-      if (this.featured) {
+      if (this.featuredLocal) {
         params.filter.field_gc_video_featured = 1;
       }
 
-      if (!this.viewAll) {
+      if (this.limit !== 0) {
         params.page = {
-          limit: 6,
+          limit: this.limit,
         };
       }
 
@@ -120,6 +133,11 @@ export default {
             response.data.included,
             this.params,
           );
+          if (this.featuredLocal === true && this.listing.length === 0) {
+            // Load one more time without featured filter.
+            this.featuredLocal = false;
+            this.load();
+          }
           this.loading = false;
         })
         .catch((error) => {

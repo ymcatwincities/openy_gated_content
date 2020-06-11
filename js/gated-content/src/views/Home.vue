@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <VideoListing class="videos gated-container" :featured="true" :viewAll="true"/>
+    <VideoListing class="videos gated-container" :featured="true" :viewAll="true" :limit="6"/>
     <LiveStreamListing class="videos gated-container" :viewAll="true"/>
   </div>
 </template>
