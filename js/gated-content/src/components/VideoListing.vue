@@ -16,7 +16,7 @@
     </div>
     </template>
     <div v-else class="empty-listing">
-      Listing is empty.
+      Videos not found.
     </div>
   </div>
 </template>

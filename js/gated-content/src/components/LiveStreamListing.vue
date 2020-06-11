@@ -16,7 +16,7 @@
       </div>
     </template>
     <div v-else class="empty-listing">
-      Listing is empty.
+      Live streams not found.
     </div>
   </div>
 </template>
@@ -46,8 +46,8 @@ export default {
       default: false,
     },
     date: {
-      type: String,
-      default: '',
+      type: Date,
+      default: null,
     },
     featured: {
       type: Boolean,
@@ -78,6 +78,7 @@ export default {
   watch: {
     $route: 'load',
     excludedVideoId: 'load',
+    date: 'load',
   },
   async mounted() {
     this.featuredLocal = this.featured;
@@ -106,7 +107,34 @@ export default {
       };
 
       if (this.date) {
-        // TODO: add filter date.end_value < {selected end of the day} Example < 23:59:59.
+        params.filter.dateFilterStart = {
+          condition: {
+            path: 'date.value',
+            operator: '>',
+            value: new Date(
+              this.date.getFullYear(),
+              this.date.getMonth(),
+              this.date.getDate(),
+              0,
+              0,
+              1
+            ),
+          },
+        };
+        params.filter.dateFilterEnd = {
+          condition: {
+            path: 'date.value',
+            operator: '<',
+            value: new Date(
+              this.date.getFullYear(),
+              this.date.getMonth(),
+              this.date.getDate(),
+              23,
+              59,
+              59
+            ),
+          },
+        };
       }
 
       if (this.excludedVideoId.length > 0) {
