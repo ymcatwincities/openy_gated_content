@@ -96,7 +96,9 @@ export default {
   async mounted() {
     this.featuredLocal = this.featured;
     await this.load();
-    this.date = new Date();
+    if (this.withDateFilter) {
+      this.date = new Date();
+    }
   },
   computed: {
     listingIsNotEmpty() {
