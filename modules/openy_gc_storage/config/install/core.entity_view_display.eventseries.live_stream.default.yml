@@ -5,6 +5,7 @@ dependencies:
     - field.field.eventseries.live_stream.field_ls_category
     - field.field.eventseries.live_stream.field_ls_equipment
     - field.field.eventseries.live_stream.field_ls_host_name
+    - field.field.eventseries.live_stream.field_ls_image
     - field.field.eventseries.live_stream.field_ls_level
     - field.field.eventseries.live_stream.field_ls_media
     - recurring_events.eventseries_type.live_stream
@@ -56,6 +57,15 @@ content:
       link_to_entity: false
     third_party_settings: {  }
     type: string
+    region: content
+  field_ls_image:
+    type: entity_reference_entity_view
+    weight: 9
+    label: above
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
     region: content
   field_ls_level:
     weight: 7

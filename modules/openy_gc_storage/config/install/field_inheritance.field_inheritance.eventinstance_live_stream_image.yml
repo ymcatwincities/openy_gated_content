@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies: {  }
+id: eventinstance_live_stream_image
+label: Image
+type: fallback
+sourceEntityType: eventseries
+destinationEntityType: eventinstance
+sourceEntityBundle: live_stream
+destinationEntityBundle: live_stream
+sourceField: field_ls_image
+destinationField: field_ls_image
+plugin: entity_reference_inheritance

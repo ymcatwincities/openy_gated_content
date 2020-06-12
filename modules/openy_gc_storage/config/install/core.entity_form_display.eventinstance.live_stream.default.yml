@@ -5,6 +5,7 @@ dependencies:
     - entity_browser.browser.videos_library
     - field.field.eventinstance.live_stream.field_ls_category
     - field.field.eventinstance.live_stream.field_ls_featured
+    - field.field.eventinstance.live_stream.field_ls_image
     - field.field.eventinstance.live_stream.field_ls_level
     - field.field.eventinstance.live_stream.field_ls_media
     - recurring_events.eventinstance_type.live_stream
@@ -42,42 +43,58 @@ content:
     type: entity_reference_autocomplete
     region: content
   field_ls_featured:
-    weight: 7
+    weight: 6
     settings:
       display_label: true
     third_party_settings: {  }
     type: boolean_checkbox
     region: content
+  field_ls_image:
+    type: entity_browser_entity_reference
+    weight: 4
+    settings:
+      entity_browser: images_library
+      field_widget_display: rendered_entity
+      field_widget_edit: true
+      field_widget_remove: true
+      selection_mode: selection_append
+      field_widget_display_settings:
+        view_mode: thumbnail_for_preview
+      field_widget_replace: false
+      open: false
+    third_party_settings: {  }
+    region: content
   field_ls_level:
-    weight: 6
+    weight: 3
     settings: {  }
     third_party_settings: {  }
     type: options_select
     region: content
   field_ls_media:
     type: entity_browser_entity_reference
-    weight: 3
+    weight: 5
     settings:
       entity_browser: videos_library
-      field_widget_display: label
+      field_widget_display: rendered_entity
       field_widget_edit: true
       field_widget_remove: true
       selection_mode: selection_append
+      field_widget_display_settings:
+        view_mode: thumbnail_for_preview
       field_widget_replace: false
       open: false
-      field_widget_display_settings: {  }
     third_party_settings: {  }
     region: content
   status:
     type: boolean_checkbox
     settings:
       display_label: true
-    weight: 5
+    weight: 8
     region: content
     third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
-    weight: 4
+    weight: 7
     settings:
       match_operator: CONTAINS
       size: 60

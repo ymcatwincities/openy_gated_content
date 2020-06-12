@@ -16,7 +16,7 @@
       </div>
     </template>
     <div v-else class="empty-listing">
-      Listing is empty.
+      Live streams not found.
     </div>
   </div>
 </template>
@@ -46,8 +46,16 @@ export default {
       default: false,
     },
     date: {
-      type: String,
-      default: '',
+      type: Date,
+      default: null,
+    },
+    featured: {
+      type: Boolean,
+      default: false,
+    },
+    limit: {
+      type: Number,
+      default: 0,
     },
     msg: String,
   },
@@ -56,12 +64,13 @@ export default {
       loading: true,
       error: false,
       listing: null,
+      featuredLocal: false,
       params: [
-        'field_ls_media',
-        'field_ls_media.thumbnail',
+        'field_ls_image',
+        'field_ls_image.field_media_image',
         'field_ls_level',
-        'media',
-        'media.thumbnail',
+        'image',
+        'image.field_media_image',
         'level',
       ],
     };
@@ -69,8 +78,10 @@ export default {
   watch: {
     $route: 'load',
     excludedVideoId: 'load',
+    date: 'load',
   },
   async mounted() {
+    this.featuredLocal = this.featured;
     await this.load();
   },
   computed: {
@@ -96,7 +107,34 @@ export default {
       };
 
       if (this.date) {
-        // TODO: add filter date.end_value < {selected end of the day} Example < 23:59:59.
+        params.filter.dateFilterStart = {
+          condition: {
+            path: 'date.value',
+            operator: '>',
+            value: new Date(
+              this.date.getFullYear(),
+              this.date.getMonth(),
+              this.date.getDate(),
+              0,
+              0,
+              1,
+            ),
+          },
+        };
+        params.filter.dateFilterEnd = {
+          condition: {
+            path: 'date.value',
+            operator: '<',
+            value: new Date(
+              this.date.getFullYear(),
+              this.date.getMonth(),
+              this.date.getDate(),
+              23,
+              59,
+              59,
+            ),
+          },
+        };
       }
 
       if (this.excludedVideoId.length > 0) {
@@ -109,10 +147,14 @@ export default {
         };
       }
 
-      if (this.viewAll) {
+      if (this.limit !== 0) {
         params.page = {
           limit: 6,
         };
+      }
+
+      if (this.featuredLocal) {
+        params.filter.field_ls_featured = 1;
       }
 
       params.sort = {
@@ -130,6 +172,11 @@ export default {
             response.data.included,
             this.params,
           );
+          if (this.featuredLocal === true && this.listing.length === 0) {
+            // Load one more time without featured filter.
+            this.featuredLocal = false;
+            this.load();
+          }
           this.loading = false;
         })
         .catch((error) => {

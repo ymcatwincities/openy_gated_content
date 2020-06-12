@@ -64,6 +64,7 @@
         :excluded-video-id="video.id"
         :category="video.relationships.field_gc_video_category.data.id"
         :viewAll="true"
+        :limit="6"
       />
     </template>
   </div>
