@@ -177,7 +177,7 @@ export default {
 
       if (this.limit !== 0) {
         params.page = {
-          limit: 6,
+          limit: this.limit,
         };
       }
 
