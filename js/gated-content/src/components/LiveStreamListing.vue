@@ -85,7 +85,7 @@ export default {
         'image.field_media_image',
         'level',
       ],
-      date: new Date(),
+      date: null,
     };
   },
   watch: {
@@ -96,6 +96,7 @@ export default {
   async mounted() {
     this.featuredLocal = this.featured;
     await this.load();
+    this.date = new Date();
   },
   computed: {
     listingIsNotEmpty() {
