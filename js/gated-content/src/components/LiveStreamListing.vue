@@ -93,12 +93,14 @@ export default {
     excludedVideoId: 'load',
     date: 'load',
   },
-  async mounted() {
-    this.featuredLocal = this.featured;
-    await this.load();
+  created() {
     if (this.withDateFilter) {
       this.date = new Date();
     }
+  },
+  async mounted() {
+    this.featuredLocal = this.featured;
+    await this.load();
   },
   computed: {
     listingIsNotEmpty() {
