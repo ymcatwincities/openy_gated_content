@@ -54,7 +54,7 @@
       <!--div class="video-category">
         &lt; {{ video.attributes.field_gc_video_category.name }}
       </div-->
-      <LiveStreamListing class="videos gated-container"
+      <LiveStreamListing
         :title="'UP NEXT'"
         :excluded-video-id="video.id"
         :viewAll="true"

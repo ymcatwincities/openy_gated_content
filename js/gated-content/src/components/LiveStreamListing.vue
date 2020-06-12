@@ -1,9 +1,21 @@
 <template>
-  <div>
-    <h2 class="title">{{ title }}</h2>
-    <router-link :to="{ name: 'LiveStreamListing' }" v-if="viewAll">
-      View All
-    </router-link>
+  <div class="videos gated-container">
+    <div class="videos__header" :class="{'with-date-filter': withDateFilter}">
+      <h2 class="title">{{ title }}</h2>
+      <h2 class="videos__date-filter"
+        v-if="withDateFilter"
+      >
+        <button v-on:click.stop="backOneDay" class="left" role="button"
+                :style="[hidePrevDateButton ? {'visibility':'hidden'}:'']"
+                aria-label="previous date"><i class="fa fa-angle-left"></i></button>
+        <span class="date" v-cloak>{{ dateFormatted }}</span>
+        <button v-on:click.stop="forwardOneDay" class="right"
+                role="button" aria-label="next date"><i class="fa fa-angle-right"></i></button>
+      </h2>
+      <router-link :to="{ name: 'LiveStreamListing' }" v-if="viewAll">
+        View All
+      </router-link>
+    </div>
     <template v-if="listingIsNotEmpty">
       <div v-if="loading">Loading...</div>
       <div v-else-if="error">Error loading</div>
@@ -45,9 +57,9 @@ export default {
       type: Boolean,
       default: false,
     },
-    date: {
-      type: Date,
-      default: null,
+    withDateFilter: {
+      type: Boolean,
+      default: false,
     },
     featured: {
       type: Boolean,
@@ -73,6 +85,7 @@ export default {
         'image.field_media_image',
         'level',
       ],
+      date: new Date(),
     };
   },
   watch: {
@@ -87,6 +100,21 @@ export default {
   computed: {
     listingIsNotEmpty() {
       return this.listing !== null && this.listing.length > 0;
+    },
+    dateFormatted() {
+      const weekDay = this.date.toLocaleDateString('en', { weekday: 'long' });
+      const monthName = this.date.toLocaleDateString('en', { month: 'long' });
+      return `${monthName} ${this.date.getDate()}, ${weekDay}`;
+    },
+    hidePrevDateButton() {
+      const isToday = (someDate) => {
+        const today = new Date();
+        return (someDate.getDate() === today.getDate()
+          && someDate.getMonth() === today.getMonth()
+          && someDate.getFullYear() === today.getFullYear());
+      };
+
+      return isToday(this.date);
     },
   },
   methods: {
@@ -185,6 +213,12 @@ export default {
           console.error(error);
           throw error;
         });
+    },
+    backOneDay() {
+      this.date = new Date(this.date.setTime(this.date.getTime() - 86400000));
+    },
+    forwardOneDay() {
+      this.date = new Date(this.date.setTime(this.date.getTime() + 86400000));
     },
   },
 };
