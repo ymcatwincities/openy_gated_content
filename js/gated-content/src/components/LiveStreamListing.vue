@@ -85,18 +85,13 @@ export default {
         'image.field_media_image',
         'level',
       ],
-      date: null,
+      date: new Date(),
     };
   },
   watch: {
     $route: 'load',
     excludedVideoId: 'load',
     date: 'load',
-  },
-  created() {
-    if (this.withDateFilter) {
-      this.date = new Date();
-    }
   },
   async mounted() {
     this.featuredLocal = this.featured;
@@ -139,7 +134,7 @@ export default {
         },
       };
 
-      if (this.date) {
+      if (this.withDateFilter) {
         params.filter.dateFilterStart = {
           condition: {
             path: 'date.value',
