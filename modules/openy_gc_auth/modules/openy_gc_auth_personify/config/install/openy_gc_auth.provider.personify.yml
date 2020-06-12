@@ -1,4 +1,4 @@
+application_url: /gated-content
 api_login_check: /openy_gc_auth_personify/check/login
-api_get_login_url: /openy_gc_auth_personify/get-login-url
 api_auth: /openy_gc_auth_personify/auth
 api_logout: /openy_gc_auth_personify/logout

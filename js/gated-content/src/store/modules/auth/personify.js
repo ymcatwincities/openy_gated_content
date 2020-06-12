@@ -12,24 +12,8 @@ export default {
           if (r.data.user && r.data.user.email) {
             context.dispatch('authorize', r.data.user);
           } else {
-            // Get Personify login URL and redirect to login page.
-            client({
-              url: context.getters.getPersonifyConfig.api_get_login_url,
-              method: 'post',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              params: {
-                dest: window.location.href,
-              },
-            })
-              .then((response) => {
-                window.location = response.data;
-              })
-              .catch((error) => {
-                console.error(error);
-                throw error;
-              });
+            // Redirect to Personify login page.
+            window.location = context.getters.getPersonifyConfig.api_login_personify;
           }
         })
         .catch((error) => {

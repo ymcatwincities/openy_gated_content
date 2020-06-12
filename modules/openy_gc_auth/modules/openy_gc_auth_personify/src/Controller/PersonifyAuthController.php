@@ -11,7 +11,7 @@ use Drupal\personify\PersonifySSO;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Personify controller to handle Personify SSO authentication.
@@ -31,13 +31,6 @@ class PersonifyAuthController extends ControllerBase {
    * @var \Drupal\personify\PersonifyClient
    */
   protected $personifyClient;
-
-  /**
-   * Request stack.
-   *
-   * @var \Symfony\Component\HttpFoundation\Request|null
-   */
-  protected $request;
 
   /**
    * Logger interface.
@@ -62,8 +55,6 @@ class PersonifyAuthController extends ControllerBase {
    *   Personify Client service.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   Config factory.
-   * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
-   *   Request stack.
    * @param \Drupal\Core\Logger\LoggerChannelFactory $loggerChannelFactory
    *   Logger factory.
    */
@@ -71,13 +62,11 @@ class PersonifyAuthController extends ControllerBase {
     PersonifySSO $personifySSO,
     PersonifyClient $personifyClient,
     ConfigFactoryInterface $configFactory,
-    RequestStack $requestStack,
     LoggerChannelFactory $loggerChannelFactory
   ) {
     $this->personifySSO = $personifySSO;
     $this->personifyClient = $personifyClient;
     $this->configFactory = $configFactory;
-    $this->request = $requestStack->getCurrentRequest();
     $this->logger = $loggerChannelFactory->get('openy_gc_auth_personify');
   }
 
@@ -89,56 +78,22 @@ class PersonifyAuthController extends ControllerBase {
       $container->get('personify.sso_client'),
       $container->get('personify.client'),
       $container->get('config.factory'),
-      $container->get('request_stack'),
       $container->get('logger.factory')
     );
   }
 
   /**
-   * Create Personify login URL.
-   *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   Response with Personify login URL.
-   */
-  public function getLoginUrl() {
-    $options = ['absolute' => TRUE];
-    if ($destination = $this->request->query->get('dest')) {
-      $options['query']['dest'] = urlencode($destination);
-    }
-
-    // Generate auth URL that would base of validation token.
-    $configAuthUrl = $this->configFactory->get('openy_gc_auth.provider.personify')->get('api_auth');
-    $url = Url::fromUserInput($configAuthUrl, $options)->toString();
-
-    $vendor_token = $this->personifySSO->getVendorToken($url);
-    $options = [
-      'query' => [
-        'vi' => $this->personifySSO->getConfigVendorId(),
-        'vt' => $vendor_token,
-      ],
-    ];
-
-    $env = $this->configFactory->get('personify.settings')->get('environment');
-    $configLoginUrl = $this->configFactory->get('openy_gc_auth_personify.settings')->get($env . '_url_login');
-    if (empty($configLoginUrl)) {
-      $this->logger->warning('Please, check Personify configs in settings.php.');
-      return NULL;
-    }
-
-    $loginUrl = Url::fromUri($configLoginUrl, $options)->toString();
-
-    return new JsonResponse($loginUrl);
-  }
-
-  /**
    * Set cookies to authenticate user based on response from Personify.
+   *
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   Current request.
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
-  public function auth() {
+  public function auth(Request $request) {
     $errorMessage = 'Login failed because of mismatched Personify response.';
 
-    $query = $this->request->query->all();
+    $query = $request->query->all();
     if (isset($query['ct']) && !empty($query['ct'])) {
       $errorMessage = 'An attempt to login with wrong personify token was detected.';
 
@@ -224,16 +179,19 @@ class PersonifyAuthController extends ControllerBase {
   /**
    * Logout actions and redirect.
    *
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   Current request.
+   *
    * @return \Symfony\Component\HttpFoundation\JsonResponse
    *   Response with logout redirect url.
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
-  public function signOutUrl() {
+  public function signOutUrl(Request $request) {
     user_cookie_delete('personify_authorized');
     user_cookie_delete('personify_time');
 
-    $query = $this->request->query->all();
+    $query = $request->query->all();
     $redirect_url = Url::fromRoute('<front>')->toString();
     if (isset($query['dest'])) {
       $redirect_url = urldecode($query['dest']);

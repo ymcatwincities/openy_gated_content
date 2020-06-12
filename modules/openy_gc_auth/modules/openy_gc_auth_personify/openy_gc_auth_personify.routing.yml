@@ -8,16 +8,6 @@ openy_gc_auth_personify.personify_check:
   options:
     no_cache: TRUE
 
-openy_gc_auth_personify.personify_login:
-  path: /openy_gc_auth_personify/get-login-url
-  defaults:
-    _controller: \Drupal\openy_gc_auth_personify\Controller\PersonifyAuthController::getLoginUrl
-    _title: Personify get login URL
-  requirements:
-    _permission: 'access content'
-  options:
-    no_cache: TRUE
-
 openy_gc_auth_personify.personify_logout:
   path: /openy_gc_auth_personify/logout
   defaults:
