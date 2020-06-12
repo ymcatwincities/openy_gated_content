@@ -10,7 +10,7 @@ export default {
   methods: {
     logout() {
       this.$store.dispatch(`${this.$store.getters.authPlugin}Logout`);
-      this.$router.push({ name: 'Login' });
+      this.$router.push({ name: 'Login' }).catch(() => {});
     },
   },
 };

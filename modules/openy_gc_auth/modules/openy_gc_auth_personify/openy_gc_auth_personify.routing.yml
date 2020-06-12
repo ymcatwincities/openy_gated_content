@@ -1,0 +1,39 @@
+openy_gc_auth_personify.personify_check:
+  path: /openy_gc_auth_personify/check/login
+  defaults:
+    _controller: \Drupal\openy_gc_auth_personify\Controller\PersonifyAuthController::checkLoggedUser
+    _title: Personify check logged user
+  requirements:
+    _permission: 'access content'
+  options:
+    no_cache: TRUE
+
+openy_gc_auth_personify.personify_login:
+  path: /openy_gc_auth_personify/get-login-url
+  defaults:
+    _controller: \Drupal\openy_gc_auth_personify\Controller\PersonifyAuthController::getLoginUrl
+    _title: Personify get login URL
+  requirements:
+    _permission: 'access content'
+  options:
+    no_cache: TRUE
+
+openy_gc_auth_personify.personify_logout:
+  path: /openy_gc_auth_personify/logout
+  defaults:
+    _controller: \Drupal\openy_gc_auth_personify\Controller\PersonifyAuthController::signOutUrl
+    _title: Personify get login URL
+  requirements:
+    _permission: 'access content'
+  options:
+    no_cache: TRUE
+
+openy_gc_auth_personify.personify_auth:
+  path: /openy_gc_auth_personify/auth
+  defaults:
+    _controller: \Drupal\openy_gc_auth_personify\Controller\PersonifyAuthController::auth
+    _title: Personify auth
+  requirements:
+    _permission: 'access content'
+  options:
+    no_cache: TRUE
