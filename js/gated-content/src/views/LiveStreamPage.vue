@@ -37,14 +37,15 @@
               Category:
               {{ category }}
             </div>
-            <div class="video-footer__equipment"
-              v-if="video.attributes.equipment"
-            >
+            <div
+              v-if="video.attributes.equipment.length > 0"
+              class="video-footer__equipment">
               <i class="fa fa-cubes"></i>
               Equipment:
               <ul>
-                <li>
-                  {{ video.attributes.equipment }}
+                <li v-for="equip in video.attributes.equipment"
+                    :key="equip.drupal_internal__tid">
+                  {{ equip.name }}
                 </li>
               </ul>
             </div>
@@ -97,6 +98,7 @@ export default {
         'category',
         'media',
         'level',
+        'equipment',
       ],
     };
   },
@@ -132,6 +134,17 @@ export default {
         .get(`jsonapi/eventinstance/live_stream/${this.id}`, { params })
         .then((response) => {
           this.video = this.combine(response.data.data, response.data.included, this.params);
+          // We need here small hack for equipment.
+          // In included we have all referenced items, but in relationship only one.
+          // So we need manually pass this items to this.video.attributes.equipment.
+          this.video.attributes.equipment = [];
+          if (response.data.included.length > 0) {
+            response.data.included.forEach((ref) => {
+              if (ref.type === 'taxonomy_term--gc_equipment') {
+                this.video.attributes.equipment.push(ref.attributes);
+              }
+            });
+          }
           this.loading = false;
         })
         .catch((error) => {

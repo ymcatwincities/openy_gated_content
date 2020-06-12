@@ -5,6 +5,7 @@ dependencies:
     - entity_browser.browser.videos_library
     - field.field.eventseries.live_stream.field_ls_category
     - field.field.eventseries.live_stream.field_ls_equipment
+    - field.field.eventseries.live_stream.field_ls_equipment
     - field.field.eventseries.live_stream.field_ls_host_name
     - field.field.eventseries.live_stream.field_ls_image
     - field.field.eventseries.live_stream.field_ls_level
@@ -69,6 +70,16 @@ content:
       placeholder: ''
     third_party_settings: {  }
     type: string_textarea
+    region: content
+  field_ls_equipment:
+    weight: 26
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: entity_reference_autocomplete
     region: content
   field_ls_host_name:
     type: string_textfield

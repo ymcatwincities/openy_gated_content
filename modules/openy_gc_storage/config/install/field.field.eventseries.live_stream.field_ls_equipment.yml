@@ -4,6 +4,7 @@ dependencies:
   config:
     - field.storage.eventseries.field_ls_equipment
     - recurring_events.eventseries_type.live_stream
+    - taxonomy.vocabulary.gc_equipment
   module:
     - datalayer
 third_party_settings:
@@ -16,9 +17,18 @@ entity_type: eventseries
 bundle: live_stream
 label: Equipment
 description: ''
-required: true
+required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''
-settings: {  }
-field_type: string_long
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      gc_equipment: gc_equipment
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

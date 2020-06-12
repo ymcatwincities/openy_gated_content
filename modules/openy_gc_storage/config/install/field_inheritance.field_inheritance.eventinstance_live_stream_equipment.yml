@@ -10,4 +10,4 @@ sourceEntityBundle: live_stream
 destinationEntityBundle: live_stream
 sourceField: field_ls_equipment
 destinationField: ''
-plugin: default_inheritance
+plugin: entity_reference_inheritance
