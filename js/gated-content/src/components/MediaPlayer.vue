@@ -2,6 +2,7 @@
   <div>
     <LazyYoutubeVideo ref="youtube-player" v-if="source === 'youtube'" :src="youtubeSrc"/>
     <vueVimeoPlayer
+      :class="source"
       ref="vimeo-player"
       v-if="source === 'vimeo' || source === 'vimeo_event'"
       v-bind="vimeoOptions"

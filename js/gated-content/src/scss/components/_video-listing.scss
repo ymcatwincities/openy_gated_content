@@ -1,18 +1,60 @@
-.video-listing {
-  padding-top: 30px;
-  display: grid;
-  grid-gap: 30px;
-  grid-template-columns: 1fr;
+.videos {
+  .videos__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-  @media all and (min-width: 600px) {
-    grid-template-columns: repeat(2, 1fr);
+    &.with-date-filter {
+      justify-content: initial;
+    }
+
+    .title {
+      font-size: 24px;
+      line-height: 24px;
+      width: 33%;
+      margin: 0;
+    }
+
+    .videos__date-filter {
+      margin: 0;
+
+      > button {
+        border: none;
+        background-color: white;
+        color: $gray;
+
+        &:focus {
+          outline: 0;
+        }
+      }
+
+      .date {
+        padding: 0 20px;
+      }
+    }
   }
 
-  @media all and (min-width: 1200px) {
-    grid-template-columns: repeat(3, 1fr);
+  .video-listing {
+    padding-top: 30px;
+    display: grid;
+    grid-gap: 30px;
+    grid-template-columns: 1fr;
+
+    @media all and (min-width: 600px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media all and (min-width: 1200px) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .empty-listing {
+    text-align: center;
+    padding: 30px;
   }
 }
 
-.empty-listing {
-  text-align: center;
+div.videos:last-of-type {
+  padding-bottom: 30px;
 }
