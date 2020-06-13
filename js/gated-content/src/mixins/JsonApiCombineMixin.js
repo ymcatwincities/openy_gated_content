@@ -11,7 +11,8 @@ export const JsonApiCombineMixin = {
           // Example - field_gc_category_media.field_media_image = field_media_image
           fieldName = field.split('.').pop();
         }
-        const rel = item.relationships[field] ? item.relationships[field].data : null;
+        const rel = item.relationships[field] && item.relationships[field].data
+          ? item.relationships[field].data : null;
         const subRel = params.filter((fieldWithParent) => fieldWithParent.search(`${fieldName}.`) !== -1);
         if (rel === null) {
           item.attributes[field] = null;
