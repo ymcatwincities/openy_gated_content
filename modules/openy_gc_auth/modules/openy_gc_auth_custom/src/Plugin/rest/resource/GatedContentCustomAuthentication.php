@@ -117,19 +117,23 @@ class GatedContentCustomAuthentication extends ResourceBase implements Container
   public function post(Request $request) {
     $content = json_decode($request->getContent(), TRUE);
 
-    if (!$content['recaptchaToken']) {
-      return $this->errorResponse($this->t('ReCaptcha token required.'), 400);
-    }
+    $provider_config = $this->configFactory->get('openy_gc_auth.provider.custom');
+    if ($provider_config->get('enable_recaptcha')) {
+      // Validate recaptchaToken if enabled in the provider config.
+      if (!$content['recaptchaToken']) {
+        return $this->errorResponse($this->t('ReCaptcha token required.'), 400);
+      }
 
-    $config = $this->configFactory->get('recaptcha.settings');
-    $recaptcha_secret_key = $config->get('secret_key');
-    $recaptcha = new ReCaptcha($recaptcha_secret_key, new Drupal8Post());
-    if ($config->get('verify_hostname')) {
-      $recaptcha->setExpectedHostname($_SERVER['SERVER_NAME']);
-    }
-    $resp = $recaptcha->verify($content['recaptchaToken'], $request->getClientIp());
-    if (!$resp->isSuccess()) {
-      return $this->errorResponse($this->t('ReCaptcha token invalid.'), 400);
+      $config = $this->configFactory->get('recaptcha.settings');
+      $recaptcha_secret_key = $config->get('secret_key');
+      $recaptcha = new ReCaptcha($recaptcha_secret_key, new Drupal8Post());
+      if ($config->get('verify_hostname')) {
+        $recaptcha->setExpectedHostname($_SERVER['SERVER_NAME']);
+      }
+      $resp = $recaptcha->verify($content['recaptchaToken'], $request->getClientIp());
+      if (!$resp->isSuccess()) {
+        return $this->errorResponse($this->t('ReCaptcha token invalid.'), 400);
+      }
     }
 
     if (!$this->emailValidator->isValid($content['email'])) {

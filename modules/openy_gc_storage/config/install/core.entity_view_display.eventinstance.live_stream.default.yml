@@ -92,6 +92,14 @@ content:
       link: false
     third_party_settings: {  }
     region: content
+  image:
+    label: visible
+    weight: 53
+    region: content
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
   instructor:
     label: visible
     weight: 53
