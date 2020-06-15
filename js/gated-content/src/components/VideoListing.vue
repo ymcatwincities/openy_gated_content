@@ -6,16 +6,18 @@
         View All
       </router-link>
     </div>
-    <template v-if="listingIsNotEmpty">
-    <div v-if="loading">Loading...</div>
-    <div v-else-if="error">Error loading</div>
-    <div v-else class="video-listing">
-      <VideoTeaser
-        v-for="video in listing"
-        :key="video.id"
-        :video="video"
-      />
+    <div v-if="loading" class="text-center">
+      <Spinner></Spinner>
     </div>
+    <template v-else-if="listingIsNotEmpty">
+      <div v-if="error">Error loading</div>
+      <div v-else class="video-listing">
+        <VideoTeaser
+          v-for="video in listing"
+          :key="video.id"
+          :video="video"
+        />
+      </div>
     </template>
     <div v-else class="empty-listing">
       Videos not found.
@@ -26,6 +28,7 @@
 <script>
 import client from '@/client';
 import VideoTeaser from '@/components/VideoTeaser.vue';
+import Spinner from '@/components/Spinner.vue';
 import { JsonApiCombineMixin } from '../mixins/JsonApiCombineMixin';
 
 export default {
@@ -33,6 +36,7 @@ export default {
   mixins: [JsonApiCombineMixin],
   components: {
     VideoTeaser,
+    Spinner,
   },
   props: {
     title: {

@@ -1,6 +1,8 @@
 <template>
   <div class="gated-content-video-page">
-    <div v-if="loading">Loading</div>
+    <div v-if="loading" class="text-center">
+      <Spinner></Spinner>
+    </div>
     <div v-else-if="error">Error loading</div>
     <template v-else>
       <div class="video-wrapper">
@@ -72,6 +74,7 @@
 
 <script>
 import client from '@/client';
+import Spinner from '@/components/Spinner.vue';
 import VideoListing from '../components/VideoListing.vue';
 import MediaPlayer from '../components/MediaPlayer.vue';
 import { JsonApiCombineMixin } from '../mixins/JsonApiCombineMixin';
@@ -82,6 +85,7 @@ export default {
   components: {
     MediaPlayer,
     VideoListing,
+    Spinner,
   },
   props: {
     id: {
