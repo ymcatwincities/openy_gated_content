@@ -68,11 +68,8 @@ function openy_gated_content_jsonapi_eventinstance_filter_access(EntityTypeInter
 function openy_gated_content_form_eventseries_live_stream_edit_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   // Disable rebuild form.
   $form['#validate'][] = '_openy_gated_content_form_eventseries_live_stream_validate';
-  // We need to rebuild cache to see updates in JSON API.
-  // TODO: find better solution, maybe custom submit handler, that invalidates
-  // cache tag or context (tested on eventseries_list, eventinstance_list
-  // field_inheritance_list - not works with this tags invalidation).
-  $form['actions']['submit']['#submit'][] = 'drupal_flush_all_caches';
+  // We need to clear JSON API cache bin on submit.
+  $form['actions']['submit']['#submit'][] = '_openy_gated_content_form_eventseries_live_stream_submit';
 }
 
 /**
@@ -82,6 +79,13 @@ function _openy_gated_content_form_eventseries_live_stream_validate(&$form, Form
   // This will fix entity save, but disable confirmation step
   // on date change.
   $form_state->setRebuild(FALSE);
+}
+
+/**
+ * Custom submit handler for eventseries_live_stream_edit_form.
+ */
+function _openy_gated_content_form_eventseries_live_stream_submit(&$form, FormStateInterface $form_state) {
+  \Drupal::cache('jsonapi_normalizations')->deleteAll();
 }
 
 /**
