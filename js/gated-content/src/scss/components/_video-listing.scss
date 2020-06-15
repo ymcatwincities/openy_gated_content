@@ -4,19 +4,29 @@
     align-items: center;
     justify-content: space-between;
 
-    &.with-date-filter {
-      justify-content: initial;
+    @media all and (max-width: 600px) {
+      flex-direction: column;
+      align-items: flex-start;
     }
 
     .title {
       font-size: 24px;
       line-height: 24px;
-      width: 33%;
       margin: 0;
     }
 
     .videos__date-filter {
       margin: 0;
+      font-size: 24px;
+      line-height: 24px;
+
+      @media all and (max-width: 600px) {
+        align-self: center;
+        padding-top: 20px;
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+      }
 
       > button {
         border: none;
@@ -26,10 +36,21 @@
         &:focus {
           outline: 0;
         }
+
+        &.left {
+          padding-left: 0;
+        }
+
+        &.right {
+          padding-right: 0;
+        }
       }
 
       .date {
         padding: 0 20px;
+        min-width: 310px;
+        display: inline-block;
+        text-align: center;
       }
     }
   }
