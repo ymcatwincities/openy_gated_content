@@ -33,7 +33,9 @@ class DaxkoLinkController extends ControllerBase {
    * DaxkoLinkController constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
+   *   Config factory instance.
    * @param \Drupal\daxko_sso\DaxkoSSOClient $daxkoSSOClient
+   *   Daxko client instance.
    */
   public function __construct(
     ConfigFactoryInterface $configFactory,
@@ -57,8 +59,10 @@ class DaxkoLinkController extends ControllerBase {
    * Controller that construct's SSO link for Daxko.
    *
    * @param \Symfony\Component\HttpFoundation\Request $request
+   *   Current request object.
    *
    * @return \Drupal\Core\Routing\TrustedRedirectResponse
+   *   Redirect to the Daxko CRM login page.
    */
   public function getlink(Request $request) {
 
@@ -88,8 +92,10 @@ class DaxkoLinkController extends ControllerBase {
    * Controller that get user info based on SSO back-link data.
    *
    * @param \Symfony\Component\HttpFoundation\Request $request
+   *   Current request object.
    *
    * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Json array with user fields or error.
    */
   public function backlink(Request $request) {
 
@@ -103,7 +109,7 @@ class DaxkoLinkController extends ControllerBase {
       return new JsonResponse(
         [
           'error' => 1,
-          'message' => 'Wrong cross site check'
+          'message' => 'Wrong cross site check',
         ]
       );
     }
@@ -123,16 +129,17 @@ class DaxkoLinkController extends ControllerBase {
           'user' => [
             'name' => $userDetails->name->first_name,
             'email' => $userDetails->emails[0]->email,
-          ]
+          ],
         ]
       );
     } else {
       return new JsonResponse(
         [
           'error' => 1,
-          'message' => 'User is not active client'
+          'message' => 'User is not active client',
         ]
       );
     }
   }
+
 }
