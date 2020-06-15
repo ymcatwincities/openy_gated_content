@@ -74,8 +74,8 @@ class DaxkoLinkController extends ControllerBase {
 
       $daxkoSSORedirectLink = 'https://operations.daxko.com/online/auth'
         . '?response_type=code&scope=client:'
-        . $config->get('client_id') . '+member:basic_info'
-        . '&state=' . md5($request->getSchemeAndHttpHost())
+        . $config->get('client_id') . '+member:basic_info&state='
+        . md5($request->getSchemeAndHttpHost())
         . '&client_id=' . $config->get('user')
         . '&redirect_uri=' . $backlinkUrl;
 
