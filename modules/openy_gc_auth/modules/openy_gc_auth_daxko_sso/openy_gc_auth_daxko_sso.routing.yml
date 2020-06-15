@@ -1,0 +1,15 @@
+openy_gc_auth_daxko_sso.daxko_link_controller_hello:
+  path: '/openy-gc-auth-daxko-sso/redirect-link'
+  defaults:
+    _controller: '\Drupal\openy_gc_auth_daxko_sso\Controller\DaxkoLinkController::getlink'
+    _title: 'Daxko SSO Redirect link'
+  requirements:
+    _permission: 'access content'
+
+openy_gc_auth_daxko_sso.daxko_back_redirect:
+  path: '/openy-gc-auth-daxko-sso/back-redirect'
+  defaults:
+    _controller: '\Drupal\openy_gc_auth_daxko_sso\Controller\DaxkoLinkController::backlink'
+    _title: 'Daxko SSO back link'
+  requirements:
+    _permission: 'access content'
