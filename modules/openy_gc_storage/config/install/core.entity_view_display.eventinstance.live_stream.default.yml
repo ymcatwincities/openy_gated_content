@@ -4,11 +4,13 @@ dependencies:
   config:
     - field.field.eventinstance.live_stream.field_ls_category
     - field.field.eventinstance.live_stream.field_ls_featured
+    - field.field.eventinstance.live_stream.field_ls_image
     - field.field.eventinstance.live_stream.field_ls_level
     - field.field.eventinstance.live_stream.field_ls_media
     - recurring_events.eventinstance_type.live_stream
   module:
     - datetime_range
+    - text
 id: eventinstance.live_stream.default
 targetEntityType: eventinstance
 bundle: live_stream
@@ -64,6 +66,15 @@ content:
     third_party_settings: {  }
     type: boolean
     region: content
+  field_ls_image:
+    type: entity_reference_entity_view
+    weight: 56
+    label: above
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    region: content
   field_ls_level:
     weight: 54
     label: above
@@ -81,6 +92,14 @@ content:
       link: false
     third_party_settings: {  }
     region: content
+  image:
+    label: visible
+    weight: 53
+    region: content
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
   instructor:
     label: visible
     weight: 53
