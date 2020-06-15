@@ -116,11 +116,11 @@ class DaxkoLinkController extends ControllerBase {
 
     $backlinkUrl = $request->getSchemeAndHttpHost() . $plugin_config->get('redirect_url');
     $token = $this->daxkoClient->getUserAccessToken($code, $backlinkUrl);
-    // Based on user token, get logged user data.
+    //Based on user token, get logged user data.
     $userData = $this->daxkoClient->getMyInfo($token);
 
     $userDetails = $this->daxkoClient->getRequest('members/' . $userData->member_id);
-    //  Check if this user is an active client.
+    //Check if this user is an active client.
     if ($userDetails->active) {
       return new JsonResponse(
         [
@@ -132,7 +132,8 @@ class DaxkoLinkController extends ControllerBase {
           ],
         ]
       );
-    } else {
+    }
+    else {
       return new JsonResponse(
         [
           'error' => 1,

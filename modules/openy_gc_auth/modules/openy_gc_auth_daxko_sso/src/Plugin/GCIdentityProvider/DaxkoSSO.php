@@ -1,6 +1,7 @@
 <?php
 
 namespace Drupal\openy_gc_auth_daxko_sso\Plugin\GCIdentityProvider;
+
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -126,8 +127,8 @@ class DaxkoSSO extends GCIdentityProviderPluginBase {
 
       if (!$result['error']) {
         $this->messenger()->addStatus('We were able to register your URL at Daxko API settings');
-      } else {
-
+      }
+      else {
         $this->messenger()->addError('Attempt to register redirect url was failed. ' . $result['message']);
       }
       parent::submitConfigurationForm($form, $form_state);
