@@ -11,7 +11,7 @@
           v-html="category.attributes.description.processed"
         ></div>
       </div>
-      <VideoListing class="videos gated-container"
+      <VideoListing
         :title="'Videos'"
         :category="category.id"
       />

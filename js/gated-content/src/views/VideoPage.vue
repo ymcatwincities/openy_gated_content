@@ -33,7 +33,7 @@
               Category: {{ video.attributes.field_gc_video_category.name }}
             </div>
             <div
-              v-if="video.attributes.field_gc_video_equipment"
+              v-if="video.attributes.field_gc_video_equipment.length > 0"
               class="video-footer__equipment">
               <i class="fa fa-cubes"></i>
               Equipment:
@@ -59,11 +59,12 @@
           </router-link>
         </div>
       </div>
-      <VideoListing class="videos gated-container"
+      <VideoListing
         :title="'UP NEXT'"
         :excluded-video-id="video.id"
         :category="video.relationships.field_gc_video_category.data.id"
         :viewAll="true"
+        :limit="6"
       />
     </template>
   </div>
