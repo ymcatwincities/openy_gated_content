@@ -4,30 +4,28 @@
     </div>
 </template>
 <script>
-  export default {
-    name: 'DaxkoSSO',
-    data() {
-      return {
-        'error': '',
-      };
+export default {
+  name: 'DaxkoSSO',
+  data() {
+    return {
+      error: '',
+    };
+  },
+  computed: {
+    config() {
+      return this.$store.getters.getDaxkoSSOConfig;
     },
-    computed: {
-      config() {
-        return this.$store.getters.getDaxkoSSOConfig;
-      },
-    },
-    async mounted() {
-      await this.$store
-        .dispatch('daxkossoAuthorize')
-          .then(() => {
-            this.$router.push({ name: 'Home' });
-          })
-        .catch((error) => {
-
-          this.error = error.response ? error.response.data.message : 'Something went wrong!';
-          throw error;
+  },
+  async mounted() {
+    await this.$store
+      .dispatch('daxkossoAuthorize')
+      .then(() => {
+        this.$router.push({ name: 'Home' });
+      })
+      .catch((error) => {
+        this.error = error.response ? error.response.data.message : 'Something went wrong!';
+        throw error;
       });
-
-    },
-  };
+  },
+};
 </script>
