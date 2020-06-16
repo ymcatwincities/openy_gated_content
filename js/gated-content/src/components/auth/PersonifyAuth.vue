@@ -3,13 +3,21 @@
     <div v-if="this.error" class="alert alert-danger">
       <span>{{ this.error }}</span>
     </div>
-    <div v-else class="message">You will be logged in with your Personify account...</div>
+    <div v-else class="text-center">
+      <p>You will be logged in with your Personify account, please wait...</p>
+      <Spinner></Spinner>
+    </div>
   </div>
 </template>
 
 <script>
+import Spinner from '@/components/Spinner.vue';
+
 export default {
   name: 'PersonifyAuth',
+  components: {
+    Spinner,
+  },
   data() {
     return {
       error: '',
@@ -18,12 +26,13 @@ export default {
   async mounted() {
     await this.$store
       .dispatch('personifyAuthorize')
+      .then(() => {
+        this.$router.push({ name: 'Home' }).catch(() => {});
+      })
       .catch((error) => {
         this.error = error.response ? error.response.data.message : 'Something went wrong!';
         throw error;
       });
-
-    this.$router.push({ name: 'Home' }).catch(() => {});
   },
 };
 </script>

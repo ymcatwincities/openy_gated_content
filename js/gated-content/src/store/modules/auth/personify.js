@@ -6,20 +6,22 @@ export default {
   },
   actions: {
     async personifyAuthorize(context) {
-      return client.post(context.getters.getPersonifyConfig.api_login_check)
-        .then((r) => {
-          // Check user data.
-          if (r.data.user && r.data.user.email) {
-            context.dispatch('authorize', r.data.user);
-          } else {
-            // Redirect to Personify login page.
-            window.location = context.getters.getPersonifyConfig.api_login_personify;
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-          throw error;
-        });
+      if (!context.getters.isLoggedIn) {
+        await client.post(context.getters.getPersonifyConfig.api_login_check)
+          .then((r) => {
+            // Check user data.
+            if (r.data.user && r.data.user.email) {
+              context.dispatch('authorize', r.data.user);
+            } else {
+              // Redirect to Personify login page.
+              window.location = context.getters.getPersonifyConfig.api_login_personify;
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+            throw error;
+          });
+      }
     },
     personifyLogout(context) {
       client({

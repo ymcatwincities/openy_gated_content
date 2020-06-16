@@ -145,7 +145,7 @@ class PersonifyAuthController extends ControllerBase {
       user_cookie_delete('personify_time');
 
       return new JsonResponse([
-        'message' => 'Personify user does\'n have active membership.',
+        'message' => 'Personify user doesn\'t have active membership.',
         'user' => [],
       ], 403);
     }
