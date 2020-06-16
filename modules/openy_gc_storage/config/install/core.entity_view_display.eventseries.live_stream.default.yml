@@ -4,7 +4,6 @@ dependencies:
   config:
     - field.field.eventseries.live_stream.field_ls_category
     - field.field.eventseries.live_stream.field_ls_equipment
-    - field.field.eventseries.live_stream.field_ls_equipment
     - field.field.eventseries.live_stream.field_ls_host_name
     - field.field.eventseries.live_stream.field_ls_image
     - field.field.eventseries.live_stream.field_ls_level
@@ -43,13 +42,6 @@ content:
       link: true
     third_party_settings: {  }
     type: entity_reference_label
-    region: content
-  field_ls_equipment:
-    weight: 8
-    label: above
-    settings: {  }
-    third_party_settings: {  }
-    type: basic_string
     region: content
   field_ls_equipment:
     weight: 10

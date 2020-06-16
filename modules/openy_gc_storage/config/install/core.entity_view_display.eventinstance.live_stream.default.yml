@@ -3,10 +3,13 @@ status: true
 dependencies:
   config:
     - field.field.eventinstance.live_stream.field_ls_category
+    - field.field.eventinstance.live_stream.field_ls_equipment
     - field.field.eventinstance.live_stream.field_ls_featured
+    - field.field.eventinstance.live_stream.field_ls_host_name
     - field.field.eventinstance.live_stream.field_ls_image
     - field.field.eventinstance.live_stream.field_ls_level
     - field.field.eventinstance.live_stream.field_ls_media
+    - field.field.eventinstance.live_stream.field_ls_title
     - recurring_events.eventinstance_type.live_stream
   module:
     - datetime_range
@@ -56,6 +59,14 @@ content:
     third_party_settings: {  }
     type: entity_reference_label
     region: content
+  field_ls_equipment:
+    weight: 59
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
   field_ls_featured:
     weight: 55
     label: above
@@ -65,6 +76,14 @@ content:
       format_custom_true: ''
     third_party_settings: {  }
     type: boolean
+    region: content
+  field_ls_host_name:
+    weight: 58
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
     region: content
   field_ls_image:
     type: entity_reference_entity_view
@@ -91,6 +110,14 @@ content:
       view_mode: default
       link: false
     third_party_settings: {  }
+    region: content
+  field_ls_title:
+    weight: 57
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
     region: content
   image:
     label: visible

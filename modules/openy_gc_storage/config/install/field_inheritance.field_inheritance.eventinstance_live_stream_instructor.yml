@@ -3,11 +3,11 @@ status: true
 dependencies: {  }
 id: eventinstance_live_stream_instructor
 label: Instructor
-type: inherit
+type: fallback
 sourceEntityType: eventseries
 destinationEntityType: eventinstance
 sourceEntityBundle: live_stream
 destinationEntityBundle: live_stream
 sourceField: field_ls_host_name
-destinationField: ''
+destinationField: field_ls_host_name
 plugin: default_inheritance
