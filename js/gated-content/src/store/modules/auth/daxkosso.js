@@ -12,7 +12,7 @@ export default {
         const code = urlParams.get('code');
 
         if ((state !== null) && (code !== null)) {
-          const apiCheckEndPoint = `/openy-gc-auth-daxko-sso/back-redirect?state=${state}&code=${code}`;
+          const apiCheckEndPoint = `${context.getters.getDaxkoSSOConfig.check_url}?state=${state}&code=${code}`;
           await client.get(apiCheckEndPoint).then((result) => {
             if (result.data.error === 0) {
               context.dispatch('authorize', result.data.user);

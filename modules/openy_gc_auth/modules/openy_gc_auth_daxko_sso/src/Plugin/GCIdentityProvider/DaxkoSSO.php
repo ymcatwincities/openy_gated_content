@@ -141,6 +141,7 @@ class DaxkoSSO extends GCIdentityProviderPluginBase {
   public function getDataForApp():array {
     $data = parent::getDataForApp();
     $data['login_url'] = Url::fromRoute('openy_gc_auth_daxko_sso.daxko_link_controller_hello')->toString();
+    $data['check_url'] = Url::fromRoute('openy_gc_auth_daxko_sso.daxko_back_redirect')->toString();
     return $data;
   }
 

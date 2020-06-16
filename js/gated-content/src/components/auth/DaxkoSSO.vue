@@ -1,25 +1,33 @@
 <template>
     <div>
-        <p>You will be redirected to Daxko website for authentication</p>
+        <div v-if="this.error" class="alert alert-danger">
+            <span>{{ this.error }}</span>
+        </div>
+      <div v-if="loading" class="text-center">
+        <p>We are registering you, using Daxko, please wait.</p>
+        <Spinner></Spinner>
+      </div>
     </div>
 </template>
 <script>
+import Spinner from '@/components/Spinner.vue';
+
 export default {
   name: 'DaxkoSSO',
+  components: {
+    Spinner,
+  },
   data() {
     return {
       error: '',
+      loading: true,
     };
-  },
-  computed: {
-    config() {
-      return this.$store.getters.getDaxkoSSOConfig;
-    },
   },
   async mounted() {
     await this.$store
       .dispatch('daxkossoAuthorize')
       .then(() => {
+        this.loading = false;
         this.$router.push({ name: 'Home' });
       })
       .catch((error) => {
