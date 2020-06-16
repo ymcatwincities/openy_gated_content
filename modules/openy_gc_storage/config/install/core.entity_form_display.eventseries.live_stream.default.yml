@@ -65,10 +65,12 @@ content:
   field_ls_equipment:
     weight: 6
     settings:
-      rows: 5
       placeholder: ''
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
     third_party_settings: {  }
-    type: string_textarea
+    type: entity_reference_autocomplete
     region: content
   field_ls_host_name:
     type: string_textfield

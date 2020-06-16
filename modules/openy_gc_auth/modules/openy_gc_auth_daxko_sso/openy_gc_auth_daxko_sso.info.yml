@@ -1,0 +1,9 @@
+name: Daxko Gated Content integration
+type: module
+description: 'Daxko integration for Gated content'
+package: Open Y Gated Content
+version: 0.1
+core: 8.x
+dependencies:
+  - drupal:daxko_sso
+  - drupal:openy_gc_auth

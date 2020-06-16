@@ -46,9 +46,10 @@ content:
   field_ls_equipment:
     weight: 8
     label: above
-    settings: {  }
+    settings:
+      link: true
     third_party_settings: {  }
-    type: basic_string
+    type: entity_reference_label
     region: content
   field_ls_host_name:
     weight: 6

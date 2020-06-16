@@ -4,9 +4,9 @@ dependencies:
   module:
     - recurring_events
     - taxonomy
-id: eventseries.field_ls_equipment
+id: eventinstance.field_ls_equipment
 field_name: field_ls_equipment
-entity_type: eventseries
+entity_type: eventinstance
 type: entity_reference
 settings:
   target_type: taxonomy_term
