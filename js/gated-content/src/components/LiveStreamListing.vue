@@ -16,9 +16,11 @@
         View All
       </router-link>
     </div>
-    <template v-if="listingIsNotEmpty">
-      <div v-if="loading">Loading...</div>
-      <div v-else-if="error">Error loading</div>
+    <div v-if="loading" class="text-center">
+      <Spinner></Spinner>
+    </div>
+    <template v-else-if="listingIsNotEmpty">
+      <div v-if="error">Error loading</div>
       <div v-else class="video-listing live-stream-listing">
           <LiveStreamTeaser
             v-for="video in listing"
@@ -36,6 +38,7 @@
 <script>
 import client from '@/client';
 import LiveStreamTeaser from '@/components/LiveStreamTeaser.vue';
+import Spinner from '@/components/Spinner.vue';
 import { JsonApiCombineMixin } from '../mixins/JsonApiCombineMixin';
 
 export default {
@@ -43,6 +46,7 @@ export default {
   mixins: [JsonApiCombineMixin],
   components: {
     LiveStreamTeaser,
+    Spinner,
   },
   props: {
     title: {
