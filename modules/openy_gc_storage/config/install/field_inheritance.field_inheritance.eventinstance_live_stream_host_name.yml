@@ -1,13 +1,13 @@
 langcode: en
 status: true
 dependencies: {  }
-id: eventinstance_live_stream_description
-label: Description
+id: eventinstance_live_stream_host_name
+label: 'Host’s name'
 type: fallback
 sourceEntityType: eventseries
 destinationEntityType: eventinstance
 sourceEntityBundle: live_stream
 destinationEntityBundle: live_stream
-sourceField: body
-destinationField: body
+sourceField: field_ls_host_name
+destinationField: field_ls_host_name
 plugin: default_inheritance

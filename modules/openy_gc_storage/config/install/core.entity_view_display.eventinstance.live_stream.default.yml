@@ -3,10 +3,13 @@ status: true
 dependencies:
   config:
     - field.field.eventinstance.live_stream.field_ls_category
+    - field.field.eventinstance.live_stream.field_ls_equipment
     - field.field.eventinstance.live_stream.field_ls_featured
+    - field.field.eventinstance.live_stream.field_ls_host_name
     - field.field.eventinstance.live_stream.field_ls_image
     - field.field.eventinstance.live_stream.field_ls_level
     - field.field.eventinstance.live_stream.field_ls_media
+    - field.field.eventinstance.live_stream.field_ls_title
     - recurring_events.eventinstance_type.live_stream
   module:
     - datetime_range
@@ -18,7 +21,7 @@ mode: default
 content:
   category:
     label: above
-    weight: 51
+    weight: 3
     region: content
     settings:
       link: true
@@ -27,7 +30,7 @@ content:
   date:
     label: above
     type: daterange_custom
-    weight: -4
+    weight: 0
     settings:
       separator: '-'
       date_format: 'Y-m-d\TH:i:s'
@@ -36,20 +39,13 @@ content:
     third_party_settings: {  }
   description:
     label: above
-    weight: 50
+    weight: 1
     region: content
     settings: {  }
     third_party_settings: {  }
     type: text_default
-  equipment:
-    label: visible
-    weight: 52
-    region: content
-    settings: {  }
-    third_party_settings: {  }
-    type: basic_string
   field_ls_category:
-    weight: 52
+    weight: 5
     label: above
     settings:
       link: true
@@ -57,7 +53,7 @@ content:
     type: entity_reference_label
     region: content
   field_ls_featured:
-    weight: 55
+    weight: 12
     label: above
     settings:
       format: default
@@ -66,9 +62,17 @@ content:
     third_party_settings: {  }
     type: boolean
     region: content
+  field_ls_host_name:
+    weight: 15
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
   field_ls_image:
     type: entity_reference_entity_view
-    weight: 56
+    weight: 13
     label: above
     settings:
       view_mode: default
@@ -76,7 +80,7 @@ content:
     third_party_settings: {  }
     region: content
   field_ls_level:
-    weight: 54
+    weight: 11
     label: above
     settings:
       link: true
@@ -85,32 +89,48 @@ content:
     region: content
   field_ls_media:
     type: entity_reference_entity_view
-    weight: 53
+    weight: 7
     label: above
     settings:
       view_mode: default
       link: false
     third_party_settings: {  }
     region: content
+  field_ls_title:
+    weight: 14
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  host_name:
+    label: above
+    weight: 8
+    region: content
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
   image:
-    label: visible
-    weight: 53
+    label: above
+    weight: 9
     region: content
     settings:
       link: true
     third_party_settings: {  }
     type: entity_reference_label
   instructor:
-    label: visible
-    weight: 53
+    label: above
+    weight: 10
     region: content
     settings:
       link_to_entity: false
     third_party_settings: {  }
     type: string
   level:
-    label: visible
-    weight: 52
+    label: above
+    weight: 6
     region: content
     settings:
       link: true
@@ -118,7 +138,7 @@ content:
     type: entity_reference_label
   media:
     label: above
-    weight: 50
+    weight: 2
     region: content
     settings:
       link: true
@@ -126,7 +146,7 @@ content:
     type: entity_reference_label
   title:
     label: above
-    weight: 51
+    weight: 4
     region: content
     settings:
       link_to_entity: false
@@ -134,3 +154,5 @@ content:
     type: string
 hidden:
   body: true
+  equipment: true
+  field_ls_equipment: true

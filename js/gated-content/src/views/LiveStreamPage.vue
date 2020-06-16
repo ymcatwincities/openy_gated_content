@@ -15,9 +15,9 @@
           <div>
             <div class="video-footer__title">{{ video.attributes.title }}</div>
             <div
-              v-if="video.attributes.description"
+              v-if="description"
               class="video-footer__description"
-                 v-html="video.attributes.description.processed"
+                 v-html="description.processed"
             ></div>
           </div>
           <div>
@@ -32,8 +32,8 @@
             >
               Level: {{ level | capitalize }}
             </div>
-            <div class="video-footer__block" v-if="video.attributes.instructor">
-              Instructor: {{ video.attributes.instructor }}
+            <div class="video-footer__block" v-if="instructor">
+              Instructor: {{ instructor }}
             </div>
             <div class="video-footer__block">
               Category:
@@ -109,6 +109,10 @@ export default {
   computed: {
     // This values most of all from parent (series), but can be overridden by item,
     // so ve need to check this here and use correct value.
+    description() {
+      return this.video.attributes.body ? this.video.attributes.body
+        : this.video.attributes.description;
+    },
     level() {
       return this.video.attributes.field_ls_level ? this.video.attributes.field_ls_level.name
         : this.video.attributes.level.name;
@@ -120,6 +124,10 @@ export default {
     category() {
       return this.video.attributes.field_ls_category ? this.video.attributes.field_ls_category.name
         : this.video.attributes.category.name;
+    },
+    instructor() {
+      return this.video.attributes.field_ls_host_name ? this.video.attributes.field_ls_host_name
+        : this.video.attributes.instructor;
     },
   },
   watch: {

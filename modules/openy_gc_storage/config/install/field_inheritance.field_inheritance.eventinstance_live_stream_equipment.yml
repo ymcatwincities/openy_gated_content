@@ -3,11 +3,11 @@ status: true
 dependencies: {  }
 id: eventinstance_live_stream_equipment
 label: Equipment
-type: inherit
+type: fallback
 sourceEntityType: eventseries
 destinationEntityType: eventinstance
 sourceEntityBundle: live_stream
 destinationEntityBundle: live_stream
 sourceField: field_ls_equipment
-destinationField: ''
+destinationField: field_ls_equipment
 plugin: default_inheritance

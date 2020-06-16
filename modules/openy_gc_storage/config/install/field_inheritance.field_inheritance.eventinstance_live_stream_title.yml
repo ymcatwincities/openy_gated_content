@@ -3,11 +3,11 @@ status: true
 dependencies: {  }
 id: eventinstance_live_stream_title
 label: Title
-type: inherit
+type: fallback
 sourceEntityType: eventseries
 destinationEntityType: eventinstance
 sourceEntityBundle: live_stream
 destinationEntityBundle: live_stream
 sourceField: title
-destinationField: null
+destinationField: field_ls_title
 plugin: default_inheritance
