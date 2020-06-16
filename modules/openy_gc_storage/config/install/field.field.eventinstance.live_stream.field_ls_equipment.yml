@@ -2,8 +2,8 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.eventseries.field_ls_equipment
-    - recurring_events.eventseries_type.live_stream
+    - field.storage.eventinstance.field_ls_equipment
+    - recurring_events.eventinstance_type.live_stream
     - taxonomy.vocabulary.gc_equipment
   module:
     - datalayer
@@ -11,9 +11,9 @@ third_party_settings:
   datalayer:
     expose: 0
     label: field_ls_equipment
-id: eventseries.live_stream.field_ls_equipment
+id: eventinstance.live_stream.field_ls_equipment
 field_name: field_ls_equipment
-entity_type: eventseries
+entity_type: eventinstance
 bundle: live_stream
 label: Equipment
 description: ''

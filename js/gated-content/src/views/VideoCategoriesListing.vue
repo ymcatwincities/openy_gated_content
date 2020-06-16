@@ -1,7 +1,9 @@
 <template>
   <div v-if="listingIsNotEmpty" class="gated-container">
     <h2 class="title">{{ title }}</h2>
-    <div v-if="loading">Loading...</div>
+    <div v-if="loading" class="text-center">
+      <Spinner></Spinner>
+    </div>
     <div v-else-if="error">Error loading</div>
     <div v-else class="video-listing category-listing">
       <CategoryTeaser
@@ -16,6 +18,7 @@
 <script>
 import client from '@/client';
 import CategoryTeaser from '@/components/CategoryTeaser.vue';
+import Spinner from '@/components/Spinner.vue';
 import { JsonApiCombineMixin } from '../mixins/JsonApiCombineMixin';
 
 export default {
@@ -23,6 +26,7 @@ export default {
   mixins: [JsonApiCombineMixin],
   components: {
     CategoryTeaser,
+    Spinner,
   },
   props: {
     title: {

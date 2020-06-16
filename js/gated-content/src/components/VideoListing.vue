@@ -1,19 +1,23 @@
 <template>
-  <div>
-    <h2 class="title">{{ title }}</h2>
-    <template v-if="listingIsNotEmpty">
-    <router-link :to="{ name: 'CategoryListing' }" v-if="viewAll">
-      View All
-    </router-link>
-    <div v-if="loading">Loading...</div>
-    <div v-else-if="error">Error loading</div>
-    <div v-else class="video-listing">
-      <VideoTeaser
-        v-for="video in listing"
-        :key="video.id"
-        :video="video"
-      />
+  <div class="videos gated-container">
+    <div class="videos__header">
+      <h2 class="title">{{ title }}</h2>
+      <router-link :to="{ name: 'CategoryListing' }" v-if="viewAll && listingIsNotEmpty">
+        View All
+      </router-link>
     </div>
+    <div v-if="loading" class="text-center">
+      <Spinner></Spinner>
+    </div>
+    <template v-else-if="listingIsNotEmpty">
+      <div v-if="error">Error loading</div>
+      <div v-else class="video-listing">
+        <VideoTeaser
+          v-for="video in listing"
+          :key="video.id"
+          :video="video"
+        />
+      </div>
     </template>
     <div v-else class="empty-listing">
       Videos not found.
@@ -24,6 +28,7 @@
 <script>
 import client from '@/client';
 import VideoTeaser from '@/components/VideoTeaser.vue';
+import Spinner from '@/components/Spinner.vue';
 import { JsonApiCombineMixin } from '../mixins/JsonApiCombineMixin';
 
 export default {
@@ -31,6 +36,7 @@ export default {
   mixins: [JsonApiCombineMixin],
   components: {
     VideoTeaser,
+    Spinner,
   },
   props: {
     title: {
