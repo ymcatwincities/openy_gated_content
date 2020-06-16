@@ -65,6 +65,32 @@ function openy_gated_content_jsonapi_eventinstance_filter_access(EntityTypeInter
 /**
  * Implements hook_form_FORM_ID_alter().
  */
+function openy_gated_content_form_eventseries_live_stream_edit_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Disable rebuild form.
+  $form['#validate'][] = '_openy_gated_content_form_eventseries_live_stream_validate';
+  // We need to clear JSON API cache bin on submit.
+  $form['actions']['submit']['#submit'][] = '_openy_gated_content_form_eventseries_live_stream_submit';
+}
+
+/**
+ * Custom validation for eventseries_live_stream_edit_form.
+ */
+function _openy_gated_content_form_eventseries_live_stream_validate(&$form, FormStateInterface $form_state) {
+  // This will fix entity save, but disable confirmation step
+  // on date change.
+  $form_state->setRebuild(FALSE);
+}
+
+/**
+ * Custom submit handler for eventseries_live_stream_edit_form.
+ */
+function _openy_gated_content_form_eventseries_live_stream_submit(&$form, FormStateInterface $form_state) {
+  \Drupal::cache('jsonapi_normalizations')->deleteAll();
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
 function openy_gated_content_form_eventinstance_live_stream_edit_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   // Collapse field_inheritance by default in event instance edit form.
   $form['field_inheritance']['#open'] = FALSE;
