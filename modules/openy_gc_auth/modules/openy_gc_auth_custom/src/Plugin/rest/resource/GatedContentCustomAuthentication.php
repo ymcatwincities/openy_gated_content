@@ -116,6 +116,9 @@ class GatedContentCustomAuthentication extends ResourceBase implements Container
    */
   public function post(Request $request) {
     $content = json_decode($request->getContent(), TRUE);
+    if (!is_array($content) || empty($content)) {
+      return $this->errorResponse($this->t('Bad Request.'), 400);
+    }
 
     $provider_config = $this->configFactory->get('openy_gc_auth.provider.custom');
     if ($provider_config->get('enable_recaptcha')) {

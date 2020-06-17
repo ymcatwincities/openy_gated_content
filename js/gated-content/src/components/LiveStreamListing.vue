@@ -90,6 +90,7 @@ export default {
         'level',
       ],
       date: new Date(),
+      oneDay: 86400000,
     };
   },
   watch: {
@@ -219,14 +220,11 @@ export default {
         });
     },
     backOneDay() {
-      this.date = new Date(this.date.setTime(this.date.getTime() - 86400000));
+      this.date = new Date(this.date.setTime(this.date.getTime() - this.oneDay));
     },
     forwardOneDay() {
-      this.date = new Date(this.date.setTime(this.date.getTime() + 86400000));
+      this.date = new Date(this.date.setTime(this.date.getTime() + this.oneDay));
     },
   },
 };
 </script>
-
-<style lang="scss">
-</style>

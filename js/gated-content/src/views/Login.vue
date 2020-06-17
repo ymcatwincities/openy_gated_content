@@ -35,12 +35,7 @@ export default {
   },
   methods: {
     loginSuccess() {
-      // if (this.destination) {
-      // this.$router.push(this.destination);
-      // this.$store.dispatch('unsetDestination');
-      // } else {
       this.$router.push({ name: 'Home' });
-      // }
     },
   },
 };

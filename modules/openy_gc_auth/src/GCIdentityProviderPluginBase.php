@@ -81,9 +81,7 @@ abstract class GCIdentityProviderPluginBase extends PluginBase implements GCIden
    * {@inheritdoc}
    */
   private function baseConfigurationDefaults():array {
-    return [
-      // TODO: add here configs that can be similar for all instances.
-    ];
+    return [];
   }
 
   /**
@@ -115,12 +113,11 @@ abstract class GCIdentityProviderPluginBase extends PluginBase implements GCIden
    * {@inheritdoc}
    */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
-    // $config = $this->getConfiguration();
     $form['admin_label'] = [
       '#type' => 'page_title',
       '#title' => $this->getLabel(),
     ];
-    // TODO: add here fields that can be similar for all instances.
+
     return $form;
   }
 
@@ -148,7 +145,6 @@ abstract class GCIdentityProviderPluginBase extends PluginBase implements GCIden
    * {@inheritdoc}
    */
   public function getDataForApp():array {
-    // $config = $this->configFactory->get($this->getConfigName());
     return [
       'type' => $this->getId(),
     ];
