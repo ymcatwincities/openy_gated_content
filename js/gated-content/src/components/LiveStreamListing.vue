@@ -12,7 +12,7 @@
         <button v-on:click.stop="forwardOneDay" class="right"
                 role="button" aria-label="next date"><i class="fa fa-angle-right"></i></button>
       </h2>
-      <router-link :to="{ name: 'LiveStreamListing' }" v-if="viewAll">
+      <router-link :to="{ name: 'LiveStreamListing' }" v-if="viewAll" class="view-all">
         View All
       </router-link>
     </div>
@@ -90,6 +90,7 @@ export default {
         'level',
       ],
       date: new Date(),
+      oneDay: 86400000,
     };
   },
   watch: {
@@ -219,14 +220,11 @@ export default {
         });
     },
     backOneDay() {
-      this.date = new Date(this.date.setTime(this.date.getTime() - 86400000));
+      this.date = new Date(this.date.setTime(this.date.getTime() - this.oneDay));
     },
     forwardOneDay() {
-      this.date = new Date(this.date.setTime(this.date.getTime() + 86400000));
+      this.date = new Date(this.date.setTime(this.date.getTime() + this.oneDay));
     },
   },
 };
 </script>
-
-<style lang="scss">
-</style>

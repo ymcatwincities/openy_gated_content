@@ -54,9 +54,6 @@
           </div>
         </div>
       </div>
-      <!--div class="video-category">
-        &lt; {{ video.attributes.field_gc_video_category.name }}
-      </div-->
       <LiveStreamListing
         :title="'UP NEXT'"
         :excluded-video-id="video.id"
