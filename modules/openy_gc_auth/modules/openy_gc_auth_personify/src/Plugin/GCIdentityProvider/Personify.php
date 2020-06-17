@@ -101,9 +101,10 @@ class Personify extends GCIdentityProviderPluginBase {
 
     $personifyConfigForm = Link::createFromRoute($this->t('Personify configuration form'),
       'personify.settings', [], ['target' => '_blank'])->toString();
-    $readMeUrl = Link::fromTextAndUrl($this->t('README file'),
-      Url::fromUserInput('/' . drupal_get_path('module', 'openy_gc_auth_personify') . '/README.md',
-        ['attributes' => ['target' => '_blank']])
+    $readMeUrl = Link::createFromRoute($this->t('README file'),
+      'help.page',
+      ['name' => 'openy_gc_auth_personify'],
+      ['attributes' => ['target' => '_blank']]
     )->toString();
 
     // Check settings.
