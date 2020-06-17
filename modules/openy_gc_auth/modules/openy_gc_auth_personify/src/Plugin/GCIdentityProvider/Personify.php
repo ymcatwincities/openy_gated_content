@@ -153,9 +153,9 @@ class Personify extends GCIdentityProviderPluginBase {
     $data = parent::getDataForApp();
 
     $data['api_login_personify'] = $this->getPersonifyLoginUrl($this->configuration['application_url']);
-    $data['api_login_check'] = Url::fromRoute('openy_gc_auth_personify.personify_check')->toString();;
-    $data['api_auth'] = Url::fromRoute('openy_gc_auth_personify.personify_auth')->toString();;
-    $data['api_logout'] = Url::fromRoute('openy_gc_auth_personify.personify_logout')->toString();;
+    $data['api_login_check'] = Url::fromRoute('openy_gc_auth_personify.personify_check')->toString();
+    $data['api_auth'] = Url::fromRoute('openy_gc_auth_personify.personify_auth')->toString();
+    $data['api_logout'] = Url::fromRoute('openy_gc_auth_personify.personify_logout')->toString();
     return $data;
   }
 
@@ -177,8 +177,7 @@ class Personify extends GCIdentityProviderPluginBase {
     ];
 
     // Generate auth URL that would base of validation token.
-    $configAuthUrl = $this->configFactory->get('openy_gc_auth.provider.personify')->get('api_auth');
-    $url = Url::fromUserInput($configAuthUrl, $options)->toString();
+    $url = Url::fromRoute('openy_gc_auth_personify.personify_auth', [], $options)->toString();
 
     $vendor_token = $this->personifySSO->getVendorToken($url);
     $options = [
