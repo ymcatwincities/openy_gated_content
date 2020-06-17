@@ -4,6 +4,7 @@
     <DummyAuth v-if="authPlugin === 'dummy'"/>
     <CustomAuth v-else-if="authPlugin === 'custom'"/>
     <DaxkoSSO v-else-if="authPlugin === 'daxkosso'"/>
+    <PersonifyAuth v-else-if="authPlugin === 'personify'"/>
     <div v-else>
       No auth plugin was set.
     </div>
@@ -14,6 +15,7 @@
 import DummyAuth from '@/components/auth/DummyAuth.vue';
 import CustomAuth from '@/components/auth/CustomAuth.vue';
 import DaxkoSSO from '@/components/auth/DaxkoSSO.vue';
+import PersonifyAuth from '@/components/auth/PersonifyAuth.vue';
 
 export default {
   name: 'Login',
@@ -21,6 +23,7 @@ export default {
     DaxkoSSO,
     DummyAuth,
     CustomAuth,
+    PersonifyAuth,
   },
   data() {
     return {
