@@ -86,9 +86,6 @@ class Personify extends GCIdentityProviderPluginBase {
   public function defaultConfiguration():array {
     return [
       'application_url' => '/gated-content',
-      'api_login_check' => '/openy_gc_auth_personify/check/login',
-      'api_auth' => '/openy_gc_auth_personify/auth',
-      'api_logout' => '/openy_gc_auth_personify/logout',
     ];
   }
 
@@ -145,9 +142,6 @@ class Personify extends GCIdentityProviderPluginBase {
   public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
     if (!$form_state->getErrors()) {
       $this->configuration['application_url'] = $form_state->getValue('application_url');
-      $this->configuration['api_login_check'] = $form_state->getValue('api_login_check');
-      $this->configuration['api_auth'] = $form_state->getValue('api_auth');
-      $this->configuration['api_logout'] = $form_state->getValue('api_logout');
       parent::submitConfigurationForm($form, $form_state);
     }
   }
@@ -159,9 +153,9 @@ class Personify extends GCIdentityProviderPluginBase {
     $data = parent::getDataForApp();
 
     $data['api_login_personify'] = $this->getPersonifyLoginUrl($this->configuration['application_url']);
-    $data['api_login_check'] = $this->configuration['api_login_check'];
-    $data['api_auth'] = $this->configuration['api_auth'];
-    $data['api_logout'] = $this->configuration['api_logout'];
+    $data['api_login_check'] = Url::fromRoute('openy_gc_auth_personify.personify_check')->toString();;
+    $data['api_auth'] = Url::fromRoute('openy_gc_auth_personify.personify_auth')->toString();;
+    $data['api_logout'] = Url::fromRoute('openy_gc_auth_personify.personify_logout')->toString();;
     return $data;
   }
 
