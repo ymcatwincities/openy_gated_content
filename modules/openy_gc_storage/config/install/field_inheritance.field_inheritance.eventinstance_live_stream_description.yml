@@ -3,7 +3,7 @@ status: true
 dependencies: {  }
 id: eventinstance_live_stream_description
 label: Description
-type: fallback
+type: append
 sourceEntityType: eventseries
 destinationEntityType: eventinstance
 sourceEntityBundle: live_stream

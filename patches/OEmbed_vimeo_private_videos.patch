@@ -1,0 +1,20 @@
+Index: a/modules/media/src/OEmbed/ResourceFetcher.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- a/modules/media/src/OEmbed/ResourceFetcher.php	(date 1592385005902)
++++ b/modules/media/src/OEmbed/ResourceFetcher.php	(date 1592385005902)
+@@ -58,7 +58,11 @@
+     }
+
+     try {
+-      $response = $this->httpClient->get($url);
++      $response = $this->httpClient->get($url, [
++        'headers' => [
++          'Referer' => $_SERVER['HTTP_REFERER'],
++        ],
++      ]);
+     }
+     catch (RequestException $e) {
+       throw new ResourceException('Could not retrieve the oEmbed resource.', $url, [], $e);
