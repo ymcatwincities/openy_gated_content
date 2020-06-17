@@ -12,7 +12,7 @@
         <button v-on:click.stop="forwardOneDay" class="right"
                 role="button" aria-label="next date"><i class="fa fa-angle-right"></i></button>
       </h2>
-      <router-link :to="{ name: 'LiveStreamListing' }" v-if="viewAll">
+      <router-link :to="{ name: 'LiveStreamListing' }" v-if="viewAll" class="view-all">
         View All
       </router-link>
     </div>

@@ -2,7 +2,7 @@
   <div class="videos gated-container">
     <div class="videos__header">
       <h2 class="title">{{ title }}</h2>
-      <router-link :to="{ name: 'CategoryListing' }" v-if="viewAll && listingIsNotEmpty">
+      <router-link :to="{ name: 'CategoryListing' }" v-if="viewAll && listingIsNotEmpty" class="view-all">
         View All
       </router-link>
     </div>
