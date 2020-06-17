@@ -13,7 +13,6 @@ dependencies:
     - recurring_events.eventinstance_type.live_stream
   module:
     - datetime_range
-    - text
 id: eventinstance.live_stream.default
 targetEntityType: eventinstance
 bundle: live_stream
