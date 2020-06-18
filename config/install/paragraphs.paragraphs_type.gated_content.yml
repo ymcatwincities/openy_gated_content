@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies: {  }
+id: gated_content
+label: 'Gated Content'
+icon_uuid: null
+description: 'Open Y Gated content'
+behavior_plugins: {  }

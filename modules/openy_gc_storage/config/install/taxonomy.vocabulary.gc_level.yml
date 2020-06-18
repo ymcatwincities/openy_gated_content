@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 'GC Level'
+vid: gc_level
+description: 'Exercise level for Open Y Gated Content'
+weight: 0

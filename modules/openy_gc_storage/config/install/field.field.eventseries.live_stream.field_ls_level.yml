@@ -1,0 +1,34 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.eventseries.field_ls_level
+    - recurring_events.eventseries_type.live_stream
+    - taxonomy.vocabulary.gc_level
+  module:
+    - datalayer
+third_party_settings:
+  datalayer:
+    expose: 0
+    label: field_ls_level
+id: eventseries.live_stream.field_ls_level
+field_name: field_ls_level
+entity_type: eventseries
+bundle: live_stream
+label: Level
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      gc_level: gc_level
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

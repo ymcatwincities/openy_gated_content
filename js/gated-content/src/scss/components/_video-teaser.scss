@@ -1,0 +1,61 @@
+.video-teaser {
+  border: solid 1px $gray;
+  border-top: solid 5px $indigo;
+  cursor: pointer;
+
+  box-shadow: 0 1px 1px rgba(0,0,0,.5);
+  transform: scale(1);
+
+  &:hover {
+    box-shadow: 0 4px 6px rgba(0,0,0,.25);
+    transform: scale(1.01);
+  }
+
+  a {
+    color: $gray;
+
+    &:hover {
+      color: $blue-hover;
+      text-decoration: none;
+    }
+  }
+
+  .preview {
+    position: relative;
+    padding-bottom: 56.25%;
+    background-size: contain;
+
+    .duration {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      padding: 10px 15px;
+      font-size: 10px;
+      line-height: 10px;
+      text-align: center;
+      color: $white;
+      background: rgba(0, 0, 0, .5);
+    }
+  }
+
+  .title {
+    padding: 10px 10px 0;
+    font-size: 22px;
+    line-height: 20px;
+  }
+
+  .meta {
+    padding: 15px 10px;
+    font-size: 14px;
+    line-height: 14px;
+    display: flex;
+    align-items: center;
+  }
+
+  &:focus, &:hover {
+    .y-video__button-shape {
+      fill: $red;
+      fill-opacity: 1;
+    }
+  }
+}

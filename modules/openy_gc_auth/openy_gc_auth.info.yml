@@ -1,0 +1,6 @@
+name: Open Y Gated Content Auth
+type: module
+description: 'Provides Open Y Gated Content authentication provider.'
+package: Open Y Gated Content
+version: 0.1
+core: 8.x

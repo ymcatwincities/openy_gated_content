@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - media
+    - recurring_events
+id: eventinstance.field_ls_image
+field_name: field_ls_image
+entity_type: eventinstance
+type: entity_reference
+settings:
+  target_type: media
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: true
+custom_storage: false

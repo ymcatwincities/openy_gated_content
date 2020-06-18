@@ -1,0 +1,9 @@
+name: Open Y Gated Content Personify SSO Auth
+type: module
+description: 'Provides Open Y Gated Content Personify SSO authentication provider.'
+package: Open Y Gated Content
+version: 0.1
+core: 8.x
+dependencies:
+  - drupal:openy_gc_auth
+  - drupal:personify

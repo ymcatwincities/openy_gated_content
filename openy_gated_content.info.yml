@@ -1,0 +1,11 @@
+name: Open Y Gated Content base
+type: module
+description: 'Provides Open Y Gated Content functionality.'
+package: Open Y Gated Content
+version: 0.1
+core: 8.x
+dependencies:
+  - drupal:openy_system
+  - drupal:openy_gc_auth
+  - drupal:recaptcha
+  - drupal:jsonapi

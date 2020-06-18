@@ -1,0 +1,13 @@
+name: Open Y Gated Content Demo content
+type: module
+description: 'Provides a Landing page node for development purposes.'
+package: Open Y Gated Content
+version: 0.1
+core: 8.x
+dependencies:
+  - drupal:default_content
+  - drupal:jsonapi
+  - drupal:openy_gated_content
+  - drupal:openy_gc_storage
+  - drupal:openy_gc_auth_example
+  - drupal:openy_gc_auth_custom

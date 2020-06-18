@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies: {  }
+id: eventinstance_live_stream_category
+label: Category
+type: fallback
+sourceEntityType: eventseries
+destinationEntityType: eventinstance
+sourceEntityBundle: live_stream
+destinationEntityBundle: live_stream
+sourceField: field_ls_category
+destinationField: field_ls_category
+plugin: entity_reference_inheritance

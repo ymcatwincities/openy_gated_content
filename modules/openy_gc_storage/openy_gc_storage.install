@@ -1,0 +1,30 @@
+<?php
+
+/**
+ * @file
+ * Installation file for Open Y Gated Content Storage.
+ */
+
+use Drupal\user\Entity\Role;
+use Drupal\user\RoleInterface;
+
+/**
+ * Implements hook_install().
+ */
+function openy_gc_storage_install() {
+  $role_object = Role::load(RoleInterface::ANONYMOUS_ID);
+  // Allow anonymous view events entities (for JSON API).
+  $role_object->grantPermission('view eventinstance entity');
+  $role_object->grantPermission('view eventseries entity');
+  $role_object->save();
+
+  $role2_object = Role::load(RoleInterface::AUTHENTICATED_ID);
+  // Allow authenticated users access gated content entities pages.
+  $role2_object->grantPermission('view gated content entities pages');
+  $role2_object->save();
+
+  $config_factory = \Drupal::configFactory();
+  $config = $config_factory->getEditable('jsonapi_image_styles.settings');
+  $config->set('image_styles.gated_content_teaser', 'gated_content_teaser');
+  $config->save(TRUE);
+}

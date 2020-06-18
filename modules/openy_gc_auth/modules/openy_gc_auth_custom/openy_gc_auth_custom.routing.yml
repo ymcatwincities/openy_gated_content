@@ -1,0 +1,7 @@
+openy_gc_auth_custom.import_csv:
+  path: '/admin/openy/openy-gc-auth/settings/provider/custom/import_csv'
+  defaults:
+    _form: '\Drupal\openy_gc_auth_custom\Form\ImportCsvForm'
+    _title: 'Import CSV'
+  requirements:
+    _permission: 'administer site configuration'

@@ -1,0 +1,14 @@
+langcode: en
+status: true
+dependencies: {  }
+name: gated_content_teaser
+label: 'Gated content teaser'
+effects:
+  2ce2d10c-63ff-402b-93a2-80fae5700c1b:
+    uuid: 2ce2d10c-63ff-402b-93a2-80fae5700c1b
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 775
+      height: 435
+      anchor: center-center

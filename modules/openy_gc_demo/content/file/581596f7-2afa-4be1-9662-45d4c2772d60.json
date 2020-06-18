@@ -1,0 +1,95 @@
+{
+    "_links": {
+        "self": {
+            "href": "http:\/\/rose.openy.docksal\/sites\/rose\/files\/video_thumbnails\/405566465.jpg"
+        },
+        "type": {
+            "href": "http:\/\/drupal.org\/rest\/type\/file\/file"
+        },
+        "http:\/\/drupal.org\/rest\/relation\/file\/file\/uid": [
+            {
+                "href": "http:\/\/rose.openy.docksal\/user\/1?_format=hal_json"
+            }
+        ]
+    },
+    "fid": [
+        {
+            "value": 7
+        }
+    ],
+    "uuid": [
+        {
+            "value": "581596f7-2afa-4be1-9662-45d4c2772d60"
+        }
+    ],
+    "langcode": [
+        {
+            "value": "en"
+        }
+    ],
+    "_embedded": {
+        "http:\/\/drupal.org\/rest\/relation\/file\/file\/uid": [
+            {
+                "_links": {
+                    "self": {
+                        "href": "http:\/\/rose.openy.docksal\/user\/1?_format=hal_json"
+                    },
+                    "type": {
+                        "href": "http:\/\/drupal.org\/rest\/type\/user\/user"
+                    }
+                },
+                "uuid": [
+                    {
+                        "value": "0151a2b2-9077-46ca-92e3-fb9e78e6f8a0"
+                    }
+                ]
+            }
+        ]
+    },
+    "filename": [
+        {
+            "value": "405566465.jpg"
+        }
+    ],
+    "uri": [
+        {
+            "value": "public:\/\/video_thumbnails\/405566465.jpg",
+            "url": "\/sites\/rose\/files\/video_thumbnails\/405566465.jpg"
+        }
+    ],
+    "filemime": [
+        {
+            "value": "image\/jpeg"
+        }
+    ],
+    "filesize": [
+        {
+            "value": 7464
+        }
+    ],
+    "status": [
+        {
+            "value": true
+        }
+    ],
+    "created": [
+        {
+            "value": "2020-06-05T10:16:11+00:00",
+            "format": "Y-m-d\\TH:i:sP"
+        }
+    ],
+    "changed": [
+        {
+            "value": "2020-06-05T10:16:11+00:00",
+            "format": "Y-m-d\\TH:i:sP"
+        }
+    ],
+    "image_style_uri": [
+        {
+            "url": {
+                "gated_content_teaser": "http:\/\/rose.openy.docksal\/sites\/rose\/files\/styles\/gated_content_teaser\/public\/video_thumbnails\/405566465.jpg?itok=aFBpFnbi"
+            },
+            "lang": "en"
+        }
+    ]
+}

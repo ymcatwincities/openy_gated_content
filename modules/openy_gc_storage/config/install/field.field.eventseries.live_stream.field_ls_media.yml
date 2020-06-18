@@ -1,0 +1,33 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.eventseries.field_ls_media
+    - media.type.video
+    - recurring_events.eventseries_type.live_stream
+  module:
+    - datalayer
+third_party_settings:
+  datalayer:
+    expose: 0
+    label: field_ls_media
+id: eventseries.live_stream.field_ls_media
+field_name: field_ls_media
+entity_type: eventseries
+bundle: live_stream
+label: Media
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:media'
+  handler_settings:
+    target_bundles:
+      video: video
+    sort:
+      field: _none
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

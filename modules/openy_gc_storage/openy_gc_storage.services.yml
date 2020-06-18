@@ -1,0 +1,6 @@
+services:
+  # Route subscriber.
+  openy_gc_storage.route_subscriber:
+    class: Drupal\openy_gc_storage\Routing\StorageRouteSubscriber
+    tags:
+      - { name: event_subscriber }

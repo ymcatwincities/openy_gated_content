@@ -1,0 +1,13 @@
+name: Open Y Gated Content Auth Custom
+type: module
+description: 'Provides Open Y Gated Content custom authentication provider based on data imported from csv file.'
+package: Open Y Gated Content
+version: 0.1
+core: 8.x
+dependencies:
+  - drupal:migrate
+  - drupal:migrate_source_csv
+  - drupal:migrate_plus
+  - drupal:recaptcha
+  - drupal:rest
+  - drupal:openy_gc_auth

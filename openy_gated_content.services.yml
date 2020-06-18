@@ -1,0 +1,6 @@
+services:
+  openy_gated_content.subscriber:
+    class: '\Drupal\openy_gated_content\EventSubscriber\GatedContentSubscriber'
+    arguments: ['@current_user']
+    tags:
+      - { name: 'event_subscriber' }

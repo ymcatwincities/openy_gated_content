@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - recurring_events
+id: eventseries.field_ls_host_name
+field_name: field_ls_host_name
+entity_type: eventseries
+type: string
+settings:
+  max_length: 255
+  is_ascii: false
+  case_sensitive: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: true
+custom_storage: false

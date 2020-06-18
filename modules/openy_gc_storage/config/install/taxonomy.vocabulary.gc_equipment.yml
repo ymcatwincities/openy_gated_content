@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 'GC Equipment'
+vid: gc_equipment
+description: 'Equipment for Open Y Gated Content'
+weight: 0

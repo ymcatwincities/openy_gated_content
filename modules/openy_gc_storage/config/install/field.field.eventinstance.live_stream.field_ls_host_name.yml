@@ -1,0 +1,24 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.eventinstance.field_ls_host_name
+    - recurring_events.eventinstance_type.live_stream
+  module:
+    - datalayer
+third_party_settings:
+  datalayer:
+    expose: 0
+    label: field_ls_host_name
+id: eventinstance.live_stream.field_ls_host_name
+field_name: field_ls_host_name
+entity_type: eventinstance
+bundle: live_stream
+label: 'Host’s name'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

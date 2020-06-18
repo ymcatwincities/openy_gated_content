@@ -1,0 +1,34 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_gc_video_category
+    - node.type.gc_video
+    - taxonomy.vocabulary.gc_category
+  module:
+    - datalayer
+third_party_settings:
+  datalayer:
+    expose: 0
+    label: field_gc_video_category
+id: node.gc_video.field_gc_video_category
+field_name: field_gc_video_category
+entity_type: node
+bundle: gc_video
+label: Category
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      gc_category: gc_category
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

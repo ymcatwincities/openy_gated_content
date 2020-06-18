@@ -1,0 +1,38 @@
+// This file must not generated any real CSS as it's included in every SFC.
+@import "../../node_modules/bootstrap/scss/functions";
+@import "../../node_modules/bootstrap/scss/variables";
+@import "../../node_modules/bootstrap/scss/mixins";
+
+@import "variables";
+@import "widgets/video-level";
+@import "components/video-listing";
+@import "components/video-teaser";
+@import "components/live-stream-teaser";
+@import "components/category-listing";
+@import "components/category-teaser";
+@import "views/video-page";
+@import "views/category-page";
+@import "views/login";
+
+#gated-content {
+  padding-bottom: 30px;
+
+  .gated-container {
+    padding: 10px;
+
+    @media (min-width: 768px) {
+      margin-left: auto;
+      margin-right: auto;
+      padding: 30px 15px;
+      max-width: 750px;
+    }
+
+    @media (min-width: 992px) {
+      max-width: 970px;
+    }
+
+    @media (min-width: 1200px) {
+      max-width: 1170px;
+    }
+  }
+}
