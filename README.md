@@ -45,7 +45,7 @@ git clone --branch openy-gc-builds \
   git@github.com:fivejars/docksal-for-openy.git .docksal
 git clone git@github.com:fivejars/openy_gated_content.git
 mkdir -p docroot/libraries docroot/sites/default/config/staging
-wget -N https://raw.githubusercontent.com/fivejars/openy-project/8.2.x-gated-content-ci/composer.json
+wget -N https://raw.githubusercontent.com/ymcatwincities/openy-project/8.2.x-virtual-y/composer.json
 docker volume create --name=composer_cache
 fin init
 ```
