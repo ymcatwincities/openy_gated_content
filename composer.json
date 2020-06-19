@@ -5,6 +5,7 @@
     "require": {
         "drupal/default_content": "*",
         "drupal/recurring_events": "*",
+        "ymcatwincities/daxko_sso: "*",
         "drupal/jsonapi_image_styles": "^1.0@beta"
     },
     "license": "GPL-2.0+",
