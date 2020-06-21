@@ -115,6 +115,7 @@ export default {
   },
   methods: {
     async load() {
+      this.loading = true;
       const params = {};
       if (this.params) {
         params.include = this.params.join(',');

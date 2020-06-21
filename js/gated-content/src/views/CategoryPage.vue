@@ -53,11 +53,11 @@ export default {
   },
   methods: {
     async load() {
+      this.loading = true;
       client
         .get(`jsonapi/taxonomy_term/gc_category/${this.cid}`)
         .then((response) => {
           this.category = response.data.data;
-          console.log(this.category);
           this.loading = false;
         })
         .catch((error) => {

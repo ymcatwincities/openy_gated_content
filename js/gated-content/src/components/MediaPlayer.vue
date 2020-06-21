@@ -27,6 +27,10 @@ export default {
       required: true,
     },
   },
+  watch: {
+    media: 'reload',
+    source: 'reload',
+  },
   computed: {
     source() {
       return this.media.field_media_source;
@@ -46,6 +50,11 @@ export default {
       };
 
       return options;
+    },
+  },
+  methods: {
+    reload() {
+      this.$forceUpdate();
     },
   },
 };
