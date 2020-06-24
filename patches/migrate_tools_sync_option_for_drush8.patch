@@ -1,0 +1,33 @@
+Index: a/migrate_tools.drush.inc
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- a/migrate_tools.drush.inc	(date 1593007548261)
++++ b/migrate_tools.drush.inc	(date 1593007548261)
+@@ -50,6 +50,7 @@
+       'idlist-delimiter' => 'The delimiter for records, defaults to \':\'',
+       'update' => ' In addition to processing unprocessed items from the source, update previously-imported items with the current data',
+       'force' => 'Force an operation to run, even if all dependencies are not satisfied',
++      'sync' => 'Sync source and destination. Delete destination records that do not exist in the source.',
+       'execute-dependencies' => 'Execute all dependent migrations first.',
+     ],
+     'arguments' => [
+@@ -264,6 +265,7 @@
+     'idlist-delimiter',
+     'update',
+     'force',
++    'sync',
+   ];
+   foreach ($options as $option) {
+     if (drush_get_option($option)) {
+@@ -309,6 +311,9 @@
+   if (!empty($options['force'])) {
+     $migration->set('requirements', []);
+   }
++  if ($options['sync']) {
++    $migration->set('syncSource', TRUE);
++  }
+   if (!empty($options['update'])) {
+     if (empty($options['idlist'])) {
+       $migration->getIdMap()->prepareUpdate();

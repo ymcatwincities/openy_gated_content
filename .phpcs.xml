@@ -11,5 +11,6 @@
   <exclude-pattern>/node_modules/</exclude-pattern>
   <exclude-pattern>/dist/</exclude-pattern>
   <exclude-pattern>*.min.*</exclude-pattern>
+  <exclude-pattern>README.md</exclude-pattern>
   <file>.</file>
 </ruleset>
