@@ -20,10 +20,10 @@ third_party_settings:
     unpublish_enable: false
     unpublish_required: false
     unpublish_revision: false
-name: 'Virtual Y Video'
-type: gc_video
-description: 'Video content type is used for adding videos for a Gated Content'
+name: 'Virtual Y blog post'
+type: vy_blog_post
+description: 'Virtual Y blog post content type is used for adding a blog posts for a Gated Content'
 help: ''
 new_revision: true
 preview_mode: 1
-display_submitted: false
+display_submitted: true

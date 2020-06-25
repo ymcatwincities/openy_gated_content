@@ -1,0 +1,38 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.vy_blog_post.field_vy_blog_description
+    - field.field.node.vy_blog_post.field_vy_blog_image
+    - node.type.vy_blog_post
+  module:
+    - text
+    - user
+id: node.vy_blog_post.default
+targetEntityType: node
+bundle: vy_blog_post
+mode: default
+content:
+  field_vy_blog_description:
+    weight: 2
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: text_default
+    region: content
+  field_vy_blog_image:
+    type: entity_reference_entity_view
+    weight: 1
+    label: above
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    region: content
+  links:
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  langcode: true
