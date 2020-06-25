@@ -64,7 +64,7 @@ class GatedContentSubscriber implements EventSubscriberInterface {
         break;
     }
 
-    $entity_types = ['gc_video', 'live_stream'];
+    $entity_types = ['gc_video', 'vy_blog_post', 'live_stream'];
     if (!$route_object || !in_array($route_object->getType(), $entity_types)) {
       return;
     }
