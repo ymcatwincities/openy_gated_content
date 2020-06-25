@@ -17,9 +17,9 @@
 
 <script>
 import client from '@/client';
-import CategoryTeaser from '@/components/CategoryTeaser.vue';
+import CategoryTeaser from '@/components/video/CategoryTeaser.vue';
 import Spinner from '@/components/Spinner.vue';
-import { JsonApiCombineMixin } from '../mixins/JsonApiCombineMixin';
+import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
 
 export default {
   name: 'VideoCategoriesListing',

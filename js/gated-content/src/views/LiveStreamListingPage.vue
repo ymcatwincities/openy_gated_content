@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import LiveStreamListing from '@/components/LiveStreamListing.vue';
+import LiveStreamListing from '@/components/event/LiveStreamListing.vue';
 
 export default {
   name: 'LiveStreamListingPage',

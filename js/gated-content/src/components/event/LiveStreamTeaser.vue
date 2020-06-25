@@ -34,7 +34,7 @@
 <script>
 
 export default {
-  name: 'VideoTeaser',
+  name: 'LiveStreamTeaser',
   props: {
     video: {
       type: Object,

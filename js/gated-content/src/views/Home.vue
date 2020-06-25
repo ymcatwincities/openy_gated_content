@@ -6,8 +6,8 @@
 </template>
 
 <script>
-import VideoListing from '@/components/VideoListing.vue';
-import LiveStreamListing from '@/components/LiveStreamListing.vue';
+import VideoListing from '@/components/video/VideoListing.vue';
+import LiveStreamListing from '@/components/event/LiveStreamListing.vue';
 
 export default {
   name: 'Home',

@@ -67,9 +67,9 @@
 <script>
 import client from '@/client';
 import Spinner from '@/components/Spinner.vue';
-import MediaPlayer from '../components/MediaPlayer.vue';
-import LiveStreamListing from '../components/LiveStreamListing.vue';
-import { JsonApiCombineMixin } from '../mixins/JsonApiCombineMixin';
+import MediaPlayer from '@/components/MediaPlayer.vue';
+import LiveStreamListing from '@/components/event/LiveStreamListing.vue';
+import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
 
 export default {
   name: 'LiveStreamPage',
