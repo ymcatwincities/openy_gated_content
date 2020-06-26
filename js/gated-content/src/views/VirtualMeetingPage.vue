@@ -1,13 +1,16 @@
 <template>
-  <div class="gated-content-video-page">
+  <div class="gated-content-video-page virtual-meeting-page">
     <div v-if="loading" class="text-center">
       <Spinner></Spinner>
     </div>
     <div v-else-if="error">Error loading</div>
     <template v-else>
-      <div class="video-wrapper">
-        <div class="video gated-container">
-          <MediaPlayer :media="media"/>
+      <div class="virtual-meeting-page__image" v-bind:style="{
+              backgroundImage: `url(${image})`
+      }">
+
+        <div class="virtual-meeting-page__link">
+          <a :href="meetingLink.uri" target="_blank" class="btn btn-lg">{{ meetingLink.title }}</a>
         </div>
       </div>
       <div class="video-footer-wrapper">
@@ -57,6 +60,7 @@
       <EventListing
         :title="'UP NEXT'"
         :excluded-video-id="video.id"
+        :eventType="'virtual_meeting'"
         :viewAll="true"
         :limit="6"
       />
@@ -67,15 +71,13 @@
 <script>
 import client from '@/client';
 import Spinner from '@/components/Spinner.vue';
-import MediaPlayer from '@/components/MediaPlayer.vue';
 import EventListing from '@/components/event/EventListing.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
 
 export default {
-  name: 'LiveStreamPage',
+  name: 'VirtualMeetingPage',
   mixins: [JsonApiCombineMixin],
   components: {
-    MediaPlayer,
     EventListing,
     Spinner,
   },
@@ -93,13 +95,15 @@ export default {
       response: null,
       params: [
         'field_ls_category',
-        'field_ls_media',
         'field_ls_level',
+        'field_ls_image',
+        'field_ls_image.field_media_image',
         // Data from parent (series).
         'category',
-        'media',
         'level',
         'equipment',
+        'image',
+        'image.field_media_image',
       ],
     };
   },
@@ -114,10 +118,6 @@ export default {
       return this.video.attributes.field_ls_level ? this.video.attributes.field_ls_level.name
         : this.video.attributes.level.name;
     },
-    media() {
-      return this.video.attributes.field_ls_media ? this.video.attributes.field_ls_media
-        : this.video.attributes.media;
-    },
     category() {
       return this.video.attributes.field_ls_category ? this.video.attributes.field_ls_category.name
         : this.video.attributes.category.name;
@@ -125,6 +125,33 @@ export default {
     instructor() {
       return this.video.attributes.field_ls_host_name ? this.video.attributes.field_ls_host_name
         : this.video.attributes.instructor;
+    },
+    image() {
+      if (this.video.attributes['field_ls_image.field_media_image']) {
+        return this.video.attributes['field_ls_image.field_media_image'].uri.url;
+      }
+      if (this.video.attributes['image.field_media_image']) {
+        return this.video.attributes['image.field_media_image'].uri.url;
+      }
+      return null;
+    },
+    meetingLink() {
+      const link = {
+        title: 'Join Meeting',
+      };
+      if (this.video.attributes.field_vm_link) {
+        link.uri = this.video.attributes.field_vm_link.uri;
+        if (this.video.attributes.field_vm_link.title) {
+          link.title = this.video.attributes.field_vm_link.title;
+        }
+      }
+      if (this.video.attributes.meeting_link) {
+        link.uri = this.video.attributes.meeting_link.uri;
+        if (this.video.attributes.meeting_link.title) {
+          link.title = this.video.attributes.meeting_link.title;
+        }
+      }
+      return link;
     },
   },
   watch: {
@@ -141,7 +168,7 @@ export default {
         params.include = this.params.join(',');
       }
       client
-        .get(`jsonapi/eventinstance/live_stream/${this.id}`, { params })
+        .get(`jsonapi/eventinstance/virtual_meeting/${this.id}`, { params })
         .then((response) => {
           this.video = this.combine(response.data.data, response.data.included, this.params);
           // We need here small hack for equipment.

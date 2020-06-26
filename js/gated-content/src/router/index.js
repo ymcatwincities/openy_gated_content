@@ -11,6 +11,8 @@ import CategoryPage from '@/views/CategoryPage.vue';
 import VideoCategoriesListing from '@/views/VideoCategoriesListing.vue';
 import LiveStreamPage from '@/views/LiveStreamPage.vue';
 import LiveStreamListingPage from '@/views/LiveStreamListingPage.vue';
+import VirtualMeetingPage from '@/views/VirtualMeetingPage.vue';
+import VirtualMeetingListingPage from '@/views/VirtualMeetingListingPage.vue';
 
 Vue.use(VueRouter);
 
@@ -59,6 +61,20 @@ const routes = [
     path: '/live-stream/:id',
     name: 'LiveStream',
     component: LiveStreamPage,
+    props: true,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/virtual-meeting',
+    name: 'VirtualMeetingListing',
+    component: VirtualMeetingListingPage,
+    props: true,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/virtual-meeting/:id',
+    name: 'VirtualMeeting',
+    component: VirtualMeetingPage,
     props: true,
     meta: { requiresAuth: true },
   },
