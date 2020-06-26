@@ -37,6 +37,7 @@ class Custom extends GCIdentityProviderPluginBase {
     $form['import'] = [
       '#title' => $this->t('Run users import'),
       '#type' => 'link',
+      '#weight' => 0,
       '#url' => Url::fromRoute('openy_gc_auth_custom.import_csv'),
       '#attributes' => ['class' => ['button']],
     ];
