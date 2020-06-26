@@ -31,9 +31,9 @@
 
 <script>
 import client from '@/client';
-import VideoTeaser from '@/components/VideoTeaser.vue';
+import VideoTeaser from '@/components/video/VideoTeaser.vue';
 import Spinner from '@/components/Spinner.vue';
-import { JsonApiCombineMixin } from '../mixins/JsonApiCombineMixin';
+import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
 
 export default {
   name: 'VideoListing',
