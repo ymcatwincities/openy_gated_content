@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies: {  }
+id: eventinstance_virtual_meeting_description
+label: Description
+type: append
+sourceEntityType: eventseries
+destinationEntityType: eventinstance
+sourceEntityBundle: virtual_meeting
+destinationEntityBundle: virtual_meeting
+sourceField: body
+destinationField: body
+plugin: default_inheritance

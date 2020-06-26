@@ -1,0 +1,162 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - entity_browser.browser.images_library
+    - field.field.eventseries.virtual_meeting.field_ls_category
+    - field.field.eventseries.virtual_meeting.field_ls_equipment
+    - field.field.eventseries.virtual_meeting.field_ls_host_name
+    - field.field.eventseries.virtual_meeting.field_ls_image
+    - field.field.eventseries.virtual_meeting.field_ls_level
+    - field.field.eventseries.virtual_meeting.field_vm_link
+    - recurring_events.eventseries_type.virtual_meeting
+  module:
+    - datetime_range
+    - entity_browser
+    - link
+    - recurring_events
+    - text
+id: eventseries.virtual_meeting.default
+targetEntityType: eventseries
+bundle: virtual_meeting
+mode: default
+content:
+  body:
+    type: text_textarea
+    weight: 6
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  consecutive_recurring_date:
+    type: consecutive_recurring_date
+    weight: 9
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  custom_date:
+    type: daterange_default
+    weight: 13
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  daily_recurring_date:
+    type: daily_recurring_date
+    weight: 10
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  excluded_dates:
+    type: daterange_default
+    weight: 14
+    settings: {  }
+    region: content
+    third_party_settings: {  }
+  field_ls_category:
+    weight: 2
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: entity_reference_autocomplete
+    region: content
+  field_ls_equipment:
+    weight: 7
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: entity_reference_autocomplete
+    region: content
+  field_ls_host_name:
+    weight: 5
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_ls_image:
+    weight: 3
+    settings:
+      entity_browser: images_library
+      field_widget_display: rendered_entity
+      field_widget_edit: true
+      field_widget_remove: true
+      selection_mode: selection_append
+      field_widget_display_settings:
+        view_mode: thumbnail_for_preview
+      field_widget_replace: false
+      open: false
+    third_party_settings: {  }
+    type: entity_browser_entity_reference
+    region: content
+  field_ls_level:
+    weight: 1
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
+  field_vm_link:
+    weight: 4
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+    type: link_default
+    region: content
+  included_dates:
+    type: daterange_default
+    weight: 15
+    settings: {  }
+    region: content
+    third_party_settings: {  }
+  monthly_recurring_date:
+    type: monthly_recurring_date
+    weight: 12
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  recur_type:
+    type: options_buttons
+    weight: 8
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    settings:
+      display_label: true
+    weight: 17
+    region: content
+    third_party_settings: {  }
+  title:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  uid:
+    type: entity_reference_autocomplete
+    weight: 16
+    settings:
+      match_operator: CONTAINS
+      size: 60
+      placeholder: ''
+      match_limit: 10
+    region: content
+    third_party_settings: {  }
+  weekly_recurring_date:
+    type: weekly_recurring_date
+    weight: 11
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden: {  }

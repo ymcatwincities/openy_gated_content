@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies: {  }
+id: eventinstance_virtual_meeting_title
+label: Title
+type: fallback
+sourceEntityType: eventseries
+destinationEntityType: eventinstance
+sourceEntityBundle: virtual_meeting
+destinationEntityBundle: virtual_meeting
+sourceField: title
+destinationField: field_ls_title
+plugin: default_inheritance

@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.eventseries.field_vm_link
+    - recurring_events.eventseries_type.virtual_meeting
+  module:
+    - datalayer
+    - link
+third_party_settings:
+  datalayer:
+    expose: 0
+    label: field_vm_link
+id: eventseries.virtual_meeting.field_vm_link
+field_name: field_vm_link
+entity_type: eventseries
+bundle: virtual_meeting
+label: 'Meeting link'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  link_type: 16
+  title: 1
+field_type: link
