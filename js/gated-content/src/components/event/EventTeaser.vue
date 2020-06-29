@@ -1,6 +1,12 @@
 <template>
-  <div class="video-teaser live-stream-teaser">
-    <router-link :to="{ name: 'LiveStream', params: { id: video.id } }">
+  <div
+    class="video-teaser event-teaser"
+    v-bind:class="{
+      'live-stream': route === 'LiveStream',
+      'virtual-meeting': route === 'VirtualMeeting'
+    }"
+  >
+    <router-link :to="{ name: route, params: { id: video.id } }">
       <div class="preview" v-bind:style="{
               backgroundImage: `url(${image})`
             }">
@@ -18,7 +24,7 @@
       </div>
       <div v-if="isOnAir" class="controls join">
         <router-link
-          :to="{ name: 'LiveStream', params: { id: video.id } }">
+          :to="{ name: route, params: { id: video.id } }">
           Join live stream
         </router-link>
       </div>
@@ -34,7 +40,7 @@
 <script>
 
 export default {
-  name: 'LiveStreamTeaser',
+  name: 'EventTeaser',
   props: {
     video: {
       type: Object,
@@ -63,6 +69,16 @@ export default {
       const dateEnd = new Date(this.video.attributes.date.end_value);
       const now = new Date();
       return dateStart < now && now < dateEnd;
+    },
+    route() {
+      switch (this.video.type) {
+        case 'eventinstance--live_stream':
+          return 'LiveStream';
+        case 'eventinstance--virtual_meeting':
+          return 'VirtualMeeting';
+        default:
+          return 'LiveStream';
+      }
     },
   },
 };

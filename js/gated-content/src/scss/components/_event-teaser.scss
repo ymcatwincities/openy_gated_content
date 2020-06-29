@@ -1,5 +1,9 @@
-.live-stream-teaser {
+.event-teaser {
   cursor: initial;
+
+  &.virtual-meeting {
+    border-top: solid 5px $blue-hover;
+  }
 
   .preview {
     .month {

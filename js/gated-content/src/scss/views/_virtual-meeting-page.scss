@@ -1,0 +1,21 @@
+.virtual-meeting-page {
+  .virtual-meeting-page__image {
+    height: 400px;
+    position: relative;
+    background-size: cover;
+    background-position: center;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    .virtual-meeting-page__link .btn {
+      background-color: $mine-shaft;
+
+      &:hover {
+        background-color: $blue-hover;
+      }
+    }
+  }
+}
