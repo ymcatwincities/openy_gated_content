@@ -5,10 +5,14 @@ export default {
     name: null,
     user: {},
     loggedIn: false,
+    appUrl: '',
   },
   actions: {
     authorize(context, user) {
       context.commit('setUser', user);
+      if (context.state.appUrl.length > 0) {
+        window.location = context.state.appUrl;
+      }
     },
     logout(context) {
       context.commit('unsetUser');
