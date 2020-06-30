@@ -1,0 +1,25 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.gated_content_login.field_link_to_gated_content_app
+    - paragraphs.paragraphs_type.gated_content_login
+  module:
+    - link
+id: paragraph.gated_content_login.default
+targetEntityType: paragraph
+bundle: gated_content_login
+mode: default
+content:
+  field_link_to_gated_content_app:
+    weight: 0
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+    type: link_default
+    region: content
+hidden:
+  created: true
+  status: true
+  uid: true

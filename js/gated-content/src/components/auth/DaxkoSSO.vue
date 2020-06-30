@@ -28,7 +28,7 @@ export default {
       .dispatch('daxkossoAuthorize')
       .then(() => {
         this.loading = false;
-        this.$router.push({ name: 'Home' });
+        this.$router.push({ name: 'Home' }).catch(() => {});
       })
       .catch((error) => {
         this.error = error.response ? error.response.data.message : 'Something went wrong!';
