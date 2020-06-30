@@ -1,0 +1,6 @@
+openy_gated_content.settings:
+  title: 'Gated Content settings'
+  route_name: openy_gated_content.settings
+  description: 'Gated Content settings form.'
+  parent: openy_system.openy
+  weight: 20

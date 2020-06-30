@@ -14,7 +14,7 @@ import { mapGetters } from 'vuex';
 
 export default {
   name: 'GatedContent',
-  props: ['auth', 'config'],
+  props: ['auth', 'config', 'settings'],
   components: {
     LogoutLink,
   },
@@ -25,6 +25,7 @@ export default {
   },
   mounted() {
     this.$store.dispatch('setAuthPlugin', this.auth);
+    this.$store.dispatch('setSettings', JSON.parse(this.settings));
     this.$store.dispatch(`${this.auth}Configure`, JSON.parse(this.config));
   },
 };
