@@ -2,6 +2,14 @@ openy_gated_content.settings:
   path: '/admin/openy/openy-gated-content'
   defaults:
     _form: '\Drupal\openy_gated_content\Form\GCSettingsForm'
-    _title: 'Gated Content settings'
+    _title: 'Virtual Y settings'
   requirements:
     _permission: 'administer site configuration'
+
+openy_gated_content.categories:
+  path: '/api/video-categories-list'
+  defaults:
+    _controller: '\Drupal\openy_gated_content\Controller\CategoriesController::list'
+    _title: 'Virtual Y categories'
+  requirements:
+    _permission: 'access content'
