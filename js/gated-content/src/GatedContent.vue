@@ -31,9 +31,9 @@ export default {
     ]),
   },
   created() {
-    this.$store.state.auth.appUrl = this.appUrl;
+    this.$store.dispatch('setAppUrl', this.appUrl);
     if (this.isLoggedIn && this.appUrl !== undefined && this.appUrl.length > 0) {
-      // window.location = this.appUrl;
+      window.location = this.appUrl;
     }
   },
   mounted() {

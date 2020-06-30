@@ -17,6 +17,9 @@ export default {
     setAuthPlugin(context, plugin) {
       context.commit('setAuthPlugin', plugin);
     },
+    setAppUrl(context, appUrl) {
+      context.commit('setAppUrl', appUrl);
+    },
   },
   mutations: {
     setUser(state, user) {
@@ -30,9 +33,13 @@ export default {
     setAuthPlugin(state, plugin) {
       state.authPlugin = plugin;
     },
+    setAppUrl(state, appUrl) {
+      state.appUrl = appUrl;
+    },
   },
   getters: {
     isLoggedIn: (state) => state.loggedIn,
     authPlugin: (state) => state.authPlugin,
+    getAppUrl: (state) => state.appUrl,
   },
 };
