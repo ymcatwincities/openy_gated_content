@@ -27,6 +27,10 @@
             {
                 "href": "",
                 "lang": "en"
+            },
+            {
+                "href": "",
+                "lang": "en"
             }
         ],
         "http:\/\/drupal.org\/rest\/relation\/node\/landing_page\/field_header_content": [
@@ -48,7 +52,7 @@
     ],
     "vid": [
         {
-            "value": 17
+            "value": 23
         }
     ],
     "langcode": [
@@ -64,7 +68,7 @@
     ],
     "revision_timestamp": [
         {
-            "value": "2020-06-29T14:42:22+00:00",
+            "value": "2020-06-30T10:07:22+00:00",
             "format": "Y-m-d\\TH:i:sP"
         }
     ],
@@ -120,10 +124,27 @@
                     }
                 ],
                 "lang": "en",
-                "target_revision_id": "19"
+                "target_revision_id": "28"
             }
         ],
         "http:\/\/drupal.org\/rest\/relation\/node\/landing_page\/field_content": [
+            {
+                "_links": {
+                    "self": {
+                        "href": ""
+                    },
+                    "type": {
+                        "href": "http:\/\/drupal.org\/rest\/type\/paragraph\/simple_content"
+                    }
+                },
+                "uuid": [
+                    {
+                        "value": "3d887d2b-d15a-4edb-af94-7c5b65672a83"
+                    }
+                ],
+                "lang": "en",
+                "target_revision_id": "29"
+            },
             {
                 "_links": {
                     "self": {
@@ -139,7 +160,7 @@
                     }
                 ],
                 "lang": "en",
-                "target_revision_id": "20"
+                "target_revision_id": "30"
             }
         ],
         "http:\/\/drupal.org\/rest\/relation\/node\/landing_page\/field_header_content": [
@@ -158,7 +179,7 @@
                     }
                 ],
                 "lang": "en",
-                "target_revision_id": "21"
+                "target_revision_id": "31"
             }
         ]
     },
@@ -183,7 +204,7 @@
     ],
     "changed": [
         {
-            "value": "2020-06-29T14:42:22+00:00",
+            "value": "2020-06-30T10:07:22+00:00",
             "lang": "en",
             "format": "Y-m-d\\TH:i:sP"
         }
