@@ -22,6 +22,7 @@
               class="video-footer__description"
                  v-html="description.processed"
             ></div>
+            <AddToCalendar :event="event"></AddToCalendar>
           </div>
           <div>
             <div class="video-footer__block">
@@ -72,13 +73,16 @@
 import client from '@/client';
 import Spinner from '@/components/Spinner.vue';
 import EventListing from '@/components/event/EventListing.vue';
+import AddToCalendar from '@/components/event/AddToCalendar.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
+import { EventMixin } from '@/mixins/EventMixin';
 
 export default {
   name: 'VirtualMeetingPage',
-  mixins: [JsonApiCombineMixin],
+  mixins: [JsonApiCombineMixin, EventMixin],
   components: {
     EventListing,
+    AddToCalendar,
     Spinner,
   },
   props: {
@@ -110,22 +114,6 @@ export default {
   computed: {
     // This values most of all from parent (series), but can be overridden by item,
     // so ve need to check this here and use correct value.
-    description() {
-      return this.video.attributes.body ? this.video.attributes.body
-        : this.video.attributes.description;
-    },
-    level() {
-      return this.video.attributes.field_ls_level ? this.video.attributes.field_ls_level.name
-        : this.video.attributes.level.name;
-    },
-    category() {
-      return this.video.attributes.field_ls_category ? this.video.attributes.field_ls_category.name
-        : this.video.attributes.category.name;
-    },
-    instructor() {
-      return this.video.attributes.field_ls_host_name ? this.video.attributes.field_ls_host_name
-        : this.video.attributes.instructor;
-    },
     image() {
       if (this.video.attributes['field_ls_image.field_media_image']) {
         return this.video.attributes['field_ls_image.field_media_image'].uri.url;
@@ -153,12 +141,16 @@ export default {
       }
       return link;
     },
-  },
-  watch: {
-    $route: 'load',
-  },
-  async mounted() {
-    await this.load();
+    event() {
+      return {
+        start: this.formatDate(this.video.attributes.date.value),
+        duration: [this.getDuration(this.video.attributes.date), 'hour'],
+        title: this.video.attributes.title,
+        description: `${this.description.processed}<br>${this.meetingLink.title}: ${this.meetingLink.uri} <br> Virtual meeting page: ${this.pageUrl}`,
+        busy: true,
+        guests: [],
+      };
+    },
   },
   methods: {
     async load() {
@@ -194,7 +186,3 @@ export default {
   },
 };
 </script>
-
-<style>
-
-</style>
