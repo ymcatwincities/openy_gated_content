@@ -17,6 +17,7 @@ export default {
   props: {
     auth: String,
     config: String,
+    settings: String,
     appUrl: {
       type: String,
       default: '',
@@ -38,6 +39,7 @@ export default {
   },
   mounted() {
     this.$store.dispatch('setAuthPlugin', this.auth);
+    this.$store.dispatch('setSettings', JSON.parse(this.settings));
     this.$store.dispatch(`${this.auth}Configure`, JSON.parse(this.config));
   },
 };

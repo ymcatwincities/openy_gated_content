@@ -12,7 +12,7 @@
         <button v-on:click.stop="forwardOneDay" class="right"
                 role="button" aria-label="next date"><i class="fa fa-angle-right"></i></button>
       </h2>
-      <router-link :to="{ name: 'LiveStreamListing' }" v-if="viewAll" class="view-all">
+      <router-link :to="{ name: viewAllRoute }" v-if="viewAll" class="view-all">
         View All
       </router-link>
     </div>
@@ -22,7 +22,7 @@
     <template v-else-if="listingIsNotEmpty">
       <div v-if="error">Error loading</div>
       <div v-else class="video-listing live-stream-listing">
-          <LiveStreamTeaser
+          <EventTeaser
             v-for="video in listing"
             :key="video.id"
             :video="video"
@@ -37,21 +37,25 @@
 
 <script>
 import client from '@/client';
-import LiveStreamTeaser from '@/components/LiveStreamTeaser.vue';
+import EventTeaser from '@/components/event/EventTeaser.vue';
 import Spinner from '@/components/Spinner.vue';
-import { JsonApiCombineMixin } from '../mixins/JsonApiCombineMixin';
+import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
 
 export default {
-  name: 'LiveStreamListing',
+  name: 'EventListing',
   mixins: [JsonApiCombineMixin],
   components: {
-    LiveStreamTeaser,
+    EventTeaser,
     Spinner,
   },
   props: {
     title: {
       type: String,
       default: 'Live streams',
+    },
+    eventType: {
+      type: String,
+      default: 'live_stream',
     },
     excludedVideoId: {
       type: String,
@@ -120,6 +124,16 @@ export default {
       };
 
       return isToday(this.date);
+    },
+    viewAllRoute() {
+      switch (this.eventType) {
+        case 'live_stream':
+          return 'LiveStreamListing';
+        case 'virtual_meeting':
+          return 'VirtualMeetingListing';
+        default:
+          return 'LiveStreamListing';
+      }
     },
   },
   methods: {
@@ -199,7 +213,7 @@ export default {
       };
 
       client
-        .get('jsonapi/eventinstance/live_stream', { params })
+        .get(`jsonapi/eventinstance/${this.eventType}`, { params })
         .then((response) => {
           this.listing = this.combineMultiple(
             response.data.data,

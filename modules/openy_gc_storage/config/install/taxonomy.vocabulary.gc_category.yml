@@ -1,7 +1,7 @@
 langcode: en
 status: true
 dependencies: {  }
-name: 'GC Category'
+name: 'Virtual Y Category'
 vid: gc_category
 description: 'Category for Open Y Gated Content'
 weight: 0

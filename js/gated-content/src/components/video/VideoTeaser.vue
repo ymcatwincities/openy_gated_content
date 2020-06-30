@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import YoutubePlayButton from './YoutubePlayButton.vue';
+import YoutubePlayButton from '@/components/YoutubePlayButton.vue';
 
 export default {
   name: 'VideoTeaser',

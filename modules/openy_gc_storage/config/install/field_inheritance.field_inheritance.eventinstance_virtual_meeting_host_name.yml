@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies: {  }
+id: eventinstance_virtual_meeting_host_name
+label: 'Host’s name'
+type: fallback
+sourceEntityType: eventseries
+destinationEntityType: eventinstance
+sourceEntityBundle: virtual_meeting
+destinationEntityBundle: virtual_meeting
+sourceField: field_ls_host_name
+destinationField: field_ls_host_name
+plugin: default_inheritance

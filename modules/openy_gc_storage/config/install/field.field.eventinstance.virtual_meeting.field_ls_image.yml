@@ -1,0 +1,33 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.eventinstance.field_ls_image
+    - media.type.image
+    - recurring_events.eventinstance_type.virtual_meeting
+  module:
+    - datalayer
+third_party_settings:
+  datalayer:
+    expose: 0
+    label: field_ls_image
+id: eventinstance.virtual_meeting.field_ls_image
+field_name: field_ls_image
+entity_type: eventinstance
+bundle: virtual_meeting
+label: Image
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:media'
+  handler_settings:
+    target_bundles:
+      image: image
+    sort:
+      field: _none
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

@@ -75,9 +75,9 @@
 <script>
 import client from '@/client';
 import Spinner from '@/components/Spinner.vue';
-import VideoListing from '../components/VideoListing.vue';
-import MediaPlayer from '../components/MediaPlayer.vue';
-import { JsonApiCombineMixin } from '../mixins/JsonApiCombineMixin';
+import VideoListing from '@/components/video/VideoListing.vue';
+import MediaPlayer from '@/components/MediaPlayer.vue';
+import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
 
 export default {
   name: 'VideoPage',
@@ -136,7 +136,3 @@ export default {
   },
 };
 </script>
-
-<style>
-
-</style>

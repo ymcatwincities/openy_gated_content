@@ -32,7 +32,6 @@ export default {
     dummyLogin() {
       this.$store.dispatch('dummyAuthorize').then(() => {
         const appUrl = this.$store.getters.getAppUrl;
-        console.log(appUrl);
         if (appUrl !== undefined && appUrl.length > 0) {
           this.loading = true;
           window.location = appUrl;
