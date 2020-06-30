@@ -15,8 +15,14 @@ export default {
   },
   methods: {
     dummyLogin() {
-      this.$store.dispatch('dummyAuthorize');
-      this.$router.push({ name: 'Home' });
+      this.$store.dispatch('dummyAuthorize').then(() => {
+        const { appUrl } = this.$store.state.auth;
+        if (appUrl !== undefined && appUrl.length > 0) {
+          window.location = appUrl;
+        } else {
+          this.$router.push({ name: 'Home' }).catch(() => {});
+        }
+      });
     },
   },
 };

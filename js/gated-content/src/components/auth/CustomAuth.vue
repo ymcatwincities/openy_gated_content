@@ -51,7 +51,12 @@ export default {
       await this.$store
         .dispatch('customAuthorize', this.form)
         .then(() => {
-          this.$router.push({ name: 'Home' });
+          const { appUrl } = this.$store.state.auth;
+          if (appUrl !== undefined && appUrl.length > 0) {
+            window.location = appUrl;
+          } else {
+            this.$router.push({ name: 'Home' }).catch(() => {});
+          }
         })
         .catch((error) => {
           this.loading = false;

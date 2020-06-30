@@ -27,8 +27,13 @@ export default {
     await this.$store
       .dispatch('daxkossoAuthorize')
       .then(() => {
-        this.loading = false;
-        this.$router.push({ name: 'Home' });
+        const { appUrl } = this.$store.state.auth;
+        if (appUrl !== undefined && appUrl.length > 0) {
+          window.location = appUrl;
+        } else {
+          this.loading = false;
+          this.$router.push({ name: 'Home' }).catch(() => {});
+        }
       })
       .catch((error) => {
         this.error = error.response ? error.response.data.message : 'Something went wrong!';
