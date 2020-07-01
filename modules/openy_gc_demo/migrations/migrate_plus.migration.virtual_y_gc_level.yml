@@ -4,7 +4,7 @@ dependencies:
   enforced:
     module:
       - openy_gc_demo
-id: virtual_y_taxonomy
+id: virtual_y_gc_level
 migration_tags:
   - openy_complete_installation
 migration_group: virtual_y
