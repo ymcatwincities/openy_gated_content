@@ -1,0 +1,53 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - openy_gc_demo
+id: virtual_y_gc_equipment
+migration_tags:
+  - openy_complete_installation
+migration_group: virtual_y
+label: 'GC Equipment'
+source:
+  plugin: embedded_data
+  data_rows:
+    -
+      tid: 1
+      title: 'Bench'
+    -
+      tid: 2
+      title: 'Big Box'
+    -
+      tid: 3
+      title: 'Chair'
+    -
+      tid: 4
+      title: 'Cycle Bike'
+    -
+      tid: 5
+      title: 'Light Weight Bar'
+    -
+      tid: 6
+      title: 'Pilates ball'
+    -
+      tid: 7
+      title: 'Weights'
+    -
+      tid: 8
+      title: 'Yoga Mat'
+  ids:
+    tid:
+      type: integer
+process:
+  langcode:
+    plugin: default_value
+    source: language
+    default_value: en
+  status:
+    plugin: default_value
+    default_value: 1
+  name: title
+destination:
+  plugin: entity:taxonomy_term
+  default_bundle: gc_equipment
