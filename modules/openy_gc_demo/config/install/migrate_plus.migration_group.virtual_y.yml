@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+id: virtual_y
+label: 'Virtual Y Migration group'
+description: 'Imports landing page demo content for Virtual Y.'
+module: openy_gc_demo
