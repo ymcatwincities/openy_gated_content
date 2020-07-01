@@ -1,0 +1,74 @@
+dependencies:
+  module:
+    - file
+  enforced:
+    module:
+      - openy_gc_demo
+id: virtual_y_file
+migration_tags:
+  - openy_complete_installation
+migration_group: virtual_y
+label: 'Import demo gated content files'
+source:
+  plugin: embedded_data
+  data_rows:
+    -
+      id: 1
+      name: marjanblan-6bXvYyAYVrE-unsplash.jpg
+    -
+      id: 2
+      name: jonathan-borba-lrQPTQs7nQQ-unsplash.jpg
+  ids:
+    id:
+      type: integer
+  constants:
+    source_relative_path: assets/images
+    uri_file: 'public:/'
+    module: openy_gc_demo
+process:
+  langcode:
+    plugin: default_value
+    source: language
+    default_value: en
+  module_path:
+    plugin: module_path
+    source: constants/module
+  source_full_path:
+    -
+      plugin: concat
+      delimiter: /
+      source:
+        - '@module_path'
+        - constants/source_relative_path
+        - name
+    -
+      plugin: urlencode
+  uri_file:
+    -
+      plugin: concat
+      delimiter: /
+      source:
+        - constants/uri_file
+        - name
+    -
+      plugin: urlencode
+  filename: name
+  uri:
+    plugin: file_copy
+    source:
+      - '@source_full_path'
+      - '@uri_file'
+  status:
+    -
+      plugin: default_value
+      default_value: 1
+  uid:
+    -
+      plugin: default_value
+      default_value: 1
+destination:
+  plugin: 'entity:file'
+migration_dependencies:
+  required: {  }
+  optional: {  }
+

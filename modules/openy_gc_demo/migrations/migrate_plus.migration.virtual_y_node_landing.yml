@@ -27,9 +27,21 @@ source:
               format: full_html
               value: |
                 <p>Wherever you go, the Y is there.</p>
+            image: 1
       content:
         -
           bundle: gated_content_login
+      bottom_content:
+        -
+          bundle: banner
+          values:
+            field_prgf_headline: 'YOUR FAVORITES AT YOUR FINGERTIPS'
+            field_prgf_color: 28
+            field_prgf_description:
+              format: full_html
+              value: |
+                <p>Follow classes live or replay on - demand to best fit your schedule.</p>
+            image: 2
     -
       id: virtual_y_app_page
       title: 'Gated Content'
@@ -101,7 +113,19 @@ process:
   field_content:
     plugin: fly_paragraph
     source: content
-
+  field_bottom_content:
+    plugin: fly_paragraph
+    source: bottom_content
+  field_prgf_image:
+    -
+      plugin: migration
+      migration: virtual_y_media_image
+      source: image
 destination:
   plugin: 'entity:node'
   default_bundle: landing_page
+
+migration_dependencies:
+  required:
+    - virtual_y_media_image
+  optional: {  }
