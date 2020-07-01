@@ -7,7 +7,7 @@ dependencies:
 id: virtual_y
 migration_tags:
   - openy_complete_installation
-migration_group: openy_demo_nlanding
+migration_group: virtual_y
 label: 'Create demo landing page nodes for Virtual Y'
 source:
   plugin: embedded_data
