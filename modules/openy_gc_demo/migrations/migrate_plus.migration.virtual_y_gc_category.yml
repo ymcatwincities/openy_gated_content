@@ -8,18 +8,28 @@ id: virtual_y_taxonomy
 migration_tags:
   - openy_complete_installation
 migration_group: virtual_y
-label: 'Taxonomy'
+label: 'GC Category'
 source:
   plugin: embedded_data
   data_rows:
     -
       tid: 1
-      title: 'VIRTUAL YMCA'
-      vid:
+      title: 'Barre'
     -
       tid: 2
-      title: 'Gated Content'
-      vid:
+      title: 'Bootcamp'
+    -
+      tid: 3
+      title: 'Dance Fitness'
+    -
+      tid: 4
+      title: 'Pilates'
+    -
+      tid: 5
+      title: 'Weightlifting'
+    -
+      tid: 6
+      title: 'Yoga'
   ids:
     tid:
       type: integer
