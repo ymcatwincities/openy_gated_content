@@ -53,7 +53,7 @@ export default {
     return {
       loading: true,
       error: false,
-      blog: null,
+      blog: {},
       response: null,
       params: [
         'field_vy_blog_image',
