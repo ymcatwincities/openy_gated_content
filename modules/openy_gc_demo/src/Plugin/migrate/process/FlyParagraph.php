@@ -39,7 +39,7 @@ class FlyParagraph extends EntityGenerate {
 
     return [
       'target_id' => $p->id(),
-      'target_revision_id' => $p->getRevisionId()
+      'target_revision_id' => $p->getRevisionId(),
     ];
   }
 

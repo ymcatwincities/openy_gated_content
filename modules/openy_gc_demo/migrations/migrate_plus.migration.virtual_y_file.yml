@@ -71,4 +71,3 @@ destination:
 migration_dependencies:
   required: {  }
   optional: {  }
-
