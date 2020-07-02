@@ -1,0 +1,129 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - openy_gc_demo
+id: virtual_y_reccuring_event_live_stream
+migration_tags:
+  - openy_complete_installation
+migration_group: virtual_y
+label: 'Create demo live stream for Virtual Y'
+source:
+  plugin: embedded_data
+  data_rows:
+    -
+      id: 1
+      title: 'Live stream Power Yoga'
+      description: |
+        <p>Our power yoga classes take you on a dynamic journey, linking breath
+        to movement as you explore new postures and build your practice.
+        We invite all levels of yoga experience to grow, strengthen, connect,
+        and inspire. Expect an invigorating flow that builds strength and
+        vitality while focusing on alignment and breath.</p>
+      instructor: 'Linda Myers'
+      media: 1
+      image: 1
+      category: 6
+      equipment: 8
+      level: 1
+      time: '8:00 am'
+      duration: 900
+    -
+      id: 2
+      title: 'Yoga For Immunity'
+      description: |
+        <p>Yoga places focus on flowing sequences that move through set poses
+        in a dynamic, athletic way. Emphasis will be placed on connecting
+        breath and movement to propel you through the practice. This Yoga
+        Class is 45 min during the week. This Yoga class will help ground
+        your mind and body, develop your respiratory system, and sup</p>
+      instructor: 'Linda Myers'
+      media: 3
+      image: 2
+      category: 6
+      equipment: 8
+      level: 2
+      time: '11:00 am'
+      duration: 2700
+  ids:
+    id:
+      type: integer
+process:
+  langcode:
+    plugin: default_value
+    source: language
+    default_value: en
+  status:
+    -
+      plugin: get
+      source: publish_status
+    -
+      plugin: default_value
+      default_value: 1
+  uid:
+    plugin: default_value
+    default_value: 1
+  title: title
+  body: description
+  field_ls_host_name: instructor
+  field_ls_media:
+    -
+      plugin: migration
+      migration: virtual_y_media_video
+      source: video
+  field_ls_image:
+    -
+      plugin: migration
+      migration: virtual_y_media_image
+      source: image
+  field_ls_category:
+    -
+      plugin: migration
+      migration: virtual_y_gc_category
+      source: category
+  field_ls_equipment:
+    -
+      plugin: migration
+      migration: virtual_y_gc_equipment
+      source: equipment
+  field_ls_level:
+    -
+      plugin: migration
+      migration: virtual_y_gc_level
+      source: level
+  recur_type:
+    plugin: default_value
+    default_value: 'daily_recurring_date'
+  'daily_recurring_date/value':
+    -
+      plugin: default_value
+      default_value: '+1 day'
+    -
+      plugin: callback
+      callable: strtotime
+    -
+      plugin: date_timestamp
+      to_format: 'Y-m-d\TH:i:s'
+  'daily_recurring_date/end_value':
+    -
+      plugin: default_value
+      default_value: '+1 month'
+    -
+      plugin: callback
+      callable: strtotime
+    -
+      plugin: date_timestamp
+      to_format: 'Y-m-d\TH:i:s'
+  'daily_recurring_date/time': time
+  'daily_recurring_date/duration': duration
+destination:
+  plugin: 'entity:eventseries'
+  default_bundle: live_stream
+migration_dependencies:
+  required:
+    - virtual_y_media_video
+    - virtual_y_gc_category
+    - virtual_y_gc_equipment
+    - virtual_y_gc_level
+  optional: {}
