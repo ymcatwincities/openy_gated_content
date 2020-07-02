@@ -4,7 +4,7 @@ dependencies:
   enforced:
     module:
       - openy_gc_demo
-id: virtual_y
+id: virtual_y_landing_pages
 migration_tags:
   - openy_complete_installation
 migration_group: virtual_y
@@ -31,6 +31,10 @@ source:
       content:
         -
           bundle: gated_content_login
+          values:
+            field_link_to_gated_content_app:
+              uri: 'internal:/gated_content'
+
       bottom_content:
         -
           bundle: banner
