@@ -20,7 +20,7 @@ source:
       instructor: 'Linda Myers'
       duration: 300
       featured: 0
-
+      video: 1
     -
       id: 2
       title: 'Yoga Atlanta'
@@ -29,6 +29,7 @@ source:
       instructor: 'Linda Myers'
       duration: 200
       featured: 1
+      video: 3
     -
       id: 3
       title: 'Youth Bootcamp Challenge'
@@ -37,6 +38,7 @@ source:
       instructor: 'Naya Cardoza'
       duration: 500
       featured: 0
+      video: 2
   ids:
     id:
       type: integer
@@ -76,10 +78,20 @@ process:
     plugin: default_value
     default_value: 1
   title: title
+  field_gc_video_description: description
   field_gc_video_duration: duration
   field_gc_video_instructor: instructor
   field_gc_video_featured: featured
-
+  field_gc_video_media:
+    -
+      plugin: migration
+      migration: virtual_y_media_video
+      source: video
 destination:
   plugin: 'entity:node'
   default_bundle: gc_video
+
+migration_dependencies:
+  required:
+    - virtual_y_media_video
+  optional: {  }
