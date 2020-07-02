@@ -57,3 +57,12 @@ with thumbnails download to drupal media. In this case - apply a patch
 for drupal core:
 
 - _patches/OEmbed_vimeo_private_videos.patch_
+
+### Migration notes
+If you have error:
+```
+TypeError: Argument 6 passed to __construct() must be an instance of EntityTypeManagerInterface
+```
+apply patch:
+
+- _patches/3079627-4.paragraphs.Argument-6-passed-to-construct.patch_

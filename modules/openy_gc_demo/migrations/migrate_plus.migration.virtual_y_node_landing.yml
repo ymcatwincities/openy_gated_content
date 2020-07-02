@@ -1,0 +1,136 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - openy_gc_demo
+id: virtual_y_landing_pages
+migration_tags:
+  - openy_complete_installation
+migration_group: virtual_y
+label: 'Create demo landing page nodes for Virtual Y'
+source:
+  plugin: embedded_data
+  data_rows:
+    -
+      id: virtual_y_app_login
+      title: 'VIRTUAL YMCA'
+      alias: '/virtual_y_login'
+      layout: one_column
+      header_content:
+        -
+          bundle: banner
+          values:
+            field_prgf_headline: 'VIRTUAL YMCA'
+            field_prgf_color: 28
+            field_prgf_description:
+              format: full_html
+              value: |
+                <p>Wherever you go, the Y is there.</p>
+            image: 1
+      content:
+        -
+          bundle: gated_content_login
+          values:
+            field_link_to_gated_content_app:
+              uri: 'internal:/gated_content'
+
+      bottom_content:
+        -
+          bundle: banner
+          values:
+            field_prgf_headline: 'YOUR FAVORITES AT YOUR FINGERTIPS'
+            field_prgf_color: 28
+            field_prgf_description:
+              format: full_html
+              value: |
+                <p>Follow classes live or replay on - demand to best fit your schedule.</p>
+            image:
+              target_id: 1
+    -
+      id: virtual_y_app_page
+      title: 'Gated Content'
+      layout: one_column
+      alias: '/gated_content'
+      header_content:
+        -
+          bundle: small_banner
+          values:
+            field_prgf_headline: 'Virtual YMCA'
+            field_prgf_description:
+              format: full_html
+              value: |
+                <p>Find the newest Y classes and programs</p><p><a class="btn btn-default" href="#"><span class="text">Live Streams</span></a>&nbsp; <a class="btn btn-default" href="#/categories"><span class="text">Videos</span></a></p>
+      content:
+        -
+          bundle: gated_content
+  ids:
+    id:
+      type: string
+process:
+  langcode:
+    plugin: default_value
+    source: language
+    default_value: en
+  status:
+    -
+      plugin: get
+      source: publish_status
+    -
+      plugin: default_value
+      default_value: 1
+  publish_on:
+    -
+      plugin: get
+      source: publish_date
+    -
+      plugin: callback
+      callable: strtotime
+    -
+      plugin: default_value
+      default_value: null
+  unpublish_on:
+    -
+      plugin: get
+      source: unpublish_date
+    -
+      plugin: callback
+      callable: strtotime
+    -
+      plugin: default_value
+      default_value: null
+  uid:
+    plugin: default_value
+    default_value: 1
+  title: title
+  path/pathauto:
+    plugin: default_value
+    default_value: 0
+  path/alias:
+    plugin: get
+    source: alias
+  field_lp_layout:
+    plugin: default_value
+    source: layout
+  field_header_content:
+    plugin: fly_paragraph
+    source: header_content
+  field_content:
+    plugin: fly_paragraph
+    source: content
+  field_bottom_content:
+    plugin: fly_paragraph
+    source: bottom_content
+  field_prgf_image:
+    -
+      plugin: migration
+      migration: virtual_y_media_image
+      source: image
+destination:
+  plugin: 'entity:node'
+  default_bundle: landing_page
+
+migration_dependencies:
+  required:
+    - virtual_y_media_image
+  optional: {  }

@@ -1,0 +1,41 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - openy_gc_demo
+id: virtual_y_gc_level
+migration_tags:
+  - openy_complete_installation
+migration_group: virtual_y
+label: 'GC Level'
+source:
+  plugin: embedded_data
+  data_rows:
+    -
+      tid: 1
+      title: 'ADVANCED'
+    -
+      tid: 2
+      title: 'BEGINNER'
+    -
+      tid: 3
+      title: 'INTERMEDIATE'
+    -
+      tid: 4
+      title: 'N/A'
+  ids:
+    tid:
+      type: integer
+process:
+  langcode:
+    plugin: default_value
+    source: language
+    default_value: en
+  status:
+    plugin: default_value
+    default_value: 1
+  name: title
+destination:
+  plugin: entity:taxonomy_term
+  default_bundle: gc_equipment
