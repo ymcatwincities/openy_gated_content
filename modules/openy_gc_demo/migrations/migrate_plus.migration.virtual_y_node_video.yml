@@ -19,8 +19,11 @@ source:
         <p>A more advanced yoga flow designed toward strength building</p>
       instructor: 'Linda Myers'
       duration: 300
-      featured: 0
+      featured: 1
       video: 1
+      category: 6
+      equipment: 8
+      level: 4
     -
       id: 2
       title: 'Yoga Atlanta'
@@ -30,6 +33,9 @@ source:
       duration: 200
       featured: 1
       video: 3
+      category: 6
+      equipment: 8
+      level: 2
     -
       id: 3
       title: 'Youth Bootcamp Challenge'
@@ -37,8 +43,11 @@ source:
         <p>YMCA Youth Bootcamp Challenge</p>
       instructor: 'Naya Cardoza'
       duration: 500
-      featured: 0
+      featured: 1
       video: 2
+      category: 2
+      equipment: 3
+      level: 3
   ids:
     id:
       type: integer
@@ -87,6 +96,23 @@ process:
       plugin: migration
       migration: virtual_y_media_video
       source: video
+  field_gc_video_category:
+    -
+      plugin: migration
+      migration: virtual_y_gc_category
+      source: category
+  field_gc_video_equipment:
+    -
+      plugin: migration
+      migration: virtual_y_gc_equipment
+      source: equipment
+  field_gc_video_level:
+    -
+      plugin: migration
+      migration: virtual_y_gc_level
+      source: level
+
+
 destination:
   plugin: 'entity:node'
   default_bundle: gc_video
@@ -94,4 +120,7 @@ destination:
 migration_dependencies:
   required:
     - virtual_y_media_video
+    - virtual_y_gc_category
+    - virtual_y_gc_equipment
+    - virtual_y_gc_level
   optional: {  }
