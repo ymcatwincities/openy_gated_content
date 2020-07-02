@@ -24,6 +24,12 @@ source:
     -
       id: 4
       name: Power_Yoga.jpeg
+    -
+      id: 5
+      name: dance1.jpg
+    -
+      id: 6
+      name: dance2.jpg
   ids:
     id:
       type: integer

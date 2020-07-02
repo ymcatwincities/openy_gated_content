@@ -27,6 +27,14 @@ source:
       id: 4
       name: 'Virtual Y Power Yoga'
       file: 4
+    -
+      id: 5
+      name: 'Virtual Y Dance'
+      file: 5
+    -
+      id: 6
+      name: 'Virtual Y Dance 2'
+      file: 6
   ids:
     id:
       type: integer

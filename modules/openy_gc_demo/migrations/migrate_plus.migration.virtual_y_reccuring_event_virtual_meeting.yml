@@ -4,48 +4,45 @@ dependencies:
   enforced:
     module:
       - openy_gc_demo
-id: virtual_y_reccuring_event_live_stream
+id: virtual_y_reccuring_event_virtual_meeting
 migration_tags:
   - openy_complete_installation
 migration_group: virtual_y
-label: 'Create demo live stream for Virtual Y'
+label: 'Create demo virtual meeting for Virtual Y'
 source:
   plugin: embedded_data
   data_rows:
     -
       id: 1
-      title: 'Live stream Power Yoga'
+      title: 'Dance Fitness LIVE'
       description: |
-        Our power yoga classes take you on a dynamic journey, linking breath
-        to movement as you explore new postures and build your practice.
-        We invite all levels of yoga experience to grow, strengthen, connect,
-        and inspire. Expect an invigorating flow that builds strength and
-        vitality while focusing on alignment and breath.
-      instructor: 'Linda Myers'
-      media: 1
-      image: 3
-      category: 6
-      equipment: 8
+        Don’t let social distancing keep you from dancing! We’re broadcasting
+        a FULL line-up of more than 14 virtual dance fitness classes per
+        week until it’s safe to return to the studios.
+      instructor: 'Jessica Myers'
+      image: 5
+      category: 3
+      equipment: 7
       level: 4
-      time: '8:00 am'
+      time: '9:00 am'
       duration: 900
+      link: 'http://example.com/'
     -
       id: 2
-      title: 'Yoga For Immunity'
+      title: 'Dance Fitness LIVE'
       description: |
-        Yoga places focus on flowing sequences that move through set poses
-        in a dynamic, athletic way. Emphasis will be placed on connecting
-        breath and movement to propel you through the practice. This Yoga
-        Class is 45 min during the week. This Yoga class will help ground
-        your mind and body, develop your respiratory system, and sup
-      instructor: 'Linda Myers'
-      media: 3
-      image: 4
-      category: 6
-      equipment: 8
-      level: 2
-      time: '11:00 am'
+        Now you can jump start your workout dancing with Jessica Myers in the
+        comfort of your own home via LiveStream! Not only do you get to dance
+        to all the music you love and Jessica’s fun routines, but you also get
+        to feel the energy of the class she is teaching.
+      instructor: 'Jessica Myers'
+      image: 6
+      category: 3
+      equipment: 7
+      level: 3
+      time: '10:00 am'
       duration: 2700
+      link: 'http://example.com/'
   ids:
     id:
       type: integer
@@ -67,11 +64,7 @@ process:
   title: title
   body: description
   field_ls_host_name: instructor
-  field_ls_media:
-    -
-      plugin: migration
-      migration: virtual_y_media_video
-      source: media
+  'field_vm_link/uri': link
   field_ls_image:
     -
       plugin: migration
@@ -119,10 +112,9 @@ process:
   'daily_recurring_date/duration': duration
 destination:
   plugin: 'entity:eventseries'
-  default_bundle: live_stream
+  default_bundle: virtual_meeting
 migration_dependencies:
   required:
-    - virtual_y_media_video
     - virtual_y_gc_category
     - virtual_y_gc_equipment
     - virtual_y_gc_level
