@@ -78,6 +78,7 @@ process:
     plugin: default_value
     default_value: 1
   title: title
+  field_gc_video_description: description
   field_gc_video_duration: duration
   field_gc_video_instructor: instructor
   field_gc_video_featured: featured
