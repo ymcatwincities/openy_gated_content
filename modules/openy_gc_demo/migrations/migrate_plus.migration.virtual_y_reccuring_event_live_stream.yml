@@ -16,31 +16,31 @@ source:
       id: 1
       title: 'Live stream Power Yoga'
       description: |
-        <p>Our power yoga classes take you on a dynamic journey, linking breath
+        Our power yoga classes take you on a dynamic journey, linking breath
         to movement as you explore new postures and build your practice.
         We invite all levels of yoga experience to grow, strengthen, connect,
         and inspire. Expect an invigorating flow that builds strength and
-        vitality while focusing on alignment and breath.</p>
+        vitality while focusing on alignment and breath.
       instructor: 'Linda Myers'
       media: 1
       image: 1
       category: 6
       equipment: 8
-      level: 1
+      level: 4
       time: '8:00 am'
       duration: 900
     -
       id: 2
       title: 'Yoga For Immunity'
       description: |
-        <p>Yoga places focus on flowing sequences that move through set poses
+        Yoga places focus on flowing sequences that move through set poses
         in a dynamic, athletic way. Emphasis will be placed on connecting
         breath and movement to propel you through the practice. This Yoga
         Class is 45 min during the week. This Yoga class will help ground
-        your mind and body, develop your respiratory system, and sup</p>
+        your mind and body, develop your respiratory system, and sup
       instructor: 'Linda Myers'
       media: 3
-      image: 2
+      image: 4
       category: 6
       equipment: 8
       level: 2
@@ -71,7 +71,7 @@ process:
     -
       plugin: migration
       migration: virtual_y_media_video
-      source: video
+      source: media
   field_ls_image:
     -
       plugin: migration

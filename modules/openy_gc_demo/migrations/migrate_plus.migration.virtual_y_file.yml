@@ -18,6 +18,12 @@ source:
     -
       id: 2
       name: jonathan-borba-lrQPTQs7nQQ-unsplash.jpg
+    -
+      id: 3
+      name: yoga_955x350.jpg
+    -
+      id: 4
+      name: Power_Yoga.jpeg
   ids:
     id:
       type: integer

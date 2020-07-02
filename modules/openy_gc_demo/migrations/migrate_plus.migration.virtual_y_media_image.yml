@@ -13,12 +13,20 @@ source:
   data_rows:
     -
       id: 1
-      name: 'GC World'
+      name: 'Virtual Y World'
       file: 1
     -
       id: 2
-      name: 'GC Workout'
+      name: 'Virtual Y Workout'
       file: 2
+    -
+      id: 3
+      name: 'Virtual Y Yoga'
+      file: 3
+    -
+      id: 4
+      name: 'Virtual Y Power Yoga'
+      file: 4
   ids:
     id:
       type: integer
