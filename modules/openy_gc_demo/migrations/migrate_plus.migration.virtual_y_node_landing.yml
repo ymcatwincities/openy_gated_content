@@ -45,7 +45,8 @@ source:
               format: full_html
               value: |
                 <p>Follow classes live or replay on - demand to best fit your schedule.</p>
-            image: 2
+            image:
+              target_id: 1
     -
       id: virtual_y_app_page
       title: 'Gated Content'
