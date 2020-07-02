@@ -1,8 +1,8 @@
 <template>
   <div class="home">
-    <BlogListing :featured="false" :viewAll="true" :limit="6"/>
     <VideoListing :featured="true" :viewAll="true" :limit="6"/>
     <EventListing :featured="true" :viewAll="true" :limit="6"/>
+    <BlogListing :featured="false" :viewAll="true" :limit="6"/>
     <EventListing
       :title="'Virtual meetings'"
       :featured="true"
