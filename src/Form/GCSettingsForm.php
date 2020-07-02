@@ -58,7 +58,7 @@ class GCSettingsForm extends ConfigFormBase {
     $form['app_settings'] = [
       '#type' => 'details',
       '#open' => TRUE,
-      '#title' => $this->t('Gated content APP settings'),
+      '#title' => $this->t('Virtual YMCA APP settings'),
     ];
 
     $form['app_settings']['event_add_to_calendar'] = [

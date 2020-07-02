@@ -1,5 +1,5 @@
 openy_gc_auth.settings:
-  path: '/admin/openy/openy-gated-content/gc-auth-settings'
+  path: '/admin/openy/virtual-ymca/gc-auth-settings'
   defaults:
     _form: '\Drupal\openy_gc_auth\Form\GCAuthSettingsForm'
     _title: 'Virtual YMCA Auth settings'
@@ -7,7 +7,7 @@ openy_gc_auth.settings:
     _permission: 'administer site configuration'
 
 openy_gc_auth.provider.edit:
-  path: '/admin/openy/openy-gated-content/gc-auth-settings/provider/{type}'
+  path: '/admin/openy/virtual-ymca/gc-auth-settings/provider/{type}'
   defaults:
     _form: '\Drupal\openy_gc_auth\Form\GCIdentityProviderEditForm'
     _title: 'Identity Provider'
