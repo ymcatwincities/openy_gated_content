@@ -19,6 +19,18 @@ source:
       id: 2
       name: 'GC Workout'
       file: 2
+    -
+      id: 3
+      name: 'Blog 1'
+      file: 3
+    -
+      id: 4
+      name: 'Blog 2'
+      file: 4
+    -
+      id: 5
+      name: 'Blog 3'
+      file: 5
   ids:
     id:
       type: integer

@@ -12,12 +12,23 @@ label: 'Import demo gated content files'
 source:
   plugin: embedded_data
   data_rows:
+    # Images, needed for Landing pages.
     -
       id: 1
       name: marjanblan-6bXvYyAYVrE-unsplash.jpg
     -
       id: 2
       name: jonathan-borba-lrQPTQs7nQQ-unsplash.jpg
+    # Images, needed for Virtual Y blog posts
+    -
+      id: 3
+      name: baylee-gramling-R5eoT-c-jkY-unsplash.jpg
+    -
+      id: 4
+      name: david-marcu-69433-unsplash.jpg
+    -
+      id: 5
+      name: joan-azeka-bg43g7xTu2M-unsplash.jpg
   ids:
     id:
       type: integer
