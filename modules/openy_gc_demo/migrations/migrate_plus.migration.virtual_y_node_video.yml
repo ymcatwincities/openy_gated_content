@@ -21,6 +21,8 @@ source:
       duration: 300
       featured: 0
       video: 1
+      category: 6
+      equipment: 8
     -
       id: 2
       title: 'Yoga Atlanta'
@@ -30,6 +32,8 @@ source:
       duration: 200
       featured: 1
       video: 3
+      category: 6
+      equipment: 8
     -
       id: 3
       title: 'Youth Bootcamp Challenge'
@@ -39,6 +43,8 @@ source:
       duration: 500
       featured: 0
       video: 2
+      category: 2
+      equipment: 3
   ids:
     id:
       type: integer
@@ -87,6 +93,17 @@ process:
       plugin: migration
       migration: virtual_y_media_video
       source: video
+  field_gc_video_category:
+    -
+      plugin: migration
+      migration: virtual_y_gc_category
+      source: category
+  field_gc_video_equipment:
+    -
+      plugin: migration
+      migration: virtual_y_gc_equipment
+      source: equipment
+
 destination:
   plugin: 'entity:node'
   default_bundle: gc_video
@@ -94,4 +111,6 @@ destination:
 migration_dependencies:
   required:
     - virtual_y_media_video
+    - virtual_y_gc_category
+    - virtual_y_gc_equipment
   optional: {  }
