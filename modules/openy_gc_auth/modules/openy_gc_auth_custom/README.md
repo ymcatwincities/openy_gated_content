@@ -1,6 +1,6 @@
 ## About
 
-This module provides custom authentication for Gated content.
+This module provides custom authentication for Virtual Y.
 You can use any source of data, it just should be exported to CSV file.
 
 This is how default structure of CSV looks like:

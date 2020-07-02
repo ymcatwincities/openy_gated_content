@@ -8,7 +8,7 @@ id: virtual_y_file
 migration_tags:
   - openy_complete_installation
 migration_group: virtual_y
-label: 'Import demo gated content files'
+label: 'Import demo Virtual YMCA files'
 source:
   plugin: embedded_data
   data_rows:

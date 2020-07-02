@@ -2,7 +2,7 @@ openy_gc_auth.settings:
   path: '/admin/openy/openy-gated-content/gc-auth-settings'
   defaults:
     _form: '\Drupal\openy_gc_auth\Form\GCAuthSettingsForm'
-    _title: 'Gated Content Auth settings'
+    _title: 'Virtual YMCA Auth settings'
   requirements:
     _permission: 'administer site configuration'
 

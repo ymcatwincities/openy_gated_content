@@ -7,7 +7,7 @@ dependencies:
 id: virtual_y_media_image
 migration_tags: { }
 migration_group: virtual_y
-label: Import demo gated content media images
+label: Import demo Virtual YMCA media images
 source:
   plugin: embedded_data
   data_rows:

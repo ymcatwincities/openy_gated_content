@@ -33,7 +33,7 @@ source:
           bundle: gated_content_login
           values:
             field_link_to_gated_content_app:
-              uri: 'internal:/gated_content'
+              uri: 'internal:/virtual-ymca'
 
       bottom_content:
         -
@@ -49,9 +49,9 @@ source:
               target_id: 1
     -
       id: virtual_y_app_page
-      title: 'Gated Content'
+      title: 'Virtual YMCA'
       layout: one_column
-      alias: '/gated_content'
+      alias: '/virtual-ymca'
       header_content:
         -
           bundle: small_banner

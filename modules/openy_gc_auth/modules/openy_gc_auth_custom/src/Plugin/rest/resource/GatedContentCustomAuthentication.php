@@ -16,11 +16,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Represents resource for Gated Content authentication provider.
+ * Represents resource for Virtual YMCA authentication provider.
  *
  * @RestResource(
  *   id = "openy_gc_auth_custom",
- *   label = @Translation("Custom authentication provider for Gated Content"),
+ *   label = @Translation("Custom authentication provider for Virtual YMCA"),
  *   uri_paths = {
  *     "create" = "/openy-gc-auth/provider/custom/login"
  *   }

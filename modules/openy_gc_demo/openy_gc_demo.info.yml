@@ -1,7 +1,7 @@
-name: Open Y Gated Content Demo content
+name: Open Y Virtual YMCA Demo content
 type: module
 description: 'Provides a Landing page node for development purposes.'
-package: Open Y Gated Content
+package: Open Y Virtual YMCA
 version: 0.1
 core: 8.x
 dependencies:

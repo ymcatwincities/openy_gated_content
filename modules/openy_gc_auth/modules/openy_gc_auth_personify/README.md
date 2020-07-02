@@ -1,6 +1,6 @@
-## Open Y Gated Content Personify SSO Auth.
+## Open Y Virtual YMCA Personify SSO Auth.
 
-Provides Open Y Gated Content Personify SSO authentication provider
+Provides Open Y Virtual YMCA Personify SSO authentication provider
  based on <i>Personify</i> module.
 
 ### Integration with Personify
@@ -29,7 +29,7 @@ $config['personify.settings']['stage_password'] = '';
 
 ### Additional configuration
 
-To be abe to login with Personify you have to add to your settings.php file 
+To be abe to login with Personify you have to add to your settings.php file
 <i>login URL</i> for stage and prod environments:
 
 ```

@@ -2,7 +2,7 @@ langcode: en
 status: true
 dependencies: {  }
 name: gated_content_teaser
-label: 'Gated content teaser'
+label: 'Virtual Y teaser'
 effects:
   2ce2d10c-63ff-402b-93a2-80fae5700c1b:
     uuid: 2ce2d10c-63ff-402b-93a2-80fae5700c1b

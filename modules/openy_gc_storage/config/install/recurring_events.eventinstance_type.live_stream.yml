@@ -3,4 +3,4 @@ status: true
 dependencies: {  }
 label: 'Live stream'
 id: live_stream
-description: 'Live stream Event type is used for adding live-stream schedule for a Gated Content'
+description: 'Live stream Event type is used for adding live-stream schedule for a Virtual YMCA'

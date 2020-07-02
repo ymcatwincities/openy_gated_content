@@ -22,7 +22,7 @@ third_party_settings:
     unpublish_revision: false
 name: 'Virtual Y blog post'
 type: vy_blog_post
-description: 'Virtual Y blog post content type is used for adding a blog posts for a Gated Content'
+description: 'Virtual Y blog post content type is used for adding a blog posts for a Virtual YMCA'
 help: ''
 new_revision: true
 preview_mode: 1
