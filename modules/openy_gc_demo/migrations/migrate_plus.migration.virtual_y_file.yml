@@ -12,23 +12,34 @@ label: 'Import demo Virtual YMCA files'
 source:
   plugin: embedded_data
   data_rows:
+    # Images, needed for Landing pages.
     -
       id: 1
       name: marjanblan-6bXvYyAYVrE-unsplash.jpg
     -
       id: 2
       name: jonathan-borba-lrQPTQs7nQQ-unsplash.jpg
+    # Images, needed for Virtual Y blog posts
     -
       id: 3
-      name: yoga_955x350.jpg
+      name: baylee-gramling-R5eoT-c-jkY-unsplash.jpg
     -
       id: 4
-      name: Power_Yoga.jpeg
+      name: david-marcu-69433-unsplash.jpg
     -
       id: 5
-      name: dance1.jpg
+      name: joan-azeka-bg43g7xTu2M-unsplash.jpg
     -
       id: 6
+      name: yoga_955x350.jpg
+    -
+      id: 7
+      name: Power_Yoga.jpeg
+    -
+      id: 8
+      name: dance1.jpg
+    -
+      id: 9
       name: dance2.jpg
   ids:
     id:

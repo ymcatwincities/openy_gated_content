@@ -16,7 +16,7 @@ source:
       id: virtual_y_app_login
       title: 'VIRTUAL YMCA'
       alias: '/virtual_y_login'
-      layout: one_column
+      layout: one_column_clean
       header_content:
         -
           bundle: banner
@@ -27,7 +27,8 @@ source:
               format: full_html
               value: |
                 <p>Wherever you go, the Y is there.</p>
-            image: 1
+            field_prgf_image:
+              target_id: 1
       content:
         -
           bundle: gated_content_login
@@ -45,12 +46,12 @@ source:
               format: full_html
               value: |
                 <p>Follow classes live or replay on - demand to best fit your schedule.</p>
-            image:
-              target_id: 1
+            field_prgf_image:
+              target_id: 2
     -
       id: virtual_y_app_page
       title: 'Virtual YMCA'
-      layout: one_column
+      layout: one_column_clean
       alias: '/virtual-ymca'
       header_content:
         -
@@ -112,20 +113,25 @@ process:
   field_lp_layout:
     plugin: default_value
     source: layout
+  field_header_content/values/field_prgf_image/target_id:
+    -
+      plugin: migration
+      migration: virtual_y_media_image
+      source: field_prgf_image
   field_header_content:
     plugin: fly_paragraph
     source: header_content
   field_content:
     plugin: fly_paragraph
     source: content
-  field_bottom_content:
-    plugin: fly_paragraph
-    source: bottom_content
-  field_prgf_image:
+  field_bottom_content/values/field_prgf_image/target_id:
     -
       plugin: migration
       migration: virtual_y_media_image
-      source: image
+      source: field_prgf_image
+  field_bottom_content:
+    plugin: fly_paragraph
+    source: bottom_content
 destination:
   plugin: 'entity:node'
   default_bundle: landing_page

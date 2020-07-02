@@ -21,20 +21,32 @@ source:
       file: 2
     -
       id: 3
-      name: 'Virtual Y Yoga'
+      name: 'Blog 1'
       file: 3
     -
       id: 4
-      name: 'Virtual Y Power Yoga'
+      name: 'Blog 2'
       file: 4
     -
       id: 5
-      name: 'Virtual Y Dance'
+      name: 'Blog 3'
       file: 5
     -
       id: 6
-      name: 'Virtual Y Dance 2'
+      name: 'Virtual Y Yoga'
       file: 6
+    -
+      id: 7
+      name: 'Virtual Y Power Yoga'
+      file: 7
+    -
+      id: 8
+      name: 'Virtual Y Dance'
+      file: 8
+    -
+      id: 9
+      name: 'Virtual Y Dance 2'
+      file: 9
   ids:
     id:
       type: integer
