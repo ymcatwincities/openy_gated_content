@@ -14,7 +14,7 @@ source:
   data_rows:
     -
       tid: 1
-      title: 'ADVANCED'
+      title: 'N/A'
     -
       tid: 2
       title: 'BEGINNER'
@@ -23,7 +23,7 @@ source:
       title: 'INTERMEDIATE'
     -
       tid: 4
-      title: 'N/A'
+      title: 'ADVANCED'
   ids:
     tid:
       type: integer
@@ -38,4 +38,4 @@ process:
   name: title
 destination:
   plugin: entity:taxonomy_term
-  default_bundle: gc_equipment
+  default_bundle: gc_level
