@@ -67,4 +67,3 @@ CSV Limit source plugin and Migration group edit form extension
 to allow CSV file upload was re-used from:
 
 * [https://github.com/skilld-labs/skilld\_migrate](https://github.com/skilld-labs/skilld_migrate)
-

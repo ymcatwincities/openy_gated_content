@@ -4,7 +4,7 @@
 
 The goal of this module is to give the ability to log into Virtual Y, in case if your CRM is Daxko.
 It consists of Daxko SSO plugin and
-requres [https://github.com/ymcatwincities/daxko\_sso](https://github.com/ymcatwincities/daxko_sso).
+``requres [https://github.com/ymcatwincities/daxko\_sso](https://github.com/ymcatwincities/daxko_sso).
 
 ## How to use this integration.
 
@@ -28,4 +28,3 @@ requres [https://github.com/ymcatwincities/daxko\_sso](https://github.com/ymcatw
 ## I need help.
 
 In case, if you need help, please write your question at the \#developers channel at Open Y slack.
-

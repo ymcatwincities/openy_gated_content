@@ -37,4 +37,3 @@ file login URL for stage and prod environments:
 $config['openy_gc_auth_personify.settings']['prod_url_login'] = '';
 $config['openy_gc_auth_personify.settings']['stage_url_login'] = '';
 ```
-

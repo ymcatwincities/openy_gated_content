@@ -9,4 +9,3 @@
       * [README](modules/openy_gc_auth/modules/openy_gc_auth_daxko_sso.md)
 * [js](js/README.md)
   * [gated-content](js/gated-content.md)
-
