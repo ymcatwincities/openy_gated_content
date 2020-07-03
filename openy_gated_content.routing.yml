@@ -1,3 +1,19 @@
+openy_gated_content.openy_config:
+  path: '/admin/virtual-y'
+  defaults:
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: 'Virtual Y'
+  requirements:
+    _permission: 'access administration pages'
+
+openy_gated_content.taxonomy_config:
+  path: '/admin/virtual-y/taxonomy'
+  defaults:
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: 'Virtual Y Taxonomy'
+  requirements:
+    _permission: 'access administration pages'
+
 openy_gated_content.settings:
   path: '/admin/openy/virtual-ymca'
   defaults:
