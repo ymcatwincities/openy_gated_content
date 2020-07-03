@@ -38,7 +38,7 @@ In order to use it you have to install Docksal.
 Follow the instruction below to get the working local environment that provides
 4 local websites (1 for each base theme and not yet installed Open Y):
 
-```
+```text
 mkdir vymca
 cd vymca
 git clone --branch openy-gc-builds \
@@ -56,7 +56,8 @@ For videos, protected from embed by "Specific domains" you can have an issue
 with thumbnails download to drupal media. In this case - apply a patch
 for drupal core:
 
-- _patches/OEmbed_vimeo_private_videos.patch_
+* _patches/OEmbed\_vimeo\_private\_videos.patch_
+
 
 ### Migration notes
 If you have error:
@@ -65,4 +66,4 @@ TypeError: Argument 6 passed to __construct() must be an instance of EntityTypeM
 ```
 apply patch:
 
-- _patches/3079627-4.paragraphs.Argument-6-passed-to-construct.patch_
+* _patches/3079627-4.paragraphs.Argument-6-passed-to-construct.patch_

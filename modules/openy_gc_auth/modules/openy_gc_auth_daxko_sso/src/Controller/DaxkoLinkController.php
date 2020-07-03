@@ -50,8 +50,7 @@ class DaxkoLinkController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('config.factory'),
-      $container->get('daxko_sso.client'),
-
+      $container->get('daxko_sso.client')
     );
   }
 
