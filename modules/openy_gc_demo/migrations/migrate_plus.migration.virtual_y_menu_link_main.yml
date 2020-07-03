@@ -1,0 +1,86 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - openy_gc_demo
+id: virtual_y_menu_link_main
+migration_tags:
+  - openy_complete_installation
+migration_group: virtual_y
+label: 'Create demo main menu links'
+source:
+  plugin: embedded_data
+  data_rows:
+    -
+      id: 1
+      title: 'Home'
+      menu_name: 'main'
+      link: 'internal:/virtual-y-login'
+      weight: 1
+      parent_id: 0
+      expanded: 0
+      parent_link_path: ''
+    -
+      id: 2
+      title: 'Blogs'
+      menu_name: 'main'
+      link: 'internal:/virtual-ymca#/blog-post'
+      weight: 2
+      parent_id: 0
+      expanded: 0
+      parent_link_path: ''
+    -
+      id: 3
+      title: 'Videos'
+      menu_name: 'main'
+      link: 'internal:/virtual-ymca#/categories'
+      weight: 3
+      parent_id: 0
+      expanded: 0
+      parent_link_path: ''
+    -
+      id: 4
+      title: 'Live streams'
+      menu_name: 'main'
+      link: 'internal:/virtual-ymca#/live-stream'
+      weight: 4
+      parent_id: 0
+      expanded: 0
+      parent_link_path: ''
+    -
+      id: 5
+      title: 'Virtual meetings'
+      menu_name: 'main'
+      link: 'internal:/virtual-ymca#/virtual-meeting'
+      weight: 5
+      parent_id: 0
+      expanded: 0
+      parent_link_path: ''
+  ids:
+    id:
+      type: integer
+process:
+  langcode:
+    plugin: default_value
+    source: language
+    default_value: en
+  bundle:
+    plugin: default_value
+    default_value: menu_link_content
+  title: title
+  menu_name: menu_name
+  link/uri:
+    plugin: link_uri
+    source:
+      - link
+  weight: weight
+  expanded: expanded
+  parent:
+    plugin: menu_link_parent
+    source:
+      - parent_id
+      - menu_name
+      - parent_link_path
+destination:
+  plugin: entity:menu_link_content

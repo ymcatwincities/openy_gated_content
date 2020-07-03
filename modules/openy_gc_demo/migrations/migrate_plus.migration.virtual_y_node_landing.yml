@@ -15,7 +15,7 @@ source:
     -
       id: virtual_y_app_login
       title: 'VIRTUAL YMCA'
-      alias: '/virtual_y_login'
+      alias: '/virtual-y-login'
       layout: one_column_clean
       header_content:
         -
