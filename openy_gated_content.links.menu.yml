@@ -11,7 +11,7 @@ openy_gated_content.videos:
   options:
     query:
       type: gc_video
-  description: ''
+  description: 'View videos list.'
   parent: openy_gated_content.openy
   weight: 1
 
@@ -20,13 +20,13 @@ openy_gated_content.video_add:
   route_name: node.add
   route_parameters:
     node_type: gc_video
-  description: ''
+  description: 'Add Video.'
   parent: openy_gated_content.videos
 
 openy_gated_content.event_series:
   title: 'Event series'
   route_name: entity.eventseries.admin_collection
-  description: ''
+  description: 'Event series.'
   parent: openy_gated_content.openy
   weight: 2
 
@@ -38,11 +38,11 @@ openy_gated_content.event_instances:
   weight: 1
 
 openy_gated_content.livestream_add:
-  title: 'Add Livestream'
+  title: 'Add Live Stream.'
   route_name: entity.eventseries.add_form
   route_parameters:
     eventseries_type: live_stream
-  description: ''
+  description: 'Add Live Stream.'
   parent: openy_gated_content.event_series
   weight: 2
 
@@ -51,7 +51,7 @@ openy_gated_content.virtualmeetings:
   route_name: entity.eventseries.add_form
   route_parameters:
     eventseries_type: virtual_meeting
-  description: ''
+  description: 'Add Virtual Meeting.'
   parent: openy_gated_content.event_series
   weight: 3
 
@@ -61,7 +61,7 @@ openy_gated_content.blogs:
   options:
     query:
       type: vy_blog_post
-  description: ''
+  description: 'View blog posts list.'
   parent: openy_gated_content.openy
 
 openy_gated_content.blogs_add:
@@ -69,7 +69,7 @@ openy_gated_content.blogs_add:
   route_name: node.add
   route_parameters:
     node_type: vy_blog_post
-  description: ''
+  description: 'Add blog post.'
   parent: openy_gated_content.blogs
 
 openy_gated_content.settings:
@@ -82,7 +82,7 @@ openy_gated_content.settings:
 openy_gated_content.taxonomy:
   title: 'Taxonomy'
   route_name: openy_gated_content.taxonomy_config
-  description: 'Virtual YMCA taxonomy'
+  description: 'Virtual YMCA taxonomy.'
   parent: openy_gated_content.openy
   weight: 20
 
