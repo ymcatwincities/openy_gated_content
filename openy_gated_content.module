@@ -122,3 +122,10 @@ function _openy_gated_content_form_eventseries_live_stream_validate(&$form, Form
 function _openy_gated_content_form_eventseries_live_stream_submit(&$form, FormStateInterface $form_state) {
   \Drupal::cache('jsonapi_normalizations')->deleteAll();
 }
+
+/**
+ * Implements hook_page_attachments().
+ */
+function openy_gated_content_page_attachments(array &$attachments) {
+  $attachments['#attached']['library'][] = 'openy_gated_content/styles';
+}

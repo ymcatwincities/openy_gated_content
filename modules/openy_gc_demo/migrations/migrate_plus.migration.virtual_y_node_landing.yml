@@ -15,14 +15,14 @@ source:
     -
       id: virtual_y_app_login
       title: 'VIRTUAL YMCA'
-      alias: '/virtual_y_login'
+      alias: '/virtual-y-login'
       layout: one_column_clean
       header_content:
         -
           bundle: banner
           values:
             field_prgf_headline: 'VIRTUAL YMCA'
-            field_prgf_color: 28
+            field_prgf_color: 1
             field_prgf_description:
               format: full_html
               value: |
@@ -41,7 +41,7 @@ source:
           bundle: banner
           values:
             field_prgf_headline: 'YOUR FAVORITES AT YOUR FINGERTIPS'
-            field_prgf_color: 28
+            field_prgf_color: 1
             field_prgf_description:
               format: full_html
               value: |
@@ -57,11 +57,12 @@ source:
         -
           bundle: small_banner
           values:
+            field_prgf_color: 1
             field_prgf_headline: 'Virtual YMCA'
             field_prgf_description:
               format: full_html
               value: |
-                <p>Find the newest Y classes and programs</p><p><a class="btn btn-default" href="#"><span class="text">Live Streams</span></a>&nbsp; <a class="btn btn-default" href="#/categories"><span class="text">Videos</span></a></p>
+                <p>Find the newest Y classes and programs</p><p><a class="btn btn-default" href="#/live-stream"><span class="text">Live Streams</span></a>&nbsp; <a class="btn btn-default" href="#/categories"><span class="text">Videos</span></a></p>
       content:
         -
           bundle: gated_content
@@ -113,6 +114,11 @@ process:
   field_lp_layout:
     plugin: default_value
     source: layout
+  field_header_content/values/field_prgf_color:
+    -
+      plugin: migration
+      migration: virtual_y_color
+      source: field_prgf_color
   field_header_content/values/field_prgf_image/target_id:
     -
       plugin: migration
@@ -139,4 +145,5 @@ destination:
 migration_dependencies:
   required:
     - virtual_y_media_image
+    - virtual_y_color
   optional: {  }
