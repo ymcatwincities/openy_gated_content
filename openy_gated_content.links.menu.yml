@@ -1,6 +1,6 @@
 openy_gated_content.settings:
-  title: 'Gated Content settings'
+  title: 'Virtual YMCA settings'
   route_name: openy_gated_content.settings
-  description: 'Gated Content settings form.'
+  description: 'Virtual YMCA settings form.'
   parent: openy_system.openy
   weight: 20

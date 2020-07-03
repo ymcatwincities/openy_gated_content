@@ -1,9 +1,9 @@
-name: 'Open Y Gated Content Storage'
-description: 'Provides a node types and taxonomy vocabularies for Open Y Gated Content.'
+name: 'Open Y Virtual YMCA Storage'
+description: 'Provides a node types and taxonomy vocabularies for Open Y Virtual YMCA.'
 type: module
 core: 8.x
 version: 8.x-1.0
-package: Open Y Gated Content
+package: Open Y Virtual YMCA
 core_incompatible: false
 dependencies:
   - drupal:datalayer

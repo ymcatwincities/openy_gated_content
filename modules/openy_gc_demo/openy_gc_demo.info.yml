@@ -1,11 +1,13 @@
-name: Open Y Gated Content Demo content
+name: Open Y Virtual YMCA Demo content
 type: module
 description: 'Provides a Landing page node for development purposes.'
-package: Open Y Gated Content
+package: Open Y Virtual YMCA
 version: 0.1
 core: 8.x
 dependencies:
-  - drupal:default_content
+  - drupal:migrate
+  - migrate_plus:migrate_plus
+  - migrate_tools:migrate_tools
   - drupal:jsonapi
   - drupal:openy_gated_content
   - drupal:openy_gc_storage

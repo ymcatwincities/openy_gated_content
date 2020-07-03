@@ -103,7 +103,7 @@ class DaxkoSSO extends GCIdentityProviderPluginBase {
 
     $form['redirect_url'] = [
       '#title' => $this->t('Url'),
-      '#description' => $this->t('Link to the Gated Content Landing Page at your project.'),
+      '#description' => $this->t('Link to the Virtual YMCA Landing Page at your project.'),
       '#type' => 'textfield',
       '#default_value' => $config['redirect_url'],
       '#required' => TRUE,

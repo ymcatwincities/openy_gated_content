@@ -22,7 +22,7 @@ third_party_settings:
     unpublish_revision: false
 name: 'Virtual Y Video'
 type: gc_video
-description: 'Video content type is used for adding videos for a Gated Content'
+description: 'Video content type is used for adding videos for a Virtual YMCA'
 help: ''
 new_revision: true
 preview_mode: 1

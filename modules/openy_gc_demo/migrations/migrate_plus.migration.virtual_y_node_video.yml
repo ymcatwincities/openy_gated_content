@@ -1,0 +1,126 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - openy_gc_demo
+id: virtual_y_node_video
+migration_tags:
+  - openy_complete_installation
+migration_group: virtual_y
+label: 'Create demo videos for Virtual Y'
+source:
+  plugin: embedded_data
+  data_rows:
+    -
+      id: 1
+      title: 'YOGA WITH LINDA  - POWER YOGA'
+      description: |
+        <p>A more advanced yoga flow designed toward strength building</p>
+      instructor: 'Linda Myers'
+      duration: 300
+      featured: 1
+      video: 1
+      category: 6
+      equipment: 8
+      level: 4
+    -
+      id: 2
+      title: 'Yoga Atlanta'
+      description: |
+        <p>New yoga video</p>
+      instructor: 'Linda Myers'
+      duration: 200
+      featured: 1
+      video: 3
+      category: 6
+      equipment: 8
+      level: 2
+    -
+      id: 3
+      title: 'Youth Bootcamp Challenge'
+      description: |
+        <p>YMCA Youth Bootcamp Challenge</p>
+      instructor: 'Naya Cardoza'
+      duration: 500
+      featured: 1
+      video: 2
+      category: 2
+      equipment: 3
+      level: 3
+  ids:
+    id:
+      type: integer
+process:
+  langcode:
+    plugin: default_value
+    source: language
+    default_value: en
+  status:
+    -
+      plugin: get
+      source: publish_status
+    -
+      plugin: default_value
+      default_value: 1
+  publish_on:
+    -
+      plugin: get
+      source: publish_date
+    -
+      plugin: callback
+      callable: strtotime
+    -
+      plugin: default_value
+      default_value: null
+  unpublish_on:
+    -
+      plugin: get
+      source: unpublish_date
+    -
+      plugin: callback
+      callable: strtotime
+    -
+      plugin: default_value
+      default_value: null
+  uid:
+    plugin: default_value
+    default_value: 1
+  title: title
+  field_gc_video_description: description
+  field_gc_video_duration: duration
+  field_gc_video_instructor: instructor
+  field_gc_video_featured: featured
+  field_gc_video_media:
+    -
+      plugin: migration
+      migration: virtual_y_media_video
+      source: video
+  field_gc_video_category:
+    -
+      plugin: migration
+      migration: virtual_y_gc_category
+      source: category
+  field_gc_video_equipment:
+    -
+      plugin: migration
+      migration: virtual_y_gc_equipment
+      source: equipment
+  field_gc_video_level:
+    -
+      plugin: migration
+      migration: virtual_y_gc_level
+      source: level
+
+
+destination:
+  plugin: 'entity:node'
+  default_bundle: gc_video
+
+migration_dependencies:
+  required:
+    - virtual_y_media_video
+    - virtual_y_gc_category
+    - virtual_y_gc_equipment
+    - virtual_y_gc_level
+  optional: {  }
