@@ -38,7 +38,7 @@ openy_gated_content.event_instances:
   weight: 1
 
 openy_gated_content.livestream_add:
-  title: 'Add Live Stream.'
+  title: 'Add Live Stream'
   route_name: entity.eventseries.add_form
   route_parameters:
     eventseries_type: live_stream
@@ -56,7 +56,7 @@ openy_gated_content.virtualmeetings:
   weight: 3
 
 openy_gated_content.blogs:
-  title: 'Blogs'
+  title: 'Blog posts'
   route_name: system.admin_content
   options:
     query:
@@ -65,7 +65,7 @@ openy_gated_content.blogs:
   parent: openy_gated_content.openy
 
 openy_gated_content.blogs_add:
-  title: 'Add Blog'
+  title: 'Add Blog post'
   route_name: node.add
   route_parameters:
     node_type: vy_blog_post
