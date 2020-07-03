@@ -29,6 +29,7 @@ It consists of Daxko SSO plugin and requires
 
 ## I need help.
 
-In case, if you need help, please write your question at the \#developers channel at Open Y slack.
+In case, if you need help, please write your question at
+the \#developers channel at Open Y slack.
 
 [1]: https://github.com/ymcatwincities/daxko_sso
