@@ -17,7 +17,7 @@
             <div
               v-if="description"
               class="video-footer__description"
-                 v-html="video.attributes.description.processed"
+                 v-html="description"
             ></div>
             <AddToCalendar :event="event"></AddToCalendar>
           </div>
