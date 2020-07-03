@@ -1,6 +1,7 @@
 # Open Y Gated Content Personify SSO Auth.
 
-Provides Open Y Gated Content Personify SSO authentication provider based on Personify module.
+Provides Open Y Gated Content Personify SSO authentication provider
+based on Personify module.
 
 ## Integration with Personify
 
@@ -28,7 +29,8 @@ $config['personify.settings']['stage_password'] = '';
 
 ## Additional configuration
 
-To be abe to login with Personify you have to add to your settings.php file login URL for stage and prod environments:
+To be abe to login with Personify you have to add to your settings.php
+file login URL for stage and prod environments:
 
 ```text
 # Personify login URL.
