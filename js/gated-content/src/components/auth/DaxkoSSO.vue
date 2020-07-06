@@ -28,7 +28,7 @@ export default {
   computed: {
     loading() {
       return this.$store.state.authDaxkoSSO.loading;
-    }
+    },
   },
   async mounted() {
     await this.$store
