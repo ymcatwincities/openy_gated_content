@@ -3,6 +3,7 @@ import client from '@/client';
 export default {
   state: {
     config: null,
+    loading: false,
   },
   actions: {
     async daxkossoAuthorize(context) {
@@ -18,6 +19,7 @@ export default {
               context.dispatch('authorize', result.data.user);
             }
           });
+          context.commit('setLoading', false);
         } else {
           // Redirect user if session is not started and there are no token in get.
           window.location = context.getters.getDaxkoSSOConfig.login_url;
@@ -35,6 +37,9 @@ export default {
   mutations: {
     setDaxkoSSOConfig(state, config) {
       state.config = config;
+    },
+    setLoading(state, value) {
+      state.loading = value;
     },
   },
   getters: {

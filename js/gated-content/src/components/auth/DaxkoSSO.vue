@@ -20,14 +20,20 @@ export default {
   data() {
     return {
       error: '',
-      loading: true,
     };
+  },
+  created() {
+    this.$store.commit('setLoading', true);
+  },
+  computed: {
+    loading() {
+      return this.$store.state.authDaxkoSSO.loading;
+    }
   },
   async mounted() {
     await this.$store
       .dispatch('daxkossoAuthorize')
       .then(() => {
-        this.loading = false;
         this.$router.push({ name: 'Home' }).catch(() => {});
       })
       .catch((error) => {
