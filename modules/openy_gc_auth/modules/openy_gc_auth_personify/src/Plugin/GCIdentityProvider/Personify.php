@@ -115,8 +115,8 @@ class Personify extends GCIdentityProviderPluginBase {
     }
 
     $form['application_url'] = [
-      '#title' => $this->t('Gated Content application URL'),
-      '#description' => $this->t('Specify Gated Content application URL to create Personify login url started with "/".'),
+      '#title' => $this->t('Virtual YMCA application URL'),
+      '#description' => $this->t('Specify Virtual YMCA application URL to create Personify login url started with "/".'),
       '#type' => 'textfield',
       '#default_value' => $config['application_url'],
       '#required' => TRUE,

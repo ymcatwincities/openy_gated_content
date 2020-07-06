@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import VuexPersistence from 'vuex-persist';
 import auth from './modules/auth';
+import settings from './modules/settings';
 import authDummy from './modules/auth/dummy';
 import authCustom from './modules/auth/custom';
 import authDaxkoSSO from './modules/auth/daxkosso';
@@ -25,6 +26,7 @@ export default new Vuex.Store({
   mutations: { },
   actions: { },
   modules: {
+    settings,
     auth,
     authDummy,
     authCustom,

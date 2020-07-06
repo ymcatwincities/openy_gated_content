@@ -1,0 +1,121 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - openy_gc_demo
+id: virtual_y_reccuring_event_virtual_meeting
+migration_tags:
+  - openy_complete_installation
+migration_group: virtual_y
+label: 'Create demo virtual meeting for Virtual Y'
+source:
+  plugin: embedded_data
+  data_rows:
+    -
+      id: 1
+      title: 'Dance Fitness LIVE'
+      description: |
+        Don’t let social distancing keep you from dancing! We’re broadcasting
+        a FULL line-up of more than 14 virtual dance fitness classes per
+        week until it’s safe to return to the studios.
+      instructor: 'Jessica Myers'
+      image: 8
+      category: 3
+      equipment: 7
+      level: 4
+      time: '9:00 am'
+      duration: 900
+      link: 'http://example.com/'
+    -
+      id: 2
+      title: 'Dance Fitness LIVE'
+      description: |
+        Now you can jump start your workout dancing with Jessica Myers in the
+        comfort of your own home via LiveStream! Not only do you get to dance
+        to all the music you love and Jessica’s fun routines, but you also get
+        to feel the energy of the class she is teaching.
+      instructor: 'Jessica Myers'
+      image: 9
+      category: 3
+      equipment: 7
+      level: 3
+      time: '10:00 am'
+      duration: 2700
+      link: 'http://example.com/'
+  ids:
+    id:
+      type: integer
+process:
+  langcode:
+    plugin: default_value
+    source: language
+    default_value: en
+  status:
+    -
+      plugin: get
+      source: publish_status
+    -
+      plugin: default_value
+      default_value: 1
+  uid:
+    plugin: default_value
+    default_value: 1
+  title: title
+  body: description
+  field_ls_host_name: instructor
+  'field_vm_link/uri': link
+  field_ls_image:
+    -
+      plugin: migration
+      migration: virtual_y_media_image
+      source: image
+  field_ls_category:
+    -
+      plugin: migration
+      migration: virtual_y_gc_category
+      source: category
+  field_ls_equipment:
+    -
+      plugin: migration
+      migration: virtual_y_gc_equipment
+      source: equipment
+  field_ls_level:
+    -
+      plugin: migration
+      migration: virtual_y_gc_level
+      source: level
+  recur_type:
+    plugin: default_value
+    default_value: 'daily_recurring_date'
+  'daily_recurring_date/value':
+    -
+      plugin: default_value
+      default_value: '+1 day'
+    -
+      plugin: callback
+      callable: strtotime
+    -
+      plugin: date_timestamp
+      to_format: 'Y-m-d\TH:i:s'
+  'daily_recurring_date/end_value':
+    -
+      plugin: default_value
+      default_value: '+1 month'
+    -
+      plugin: callback
+      callable: strtotime
+    -
+      plugin: date_timestamp
+      to_format: 'Y-m-d\TH:i:s'
+  'daily_recurring_date/time': time
+  'daily_recurring_date/duration': duration
+destination:
+  plugin: 'entity:eventseries'
+  default_bundle: virtual_meeting
+migration_dependencies:
+  required:
+    - virtual_y_gc_category
+    - virtual_y_gc_equipment
+    - virtual_y_gc_level
+  optional: {}

@@ -1,0 +1,63 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - openy_gc_demo
+id: virtual_y_gc_category
+migration_tags:
+  - openy_complete_installation
+migration_group: virtual_y
+label: 'GC Category'
+source:
+  plugin: embedded_data
+  data_rows:
+    -
+      tid: 1
+      title: 'Barre'
+      image: 3
+    -
+      tid: 2
+      title: 'Bootcamp'
+      image: 4
+    -
+      tid: 3
+      title: 'Dance Fitness'
+      image: 5
+    -
+      tid: 4
+      title: 'Pilates'
+      image: 6
+    -
+      tid: 5
+      title: 'Weightlifting'
+      image: 8
+    -
+      tid: 6
+      title: 'Yoga'
+      image: 7
+  ids:
+    tid:
+      type: integer
+process:
+  langcode:
+    plugin: default_value
+    source: language
+    default_value: en
+  status:
+    plugin: default_value
+    default_value: 1
+  name: title
+  field_gc_category_media:
+    -
+      plugin: migration
+      migration: virtual_y_media_image
+      source: image
+destination:
+  plugin: entity:taxonomy_term
+  default_bundle: gc_category
+
+migration_dependencies:
+  required:
+    - virtual_y_media_image
+  optional: {  }

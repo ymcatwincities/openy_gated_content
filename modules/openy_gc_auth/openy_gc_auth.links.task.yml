@@ -1,0 +1,8 @@
+openy_gated_content.settings:
+  title: 'Virtual YMCA Settings'
+  route_name: openy_gated_content.settings
+  base_route: openy_gated_content.settings
+openy_gc_auth.settings:
+  title: 'AUTH settings'
+  route_name: openy_gc_auth.settings
+  base_route: openy_gated_content.settings

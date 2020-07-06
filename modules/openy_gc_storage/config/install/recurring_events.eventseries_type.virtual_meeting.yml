@@ -1,0 +1,6 @@
+langcode: en
+status: true
+dependencies: {  }
+label: 'Virtual Meeting'
+id: virtual_meeting
+description: 'A Virtual Meeting Event type is used for adding Virtual Meeting schedule for a Virtual YMCA'

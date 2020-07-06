@@ -22,6 +22,14 @@ function openy_gated_content_theme() {
         'auth_configuration' => '',
       ],
     ],
+    'paragraph__gated_content_login' => [
+      'base hook' => 'paragraph',
+      'variables' => [
+        'auth_provider_id' => '',
+        'auth_configuration' => '',
+        'app_url' => '',
+      ],
+    ],
   ];
 }
 
@@ -29,10 +37,20 @@ function openy_gated_content_theme() {
  * Implements hook_preprocess_paragraph().
  */
 function openy_gated_content_preprocess_paragraph(&$variables) {
-  if (!isset($variables['paragraph']) || $variables['paragraph']->getType() != 'gated_content') {
+  if (!isset($variables['paragraph'])) {
     return;
   }
 
+  if (!in_array($variables['paragraph']->getType(), ['gated_content', 'gated_content_login'])) {
+    return;
+  }
+
+  if ($variables['paragraph']->getType() === 'gated_content_login') {
+    $variables['app_url'] = $variables['paragraph']
+      ->field_link_to_gated_content_app->get(0)->getUrl()->toString();
+  }
+
+  $variables['#cache']['tags'][] = 'config:openy_gated_content.settings';
   $variables['#cache']['tags'][] = 'config:openy_gc_auth.settings';
   $active_provider = \Drupal::config('openy_gc_auth.settings')->get('active_provider');
   $identityProviderManager = \Drupal::service('plugin.manager.gc_identity_provider');
@@ -41,8 +59,10 @@ function openy_gated_content_preprocess_paragraph(&$variables) {
     return;
   }
   $plugin_instance = $identityProviderManager->createInstance($active_provider);
+  $app_config = \Drupal::config('openy_gated_content.settings')->getOriginal();
   $variables['auth_provider_id'] = $plugin_instance->getId();
   $variables['auth_configuration'] = json_encode($plugin_instance->getDataForApp());
+  $variables['app_settings'] = json_encode($app_config);
   $variables['#cache']['tags'][] = 'config:' . $plugin_instance->getConfigName();
 }
 
@@ -63,13 +83,28 @@ function openy_gated_content_jsonapi_eventinstance_filter_access(EntityTypeInter
 }
 
 /**
- * Implements hook_form_FORM_ID_alter().
+ * Implements hook_form_alter().
  */
-function openy_gated_content_form_eventseries_live_stream_edit_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  // Disable rebuild form.
-  $form['#validate'][] = '_openy_gated_content_form_eventseries_live_stream_validate';
-  // We need to clear JSON API cache bin on submit.
-  $form['actions']['submit']['#submit'][] = '_openy_gated_content_form_eventseries_live_stream_submit';
+function openy_gated_content_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $event_series_forms = [
+    'eventseries_live_stream_edit_form',
+    'eventseries_virtual_meeting_edit_form',
+  ];
+  if (in_array($form_id, $event_series_forms)) {
+    // Disable rebuild form.
+    $form['#validate'][] = '_openy_gated_content_form_eventseries_live_stream_validate';
+    // We need to clear JSON API cache bin on submit.
+    $form['actions']['submit']['#submit'][] = '_openy_gated_content_form_eventseries_live_stream_submit';
+  }
+
+  $event_instance_forms = [
+    'eventinstance_live_stream_edit_form',
+    'eventinstance_virtual_meeting_edit_form',
+  ];
+  if (in_array($form_id, $event_instance_forms)) {
+    // Collapse field_inheritance by default in event instance edit form.
+    $form['field_inheritance']['#open'] = FALSE;
+  }
 }
 
 /**
@@ -89,9 +124,8 @@ function _openy_gated_content_form_eventseries_live_stream_submit(&$form, FormSt
 }
 
 /**
- * Implements hook_form_FORM_ID_alter().
+ * Implements hook_page_attachments().
  */
-function openy_gated_content_form_eventinstance_live_stream_edit_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  // Collapse field_inheritance by default in event instance edit form.
-  $form['field_inheritance']['#open'] = FALSE;
+function openy_gated_content_page_attachments(array &$attachments) {
+  $attachments['#attached']['library'][] = 'openy_gated_content/styles';
 }

@@ -75,9 +75,9 @@
 <script>
 import client from '@/client';
 import Spinner from '@/components/Spinner.vue';
-import VideoListing from '../components/VideoListing.vue';
-import MediaPlayer from '../components/MediaPlayer.vue';
-import { JsonApiCombineMixin } from '../mixins/JsonApiCombineMixin';
+import VideoListing from '@/components/video/VideoListing.vue';
+import MediaPlayer from '@/components/MediaPlayer.vue';
+import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
 
 export default {
   name: 'VideoPage',
@@ -115,6 +115,7 @@ export default {
   },
   methods: {
     async load() {
+      this.loading = true;
       const params = {};
       if (this.params) {
         params.include = this.params.join(',');
@@ -135,7 +136,3 @@ export default {
   },
 };
 </script>
-
-<style>
-
-</style>

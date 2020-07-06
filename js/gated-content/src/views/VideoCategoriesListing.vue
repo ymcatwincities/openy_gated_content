@@ -17,9 +17,9 @@
 
 <script>
 import client from '@/client';
-import CategoryTeaser from '@/components/CategoryTeaser.vue';
+import CategoryTeaser from '@/components/video/CategoryTeaser.vue';
 import Spinner from '@/components/Spinner.vue';
-import { JsonApiCombineMixin } from '../mixins/JsonApiCombineMixin';
+import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
 
 export default {
   name: 'VideoCategoriesListing',
@@ -64,14 +64,37 @@ export default {
       }
 
       client
-        .get('jsonapi/taxonomy_term/gc_category', { params })
+        .get('api/video-categories-list', { params })
         .then((response) => {
-          this.listing = this.combineMultiple(
-            response.data.data,
-            response.data.included,
-            this.params,
-          );
-          this.loading = false;
+          params.filter = {};
+          if (response.data.length > 0) {
+            params.filter.excludeSelf = {
+              condition: {
+                path: 'id',
+                operator: 'IN',
+                value: response.data,
+              },
+            };
+
+            client
+              .get('jsonapi/taxonomy_term/gc_category', { params })
+              .then((response2) => {
+                this.listing = this.combineMultiple(
+                  response2.data.data,
+                  response2.data.included,
+                  this.params,
+                );
+                this.loading = false;
+              })
+              .catch((error) => {
+                this.error = true;
+                this.loading = false;
+                console.error(error);
+                throw error;
+              });
+          } else {
+            this.loading = false;
+          }
         })
         .catch((error) => {
           this.error = true;

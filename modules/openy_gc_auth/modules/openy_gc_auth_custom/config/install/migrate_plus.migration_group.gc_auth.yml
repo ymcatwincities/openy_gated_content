@@ -6,7 +6,7 @@ dependencies:
       - openy_gc_auth_custom
 id: gc_auth
 label: GC Auth Custom users
-description: 'Open Y Gated Content Auth Custom users migration group'
+description: 'Open Y Virtual YMCA Auth Custom users migration group'
 source_type: 'CSV files with customers'
 module: openy_gc_auth_custom
 shared_configuration:

@@ -1,0 +1,80 @@
+dependencies:
+  module:
+    - openy_media_image
+  enforced:
+    module:
+      - openy_gc_demo
+id: virtual_y_media_image
+migration_tags: { }
+migration_group: virtual_y
+label: Import demo Virtual YMCA media images
+source:
+  plugin: embedded_data
+  data_rows:
+    -
+      id: 1
+      name: 'Virtual Y World'
+      file: 1
+    -
+      id: 2
+      name: 'Virtual Y Workout'
+      file: 2
+    -
+      id: 3
+      name: 'Blog 1'
+      file: 3
+    -
+      id: 4
+      name: 'Blog 2'
+      file: 4
+    -
+      id: 5
+      name: 'Blog 3'
+      file: 5
+    -
+      id: 6
+      name: 'Virtual Y Yoga'
+      file: 6
+    -
+      id: 7
+      name: 'Virtual Y Power Yoga'
+      file: 7
+    -
+      id: 8
+      name: 'Virtual Y Dance'
+      file: 8
+    -
+      id: 9
+      name: 'Virtual Y Dance 2'
+      file: 9
+  ids:
+    id:
+      type: integer
+process:
+  langcode:
+    plugin: default_value
+    source: language
+    default_value: en
+  name:
+    -
+      plugin: get
+      source: name
+  bundle:
+    -
+      plugin: default_value
+      default_value: image
+  uid:
+    -
+      plugin: default_value
+      default_value: 1
+  field_media_image:
+    -
+      plugin: migration
+      migration: virtual_y_file
+      source: file
+destination:
+  plugin: 'entity:media'
+migration_dependencies:
+  required:
+    - virtual_y_file
+  optional: {  }

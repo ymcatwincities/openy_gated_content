@@ -17,8 +17,9 @@
             <div
               v-if="description"
               class="video-footer__description"
-                 v-html="description.processed"
+                 v-html="description"
             ></div>
+            <AddToCalendar :event="event"></AddToCalendar>
           </div>
           <div>
             <div class="video-footer__block">
@@ -54,7 +55,7 @@
           </div>
         </div>
       </div>
-      <LiveStreamListing
+      <EventListing
         :title="'UP NEXT'"
         :excluded-video-id="video.id"
         :viewAll="true"
@@ -67,16 +68,19 @@
 <script>
 import client from '@/client';
 import Spinner from '@/components/Spinner.vue';
-import MediaPlayer from '../components/MediaPlayer.vue';
-import LiveStreamListing from '../components/LiveStreamListing.vue';
-import { JsonApiCombineMixin } from '../mixins/JsonApiCombineMixin';
+import MediaPlayer from '@/components/MediaPlayer.vue';
+import EventListing from '@/components/event/EventListing.vue';
+import AddToCalendar from '@/components/event/AddToCalendar.vue';
+import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
+import { EventMixin } from '@/mixins/EventMixin';
 
 export default {
   name: 'LiveStreamPage',
-  mixins: [JsonApiCombineMixin],
+  mixins: [JsonApiCombineMixin, EventMixin],
   components: {
     MediaPlayer,
-    LiveStreamListing,
+    EventListing,
+    AddToCalendar,
     Spinner,
   },
   props: {
@@ -106,35 +110,27 @@ export default {
   computed: {
     // This values most of all from parent (series), but can be overridden by item,
     // so ve need to check this here and use correct value.
-    description() {
-      return this.video.attributes.body ? this.video.attributes.body
-        : this.video.attributes.description;
-    },
-    level() {
-      return this.video.attributes.field_ls_level ? this.video.attributes.field_ls_level.name
-        : this.video.attributes.level.name;
-    },
     media() {
       return this.video.attributes.field_ls_media ? this.video.attributes.field_ls_media
         : this.video.attributes.media;
     },
-    category() {
-      return this.video.attributes.field_ls_category ? this.video.attributes.field_ls_category.name
-        : this.video.attributes.category.name;
+    description() {
+      return this.video.attributes.description ? this.video.attributes.description.processed : '';
     },
-    instructor() {
-      return this.video.attributes.field_ls_host_name ? this.video.attributes.field_ls_host_name
-        : this.video.attributes.instructor;
+    event() {
+      return {
+        start: this.formatDate(this.video.attributes.date.value),
+        duration: [this.getDuration(this.video.attributes.date), 'hour'],
+        title: this.video.attributes.title,
+        description: `${this.description}<br> Live stream page: ${this.pageUrl}`,
+        busy: true,
+        guests: [],
+      };
     },
-  },
-  watch: {
-    $route: 'load',
-  },
-  async mounted() {
-    await this.load();
   },
   methods: {
     async load() {
+      this.loading = true;
       const params = {};
       if (this.params) {
         params.include = this.params.join(',');
@@ -166,7 +162,3 @@ export default {
   },
 };
 </script>
-
-<style>
-
-</style>

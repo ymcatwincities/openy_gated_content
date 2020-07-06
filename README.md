@@ -2,9 +2,13 @@
 
 ## Development
 
-This is just a set of drupal modules. Install it as you would do with any drupal module.
+This is just a set of drupal modules. Install it as you would do with any
+drupal module.
 
-In development purposes, you might want a set of modules to be enabled. Use `openy_gc_demo` module for such purposes. Specify modules that you want to be enabled as dependencies of this module. The CI configuration automatially enables this modules, and all its dependencies.
+In development purposes, you might want a set of modules to be enabled. Use
+`openy_gc_demo` module for such purposes. Specify modules that you want to be
+enabled as dependencies of this module. The CI configuration automatially
+enables this modules, and all its dependencies.
 
 ### Coding standards
 
@@ -18,17 +22,21 @@ In order to use the configuration just run `phpcs` within the module directory.
 
 Please find the esling configuration in `js/gated-content/.eslintrc.js`
 
-To run the check execute `npm install && npm lint-no-fix`. See `js/gated-content/package.json` for details.
+To run the check execute `npm install && npm lint-no-fix`. See
+`js/gated-content/package.json` for details.
 
 Automatic code fixing is available with `npm lint`.
 
 ### With docksal for openy
 
-The docksal configuration [https://github.com/fivejars/docksal-for-openy/tree/openy-gc-builds](https://github.com/fivejars/docksal-for-openy/tree/openy-gc-builds) is used to for building the PR builds.
+The docksal configuration
+https://github.com/fivejars/docksal-for-openy/tree/openy-gc-builds is used to
+for building the PR builds.
 
 In order to use it you have to install Docksal.
 
-Follow the instruction below to get the working local environment that provides 4 local websites \(1 for each base theme and not yet installed Open Y\):
+Follow the instruction below to get the working local environment that provides
+4 local websites (1 for each base theme and not yet installed Open Y):
 
 ```text
 mkdir vymca
@@ -44,7 +52,18 @@ fin init
 
 ### Vimeo private videos
 
-For videos, protected from embed by "Specific domains" you can have an issue with thumbnails download to drupal media. In this case - apply a patch for drupal core:
+For videos, protected from embed by "Specific domains" you can have an issue
+with thumbnails download to drupal media. In this case - apply a patch
+for drupal core:
 
 * _patches/OEmbed\_vimeo\_private\_videos.patch_
 
+
+### Migration notes
+If you have error:
+```
+TypeError: Argument 6 passed to __construct() must be an instance of EntityTypeManagerInterface
+```
+apply patch:
+
+* _patches/3079627-4.paragraphs.Argument-6-passed-to-construct.patch_

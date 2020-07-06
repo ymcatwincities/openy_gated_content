@@ -1,6 +1,6 @@
 <template>
   <span class="menu">
-    <a @click.prevent="logout">Sign out</a>
+    <a @click.prevent="logout" href="#">Sign out</a>
   </span>
 </template>
 

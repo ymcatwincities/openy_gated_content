@@ -1,7 +1,7 @@
 langcode: en
 status: true
 dependencies: {  }
-name: 'GC Equipment'
+name: 'Virtual YMCA Equipment'
 vid: gc_equipment
-description: 'Equipment for Open Y Gated Content'
+description: 'Equipment for Open Y Virtual YMCA'
 weight: 0

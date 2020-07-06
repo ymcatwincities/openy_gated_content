@@ -1,7 +1,7 @@
 langcode: en
 status: true
 dependencies: {  }
-name: 'GC Category'
+name: 'Virtual YMCA Category'
 vid: gc_category
-description: 'Category for Open Y Gated Content'
+description: 'Category for Open Y Virtual YMCA'
 weight: 0

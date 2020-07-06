@@ -22,8 +22,8 @@
 <script>
 import client from '@/client';
 import 'vue-lazy-youtube-video/dist/style.css';
-import VideoListing from '../components/VideoListing.vue';
-import { JsonApiCombineMixin } from '../mixins/JsonApiCombineMixin';
+import VideoListing from '@/components/video/VideoListing.vue';
+import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
 
 export default {
   name: 'CategoryPage',
@@ -53,11 +53,11 @@ export default {
   },
   methods: {
     async load() {
+      this.loading = true;
       client
         .get(`jsonapi/taxonomy_term/gc_category/${this.cid}`)
         .then((response) => {
           this.category = response.data.data;
-          console.log(this.category);
           this.loading = false;
         })
         .catch((error) => {

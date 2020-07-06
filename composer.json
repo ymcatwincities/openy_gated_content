@@ -3,7 +3,6 @@
     "description": "Open Y Gated Content",
     "type": "drupal-module",
     "require": {
-        "drupal/default_content": "*",
         "drupal/recurring_events": "*",
         "ymcatwincities/daxko_sso": "*",
         "drupal/jsonapi_image_styles": "^1.0@beta"

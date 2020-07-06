@@ -1,7 +1,7 @@
-name: Daxko Gated Content integration
+name: Daxko Virtual YMCA integration
 type: module
-description: 'Daxko integration for Gated content'
-package: Open Y Gated Content
+description: 'Daxko integration for Virtual YMCA'
+package: Open Y Virtual YMCA
 version: 0.1
 core: 8.x
 dependencies:

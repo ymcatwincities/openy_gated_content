@@ -1,7 +1,7 @@
 # Interaction Types
 openy_gc_auth.settings:
-  title: 'Gated Content settings'
+  title: 'GC auth settings'
   route_name: openy_gc_auth.settings
-  description: 'List of Gated Content authentication identity providers'
-  parent: openy_system.openy
+  description: 'List of Virtual YMCA authentication identity providers'
+  parent: openy_gated_content.settings
   weight: 20

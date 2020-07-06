@@ -1,16 +1,16 @@
 <template>
   <div class="live-stream-listing-page">
-    <LiveStreamListing :withDateFilter="true"/>
+    <EventListing :withDateFilter="true"/>
   </div>
 </template>
 
 <script>
-import LiveStreamListing from '@/components/LiveStreamListing.vue';
+import EventListing from '@/components/event/EventListing.vue';
 
 export default {
   name: 'LiveStreamListingPage',
   components: {
-    LiveStreamListing,
+    EventListing,
   },
 };
 </script>

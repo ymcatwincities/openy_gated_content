@@ -1,0 +1,58 @@
+dependencies:
+  module:
+    - openy_media_video
+  enforced:
+    module:
+      - openy_gc_demo
+id: virtual_y_media_video
+migration_tags: { }
+migration_group: virtual_y
+label: Import demo Virtual YMCA media videos
+source:
+  plugin: embedded_data
+  data_rows:
+    -
+      id: 1
+      name: 'Power Flow'
+      url: 'https://youtu.be/B2bW0DIs0hA'
+    -
+      id: 2
+      name: 'Bootcamp Challenge by Naya Cardoza'
+      url: 'https://vimeo.com/405566465'
+    -
+      id: 3
+      name: 'Vimeo test video'
+      url: 'https://vimeo.com/397814121'
+    -
+      id: 4
+      name: 'Vimeo test event'
+      url: 'https://vimeo.com/event/98281'
+  ids:
+    id:
+      type: integer
+process:
+  langcode:
+    plugin: default_value
+    source: language
+    default_value: en
+  name:
+    -
+      plugin: get
+      source: name
+  bundle:
+    -
+      plugin: default_value
+      default_value: video
+  uid:
+    -
+      plugin: default_value
+      default_value: 1
+  field_media_video_embed_field:
+    -
+      plugin: get
+      source: url
+destination:
+  plugin: 'entity:media'
+migration_dependencies:
+  required: {  }
+  optional: {  }

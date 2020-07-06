@@ -1,6 +1,6 @@
-name: Open Y Gated Content Auth
+name: Open Y Virtual YMCA Auth
 type: module
-description: 'Provides Open Y Gated Content authentication provider.'
-package: Open Y Gated Content
+description: 'Provides Open Y Virtual YMCA authentication provider.'
+package: Open Y Virtual YMCA
 version: 0.1
 core: 8.x

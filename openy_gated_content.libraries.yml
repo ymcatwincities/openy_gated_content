@@ -1,3 +1,9 @@
+styles:
+  version: 0.1
+  css:
+    theme:
+      css/styles.css: {}
+
 gated-content-vue:
   version: 0.1
   js:

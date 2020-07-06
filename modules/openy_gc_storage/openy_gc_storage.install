@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Installation file for Open Y Gated Content Storage.
+ * Installation file for Open Y Virtual YMCA Storage.
  */
 
 use Drupal\user\Entity\Role;
@@ -19,7 +19,7 @@ function openy_gc_storage_install() {
   $role_object->save();
 
   $role2_object = Role::load(RoleInterface::AUTHENTICATED_ID);
-  // Allow authenticated users access gated content entities pages.
+  // Allow authenticated users access Virtual YMCA entities pages.
   $role2_object->grantPermission('view gated content entities pages');
   $role2_object->save();
 

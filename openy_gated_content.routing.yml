@@ -1,0 +1,31 @@
+openy_gated_content.openy_config:
+  path: '/admin/virtual-y'
+  defaults:
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: 'Virtual Y'
+  requirements:
+    _permission: 'administer site configuration'
+
+openy_gated_content.taxonomy_config:
+  path: '/admin/virtual-y/taxonomy'
+  defaults:
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: 'Virtual Y Taxonomy'
+  requirements:
+    _permission: 'administer site configuration'
+
+openy_gated_content.settings:
+  path: '/admin/openy/virtual-ymca'
+  defaults:
+    _form: '\Drupal\openy_gated_content\Form\GCSettingsForm'
+    _title: 'Virtual Y settings'
+  requirements:
+    _permission: 'administer site configuration'
+
+openy_gated_content.categories:
+  path: '/api/video-categories-list'
+  defaults:
+    _controller: '\Drupal\openy_gated_content\Controller\CategoriesController::list'
+    _title: 'Virtual Y categories'
+  requirements:
+    _permission: 'access content'
