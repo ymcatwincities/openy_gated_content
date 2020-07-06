@@ -2,7 +2,6 @@
   <div class="home">
     <VideoListing :featured="true" :viewAll="true" :limit="6"/>
     <EventListing :featured="true" :viewAll="true" :limit="6"/>
-    <BlogListing :featured="false" :viewAll="true" :limit="6"/>
     <EventListing
       :title="'Virtual meetings'"
       :featured="true"
@@ -10,6 +9,7 @@
       :limit="6"
       :eventType="'virtual_meeting'"
     />
+    <BlogListing :featured="false" :viewAll="true" :limit="6"/>
   </div>
 </template>
 
