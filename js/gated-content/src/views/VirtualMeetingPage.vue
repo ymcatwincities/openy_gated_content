@@ -10,7 +10,9 @@
       }">
 
         <div class="virtual-meeting-page__link">
-          <a :href="meetingLink.uri" target="_blank" class="btn btn-lg">{{ meetingLink.title }}</a>
+          <a :href="meetingLink.uri" target="_blank" class="btn btn-lg btn-primary">
+            {{ meetingLink.title }}
+          </a>
         </div>
       </div>
       <div class="video-footer-wrapper">
