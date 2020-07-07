@@ -1,0 +1,32 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - openy_gc_demo
+id: virtual_y_paragraph_gated_content_login
+migration_tags: {  }
+migration_group: virtual_y
+label: 'Create gated_content_login for Virtual Y'
+source:
+  plugin: embedded_data
+  data_rows:
+    -
+      id: virtual_y_login_app
+  ids:
+    id:
+      type: string
+process:
+  langcode:
+    plugin: default_value
+    source: language
+    default_value: en
+  status:
+    plugin: default_value
+    default_value: 1
+  uid:
+    plugin: default_value
+    default_value: 1
+destination:
+  plugin: 'entity:paragraph'
+  default_bundle: gated_content_login
