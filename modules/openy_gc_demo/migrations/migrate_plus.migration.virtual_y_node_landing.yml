@@ -62,7 +62,7 @@ source:
             field_prgf_description:
               format: full_html
               value: |
-                <p>Find the newest Y classes and programs</p><p><a class="btn btn-default" href="#/live-stream"><span class="text">Live Streams</span></a>&nbsp; <a class="btn btn-default" href="#/categories"><span class="text">Videos</span></a></p>
+                <p>Find the newest Y classes and programs</p><p><a class="btn btn-primary" href="#/live-stream"><span class="text">Live Streams</span></a>&nbsp; <a class="btn btn-primary" href="#/categories"><span class="text">Videos</span></a></p>
       content:
         -
           bundle: gated_content
