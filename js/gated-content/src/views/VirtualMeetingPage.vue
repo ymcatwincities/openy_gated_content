@@ -66,6 +66,7 @@
         :eventType="'virtual_meeting'"
         :viewAll="true"
         :limit="6"
+        :msg="'Virtual Meetings not found.'"
       />
     </template>
   </div>

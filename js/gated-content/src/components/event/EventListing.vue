@@ -29,9 +29,7 @@
           />
       </div>
     </template>
-    <div v-else class="empty-listing">
-      Live streams not found.
-    </div>
+    <div v-else class="empty-listing">{{ msg }}</div>
   </div>
 </template>
 
@@ -77,7 +75,10 @@ export default {
       type: Number,
       default: 0,
     },
-    msg: String,
+    msg: {
+      String,
+      default: 'Events not found.',
+    },
   },
   data() {
     return {
