@@ -1,7 +1,7 @@
 <template>
   <div class="dropdown add-to-calendar" v-if="allowToShow">
     <button
-      class="btn btn-secondary dropdown-toggle"
+      class="btn btn-primary dropdown-toggle"
       type="button"
       id="dropdownMenuButton"
       data-toggle="dropdown"

@@ -8,6 +8,7 @@ dependencies:
   - drupal:migrate
   - migrate_plus:migrate_plus
   - migrate_tools:migrate_tools
+  - drupal:openy_demo_tcolor
   - drupal:jsonapi
   - drupal:openy_gated_content
   - drupal:openy_gc_storage
