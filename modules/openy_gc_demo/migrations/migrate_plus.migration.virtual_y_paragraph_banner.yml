@@ -1,0 +1,61 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - openy_gc_demo
+id: virtual_y_paragraph_banner
+migration_tags: {  }
+migration_group: virtual_y
+label: 'Create banner paragraph(s) for Virtual Y'
+migration_dependencies:
+  required:
+    - openy_demo_lp_media_image
+    - openy_demo_taxonomy_term_color
+source:
+  plugin: embedded_data
+  data_rows:
+    -
+      id: virtual_y_banner_top
+      headline: 'VIRTUAL YMCA'
+      color: 14
+      image: 1
+      description: |
+        <p>Wherever you go, the Y is there.</p>
+    -
+      id: virtual_y_banner_bottom
+      headline: 'YOUR FAVORITES AT YOUR FINGERTIPS'
+      color: 14
+      image: 2
+      description: |
+        <p>Follow classes live or replay on - demand to best fit your schedule.</p>
+  ids:
+    id:
+      type: string
+process:
+  langcode:
+    plugin: default_value
+    source: language
+    default_value: en
+  status:
+    plugin: default_value
+    default_value: 1
+  uid:
+    plugin: default_value
+    default_value: 1
+  field_prgf_headline: headline
+  field_prgf_color:
+    plugin: migration
+    migration: openy_demo_taxonomy_term_color
+    source: color
+  field_prgf_image:
+    plugin: migration
+    migration: virtual_y_media_image
+    source: image
+  field_prgf_description/value: description
+  field_prgf_description/format:
+    plugin: default_value
+    default_value: full_html
+destination:
+  plugin: 'entity:paragraph'
+  default_bundle: banner
