@@ -16,8 +16,8 @@
             <div class="video-footer__title">{{ video.attributes.title }}</div>
             <div
               v-if="description"
-              class="video-footer__description"
-                 v-html="description"
+              class="video-footer__description mb-3"
+              v-html="description"
             ></div>
             <AddToCalendar :event="event"></AddToCalendar>
           </div>
@@ -60,6 +60,7 @@
         :excluded-video-id="video.id"
         :viewAll="true"
         :limit="6"
+        :msg="'Live streams not found.'"
       />
     </template>
   </div>
