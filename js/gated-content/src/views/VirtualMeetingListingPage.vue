@@ -4,6 +4,7 @@
       :title="'Virtual meetings'"
       :eventType="'virtual_meeting'"
       :withDateFilter="true"
+      :msg="'No Virtual Meetings scheduled for this date.'"
     />
   </div>
 </template>

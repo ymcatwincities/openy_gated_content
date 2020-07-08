@@ -60,6 +60,7 @@
         :excluded-video-id="video.id"
         :viewAll="true"
         :limit="6"
+        :msg="'Live streams not found.'"
       />
     </template>
   </div>
