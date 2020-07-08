@@ -13,7 +13,7 @@ source:
   data_rows:
     -
       id: virtual_y_app_login
-      title: 'VIRTUAL YMCA'
+      title: 'VIRTUAL Y Login'
       alias: '/virtual-y-login'
       layout: one_column_clean
       header_content:
@@ -21,8 +21,7 @@ source:
           header_content_id: virtual_y_banner_top
       content:
         -
-          content_id: gated_content_login
-
+          content_id: virtual_y_landing_page_login_app
       bottom_content:
         -
           bottom_content_id: virtual_y_banner_bottom
@@ -33,7 +32,10 @@ source:
       alias: '/virtual-ymca'
       header_content:
         -
-          header_content_id: gated_content
+          header_content_id: virtual_y_small_banner
+      content:
+        -
+          content_id: virtual_y_landing_page_app
   ids:
     id:
       type: string
@@ -133,11 +135,8 @@ process:
 destination:
   plugin: 'entity:node'
   default_bundle: landing_page
-
 migration_dependencies:
   required:
-    - virtual_y_media_image
-    - openy_demo_taxonomy_term_color
     - virtual_y_paragraph_banner
     - virtual_y_paragraph_small_banner
     - virtual_y_paragraph_gated_content
