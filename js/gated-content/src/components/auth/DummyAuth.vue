@@ -4,8 +4,7 @@
       <Spinner></Spinner>
     </div>
     <template v-else>
-      <button @click.prevent="dummyLogin">Login!</button>
-      <pre>config: {{ config }}</pre>
+      <button class="gc-button" @click.prevent="dummyLogin">Enter Virtual YMCA</button>
     </template>
   </div>
 </template>
