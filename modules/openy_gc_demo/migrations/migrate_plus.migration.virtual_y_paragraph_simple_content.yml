@@ -14,6 +14,7 @@ source:
     -
       id: wherever_you_go_y_is_there
       field_prgf_description_value: |
+        <p class="text-align-center">&nbsp;</p>
         <h1 class="text-align-center">Access from anywhere, anytime</h1>
         <p class="text-align-center"><strong>Enter your email address below
         to access exclusive content made for you.</strong></p>
