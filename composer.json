@@ -1,6 +1,6 @@
 {
     "name": "ymcatwincities/openy_gated_content",
-    "description": "Open Y Gated Content",
+    "description": "Open Y Virtual Y Content",
     "type": "drupal-module",
     "require": {
         "drupal/recurring_events": "*",

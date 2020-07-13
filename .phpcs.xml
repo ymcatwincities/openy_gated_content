@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <ruleset name="openy_gated_content">
-  <description>PHP Code Sniffer configuration for Open Y Gated Content.</description>
+  <description>PHP Code Sniffer configuration for Open Y Virtual Y Content.</description>
   <arg name="colors" />
   <arg value="s" />
   <rule ref="Drupal">
