@@ -2,7 +2,7 @@ langcode: en
 status: true
 dependencies: {  }
 id: gated_content
-label: 'Gated Content'
+label: 'Virtual Y Content'
 icon_uuid: null
-description: 'Open Y Gated content'
+description: 'Open Y Virtual Y content'
 behavior_plugins: {  }
