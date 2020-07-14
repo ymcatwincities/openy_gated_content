@@ -1,4 +1,4 @@
-``# Table of contents
+# Table of contents
 
 * [Open Y Gated content](README.md)
 * [modules](modules/README.md)
