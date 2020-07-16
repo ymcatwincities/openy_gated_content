@@ -79,11 +79,11 @@ drush mim gc_auth_custom_users --sync=TRUE
 
 ### How to upload source file
 
-You can upload source file directly t0 private://gc_auth/import
-File name should be gc_auth_custom_users.csv
+You can upload source file directly to `private://gc_auth/import/gc_auth_custom_users.csv`.
 
-Or you can upload file from UI in migration group settings, for example:
-- /admin/structure/migrate/manage/gc_auth
+OR
+
+You can upload file from the Drupal UI in Migration Group settings at `/admin/structure/migrate/manage/gc_auth`.
 
 ## Notes:
 
