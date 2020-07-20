@@ -119,7 +119,7 @@ export default {
       if (this.featuredLocal) {
         params.filter.field_gc_video_featured = 1;
       }
-
+      params.filter.status = 1;
       if (this.limit !== 0) {
         params.page = {
           limit: this.limit,

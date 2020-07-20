@@ -44,7 +44,9 @@ class CategoriesController implements ContainerInjectionInterface {
   public function list() {
     $query = $this->database->select('node__field_gc_video_category', 'n');
     $query->leftJoin('taxonomy_term_data', 't', 't.tid = n.field_gc_video_category_target_id');
+    $query->leftJoin('taxonomy_term_field_data', 'tf', 't.tid = tf.tid');
     $query->condition('t.vid', 'gc_category');
+    $query->condition('tf.status', 1);
     $query->fields('t', ['uuid']);
     $query->distinct(TRUE);
     $result = $query->execute()->fetchCol();
