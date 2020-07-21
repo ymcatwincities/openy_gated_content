@@ -1,0 +1,34 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - openy_gc_demo
+id: virtual_y_paragraph_simple_content
+migration_tags: {  }
+migration_group: virtual_y
+label: 'Create simple content paragraph(s) for Virtual Y'
+source:
+  plugin: embedded_data
+  data_rows:
+    -
+      id: wherever_you_go_y_is_there
+      field_prgf_description_value: |
+        <p class="text-align-center">&nbsp;</p>
+        <h1 class="text-align-center">Access from anywhere, anytime</h1>
+        <p class="text-align-center"><strong>Enter your email address below
+        to access exclusive content made for you.</strong></p>
+        <p class="text-align-center"><strong>Not a member? Join today to
+        start experiencing the power of Virtual YMCA.</strong></p>
+        <p class="text-align-center">&nbsp;</p>
+  ids:
+    id:
+      type: string
+process:
+  field_prgf_description/value: field_prgf_description_value
+  field_prgf_description/format:
+    plugin: default_value
+    default_value: full_html
+destination:
+  plugin: 'entity:paragraph'
+  default_bundle: simple_content

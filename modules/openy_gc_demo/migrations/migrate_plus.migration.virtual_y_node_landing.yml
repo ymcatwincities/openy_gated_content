@@ -21,6 +21,8 @@ source:
           header_content_id: virtual_y_banner_top
       content:
         -
+          content_id: wherever_you_go_y_is_there
+        -
           content_id: virtual_y_landing_page_login_app
       bottom_content:
         -
@@ -107,12 +109,14 @@ process:
       target_id:
         plugin: migration
         migration:
+          - virtual_y_paragraph_simple_content
           - virtual_y_paragraph_gated_content
           - virtual_y_paragraph_gated_content_login
         source: content_id
       target_revision_id:
         plugin: migration
         migration:
+          - virtual_y_paragraph_simple_content
           - virtual_y_paragraph_gated_content
           - virtual_y_paragraph_gated_content_login
         source: content_id
@@ -141,4 +145,5 @@ migration_dependencies:
     - virtual_y_paragraph_small_banner
     - virtual_y_paragraph_gated_content
     - virtual_y_paragraph_gated_content_login
+    - virtual_y_paragraph_simple_content
   optional: {  }

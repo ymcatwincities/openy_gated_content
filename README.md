@@ -38,7 +38,7 @@ In order to use it you have to install Docksal.
 Follow the instruction below to get the working local environment that provides
 4 local websites (1 for each base theme and not yet installed Open Y):
 
-```text
+```shell script
 mkdir vymca
 cd vymca
 git clone --branch openy-gc-builds \
@@ -59,11 +59,35 @@ for drupal core:
 * _patches/OEmbed\_vimeo\_private\_videos.patch_
 
 
+### JSON API patch required for Drupal 8.7
+
+```json
+{
+  "extra": {
+    "patches": {
+      "drupal/core": {
+        "JSONAPI wont install (8.7-specific)": "https://www.drupal.org/files/issues/2019-05-23/jsonapi_2996114.patch"
+      }
+    }
+  }
+}
+```
+
 ### Migration notes
 If you have error:
 ```
 TypeError: Argument 6 passed to __construct() must be an instance of EntityTypeManagerInterface
 ```
-apply patch:
+apply patch to composer.json:
+```json
+{
+  "extra": {
+    "patches": {
+      "drupal/paragraphs": {
+        "3079627": "https://www.drupal.org/files/issues/2019-09-06/3079627-4.paragraphs.Argument-6-passed-to-construct.patch"
+      }
+    }
+  }
+}
+```
 
-* _patches/3079627-4.paragraphs.Argument-6-passed-to-construct.patch_

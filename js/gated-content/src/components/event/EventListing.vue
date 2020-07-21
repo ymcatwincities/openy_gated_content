@@ -206,6 +206,7 @@ export default {
         params.filter.field_ls_featured = 1;
       }
 
+      params.filter.status = 1;
       params.sort = {
         sortByDate: {
           path: 'date.value',
