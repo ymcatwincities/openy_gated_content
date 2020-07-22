@@ -178,6 +178,8 @@ export default {
             });
           }
           this.loading = false;
+        }).then(() => {
+          this.$tm.trackEventEntityView('series', 'virtual_meeting', this.video.attributes.drupal_internal__id);
         })
         .catch((error) => {
           this.error = true;

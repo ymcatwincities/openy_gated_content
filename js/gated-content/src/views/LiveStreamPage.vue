@@ -152,6 +152,8 @@ export default {
             });
           }
           this.loading = false;
+        }).then(() => {
+          this.$tm.trackEventEntityView('series', 'live_stream', this.video.attributes.drupal_internal__id);
         })
         .catch((error) => {
           this.error = true;
