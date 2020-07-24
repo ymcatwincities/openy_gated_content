@@ -34,8 +34,6 @@ export default {
       return this.$store.getters.authPlugin;
     },
   },
-  mounted() {
-  },
   methods: {
     loginSuccess() {
       this.$router.push({ name: 'Home' });

@@ -5,8 +5,11 @@ namespace Drupal\openy_gc_auth_custom\Plugin\rest\resource;
 use Drupal\Component\Utility\EmailValidatorInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Mail\MailManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Component\Utility\Crypt;
+use Drupal\openy_gc_auth_custom\Plugin\rest\ErrorResponseTrait;
 use Drupal\rest\ModifiedResourceResponse;
 use Drupal\rest\Plugin\ResourceBase;
 use Psr\Log\LoggerInterface;
@@ -29,6 +32,7 @@ use Symfony\Component\HttpFoundation\Request;
 class GatedContentCustomAuthentication extends ResourceBase implements ContainerFactoryPluginInterface {
 
   use StringTranslationTrait;
+  use ErrorResponseTrait;
 
   /**
    * The entity type targeted by this resource.
@@ -52,6 +56,13 @@ class GatedContentCustomAuthentication extends ResourceBase implements Container
   protected $configFactory;
 
   /**
+   * The mail manager.
+   *
+   * @var \Drupal\Core\Mail\MailManagerInterface
+   */
+  protected $mailManager;
+
+  /**
    * Constructs a GatedContentCustomAuthentication.
    *
    * @param array $configuration
@@ -70,6 +81,8 @@ class GatedContentCustomAuthentication extends ResourceBase implements Container
    *   Validates email addresses.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.
+   * @param \Drupal\Core\Mail\MailManagerInterface $mail_manager
+   *   The mail manager.
    */
   public function __construct(
     array $configuration,
@@ -79,11 +92,13 @@ class GatedContentCustomAuthentication extends ResourceBase implements Container
     array $serializer_formats,
     LoggerInterface $logger,
     EmailValidatorInterface $validator,
-    ConfigFactoryInterface $config_factory) {
+    ConfigFactoryInterface $config_factory,
+    MailManagerInterface $mail_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->entityTypeManager = $entity_type_manager;
     $this->emailValidator = $validator;
     $this->configFactory = $config_factory;
+    $this->mailManager = $mail_manager;
   }
 
   /**
@@ -98,7 +113,8 @@ class GatedContentCustomAuthentication extends ResourceBase implements Container
       $container->getParameter('serializer.formats'),
       $container->get('logger.factory')->get('rest'),
       $container->get('email.validator'),
-      $container->get('config.factory')
+      $container->get('config.factory'),
+      $container->get('plugin.manager.mail')
     );
   }
 
@@ -123,19 +139,9 @@ class GatedContentCustomAuthentication extends ResourceBase implements Container
     $provider_config = $this->configFactory->get('openy_gc_auth.provider.custom');
     if ($provider_config->get('enable_recaptcha')) {
       // Validate recaptchaToken if enabled in the provider config.
-      if (!$content['recaptchaToken']) {
-        return $this->errorResponse($this->t('ReCaptcha token required.'), 400);
-      }
-
-      $config = $this->configFactory->get('recaptcha.settings');
-      $recaptcha_secret_key = $config->get('secret_key');
-      $recaptcha = new ReCaptcha($recaptcha_secret_key, new Drupal8Post());
-      if ($config->get('verify_hostname')) {
-        $recaptcha->setExpectedHostname($_SERVER['SERVER_NAME']);
-      }
-      $resp = $recaptcha->verify($content['recaptchaToken'], $request->getClientIp());
-      if (!$resp->isSuccess()) {
-        return $this->errorResponse($this->t('ReCaptcha token invalid.'), 400);
+      $validation_result = $this->validateRecaptcha($content, $request);
+      if ($validation_result instanceof ModifiedResourceResponse) {
+        return $validation_result;
       }
     }
 
@@ -154,6 +160,16 @@ class GatedContentCustomAuthentication extends ResourceBase implements Container
       ]), 404);
     }
     $user = reset($gc_users);
+
+    if ($provider_config->get('enable_email_verification')) {
+      if (!$user->isActive()) {
+        $verification_result = $this->sendEmailVerification($user, $content, $request, $provider_config);
+        if ($verification_result instanceof ModifiedResourceResponse) {
+          return $verification_result;
+        }
+      }
+    }
+
     // User can login.
     return new ModifiedResourceResponse([
       'message' => 'success',
@@ -167,21 +183,56 @@ class GatedContentCustomAuthentication extends ResourceBase implements Container
   }
 
   /**
-   * Error Response.
-   *
-   * @param string $message
-   *   The error message.
-   * @param int $status
-   *   The HTTP status code for error.
-   *
-   * @return \Drupal\rest\ModifiedResourceResponse
-   *   The HTTP response object.
+   * Helper function for reCaptcha validation.
    */
-  protected function errorResponse($message, $status) {
+  protected function validateRecaptcha($content, $request) {
+    if (!$content['recaptchaToken']) {
+      return $this->errorResponse($this->t('ReCaptcha token required.'), 400);
+    }
+
+    $config = $this->configFactory->get('recaptcha.settings');
+    $recaptcha_secret_key = $config->get('secret_key');
+    $recaptcha = new ReCaptcha($recaptcha_secret_key, new Drupal8Post());
+    if ($config->get('verify_hostname')) {
+      $recaptcha->setExpectedHostname($_SERVER['SERVER_NAME']);
+    }
+    $resp = $recaptcha->verify($content['recaptchaToken'], $request->getClientIp());
+    if (!$resp->isSuccess()) {
+      return $this->errorResponse($this->t('ReCaptcha token invalid.'), 400);
+    }
+
+    return TRUE;
+  }
+
+  /**
+   * Helper function for verification email sending.
+   */
+  protected function sendEmailVerification($user, $content, $request, $provider_config) {
+    $request_time = $request->server->get('REQUEST_TIME');
+    $token = Crypt::hashBase64($content['email'] . $request_time);
+    // Generate confirmation link for application, example:
+    // https://{HOST}/virtual-ymca#/login/{ID}/{TOKEN}/confirm
+    $path = implode('/', [
+      $request->getSchemeAndHttpHost() . $content['path'] . '#/login',
+      $user->id(),
+      $token,
+      'confirm',
+    ]);
+
+    $user->setToken($token)
+      ->setVerificationTime($request_time)
+      ->save();
+
+    $params = [
+      'message' => $provider_config->get('email_verification_text') . '<br>',
+    ];
+    $params['message'] .= '<a href="' . $path . '">Click to verify your email</a>';
+    $this->mailManager->mail('openy_gc_auth_custom', 'email_verification', $content['email'], 'en', $params, NULL, TRUE);
+
     return new ModifiedResourceResponse([
-      'message' => $message,
-      'status' => 'invalid',
-    ], $status);
+      'message' => $provider_config->get('verification_message'),
+      'status' => 'Accepted',
+    ], 202);
   }
 
 }

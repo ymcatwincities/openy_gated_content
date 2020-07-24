@@ -1,17 +1,20 @@
 <template>
-  <div>
+  <div class="container">
+    <div v-if="message" class="alert alert-info">
+      <span>{{ message }}</span>
+    </div>
     <div v-if="loading" class="spinner-center">
       <Spinner></Spinner>
     </div>
     <form v-else class="plugin-custom">
-      <div v-if="this.error" class="alert alert-danger">
-        <span>{{ this.error }}</span>
+      <div v-if="error" class="alert alert-danger">
+        <span>{{ error }}</span>
       </div>
       <div class="form-group">
         <label for="auth-email">Email Address</label>
         <input
           v-model="form.email"
-          placeholder="jondoe@example.com"
+          placeholder="johndoe@example.com"
           type="email"
           id="auth-email"
           class="form-control"
@@ -42,8 +45,10 @@ export default {
       form: {
         email: '',
         recaptchaToken: '',
+        path: '',
       },
       error: '',
+      message: '',
     };
   },
   computed: {
@@ -55,10 +60,24 @@ export default {
     async login() {
       this.loading = true;
       this.error = '';
+      const appUrl = this.$store.getters.getAppUrl;
+      if (appUrl !== undefined && appUrl.length > 0) {
+        this.form.path = appUrl;
+      } else {
+        this.form.path = window.location.pathname;
+      }
       await this.$store
         .dispatch('customAuthorize', this.form)
-        .then(() => {
-          const appUrl = this.$store.getters.getAppUrl;
+        .then((response) => {
+          if (response.status === 202) {
+            this.message = response.data.message;
+            this.form.email = '';
+            if (this.config.enableRecaptcha) {
+              this.$refs.recaptcha.reset();
+            }
+            this.loading = false;
+            return;
+          }
           if (appUrl !== undefined && appUrl.length > 0) {
             window.location = appUrl;
           } else {
@@ -66,16 +85,13 @@ export default {
           }
         })
         .catch((error) => {
-          this.loading = false;
           this.error = error.response ? error.response.data.message : 'Something went wrong!';
-          console.log(this.$refs);
-          this.$refs.recaptcha.reset();
+          if (this.config.enableRecaptcha) {
+            this.$refs.recaptcha.reset();
+          }
+          this.loading = false;
         });
     },
   },
 };
 </script>
-
-<style scoped>
-
-</style>

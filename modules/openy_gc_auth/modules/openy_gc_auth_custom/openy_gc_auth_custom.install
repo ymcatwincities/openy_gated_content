@@ -5,6 +5,7 @@
  * Installation file.
  */
 
+use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\user\Entity\Role;
 use Drupal\user\RoleInterface;
 
@@ -20,6 +21,7 @@ function openy_gc_auth_custom_install() {
 
   $permissions = [
     'restful post openy_gc_auth_custom',
+    'restful post openy_gc_auth_custom_confirm',
   ];
 
   foreach ($permissions as $permission) {
@@ -28,5 +30,46 @@ function openy_gc_auth_custom_install() {
       $role->save();
     }
   }
+}
 
+/**
+ * Add new base fields definitions for the gc_auth_custom_user.
+ */
+function openy_gc_auth_custom_update_8001() {
+  $bundle_of = 'gc_auth_custom_user';
+  $definition_manager = \Drupal::entityDefinitionUpdateManager();
+  $status = BaseFieldDefinition::create('boolean')
+    ->setLabel(t('User status'))
+    ->setDescription(t('Whether the gc_auth_custom_user is verified or blocked.'))
+    ->setDefaultValue(FALSE);
+  $verification_time = BaseFieldDefinition::create('timestamp')
+    ->setLabel(t('Verification time'))
+    ->setDescription(t('The time at which the verification email was sent.'))
+    ->setDefaultValue(NULL);
+  $verification_token = BaseFieldDefinition::create('string')
+    ->setLabel(t('Verification token'))
+    ->setDescription(t('The token that gc_auth_custom_user for account activation.'))
+    ->setDefaultValue(NULL);
+
+  // Install the new definitions.
+  $definition_manager->installFieldStorageDefinition('status', $bundle_of, $bundle_of, $status);
+  $definition_manager->installFieldStorageDefinition('verification_time', $bundle_of, $bundle_of, $verification_time);
+  $definition_manager->installFieldStorageDefinition('verification_token', $bundle_of, $bundle_of, $verification_token);
+}
+
+/**
+ * Set proper permissions to access the new rest endpoint.
+ */
+function openy_gc_auth_custom_update_8002() {
+  $config_dir = drupal_get_path('module', 'openy_gc_auth_custom');
+  $config_dir .= '/config/install/';
+  // Import new configuration.
+  $config_importer = \Drupal::service('openy_upgrade_tool.importer');
+  $config_importer->setDirectory($config_dir);
+  $config_importer->importConfigs([
+    'rest.resource.openy_gc_auth_custom_confirm',
+  ]);
+
+  // Set proper permissions to access the new endpoint.
+  openy_gc_auth_custom_install();
 }

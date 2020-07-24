@@ -11,3 +11,4 @@ dependencies:
   - drupal:recaptcha
   - drupal:rest
   - drupal:openy_gc_auth
+  - drupal:openy_upgrade_tool
