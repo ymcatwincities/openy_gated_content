@@ -1,5 +1,0 @@
-entity.log_entity.add_form:
-  route_name: entity.log_entity.add_form
-  title: 'Add Log entity'
-  appears_on:
-    - entity.log_entity.collection

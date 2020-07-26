@@ -6,9 +6,3 @@ entity.log_entity.collection:
   description: 'List Log entity entities'
   parent: system.admin_structure
   weight: 100
-
-log_entity.admin.structure.settings:
-  title: 'Log entity settings'
-  description: 'Configure Log entity entities'
-  route_name: log_entity.settings
-  parent: system.admin_structure
