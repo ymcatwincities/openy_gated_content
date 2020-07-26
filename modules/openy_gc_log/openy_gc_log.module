@@ -1,0 +1,40 @@
+<?php
+
+/**
+ * @file
+ * Contains openy_gc_log.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements template_preprocess_paragraph().
+ *
+ * @param array $variables
+ */
+function openy_gc_log_preprocess_paragraph(&$variables) {
+  /** @var \Drupal\paragraphs\Entity\Paragraph $paragraph */
+  $paragraph = $variables['paragraph'];
+
+  if (!in_array($paragraph->bundle(), ['gated_content', 'gated_content_login'])) {
+    return;
+  }
+
+  $variables['#attached']['library'][] = 'openy_gc_log/logger';
+}
+
+/**
+ * Implements hook_help().
+ */
+function openy_gc_log_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the openy_gc_log module.
+    case 'help.page.openy_gc_log':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Virtual Y Log') . '</p>';
+      return $output;
+
+    default:
+  }
+}

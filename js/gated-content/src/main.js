@@ -3,9 +3,9 @@ import App from './GatedContent.vue';
 import router from './router';
 import store from './store';
 import filters from './filters';
-import Telemetry from './plugins/telemetry';
+import Log from './plugins/log';
 
-Vue.use(Telemetry);
+Vue.use(Log);
 
 Vue.config.productionTip = false;
 

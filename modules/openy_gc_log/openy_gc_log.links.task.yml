@@ -1,0 +1,21 @@
+# Log entity routing definition
+log_entity.settings_tab:
+  route_name: log_entity.settings
+  title: 'Settings'
+  base_route: log_entity.settings
+
+entity.log_entity.canonical:
+  route_name: entity.log_entity.canonical
+  base_route: entity.log_entity.canonical
+  title: 'View'
+
+entity.log_entity.edit_form:
+  route_name: entity.log_entity.edit_form
+  base_route: entity.log_entity.canonical
+  title: 'Edit'
+
+entity.log_entity.delete_form:
+  route_name:  entity.log_entity.delete_form
+  base_route:  entity.log_entity.canonical
+  title: Delete
+  weight: 10
