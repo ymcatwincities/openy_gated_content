@@ -460,7 +460,7 @@ display:
           expose:
             operator_id: created_op
             label: Created
-            description: ''
+            description: 'Format: YYYY-MM-DD HH:MM:SS'
             use_operator: false
             operator: created_op
             operator_limit_selection: false
