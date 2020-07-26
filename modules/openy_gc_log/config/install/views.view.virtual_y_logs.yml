@@ -581,13 +581,13 @@ display:
             default_group_multiple: {  }
             group_items:
               1:
-                title: Login
+                title: userLoggedIn
                 operator: contains
-                value: login
+                value: userLoggedIn
               2:
-                title: View
+                title: entityView
                 operator: contains
-                value: view
+                value: entityView
               3:
                 title: ''
                 operator: contains
@@ -695,21 +695,21 @@ display:
             default_group_multiple: {  }
             group_items:
               1:
-                title: Video
+                title: 'Virtual Y Video'
                 operator: contains
-                value: video
+                value: gc_video
               2:
-                title: Blog
+                title: 'Virtual Y Blog'
                 operator: contains
-                value: blog
+                value: vy_blog_post
               3:
-                title: 'Live Stream'
+                title: 'Virtual Y Live Stream'
                 operator: contains
                 value: live_stream
               4:
-                title: 'Virtual Meeting'
+                title: 'Virtual Y Virtual Meeting'
                 operator: contains
-                value: virtual_meetings
+                value: virtual_meeting
           entity_type: log_entity
           entity_field: bundle
           plugin_id: string
