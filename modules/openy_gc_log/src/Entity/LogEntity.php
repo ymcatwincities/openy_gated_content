@@ -72,8 +72,6 @@ class LogEntity extends ContentEntityBase implements LogEntityInterface {
 
   /**
    * @param $fields
-   *
-   * @return mixed
    */
   public static function defineEmailField(array &$fields) {
     $fields['email'] = BaseFieldDefinition::create('string')
@@ -100,8 +98,6 @@ class LogEntity extends ContentEntityBase implements LogEntityInterface {
 
   /**
    * @param $fields
-   *
-   * @return mixed
    */
   public static function defineEventTypeField(array &$fields) {
     $fields['event_type'] = BaseFieldDefinition::create('string')
@@ -128,8 +124,6 @@ class LogEntity extends ContentEntityBase implements LogEntityInterface {
 
   /**
    * @param $fields
-   *
-   * @return mixed
    */
   public static function defineEntityTypeField(array &$fields) {
     $fields['entity_type'] = BaseFieldDefinition::create('string')
@@ -156,8 +150,6 @@ class LogEntity extends ContentEntityBase implements LogEntityInterface {
 
   /**
    * @param $fields
-   *
-   * @return mixed
    */
   public static function defineBundleField(array &$fields) {
     $fields['bundle'] = BaseFieldDefinition::create('string')
@@ -184,8 +176,6 @@ class LogEntity extends ContentEntityBase implements LogEntityInterface {
 
   /**
    * @param $fields
-   *
-   * @return mixed
    */
   public static function defineEntityIdField(array &$fields) {
     $fields['entity_id'] = BaseFieldDefinition::create('string')
@@ -212,8 +202,6 @@ class LogEntity extends ContentEntityBase implements LogEntityInterface {
 
   /**
    * @param $fields
-   *
-   * @return mixed
    */
   public static function definePayloadField(array &$fields) {
     $fields['payload'] = BaseFieldDefinition::create('string')
@@ -229,7 +217,7 @@ class LogEntity extends ContentEntityBase implements LogEntityInterface {
   /**
    * @param $fields
    *
-   * @return mixed
+
    */
   public static function defineCreatedField(array &$fields) {
     $fields['created'] = BaseFieldDefinition::create('created')
