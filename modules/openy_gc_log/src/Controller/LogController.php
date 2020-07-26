@@ -42,26 +42,25 @@ class LogController extends ControllerBase {
    */
   public function index(Request $request) {
     try {
-//      $log = new LogEntity([], 'log_entity');
-//      $log->set('email', 'test@mail.com');
-//      $log->set('event_type', 'ViewEvent');
-//      $log->set('entity_type', 'node');
-//      $log->set('bundle', 'vblog');
-//      $log->set('entity_id', '5');
-//      $log->save();
+      $content = $request->getContent();
+      if ($content) {
+        $params = json_decode($content, TRUE);
 
-      $data = $request->request->all();
-      $log = new LogEntity($data, 'log_entity');
-      $log->setCreatedTime(time());
-      $log->save();
+        $log = new LogEntity([], 'log_entity');
+        foreach ($params as $param => $value) {
+          $log->set($param, $value);
+        }
+        $log->setCreatedTime(time());
+        $log->save();
+      }
 
       return new AjaxResponse([
-        'status' => 'ok',
+        'status' => 'ok'
       ]);
     } catch (\Exception $e) {
       $this->logger->error($e->getMessage());
       return new AjaxResponse([
-        'status' => $e->getMessage()
+        'status' => 'error'
       ], AjaxResponse::HTTP_INTERNAL_SERVER_ERROR);
     }
   }
