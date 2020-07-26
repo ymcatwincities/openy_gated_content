@@ -1,7 +1,14 @@
 logger:
   js:
-    js/logger/dist/logger.bundle.min.js: {}
+    js/logger/dist/logger.bundle.min.js: { minified: true }
   dependencies:
     - core/jquery
     - core/drupalSettings
     - openy_system/axios
+
+datepicker:
+  js:
+    js/datepicker.behaviors.js : {}
+  dependencies:
+    - core/jquery
+    - core/jquery.ui.datepicker

@@ -23,6 +23,14 @@ function openy_gc_log_preprocess_paragraph(&$variables) {
   $variables['#attached']['library'][] = 'openy_gc_log/logger';
 }
 
+function openy_gc_log_preprocess_views_view(&$variables) {
+  if ($variables['view']->storage->id() !== 'virtual_y_logs') {
+    return;
+  }
+
+  $variables['#attached']['library'][] = 'openy_gc_log/datepicker';
+}
+
 /**
  * Implements hook_help().
  */
