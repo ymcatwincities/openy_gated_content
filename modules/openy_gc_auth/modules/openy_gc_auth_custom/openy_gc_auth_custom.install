@@ -13,23 +13,7 @@ use Drupal\user\RoleInterface;
  * Implements hook_install().
  */
 function openy_gc_auth_custom_install() {
-  // Set proper permissions to access the endpoint.
-  $roles = Role::loadMultiple([
-    RoleInterface::ANONYMOUS_ID,
-    RoleInterface::AUTHENTICATED_ID,
-  ]);
-
-  $permissions = [
-    'restful post openy_gc_auth_custom',
-    'restful post openy_gc_auth_custom_confirm',
-  ];
-
-  foreach ($permissions as $permission) {
-    foreach ($roles as $role) {
-      $role->grantPermission($permission);
-      $role->save();
-    }
-  }
+  _update_user_permissions();
 }
 
 /**
@@ -71,6 +55,25 @@ function openy_gc_auth_custom_update_8002() {
     'views.view.virtual_y_users',
   ]);
 
-  // Set proper permissions to access the new endpoint.
-  openy_gc_auth_custom_install();
+  _update_user_permissions();
+}
+
+/**
+ * Set proper permissions to access the rest endpoints.
+ */
+function _update_user_permissions() {
+  $roles = Role::loadMultiple([
+    RoleInterface::ANONYMOUS_ID,
+    RoleInterface::AUTHENTICATED_ID,
+  ]);
+  $permissions = [
+    'restful post openy_gc_auth_custom',
+    'restful post openy_gc_auth_custom_confirm',
+  ];
+  foreach ($permissions as $permission) {
+    foreach ($roles as $role) {
+      $role->grantPermission($permission);
+      $role->save();
+    }
+  }
 }

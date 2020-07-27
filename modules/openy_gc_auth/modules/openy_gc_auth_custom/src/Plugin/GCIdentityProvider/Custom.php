@@ -17,6 +17,8 @@ use Drupal\openy_gc_auth\GCIdentityProviderPluginBase;
  */
 class Custom extends GCIdentityProviderPluginBase {
 
+  const DEFAULT_LINK_LIFE_TIME = 14400;
+
   /**
    * {@inheritdoc}
    */
@@ -26,7 +28,7 @@ class Custom extends GCIdentityProviderPluginBase {
       'api_endpoint' => '/openy-gc-auth/provider/custom/login',
       'enable_email_verification' => TRUE,
       'email_verification_api_endpoint' => '/openy-gc-auth/provider/custom/login-by-link',
-      'email_verification_link_life_time' => 14400,
+      'email_verification_link_life_time' => self::DEFAULT_LINK_LIFE_TIME,
       'email_verification_text' => 'Hello! <br> You’re just one step away from accessing your Virtual YMCA. Please open the link below to begin enjoying YMCA content made exclusively for members like you.',
       'verification_message' => 'We have sent a verification link to the email address you provided. Please open this link and activate your account. If you do not receive an email, please try again or contact us at XXX-XXX-XXXX to ensure we have the correct email on file for your membership.',
     ];
@@ -139,7 +141,6 @@ class Custom extends GCIdentityProviderPluginBase {
       $this->configuration['enable_email_verification'] = $form_state->getValue('enable_email_verification');
       $this->configuration['email_verification_api_endpoint'] = $form_state->getValue('email_verification_api_endpoint');
       $this->configuration['email_verification_link_life_time'] = $form_state->getValue('email_verification_link_life_time');
-      // TODO: check that text_format works on submit.
       $this->configuration['email_verification_text'] = !empty($form_state->getValue('email_verification_text')) ? $form_state->getValue('email_verification_text')['value'] : '';
       $this->configuration['verification_message'] = !empty($form_state->getValue('verification_message')) ? $form_state->getValue('verification_message')['value'] : '';
       parent::submitConfigurationForm($form, $form_state);
