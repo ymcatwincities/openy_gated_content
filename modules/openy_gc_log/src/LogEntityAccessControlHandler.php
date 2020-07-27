@@ -28,7 +28,6 @@ class LogEntityAccessControlHandler extends EntityAccessControlHandler {
           return AccessResult::allowedIfHasPermission($account, 'view unpublished log entity entities');
         }
 
-
         return AccessResult::allowedIfHasPermission($account, 'view published log entity entities');
 
       case 'update':
@@ -50,6 +49,5 @@ class LogEntityAccessControlHandler extends EntityAccessControlHandler {
   protected function checkCreateAccess(AccountInterface $account, array $context, $entity_bundle = NULL) {
     return AccessResult::allowedIfHasPermission($account, 'add log entity entities');
   }
-
 
 }

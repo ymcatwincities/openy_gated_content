@@ -7,7 +7,7 @@ use Drupal\Core\TypedData\ComputedItemListTrait;
 use Drupal\openy_gc_log\Entity\LogEntityInterface;
 
 /**
- * Class PayloadFieldItemList
+ * Class PayloadFieldItemList.
  *
  * Computed field for LogEntity.
  * Composed from event_type related fields.
@@ -19,6 +19,8 @@ class PayloadFieldItemList extends FieldItemList {
   use ComputedItemListTrait;
 
   /**
+   * Compute value.
+   *
    * @inheritDoc
    */
   protected function computeValue() {

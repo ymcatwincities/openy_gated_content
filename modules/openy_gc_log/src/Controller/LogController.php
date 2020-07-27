@@ -15,11 +15,17 @@ use Symfony\Component\HttpFoundation\Request;
 class LogController extends ControllerBase {
 
   /**
+   * Logger channel.
+   *
    * @var \Drupal\Core\Logger\LoggerChannelInterface
    */
   protected $logger;
 
   /**
+   * Constructor.
+   *
+   * Logger Factory.
+   *
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $loggerFactory
    */
   public function __construct(LoggerChannelFactoryInterface $loggerFactory) {
@@ -34,10 +40,11 @@ class LogController extends ControllerBase {
       $container->get('logger.factory')
     );
   }
+
   /**
    * Index.
    *
-   * @return AjaxResponse
+   * @return \Drupal\Core\Ajax\AjaxResponse
    *   Return status
    */
   public function index(Request $request) {
@@ -55,12 +62,13 @@ class LogController extends ControllerBase {
       }
 
       return new AjaxResponse([
-        'status' => 'ok'
+        'status' => 'ok',
       ]);
-    } catch (\Exception $e) {
+    }
+    catch (\Exception $e) {
       $this->logger->error($e->getMessage());
       return new AjaxResponse([
-        'status' => 'error'
+        'status' => 'error',
       ], AjaxResponse::HTTP_INTERNAL_SERVER_ERROR);
     }
   }

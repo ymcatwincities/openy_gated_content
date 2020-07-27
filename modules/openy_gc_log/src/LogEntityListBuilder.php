@@ -4,7 +4,6 @@ namespace Drupal\openy_gc_log;
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityListBuilder;
-use Drupal\Core\Link;
 
 /**
  * Defines a class to build a listing of Log entity entities.
