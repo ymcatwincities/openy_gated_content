@@ -23,6 +23,8 @@ class LogEntityViewsData extends EntityViewsData {
   }
 
   /**
+   * Promote "Payload" entity computed field to Views Fields.
+   *
    * @param array $data
    */
   public function preparePayloadViewsData(array &$data) {
@@ -31,7 +33,7 @@ class LogEntityViewsData extends EntityViewsData {
       'field' => [
         'id' => 'field',
         'default_formatter' => 'string',
-        'field_name' => 'payload'
+        'field_name' => 'payload',
       ],
     ];
   }
