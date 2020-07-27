@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div v-if="message" class="alert alert-info">
-      <span>{{ message }}</span>
+      <span v-html="message"></span>
     </div>
     <div v-if="loading" class="spinner-center">
       <Spinner></Spinner>

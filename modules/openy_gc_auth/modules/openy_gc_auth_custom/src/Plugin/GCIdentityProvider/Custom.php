@@ -103,7 +103,8 @@ class Custom extends GCIdentityProviderPluginBase {
     $form['verification']['email_verification_text'] = [
       '#title' => $this->t('Email verification text'),
       '#description' => $this->t('This text will be used in the email.'),
-      '#type' => 'textarea',
+      '#type' => 'text_format',
+      '#format' => 'full_html',
       '#default_value' => $config['email_verification_text'],
       '#required' => TRUE,
     ];
@@ -111,7 +112,8 @@ class Custom extends GCIdentityProviderPluginBase {
     $form['verification']['verification_message'] = [
       '#title' => $this->t('Verification message'),
       '#description' => $this->t('This text will be displayed in the application after unverified user tried to login.'),
-      '#type' => 'textarea',
+      '#type' => 'text_format',
+      '#format' => 'full_html',
       '#default_value' => $config['verification_message'],
       '#required' => TRUE,
     ];
@@ -129,8 +131,9 @@ class Custom extends GCIdentityProviderPluginBase {
       $this->configuration['enable_email_verification'] = $form_state->getValue('enable_email_verification');
       $this->configuration['email_verification_api_endpoint'] = $form_state->getValue('email_verification_api_endpoint');
       $this->configuration['email_verification_link_life_time'] = $form_state->getValue('email_verification_link_life_time');
-      $this->configuration['email_verification_text'] = $form_state->getValue('email_verification_text');
-      $this->configuration['verification_message'] = $form_state->getValue('verification_message');
+      // TODO: check that text_format works on submit.
+      $this->configuration['email_verification_text'] = !empty($form_state->getValue('email_verification_text')) ? $form_state->getValue('email_verification_text')['value'] : '';
+      $this->configuration['verification_message'] = !empty($form_state->getValue('verification_message')) ? $form_state->getValue('verification_message')['value'] : '';
       parent::submitConfigurationForm($form, $form_state);
     }
   }
