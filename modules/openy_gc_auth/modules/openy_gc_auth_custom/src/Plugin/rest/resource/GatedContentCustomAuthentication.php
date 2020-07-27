@@ -226,7 +226,7 @@ class GatedContentCustomAuthentication extends ResourceBase implements Container
     $params = [
       'message' => $provider_config->get('email_verification_text') . '<br>',
     ];
-    $params['message'] .= '<a href="' . $path . '">Click to verify your email</a>';
+    $params['message'] .= 'Click to verify your email: ' . $path;
     $this->mailManager->mail('openy_gc_auth_custom', 'email_verification', $content['email'], 'en', $params, NULL, TRUE);
 
     return new ModifiedResourceResponse([
