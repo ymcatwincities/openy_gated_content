@@ -21,7 +21,7 @@ const Log = {
             email: 'email' in user ? user.email : 'dummy',
             event_type: 'entityView',
             entity_type: entityType,
-            bundle: entityBundle,
+            entity_bundle: entityBundle,
             entity_id: entityId,
           },
         });
