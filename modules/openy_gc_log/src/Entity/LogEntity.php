@@ -215,9 +215,7 @@ class LogEntity extends ContentEntityBase implements LogEntityInterface {
   }
 
   /**
-   * @param $fields
-   *
-
+   * @param  $fields
    */
   public static function defineCreatedField(array &$fields) {
     $fields['created'] = BaseFieldDefinition::create('created')

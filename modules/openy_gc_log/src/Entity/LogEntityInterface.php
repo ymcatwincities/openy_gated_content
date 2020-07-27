@@ -3,8 +3,6 @@
 namespace Drupal\openy_gc_log\Entity;
 
 use Drupal\Core\Entity\ContentEntityInterface;
-use Drupal\Core\Entity\EntityChangedInterface;
-use Drupal\Core\Entity\EntityPublishedInterface;
 
 /**
  * Provides an interface for defining Log entity entities.

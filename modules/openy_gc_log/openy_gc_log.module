@@ -10,9 +10,11 @@ use Drupal\Core\Routing\RouteMatchInterface;
 /**
  * Implements HOOK_preprocess_paragraph().
  *
+ * Variables.
+ *
  * @param array $variables
  */
-function openy_gc_log_preprocess_paragraph(&$variables) {
+function openy_gc_log_preprocess_paragraph(array &$variables) {
   /** @var \Drupal\paragraphs\Entity\Paragraph $paragraph */
   $paragraph = $variables['paragraph'];
 
@@ -24,11 +26,13 @@ function openy_gc_log_preprocess_paragraph(&$variables) {
 }
 
 /**
- * Implemets HOOK_preprocess_views_view().
+ * Implements HOOK_preprocess_views_view().
  *
- * @param $variables
+ * Variables.
+ *
+ * @param array $variables
  */
-function openy_gc_log_preprocess_views_view(&$variables) {
+function openy_gc_log_preprocess_views_view(array &$variables) {
   if ($variables['view']->storage->id() !== 'virtual_y_logs') {
     return;
   }
