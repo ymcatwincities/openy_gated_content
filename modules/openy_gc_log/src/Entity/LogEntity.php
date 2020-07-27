@@ -39,7 +39,7 @@ use Drupal\openy_gc_log\Field\PayloadFieldItemList;
  *     "email" = "email",
  *     "event_type" = "event_type",
  *     "entity_type" = "entity_type",
- *     "bundle" = "bundle",
+ *     "entity_bundle" = "entity_bundle",
  *     "entity_id" = "entity_id",
  *     "payload" = "payload",
  *   },
@@ -145,15 +145,15 @@ class LogEntity extends ContentEntityBase implements LogEntityInterface {
       ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE)
-      ->setRequired(TRUE);
+      ->setRequired(FALSE);
   }
 
   /**
    * @param $fields
    */
   public static function defineBundleField(array &$fields) {
-    $fields['bundle'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('Bundle'))
+    $fields['entity_bundle'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Entity Bundle'))
       ->setDescription(t('The name of the Log entity entity.'))
       ->setSettings([
         'max_length' => 50,
@@ -171,7 +171,7 @@ class LogEntity extends ContentEntityBase implements LogEntityInterface {
       ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE)
-      ->setRequired(TRUE);
+      ->setRequired(FALSE);
   }
 
   /**
@@ -197,7 +197,7 @@ class LogEntity extends ContentEntityBase implements LogEntityInterface {
       ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE)
-      ->setRequired(TRUE);
+      ->setRequired(FALSE);
   }
 
   /**
@@ -238,6 +238,10 @@ class LogEntity extends ContentEntityBase implements LogEntityInterface {
   public function setCreatedTime($timestamp) {
     $this->set('created', $timestamp);
     return $this;
+  }
+
+  public function isPublished() {
+    return TRUE;
   }
 
 }

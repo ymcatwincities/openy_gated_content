@@ -76,7 +76,7 @@ display:
             email: email
             event_type: event_type
             entity_type: entity_type
-            bundle: bundle
+            entity_bundle: entity_bundle
             id: id
             operations: operations
           info:
@@ -101,7 +101,7 @@ display:
               separator: ''
               empty_column: false
               responsive: ''
-            bundle:
+            entity_bundle:
               sortable: false
               default_sort_order: asc
               align: ''
@@ -705,10 +705,10 @@ display:
           entity_type: log_entity
           entity_field: entity_type
           plugin_id: string
-        bundle:
-          id: bundle
+        entity_bundle:
+          id: entity_bundle
           table: log_entity
-          field: bundle
+          field: entity_bundle
           relationship: none
           group_type: group
           admin_label: ''
@@ -724,7 +724,7 @@ display:
             operator: bundle_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: bundle
+            identifier: entity_bundle
             required: false
             remember: false
             multiple: false
@@ -739,7 +739,7 @@ display:
           group_info:
             label: Bundle
             description: ''
-            identifier: bundle
+            identifier: entity_bundle
             optional: true
             widget: select
             multiple: false
@@ -764,7 +764,7 @@ display:
                 operator: contains
                 value: virtual_meeting
           entity_type: log_entity
-          entity_field: bundle
+          entity_field: entity_bundle
           plugin_id: string
         entity_id:
           id: entity_id

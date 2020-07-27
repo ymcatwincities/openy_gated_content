@@ -29,7 +29,7 @@ class PayloadFieldItemList extends FieldItemList {
     $eventType = $log->get('event_type')->value;
     if ($eventType === LogEntityInterface::EVENT_TYPE_ENTITY_VIEW) {
       $entityType = $log->get('entity_type')->value;
-      $bundle = $log->get('bundle')->value;
+      $bundle = $log->get('entity_bundle')->value;
       $entityId = $log->get('entity_id')->value;
 
       $value = "$entityType:$bundle/$entityId";
