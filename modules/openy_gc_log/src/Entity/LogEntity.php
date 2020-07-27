@@ -35,10 +35,6 @@ use Drupal\openy_gc_log\Field\PayloadFieldItemList;
  *     "id" = "id",
  *     "email" = "email",
  *     "event_type" = "event_type",
- *     "entity_type" = "entity_type",
- *     "entity_bundle" = "entity_bundle",
- *     "entity_id" = "entity_id",
- *     "payload" = "payload",
  *   },
  *   links = {
  *     "delete-form" = "/admin/structure/log_entity/{log_entity}/delete",
