@@ -1,6 +1,6 @@
 logger:
   js:
-    js/logger/dist/logger.bundle.min.js: { minified: true }
+    js/logger.behaviors.js: {}
   dependencies:
     - core/jquery
     - core/drupalSettings
