@@ -5,8 +5,19 @@
     "require": {
         "drupal/recurring_events": "*",
         "ymcatwincities/daxko_sso": "*",
-        "drupal/jsonapi_image_styles": "^1.0@beta"
+        "drupal/jsonapi_image_styles": "^1.0@beta",
+        "drupal/file_entity": "*",
+        "drupal/csv_serialization": "1.4",
+        "ext-json": "*",
+        "ext-zlib": "*"
     },
     "license": "GPL-2.0+",
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "extra": {
+        "patches": {
+            "drupal/csv_serialization": {
+                "Option for CSV Encoder to skip preparing and outputting the header": "https://www.drupal.org/files/issues/2018-08-10/csv_serliazation-2854087-skip-headers.patch"
+            }
+        }
+    }
 }
