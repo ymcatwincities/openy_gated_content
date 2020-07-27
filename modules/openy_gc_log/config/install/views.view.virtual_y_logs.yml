@@ -691,11 +691,11 @@ display:
             default_group_multiple: {  }
             group_items:
               1:
-                title: Node
+                title: Video/Blog
                 operator: contains
                 value: node
               2:
-                title: Series
+                title: Videoconference/Online Translation
                 operator: contains
                 value: series
               3:
