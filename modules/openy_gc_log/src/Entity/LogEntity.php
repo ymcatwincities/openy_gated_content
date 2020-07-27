@@ -253,6 +253,12 @@ class LogEntity extends ContentEntityBase implements LogEntityInterface {
     return $this;
   }
 
+  /**
+   * Check is published.
+   *
+   * @return bool
+   *   Boolean
+   */
   public function isPublished() {
     return TRUE;
   }
