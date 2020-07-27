@@ -1,0 +1,8 @@
+
+# Log entity menu items definition
+openy_gated_content.logs:
+  title: 'Logs'
+  route_name: view.virtual_y_logs.page_1
+  description: 'List Log entity entities'
+  parent: openy_gated_content.openy
+  weight: 100

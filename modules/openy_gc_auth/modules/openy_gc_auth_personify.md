@@ -1,6 +1,6 @@
-# Open Y Gated Content Personify SSO Auth.
+# Open Y Virtual Y Content Personify SSO Auth.
 
-Provides Open Y Gated Content Personify SSO authentication provider
+Provides Open Y Virtual Y Content Personify SSO authentication provider
 based on Personify module.
 
 ## Integration with Personify

@@ -15,7 +15,7 @@ id: paragraph.gated_content_login.field_link_to_gated_content_app
 field_name: field_link_to_gated_content_app
 entity_type: paragraph
 bundle: gated_content_login
-label: 'Link to Gated Content App'
+label: 'Link to Virtual Y Content App'
 description: 'The page user sent after signed in.'
 required: true
 translatable: false

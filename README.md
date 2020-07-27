@@ -1,4 +1,4 @@
-# Open Y Gated content
+# Open Y Virtual Y content
 
 ## Development
 
