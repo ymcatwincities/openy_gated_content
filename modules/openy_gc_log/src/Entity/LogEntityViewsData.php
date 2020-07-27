@@ -26,6 +26,7 @@ class LogEntityViewsData extends EntityViewsData {
    * Promote "Payload" entity computed field to Views Fields.
    *
    * @param array $data
+   *   Data.
    */
   public function preparePayloadViewsData(array &$data) {
     $data['log_entity']['payload'] = [

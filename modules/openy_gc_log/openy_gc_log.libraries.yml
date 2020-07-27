@@ -1,4 +1,5 @@
 logger:
+  version: 0.1
   js:
     js/logger.behaviors.js: {}
   dependencies:
@@ -7,6 +8,7 @@ logger:
     - openy_system/axios
 
 datepicker:
+  version: 0.1
   js:
     js/datepicker.behaviors.js : {}
   dependencies:
