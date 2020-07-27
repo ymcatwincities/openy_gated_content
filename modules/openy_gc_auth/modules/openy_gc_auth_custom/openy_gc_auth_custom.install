@@ -68,6 +68,7 @@ function openy_gc_auth_custom_update_8002() {
   $config_importer->setDirectory($config_dir);
   $config_importer->importConfigs([
     'rest.resource.openy_gc_auth_custom_confirm',
+    'views.view.virtual_y_users',
   ]);
 
   // Set proper permissions to access the new endpoint.

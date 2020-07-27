@@ -13,6 +13,10 @@ use Drupal\Core\Field\BaseFieldDefinition;
  *   id = "gc_auth_custom_user",
  *   label = @Translation("Auth Custom User"),
  *   base_table = "gc_auth_custom_user",
+ *   handlers = {
+ *     "views_data" = "Drupal\views\EntityViewsData",
+ *     "list_builder" = "Drupal\Core\Entity\EntityListBuilder",
+ *   },
  *   entity_keys = {
  *     "id" = "id"
  *   },

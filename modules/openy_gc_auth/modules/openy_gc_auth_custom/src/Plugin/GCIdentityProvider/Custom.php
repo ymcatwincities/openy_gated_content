@@ -47,6 +47,14 @@ class Custom extends GCIdentityProviderPluginBase {
       '#attributes' => ['class' => ['button']],
     ];
 
+    $form['users_list'] = [
+      '#title' => $this->t('Users List'),
+      '#type' => 'link',
+      '#weight' => 0,
+      '#url' => Url::fromUserInput('/admin/openy/virtual-ymca/gc-auth-settings/provider/custom/users'),
+      '#attributes' => ['class' => ['button', 'button--primary']],
+    ];
+
     $form['enable_recaptcha'] = [
       '#title' => $this->t('Enable ReCaptcha'),
       '#description' => $this->t('Set to TRUE if you want ReCaptcha validation on login form.'),
