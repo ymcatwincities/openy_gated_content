@@ -3,6 +3,8 @@ status: true
 dependencies:
   module:
     - openy_gc_log
+_core:
+  default_config_hash: H-mchKrbgMyLCwLeWlXsdWI-s3cOq_tN6HXhYV0FEyM
 id: virtual_y_logs
 label: 'Virtual Y Logs'
 module: views
@@ -448,8 +450,8 @@ display:
           field: created
           relationship: none
           group_type: group
-          admin_label: ''
-          operator: between
+          admin_label: 'Date from'
+          operator: '>='
           value:
             min: ''
             max: ''
@@ -459,13 +461,64 @@ display:
           exposed: true
           expose:
             operator_id: created_op
-            label: Created
+            label: 'Date Start'
             description: 'Format: YYYY-MM-DD HH:MM:SS'
             use_operator: false
             operator: created_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: created
+            identifier: created_min
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+              contributor: '0'
+              editor: '0'
+            placeholder: ''
+            min_placeholder: ''
+            max_placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          entity_type: log_entity
+          entity_field: created
+          plugin_id: date
+        created_1:
+          id: created_1
+          table: log_entity
+          field: created
+          relationship: none
+          group_type: group
+          admin_label: 'Date to'
+          operator: '<='
+          value:
+            min: ''
+            max: ''
+            value: ''
+            type: date
+          group: 1
+          exposed: true
+          expose:
+            operator_id: created_1_op
+            label: 'Date To'
+            description: ''
+            use_operator: false
+            operator: created_1_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: created_max
             required: false
             remember: false
             multiple: false
@@ -769,7 +822,7 @@ display:
       filter_groups:
         operator: AND
         groups:
-          1: OR
+          1: AND
     cache_metadata:
       max-age: -1
       contexts:
