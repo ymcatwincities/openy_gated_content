@@ -4,3 +4,4 @@ description: 'Virtual Y Log'
 package: Open Y Virtual YMCA
 version: 0.1
 core: 8.x
+core_version_requirement: ^8 || ^9

@@ -24,9 +24,8 @@ class LogController extends ControllerBase {
   /**
    * Constructor.
    *
-   * Logger Factory.
-   *
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $loggerFactory
+   *   Logger Factory.
    */
   public function __construct(LoggerChannelFactoryInterface $loggerFactory) {
     $this->logger = $loggerFactory->get('openy_gc_log');

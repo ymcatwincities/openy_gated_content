@@ -5,6 +5,7 @@ openy_gc_log.log_controller_index:
     _controller: '\Drupal\openy_gc_log\Controller\LogController::index'
     _title: 'index'
   requirements:
+    #logging is available for all
     _access: 'TRUE'
   options:
     no_cache: TRUE

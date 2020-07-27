@@ -71,7 +71,10 @@ class LogEntity extends ContentEntityBase implements LogEntityInterface {
   }
 
   /**
-   * @param $fields
+   * Define email field.
+   *
+   * @param array $fields
+   *   Fields.
    */
   public static function defineEmailField(array &$fields) {
     $fields['email'] = BaseFieldDefinition::create('string')
@@ -97,7 +100,10 @@ class LogEntity extends ContentEntityBase implements LogEntityInterface {
   }
 
   /**
-   * @param $fields
+   * Define eventType field.
+   *
+   * @param array $fields
+   *   Fields.
    */
   public static function defineEventTypeField(array &$fields) {
     $fields['event_type'] = BaseFieldDefinition::create('string')
@@ -123,7 +129,10 @@ class LogEntity extends ContentEntityBase implements LogEntityInterface {
   }
 
   /**
-   * @param $fields
+   * Define entityType field.
+   *
+   * @param array $fields
+   *   Fields.
    */
   public static function defineEntityTypeField(array &$fields) {
     $fields['entity_type'] = BaseFieldDefinition::create('string')
@@ -149,7 +158,10 @@ class LogEntity extends ContentEntityBase implements LogEntityInterface {
   }
 
   /**
-   * @param $fields
+   * Define bundle field.
+   *
+   * @param array $fields
+   *   Fields.
    */
   public static function defineBundleField(array &$fields) {
     $fields['bundle'] = BaseFieldDefinition::create('string')
@@ -175,7 +187,10 @@ class LogEntity extends ContentEntityBase implements LogEntityInterface {
   }
 
   /**
-   * @param $fields
+   * Define entityId field.
+   *
+   * @param array $fields
+   *   Fields.
    */
   public static function defineEntityIdField(array &$fields) {
     $fields['entity_id'] = BaseFieldDefinition::create('string')
@@ -201,7 +216,10 @@ class LogEntity extends ContentEntityBase implements LogEntityInterface {
   }
 
   /**
-   * @param $fields
+   * Define payload field.
+   *
+   * @param array $fields
+   *   Fields.
    */
   public static function definePayloadField(array &$fields) {
     $fields['payload'] = BaseFieldDefinition::create('string')
@@ -215,7 +233,10 @@ class LogEntity extends ContentEntityBase implements LogEntityInterface {
   }
 
   /**
-   * @param  $fields
+   * Define created field.
+   *
+   * @param array $fields
+   *   Fields.
    */
   public static function defineCreatedField(array &$fields) {
     $fields['created'] = BaseFieldDefinition::create('created')
