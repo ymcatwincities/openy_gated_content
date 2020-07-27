@@ -21,10 +21,7 @@ use Drupal\openy_gc_log\Field\PayloadFieldItemList;
  *     "views_data" = "Drupal\openy_gc_log\Entity\LogEntityViewsData",
  *
  *     "form" = {
- *       "default" = "Drupal\openy_gc_log\Form\LogEntityForm",
- *       "add" = "Drupal\openy_gc_log\Form\LogEntityForm",
- *       "edit" = "Drupal\openy_gc_log\Form\LogEntityForm",
- *       "delete" = "Drupal\openy_gc_log\Form\LogEntityDeleteForm",
+ *       "delete" = "Drupal\Core\Entity\ContentEntityDeleteForm",
  *     },
  *     "route_provider" = {
  *       "html" = "Drupal\openy_gc_log\LogEntityHtmlRouteProvider",
@@ -44,9 +41,6 @@ use Drupal\openy_gc_log\Field\PayloadFieldItemList;
  *     "payload" = "payload",
  *   },
  *   links = {
- *     "canonical" = "/admin/structure/log_entity/{log_entity}",
- *     "add-form" = "/admin/structure/log_entity/add",
- *     "edit-form" = "/admin/structure/log_entity/{log_entity}/edit",
  *     "delete-form" = "/admin/structure/log_entity/{log_entity}/delete",
  *     "collection" = "/admin/structure/log_entity",
  *   },
@@ -79,9 +73,9 @@ class LogEntity extends ContentEntityBase implements LogEntityInterface {
   public static function defineEmailField(array &$fields) {
     $fields['email'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Email'))
-      ->setDescription(t('The name of the Log entity entity.'))
+      ->setDescription(t('The email of the Log entity.'))
       ->setSettings([
-        'max_length' => 50,
+        'max_length' => 256,
         'text_processing' => 0,
       ])
       ->setDefaultValue('')
@@ -108,7 +102,7 @@ class LogEntity extends ContentEntityBase implements LogEntityInterface {
   public static function defineEventTypeField(array &$fields) {
     $fields['event_type'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Event Type'))
-      ->setDescription(t('The name of the Log entity entity.'))
+      ->setDescription(t('The event type of the Log entity.'))
       ->setSettings([
         'max_length' => 50,
         'text_processing' => 0,
@@ -137,7 +131,7 @@ class LogEntity extends ContentEntityBase implements LogEntityInterface {
   public static function defineEntityTypeField(array &$fields) {
     $fields['entity_type'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Entity Type'))
-      ->setDescription(t('The name of the Log entity entity.'))
+      ->setDescription(t('The entity type of the Log entity.'))
       ->setSettings([
         'max_length' => 50,
         'text_processing' => 0,
@@ -166,7 +160,7 @@ class LogEntity extends ContentEntityBase implements LogEntityInterface {
   public static function defineBundleField(array &$fields) {
     $fields['bundle'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Bundle'))
-      ->setDescription(t('The name of the Log entity entity.'))
+      ->setDescription(t('The bundle of the Log entity.'))
       ->setSettings([
         'max_length' => 50,
         'text_processing' => 0,
@@ -195,7 +189,7 @@ class LogEntity extends ContentEntityBase implements LogEntityInterface {
   public static function defineEntityIdField(array &$fields) {
     $fields['entity_id'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Entity Id'))
-      ->setDescription(t('The name of the Log entity entity.'))
+      ->setDescription(t('The entity id of the Log entity.'))
       ->setSettings([
         'max_length' => 50,
         'text_processing' => 0,
