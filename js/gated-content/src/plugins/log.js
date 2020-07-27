@@ -25,7 +25,6 @@ const Log = {
             entity_id: entityId,
           },
         });
-        console.log('dispatch', event.detail);
         document.body.dispatchEvent(event);
       },
     };

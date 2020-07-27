@@ -8,7 +8,7 @@
 use Drupal\Core\Routing\RouteMatchInterface;
 
 /**
- * Implements template_preprocess_paragraph().
+ * Implements HOOK_preprocess_paragraph().
  *
  * @param array $variables
  */
@@ -23,6 +23,11 @@ function openy_gc_log_preprocess_paragraph(&$variables) {
   $variables['#attached']['library'][] = 'openy_gc_log/logger';
 }
 
+/**
+ * Implemets HOOK_preprocess_views_view().
+ *
+ * @param $variables
+ */
 function openy_gc_log_preprocess_views_view(&$variables) {
   if ($variables['view']->storage->id() !== 'virtual_y_logs') {
     return;
