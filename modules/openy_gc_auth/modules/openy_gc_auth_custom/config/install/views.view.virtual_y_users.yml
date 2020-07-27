@@ -1,8 +1,6 @@
 langcode: en
 status: true
 dependencies:
-  config:
-    - user.role.administrator
   module:
     - openy_gc_auth_custom
     - user
@@ -21,10 +19,9 @@ display:
     position: 0
     display_options:
       access:
-        type: role
+        type: perm
         options:
-          role:
-            administrator: administrator
+          perm: 'administer site configuration'
       cache:
         type: tag
         options: {  }
@@ -517,7 +514,7 @@ display:
         - 'languages:language_interface'
         - url
         - url.query_args
-        - user.roles
+        - user.permissions
       tags: {  }
   page_1:
     display_plugin: page
@@ -534,5 +531,5 @@ display:
         - 'languages:language_interface'
         - url
         - url.query_args
-        - user.roles
+        - user.permissions
       tags: {  }
