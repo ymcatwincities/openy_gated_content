@@ -13,6 +13,10 @@ use Drupal\Core\Field\BaseFieldDefinition;
  *   id = "gc_auth_custom_user",
  *   label = @Translation("Auth Custom User"),
  *   base_table = "gc_auth_custom_user",
+ *   handlers = {
+ *     "views_data" = "Drupal\views\EntityViewsData",
+ *     "list_builder" = "Drupal\Core\Entity\EntityListBuilder",
+ *   },
  *   entity_keys = {
  *     "id" = "id"
  *   },
@@ -22,6 +26,53 @@ use Drupal\Core\Field\BaseFieldDefinition;
  * )
  */
 class AuthCustomUser extends ContentEntityBase implements AuthCustomUserInterface {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getVerificationTime() {
+    return $this->get('verification_time')->value;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setVerificationTime($timestamp) {
+    $this->get('verification_time')->value = $timestamp;
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getToken() {
+    return $this->get('verification_token')->value;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setToken($token) {
+    $this->get('verification_token')->value = $token;
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isActive() {
+    return $this->get('status')->value == 1;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function activate() {
+    $this->get('status')->value = 1;
+    $this->get('verification_token')->value = '';
+    $this->get('verification_time')->value = NULL;
+    return $this;
+  }
 
   /**
    * {@inheritdoc}
@@ -57,6 +108,21 @@ class AuthCustomUser extends ContentEntityBase implements AuthCustomUserInterfac
     $fields['package_site'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Package Site'))
       ->setDescription(t('Member Package Site.'));
+
+    $fields['status'] = BaseFieldDefinition::create('boolean')
+      ->setLabel(t('User status'))
+      ->setDescription(t('Whether the gc_auth_custom_user is verified or blocked.'))
+      ->setDefaultValue(FALSE);
+
+    $fields['verification_time'] = BaseFieldDefinition::create('timestamp')
+      ->setLabel(t('Verification time'))
+      ->setDescription(t('The time at which the verification email was sent.'))
+      ->setDefaultValue(NULL);
+
+    $fields['verification_token'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Verification token'))
+      ->setDescription(t('The token that gc_auth_custom_user for account activation.'))
+      ->setDefaultValue(NULL);
 
     return $fields;
   }
