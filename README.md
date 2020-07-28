@@ -56,7 +56,9 @@ For videos, protected from embed by "Specific domains" you can have an issue
 with thumbnails download to drupal media. In this case - apply a patch
 for drupal core:
 
-* _patches/OEmbed\_vimeo\_private\_videos.patch_
+* _patches/OEmbed\_vimeo\_private\_videos.patch_ - in case of using core media
+* _patches/video\_embed\_field\_vimeo\_private\_videos.patch_ - in case of
+using video_embed_field module
 
 
 ### JSON API patch required for Drupal 8.7

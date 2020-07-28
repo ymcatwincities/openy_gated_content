@@ -1,0 +1,22 @@
+Index: a/src/Plugin/video_embed_field/Provider/Vimeo.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- a/src/Plugin/video_embed_field/Provider/Vimeo.php	(date 1595585152357)
++++ b/src/Plugin/video_embed_field/Provider/Vimeo.php	(date 1595585152357)
+@@ -52,7 +52,13 @@
+    *   An array of data from the oembed endpoint.
+    */
+   protected function oEmbedData() {
+-    return json_decode(file_get_contents('http://vimeo.com/api/oembed.json?url=' . $this->getInput()));
++    $opts = [
++      'http' => [
++        'header' => ["Referer: " . $_SERVER['HTTP_REFERER']]
++      ],
++    ];
++    $context = stream_context_create($opts);
++    return json_decode(file_get_contents('http://vimeo.com/api/oembed.json?url=' . $this->getInput(), FALSE, $context));
+   }
+ 
+   /**
