@@ -31,7 +31,7 @@ class GatedContentSubscriber implements EventSubscriberInterface {
   }
 
   /**
-   * Check Access to gated contend entities pages.
+   * Check Access to Virtual Y contend entities pages.
    *
    * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
    *   The GetResponseEvent to process.

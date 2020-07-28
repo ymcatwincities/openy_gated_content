@@ -25,7 +25,7 @@ It consists of Daxko SSO plugin and requires
 
 5. Set Daxko SSO as your main authorization plugin
 
-   at the Gated Content settings: /admin/openy/openy-gc-auth/settings
+   at the Virtual Y Content settings: /admin/openy/openy-gc-auth/settings
 
 ## I need help.
 

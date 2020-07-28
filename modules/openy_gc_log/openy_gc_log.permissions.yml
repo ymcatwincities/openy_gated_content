@@ -1,0 +1,19 @@
+add log entity entities:
+  title: 'Create new Log entity entities'
+
+administer log entity entities:
+  title: 'Administer Log entity entities'
+  description: 'Allow to access the administration form to configure Log entity entities.'
+  restrict access: true
+
+delete log entity entities:
+  title: 'Delete Log entity entities'
+
+edit log entity entities:
+  title: 'Edit Log entity entities'
+
+view published log entity entities:
+  title: 'View published Log entity entities'
+
+view unpublished log entity entities:
+  title: 'View unpublished Log entity entities'

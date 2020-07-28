@@ -2,7 +2,7 @@ langcode: en
 status: true
 dependencies: {  }
 id: gated_content_login
-label: 'Gated Content Login'
+label: 'Virtual Y Content Login'
 icon_uuid: null
 description: ''
 behavior_plugins: {  }

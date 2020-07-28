@@ -1,6 +1,6 @@
-name: Open Y Virtual YMCA Auth
+name: Open Y Virtual YMCA Log
 type: module
-description: 'Provides Open Y Virtual YMCA authentication provider.'
+description: 'Virtual Y Log'
 package: Open Y Virtual YMCA
 version: 0.1
 core: 8.x

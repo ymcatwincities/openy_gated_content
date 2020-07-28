@@ -3,6 +3,9 @@ import App from './GatedContent.vue';
 import router from './router';
 import store from './store';
 import filters from './filters';
+import Log from './plugins/log';
+
+Vue.use(Log);
 
 Vue.config.productionTip = false;
 
