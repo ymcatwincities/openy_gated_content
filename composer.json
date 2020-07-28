@@ -7,7 +7,7 @@
         "ymcatwincities/daxko_sso": "*",
         "drupal/jsonapi_image_styles": "^1.0@beta",
         "drupal/file_entity": "*",
-        "drupal/csv_serialization": "1.4",
+        "drupal/csv_serialization": "^1",
         "ext-json": "*",
         "ext-zlib": "*"
     },
