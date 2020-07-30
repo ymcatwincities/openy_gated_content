@@ -1,3 +1,5 @@
+import Vue from 'vue';
+
 export default {
   state: {
     authPlugin: 'dummy',
@@ -10,6 +12,7 @@ export default {
   actions: {
     authorize(context, user) {
       context.commit('setUser', user);
+      Vue.prototype.$log.trackEventLoggedIn(user);
     },
     logout(context) {
       context.commit('unsetUser');
@@ -41,5 +44,6 @@ export default {
     isLoggedIn: (state) => state.loggedIn,
     authPlugin: (state) => state.authPlugin,
     getAppUrl: (state) => state.appUrl,
+    getUser: (state) => state.user,
   },
 };

@@ -125,6 +125,8 @@ export default {
         .then((response) => {
           this.video = this.combine(response.data.data, response.data.included, this.params);
           this.loading = false;
+        }).then(() => {
+          this.$log.trackEventEntityView('node', 'gc_video', this.video.attributes.drupal_internal__nid);
         })
         .catch((error) => {
           this.error = true;

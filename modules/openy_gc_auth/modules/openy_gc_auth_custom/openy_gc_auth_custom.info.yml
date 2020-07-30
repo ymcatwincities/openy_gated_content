@@ -4,6 +4,7 @@ description: 'Provides Open Y Virtual YMCA custom authentication provider based 
 package: Open Y Virtual YMCA
 version: 0.1
 core: 8.x
+core_version_requirement: ^8 || ^9
 dependencies:
   - drupal:migrate
   - drupal:migrate_source_csv
@@ -11,3 +12,4 @@ dependencies:
   - drupal:recaptcha
   - drupal:rest
   - drupal:openy_gc_auth
+  - drupal:openy_upgrade_tool
