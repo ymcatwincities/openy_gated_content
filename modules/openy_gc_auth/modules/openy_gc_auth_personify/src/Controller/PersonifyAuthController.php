@@ -131,8 +131,11 @@ class PersonifyAuthController extends ControllerBase {
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
-  public function checkLoggedUser() {
-    $token = !empty($_COOKIE['Drupal_visitor_personify_authorized']) ? $_COOKIE['Drupal_visitor_personify_authorized'] : '';
+  public function checkLoggedUser(Request $request) {
+    $token = '';
+    if ($request->cookies->has('Drupal_visitor_personify_authorized')) {
+      $token = $request->cookies->get('Drupal_visitor_personify_authorized');
+    }
     if (empty($token)) {
       return new JsonResponse([
         'message' => 'Personify user not found. Redirect to login page.',
