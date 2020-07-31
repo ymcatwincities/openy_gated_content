@@ -212,27 +212,48 @@ class PersonifyAuthController extends ControllerBase {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   private function userHasActiveMembership($token) {
+
     $personifyID = $this->personifySSO->getCustomerIdentifier($token);
     if (empty($personifyID)) {
       return FALSE;
     }
 
-    $memberships = $this->personifyClient->doAPIcall(
-      'GET',
-      'OrderMembershipInformationViews?$filter=ShipMasterCustomerId%20eq%20%27' . $personifyID . '%27&$format=json'
-    );
-    if (!isset($memberships['d'])) {
-      return FALSE;
-    }
+    $body = '<StoredProcedureRequest>
+    <StoredProcedureName>YSV_OpenY_Member_Access</StoredProcedureName>
+    <SPParameterList>
+      <StoredProcedureParameter>
+        <Name>ip_org_id</Name>
+        <Value>YMCASV</Value>
+        <Direction>1</Direction>
+      </StoredProcedureParameter>
+      <StoredProcedureParameter>
+        <Name>ip_org_unit_id</Name>
+        <Value>YMCASV</Value>
+        <Direction>1</Direction>
+      </StoredProcedureParameter>
+      <StoredProcedureParameter>
+        <Name>ip_master_customer_id</Name>
+        <Value>' . $personifyID . '</Value>
+        <Direction>1</Direction>
+      </StoredProcedureParameter>
+      <StoredProcedureParameter>
+        <Name>ip_sub_customer_id</Name>
+        <Value>0</Value>
+        <Direction>1</Direction>
+      </StoredProcedureParameter>
+      <StoredProcedureParameter>
+        <Name>ip_access_type</Name>
+        <Value>Virtual</Value>
+        <Direction>1</Direction>
+      </StoredProcedureParameter>
+    </SPParameterList>
+    </StoredProcedureRequest>';
 
-    $isActive = FALSE;
-    foreach ($memberships['d'] as $m) {
-      // "LineStatusDescr"=>"Active", "FulfillStatusDescr"=>"Active|Expired".
-      if ($m['LineStatusDescr'] == 'Active' && $m['FulfillStatusDescr'] == 'Active') {
-        $isActive = TRUE;
-        break;
-      }
-    }
+    $data = $this->personifyClient->doAPIcall('POST', 'GetStoredProcedureDataJSON?$format=json', $body, 'xml');
+    $results = json_decode($data['Data'], TRUE);
+
+    $isActive = ($results['Table'][0]['Access'] === 'Approved')? TRUE : FALSE;
+
 
     return $isActive;
   }
