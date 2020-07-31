@@ -6,6 +6,9 @@
         <span>{{ this.error }}</span>
       </div>
       <a @click.prevent="tryAgain" class="btn btn-lg btn-primary">Try again</a>
+      <div class="alert alert-info mt-3">
+        {{ error_accompanying_message }}
+      </div>
     </template>
     <div v-else class="text-center">
       <p>You will be logged in with your Personify account, please wait...</p>
@@ -29,6 +32,11 @@ export default {
   },
   mounted() {
     this.runLoginProcess();
+  },
+  computed: {
+    error_accompanying_message() {
+      return this.$store.getters.getPersonifyConfig.error_accompanying_message;
+    },
   },
   methods: {
     async runLoginProcess() {
