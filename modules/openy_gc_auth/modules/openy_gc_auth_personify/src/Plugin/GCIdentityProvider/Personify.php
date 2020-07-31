@@ -133,6 +133,14 @@ class Personify extends GCIdentityProviderPluginBase {
       ],
     ];
 
+    $form['error_accompanying_message'] = [
+      '#title' => $this->t('Authentication error message'),
+      '#description' => $this->t('Message displayed to user when he failed to log in using personify plugin.'),
+      '#type' => 'textfield',
+      '#default_value' => $config['error_accompanying_message'],
+      '#required' => FALSE,
+    ];
+
     return $form;
   }
 
@@ -142,6 +150,7 @@ class Personify extends GCIdentityProviderPluginBase {
   public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
     if (!$form_state->getErrors()) {
       $this->configuration['application_url'] = $form_state->getValue('application_url');
+      $this->configuration['error_accompanying_message'] = $form_state->getValue('error_accompanying_message');
       parent::submitConfigurationForm($form, $form_state);
     }
   }
@@ -156,6 +165,7 @@ class Personify extends GCIdentityProviderPluginBase {
     $data['api_login_check'] = Url::fromRoute('openy_gc_auth_personify.personify_check')->toString();
     $data['api_auth'] = Url::fromRoute('openy_gc_auth_personify.personify_auth')->toString();
     $data['api_logout'] = Url::fromRoute('openy_gc_auth_personify.personify_logout')->toString();
+    $data['error_accompanying_message'] = $this->configuration['error_accompanying_message'];
     return $data;
   }
 
