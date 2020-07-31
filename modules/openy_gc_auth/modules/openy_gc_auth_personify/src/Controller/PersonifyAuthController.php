@@ -250,10 +250,15 @@ class PersonifyAuthController extends ControllerBase {
     </StoredProcedureRequest>';
 
     $data = $this->personifyClient->doAPIcall('POST', 'GetStoredProcedureDataJSON?$format=json', $body, 'xml');
-    $results = json_decode($data['Data'], TRUE);
 
-    $isActive = ($results['Table'][0]['Access'] === 'Approved')? TRUE : FALSE;
+    $isActive = FALSE;
 
+    if ($data) {
+      $results = json_decode($data['Data'], TRUE);
+      if ($results['Table'][0]['Access'] === 'Approved') {
+        $isActive = TRUE;
+      }
+    }
 
     return $isActive;
   }
