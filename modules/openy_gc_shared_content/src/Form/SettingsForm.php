@@ -49,9 +49,6 @@ class SettingsForm extends ConfigFormBase {
 
   /**
    * {@inheritdoc}
-   *
-   * @return array
-   *   Config Names
    */
   protected function getEditableConfigNames() {
     return ['openy_gc_shared_content.settings'];
