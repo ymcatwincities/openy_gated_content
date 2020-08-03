@@ -17,5 +17,14 @@
         background-color: $blue-hover;
       }
     }
+
+    &.zoom-wrapper {
+      height: 650px;
+      iframe {
+        border: none;
+        background-color: $white;
+        overflow:hidden;
+      }
+    }
   }
 }
