@@ -24,10 +24,9 @@ class SettingsForm extends ConfigFormBase {
     $config = $this->config('openy_gc_shared_content.settings');
 
     $form['shared_content_server'] = [
-      '#type' => 'url',
+      '#type' => 'textarea',
       '#title' => $this->t('Shared Content Server'),
       '#default_value' => $config->get('shared_content_server'),
-      '#weight' => '0',
     ];
     $form['submit'] = [
       '#type' => 'submit',
@@ -50,9 +49,12 @@ class SettingsForm extends ConfigFormBase {
 
   /**
    * {@inheritdoc}
-   * @return array|string
+   *
+   * @return array
+   *   Config Names
    */
   protected function getEditableConfigNames() {
     return ['openy_gc_shared_content.settings'];
   }
+
 }
