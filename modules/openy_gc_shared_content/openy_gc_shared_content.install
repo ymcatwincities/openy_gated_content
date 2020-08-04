@@ -1,0 +1,32 @@
+<?php
+
+/**
+ * @file
+ * Contains openy_gc_shared_content.install.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function openy_gc_shared_content_install($is_syncing) {
+  $config_dir = drupal_get_path('module', 'openy_gc_shared_content') . '/config/update/';
+  $configs = [
+    'core.entity_form_display.eventinstance.live_stream.default',
+    'core.entity_form_display.eventinstance.virtual_meeting.default',
+    'core.entity_form_display.eventseries.live_stream.default',
+    'core.entity_form_display.eventseries.virtual_meeting.default',
+    'core.entity_form_display.node.gc_video.default',
+    'core.entity_form_display.node.vy_blog_post.default',
+    'core.entity_view_display.eventinstance.live_stream.default',
+    'core.entity_view_display.eventinstance.virtual_meeting.default',
+    'core.entity_view_display.eventseries.live_stream.default',
+    'core.entity_view_display.eventseries.virtual_meeting.default',
+    'core.entity_view_display.node.gc_video.default',
+    'core.entity_view_display.node.gc_video.teaser',
+    'core.entity_view_display.node.vy_blog_post.default',
+    'core.entity_view_display.node.vy_blog_post.teaser',
+  ];
+  $config_importer = \Drupal::service('openy_upgrade_tool.importer');
+  $config_importer->setDirectory($config_dir);
+  $config_importer->importConfigs($configs);
+}

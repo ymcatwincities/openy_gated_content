@@ -1,0 +1,185 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.eventinstance.live_stream.field_ls_category
+    - field.field.eventinstance.live_stream.field_ls_equipment
+    - field.field.eventinstance.live_stream.field_ls_featured
+    - field.field.eventinstance.live_stream.field_ls_host_name
+    - field.field.eventinstance.live_stream.field_ls_image
+    - field.field.eventinstance.live_stream.field_ls_level
+    - field.field.eventinstance.live_stream.field_ls_media
+    - field.field.eventinstance.live_stream.field_ls_origin
+    - field.field.eventinstance.live_stream.field_ls_share
+    - field.field.eventinstance.live_stream.field_ls_title
+    - recurring_events.eventinstance_type.live_stream
+  module:
+    - datetime_range
+    - link
+    - text
+_core:
+  default_config_hash: 628mZzcHqSnPP4656MFd4TRqYWS1f7x-ZvzkQLo1lv4
+id: eventinstance.live_stream.default
+targetEntityType: eventinstance
+bundle: live_stream
+mode: default
+content:
+  category:
+    label: above
+    weight: 3
+    region: content
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+  date:
+    label: above
+    type: daterange_custom
+    weight: 0
+    settings:
+      separator: '-'
+      date_format: 'Y-m-d\TH:i:s'
+      timezone_override: ''
+    region: content
+    third_party_settings: {  }
+  description:
+    label: above
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+    type: text_default
+  field_ls_category:
+    weight: 5
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_ls_featured:
+    weight: 12
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    type: boolean
+    region: content
+  field_ls_host_name:
+    weight: 15
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_ls_image:
+    type: entity_reference_entity_view
+    weight: 13
+    label: above
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    region: content
+  field_ls_level:
+    weight: 11
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_ls_media:
+    type: entity_reference_entity_view
+    weight: 7
+    label: above
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    region: content
+  field_ls_origin:
+    weight: 17
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    type: link
+    region: content
+  field_ls_share:
+    weight: 16
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    type: boolean
+    region: content
+  field_ls_title:
+    weight: 14
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  host_name:
+    label: above
+    weight: 8
+    region: content
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  image:
+    label: above
+    weight: 9
+    region: content
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+  instructor:
+    label: above
+    weight: 10
+    region: content
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  level:
+    label: above
+    weight: 6
+    region: content
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+  media:
+    label: above
+    weight: 2
+    region: content
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+  title:
+    label: above
+    weight: 4
+    region: content
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+hidden:
+  body: true
+  equipment: true
+  field_ls_equipment: true

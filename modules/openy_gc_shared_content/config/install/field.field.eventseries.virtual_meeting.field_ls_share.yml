@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.eventseries.field_ls_share
+    - recurring_events.eventseries_type.virtual_meeting
+  module:
+    - datalayer
+third_party_settings:
+  datalayer:
+    expose: 0
+    label: field_ls_share
+id: eventseries.virtual_meeting.field_ls_share
+field_name: field_ls_share
+entity_type: eventseries
+bundle: virtual_meeting
+label: 'Available to Share'
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

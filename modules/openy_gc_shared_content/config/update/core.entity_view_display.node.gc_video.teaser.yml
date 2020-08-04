@@ -1,0 +1,42 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.gc_video.field_gc_origin
+    - field.field.node.gc_video.field_gc_share
+    - field.field.node.gc_video.field_gc_video_category
+    - field.field.node.gc_video.field_gc_video_description
+    - field.field.node.gc_video.field_gc_video_duration
+    - field.field.node.gc_video.field_gc_video_equipment
+    - field.field.node.gc_video.field_gc_video_featured
+    - field.field.node.gc_video.field_gc_video_instructor
+    - field.field.node.gc_video.field_gc_video_level
+    - field.field.node.gc_video.field_gc_video_media
+    - node.type.gc_video
+  module:
+    - user
+_core:
+  default_config_hash: Ni5UJCDhzdP6cfPKAGEEM4j8PkcQLhcbFSRFVvJtSRY
+id: node.gc_video.teaser
+targetEntityType: node
+bundle: gc_video
+mode: teaser
+content:
+  links:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+hidden:
+  field_gc_origin: true
+  field_gc_share: true
+  field_gc_video_category: true
+  field_gc_video_description: true
+  field_gc_video_duration: true
+  field_gc_video_equipment: true
+  field_gc_video_featured: true
+  field_gc_video_instructor: true
+  field_gc_video_level: true
+  field_gc_video_media: true
+  langcode: true
