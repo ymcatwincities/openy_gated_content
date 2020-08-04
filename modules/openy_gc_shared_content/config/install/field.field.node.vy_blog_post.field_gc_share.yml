@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_gc_share
+    - node.type.vy_blog_post
+  module:
+    - datalayer
+third_party_settings:
+  datalayer:
+    expose: 0
+    label: field_gc_share
+id: node.vy_blog_post.field_gc_share
+field_name: field_gc_share
+entity_type: node
+bundle: vy_blog_post
+label: 'Available to Share'
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

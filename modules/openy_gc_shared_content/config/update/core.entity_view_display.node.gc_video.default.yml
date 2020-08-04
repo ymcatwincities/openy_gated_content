@@ -1,0 +1,122 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.gc_video.field_gc_origin
+    - field.field.node.gc_video.field_gc_share
+    - field.field.node.gc_video.field_gc_video_category
+    - field.field.node.gc_video.field_gc_video_description
+    - field.field.node.gc_video.field_gc_video_duration
+    - field.field.node.gc_video.field_gc_video_equipment
+    - field.field.node.gc_video.field_gc_video_featured
+    - field.field.node.gc_video.field_gc_video_instructor
+    - field.field.node.gc_video.field_gc_video_level
+    - field.field.node.gc_video.field_gc_video_media
+    - node.type.gc_video
+  module:
+    - link
+    - text
+    - user
+_core:
+  default_config_hash: '-M37Ovkd_Gue8lGEOnY6tkY8EhxPbEn77ecr5upZcQk'
+id: node.gc_video.default
+targetEntityType: node
+bundle: gc_video
+mode: default
+content:
+  field_gc_origin:
+    weight: 110
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    type: link
+    region: content
+  field_gc_share:
+    weight: 109
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    type: boolean
+    region: content
+  field_gc_video_category:
+    weight: 102
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_gc_video_description:
+    weight: 101
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: text_default
+    region: content
+  field_gc_video_duration:
+    weight: 107
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    type: number_integer
+    region: content
+  field_gc_video_equipment:
+    weight: 105
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_gc_video_featured:
+    weight: 108
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    type: boolean
+    region: content
+  field_gc_video_instructor:
+    weight: 104
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_gc_video_level:
+    weight: 106
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_gc_video_media:
+    type: entity_reference_entity_view
+    weight: 103
+    label: above
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    region: content
+  links:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+hidden:
+  langcode: true

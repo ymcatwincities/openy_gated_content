@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.eventseries.field_ls_origin
+    - recurring_events.eventseries_type.virtual_meeting
+  module:
+    - datalayer
+    - link
+third_party_settings:
+  datalayer:
+    expose: 0
+    label: field_ls_origin
+id: eventseries.virtual_meeting.field_ls_origin
+field_name: field_ls_origin
+entity_type: eventseries
+bundle: virtual_meeting
+label: Origin
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  link_type: 17
+  title: 0
+field_type: link

@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_gc_origin
+    - node.type.vy_blog_post
+  module:
+    - datalayer
+    - link
+third_party_settings:
+  datalayer:
+    expose: 0
+    label: field_gc_origin
+id: node.vy_blog_post.field_gc_origin
+field_name: field_gc_origin
+entity_type: node
+bundle: vy_blog_post
+label: Origin
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  link_type: 17
+  title: 0
+field_type: link

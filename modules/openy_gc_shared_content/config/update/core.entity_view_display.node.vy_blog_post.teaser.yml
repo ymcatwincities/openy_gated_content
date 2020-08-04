@@ -1,0 +1,30 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.vy_blog_post.field_gc_origin
+    - field.field.node.vy_blog_post.field_gc_share
+    - field.field.node.vy_blog_post.field_vy_blog_description
+    - field.field.node.vy_blog_post.field_vy_blog_image
+    - node.type.vy_blog_post
+  module:
+    - user
+_core:
+  default_config_hash: pMxhPDJBpEcx1GWyg76NyuSUcAv8M5nttSeBuzSSODU
+id: node.vy_blog_post.teaser
+targetEntityType: node
+bundle: vy_blog_post
+mode: teaser
+content:
+  links:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+hidden:
+  field_gc_origin: true
+  field_gc_share: true
+  field_vy_blog_description: true
+  field_vy_blog_image: true
+  langcode: true
