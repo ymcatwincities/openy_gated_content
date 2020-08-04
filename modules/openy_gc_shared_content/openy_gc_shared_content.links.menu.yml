@@ -1,0 +1,5 @@
+openy_gc_shared_content.settings:
+  title: 'Shared Content'
+  route_name: openy_gc_shared_content.settings_form
+  description: 'Shared Content'
+  parent: openy_gated_content.settings
