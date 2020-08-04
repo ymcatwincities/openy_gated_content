@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file
+ * Contains openy_gc_shared_content.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function openy_gc_shared_content_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the openy_gc_shared_content module.
+    case 'help.page.openy_gc_shared_content':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Virtual Y Shared Content') . '</p>';
+      return $output;
+
+    default:
+  }
+}
