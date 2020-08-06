@@ -72,10 +72,10 @@ export default {
           if (response.status === 202) {
             this.message = response.data.message;
             this.form.email = '';
+            this.loading = false;
             if (this.config.enableRecaptcha) {
               this.$refs.recaptcha.reset();
             }
-            this.loading = false;
             return;
           }
           if (appUrl !== undefined && appUrl.length > 0) {
@@ -86,10 +86,10 @@ export default {
         })
         .catch((error) => {
           this.error = error.response ? error.response.data.message : 'Something went wrong!';
+          this.loading = false;
           if (this.config.enableRecaptcha) {
             this.$refs.recaptcha.reset();
           }
-          this.loading = false;
         });
     },
   },
