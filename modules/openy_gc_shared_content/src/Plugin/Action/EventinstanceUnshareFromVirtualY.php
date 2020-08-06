@@ -5,15 +5,13 @@ namespace Drupal\openy_gc_shared_content\Plugin\Action;
 use Drupal\Core\Field\FieldUpdateActionBase;
 
 /**
- * Promotes a node.
- *
  * @Action(
- *   id = "gc_unshare_action",
- *   label = @Translation("Unshare selected content from Virtual Y"),
- *   type = "node"
+ *   id = "gc_eventinstance_unshare_action",
+ *   label = @Translation("Unshare from Virtual Y"),
+ *   type = "eventinstance"
  * )
  */
-class UnshareFromVirtualY extends FieldUpdateActionBase {
+class EventinstanceUnshareFromVirtualY extends FieldUpdateActionBase {
 
   /**
    * {@inheritdoc}

@@ -3,8 +3,8 @@ status: true
 dependencies:
   module:
     - node
-id: node_gc_share
-label: 'Share selected content to Virtual Y'
+id: gc_node_share
+label: 'Share to Virtual Y'
 type: node
-plugin: gc_share_action
+plugin: gc_node_share_action
 configuration: {  }

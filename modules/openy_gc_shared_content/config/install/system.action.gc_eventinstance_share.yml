@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - recurring_events
+id: gc_eventinstance_share
+label: 'Share to Virtual Y'
+type: eventinstance
+plugin: gc_eventinstance_share_action
+configuration: {  }
