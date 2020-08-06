@@ -49,8 +49,7 @@ function openy_gc_shared_content_entity_base_field_info(EntityTypeInterface $ent
         'settings' => [
           'display_label' => TRUE,
         ],
-      ])
-      ->setDisplayConfigurable('form', TRUE);
+      ]);
     $fields['field_gc_origin'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Origin'))
       ->setCustomStorage(FALSE)
