@@ -5,6 +5,8 @@
  * Contains openy_gc_shared_content.module.
  */
 
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Routing\RouteMatchInterface;
 
 /**
@@ -20,5 +22,51 @@ function openy_gc_shared_content_help($route_name, RouteMatchInterface $route_ma
       return $output;
 
     default:
+  }
+}
+
+/**
+ * Implements hook_entity_base_field_info().
+ */
+function openy_gc_shared_content_entity_base_field_info(EntityTypeInterface $entity_type) {
+  // Add a property only to nodes of the 'article' bundle.
+  if (in_array($entity_type->id(), [
+    'node', 'eventseries', 'eventinstance',
+  ])) {
+    $fields = [];
+    $fields['field_gc_share'] = BaseFieldDefinition::create('boolean')
+      ->setLabel(t('Available to share'))
+      ->setCustomStorage(FALSE)
+      ->setCardinality(1)
+      ->setProvider('openy_gc_shared_content')
+      ->setRequired(FALSE)
+      ->setRevisionable(FALSE)
+      ->setTranslatable(FALSE)
+      ->setDisplayConfigurable('view', FALSE)
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayOptions('form', [
+        'type' => 'boolean_checkbox',
+        'settings' => [
+          'display_label' => TRUE,
+        ],
+      ])
+      ->setDisplayConfigurable('form', TRUE);
+    $fields['field_gc_origin'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Origin'))
+      ->setCustomStorage(FALSE)
+      ->setCardinality(1)
+      ->setProvider('openy_gc_shared_content')
+      ->setRequired(FALSE)
+      ->setRevisionable(FALSE)
+      ->setTranslatable(FALSE)
+      ->setDisplayConfigurable('view', FALSE)
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayOptions('form', [
+        'type' => 'string_textfield',
+        'settings' => [
+          'size' => '255',
+        ],
+      ]);
+    return $fields;
   }
 }
