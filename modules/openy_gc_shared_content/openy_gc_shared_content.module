@@ -29,7 +29,6 @@ function openy_gc_shared_content_help($route_name, RouteMatchInterface $route_ma
  * Implements hook_entity_base_field_info().
  */
 function openy_gc_shared_content_entity_base_field_info(EntityTypeInterface $entity_type) {
-  // Add a property only to nodes of the 'article' bundle.
   if (in_array($entity_type->id(), [
     'node', 'eventseries', 'eventinstance',
   ])) {
