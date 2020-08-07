@@ -2,8 +2,6 @@
 
 namespace Drupal\openy_gc_shared_content\Plugin\Action;
 
-use Drupal\Core\Field\FieldUpdateActionBase;
-
 /**
  * Mass action "Unshare from Virtual Y".
  *
@@ -13,13 +11,6 @@ use Drupal\Core\Field\FieldUpdateActionBase;
  *   type = "eventseries"
  * )
  */
-class EventseriesUnshareFromVirtualY extends FieldUpdateActionBase {
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function getFieldsToUpdate() {
-    return ['field_gc_share' => 0];
-  }
+class EventseriesUnshareFromVirtualY extends UnshareFromVirtualYBase {
 
 }

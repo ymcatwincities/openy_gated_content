@@ -2,8 +2,6 @@
 
 namespace Drupal\openy_gc_shared_content\Plugin\Action;
 
-use Drupal\Core\Field\FieldUpdateActionBase;
-
 /**
  * Mass action "Share to Virtual Y".
  *
@@ -13,13 +11,6 @@ use Drupal\Core\Field\FieldUpdateActionBase;
  *   type = "eventinstance"
  * )
  */
-class EventinstanceShareToVirtualY extends FieldUpdateActionBase {
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function getFieldsToUpdate() {
-    return ['field_gc_share' => 1];
-  }
+class EventinstanceShareToVirtualY extends ShareToVirtualYBase {
 
 }
