@@ -4,6 +4,9 @@ namespace Drupal\openy_gc_shared_content\Plugin\Action;
 
 use Drupal\Core\Field\FieldUpdateActionBase;
 
+/**
+ *
+ */
 class ShareToVirtualYBase extends FieldUpdateActionBase {
 
   /**
@@ -12,4 +15,5 @@ class ShareToVirtualYBase extends FieldUpdateActionBase {
   protected function getFieldsToUpdate() {
     return ['field_gc_share' => 1];
   }
+
 }
