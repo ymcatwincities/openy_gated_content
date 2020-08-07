@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.virtual_ymca_editor
+  module:
+    - user
+id: user_remove_role_action.virtual_ymca_editor
+label: 'Remove the Virtual YMCA Editor role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: virtual_ymca_editor
