@@ -20,7 +20,7 @@ openy_gated_content.settings:
     _form: '\Drupal\openy_gated_content\Form\GCSettingsForm'
     _title: 'Virtual Y settings'
   requirements:
-    _permission: 'administer site configuration'
+    _permission: 'administer gated content configuration'
 
 openy_gated_content.categories:
   path: '/api/video-categories-list'

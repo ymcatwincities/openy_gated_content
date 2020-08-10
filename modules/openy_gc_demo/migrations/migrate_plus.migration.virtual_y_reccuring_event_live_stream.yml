@@ -123,6 +123,7 @@ destination:
 migration_dependencies:
   required:
     - virtual_y_media_video
+    - virtual_y_media_image
     - virtual_y_gc_category
     - virtual_y_gc_equipment
     - virtual_y_gc_level

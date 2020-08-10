@@ -77,3 +77,17 @@ function _update_user_permissions() {
     }
   }
 }
+
+/**
+ * Use 'administer gated content configuration' permission in virtual_y_users.
+ */
+function openy_gc_auth_custom_update_8003() {
+  $config_dir = drupal_get_path('module', 'openy_gc_auth_custom');
+  $config_dir .= '/config/install/';
+  // Import new configuration.
+  $config_importer = \Drupal::service('openy_upgrade_tool.importer');
+  $config_importer->setDirectory($config_dir);
+  $config_importer->importConfigs([
+    'views.view.virtual_y_users',
+  ]);
+}
