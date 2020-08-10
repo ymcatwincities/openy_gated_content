@@ -8,6 +8,7 @@ dependencies:
     - field.field.node.gc_video.field_gc_video_duration
     - field.field.node.gc_video.field_gc_video_equipment
     - field.field.node.gc_video.field_gc_video_featured
+    - field.field.node.gc_video.field_gc_video_image
     - field.field.node.gc_video.field_gc_video_instructor
     - field.field.node.gc_video.field_gc_video_level
     - field.field.node.gc_video.field_gc_video_media
@@ -30,6 +31,7 @@ hidden:
   field_gc_video_duration: true
   field_gc_video_equipment: true
   field_gc_video_featured: true
+  field_gc_video_image: true
   field_gc_video_instructor: true
   field_gc_video_level: true
   field_gc_video_media: true
