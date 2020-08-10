@@ -1,5 +1,20 @@
-openy_gc_shared_content.settings:
+shared_content_source.config:
   title: 'Shared Content'
-  route_name: openy_gc_shared_content.settings_form
-  description: 'Shared Content'
-  parent: openy_gated_content.settings
+  description: 'Virtual YMCA Shared Content.'
+  route_name: shared_content_source.config
+  parent: openy_gated_content.openy
+  weight: 25
+
+shared_content_source.source_server_list:
+  title: 'Source Servers list'
+  description: 'Virtual YMCA Shared Content source servers.'
+  route_name: entity.shared_content_source_server.collection
+  parent: shared_content_source.config
+  weight: 1
+
+shared_content_source.content:
+  title: 'Shared content fetch'
+  description: 'Virtual YMCA Shared Content fetch.'
+  route_name: entity.shared_content_source_server.add_form
+  parent: shared_content_source_server.config
+  weight: 2

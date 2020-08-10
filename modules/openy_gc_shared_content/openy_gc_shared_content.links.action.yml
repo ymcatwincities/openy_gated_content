@@ -1,0 +1,5 @@
+openy_gc_shared_content.source_add:
+  route_name: entity.shared_content_source_server.add_form
+  title: 'Add new source server'
+  appears_on:
+    - entity.shared_content_source_server.collection

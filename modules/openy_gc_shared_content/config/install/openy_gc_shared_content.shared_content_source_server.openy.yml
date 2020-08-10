@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+id: openy
+label: 'Open Y'
+url: 'http://rose.demo.openy.ci.fivejars.com'
+token: ''

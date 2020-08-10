@@ -1,7 +1,47 @@
-openy_gc_shared_content.settings_form:
-  path: '/admin/config/virtual-y/shared-content/settings'
+shared_content_source.config:
+  path: '/admin/virtual-y/shared-content'
   defaults:
-    _form: '\Drupal\openy_gc_shared_content\Form\SettingsForm'
-    _title: 'Virtual Y Shared Content settings'
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: 'Shared content'
   requirements:
-    _permission: 'administer users'
+    _permission: 'administer site configuration'
+
+entity.shared_content_source_server.collection:
+  path: '/admin/virtual-y/shared-content-server/list'
+  defaults:
+    _entity_list: 'shared_content_source_server'
+    _title: 'Shared content source list'
+  requirements:
+    _permission: 'administer site configuration'
+
+entity.shared_content_source_server.add_form:
+  path: '/admin/virtual-y/shared-content-server/add'
+  defaults:
+    _entity_form: 'shared_content_source_server.add'
+    _title: 'Add shared content source'
+  requirements:
+    _permission: 'administer site configuration'
+
+entity.shared_content_source_server.edit_form:
+  path: '/admin/virtual-y/shared-content-server/{shared_content_source_server}'
+  defaults:
+    _entity_form: 'shared_content_source_server.edit'
+    _title: 'Edit shared content source'
+  requirements:
+    _permission: 'administer site configuration'
+
+entity.shared_content_source_server.delete_form:
+  path: '/admin/virtual-y/shared-content-server/{shared_content_source_server}/delete'
+  defaults:
+    _entity_form: 'shared_content_source_server.delete'
+    _title: 'Delete shared content source'
+  requirements:
+    _permission: 'administer site configuration'
+
+entity.shared_content_source_server.fetch_form:
+  path: '/admin/virtual-y/shared-content-server/fetch/{shared_content_source_server}'
+  defaults:
+    _entity_form: 'shared_content_source_server.fetch'
+    _title: 'Fetch shared content'
+  requirements:
+    _permission: 'administer site configuration'

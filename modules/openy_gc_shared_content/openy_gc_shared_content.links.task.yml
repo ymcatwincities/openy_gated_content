@@ -1,0 +1,4 @@
+#openy_gc_shared_content.source_list:
+#  title: 'Shared content'
+#  route_name: entity.shared_content_source.collection
+#  base_route: openy_gated_content.settings
