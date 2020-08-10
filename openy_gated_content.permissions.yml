@@ -1,3 +1,6 @@
+access gated content menu:
+  title: 'Access gated content menu'
+  description: 'Users with this permission can access gated content admin menu.'
 view gated content entities pages:
   title: 'View gated content entities pages'
   description: 'Users with this permission can access gated content node/eventseries/eventinstance pages.'
