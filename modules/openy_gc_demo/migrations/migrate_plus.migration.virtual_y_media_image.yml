@@ -47,6 +47,10 @@ source:
       id: 9
       name: 'Virtual Y Dance 2'
       file: 9
+    -
+      id: 10
+      name: 'Virtual Y Bootcamp Challenge'
+      file: 10
   ids:
     id:
       type: integer
