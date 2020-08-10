@@ -2,9 +2,8 @@
 
 /**
  * @file
- * Installation file for Open Y Virtual YMCA Storage.
+ * Installation file for Open Y Virtual YMCA.
  */
-
 
 /**
  * Add virtual_ymca_editor user role.
