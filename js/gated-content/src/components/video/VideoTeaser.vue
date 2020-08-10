@@ -36,6 +36,11 @@ export default {
   },
   computed: {
     image() {
+      if (this.video.attributes['field_gc_video_image.field_media_image']) {
+        return this.video.attributes['field_gc_video_image.field_media_image']
+          .image_style_uri[0].gated_content_teaser;
+      }
+
       if (!this.video.attributes['field_gc_video_media.thumbnail']) {
         return null;
       }
