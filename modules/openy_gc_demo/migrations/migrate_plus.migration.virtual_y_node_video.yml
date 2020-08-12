@@ -24,6 +24,7 @@ source:
       category: 6
       equipment: 8
       level: 4
+      image: 0
     -
       id: 2
       title: 'Yoga Atlanta'
@@ -36,6 +37,7 @@ source:
       category: 6
       equipment: 8
       level: 2
+      image: 0
     -
       id: 3
       title: 'Youth Bootcamp Challenge'
@@ -48,6 +50,7 @@ source:
       category: 2
       equipment: 3
       level: 3
+      image: 10
   ids:
     id:
       type: integer
@@ -114,7 +117,15 @@ process:
       plugin: migration
       migration: virtual_y_gc_level
       source: level
-
+  field_gc_video_image:
+    -
+      plugin: skip_on_empty
+      method: process
+      source: image
+    -
+      plugin: migration
+      migration: virtual_y_media_image
+      source: image
 
 destination:
   plugin: 'entity:node'
@@ -123,6 +134,7 @@ destination:
 migration_dependencies:
   required:
     - virtual_y_media_video
+    - virtual_y_media_image
     - virtual_y_gc_category
     - virtual_y_gc_equipment
     - virtual_y_gc_level

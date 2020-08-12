@@ -1,4 +1,6 @@
 .login {
+  padding-top: 30px;
+
   h2.title {
     text-align: center
   }
@@ -10,5 +12,19 @@
       margin: 0 auto;
       display: block;
     }
+  }
+}
+
+.personify-auth {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .alert {
+    display: inline-block;
+  }
+
+  .btn, .btn:hover {
+    color: $white;
   }
 }

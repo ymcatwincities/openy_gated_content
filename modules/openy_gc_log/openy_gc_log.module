@@ -33,6 +33,13 @@ function openy_gc_log_preprocess_views_view(array &$variables) {
 }
 
 /**
+ * Implements hook_cron().
+ */
+function openy_gc_log_cron() {
+  \Drupal::service("openy_gc_log.log_archiver")->archive();
+}
+
+/**
  * Implements hook_help().
  */
 function openy_gc_log_help($route_name, RouteMatchInterface $route_match) {
