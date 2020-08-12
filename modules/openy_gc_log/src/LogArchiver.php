@@ -194,7 +194,7 @@ class LogArchiver {
    * Create new file entity.
    */
   protected function createNewFileEntity($fileName) {
-    $fileYear = date('Y', $this->preparedLogs[$fileName]['created']);
+    $fileYear = date('Y', (int) $this->preparedLogs[$fileName][0]['created']);
     $this->prepareFileDirectory($fileYear);
     $file = File::create();
     $file->setFilename($fileName);
