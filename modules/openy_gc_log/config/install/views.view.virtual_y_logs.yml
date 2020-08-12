@@ -3,8 +3,6 @@ status: true
 dependencies:
   module:
     - openy_gc_log
-_core:
-  default_config_hash: H-mchKrbgMyLCwLeWlXsdWI-s3cOq_tN6HXhYV0FEyM
 id: virtual_y_logs
 label: 'Virtual Y Logs'
 module: views

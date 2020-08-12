@@ -6,7 +6,7 @@ use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Entity\EntityTypeManager;
 use Drupal\Core\Logger\LoggerChannel;
 use Drupal\csv_serialization\Encoder\CsvEncoder;
-use Drupal\file_entity\Entity\FileEntity;
+use Drupal\file\Entity\File;
 
 /**
  * LogArchiver service.
@@ -180,7 +180,7 @@ class LogArchiver {
    * Create new file entity.
    */
   protected function createNewFileEntity($fileName) {
-    $file = FileEntity::create(['bundle' => 'archive', 'type' => 'archive']);
+    $file = File::create();
     $file->setFilename($fileName);
     $file->setFileUri("public://{$fileName}");
     $file->setMimeType('application/x-gzip');
@@ -198,7 +198,7 @@ class LogArchiver {
       ->condition('filename', array_keys($this->preparedLogs), 'in')
       ->execute();
 
-    $file_entities = FileEntity::loadMultiple($file_ids);
+    $file_entities = File::loadMultiple($file_ids);
 
     $this->fileEntities = [];
     foreach ($file_entities as $file_entity) {
