@@ -15,6 +15,8 @@ class LogArchiver {
 
   const WORKER_CHUNK_SIZE = 600;
 
+  const BASE_ARCHIVE_PATH = 'private://vy_logs';
+
   /**
    * Log Ids.
    *
@@ -144,6 +146,18 @@ class LogArchiver {
   }
 
   /**
+   * Prepare directory for logs.
+   */
+  protected function prepareFileDirectory($dir) {
+    $dir = self::BASE_ARCHIVE_PATH . DIRECTORY_SEPARATOR . $dir;
+    if (!file_exists($dir)) {
+      if (!mkdir($dir, 0700, TRUE) && !is_dir($dir)) {
+        throw new \RuntimeException(sprintf('Can not create directory "%s"', $dir));
+      }
+    }
+  }
+
+  /**
    * Make filename.
    */
   protected function makeFilename($logEntity) {
@@ -180,9 +194,12 @@ class LogArchiver {
    * Create new file entity.
    */
   protected function createNewFileEntity($fileName) {
+    $fileYear = date('Y', $this->preparedLogs[$fileName]['created']);
+    $this->prepareFileDirectory($fileYear);
     $file = File::create();
     $file->setFilename($fileName);
-    $file->setFileUri("public://{$fileName}");
+    $file->setFileUri(self::BASE_ARCHIVE_PATH . DIRECTORY_SEPARATOR .
+      $fileYear . DIRECTORY_SEPARATOR . "{$fileName}");
     $file->setMimeType('application/x-gzip');
     $file->setPermanent();
     return $file;
