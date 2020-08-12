@@ -198,7 +198,8 @@ class LogArchiver {
       ->condition('filename', array_keys($this->preparedLogs), 'in')
       ->execute();
 
-    $file_entities = File::loadMultiple($file_ids);
+    $file_entities = $this->entityTypeManager
+      ->getStorage('file')->loadMultiple($file_ids);
 
     $this->fileEntities = [];
     foreach ($file_entities as $file_entity) {
