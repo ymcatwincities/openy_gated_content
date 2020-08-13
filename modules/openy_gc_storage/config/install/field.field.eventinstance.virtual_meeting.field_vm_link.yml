@@ -16,7 +16,7 @@ field_name: field_vm_link
 entity_type: eventinstance
 bundle: virtual_meeting
 label: 'Meeting link'
-description: ''
+description: "This field supports Zoom web client that can be displayed in the Virtual Y application. We recommend enabling \"Embed passcode in invite link for one-click log in\" setting in your Zoom account and disabling \"Only authenticated users can join meetings from Web client\" setting. <br>\r\nOnce these settings are applied, the Zoom link to your meeting should be similar to https://zoom.us/j/96267098321?pwd=aUFwZlNJSVFkSmkyejZKOEpFN05kZz09."
 required: false
 translatable: false
 default_value: {  }

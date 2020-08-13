@@ -21,7 +21,7 @@ display:
       access:
         type: perm
         options:
-          perm: 'administer site configuration'
+          perm: 'administer gated content configuration'
       cache:
         type: tag
         options: {  }

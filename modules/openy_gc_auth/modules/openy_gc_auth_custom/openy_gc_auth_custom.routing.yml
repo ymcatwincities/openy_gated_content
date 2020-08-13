@@ -4,4 +4,4 @@ openy_gc_auth_custom.import_csv:
     _form: '\Drupal\openy_gc_auth_custom\Form\ImportCsvForm'
     _title: 'Import CSV'
   requirements:
-    _permission: 'administer site configuration'
+    _permission: 'administer gated content configuration'

@@ -5,11 +5,13 @@
     </div>
     <div v-else-if="error">Error loading</div>
     <template v-else>
-      <div class="virtual-meeting-page__image" v-bind:style="{
-              backgroundImage: `url(${image})`
-      }">
-
-        <div class="virtual-meeting-page__link">
+      <div
+        class="virtual-meeting-page__image"
+        v-bind:class="{ 'zoom-wrapper': isZoomMeetingLink }"
+        v-bind:style="{ backgroundImage: `url(${image})` }"
+      >
+        <ZoomIframe :src="meetingLink.uri" v-if="isZoomMeetingLink"></ZoomIframe>
+        <div class="virtual-meeting-page__link" v-else>
           <a :href="meetingLink.uri" target="_blank" class="btn btn-lg btn-primary">
             {{ meetingLink.title }}
           </a>
@@ -75,6 +77,7 @@
 <script>
 import client from '@/client';
 import Spinner from '@/components/Spinner.vue';
+import ZoomIframe from '@/components/ZoomIframe.vue';
 import EventListing from '@/components/event/EventListing.vue';
 import AddToCalendar from '@/components/event/AddToCalendar.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
@@ -87,6 +90,7 @@ export default {
     EventListing,
     AddToCalendar,
     Spinner,
+    ZoomIframe,
   },
   props: {
     id: {
@@ -143,6 +147,9 @@ export default {
         }
       }
       return link;
+    },
+    isZoomMeetingLink() {
+      return this.video && this.meetingLink.uri && this.meetingLink.uri.includes('https://zoom.us/');
     },
     event() {
       return {
