@@ -182,7 +182,8 @@ class LogArchiver {
   protected function prepareYearDirectory($dir) {
     if ($this->isPrivateDirEnabled()) {
       $dir = 'private://' . self::BASE_ARCHIVE_PATH . DIRECTORY_SEPARATOR . $dir;
-    } else {
+    }
+    else {
       $salt = $this->settings::getHashSalt();
       $dir = 'public://' . self::BASE_ARCHIVE_PATH . DIRECTORY_SEPARATOR . $salt .
         DIRECTORY_SEPARATOR . $dir;
@@ -238,7 +239,8 @@ class LogArchiver {
     $file->setFilename($fileName);
     if ($this->isPrivateDirEnabled()) {
       $file->setFileUri($yearDir . DIRECTORY_SEPARATOR . $fileName);
-    } else {
+    }
+    else {
       $file->setFileUri($yearDir . DIRECTORY_SEPARATOR . md5(mt_rand()) . '-' . $fileName);
     }
     $file->setMimeType('application/x-gzip');
