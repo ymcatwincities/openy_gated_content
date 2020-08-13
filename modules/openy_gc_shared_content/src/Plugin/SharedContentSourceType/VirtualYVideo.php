@@ -74,6 +74,19 @@ class VirtualYVideo extends SharedContentSourceTypeBase {
   /**
    * {@inheritdoc}
    */
+  public function entityExists($uuid) {
+    $exists = $this->entityTypeManager->getStorage($this->getEntityType())
+      ->getQuery()
+      ->condition('type', $this->getEntityBundle())
+      ->condition('uuid', $uuid)
+      ->execute();
+
+    return !empty($exists);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function formatItem($data, $teaser = TRUE) {
     return $data['attributes']['title'];
   }

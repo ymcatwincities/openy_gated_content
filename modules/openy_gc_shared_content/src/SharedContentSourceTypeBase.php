@@ -142,6 +142,13 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
   /**
    * {@inheritdoc}
    */
+  public function entityExists($uuid) {
+    return FALSE;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function processJsonApiData(&$data) {
 
   }
@@ -183,6 +190,9 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
    * {@inheritdoc}
    */
   public function saveFromSource($url, $uuid) {
+    if ($this->entityExists($uuid)) {
+      return FALSE;
+    }
     $entity = NULL;
     $resource_type = $this->resourceTypeRepository->get($this->getEntityType(), $this->getEntityBundle());
     $query_args = $this->getFullJsonApiQueryArgs();
@@ -193,7 +203,6 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
     }
 
     $this->processJsonApiData($data);
-    // TODO: search existing item by uuid.
     // Delete relationships.
     foreach ($this->getExcludedRelationships() as $rel_name) {
       unset($data['data']['relationships'][$rel_name]);
@@ -241,7 +250,7 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
                 break;
 
               case 'media':
-                $relationships_data[$field_name][$delta] = $this->saveMediaFromSource($data, $value, $entity_bundle);
+                $relationships_data[$field_name][$delta] = $this->saveMediaFromSource($data, $value, $entity_bundle, $url);
                 break;
             }
           }
@@ -253,7 +262,10 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
       foreach ($included_relationships as $rel_name) {
         $entity->set($rel_name, $relationships_data[$rel_name]);
       }
+
+      $entity->set('field_gc_origin', $url);
       $entity->save();
+      return TRUE;
     }
     catch (UnexpectedValueException $e) {
       throw new UnprocessableEntityHttpException($e->getMessage());
@@ -266,30 +278,42 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
   /**
    * {@inheritdoc}
    */
-  public function saveMediaFromSource($parent_data, $data, $bundle) {
-    // TODO: search existing item by uuid.
+  public function saveMediaFromSource($parent_data, $data, $bundle, $url) {
     if (!in_array($bundle, ['video', 'image'])) {
       // Check for supported bundles.
       return [];
     }
 
+    // Search existing media by uuid and bundle.
+    $exists = $this->entityTypeManager->getStorage('media')
+      ->getQuery()
+      ->condition('bundle', $bundle)
+      ->condition('uuid', $data['id'])
+      ->execute();
+    if (!empty($exists)) {
+      // Return media ID.
+      return ['target_id' => reset($exists)];
+    }
+
+    $file = NULL;
     if ($bundle == 'image') {
       if (!isset($data['relationships']['field_media_image'])) {
         return [];
       }
 
+      $file_data = NULL;
       foreach ($parent_data['included'] as $included) {
-        if (!isset($included['id']) || !isset($included['type'])) {
-          continue;
-        }
-        if ($included['id'] == $data['relationships']['field_media_image']['id'] && $included['type'] == $data['relationships']['field_media_image']['type']) {
-          // TODO: save image and use file ID.
+        // Search image file in parent included items.
+        if ($included['id'] == $data['relationships']['field_media_image']['data']['id'] && $included['type'] == $data['relationships']['field_media_image']['data']['type']) {
+          $file_data = $included;
           break;
         }
-
       }
-
-      return [];
+      if (!$file_data) {
+        return [];
+      }
+      $file_temp = file_get_contents($url . $file_data['attributes']['uri']['url']);
+      $file = file_save_data($file_temp, $file_data['attributes']['uri']['value']);
     }
 
     unset($data['attributes']['drupal_internal__mid']);
@@ -299,6 +323,9 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
     $resource_type = $this->resourceTypeRepository->get('media', $bundle);
     $context = ['resource_type' => $resource_type];
     $media = $this->serializer->denormalize(['data' => $data], JsonApiDocumentTopLevel::class, 'api_json', $context);
+    if ($bundle == 'image' && $file) {
+      $media->set('field_media_image', ['target_id' => $file->id()]);
+    }
     $media->save();
 
     return ['target_id' => $media->id()];
