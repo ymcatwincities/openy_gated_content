@@ -22,7 +22,7 @@ use Drupal\Core\Field\BaseFieldDefinition;
  *   },
  *   translatable = FALSE,
  *   fieldable = FALSE,
- *   admin_permission = "administer site configuration",
+ *   admin_permission = "administer gated content configuration",
  * )
  */
 class AuthCustomUser extends ContentEntityBase implements AuthCustomUserInterface {
