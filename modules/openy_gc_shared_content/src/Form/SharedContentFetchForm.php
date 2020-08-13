@@ -2,8 +2,10 @@
 
 namespace Drupal\openy_gc_shared_content\Form;
 
+use Drupal\Component\Plugin\PluginManagerInterface;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Displays Shared Content Fetch UI.
@@ -13,13 +15,36 @@ use Drupal\Core\Form\FormStateInterface;
 class SharedContentFetchForm extends EntityForm {
 
   /**
+   * The plugin manager for SharedContentSourceType classes.
+   *
+   * @var \Drupal\Component\Plugin\PluginManagerInterface
+   */
+  protected $sharedSourceTypeManager;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function __construct(PluginManagerInterface $manager) {
+    $this->sharedSourceTypeManager = $manager;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('plugin.manager.shared_content_source_type')
+    );
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
     $entity = $this->entity;
     $options = [];
-    $plugin_service = \Drupal::service('plugin.manager.shared_content_source_type');
+
     if (!$entity->url || !$entity->token) {
       $form['message'] = [
         '#type' => 'markup',
@@ -34,8 +59,8 @@ class SharedContentFetchForm extends EntityForm {
       '#markup' => $entity->label() . ' - ' . $entity->url,
     ];
 
-    foreach ($plugin_service->getDefinitions() as $plugin_id => $plugin) {
-      $instance = $plugin_service->createInstance($plugin_id);
+    foreach ($this->sharedSourceTypeManager->getDefinitions() as $plugin_id => $plugin) {
+      $instance = $this->sharedSourceTypeManager->createInstance($plugin_id);
       $options[$instance->getId()] = $instance->getLabel();
     }
     // Use first item from options as default type.
@@ -54,18 +79,18 @@ class SharedContentFetchForm extends EntityForm {
         'event' => 'change',
         'progress' => [
           'type' => 'throbber',
-          'message' => t('Loading content..'),
+          'message' => $this->t('Loading content..'),
         ],
       ],
     ];
 
     // TODO: add pager.
-    $instance = $plugin_service->createInstance($type);
+    $instance = $this->sharedSourceTypeManager->createInstance($type);
     $source_data = $instance->jsonApiCall($this->entity->url);
     $form['fetched_data'] = [
       '#type' => 'container',
       '#prefix' => '<div id="fetched-data">',
-      '#suffix' => '</div>'
+      '#suffix' => '</div>',
     ];
 
     if (empty($source_data)) {
@@ -117,8 +142,7 @@ class SharedContentFetchForm extends EntityForm {
       return;
     }
     $type = $form_state->getValue('type');
-    $plugin_service = \Drupal::service('plugin.manager.shared_content_source_type');
-    $instance = $plugin_service->createInstance($type);
+    $instance = $this->sharedSourceTypeManager->createInstance($type);
     foreach ($to_create as $uuid) {
       // TODO: create items in batch.
       $instance->saveFromSource($this->entity->url, $uuid);

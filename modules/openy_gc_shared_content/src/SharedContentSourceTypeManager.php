@@ -29,17 +29,4 @@ class SharedContentSourceTypeManager extends DefaultPluginManager {
     $this->factory = new ContainerFactory($this->getDiscovery());
   }
 
-  /**
-   * {@inheritdoc}
-   */
-  public function getDefinitionsByEntityType($entity_type) {
-    $definitions = $this->getDefinitions();
-    foreach ($definitions as $id => $definition) {
-      if ($definition['entity_type'] != $entity_type) {
-        unset($definitions[$id]);
-      }
-    }
-    return $definitions;
-  }
-
 }

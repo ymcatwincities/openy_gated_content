@@ -10,12 +10,15 @@ use Drupal\openy_gc_shared_content\SharedContentSourceTypeBase;
  * @SharedContentSourceType(
  *   id="vy_blog_post",
  *   label = @Translation("Virtual Y blog post"),
- *   entity_type="node",
- *   entity_bundle="vy_blog_post"
+ *   entityType="node",
+ *   entityBundle="vy_blog_post"
  * )
  */
 class VirtualYBlogPost extends SharedContentSourceTypeBase {
 
+  /**
+   * {@inheritdoc}
+   */
   public function getTeaserJsonApiQueryArgs() {
     return [
       'include' => 'field_vy_blog_image,field_vy_blog_image.field_media_image',
@@ -26,6 +29,9 @@ class VirtualYBlogPost extends SharedContentSourceTypeBase {
     ];
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function getFullJsonApiQueryArgs() {
     return [
       'include' => 'field_vy_blog_image,field_vy_blog_image.field_media_image',
@@ -34,6 +40,9 @@ class VirtualYBlogPost extends SharedContentSourceTypeBase {
     ];
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function getExcludedRelationships() {
     return [
       'node_type',
@@ -42,6 +51,9 @@ class VirtualYBlogPost extends SharedContentSourceTypeBase {
     ];
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function getIncludedRelationships() {
     return [
       'field_vy_blog_image',

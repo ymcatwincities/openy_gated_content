@@ -32,13 +32,13 @@ class SharedContentSourceType extends Plugin {
    *
    * @var string
    */
-  public $entity_type;
+  public $entityType;
 
   /**
    * The plugin entity bundle.
    *
    * @var string
    */
-  public $entity_bundle;
+  public $entityBundle;
 
 }

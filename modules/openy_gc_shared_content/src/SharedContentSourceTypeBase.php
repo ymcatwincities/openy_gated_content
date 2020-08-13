@@ -101,14 +101,14 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
    * {@inheritdoc}
    */
   public function getEntityType() {
-    return $this->pluginDefinition['entity_type'];
+    return $this->pluginDefinition['entityType'];
   }
 
   /**
    * {@inheritdoc}
    */
   public function getEntityBundle() {
-    return $this->pluginDefinition['entity_bundle'];
+    return $this->pluginDefinition['entityBundle'];
   }
 
   /**
@@ -176,7 +176,7 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
       return FALSE;
     }
 
-    return  $this->serializer->decode($request->getBody()->getContents(), 'api_json');
+    return $this->serializer->decode($request->getBody()->getContents(), 'api_json');
   }
 
   /**
@@ -255,8 +255,6 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
       }
       $entity->save();
     }
-      // These two serialization exception types mean there was a problem with
-      // the structure of the decoded data and it's not valid.
     catch (UnexpectedValueException $e) {
       throw new UnprocessableEntityHttpException($e->getMessage());
     }
@@ -275,13 +273,15 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
       return [];
     }
 
-    $file = NULL;
     if ($bundle == 'image') {
       if (!isset($data['relationships']['field_media_image'])) {
         return [];
       }
 
       foreach ($parent_data['included'] as $included) {
+        if (!isset($included['id']) || !isset($included['type'])) {
+          continue;
+        }
         if ($included['id'] == $data['relationships']['field_media_image']['id'] && $included['type'] == $data['relationships']['field_media_image']['type']) {
           // TODO: save image and use file ID.
           break;

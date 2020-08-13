@@ -10,12 +10,15 @@ use Drupal\openy_gc_shared_content\SharedContentSourceTypeBase;
  * @SharedContentSourceType(
  *   id="gc_video",
  *   label = @Translation("Virtual Y video"),
- *   entity_type="node",
- *   entity_bundle="gc_video"
+ *   entityType="node",
+ *   entityBundle="gc_video"
  * )
  */
 class VirtualYVideo extends SharedContentSourceTypeBase {
 
+  /**
+   * {@inheritdoc}
+   */
   public function getTeaserJsonApiQueryArgs() {
     return [
       'include' => 'field_gc_video_media,field_gc_video_media.thumbnail,field_gc_video_level,field_gc_video_category',
@@ -26,6 +29,9 @@ class VirtualYVideo extends SharedContentSourceTypeBase {
     ];
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function getFullJsonApiQueryArgs() {
     return [
       'include' => 'field_gc_video_media,field_gc_video_media.thumbnail,field_gc_video_level,field_gc_video_category,field_gc_video_equipment',
@@ -34,6 +40,9 @@ class VirtualYVideo extends SharedContentSourceTypeBase {
     ];
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function getExcludedRelationships() {
     return [
       'node_type',
@@ -42,6 +51,9 @@ class VirtualYVideo extends SharedContentSourceTypeBase {
     ];
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function getIncludedRelationships() {
     return [
       'field_gc_video_category',
