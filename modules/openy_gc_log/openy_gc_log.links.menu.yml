@@ -6,3 +6,14 @@ openy_gated_content.logs:
   description: 'List Log entity entities'
   parent: openy_gated_content.openy
   weight: 100
+
+openy_gated_content.logs_archives:
+  title: 'Logs Archives'
+  route_name: view.files.page_1
+  description: 'List Log entity entities'
+  parent: openy_gated_content.openy
+  weight: 101
+  options:
+    query:
+      filename: virtual-y
+      filemime: application/x-gzip

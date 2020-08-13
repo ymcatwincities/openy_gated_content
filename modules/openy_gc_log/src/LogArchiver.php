@@ -4,7 +4,9 @@ namespace Drupal\openy_gc_log;
 
 use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Entity\EntityTypeManager;
+use Drupal\Core\File\FileSystem;
 use Drupal\Core\Logger\LoggerChannel;
+use Drupal\Core\Site\Settings;
 use Drupal\csv_serialization\Encoder\CsvEncoder;
 use Drupal\file\Entity\File;
 
@@ -15,7 +17,7 @@ class LogArchiver {
 
   const WORKER_CHUNK_SIZE = 600;
 
-  const BASE_ARCHIVE_PATH = 'private://vy_logs';
+  const BASE_ARCHIVE_PATH = 'public://vy_logs';
 
   /**
    * Log Ids.
@@ -68,6 +70,20 @@ class LogArchiver {
   private $config;
 
   /**
+   * FileSystem.
+   *
+   * @var \Drupal\Core\File\FileSystem
+   */
+  protected $fileSystem;
+
+  /**
+   * Site Settings.
+   *
+   * @var \Drupal\Core\Site\Settings
+   */
+  protected $settings;
+
+  /**
    * LogArchiver constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManager $entityTypeManager
@@ -76,15 +92,23 @@ class LogArchiver {
    *   LoggerChannel.
    * @param \Drupal\Core\Config\ConfigFactory $configFactory
    *   ConfigFactory.
+   * @param \Drupal\Core\File\FileSystem $fileSystem
+   *   FileSystem.
+   * @param \Drupal\Core\Site\Settings $settings
+   *   Settings.
    */
   public function __construct(
     EntityTypeManager $entityTypeManager,
     LoggerChannel $logger,
-    ConfigFactory $configFactory
+    ConfigFactory $configFactory,
+    FileSystem $fileSystem,
+    Settings $settings
   ) {
     $this->entityTypeManager = $entityTypeManager;
     $this->logger = $logger;
     $this->config = $configFactory;
+    $this->fileSystem = $fileSystem;
+    $this->settings = $settings;
   }
 
   /**
@@ -148,13 +172,16 @@ class LogArchiver {
   /**
    * Prepare directory for logs.
    */
-  protected function prepareFileDirectory($dir) {
-    $dir = self::BASE_ARCHIVE_PATH . DIRECTORY_SEPARATOR . $dir;
-    if (!file_exists($dir)) {
-      if (!mkdir($dir, 0700, TRUE) && !is_dir($dir)) {
-        throw new \RuntimeException(sprintf('Can not create directory "%s"', $dir));
-      }
+  protected function prepareYearDirectory($dir) {
+    $salt = $this->settings::get('hash_salt', 'salt_undefined');
+    $dir = self::BASE_ARCHIVE_PATH . DIRECTORY_SEPARATOR . $salt .
+      DIRECTORY_SEPARATOR . $dir;
+    if (!$this->fileSystem->prepareDirectory($dir,
+      FileSystem::CREATE_DIRECTORY)) {
+      throw new \RuntimeException(sprintf('Can not create directory "%s"', $dir));
     }
+
+    return $dir;
   }
 
   /**
@@ -195,11 +222,10 @@ class LogArchiver {
    */
   protected function createNewFileEntity($fileName) {
     $fileYear = date('Y', (int) $this->preparedLogs[$fileName][0]['created']);
-    $this->prepareFileDirectory($fileYear);
+    $yearDir = $this->prepareYearDirectory($fileYear);
     $file = File::create();
     $file->setFilename($fileName);
-    $file->setFileUri(self::BASE_ARCHIVE_PATH . DIRECTORY_SEPARATOR .
-      $fileYear . DIRECTORY_SEPARATOR . "{$fileName}");
+    $file->setFileUri($yearDir . DIRECTORY_SEPARATOR . $fileName);
     $file->setMimeType('application/x-gzip');
     $file->setPermanent();
     return $file;

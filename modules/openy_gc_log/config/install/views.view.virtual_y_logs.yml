@@ -332,7 +332,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          label: User Action
+          label: 'User Action'
           exclude: false
           alter:
             alter_text: false
@@ -693,7 +693,7 @@ display:
                 operator: contains
                 value: node
               2:
-                title: Videoconference/Online Translation
+                title: 'Videoconference/Online Translation'
                 operator: contains
                 value: series
               3:
@@ -763,51 +763,6 @@ display:
                 value: virtual_meeting
           entity_type: log_entity
           entity_field: entity_bundle
-          plugin_id: string
-        entity_id:
-          id: entity_id
-          table: log_entity
-          field: entity_id
-          relationship: none
-          group_type: group
-          admin_label: ''
-          operator: contains
-          value: ''
-          group: 1
-          exposed: true
-          expose:
-            operator_id: entity_id_op
-            label: 'Entity Id'
-            description: ''
-            use_operator: false
-            operator: entity_id_op
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: entity_id
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-              anonymous: '0'
-              administrator: '0'
-              contributor: '0'
-              editor: '0'
-            placeholder: ''
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          entity_type: log_entity
-          entity_field: entity_id
           plugin_id: string
       sorts: {  }
       title: 'Virtual Y Logs'
