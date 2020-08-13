@@ -17,7 +17,7 @@ class LogArchiver {
 
   const WORKER_CHUNK_SIZE = 600;
 
-  const BASE_ARCHIVE_PATH = 'public://vy_logs';
+  const BASE_ARCHIVE_PATH = 'vy_logs';
 
   /**
    * Log Ids.
@@ -170,12 +170,23 @@ class LogArchiver {
   }
 
   /**
+   * Check is private dir enabled.
+   */
+  protected function isPrivateDirEnabled() {
+    return $this->settings::get('file_private_path', FALSE);
+  }
+
+  /**
    * Prepare directory for logs.
    */
   protected function prepareYearDirectory($dir) {
-    $salt = $this->settings::get('hash_salt', 'salt_undefined');
-    $dir = self::BASE_ARCHIVE_PATH . DIRECTORY_SEPARATOR . $salt .
-      DIRECTORY_SEPARATOR . $dir;
+    if ($this->isPrivateDirEnabled()) {
+      $dir = 'private://' . self::BASE_ARCHIVE_PATH . DIRECTORY_SEPARATOR . $dir;
+    } else {
+      $salt = $this->settings::getHashSalt();
+      $dir = 'public://' . self::BASE_ARCHIVE_PATH . DIRECTORY_SEPARATOR . $salt .
+        DIRECTORY_SEPARATOR . $dir;
+    }
     if (!$this->fileSystem->prepareDirectory($dir,
       FileSystem::CREATE_DIRECTORY)) {
       throw new \RuntimeException(sprintf('Can not create directory "%s"', $dir));
@@ -225,7 +236,11 @@ class LogArchiver {
     $yearDir = $this->prepareYearDirectory($fileYear);
     $file = File::create();
     $file->setFilename($fileName);
-    $file->setFileUri($yearDir . DIRECTORY_SEPARATOR . $fileName);
+    if ($this->isPrivateDirEnabled()) {
+      $file->setFileUri($yearDir . DIRECTORY_SEPARATOR . $fileName);
+    } else {
+      $file->setFileUri($yearDir . DIRECTORY_SEPARATOR . md5(mt_rand()) . '-' . $fileName);
+    }
     $file->setMimeType('application/x-gzip');
     $file->setPermanent();
     return $file;
