@@ -73,8 +73,8 @@ class DaxkoBarcode extends GCIdentityProviderPluginBase {
   {
     // Ensure ReCaptcha is set up before requiring it on our form.
     $enable_recaptcha = $form_state->getValue('enable_recaptcha');
-    $recaptcha_site_key = \Drupal::config('recaptcha.settings')->get('recaptcha_site_key');
-
+    $recaptcha_site_key = \Drupal::config('recaptcha.settings')->get('site_key');
+    
     if ($enable_recaptcha && !isset($recaptcha_site_key)) {
       $recaptcha_link = Link::createFromRoute('configure ReCaptcha', 'recaptcha.admin_settings_form')
         ->toString();
