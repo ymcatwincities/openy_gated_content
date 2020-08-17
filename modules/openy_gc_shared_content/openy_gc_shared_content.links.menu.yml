@@ -6,15 +6,8 @@ shared_content_source.config:
   weight: 25
 
 shared_content_source.source_server_list:
-  title: 'Source Servers list'
+  title: 'Source Servers'
   description: 'Virtual YMCA Shared Content source servers.'
   route_name: entity.shared_content_source_server.collection
   parent: shared_content_source.config
   weight: 1
-
-shared_content_source.content:
-  title: 'Shared content fetch'
-  description: 'Virtual YMCA Shared Content fetch.'
-  route_name: entity.shared_content_source_server.add_form
-  parent: shared_content_source_server.config
-  weight: 2

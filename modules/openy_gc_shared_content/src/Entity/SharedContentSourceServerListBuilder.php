@@ -29,4 +29,20 @@ class SharedContentSourceServerListBuilder extends ConfigEntityListBuilder {
     return $row + parent::buildRow($entity);
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getDefaultOperations(EntityInterface $entity) {
+    $operations = parent::getDefaultOperations($entity);
+    if ($entity->access('edit') && $entity->hasLinkTemplate('fetch-form')) {
+      $operations['fetch'] = [
+        'title' => $this->t('Fetch'),
+        'weight' => -100,
+        'url' => $this->ensureDestination($entity->toUrl('fetch-form')),
+      ];
+    }
+
+    return $operations;
+  }
+
 }
