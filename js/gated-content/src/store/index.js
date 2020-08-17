@@ -5,6 +5,7 @@ import auth from './modules/auth';
 import settings from './modules/settings';
 import authDummy from './modules/auth/dummy';
 import authCustom from './modules/auth/custom';
+import authDaxkoBarcode from './modules/auth/daxkobarcode';
 import authDaxkoSSO from './modules/auth/daxkosso';
 import authPersonify from './modules/auth/personify';
 
@@ -30,6 +31,7 @@ export default new Vuex.Store({
     auth,
     authDummy,
     authCustom,
+    authDaxkoBarcode,
     authDaxkoSSO,
     authPersonify,
   },
