@@ -3,6 +3,7 @@
 namespace Drupal\openy_gc_shared_content\Form;
 
 use Drupal\Component\Plugin\PluginManagerInterface;
+use Drupal\Core\Batch\BatchBuilder;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Pager\PagerManagerInterface;
@@ -32,11 +33,19 @@ class SharedContentFetchForm extends EntityForm {
   protected $pagerManager;
 
   /**
+   * Batch Builder.
+   *
+   * @var \Drupal\Core\Batch\BatchBuilder
+   */
+  protected $batchBuilder;
+
+  /**
    * {@inheritdoc}
    */
   public function __construct(PluginManagerInterface $manager, PagerManagerInterface $pager_manager) {
     $this->sharedSourceTypeManager = $manager;
     $this->pagerManager = $pager_manager;
+    $this->batchBuilder = new BatchBuilder();
   }
 
   /**
@@ -111,6 +120,9 @@ class SharedContentFetchForm extends EntityForm {
           'operations' => [
             'data' => [
               '#type' => 'button',
+              // TODO: Add modal with preview.
+              // TODO: For preview use custom theme template.
+              // TODO: Use markup from application.
               '#value' => $this->t('Preview'),
             ],
           ],
@@ -150,12 +162,37 @@ class SharedContentFetchForm extends EntityForm {
       return;
     }
     $type = $this->getRouteMatch()->getParameter('type');
-    $instance = $this->sharedSourceTypeManager->createInstance($type);
+
+    $this->batchBuilder
+      ->setTitle($this->t('Fetching data'))
+      ->setInitMessage($this->t('Initializing.'))
+      ->setProgressMessage($this->t('Completed @current of @total.'))
+      ->setErrorMessage($this->t('An error has occurred.'));
+    $this->batchBuilder->setFile(drupal_get_path('module', 'openy_gc_shared_content') . '/src/Form/SharedContentFetchForm.php');
     foreach ($to_create as $uuid) {
-      // TODO: create items in batch.
-      $instance->saveFromSource($this->entity->url, $uuid);
+      $this->batchBuilder->addOperation([$this, 'processItem'], [
+        $this->entity->url,
+        $uuid,
+        $type,
+      ]);
     }
-    $this->messenger()->addStatus($this->t('Fetched.'));
+    $this->batchBuilder->setFinishCallback([$this, 'finished']);
+    batch_set($this->batchBuilder->toArray());
+  }
+
+  /**
+   * Processor for batch operations.
+   */
+  public function processItem($url, $uuid, $type, array &$context) {
+    $instance = $this->sharedSourceTypeManager->createInstance($type);
+    $instance->saveFromSource($url, $uuid);
+  }
+
+  /**
+   * Finished callback for batch.
+   */
+  public function finished($success, $results, $operations) {
+    $this->messenger()->addStatus($this->t('Data Fetching Finished'));
   }
 
 }

@@ -4,7 +4,9 @@ namespace Drupal\openy_gc_shared_content;
 
 use Drupal\Component\Plugin\PluginBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Messenger\MessengerTrait;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\jsonapi\JsonApiResource\JsonApiDocumentTopLevel;
 use Drupal\jsonapi\ResourceType\ResourceTypeRepositoryInterface;
 use GuzzleHttp\Client;
@@ -18,6 +20,9 @@ use Symfony\Component\Serializer\SerializerInterface;
  * Defines the base plugin for SharedContentSourceType classes.
  */
 class SharedContentSourceTypeBase extends PluginBase implements SharedContentSourceTypeInterface, ContainerFactoryPluginInterface {
+
+  use MessengerTrait;
+  use StringTranslationTrait;
 
   /**
    * A guzzle http client.
@@ -176,7 +181,6 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
       'GET',
       $url . '/' . $this->getJsonApiEndpoint($uuid),
       ['query' => array_merge($this->getTeaserJsonApiQueryArgs(), $query_args)]
-    // TODO: add pager to query.
     );
 
     if ($request->getStatusCode() != 200) {
@@ -265,6 +269,11 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
 
       $entity->set('field_gc_origin', $url);
       $entity->save();
+      $this->messenger()->addStatus($this->t('Entity {@type:@bundle} "@title" was fetched to site.', [
+        '@type' => $this->getEntityType(),
+        '@bundle' => $this->getEntityBundle(),
+        '@title' => $entity->get('title')->value,
+      ]));
       return TRUE;
     }
     catch (UnexpectedValueException $e) {
@@ -354,7 +363,10 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
     $context = ['resource_type' => $resource_type];
     $term = $this->serializer->denormalize(['data' => $data], JsonApiDocumentTopLevel::class, 'api_json', $context);
     $term->save();
-
+    $this->messenger()->addWarning($this->t('Taxonomy term "@name" not found in {@vid}, so it was created during data fetch.', [
+      '@name' => $term->getName(),
+      '@vid' => $bundle,
+    ]));
     return ['target_id' => $term->id()];
   }
 
