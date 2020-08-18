@@ -154,7 +154,7 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
   /**
    * {@inheritdoc}
    */
-  public function processJsonApiData(&$data) {
+  public function processJsonApiData(array &$data) {
 
   }
 
@@ -176,11 +176,11 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
   /**
    * {@inheritdoc}
    */
-  public function jsonApiCall($url, $query_args = [], $uuid = NULL) {
+  public function jsonApiCall($url, array $query_args = [], $uuid = NULL) {
     $request = $this->client->request(
       'GET',
       $url . '/' . $this->getJsonApiEndpoint($uuid),
-      ['query' => array_merge($this->getTeaserJsonApiQueryArgs(), $query_args)]
+      ['query' => $query_args]
     );
 
     if ($request->getStatusCode() != 200) {

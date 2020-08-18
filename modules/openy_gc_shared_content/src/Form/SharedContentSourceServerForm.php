@@ -60,7 +60,7 @@ class SharedContentSourceServerForm extends EntityForm {
       '#type' => 'textfield',
       '#title' => $this->t('Source URL'),
       '#maxlength' => 255,
-      '#default_value' => $entity->url,
+      '#default_value' => $entity->getUrl(),
       '#required' => TRUE,
     ];
 
@@ -68,7 +68,7 @@ class SharedContentSourceServerForm extends EntityForm {
       '#type' => 'textfield',
       '#title' => $this->t('Source Token'),
       '#maxlength' => 255,
-      '#default_value' => $entity->token,
+      '#default_value' => $entity->getToken(),
       '#required' => TRUE,
     ];
     return $form;

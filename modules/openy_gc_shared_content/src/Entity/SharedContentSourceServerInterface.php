@@ -9,4 +9,20 @@ use Drupal\Core\Config\Entity\ConfigEntityInterface;
  */
 interface SharedContentSourceServerInterface extends ConfigEntityInterface {
 
+  /**
+   * Gets the url to the server.
+   *
+   * @return string
+   *   The url to the server.
+   */
+  public function getUrl();
+
+  /**
+   * Gets the token to the server.
+   *
+   * @return string
+   *   The access token to the server.
+   */
+  public function getToken();
+
 }

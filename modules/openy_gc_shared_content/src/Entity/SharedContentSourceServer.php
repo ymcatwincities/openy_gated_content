@@ -82,4 +82,18 @@ class SharedContentSourceServer extends ConfigEntityBase implements SharedConten
     return $label ?: $this->id();
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getUrl() {
+    return $this->url;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getToken() {
+    return $this->token;
+  }
+
 }

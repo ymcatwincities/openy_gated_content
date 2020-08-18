@@ -66,7 +66,7 @@ class SharedContentFetchForm extends EntityForm {
     $form = parent::form($form, $form_state);
     $entity = $this->entity;
 
-    if (!$entity->url || !$entity->token) {
+    if (!$entity->getUrl() || !$entity->getToken()) {
       $form['message'] = [
         '#type' => 'markup',
         '#markup' => $this->t('Source not configured! Go to <path> and set url and token.'),
@@ -77,7 +77,7 @@ class SharedContentFetchForm extends EntityForm {
 
     $form['label'] = [
       '#type' => 'markup',
-      '#markup' => $entity->label() . ' - ' . $entity->url,
+      '#markup' => $entity->label() . ' - ' . $entity->getUrl(),
     ];
 
     $type = $this->getRouteMatch()->getParameter('type');
@@ -90,7 +90,8 @@ class SharedContentFetchForm extends EntityForm {
       'page[limit]' => self::PAGE_LIMIT,
     ];
     $instance = $this->sharedSourceTypeManager->createInstance($type);
-    $source_data = $instance->jsonApiCall($this->entity->url, $pager_query);
+    $query_arg = array_merge($instance->getTeaserJsonApiQueryArgs(), $pager_query);
+    $source_data = $instance->jsonApiCall($this->entity->getUrl(), $query_arg);
     $form['fetched_data'] = [
       '#type' => 'container',
     ];
@@ -178,7 +179,7 @@ class SharedContentFetchForm extends EntityForm {
     $this->batchBuilder->setFile(drupal_get_path('module', 'openy_gc_shared_content') . '/src/Form/SharedContentFetchForm.php');
     foreach ($to_create as $uuid) {
       $this->batchBuilder->addOperation([$this, 'processItem'], [
-        $this->entity->url,
+        $this->entity->getUrl(),
         $uuid,
         $type,
       ]);

@@ -21,7 +21,6 @@ class VirtualYVideo extends SharedContentSourceTypeBase {
    */
   public function getTeaserJsonApiQueryArgs() {
     return [
-      'include' => 'field_gc_video_media,field_gc_video_media.thumbnail,field_gc_video_level,field_gc_video_category',
       'sort[sortByDate][path]' => 'created',
       'sort[sortByDate][direction]' => 'DESC',
       'filter[status]' => 1,

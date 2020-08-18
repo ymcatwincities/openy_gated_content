@@ -44,9 +44,10 @@ class PreviewController extends ControllerBase {
   public function openPreviewModal(Request $request, SharedContentSourceServerInterface $shared_content_source_server, string $type, string $uuid) {
     $response = new AjaxResponse();
     $instance = $this->sharedSourceTypeManager->createInstance($type);
-    $data = $instance->jsonApiCall($shared_content_source_server->url, [], $uuid);
+    $query_args = $instance->getFullJsonApiQueryArgs();
+    $data = $instance->jsonApiCall($shared_content_source_server->getUrl(), $query_args, $uuid);
     $content = $instance->formatItem($data, FALSE);
-    $content['#server'] = $shared_content_source_server->url;
+    $content['#server'] = $shared_content_source_server->getUrl();
     $response->addCommand(new OpenModalDialogCommand('Preview', $content, ['width' => '900']));
 
     return $response;

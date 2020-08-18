@@ -23,7 +23,11 @@
             <div class="video-footer__block"> Category: {{ field_gc_video_category[0] }} </div>
             <div class="video-footer__equipment">
               <i class="fa fa-cubes"></i> Equipment:
-              <ul><li> Chair </li></ul>
+              <ul>
+                {% for equipment in field_gc_video_equipment %}
+                  <li>{{ equipment }}</li>
+                {% endfor %}
+              </ul>
             </div>
           </div>
         </div>

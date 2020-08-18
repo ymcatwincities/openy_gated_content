@@ -21,7 +21,6 @@ class VirtualYBlogPost extends SharedContentSourceTypeBase {
    */
   public function getTeaserJsonApiQueryArgs() {
     return [
-      'include' => 'field_vy_blog_image,field_vy_blog_image.field_media_image',
       'sort[sortByDate][path]' => 'created',
       'sort[sortByDate][direction]' => 'DESC',
       'filter[status]' => 1,
