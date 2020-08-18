@@ -195,6 +195,9 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
    */
   public function saveFromSource($url, $uuid) {
     if ($this->entityExists($uuid)) {
+      $this->messenger()->addWarning($this->t('Entity with UUID "@uuid" already exists.', [
+        '@uuid' => $uuid,
+      ]));
       return FALSE;
     }
     $entity = NULL;

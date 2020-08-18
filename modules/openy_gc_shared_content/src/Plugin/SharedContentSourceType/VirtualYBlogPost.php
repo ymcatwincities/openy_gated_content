@@ -85,7 +85,25 @@ class VirtualYBlogPost extends SharedContentSourceTypeBase {
    * {@inheritdoc}
    */
   public function formatItem($data, $teaser = TRUE) {
-    return $data['attributes']['title'];
+    if ($teaser) {
+      return $data['attributes']['title'];
+    }
+
+    $content = [
+      '#theme' => 'openy_gc_shared_content__vy_blog_post',
+      '#title' => $data['data']['attributes']['title'],
+      '#description' => $data['data']['attributes']['field_vy_blog_description']['processed'],
+      '#image' => '',
+    ];
+
+    if (!empty($data['data']['relationships']['field_vy_blog_image']['data'])) {
+      foreach ($data['included'] as $included) {
+        if ($included['type'] == 'file--file') {
+          $content['#image'] = $included['attributes']['uri']['url'];
+        }
+      }
+    }
+    return $content;
   }
 
 }

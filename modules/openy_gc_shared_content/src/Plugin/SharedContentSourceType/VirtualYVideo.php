@@ -88,7 +88,77 @@ class VirtualYVideo extends SharedContentSourceTypeBase {
    * {@inheritdoc}
    */
   public function formatItem($data, $teaser = TRUE) {
-    return $data['attributes']['title'];
+    if ($teaser) {
+      return $data['attributes']['title'];
+    }
+
+    $content = [
+      '#theme' => 'openy_gc_shared_content__gc_video',
+      '#title' => $data['data']['attributes']['title'],
+      '#description' => $data['data']['attributes']['field_gc_video_description']['processed'],
+      '#field_gc_video_level' => NULL,
+      '#field_gc_video_instructor' => $data['data']['attributes']['field_gc_video_instructor'],
+      '#field_gc_video_category' => NULL,
+      '#field_gc_video_equipment' => [],
+      '#field_gc_video_media' => NULL,
+    ];
+    $searched_rel = [
+      'field_gc_video_category',
+      'field_gc_video_equipment',
+      'field_gc_video_level',
+      'field_gc_video_media',
+    ];
+    foreach ($data['data']['relationships'] as $field_name => $value) {
+      if (!in_array($field_name, $searched_rel)) {
+        continue;
+      }
+      if (isset($value['data'][0])) {
+        // Can be multiple.
+        $rel_data = $value['data'];
+      }
+      else {
+        // For single value save like multiple.
+        $rel_data[0] = $value['data'];
+      }
+
+      foreach ($rel_data as $seared_item) {
+        foreach ($data['included'] as $item) {
+          if ($item['type'] == $seared_item['type'] && $item['id'] == $seared_item['id']) {
+            if (strpos($item['type'], 'taxonomy_term') !== FALSE) {
+              $content['#' . $field_name][] = $item['attributes']['name'];
+            }
+            if ($item['type'] == 'media--video') {
+              if ($item['attributes']['field_media_source'] == 'youtube') {
+                $url = 'http://www.youtube.com/embed/' . $item['attributes']['field_media_video_id'];
+              }
+              elseif ($item['attributes']['field_media_source'] == 'vimeo') {
+                $url = 'https://player.vimeo.com/video/' . $item['attributes']['field_media_video_id'];
+              }
+              $content['#' . $field_name] = [
+                '#type' => 'html_tag',
+                '#tag' => 'iframe',
+                '#attributes' => [
+                  'src' => $url,
+                  'frameborder' => 0,
+                  'allow' => 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture',
+                  'scrolling' => FALSE,
+                  'allowtransparency' => TRUE,
+                  'width' => '100%',
+                  'height' => '400px',
+                  'class' => ['media-oembed-content'],
+                ],
+                '#attached' => [
+                  'library' => ['media/oembed.formatter'],
+                ],
+              ];
+            }
+            break 2;
+          }
+        }
+      }
+    }
+
+    return $content;
   }
 
 }

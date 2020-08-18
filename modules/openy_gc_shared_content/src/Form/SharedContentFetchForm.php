@@ -7,6 +7,7 @@ use Drupal\Core\Batch\BatchBuilder;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Pager\PagerManagerInterface;
+use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -119,11 +120,16 @@ class SharedContentFetchForm extends EntityForm {
           'name' => $instance->formatItem($item),
           'operations' => [
             'data' => [
-              '#type' => 'button',
-              // TODO: Add modal with preview.
-              // TODO: For preview use custom theme template.
-              // TODO: Use markup from application.
-              '#value' => $this->t('Preview'),
+              '#type' => 'link',
+              '#title' => $this->t('Preview'),
+              '#url' => Url::fromRoute('entity.shared_content_source_server.preview', [
+                'shared_content_source_server' => $entity->id(),
+                'type' => $type,
+                'uuid' => $item['id'],
+              ]),
+              '#attributes' => [
+                'class' => ['use-ajax', 'button'],
+              ],
             ],
           ],
         ];
@@ -138,6 +144,7 @@ class SharedContentFetchForm extends EntityForm {
         '#quantity' => 1,
       ];
     }
+    $form['#attached']['library'][] = 'core/drupal.dialog.ajax';
 
     return $form;
   }

@@ -113,3 +113,31 @@ function openy_gc_shared_content_form_alter(&$form, FormStateInterface $form_sta
     return;
   }
 }
+
+/**
+ * Implements hook_theme().
+ */
+function openy_gc_shared_content_theme($existing, $type, $theme, $path) {
+  return [
+    'openy_gc_shared_content__vy_blog_post' => [
+      'variables' => [
+        'title' => NULL,
+        'description' => NULL,
+        'image' => NULL,
+        'server' => NULL,
+      ],
+    ],
+    'openy_gc_shared_content__gc_video' => [
+      'variables' => [
+        'title' => NULL,
+        'description' => NULL,
+        'field_gc_video_level' => NULL,
+        'field_gc_video_instructor' => NULL,
+        'field_gc_video_category' => NULL,
+        'field_gc_video_equipment' => [],
+        'field_gc_video_media' => NULL,
+        'server' => NULL,
+      ],
+    ],
+  ];
+}
