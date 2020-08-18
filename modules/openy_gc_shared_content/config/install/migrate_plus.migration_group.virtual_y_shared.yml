@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+id: virtual_y_shared
+label: 'Virtual Y Shared Content Server sync'
+description: 'Imports shared items from Virtual Y sources to the main Demo Server.'
+module: openy_gc_shared_content

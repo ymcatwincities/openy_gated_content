@@ -1,0 +1,80 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - openy_gc_shared_content
+id: virtual_y_shared_node_video
+migration_tags:
+  - openy_complete_installation
+migration_group: virtual_y_shared
+deriver: Drupal\openy_gc_shared_content\SourceMigrationDeriver
+label: 'Sync shared videos to Open Y shared demo server.'
+source:
+  plugin: url
+  data_fetcher_plugin: http
+  # Specifies the JSON parser plugin.
+  data_parser_plugin: json
+  track_changes: true
+  headers:
+    Accept: 'application/json; charset=utf-8'
+    Content-Type: 'application/json'
+  urls: replace_me
+  item_selector: data/
+  fields:
+    - name: nid
+      label: 'nid'
+      selector: /attributes/drupal_internal__nid
+    - name: title
+      label: 'Title'
+      selector: /attributes/title
+    - name: created
+      label: 'Created'
+      selector: /attributes/created
+    - name: changed
+      label: 'Changed'
+      selector: /attributes/changed
+    - name: status
+      label: 'Status'
+      selector: /attributes/status
+    - name: field_gc_video_media_id
+      label: 'Video'
+      selector: /relationships/field_gc_video_media/data/id
+    - name: field_gc_video_description
+      label: 'Video description'
+      selector: /attributes/field_gc_video_description/value
+    - name: field_gc_video_duration
+      label: 'Duration'
+      selector: /attributes/field_gc_video_duration
+  ids:
+    nid:
+      type: integer
+process:
+  langcode:
+    plugin: default_value
+    source: language
+    default_value: en
+  status: status
+  created: created
+  changed: changed
+  uid:
+    plugin: default_value
+    default_value: 1
+  title: title
+  field_gc_video_description/value: field_gc_video_description
+  field_gc_video_description/format:
+    plugin: default_value
+    default_value: full_html
+  field_gc_video_duration: field_gc_video_duration
+  field_gc_video_media:
+    plugin: migration
+    migration: virtual_y_shared_media_video:REPLACE_ME
+    source: field_gc_video_media_id
+destination:
+  plugin: 'entity:node'
+  default_bundle: gc_video
+
+migration_dependencies:
+  required:
+    - virtual_y_shared_media_video:REPLACE_ME
+  optional: {  }
