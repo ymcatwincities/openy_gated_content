@@ -25,6 +25,8 @@ class DaxkoBarcode extends GCIdentityProviderPluginBase {
       'enable_recaptcha' => TRUE,
       'secret' => '',
       'action_url' => '',
+      'form_label' => 'Barcode',
+      'form_description' => '',
     ];
   }
 
@@ -63,6 +65,21 @@ class DaxkoBarcode extends GCIdentityProviderPluginBase {
       '#required' => TRUE,
     ];
 
+    $form['form_label'] = [
+      '#title' => $this->t('Form label'),
+      '#description' => $this->t('The label of the field where the user will enter their barcode or check-in number.'),
+      '#type' => 'textfield',
+      '#default_value' => $config['form_label'],
+      '#required' => TRUE,
+    ];
+
+    $form['form_description'] = [
+      '#title' => $this->t('Form description'),
+      '#description' => $this->t('Some short help text you can provide the user to find their barcode or check-in number. If you need more than a sentence or two of plain text, please add it above the login form.'),
+      '#type' => 'textfield',
+      '#default_value' => $config['form_description'],
+    ];
+
     return $form;
   }
 
@@ -96,6 +113,8 @@ class DaxkoBarcode extends GCIdentityProviderPluginBase {
       $this->configuration['enable_recaptcha'] = $form_state->getValue('enable_recaptcha');
       $this->configuration['secret'] = $form_state->getValue('secret');
       $this->configuration['action_url'] = $form_state->getValue('action_url');
+      $this->configuration['form_label'] = $form_state->getValue('form_label');
+      $this->configuration['form_description'] = $form_state->getValue('form_description');
 
       parent::submitConfigurationForm($form, $form_state);
     }
@@ -107,7 +126,9 @@ class DaxkoBarcode extends GCIdentityProviderPluginBase {
   public function getDataForApp():array {
     $data = parent::getDataForApp();
     $data['enableRecaptcha'] = (bool) $this->configuration['enable_recaptcha'];
-    $data['action_url'] = $this->configuration['action_url'];
+    $data['actionUrl'] = $this->configuration['action_url'];
+    $data['formLabel'] = $this->configuration['form_label'];
+    $data['formDescription'] = $this->configuration['form_description'];
     $this->configFactory->get('recaptcha.settings')->get('site_key');
     $data['reCaptchaKey'] = $this->configFactory
       ->get('recaptcha.settings')

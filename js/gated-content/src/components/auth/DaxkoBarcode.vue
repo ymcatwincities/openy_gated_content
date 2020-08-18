@@ -11,15 +11,16 @@
         <span>{{ error }}</span>
       </div>
       <div class="form-group">
-        <label for="auth-barcode">Barcode</label>
+        <label for="auth-barcode">{{ config.formLabel || 'Barcode' }}</label>
         <input
-          v-model="message"
-          placeholder="123456"
-          type="number"
+          v-model="form.text"
+          placeholder=""
+          type="text"
           id="auth-barcode"
           class="form-control"
           required
         >
+        <small v-if="config.formDescription" class="form-text">{{ config.formDescription }}</small>
       </div>
       <div v-if="config.enableRecaptcha">
         <ReCaptcha ref="recaptcha" v-model="form.recaptchaToken" />
