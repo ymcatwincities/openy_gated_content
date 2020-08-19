@@ -162,7 +162,6 @@ class DaxkoBarcode extends GCIdentityProviderPluginBase {
   public function getDataForApp():array {
     $data = parent::getDataForApp();
     $data['enableRecaptcha'] = (bool) $this->configuration['enable_recaptcha'];
-    $data['actionUrl'] = $this->configuration['action_url'];
     $data['formLabel'] = $this->configuration['form_label'];
     $data['formDescription'] = $this->configuration['form_description'];
     $this->configFactory->get('recaptcha.settings')->get('site_key');
