@@ -36,6 +36,9 @@ source:
     - name: status
       label: 'Status'
       selector: /attributes/status
+    - name: field_gc_video_instructor
+      label: 'Instructor Name'
+      selector: /attributes/field_gc_video_instructor
     - name: field_gc_video_media_id
       label: 'Video'
       selector: /relationships/field_gc_video_media/data/id
@@ -68,6 +71,7 @@ process:
     plugin: default_value
     default_value: full_html
   field_gc_video_duration: field_gc_video_duration
+  field_gc_video_instructor: field_gc_video_instructor
   field_gc_video_media:
     plugin: migration
     migration: virtual_y_shared_media_video:REPLACE_ME
