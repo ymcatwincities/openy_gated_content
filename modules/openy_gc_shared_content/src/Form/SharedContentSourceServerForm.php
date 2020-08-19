@@ -2,10 +2,14 @@
 
 namespace Drupal\openy_gc_shared_content\Form;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Form handler for the SharedContentSource add and edit forms.
@@ -13,13 +17,43 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class SharedContentSourceServerForm extends EntityForm {
 
   /**
+   * A guzzle http client instance.
+   *
+   * @var \GuzzleHttp\Client
+   */
+  protected $client;
+
+  /**
+   * The currently active request object.
+   *
+   * @var \Symfony\Component\HttpFoundation\Request
+   */
+  protected $request;
+
+  /**
+   * The configuration factory service.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $config;
+
+  /**
    * Constructs an SharedContentSource object.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entityTypeManager.
+   * @param \GuzzleHttp\Client $client
+   *   A guzzle http client instance.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   The request stack.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config
+   *   The configuration factory service.
    */
-  public function __construct(EntityTypeManagerInterface $entityTypeManager) {
+  public function __construct(EntityTypeManagerInterface $entityTypeManager, Client $client, RequestStack $request_stack, ConfigFactoryInterface $config) {
     $this->entityTypeManager = $entityTypeManager;
+    $this->client = $client;
+    $this->config = $config;
+    $this->request = $request_stack->getCurrentRequest();
   }
 
   /**
@@ -27,7 +61,10 @@ class SharedContentSourceServerForm extends EntityForm {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('entity_type.manager')
+      $container->get('entity_type.manager'),
+      $container->get('http_client'),
+      $container->get('request_stack'),
+      $container->get('config.factory')
     );
   }
 
@@ -67,10 +104,14 @@ class SharedContentSourceServerForm extends EntityForm {
     $form['token'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Source Token'),
+      '#description' => $this->t('Token will be generated on form submit.'),
       '#maxlength' => 255,
+      '#attributes' => [
+        'disabled' => TRUE,
+      ],
       '#default_value' => $entity->getToken(),
-      '#required' => TRUE,
     ];
+
     return $form;
   }
 
@@ -79,6 +120,15 @@ class SharedContentSourceServerForm extends EntityForm {
    */
   public function save(array $form, FormStateInterface $form_state) {
     $entity = $this->entity;
+    if (!$form_state->getValue('token')) {
+      $token = $this->requestToken($form_state->getValue('url'));
+      if (!$token) {
+        $this->messenger()->addError($this->t('Something went wrong during token generating.'));
+      }
+      else {
+        $entity->set('token', $token);
+      }
+    }
     $status = $entity->save();
 
     if ($status === SAVED_NEW) {
@@ -93,6 +143,33 @@ class SharedContentSourceServerForm extends EntityForm {
     }
 
     $form_state->setRedirect('entity.shared_content_source_server.collection');
+  }
+
+  /**
+   * Helper function to check whether an shared source configuration exists.
+   */
+  protected function requestToken($url) {
+    $options = [
+      'headers' => [
+        'Content-type' => 'application/json',
+      ],
+      'body' => json_encode([
+        'name' => $this->config->get('system.site')->get('name'),
+        'host' => $this->request->getSchemeAndHttpHost(),
+      ]),
+    ];
+    try {
+      // TODO: test this part after deploy to demo.
+      $response = $this->client->request('POST', $url, $options);
+      $code = $response->getStatusCode();
+      if ($code == 200) {
+        $body = json_decode($response->getBody()->getContents(), TRUE);
+        return isset($body['token']) ? $body['token'] : NULL;
+      }
+    }
+    catch (RequestException $e) {
+      return NULL;
+    }
   }
 
   /**

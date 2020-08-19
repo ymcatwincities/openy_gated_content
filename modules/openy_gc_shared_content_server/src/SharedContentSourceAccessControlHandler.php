@@ -23,15 +23,12 @@ class SharedContentSourceAccessControlHandler extends EntityAccessControlHandler
     switch ($operation) {
 
       case 'view':
-
         return AccessResult::allowedIfHasPermission($account, 'view shared content source entities');
 
       case 'update':
-
         return AccessResult::allowedIfHasPermission($account, 'edit shared content source entities');
 
       case 'delete':
-
         return AccessResult::allowedIfHasPermission($account, 'delete shared content source entities');
     }
 

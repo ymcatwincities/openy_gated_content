@@ -69,7 +69,12 @@ class SharedContentFetchForm extends EntityForm {
     if (!$entity->getUrl() || !$entity->getToken()) {
       $form['message'] = [
         '#type' => 'markup',
-        '#markup' => $this->t('Source not configured! Go to <path> and set url and token.'),
+        '#markup' => $this->t('Source not configured! Go to <a href="@edit_link">source edit page</a>, set url and generate token.', [
+          '@edit_link' => Url::fromRoute(
+            'entity.shared_content_source_server.edit_form',
+            ['shared_content_source_server' => $entity->id()],
+            ['absolute' => TRUE])->toString(),
+        ]),
       ];
 
       return $form;
@@ -164,6 +169,11 @@ class SharedContentFetchForm extends EntityForm {
    * {@inheritdoc}
    */
   public function save(array $form, FormStateInterface $form_state) {
+    $form_state->disableRedirect();
+    if (!$form_state->getValue('content')) {
+      $this->messenger()->addWarning($this->t('There no content to fetch.'));
+      return;
+    }
     $to_create = array_filter($form_state->getValue('content'));
     if (empty($to_create)) {
       $this->messenger()->addWarning($this->t('Please select items.'));
