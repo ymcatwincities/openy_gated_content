@@ -60,7 +60,7 @@ class DaxkoBarcode extends GCIdentityProviderPluginBase {
     $form['action_url'] = [
       '#title' => $this->t('Action url'),
       '#description' => $this->t('The url provided in the Daxko <code>&lt;form&gt;</code> code. Only include the text between the quotes in <code>action="https://..."</code>'),
-      '#type' => 'textfield',
+      '#type' => 'url',
       '#default_value' => $config['action_url'],
       '#required' => TRUE,
     ];
