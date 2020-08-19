@@ -1,23 +1,23 @@
 dependencies:
   module:
-    - openy_media_video
+    - openy_media_image
   enforced:
     module:
-      - openy_gc_demo
-id: virtual_y_shared_media_video
+      - openy_gc_shared_content
+id: virtual_y_shared_media_video_image
 migration_tags: { }
 migration_group: virtual_y_shared
-label: Import Virtual Y videos
 deriver: Drupal\openy_gc_shared_content\SourceMigrationDeriver
+label: Fetch Image
 source:
   entity_type: gc_video
   json_includes:
-    - field_gc_video_media
+    - field_gc_video_image.field_media_image
   plugin: url
-  track_changes: true
   data_fetcher_plugin: http
   # Specifies the JSON parser plugin.
   data_parser_plugin: json
+  track_changes: true
   headers:
     Accept: 'application/json; charset=utf-8'
     Content-Type: 'application/json'
@@ -27,8 +27,11 @@ source:
     - name: id
       label: 'id'
       selector: /id
+    - name: type
+      label: 'Include type'
+      selector: /type
     - name: name
-      label: 'Name'
+      label: 'Media Name'
       selector: /attributes/name
     - name: created
       label: 'Created'
@@ -39,21 +42,9 @@ source:
     - name: status
       label: 'Status'
       selector: /attributes/status
-    - name: type
-      label: 'Type'
-      selector: /type
-    - name: field_media_in_library
-      label: 'Media in library'
-      selector: /attributes/field_media_in_library
-    - name: field_media_source
-      label: 'Media source'
-      selector: /attributes/field_media_source
-    - name: field_media_video_embed_field
-      label: 'Video Embed'
-      selector: /attributes/field_media_video_embed_field
-    - name: field_media_video_id
-      label: 'Video ID'
-      selector: /attributes/field_media_video_id
+    - name: field_media_image
+      label: 'File'
+      selector: /relationships/field_media_image/data/id
   ids:
     id:
       type: string
@@ -62,25 +53,25 @@ process:
     plugin: default_value
     source: language
     default_value: en
-  name:
-    -
-      plugin: get
-      source: name
+  created: created
+  changed: changed
+  name: name
+  type:
+    plugin: skip_on_value
+    method: row
+    source: type
+    value: file--file
   bundle:
-    -
-      plugin: default_value
-      default_value: video
+    plugin: default_value
+    default_value: image
   uid:
-    -
-      plugin: default_value
-      default_value: 1
-  field_media_video_embed_field:
-    -
-      plugin: get
-      source: field_media_video_embed_field
-
+    plugin: default_value
+    default_value: 1
+  field_media_image:
+    plugin: migration
+    migration: virtual_y_shared_file_video:REPLACE_ME
+    source: field_media_image
 destination:
   plugin: 'entity:media'
 migration_dependencies:
-  required: {  }
   optional: {  }

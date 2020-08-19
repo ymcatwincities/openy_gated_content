@@ -4,12 +4,12 @@ dependencies:
   enforced:
     module:
       - openy_gc_shared_content
-id: virtual_y_shared_node_video
+id: virtual_y_shared_node_blog
 migration_group: virtual_y_shared
 deriver: Drupal\openy_gc_shared_content\SourceMigrationDeriver
-label: 'Sync shared videos to Open Y shared demo server.'
+label: 'Sync shared blog posts to Open Y shared demo server.'
 source:
-  entity_type: gc_video
+  entity_type: vy_blog_post
   plugin: url
   data_fetcher_plugin: http
   # Specifies the JSON parser plugin.
@@ -36,18 +36,12 @@ source:
     - name: status
       label: 'Status'
       selector: /attributes/status
-    - name: field_gc_video_media_id
-      label: 'Video'
-      selector: /relationships/field_gc_video_media/data/id
-    - name: field_gc_video_description
-      label: 'Video description'
-      selector: /attributes/field_gc_video_description/value
-    - name: field_gc_video_duration
-      label: 'Duration'
-      selector: /attributes/field_gc_video_duration
-    - name: field_gc_video_image_id
-      label: 'Teaser image'
-      selector: /relationships/field_gc_video_image/data/id
+    - name: field_vy_blog_image_id
+      label: 'Image'
+      selector: /relationships/field_vy_blog_image/data/id
+    - name: field_vy_blog_description
+      label: 'Blog description'
+      selector: /attributes/field_vy_blog_description/value
   ids:
     nid:
       type: integer
@@ -56,33 +50,28 @@ process:
     plugin: default_value
     source: language
     default_value: en
-  status: status
   created: created
   changed: changed
+  status:
+    plugin: default_value
+    default_value: 1
   uid:
     plugin: default_value
     default_value: 1
   title: title
-  field_gc_video_description/value: field_gc_video_description
-  field_gc_video_description/format:
+  field_vy_blog_description/value: field_vy_blog_description
+  field_vy_blog_description/format:
     plugin: default_value
     default_value: full_html
-  field_gc_video_duration: field_gc_video_duration
-  field_gc_video_media:
+  field_vy_blog_image:
     plugin: migration
-    migration: virtual_y_shared_media_video:REPLACE_ME
-    source: field_gc_video_media_id
-  field_gc_video_image:
-    plugin: migration
-    migration: virtual_y_shared_media_video_image:REPLACE_ME
-    source: field_gc_video_image_id
-
+    migration: virtual_y_shared_media_blog_image:REPLACE_ME
+    source: field_vy_blog_image_id
 destination:
   plugin: 'entity:node'
-  default_bundle: gc_video
+  default_bundle: vy_blog_post
 
 migration_dependencies:
   required:
-    - virtual_y_shared_media_video:REPLACE_ME
-    - virtual_y_shared_media_video_image:REPLACE_ME
+    - virtual_y_shared_media_blog_image:REPLACE_ME
   optional: {  }
