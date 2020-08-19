@@ -27,6 +27,10 @@ class DaxkoBarcode extends GCIdentityProviderPluginBase {
       'action_url' => '',
       'form_label' => 'Barcode',
       'form_description' => '',
+      'message_not_found' => 'That barcode was not found.',
+      'message_access_denied' => 'That barcode does not have access to virtual content.',
+      'message_duplicate_barcode' => 'That barcode is assigned to multiple members.',
+      'message_invalid' => 'Something went wrong. Please try again or contact us for assistance.'
     ];
   }
 
@@ -80,6 +84,34 @@ class DaxkoBarcode extends GCIdentityProviderPluginBase {
       '#default_value' => $config['form_description'],
     ];
 
+    $form['message_not_found'] = [
+      '#title' => $this->t('Message for "not found" status'),
+      '#description' => $this->t('What the user should see when Daxko reports a "not found" status.'),
+      '#type' => 'textfield',
+      '#default_value' => $config['message_not_found'],
+    ];
+
+    $form['message_access_denied'] = [
+      '#title' => $this->t('Message for "access denied" status'),
+      '#description' => $this->t('What the user should see when Daxko reports a "access denied" status.'),
+      '#type' => 'textfield',
+      '#default_value' => $config['message_access_denied'],
+    ];
+
+    $form['message_duplicate_barcode'] = [
+      '#title' => $this->t('Message for "duplicate barcode" status'),
+      '#description' => $this->t('What the user should see when Daxko reports a "duplicate barcode" status.'),
+      '#type' => 'textfield',
+      '#default_value' => $config['message_duplicate_barcode'],
+    ];
+
+    $form['message_invalid'] = [
+      '#title' => $this->t('Message for "invalid" status'),
+      '#description' => $this->t('What the user should see when Daxko reports a "invalid" status.'),
+      '#type' => 'textfield',
+      '#default_value' => $config['message_invalid'],
+    ];
+
     return $form;
   }
 
@@ -115,6 +147,10 @@ class DaxkoBarcode extends GCIdentityProviderPluginBase {
       $this->configuration['action_url'] = $form_state->getValue('action_url');
       $this->configuration['form_label'] = $form_state->getValue('form_label');
       $this->configuration['form_description'] = $form_state->getValue('form_description');
+      $this->configuration['message_not_found'] = $form_state->getValue('message_not_found');
+      $this->configuration['message_access_denied'] = $form_state->getValue('message_access_denied');
+      $this->configuration['message_duplicate_barcode'] = $form_state->getValue('message_duplicate_barcode');
+      $this->configuration['message_invalid'] = $form_state->getValue('message_invalid');
 
       parent::submitConfigurationForm($form, $form_state);
     }
