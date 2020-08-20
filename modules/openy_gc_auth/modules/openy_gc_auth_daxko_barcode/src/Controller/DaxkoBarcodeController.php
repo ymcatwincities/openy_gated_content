@@ -119,6 +119,7 @@ class DaxkoBarcodeController extends ControllerBase {
           case 'invalid':
             return new JsonResponse([
               'message' => $config->get("message_{$status}"),
+              'help' => $config->get('message_help'),
               'user' => [],
             ], 403);
         }

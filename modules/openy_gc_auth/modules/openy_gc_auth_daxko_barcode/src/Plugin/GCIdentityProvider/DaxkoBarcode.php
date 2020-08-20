@@ -31,7 +31,8 @@ class DaxkoBarcode extends GCIdentityProviderPluginBase {
       'message_not_found' => 'That barcode was not found.',
       'message_access_denied' => 'That barcode does not have access to virtual content.',
       'message_duplicate_barcode' => 'That barcode is assigned to multiple members.',
-      'message_invalid' => 'Something went wrong.'
+      'message_invalid' => 'Something went wrong.',
+      'message_help' => 'If you need assistance, please contact us at 555-555-5555 or email help@exampleymca.org.',
     ];
   }
 
@@ -113,6 +114,13 @@ class DaxkoBarcode extends GCIdentityProviderPluginBase {
       '#default_value' => $config['message_invalid'],
     ];
 
+    $form['message_help'] = [
+      '#title' => $this->t('Message for login failures'),
+      '#description' => $this->t('Where should users go for help? If set this will be displayed after all login failure messages.'),
+      '#type' => 'textfield',
+      '#default_value' => $config['message_help'],
+    ];
+
     return $form;
   }
 
@@ -152,6 +160,7 @@ class DaxkoBarcode extends GCIdentityProviderPluginBase {
       $this->configuration['message_access_denied'] = $form_state->getValue('message_access_denied');
       $this->configuration['message_duplicate_barcode'] = $form_state->getValue('message_duplicate_barcode');
       $this->configuration['message_invalid'] = $form_state->getValue('message_invalid');
+      $this->configuration['message_help'] = $form_state->getValue('message_help');
 
       parent::submitConfigurationForm($form, $form_state);
     }

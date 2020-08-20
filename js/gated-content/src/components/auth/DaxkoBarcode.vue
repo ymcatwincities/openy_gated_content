@@ -8,7 +8,8 @@
     </div>
     <form v-else class="plugin-custom">
       <div v-if="error" class="alert alert-danger">
-        <span>{{ error }}</span>
+        <p>{{ error }}</p>
+        <p v-if="help" v-html="help"></p>
       </div>
       <div class="form-group">
         <label for="auth-barcode">{{ config.formLabel || 'Barcode' }}</label>
@@ -49,6 +50,7 @@ export default {
       },
       error: '',
       message: '',
+      help: '',
     };
   },
   computed: {
@@ -71,6 +73,7 @@ export default {
         .then((response) => {
           if (response.status === 202) {
             this.message = response.data.message;
+            this.help = response.data.help;
             this.form.barcode = '';
             this.loading = false;
             if (this.config.enableRecaptcha) {
@@ -86,6 +89,7 @@ export default {
         })
         .catch((error) => {
           this.error = error.response ? error.response.data.message : 'Something went wrong!';
+          this.help = error.response ? error.response.data.help : '';
           this.loading = false;
           if (this.config.enableRecaptcha) {
             //this.$refs.recaptcha.reset();
