@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\openy_gc_shared_content;
+namespace Drupal\openy_gc_shared_content_server;
 
 use Drupal\Component\Plugin\Derivative\DeriverBase;
 use Drupal\Component\Plugin\Derivative\DeriverInterface;

@@ -1,15 +1,15 @@
 dependencies:
   enforced:
     module:
-      - openy_gc_shared_content
-id: virtual_y_shared_file_blog
-deriver: Drupal\openy_gc_shared_content\SourceMigrationDeriver
+      - openy_gc_shared_content_server
+id: virtual_y_shared_file_video
+deriver: Drupal\openy_gc_shared_content_server\SourceMigrationDeriver
 label: 'Import Shared VirtualY files'
 migration_group: virtual_y_shared
 source:
-  entity_type: vy_blog_post
+  entity_type: gc_video
   json_includes:
-    - field_vy_blog_image.field_media_image
+    - field_gc_video_image.field_media_image
   plugin: url
   data_fetcher_plugin: http
   # Specifies the JSON parser plugin.
@@ -73,10 +73,10 @@ process:
     -
       plugin: urlencode
   pseudo_destination_path:
-    plugin: concat
-    source:
-      - constants/DRUPAL_FILE_DIRECTORY
-      - filename
+    - plugin: concat
+      source:
+        - constants/DRUPAL_FILE_DIRECTORY
+        - filename
   uri_file:
     -
       plugin: concat

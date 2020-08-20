@@ -3,10 +3,10 @@ status: true
 dependencies:
   enforced:
     module:
-      - openy_gc_shared_content
+      - openy_gc_shared_content_server
 id: virtual_y_shared_node_video
 migration_group: virtual_y_shared
-deriver: Drupal\openy_gc_shared_content\SourceMigrationDeriver
+deriver: Drupal\openy_gc_shared_content_server\SourceMigrationDeriver
 label: 'Sync shared videos to Open Y shared demo server.'
 source:
   entity_type: gc_video

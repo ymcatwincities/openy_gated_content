@@ -1,13 +1,11 @@
 dependencies:
-  module:
-    - openy_media_image
   enforced:
     module:
-      - openy_gc_shared_content
+      - openy_gc_shared_content_server
 id: virtual_y_shared_media_blog_image
 migration_tags: { }
 migration_group: virtual_y_shared
-deriver: Drupal\openy_gc_shared_content\SourceMigrationDeriver
+deriver: Drupal\openy_gc_shared_content_server\SourceMigrationDeriver
 label: Fetch Image
 source:
   entity_type: vy_blog_post
