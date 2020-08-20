@@ -4,21 +4,47 @@ namespace Drupal\openy_gc_shared_content_server;
 
 use Drupal\Component\Plugin\Derivative\DeriverBase;
 use Drupal\Component\Plugin\Derivative\DeriverInterface;
+use Drupal\Core\Entity\Query\QueryFactoryInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\openy_gc_shared_content_server\Entity\SharedContentSource;
+
 
 /**
  * Class SourceMigrationDeriver.
  *
  * @package Drupal\openy_gc_shared_content
  */
-class SourceMigrationDeriver extends DeriverBase implements DeriverInterface {
+class SourceMigrationDeriver extends DeriverBase implements DeriverInterface, ContainerDeriverInterface {
+
+  /**
+   * @var \Drupal\Core\Entity\Query\QueryFactoryInterface
+   */
+  protected $entity_query;
+
+  /**
+   * SourceMigrationDeriver constructor.
+   *
+   * @param \Drupal\Core\Entity\Query\QueryFactoryInterface $entityQuery
+   */
+  public function __construct(QueryFactoryInterface $entityQuery) {
+    $this->entity_query= $entityQuery;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, $base_plugin_id) {
+    return new static(
+      $container->get('entity.query')
+    );
+  }
 
   /**
    * {@inheritdoc}
    */
   public function getDerivativeDefinitions($base_plugin_definition) {
 
-    $ids =  \Drupal::service('entity.query')
+    $ids = $this->entity_query
       ->get('shared_content_source')->execute();
 
     if (empty($ids)) {
