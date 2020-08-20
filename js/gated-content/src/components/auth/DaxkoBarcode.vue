@@ -13,7 +13,7 @@
       <div class="form-group">
         <label for="auth-barcode">{{ config.formLabel || 'Barcode' }}</label>
         <input
-          v-model="form.text"
+          v-model="form.barcode"
           placeholder=""
           type="text"
           id="auth-barcode"
@@ -46,7 +46,6 @@ export default {
       form: {
         barcode: '',
         recaptchaToken: '',
-        path: '',
       },
       error: '',
       message: '',
@@ -75,7 +74,7 @@ export default {
             this.form.barcode = '';
             this.loading = false;
             if (this.config.enableRecaptcha) {
-              this.$refs.recaptcha.reset();
+              //this.$refs.recaptcha.reset();
             }
             return;
           }
@@ -89,7 +88,7 @@ export default {
           this.error = error.response ? error.response.data.message : 'Something went wrong!';
           this.loading = false;
           if (this.config.enableRecaptcha) {
-            this.$refs.recaptcha.reset();
+            //this.$refs.recaptcha.reset();
           }
         });
     },
