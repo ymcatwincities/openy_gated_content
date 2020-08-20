@@ -19,7 +19,6 @@ class SharedContentSourceHtmlRouteProvider extends AdminHtmlRouteProvider {
    */
   public function getRoutes(EntityTypeInterface $entity_type) {
     $collection = parent::getRoutes($entity_type);
-
     $entity_type_id = $entity_type->id();
 
     if ($settings_form_route = $this->getSettingsFormRoute($entity_type)) {

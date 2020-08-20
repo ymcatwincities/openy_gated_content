@@ -7,6 +7,7 @@
 
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 
 /**
@@ -29,9 +30,13 @@ function openy_gc_shared_content_help($route_name, RouteMatchInterface $route_ma
  * Implements hook_entity_base_field_info().
  */
 function openy_gc_shared_content_entity_base_field_info(EntityTypeInterface $entity_type) {
-  if (in_array($entity_type->id(), [
-    'node', 'eventseries', 'eventinstance',
-  ])) {
+  $allowed_entity_types = [];
+  $shared_content_manager = \Drupal::service('plugin.manager.shared_content_source_type');
+  foreach ($shared_content_manager->getDefinitions() as $plugin_id => $plugin) {
+    $instance = $shared_content_manager->createInstance($plugin_id);
+    $allowed_entity_types[] = $instance->getEntityType();
+  }
+  if (in_array($entity_type->id(), $allowed_entity_types)) {
     $fields = [];
     $fields['field_gc_share'] = BaseFieldDefinition::create('boolean')
       ->setLabel(t('Available to share'))
@@ -67,4 +72,72 @@ function openy_gc_shared_content_entity_base_field_info(EntityTypeInterface $ent
       ]);
     return $fields;
   }
+}
+
+/**
+ * Implements hook_form_alter().
+ *
+ * Move field_alert_belongs field to sidebar details in advanced section.
+ */
+function openy_gc_shared_content_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if (!isset($form['field_gc_share']) || !isset($form['field_gc_origin'])) {
+    return;
+  }
+
+  $allowed_forms_list = [];
+  $shared_content_manager = \Drupal::service('plugin.manager.shared_content_source_type');
+  foreach ($shared_content_manager->getDefinitions() as $plugin_id => $plugin) {
+    $instance = $shared_content_manager->createInstance($plugin_id);
+    $allowed_forms_list[] = $instance->getEntityType() . '_' . $instance->getEntityBundle() . '_form';
+    $allowed_forms_list[] = $instance->getEntityType() . '_' . $instance->getEntityBundle() . '_edit_form';
+  }
+
+  $form['shared_content_settings'] = [
+    '#type' => 'details',
+    '#title' => t('Shared content'),
+    '#description' => t('Here you can allow this content for sharing with configured servers.'),
+    '#open' => FALSE,
+    '#group' => 'advanced',
+    '#weight' => 125,
+  ];
+
+  $form['field_gc_share']['#group'] = 'shared_content_settings';
+  $form['field_gc_origin']['#group'] = 'shared_content_settings';
+  // Disable origin field from editing.
+  $form['field_gc_origin']['widget'][0]['value']['#attributes']['disabled'] = TRUE;
+
+  if (!in_array($form_id, $allowed_forms_list)) {
+    // Close access to shared_content_settings if there no plugin for
+    // entity bundle.
+    $form['shared_content_settings']['#access'] = FALSE;
+    return;
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function openy_gc_shared_content_theme($existing, $type, $theme, $path) {
+  return [
+    'openy_gc_shared_content__vy_blog_post' => [
+      'variables' => [
+        'title' => NULL,
+        'description' => NULL,
+        'image' => NULL,
+        'server' => NULL,
+      ],
+    ],
+    'openy_gc_shared_content__gc_video' => [
+      'variables' => [
+        'title' => NULL,
+        'description' => NULL,
+        'field_gc_video_level' => NULL,
+        'field_gc_video_instructor' => NULL,
+        'field_gc_video_category' => NULL,
+        'field_gc_video_equipment' => [],
+        'field_gc_video_media' => NULL,
+        'server' => NULL,
+      ],
+    ],
+  ];
 }

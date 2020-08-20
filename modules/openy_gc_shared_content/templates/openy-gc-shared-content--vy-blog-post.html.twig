@@ -1,0 +1,18 @@
+{{ attach_library('openy_gated_content/gated-content-styles') }}
+<div id="gated-content">
+  <div>
+    <div class="gated-content-blog-page">
+      {% if image %}
+        <div class="blog-page__image" style="background-image: url({{ server ~ image }});"></div>
+      {% endif %}
+      <div class="blog-header gated-container">
+        <h2>{{ title }}</h2>
+      </div>
+      <div class="blog-content gated-container">
+        <div class="blog-content__description">
+          {{ description }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

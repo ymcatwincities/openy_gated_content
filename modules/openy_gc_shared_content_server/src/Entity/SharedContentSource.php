@@ -2,9 +2,12 @@
 
 namespace Drupal\openy_gc_shared_content_server\Entity;
 
+use Drupal\Component\Utility\Crypt;
+use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Site\Settings;
 
 /**
  * Defines the Shared content source entity.
@@ -17,13 +20,13 @@ use Drupal\Core\Entity\EntityTypeInterface;
  *   handlers = {
  *     "view_builder" = "Drupal\Core\Entity\EntityViewBuilder",
  *     "list_builder" = "Drupal\openy_gc_shared_content_server\SharedContentSourceListBuilder",
- *     "views_data" = "Drupal\openy_gc_shared_content_server\Entity\SharedContentSourceViewsData",
+ *     "views_data" = "Drupal\views\EntityViewsData",
  *
  *     "form" = {
  *       "default" = "Drupal\openy_gc_shared_content_server\Form\SharedContentSourceForm",
  *       "add" = "Drupal\openy_gc_shared_content_server\Form\SharedContentSourceForm",
  *       "edit" = "Drupal\openy_gc_shared_content_server\Form\SharedContentSourceForm",
- *       "delete" = "Drupal\openy_gc_shared_content_server\Form\SharedContentSourceDeleteForm",
+ *       "delete" = "Drupal\Core\Entity\ContentEntityDeleteForm",
  *     },
  *     "route_provider" = {
  *       "html" = "Drupal\openy_gc_shared_content_server\SharedContentSourceHtmlRouteProvider",
@@ -38,7 +41,8 @@ use Drupal\Core\Entity\EntityTypeInterface;
  *     "label" = "name",
  *     "uuid" = "uuid",
  *     "langcode" = "langcode",
- *     "url" = "url"
+ *     "url" = "url",
+ *     "token" = "token"
  *   },
  *   links = {
  *     "canonical" = "/admin/virtual-y/shared-content/shared_content_source/{shared_content_source}",
@@ -85,6 +89,21 @@ class SharedContentSource extends ContentEntityBase {
   /**
    * {@inheritdoc}
    */
+  public function getToken() {
+    return $this->get('token')->value;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setToken($token) {
+    $this->set('token', $token);
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getCreatedTime() {
     return $this->get('created')->value;
   }
@@ -95,6 +114,15 @@ class SharedContentSource extends ContentEntityBase {
   public function setCreatedTime($timestamp) {
     $this->set('created', $timestamp);
     return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function preSave(EntityStorageInterface $storage) {
+    $token = Crypt::hashBase64($this->getUrl() . Settings::getHashSalt());
+    $this->setToken($token);
+    parent::preSave($storage);
   }
 
   /**
@@ -127,6 +155,27 @@ class SharedContentSource extends ContentEntityBase {
     $fields['url'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Url'))
       ->setDescription(t('The url of the Shared content source entity.'))
+      ->setSettings([
+        'max_length' => 255,
+        'text_processing' => 0,
+      ])
+      ->setDefaultValue('')
+      ->setDisplayOptions('view', [
+        'label' => 'above',
+        'type' => 'string',
+        'weight' => -4,
+      ])
+      ->setDisplayOptions('form', [
+        'type' => 'string_textfield',
+        'weight' => -4,
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE)
+      ->setRequired(TRUE);
+
+    $fields['token'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Token'))
+      ->setDescription(t('Generated token of the Shared content source entity.'))
       ->setSettings([
         'max_length' => 255,
         'text_processing' => 0,
