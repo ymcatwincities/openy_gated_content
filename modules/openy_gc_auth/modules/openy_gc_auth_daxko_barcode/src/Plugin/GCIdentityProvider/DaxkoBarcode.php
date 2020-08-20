@@ -25,13 +25,13 @@ class DaxkoBarcode extends GCIdentityProviderPluginBase {
     return [
       'enable_recaptcha' => TRUE,
       'secret' => '',
-      'action_url' => '',
+      'action_url' => 'https://operations.daxko.com/online/XXXX/checkin/submit?area_id=YYYY',
       'form_label' => 'Barcode',
-      'form_description' => '',
+      'form_description' => 'This is the number found on your ID card.',
       'message_not_found' => 'That barcode was not found.',
       'message_access_denied' => 'That barcode does not have access to virtual content.',
       'message_duplicate_barcode' => 'That barcode is assigned to multiple members.',
-      'message_invalid' => 'Something went wrong. Please try again or contact us for assistance.'
+      'message_invalid' => 'Something went wrong.'
     ];
   }
 
@@ -64,7 +64,7 @@ class DaxkoBarcode extends GCIdentityProviderPluginBase {
 
     $form['action_url'] = [
       '#title' => $this->t('Action url'),
-      '#description' => $this->t('The url provided in the Daxko <code>&lt;form&gt;</code> code. Only include the text between the quotes in <code>action="https://..."</code>'),
+      '#description' => $this->t('The url provided by Daxko. This should look like: <code>https://operations.daxko.com/online/XXXX/checkin/submit?area_id=YYYY</code>. You will find  <code>XXXX</code> and <code>YYYY</code> in the "Integration URL" on the "Edit Virtual Area" configuration page.'),
       '#type' => 'url',
       '#default_value' => $config['action_url'],
       '#required' => TRUE,
