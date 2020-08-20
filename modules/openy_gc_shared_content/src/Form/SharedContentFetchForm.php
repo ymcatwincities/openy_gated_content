@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class SharedContentFetchForm extends EntityForm {
 
-  const PAGE_LIMIT = 4;
+  const PAGE_LIMIT = 20;
 
   /**
    * The plugin manager for SharedContentSourceType classes.
