@@ -24,7 +24,7 @@ class VirtualYBlogPost extends SharedContentSourceTypeBase {
       'sort[sortByDate][path]' => 'created',
       'sort[sortByDate][direction]' => 'DESC',
       'filter[status]' => 1,
-      // TODO: add filter by new shared content field.
+      'filter[field_gc_share]' => 1,
     ];
   }
 
@@ -35,7 +35,7 @@ class VirtualYBlogPost extends SharedContentSourceTypeBase {
     return [
       'include' => 'field_vy_blog_image,field_vy_blog_image.field_media_image',
       'filter[status]' => 1,
-      // TODO: add filter by new shared content field.
+      'filter[field_gc_share]' => 1,
     ];
   }
 
