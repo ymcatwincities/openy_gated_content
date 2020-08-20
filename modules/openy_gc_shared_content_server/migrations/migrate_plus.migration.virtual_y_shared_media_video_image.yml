@@ -51,8 +51,14 @@ process:
     plugin: default_value
     source: language
     default_value: en
-  created: created
-  changed: changed
+  created:
+    plugin: callback
+    source: created
+    callable: strtotime
+  changed:
+    plugin: callback
+    source: changed
+    callable: strtotime
   name: name
   type:
     plugin: skip_on_value

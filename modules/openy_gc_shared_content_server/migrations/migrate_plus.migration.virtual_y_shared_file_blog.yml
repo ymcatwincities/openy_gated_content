@@ -61,8 +61,14 @@ process:
     plugin: default_value
     source: language
     default_value: en
-  created: created
-  changed: changed
+  created:
+    plugin: callback
+    source: created
+    callable: strtotime
+  changed:
+    plugin: callback
+    source: changed
+    callable: strtotime
   pseudo_source_full_path:
     -
       plugin: concat
