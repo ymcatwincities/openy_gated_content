@@ -1,0 +1,9 @@
+name: Open Y Virtual Y shared content server
+type: module
+description: 'Virtual Y shared content server'
+package: Open Y Virtual YMCA
+version: 0.1
+core: 8.x
+core_version_requirement: ^8 || ^9
+dependencies:
+  - drupal:openy_gc_shared_content

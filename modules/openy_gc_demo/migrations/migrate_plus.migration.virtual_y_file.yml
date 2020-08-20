@@ -41,6 +41,10 @@ source:
     -
       id: 9
       name: dance2.jpg
+    # Images, needed for Virtual Y videos
+    -
+      id: 10
+      name: bootcamp-challenge.png
   ids:
     id:
       type: integer

@@ -8,6 +8,7 @@ dependencies:
     - field.field.node.gc_video.field_gc_video_duration
     - field.field.node.gc_video.field_gc_video_equipment
     - field.field.node.gc_video.field_gc_video_featured
+    - field.field.node.gc_video.field_gc_video_image
     - field.field.node.gc_video.field_gc_video_instructor
     - field.field.node.gc_video.field_gc_video_level
     - field.field.node.gc_video.field_gc_video_media
@@ -24,12 +25,12 @@ mode: default
 content:
   created:
     type: datetime_timestamp
-    weight: 11
+    weight: 12
     region: content
     settings: {  }
     third_party_settings: {  }
   field_gc_video_category:
-    weight: 5
+    weight: 6
     settings:
       match_operator: CONTAINS
       match_limit: 10
@@ -47,14 +48,14 @@ content:
     type: text_textarea
     region: content
   field_gc_video_duration:
-    weight: 7
+    weight: 8
     settings:
       placeholder: ''
     third_party_settings: {  }
     type: number
     region: content
   field_gc_video_equipment:
-    weight: 6
+    weight: 7
     settings:
       match_operator: CONTAINS
       match_limit: 10
@@ -64,14 +65,29 @@ content:
     type: entity_reference_autocomplete
     region: content
   field_gc_video_featured:
-    weight: 8
+    weight: 9
     settings:
       display_label: true
     third_party_settings: {  }
     type: boolean_checkbox
     region: content
+  field_gc_video_image:
+    type: entity_browser_entity_reference
+    weight: 3
+    settings:
+      entity_browser: images_library
+      field_widget_display: rendered_entity
+      field_widget_edit: true
+      field_widget_remove: true
+      selection_mode: selection_append
+      field_widget_display_settings:
+        view_mode: thumbnail_for_preview
+      field_widget_replace: false
+      open: false
+    third_party_settings: {  }
+    region: content
   field_gc_video_instructor:
-    weight: 4
+    weight: 5
     settings:
       size: 60
       placeholder: ''
@@ -79,7 +95,7 @@ content:
     type: string_textfield
     region: content
   field_gc_video_level:
-    weight: 3
+    weight: 4
     settings: {  }
     third_party_settings: {  }
     type: options_select
@@ -101,14 +117,14 @@ content:
     region: content
   langcode:
     type: language_select
-    weight: 9
+    weight: 10
     region: content
     settings:
       include_locked: true
     third_party_settings: {  }
   path:
     type: path
-    weight: 16
+    weight: 17
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -116,18 +132,18 @@ content:
     type: boolean_checkbox
     settings:
       display_label: true
-    weight: 12
+    weight: 13
     region: content
     third_party_settings: {  }
   publish_on:
     type: datetime_timestamp_no_default
-    weight: 15
+    weight: 16
     region: content
     settings: {  }
     third_party_settings: {  }
   redirect:
     type: string_textfield
-    weight: 17
+    weight: 18
     region: content
     settings:
       size: 60
@@ -137,14 +153,14 @@ content:
     type: boolean_checkbox
     settings:
       display_label: true
-    weight: 19
+    weight: 20
     region: content
     third_party_settings: {  }
   sticky:
     type: boolean_checkbox
     settings:
       display_label: true
-    weight: 13
+    weight: 14
     region: content
     third_party_settings: {  }
   title:
@@ -157,7 +173,7 @@ content:
     third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
-    weight: 10
+    weight: 11
     settings:
       match_operator: CONTAINS
       size: 60
@@ -167,12 +183,12 @@ content:
     third_party_settings: {  }
   unpublish_on:
     type: datetime_timestamp_no_default
-    weight: 14
+    weight: 15
     region: content
     settings: {  }
     third_party_settings: {  }
   url_redirects:
-    weight: 18
+    weight: 19
     region: content
     settings: {  }
     third_party_settings: {  }

@@ -4,9 +4,11 @@ namespace Drupal\openy_gc_log;
 
 use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Entity\EntityTypeManager;
+use Drupal\Core\File\FileSystem;
 use Drupal\Core\Logger\LoggerChannel;
+use Drupal\Core\Site\Settings;
 use Drupal\csv_serialization\Encoder\CsvEncoder;
-use Drupal\file_entity\Entity\FileEntity;
+use Drupal\file\Entity\File;
 
 /**
  * LogArchiver service.
@@ -14,6 +16,8 @@ use Drupal\file_entity\Entity\FileEntity;
 class LogArchiver {
 
   const WORKER_CHUNK_SIZE = 600;
+
+  const BASE_ARCHIVE_PATH = 'vy_logs';
 
   /**
    * Log Ids.
@@ -66,6 +70,20 @@ class LogArchiver {
   private $config;
 
   /**
+   * FileSystem.
+   *
+   * @var \Drupal\Core\File\FileSystem
+   */
+  protected $fileSystem;
+
+  /**
+   * Site Settings.
+   *
+   * @var \Drupal\Core\Site\Settings
+   */
+  protected $settings;
+
+  /**
    * LogArchiver constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManager $entityTypeManager
@@ -74,15 +92,23 @@ class LogArchiver {
    *   LoggerChannel.
    * @param \Drupal\Core\Config\ConfigFactory $configFactory
    *   ConfigFactory.
+   * @param \Drupal\Core\File\FileSystem $fileSystem
+   *   FileSystem.
+   * @param \Drupal\Core\Site\Settings $settings
+   *   Settings.
    */
   public function __construct(
     EntityTypeManager $entityTypeManager,
     LoggerChannel $logger,
-    ConfigFactory $configFactory
+    ConfigFactory $configFactory,
+    FileSystem $fileSystem,
+    Settings $settings
   ) {
     $this->entityTypeManager = $entityTypeManager;
     $this->logger = $logger;
     $this->config = $configFactory;
+    $this->fileSystem = $fileSystem;
+    $this->settings = $settings;
   }
 
   /**
@@ -144,6 +170,33 @@ class LogArchiver {
   }
 
   /**
+   * Check is private dir enabled.
+   */
+  protected function isPrivateDirEnabled() {
+    return $this->settings::get('file_private_path', FALSE);
+  }
+
+  /**
+   * Prepare directory for logs.
+   */
+  protected function prepareYearDirectory($dir) {
+    if ($this->isPrivateDirEnabled()) {
+      $dir = 'private://' . self::BASE_ARCHIVE_PATH . DIRECTORY_SEPARATOR . $dir;
+    }
+    else {
+      $salt = $this->settings::getHashSalt();
+      $dir = 'public://' . self::BASE_ARCHIVE_PATH . DIRECTORY_SEPARATOR . $salt .
+        DIRECTORY_SEPARATOR . $dir;
+    }
+    if (!$this->fileSystem->prepareDirectory($dir,
+      FileSystem::CREATE_DIRECTORY)) {
+      throw new \RuntimeException(sprintf('Can not create directory "%s"', $dir));
+    }
+
+    return $dir;
+  }
+
+  /**
    * Make filename.
    */
   protected function makeFilename($logEntity) {
@@ -180,9 +233,16 @@ class LogArchiver {
    * Create new file entity.
    */
   protected function createNewFileEntity($fileName) {
-    $file = FileEntity::create(['bundle' => 'archive', 'type' => 'archive']);
+    $fileYear = date('Y', (int) $this->preparedLogs[$fileName][0]['created']);
+    $yearDir = $this->prepareYearDirectory($fileYear);
+    $file = File::create();
     $file->setFilename($fileName);
-    $file->setFileUri("public://{$fileName}");
+    if ($this->isPrivateDirEnabled()) {
+      $file->setFileUri($yearDir . DIRECTORY_SEPARATOR . $fileName);
+    }
+    else {
+      $file->setFileUri($yearDir . DIRECTORY_SEPARATOR . md5(mt_rand()) . '-' . $fileName);
+    }
     $file->setMimeType('application/x-gzip');
     $file->setPermanent();
     return $file;
@@ -198,7 +258,8 @@ class LogArchiver {
       ->condition('filename', array_keys($this->preparedLogs), 'in')
       ->execute();
 
-    $file_entities = FileEntity::loadMultiple($file_ids);
+    $file_entities = $this->entityTypeManager
+      ->getStorage('file')->loadMultiple($file_ids);
 
     $this->fileEntities = [];
     foreach ($file_entities as $file_entity) {

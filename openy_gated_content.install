@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * @file
+ * Installation file for Open Y Virtual YMCA.
+ */
+
+/**
+ * Add virtual_ymca_editor user role.
+ */
+function openy_gated_content_update_8001() {
+  $config_dir = drupal_get_path('module', 'openy_gc_storage');
+  $config_dir .= '/config/install/';
+  // Import new configuration.
+  $config_importer = \Drupal::service('openy_upgrade_tool.importer');
+  $config_importer->setDirectory($config_dir);
+  $config_importer->importConfigs([
+    'system.action.user_add_role_action.virtual_ymca_editor',
+    'system.action.user_remove_role_action.virtual_ymca_editor',
+    'user.role.virtual_ymca_editor',
+  ]);
+}

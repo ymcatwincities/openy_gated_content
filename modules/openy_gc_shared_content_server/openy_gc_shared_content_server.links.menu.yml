@@ -1,0 +1,8 @@
+
+# Shared content source menu items definition
+entity.shared_content_source.collection:
+  title: 'Source list'
+  route_name: entity.shared_content_source.collection
+  description: 'List Shared content source entities'
+  parent: openy_gc_shared_content.settings
+  weight: 100
