@@ -36,8 +36,8 @@ export default {
             console.log(error.response.data.message);
             throw error;
           }))
-        .catch(e => {
-          this.errors.push(e);
+        .catch(error => {
+          throw error;
         });
     },
     daxkobarcodeLogout(context) {
