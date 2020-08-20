@@ -19,6 +19,8 @@ source:
     Accept: 'application/json; charset=utf-8'
     Content-Type: 'application/json'
   urls: replace_me
+  constants:
+    DOMAIN: replace_me
   item_selector: data/
   fields:
     - name: nid
@@ -66,6 +68,7 @@ process:
     plugin: default_value
     default_value: 1
   title: title
+  field_gc_origin: constants/DOMAIN
   field_gc_video_description/value: field_gc_video_description
   field_gc_video_description/format:
     plugin: default_value
