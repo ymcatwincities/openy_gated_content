@@ -9,6 +9,8 @@ use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\Core\Routing\TrustedRedirectResponse;
 use Drupal\Core\Url;
 use GuzzleHttp\Exception\RequestException;
+use ReCaptcha\ReCaptcha;
+use ReCaptcha\RequestMethod\Drupal8Post;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -62,26 +64,24 @@ class DaxkoBarcodeController extends ControllerBase {
   /**
    * Validate whether user has a valid barcode.
    *
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   The HTTP request object.
+   *
    * @return \Symfony\Component\HttpFoundation\JsonResponse
    *   Response with user data or error.
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function validate(Request $request) {
-    \Drupal::logger('openy_gc_auth_daxko_barcode')->notice('Request received: %request', ['%request' => print_r(Json::decode($request->getContent()), true)]);
     $content = Json::decode($request->getContent());
-    $barcode = $content['barcode'];
-
     $config = $this->configFactory->get('openy_gc_auth.provider.daxco_barcode');
-    // URL has been validated on input so we know it's good.
-    $action_url = $config->get('action_url');
-    $validation_secret = $config->get('secret');
 
-    \Drupal::logger('openy_gc_auth_daxko_barcode')->notice('Action: @action. Secret: @secret', [
-      '@action' => $action_url,
-      '@secret' => $validation_secret
-    ]);
+    // First make sure we got something in our $request.
+    if (!is_array($content) || empty($content)) {
+      return new JsonResponse(['message' => $this->t('Bad Request.')], 400);
+    }
 
+    $barcode = $content['barcode'];
     // Not sure how we'd get here without a barcode, but just in case.
     if (empty($barcode)) {
       return new JsonResponse([
@@ -90,11 +90,20 @@ class DaxkoBarcodeController extends ControllerBase {
       ], 403);
     }
 
+    // Validate recaptchaToken if enabled in the provider config.
+    if ($config->get('enable_recaptcha')) {
+      $validation_result = $this->validateRecaptcha($content, $request);
+      if ($validation_result instanceof JsonResponse) {
+        return $validation_result;
+      }
+    }
+
+    $validation_secret = $config->get('secret');
+    // Action URL has been validated on input so we can trust it's well-formed.
+    $action_url = $config->get('action_url');
+
     // Send the barcode to Daxko and parse the response.
     $dax_response = $this->getDaxkoResponse($action_url, $barcode);
-    \Drupal::logger('openy_gc_auth_daxko_barcode')->notice('Dax response: @response', [
-      '@response' => print_r($dax_response, TRUE)
-    ]);
     $dax_expiration = $dax_response['daxExpiration'] ?? NULL;
     $dax_signature = $dax_response['daxSignature'] ?? NULL;
     $status = $dax_response['status'] ?? NULL;
@@ -198,4 +207,37 @@ class DaxkoBarcodeController extends ControllerBase {
 
     return hash_equals($our_signature, $dax_signature);
   }
+
+  /**
+   * Helper function for reCaptcha validation.
+   *
+   * @param $content
+   * @param $request
+   *
+   * @return bool|JsonResponse
+   *   True if success, or an error message if failure.
+   */
+  protected function validateRecaptcha($content, $request) {
+    if (!$content['recaptchaToken']) {
+      return new JsonResponse(
+        ['message' => $this->t('ReCaptcha token required.')],
+        400);
+    }
+
+    $config = $this->configFactory->get('recaptcha.settings');
+    $recaptcha_secret_key = $config->get('secret_key');
+    $recaptcha = new ReCaptcha($recaptcha_secret_key, new Drupal8Post());
+    if ($config->get('verify_hostname')) {
+      $recaptcha->setExpectedHostname($_SERVER['SERVER_NAME']);
+    }
+    $resp = $recaptcha->verify($content['recaptchaToken'], $request->getClientIp());
+    if (!$resp->isSuccess()) {
+      return new JsonResponse(
+        ['message' => $this->t('ReCaptcha token invalid.')],
+        400);
+    }
+
+    return TRUE;
+  }
+
 }

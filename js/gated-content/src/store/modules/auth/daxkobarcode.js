@@ -21,6 +21,7 @@ export default {
             _format: 'json',
           },
           data: {
+            recaptchaToken: data.recaptchaToken,
             barcode: data.barcode
           }
         })
