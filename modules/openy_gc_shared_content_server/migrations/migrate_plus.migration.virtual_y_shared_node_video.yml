@@ -53,6 +53,15 @@ source:
     - name: field_gc_video_image_id
       label: 'Teaser image'
       selector: /relationships/field_gc_video_image/data/id
+    - name: field_gc_video_category_id
+      label: 'Category'
+      selector: /relationships/field_gc_video_category/data/id
+    - name: field_gc_video_equipment_id
+      label: 'Equipment'
+      selector: /relationships/field_gc_video_equipment/data/id
+    - name: field_gc_video_level_id
+      label: 'Level'
+      selector: /relationships/field_gc_video_level/data/id
   ids:
     nid:
       type: integer
@@ -62,8 +71,14 @@ process:
     source: language
     default_value: en
   status: status
-  created: created
-  changed: changed
+  created:
+    plugin: callback
+    source: created
+    callable: strtotime
+  changed:
+    plugin: callback
+    source: changed
+    callable: strtotime
   uid:
     plugin: default_value
     default_value: 1
@@ -83,6 +98,18 @@ process:
     plugin: migration
     migration: virtual_y_shared_media_video_image:REPLACE_ME
     source: field_gc_video_image_id
+  field_gc_video_category:
+    plugin: migration
+    migration: virtual_y_shared_gc_category:REPLACE_ME
+    source: field_gc_video_category_id
+  field_gc_video_equipment:
+    plugin: migration
+    migration: virtual_y_shared_gc_equipment:REPLACE_ME
+    source: field_gc_video_equipment_id
+  field_gc_video_level:
+    plugin: migration
+    migration: virtual_y_shared_gc_level:REPLACE_ME
+    source: field_gc_video_level_id
 
 destination:
   plugin: 'entity:node'

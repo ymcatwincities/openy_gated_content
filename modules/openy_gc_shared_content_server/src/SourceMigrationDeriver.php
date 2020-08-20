@@ -7,7 +7,7 @@ use Drupal\Component\Plugin\Derivative\DeriverInterface;
 use Drupal\openy_gc_shared_content_server\Entity\SharedContentSource;
 
 /**
- * Class SourceMigrationDeriver
+ * Class SourceMigrationDeriver.
  *
  * @package Drupal\openy_gc_shared_content
  */
@@ -107,6 +107,36 @@ class SourceMigrationDeriver extends DeriverBase implements DeriverInterface {
         $base_plugin_definition['process']['field_gc_video_image']['migration']
       );
       $base_plugin_definition['process']['field_gc_video_image']['migration'] = $migration;
+      $base_plugin_definition['migration_dependencies']['required'][] = $migration;
+    }
+
+    if (!empty($base_plugin_definition['process']['field_gc_video_category'])) {
+      $migration = str_replace(
+        'REPLACE_ME',
+        $this->getKey($url),
+        $base_plugin_definition['process']['field_gc_video_category']['migration']
+      );
+      $base_plugin_definition['process']['field_gc_video_category']['migration'] = $migration;
+      $base_plugin_definition['migration_dependencies']['required'][] = $migration;
+    }
+
+    if (!empty($base_plugin_definition['process']['field_gc_video_equipment'])) {
+      $migration = str_replace(
+        'REPLACE_ME',
+        $this->getKey($url),
+        $base_plugin_definition['process']['field_gc_video_equipment']['migration']
+      );
+      $base_plugin_definition['process']['field_gc_video_equipment']['migration'] = $migration;
+      $base_plugin_definition['migration_dependencies']['required'][] = $migration;
+    }
+
+    if (!empty($base_plugin_definition['process']['field_gc_video_level'])) {
+      $migration = str_replace(
+        'REPLACE_ME',
+        $this->getKey($url),
+        $base_plugin_definition['process']['field_gc_video_level']['migration']
+      );
+      $base_plugin_definition['process']['field_gc_video_level']['migration'] = $migration;
       $base_plugin_definition['migration_dependencies']['required'][] = $migration;
     }
 
