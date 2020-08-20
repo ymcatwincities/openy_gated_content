@@ -8,7 +8,6 @@ use Drupal\Core\Entity\Query\QueryFactoryInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\openy_gc_shared_content_server\Entity\SharedContentSource;
 
-
 /**
  * Class SourceMigrationDeriver.
  *
@@ -17,17 +16,20 @@ use Drupal\openy_gc_shared_content_server\Entity\SharedContentSource;
 class SourceMigrationDeriver extends DeriverBase implements DeriverInterface, ContainerDeriverInterface {
 
   /**
+   * EntityQuery service instance.
+   *
    * @var \Drupal\Core\Entity\Query\QueryFactoryInterface
    */
-  protected $entity_query;
+  protected $entityQuery;
 
   /**
    * SourceMigrationDeriver constructor.
    *
    * @param \Drupal\Core\Entity\Query\QueryFactoryInterface $entityQuery
+   *   EntityQuery instance.
    */
   public function __construct(QueryFactoryInterface $entityQuery) {
-    $this->entity_query= $entityQuery;
+    $this->entityQuery = $entityQuery;
   }
 
   /**
@@ -44,8 +46,7 @@ class SourceMigrationDeriver extends DeriverBase implements DeriverInterface, Co
    */
   public function getDerivativeDefinitions($base_plugin_definition) {
 
-    $ids = $this->entity_query
-      ->get('shared_content_source')->execute();
+    $ids = $this->entityQuery->get('shared_content_source')->execute();
 
     if (empty($ids)) {
       return [];
@@ -62,7 +63,7 @@ class SourceMigrationDeriver extends DeriverBase implements DeriverInterface, Co
       'sort[sortByDate][path]' => 'created',
       'sort[sortByDate][direction]' => 'DESC',
       'filter[status]' => 1,
-      //@TODO add shared_content_filter once it will be at test servers.
+      // @TODO add shared_content_filter once it will be at test servers.
     ];
 
     $jsonapi_uri = '/jsonapi/node/' . $base_plugin_definition['source']['entity_type'] . '?' . http_build_query($params);
@@ -81,12 +82,13 @@ class SourceMigrationDeriver extends DeriverBase implements DeriverInterface, Co
    *
    * @param array $base_plugin_definition
    *   Plugin settings.
-   * @param $url_long
-   *   Url with request part
-   * @param $url
+   * @param string $url_long
+   *   Url with request part.
+   * @param string $url
    *   Dynamic url for every Virtual Y content source.
    *
    * @return array
+   *   Updated plugin data.
    */
   private function getDerivativeValues(array $base_plugin_definition, $url_long, $url) {
 
@@ -172,20 +174,20 @@ class SourceMigrationDeriver extends DeriverBase implements DeriverInterface, Co
   /**
    * Helper function that checks if we need includes to jsonapi request.
    *
-   * @param $base_plugin_definition
+   * @param array $base_plugin_definition
    *   Migration array.
    *
    * @return array
    *   Includes array for JSON:API
    */
-  private function getRemoteRelationshipsList($base_plugin_definition) {
+  private function getRemoteRelationshipsList(array $base_plugin_definition) {
     return !empty($base_plugin_definition['source']['json_includes']) ? $base_plugin_definition['source']['json_includes'] : [];
   }
 
   /**
    * Helper function that prepare entity key from url.
    *
-   * @param $url
+   * @param string $url
    *   Url to source.
    *
    * @return mixed
