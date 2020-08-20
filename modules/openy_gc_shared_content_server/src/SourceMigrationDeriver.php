@@ -4,9 +4,10 @@ namespace Drupal\openy_gc_shared_content_server;
 
 use Drupal\Component\Plugin\Derivative\DeriverBase;
 use Drupal\Component\Plugin\Derivative\DeriverInterface;
-use Drupal\Core\Entity\Query\QueryFactoryInterface;
+use Drupal\Core\Entity\Query\QueryFactory;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\openy_gc_shared_content_server\Entity\SharedContentSource;
+use Drupal\Core\Plugin\Discovery\ContainerDeriverInterface;
 
 /**
  * Class SourceMigrationDeriver.
@@ -18,17 +19,17 @@ class SourceMigrationDeriver extends DeriverBase implements DeriverInterface, Co
   /**
    * EntityQuery service instance.
    *
-   * @var \Drupal\Core\Entity\Query\QueryFactoryInterface
+   * @var \Drupal\Core\Entity\Query\QueryFactory
    */
   protected $entityQuery;
 
   /**
    * SourceMigrationDeriver constructor.
    *
-   * @param \Drupal\Core\Entity\Query\QueryFactoryInterface $entityQuery
+   * @param \Drupal\Core\Entity\Query\QueryFactory $entityQuery
    *   EntityQuery instance.
    */
-  public function __construct(QueryFactoryInterface $entityQuery) {
+  public function __construct(QueryFactory $entityQuery) {
     $this->entityQuery = $entityQuery;
   }
 
