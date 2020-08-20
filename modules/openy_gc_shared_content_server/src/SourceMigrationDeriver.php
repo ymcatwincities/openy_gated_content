@@ -4,6 +4,7 @@ namespace Drupal\openy_gc_shared_content_server;
 
 use Drupal\Component\Plugin\Derivative\DeriverBase;
 use Drupal\Component\Plugin\Derivative\DeriverInterface;
+use Drupal\openy_gc_shared_content_server\Entity\SharedContentSource;
 
 /**
  * Class SourceMigrationDeriver
@@ -17,12 +18,18 @@ class SourceMigrationDeriver extends DeriverBase implements DeriverInterface {
    */
   public function getDerivativeDefinitions($base_plugin_definition) {
 
-    //@TODO rewrite it to source entities
-    $urls = [
-      'http://rose.demo.openy.ci.fivejars.com',
-      'http://lily.demo.openy.ci.fivejars.com',
-      'http://carnation.demo.openy.ci.fivejars.com'
-    ];
+    $ids =  \Drupal::service('entity.query')
+      ->get('shared_content_source')->execute();
+
+    if (empty($ids)) {
+      return [];
+    }
+
+    $sources = SharedContentSource::loadMultiple($ids);
+    $urls = [];
+    foreach ($sources as $source) {
+      $urls[] = $source->getUrl();
+    }
 
     $params = [
       'include' => implode(',', $this->getRemoteRelationshipsList($base_plugin_definition)),
@@ -30,7 +37,6 @@ class SourceMigrationDeriver extends DeriverBase implements DeriverInterface {
       'sort[sortByDate][direction]' => 'DESC',
       'filter[status]' => 1,
       //@TODO add shared_content_filter once it will be at test servers.
-      //'limit' => 100
     ];
 
     $jsonapi_uri = '/jsonapi/node/' . $base_plugin_definition['source']['entity_type'] . '?' . http_build_query($params);
