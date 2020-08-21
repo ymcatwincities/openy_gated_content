@@ -6,6 +6,7 @@ use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Logger\LoggerChannelFactory;
+use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use ReCaptcha\ReCaptcha;
 use ReCaptcha\RequestMethod\Drupal8Post;
@@ -34,19 +35,30 @@ class DaxkoBarcodeController extends ControllerBase {
   protected $configFactory;
 
   /**
+   * The Guzzle HTTP Client service.
+   *
+   * @var \GuzzleHttp\Client
+   */
+  protected $httpClient;
+
+  /**
    * DaxkoBarcodeController constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   Config factory.
    * @param \Drupal\Core\Logger\LoggerChannelFactory $loggerChannelFactory
    *   Logger factory.
+   * @param \GuzzleHttp\Client $http_client
+   *   HTTP client.
    */
   public function __construct(
     ConfigFactoryInterface $configFactory,
-    LoggerChannelFactory $loggerChannelFactory
+    LoggerChannelFactory $loggerChannelFactory,
+    Client $http_client
   ) {
     $this->configFactory = $configFactory;
     $this->logger = $loggerChannelFactory->get('openy_gc_auth_daxko_barcode');
+    $this->httpClient = $http_client;
   }
 
   /**
@@ -55,7 +67,8 @@ class DaxkoBarcodeController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('config.factory'),
-      $container->get('logger.factory')
+      $container->get('logger.factory'),
+      $container->get('http_client')
     );
   }
 
@@ -164,7 +177,7 @@ class DaxkoBarcodeController extends ControllerBase {
     ];
 
     try {
-      $client = \Drupal::httpClient();
+      $client = $this->httpClient;
       $request = $client->request('POST', $action_url, $options);
     }
     catch (RequestException $e) {
