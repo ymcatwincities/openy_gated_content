@@ -64,7 +64,7 @@ class SourceMigrationDeriver extends DeriverBase implements DeriverInterface, Co
       'sort[sortByDate][path]' => 'created',
       'sort[sortByDate][direction]' => 'DESC',
       'filter[status]' => 1,
-      // @TODO add shared_content_filter once it will be at test servers.
+      'filter[field_gc_share]' => 1,
     ];
 
     $jsonapi_uri = '/jsonapi/node/' . $base_plugin_definition['source']['entity_type'] . '?' . http_build_query($params);
