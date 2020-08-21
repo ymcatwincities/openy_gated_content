@@ -6,8 +6,6 @@ use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Logger\LoggerChannelFactory;
-use Drupal\Core\Routing\TrustedRedirectResponse;
-use Drupal\Core\Url;
 use GuzzleHttp\Exception\RequestException;
 use ReCaptcha\ReCaptcha;
 use ReCaptcha\RequestMethod\Drupal8Post;
