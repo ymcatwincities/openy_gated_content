@@ -1,0 +1,115 @@
+dependencies:
+  enforced:
+    module:
+      - openy_gc_shared_content_server
+id: virtual_y_shared_file_video
+deriver: Drupal\openy_gc_shared_content_server\SourceMigrationDeriver
+label: 'Import Shared VirtualY files'
+migration_group: virtual_y_shared
+source:
+  entity_type: gc_video
+  json_includes:
+    - field_gc_video_image.field_media_image
+  plugin: url
+  data_fetcher_plugin: http
+  # Specifies the JSON parser plugin.
+  data_parser_plugin: json
+  track_changes: true
+  headers:
+    Accept: 'application/json; charset=utf-8'
+    Content-Type: 'application/json'
+  urls: replace_me
+  item_selector: included/
+  fields:
+    - name: id
+      label: 'id'
+      selector: /id
+    - name: type
+      label: 'Include type'
+      selector: /type
+    - name: created
+      label: 'Created'
+      selector: /attributes/created
+    - name: changed
+      label: 'Changed'
+      selector: /attributes/changed
+    - name: status
+      label: 'Status'
+      selector: /attributes/status
+    - name: filename
+      label: 'FileName'
+      selector: /attributes/filename
+    - name: filemime
+      label: 'FileMIME'
+      selector: /attributes/filemime
+    - name: url
+      label: 'File url'
+      selector: /attributes/uri/url
+  ids:
+    id:
+      type: string
+  constants:
+    DOMAIN: replace_me
+    DRUPAL_FILE_DIRECTORY: 'public://virtual-y-shared-images/'
+process:
+  type:
+    plugin: skip_on_value
+    method: row
+    source: type
+    value: media--image
+  langcode:
+    plugin: default_value
+    source: language
+    default_value: en
+  created:
+    plugin: callback
+    source: created
+    callable: strtotime
+  changed:
+    plugin: callback
+    source: changed
+    callable: strtotime
+  pseudo_source_full_path:
+    -
+      plugin: concat
+      delimiter: /
+      source:
+        - constants/DOMAIN
+        - url
+    -
+      plugin: urlencode
+  pseudo_destination_path:
+    - plugin: concat
+      source:
+        - constants/DRUPAL_FILE_DIRECTORY
+        - filename
+  uri_file:
+    -
+      plugin: concat
+      delimiter: /
+      source:
+        - constants/uri_file
+        - name
+    -
+      plugin: urlencode
+  filename: filename
+  uri:
+    plugin: file_copy
+    source:
+      - '@pseudo_source_full_path'
+      - '@pseudo_destination_path'
+    file_exists: rename
+    move: false
+  status:
+    -
+      plugin: default_value
+      default_value: 1
+  uid:
+    -
+      plugin: default_value
+      default_value: 1
+destination:
+  plugin: 'entity:file'
+migration_dependencies:
+  required: {  }
+  optional: {  }

@@ -1,0 +1,122 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - openy_gc_shared_content_server
+id: virtual_y_shared_node_video
+migration_group: virtual_y_shared
+deriver: Drupal\openy_gc_shared_content_server\SourceMigrationDeriver
+label: 'Sync shared videos to Open Y shared demo server.'
+source:
+  entity_type: gc_video
+  plugin: url
+  data_fetcher_plugin: http
+  # Specifies the JSON parser plugin.
+  data_parser_plugin: json
+  track_changes: true
+  headers:
+    Accept: 'application/json; charset=utf-8'
+    Content-Type: 'application/json'
+  urls: replace_me
+  constants:
+    DOMAIN: replace_me
+  item_selector: data/
+  fields:
+    - name: nid
+      label: 'nid'
+      selector: /attributes/drupal_internal__nid
+    - name: title
+      label: 'Title'
+      selector: /attributes/title
+    - name: created
+      label: 'Created'
+      selector: /attributes/created
+    - name: changed
+      label: 'Changed'
+      selector: /attributes/changed
+    - name: status
+      label: 'Status'
+      selector: /attributes/status
+    - name: field_gc_video_instructor
+      label: 'Instructor Name'
+      selector: /attributes/field_gc_video_instructor
+    - name: field_gc_video_media_id
+      label: 'Video'
+      selector: /relationships/field_gc_video_media/data/id
+    - name: field_gc_video_description
+      label: 'Video description'
+      selector: /attributes/field_gc_video_description/value
+    - name: field_gc_video_duration
+      label: 'Duration'
+      selector: /attributes/field_gc_video_duration
+    - name: field_gc_video_image_id
+      label: 'Teaser image'
+      selector: /relationships/field_gc_video_image/data/id
+    - name: field_gc_video_category_id
+      label: 'Category'
+      selector: /relationships/field_gc_video_category/data/id
+    - name: field_gc_video_equipment_id
+      label: 'Equipment'
+      selector: /relationships/field_gc_video_equipment/data/id
+    - name: field_gc_video_level_id
+      label: 'Level'
+      selector: /relationships/field_gc_video_level/data/id
+  ids:
+    nid:
+      type: integer
+process:
+  langcode:
+    plugin: default_value
+    source: language
+    default_value: en
+  status: status
+  created:
+    plugin: callback
+    source: created
+    callable: strtotime
+  changed:
+    plugin: callback
+    source: changed
+    callable: strtotime
+  uid:
+    plugin: default_value
+    default_value: 1
+  title: title
+  field_gc_origin: constants/DOMAIN
+  field_gc_video_description/value: field_gc_video_description
+  field_gc_video_description/format:
+    plugin: default_value
+    default_value: full_html
+  field_gc_video_duration: field_gc_video_duration
+  field_gc_video_instructor: field_gc_video_instructor
+  field_gc_video_media:
+    plugin: migration
+    migration: virtual_y_shared_media_video:REPLACE_ME
+    source: field_gc_video_media_id
+  field_gc_video_image:
+    plugin: migration
+    migration: virtual_y_shared_media_video_image:REPLACE_ME
+    source: field_gc_video_image_id
+  field_gc_video_category:
+    plugin: migration
+    migration: virtual_y_shared_gc_category:REPLACE_ME
+    source: field_gc_video_category_id
+  field_gc_video_equipment:
+    plugin: migration
+    migration: virtual_y_shared_gc_equipment:REPLACE_ME
+    source: field_gc_video_equipment_id
+  field_gc_video_level:
+    plugin: migration
+    migration: virtual_y_shared_gc_level:REPLACE_ME
+    source: field_gc_video_level_id
+
+destination:
+  plugin: 'entity:node'
+  default_bundle: gc_video
+
+migration_dependencies:
+  required:
+    - virtual_y_shared_media_video:REPLACE_ME
+    - virtual_y_shared_media_video_image:REPLACE_ME
+  optional: {  }
