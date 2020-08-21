@@ -159,8 +159,7 @@ class SharedContentSourceServerForm extends EntityForm {
       ]),
     ];
     try {
-      // TODO: test this part after deploy to demo.
-      $response = $this->client->request('POST', $url, $options);
+      $response = $this->client->request('POST', $url . '/virtual-y/shared-source/generate-token', $options);
       $code = $response->getStatusCode();
       if ($code == 200) {
         $body = json_decode($response->getBody()->getContents(), TRUE);
