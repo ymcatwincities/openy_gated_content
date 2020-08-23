@@ -1,8 +1,9 @@
 name: 'Virtual Y Shared Content'
 type: module
 description: 'Virtual Y Shared Content'
-package: 'Virtual Y'
+package: Open Y Virtual YMCA
 core: 8.x
 core_version_requirement: ^8 || ^9
 dependencies:
   - drupal:openy_gc_storage
+  - drupal:recurring_events_views

@@ -5,28 +5,57 @@
  * Contains openy_gc_shared_content.install.
  */
 
+use Drupal\Core\Field\BaseFieldDefinition;
+
 /**
  * Implements hook_install().
  */
-function openy_gc_shared_content_install($is_syncing) {
+function openy_gc_shared_content_install() {
+  $field_gc_share = BaseFieldDefinition::create('boolean')
+    ->setLabel(t('Available to share'))
+    ->setCustomStorage(FALSE)
+    ->setCardinality(1)
+    ->setProvider('openy_gc_shared_content')
+    ->setRequired(FALSE)
+    ->setRevisionable(FALSE)
+    ->setTranslatable(FALSE)
+    ->setDisplayConfigurable('view', FALSE)
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayOptions('form', [
+      'type' => 'boolean_checkbox',
+      'settings' => [
+        'display_label' => TRUE,
+      ],
+    ]);
+  $field_gc_origin = BaseFieldDefinition::create('string')
+    ->setLabel(t('Origin'))
+    ->setCustomStorage(FALSE)
+    ->setCardinality(1)
+    ->setProvider('openy_gc_shared_content')
+    ->setRequired(FALSE)
+    ->setRevisionable(FALSE)
+    ->setTranslatable(FALSE)
+    ->setDisplayConfigurable('view', FALSE)
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayOptions('form', [
+      'type' => 'string_textfield',
+      'settings' => [
+        'size' => '255',
+      ],
+    ]);
+  $definition_manager = \Drupal::entityDefinitionUpdateManager();
+  $definition_manager->installFieldStorageDefinition('field_gc_share', 'node', 'openy_gc_shared_content', $field_gc_share);
+  $definition_manager->installFieldStorageDefinition('field_gc_origin', 'node', 'openy_gc_shared_content', $field_gc_origin);
+  $definition_manager->installFieldStorageDefinition('field_gc_share', 'eventseries', 'openy_gc_shared_content', $field_gc_share);
+  $definition_manager->installFieldStorageDefinition('field_gc_origin', 'eventseries', 'openy_gc_shared_content', $field_gc_origin);
+  $definition_manager->installFieldStorageDefinition('field_gc_share', 'eventinstance', 'openy_gc_shared_content', $field_gc_share);
+  $definition_manager->installFieldStorageDefinition('field_gc_origin', 'eventinstance', 'openy_gc_shared_content', $field_gc_origin);
+
   $config_dir = drupal_get_path('module', 'openy_gc_shared_content') . '/config/update/';
-  $configs = [
-    'core.entity_form_display.eventinstance.live_stream.default',
-    'core.entity_form_display.eventinstance.virtual_meeting.default',
-    'core.entity_form_display.eventseries.live_stream.default',
-    'core.entity_form_display.eventseries.virtual_meeting.default',
-    'core.entity_form_display.node.gc_video.default',
-    'core.entity_form_display.node.vy_blog_post.default',
-    'core.entity_view_display.eventinstance.live_stream.default',
-    'core.entity_view_display.eventinstance.virtual_meeting.default',
-    'core.entity_view_display.eventseries.live_stream.default',
-    'core.entity_view_display.eventseries.virtual_meeting.default',
-    'core.entity_view_display.node.gc_video.default',
-    'core.entity_view_display.node.gc_video.teaser',
-    'core.entity_view_display.node.vy_blog_post.default',
-    'core.entity_view_display.node.vy_blog_post.teaser',
-  ];
   $config_importer = \Drupal::service('openy_upgrade_tool.importer');
   $config_importer->setDirectory($config_dir);
-  $config_importer->importConfigs($configs);
+  $config_importer->importConfigs([
+    'views.view.event_series',
+    'views.view.events',
+  ]);
 }
