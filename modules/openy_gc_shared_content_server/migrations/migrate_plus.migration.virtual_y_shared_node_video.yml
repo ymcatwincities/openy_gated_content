@@ -84,6 +84,9 @@ process:
     default_value: 1
   title: title
   field_gc_origin: constants/DOMAIN
+  field_gc_share:
+    plugin: default_value
+    default_value: 1
   field_gc_video_description/value: field_gc_video_description
   field_gc_video_description/format:
     plugin: default_value
