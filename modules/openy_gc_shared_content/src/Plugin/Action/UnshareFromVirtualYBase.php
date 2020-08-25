@@ -9,11 +9,13 @@ use Drupal\Core\Field\FieldUpdateActionBase;
  */
 class UnshareFromVirtualYBase extends FieldUpdateActionBase {
 
+  const GC_SHARE_DEFAULT_VALUE = 0;
+
   /**
    * {@inheritdoc}
    */
   protected function getFieldsToUpdate() {
-    return ['field_gc_share' => 0];
+    return ['field_gc_share' => self::GC_SHARE_DEFAULT_VALUE];
   }
 
 }

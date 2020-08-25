@@ -325,7 +325,13 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
         return [];
       }
       $file_temp = file_get_contents($url . $file_data['attributes']['uri']['url']);
+      if (!$file_temp) {
+        return [];
+      }
       $file = file_save_data($file_temp, $file_data['attributes']['uri']['value']);
+      if (!$file) {
+        return [];
+      }
     }
 
     unset($data['attributes']['drupal_internal__mid']);
