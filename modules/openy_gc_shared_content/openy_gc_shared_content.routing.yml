@@ -1,0 +1,65 @@
+shared_content_source.config:
+  path: '/admin/virtual-y/shared-content'
+  defaults:
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: 'Shared content'
+  requirements:
+    _permission: 'administer gated content configuration'
+
+entity.shared_content_source_server.collection:
+  path: '/admin/virtual-y/shared-content/server'
+  defaults:
+    _entity_list: 'shared_content_source_server'
+    _title: 'Shared content source list'
+  requirements:
+    _permission: 'administer gated content configuration'
+
+entity.shared_content_source_server.add_form:
+  path: '/admin/virtual-y/shared-content/server/add'
+  defaults:
+    _entity_form: 'shared_content_source_server.add'
+    _title: 'Add shared content source'
+  requirements:
+    _permission: 'administer gated content configuration'
+
+entity.shared_content_source_server.edit_form:
+  path: '/admin/virtual-y/shared-content/server/{shared_content_source_server}'
+  defaults:
+    _entity_form: 'shared_content_source_server.edit'
+    _title: 'Edit shared content source'
+  requirements:
+    _permission: 'administer gated content configuration'
+
+entity.shared_content_source_server.delete_form:
+  path: '/admin/virtual-y/shared-content/server/{shared_content_source_server}/delete'
+  defaults:
+    _entity_form: 'shared_content_source_server.delete'
+    _title: 'Delete shared content source'
+  requirements:
+    _permission: 'administer gated content configuration'
+
+entity.shared_content_source_server.fetch_form:
+  path: '/admin/virtual-y/shared-content/server/{shared_content_source_server}/fetch/{type}'
+  defaults:
+    _entity_form: 'shared_content_source_server.fetch'
+    _title: 'Fetch shared content'
+    type: 'vy_blog_post'
+  requirements:
+    _permission: 'administer gated content configuration'
+
+entity.shared_content_source_server.preview:
+  path: '/admin/virtual-y/shared-content/server/{shared_content_source_server}/preview/{type}/{uuid}'
+  defaults:
+    _title: 'Preview'
+    _controller: '\Drupal\openy_gc_shared_content\Controller\PreviewController::openPreviewModal'
+  requirements:
+    _permission: 'administer gated content configuration'
+  options:
+    _admin_route: TRUE
+    parameters:
+      shared_content_source_server:
+        type: entity:shared_content_source_server
+      type:
+        type: string
+      uuid:
+        type: string

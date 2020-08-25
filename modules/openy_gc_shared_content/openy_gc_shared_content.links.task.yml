@@ -1,0 +1,2 @@
+openy_gc_shared_content.fetch:
+  deriver: 'Drupal\openy_gc_shared_content\Plugin\Derivative\SourceServerLocalTasks'

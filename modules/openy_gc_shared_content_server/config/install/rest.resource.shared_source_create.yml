@@ -1,0 +1,16 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - serialization
+    - user
+    - openy_gc_shared_content_server
+id: shared_source_create
+plugin_id: shared_source_create
+granularity: method
+configuration:
+  POST:
+    supported_formats:
+      - json
+    supported_auth:
+      - cookie

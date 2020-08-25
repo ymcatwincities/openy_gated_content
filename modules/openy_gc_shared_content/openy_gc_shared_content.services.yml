@@ -1,0 +1,4 @@
+services:
+  plugin.manager.shared_content_source_type:
+    class: Drupal\openy_gc_shared_content\SharedContentSourceTypeManager
+    parent: default_plugin_manager

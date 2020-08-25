@@ -1,0 +1,89 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - openy_gc_shared_content_server
+id: virtual_y_shared_node_blog
+migration_group: virtual_y_shared
+deriver: Drupal\openy_gc_shared_content_server\SourceMigrationDeriver
+label: 'Sync shared blog posts to Open Y shared demo server.'
+source:
+  entity_type: vy_blog_post
+  plugin: url
+  data_fetcher_plugin: http
+  # Specifies the JSON parser plugin.
+  data_parser_plugin: virtualy_json
+  track_changes: true
+  headers:
+    Accept: 'application/json; charset=utf-8'
+    Content-Type: 'application/json'
+  urls: replace_me
+  constants:
+    DOMAIN: replace_me
+  item_selector: data/
+  fields:
+    - name: nid
+      label: 'nid'
+      selector: /attributes/drupal_internal__nid
+    - name: title
+      label: 'Title'
+      selector: /attributes/title
+    - name: created
+      label: 'Created'
+      selector: /attributes/created
+    - name: changed
+      label: 'Changed'
+      selector: /attributes/changed
+    - name: status
+      label: 'Status'
+      selector: /attributes/status
+    - name: field_vy_blog_image_id
+      label: 'Image'
+      selector: /relationships/field_vy_blog_image/data/id
+    - name: field_vy_blog_description
+      label: 'Blog description'
+      selector: /attributes/field_vy_blog_description/value
+  ids:
+    nid:
+      type: integer
+process:
+  langcode:
+    plugin: default_value
+    source: language
+    default_value: en
+  created:
+    plugin: callback
+    source: created
+    callable: strtotime
+  changed:
+    plugin: callback
+    source: changed
+    callable: strtotime
+  status:
+    plugin: default_value
+    default_value: 1
+  uid:
+    plugin: default_value
+    default_value: 1
+  title: title
+  field_gc_origin: constants/DOMAIN
+  field_gc_share:
+    plugin: default_value
+    default_value: 1
+  field_vy_blog_description/value: field_vy_blog_description
+  field_vy_blog_description/format:
+    plugin: default_value
+    default_value: full_html
+  field_vy_blog_image:
+    plugin: migration
+    migration: virtual_y_shared_media_blog_image:REPLACE_ME
+    source: field_vy_blog_image_id
+destination:
+  plugin: 'entity:node'
+  default_bundle: vy_blog_post
+
+migration_dependencies:
+  required:
+    - virtual_y_shared_media_blog_image:REPLACE_ME
+  optional: {  }

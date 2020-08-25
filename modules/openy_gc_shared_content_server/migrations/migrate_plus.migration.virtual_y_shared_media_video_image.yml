@@ -1,0 +1,81 @@
+dependencies:
+  enforced:
+    module:
+      - openy_gc_shared_content_server
+id: virtual_y_shared_media_video_image
+migration_tags: { }
+migration_group: virtual_y_shared
+deriver: Drupal\openy_gc_shared_content_server\SourceMigrationDeriver
+label: Fetch Image
+source:
+  entity_type: gc_video
+  json_includes:
+    - field_gc_video_image.field_media_image
+  plugin: url
+  data_fetcher_plugin: http
+  # Specifies the JSON parser plugin.
+  data_parser_plugin: virtualy_json
+  track_changes: true
+  headers:
+    Accept: 'application/json; charset=utf-8'
+    Content-Type: 'application/json'
+  urls: replace_me
+  item_selector: included/
+  fields:
+    - name: id
+      label: 'id'
+      selector: /id
+    - name: type
+      label: 'Include type'
+      selector: /type
+    - name: name
+      label: 'Media Name'
+      selector: /attributes/name
+    - name: created
+      label: 'Created'
+      selector: /attributes/created
+    - name: changed
+      label: 'Changed'
+      selector: /attributes/changed
+    - name: status
+      label: 'Status'
+      selector: /attributes/status
+    - name: field_media_image
+      label: 'File'
+      selector: /relationships/field_media_image/data/id
+  ids:
+    id:
+      type: string
+process:
+  langcode:
+    plugin: default_value
+    source: language
+    default_value: en
+  created:
+    plugin: callback
+    source: created
+    callable: strtotime
+  changed:
+    plugin: callback
+    source: changed
+    callable: strtotime
+  name: name
+  type:
+    plugin: skip_on_value
+    method: row
+    source: type
+    value: file--file
+  bundle:
+    plugin: default_value
+    default_value: image
+  uid:
+    plugin: default_value
+    default_value: 1
+  field_media_image:
+    plugin: migration
+    migration: virtual_y_shared_file_video:REPLACE_ME
+    source: field_media_image
+destination:
+  plugin: 'entity:media'
+migration_dependencies:
+  optional: {  }

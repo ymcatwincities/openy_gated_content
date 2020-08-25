@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: gc_node_unshare
+label: 'Unshare from Virtual Y'
+type: node
+plugin: gc_node_unshare_action
+configuration: {  }
