@@ -1,0 +1,16 @@
+shared_content_source_server.*:
+  type: config_entity
+  label: 'Shared Content Source Server'
+  mapping:
+    id:
+      type: string
+      label: 'ID'
+    label:
+      type: label
+      label: 'Label'
+    url:
+      type: string
+      label: 'Source URL'
+    token:
+      type: string
+      label: 'Source token'

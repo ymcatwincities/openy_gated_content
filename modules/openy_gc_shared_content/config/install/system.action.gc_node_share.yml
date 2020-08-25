@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: gc_node_share
+label: 'Share to Virtual Y'
+type: node
+plugin: gc_node_share_action
+configuration: {  }

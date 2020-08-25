@@ -1,0 +1,16 @@
+add shared content source entities:
+  title: 'Create new Shared content source entities'
+
+administer shared content source entities:
+  title: 'Administer Shared content source entities'
+  description: 'Allow to access the administration form to configure Shared content source entities.'
+  restrict access: true
+
+delete shared content source entities:
+  title: 'Delete Shared content source entities'
+
+edit shared content source entities:
+  title: 'Edit Shared content source entities'
+
+view shared content source entities:
+  title: 'View Shared content source entities'

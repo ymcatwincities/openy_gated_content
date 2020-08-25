@@ -1,0 +1,83 @@
+dependencies:
+  enforced:
+    module:
+      - openy_gc_shared_content_server
+id: virtual_y_shared_media_video
+migration_group: virtual_y_shared
+label: Import Virtual Y videos
+deriver: Drupal\openy_gc_shared_content_server\SourceMigrationDeriver
+source:
+  entity_type: gc_video
+  json_includes:
+    - field_gc_video_media
+  plugin: url
+  track_changes: true
+  data_fetcher_plugin: http
+  # Specifies the JSON parser plugin.
+  data_parser_plugin: virtualy_json
+  headers:
+    Accept: 'application/json; charset=utf-8'
+    Content-Type: 'application/json'
+  urls: replace_me
+  item_selector: included/
+  fields:
+    - name: id
+      label: 'id'
+      selector: /id
+    - name: name
+      label: 'Name'
+      selector: /attributes/name
+    - name: created
+      label: 'Created'
+      selector: /attributes/created
+    - name: changed
+      label: 'Changed'
+      selector: /attributes/changed
+    - name: status
+      label: 'Status'
+      selector: /attributes/status
+    - name: type
+      label: 'Type'
+      selector: /type
+    - name: field_media_in_library
+      label: 'Media in library'
+      selector: /attributes/field_media_in_library
+    - name: field_media_source
+      label: 'Media source'
+      selector: /attributes/field_media_source
+    - name: field_media_video_embed_field
+      label: 'Video Embed'
+      selector: /attributes/field_media_video_embed_field
+    - name: field_media_video_id
+      label: 'Video ID'
+      selector: /attributes/field_media_video_id
+  ids:
+    id:
+      type: string
+process:
+  langcode:
+    plugin: default_value
+    source: language
+    default_value: en
+  name:
+    -
+      plugin: get
+      source: name
+  bundle:
+    -
+      plugin: default_value
+      default_value: video
+  uid:
+    -
+      plugin: default_value
+      default_value: 1
+  field_media_video_embed_field:
+    -
+      plugin: get
+      source: field_media_video_embed_field
+
+destination:
+  plugin: 'entity:media'
+migration_dependencies:
+  required: {  }
+  optional: {  }
