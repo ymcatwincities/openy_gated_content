@@ -5,7 +5,6 @@ namespace Drupal\openy_gc_shared_content_server;
 use Drupal\Component\Plugin\Derivative\DeriverBase;
 use Drupal\Component\Plugin\Derivative\DeriverInterface;
 use Drupal\Core\Entity\EntityTypeManager;
-use Drupal\Core\Entity\Query\QueryFactory;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\openy_gc_shared_content_server\Entity\SharedContentSource;
 use Drupal\Core\Plugin\Discovery\ContainerDeriverInterface;
@@ -27,8 +26,11 @@ class SourceMigrationDeriver extends DeriverBase implements DeriverInterface, Co
   /**
    * SourceMigrationDeriver constructor.
    *
-   * @param \Drupal\Core\Entity\EntityTypeManager $entityQuery
-   *   EntityTypeManager instance.
+   * @param \Drupal\Core\Entity\EntityTypeManager $entityTypeManager
+   *   EntityTypeManager service instance.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function __construct(EntityTypeManager $entityTypeManager) {
     $this->sharedContentStorage = $entityTypeManager

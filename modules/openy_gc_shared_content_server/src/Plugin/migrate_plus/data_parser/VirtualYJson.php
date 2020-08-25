@@ -49,7 +49,8 @@ class VirtualYJson extends Json {
       if (!empty($selector)) {
         if (!empty($source_data[$selector])) {
           $source_data = $source_data[$selector];
-        } else {
+        }
+        else {
           $source_data = [];
         }
       }
