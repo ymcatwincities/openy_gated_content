@@ -9,11 +9,13 @@ use Drupal\Core\Field\FieldUpdateActionBase;
  */
 class ShareToVirtualYBase extends FieldUpdateActionBase {
 
+  const GC_SHARE_ENABLED = 1;
+
   /**
    * {@inheritdoc}
    */
   protected function getFieldsToUpdate() {
-    return ['field_gc_share' => 1];
+    return ['field_gc_share' => self::GC_SHARE_ENABLED];
   }
 
 }

@@ -128,7 +128,7 @@ class VirtualYVideo extends SharedContentSourceTypeBase {
             }
             if ($item['type'] == 'media--video') {
               if ($item['attributes']['field_media_source'] == 'youtube') {
-                $url = 'http://www.youtube.com/embed/' . $item['attributes']['field_media_video_id'];
+                $url = 'https://www.youtube.com/embed/' . $item['attributes']['field_media_video_id'];
               }
               elseif ($item['attributes']['field_media_source'] == 'vimeo') {
                 $url = 'https://player.vimeo.com/video/' . $item['attributes']['field_media_video_id'];

@@ -13,7 +13,7 @@ source:
   plugin: url
   data_fetcher_plugin: http
   # Specifies the JSON parser plugin.
-  data_parser_plugin: json
+  data_parser_plugin: virtualy_json
   track_changes: true
   headers:
     Accept: 'application/json; charset=utf-8'

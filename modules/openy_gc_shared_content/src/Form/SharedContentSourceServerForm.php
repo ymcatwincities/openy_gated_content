@@ -8,6 +8,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -38,6 +39,13 @@ class SharedContentSourceServerForm extends EntityForm {
   protected $config;
 
   /**
+   * A logger instance.
+   *
+   * @var \Psr\Log\LoggerInterface
+   */
+  protected $logger;
+
+  /**
    * Constructs an SharedContentSource object.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
@@ -48,11 +56,14 @@ class SharedContentSourceServerForm extends EntityForm {
    *   The request stack.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config
    *   The configuration factory service.
+   * @param \Psr\Log\LoggerInterface $logger
+   *   A logger instance.
    */
-  public function __construct(EntityTypeManagerInterface $entityTypeManager, Client $client, RequestStack $request_stack, ConfigFactoryInterface $config) {
+  public function __construct(EntityTypeManagerInterface $entityTypeManager, Client $client, RequestStack $request_stack, ConfigFactoryInterface $config, LoggerInterface $logger) {
     $this->entityTypeManager = $entityTypeManager;
     $this->client = $client;
     $this->config = $config;
+    $this->logger = $logger;
     $this->request = $request_stack->getCurrentRequest();
   }
 
@@ -64,7 +75,8 @@ class SharedContentSourceServerForm extends EntityForm {
       $container->get('entity_type.manager'),
       $container->get('http_client'),
       $container->get('request_stack'),
-      $container->get('config.factory')
+      $container->get('config.factory'),
+      $container->get('logger.factory')->get('openy_gc_shared_content')
     );
   }
 
@@ -167,6 +179,7 @@ class SharedContentSourceServerForm extends EntityForm {
       }
     }
     catch (RequestException $e) {
+      $this->logger->notice($e->getMessage());
       return NULL;
     }
   }
