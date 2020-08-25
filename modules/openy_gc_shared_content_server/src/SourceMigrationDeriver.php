@@ -4,6 +4,7 @@ namespace Drupal\openy_gc_shared_content_server;
 
 use Drupal\Component\Plugin\Derivative\DeriverBase;
 use Drupal\Component\Plugin\Derivative\DeriverInterface;
+use Drupal\Core\Entity\EntityTypeManager;
 use Drupal\Core\Entity\Query\QueryFactory;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\openy_gc_shared_content_server\Entity\SharedContentSource;
@@ -19,18 +20,20 @@ class SourceMigrationDeriver extends DeriverBase implements DeriverInterface, Co
   /**
    * EntityQuery service instance.
    *
-   * @var \Drupal\Core\Entity\Query\QueryFactory
+   * @var \Drupal\Core\Entity\Query\QueryInterface
    */
-  protected $entityQuery;
+  protected $sharedContentStorage;
 
   /**
    * SourceMigrationDeriver constructor.
    *
-   * @param \Drupal\Core\Entity\Query\QueryFactory $entityQuery
-   *   EntityQuery instance.
+   * @param \Drupal\Core\Entity\EntityTypeManager $entityQuery
+   *   EntityTypeManager instance.
    */
-  public function __construct(QueryFactory $entityQuery) {
-    $this->entityQuery = $entityQuery;
+  public function __construct(EntityTypeManager $entityTypeManager) {
+    $this->sharedContentStorage = $entityTypeManager
+      ->getStorage('shared_content_source')
+      ->getQuery();
   }
 
   /**
@@ -38,7 +41,7 @@ class SourceMigrationDeriver extends DeriverBase implements DeriverInterface, Co
    */
   public static function create(ContainerInterface $container, $base_plugin_id) {
     return new static(
-      $container->get('entity.query')
+      $container->get('entity_type.manager')
     );
   }
 
@@ -47,7 +50,7 @@ class SourceMigrationDeriver extends DeriverBase implements DeriverInterface, Co
    */
   public function getDerivativeDefinitions($base_plugin_definition) {
 
-    $ids = $this->entityQuery->get('shared_content_source')->execute();
+    $ids = $this->sharedContentStorage->execute();
 
     if (empty($ids)) {
       return [];
