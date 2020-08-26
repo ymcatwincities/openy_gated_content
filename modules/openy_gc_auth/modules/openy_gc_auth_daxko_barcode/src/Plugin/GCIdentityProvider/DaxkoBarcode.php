@@ -127,8 +127,7 @@ class DaxkoBarcode extends GCIdentityProviderPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function validateConfigurationForm(array &$form, FormStateInterface $form_state)
-  {
+  public function validateConfigurationForm(array &$form, FormStateInterface $form_state) {
     // Ensure ReCaptcha is set up before requiring it on our form.
     $enable_recaptcha = $form_state->getValue('enable_recaptcha');
     $recaptcha_site_key = \Drupal::config('recaptcha.settings')->get('site_key');
@@ -138,9 +137,9 @@ class DaxkoBarcode extends GCIdentityProviderPluginBase {
         ->toString();
       $form_state
         ->setErrorByName('enable_recaptcha', $this
-        ->t('You must @configure_recaptcha before enabling it on this form.', [
-          '@configure_recaptcha' => $recaptcha_link
-        ]));
+          ->t('You must @configure_recaptcha before enabling it on this form.', [
+            '@configure_recaptcha' => $recaptcha_link,
+          ]));
     }
 
     parent::validateConfigurationForm($form, $form_state);

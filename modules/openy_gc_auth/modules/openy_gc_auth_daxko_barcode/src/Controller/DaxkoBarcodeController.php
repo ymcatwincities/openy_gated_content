@@ -126,13 +126,14 @@ class DaxkoBarcodeController extends ControllerBase {
       if ($this->validDaxSignature($dax_expiration, $status, $area_id, $validation_secret, $dax_signature)) {
         switch ($status) {
           case 'success':
-            return new JsonResponse([
-              'message' => 'success',
-              'user' => [
-                'barcode' => $barcode,
-                'primary' => 1,
-              ],
-            ]);
+            return new JsonResponse(
+              [
+                'message' => 'success',
+                'user' => [
+                  'barcode' => $barcode,
+                  'primary' => 1,
+                ],
+              ]);
           case 'not_found':
           case 'access_denied':
           case 'duplicate_barcode':
@@ -173,7 +174,7 @@ class DaxkoBarcodeController extends ControllerBase {
         'mode' => 'custom',
         'barcode' => $barcode,
       ],
-      'allow_redirects' => false,
+      'allow_redirects' => FALSE,
     ];
 
     try {
@@ -197,17 +198,22 @@ class DaxkoBarcodeController extends ControllerBase {
    * https://github.com/daxko/dax-signature-validation.
    *
    * @param string $dax_expiration
+   *   Daxko expiration time
    * @param string $status
+   *   Status value.
    * @param string $area_id
+   *   Area id.
    * @param string $validation_secret
+   *   Secret for Daxko.
    * @param string $dax_signature
+   *   Signature value.
    *
    * @return bool
    *   Whether the signature is validated or not.
    */
   private function validDaxSignature($dax_expiration, $status, $area_id, $validation_secret, $dax_signature) {
 
-    $now = round(microtime(true)*1000);
+    $now = round(microtime(TRUE)*1000);
     if ($now > $dax_expiration) {
       return FALSE;
     }
@@ -222,13 +228,15 @@ class DaxkoBarcodeController extends ControllerBase {
   /**
    * Helper function for reCaptcha validation.
    *
-   * @param $content
-   * @param $request
+   * @param array $content
+   *   Input data from user
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   Request object
    *
    * @return bool|JsonResponse
    *   True if success, or an error message if failure.
    */
-  protected function validateRecaptcha($content, $request) {
+  protected function validateRecaptcha(array $content, Request $request) {
     if (!$content['recaptchaToken']) {
       return new JsonResponse(
         ['message' => $this->t('ReCaptcha token required.')],
