@@ -149,6 +149,12 @@ class DaxkoBarcodeController extends ControllerBase {
         }
 
       }
+      else {
+        return new JsonResponse([
+          'message' => 'Signature check failed',
+          'user' => [],
+        ], 403);
+      }
     }
     else {
       return new JsonResponse([
