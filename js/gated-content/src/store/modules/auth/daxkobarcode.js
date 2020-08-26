@@ -18,10 +18,7 @@ export default {
           params: {
             _format: 'json',
           },
-          data: {
-            recaptchaToken: data.recaptchaToken,
-            barcode: data.barcode
-          }
+          data,
         })
           .then((response2) => {
             if (response2.status === 200) {
@@ -33,7 +30,7 @@ export default {
           .catch((error) => {
             throw error;
           }))
-        .catch(error => {
+        .catch((error) => {
           throw error;
         });
     },

@@ -77,9 +77,7 @@ export default {
             this.form.barcode = '';
             this.loading = false;
             if (this.config.enableRecaptcha) {
-              // @TODO: Uncommenting below throws an error. It seems like it should be there,
-              // but doesn't seem to break anything by being off.
-              // this.$refs.recaptcha.reset();
+              this.$refs.recaptcha.reset();
             }
             return;
           }
@@ -93,10 +91,6 @@ export default {
           this.error = error.response ? error.response.data.message : 'Something went wrong!';
           this.help = error.response ? error.response.data.help : '';
           this.loading = false;
-          if (this.config.enableRecaptcha) {
-            // @TODO: see above.
-            // this.$refs.recaptcha.reset();
-          }
         });
     },
   },

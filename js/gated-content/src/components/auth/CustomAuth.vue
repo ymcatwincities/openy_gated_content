@@ -87,9 +87,6 @@ export default {
         .catch((error) => {
           this.error = error.response ? error.response.data.message : 'Something went wrong!';
           this.loading = false;
-          if (this.config.enableRecaptcha) {
-            this.$refs.recaptcha.reset();
-          }
         });
     },
   },
