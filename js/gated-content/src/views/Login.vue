@@ -15,7 +15,7 @@
 <script>
 import DummyAuth from '@/components/auth/DummyAuth.vue';
 import CustomAuth from '@/components/auth/CustomAuth.vue';
-import DaxkoBarcode from '@/components/auth/DaxkoBarcode';
+import DaxkoBarcode from '@/components/auth/DaxkoBarcode.vue';
 import DaxkoSSO from '@/components/auth/DaxkoSSO.vue';
 import PersonifyAuth from '@/components/auth/PersonifyAuth.vue';
 
