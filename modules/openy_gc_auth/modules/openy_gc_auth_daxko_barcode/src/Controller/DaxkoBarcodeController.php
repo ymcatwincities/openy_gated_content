@@ -126,6 +126,7 @@ class DaxkoBarcodeController extends ControllerBase {
       if ($this->validDaxSignature($dax_expiration, $status, $area_id, $validation_secret, $dax_signature)) {
         switch ($status) {
           case 'success':
+
             return new JsonResponse(
               [
                 'message' => 'success',
@@ -138,6 +139,7 @@ class DaxkoBarcodeController extends ControllerBase {
           case 'access_denied':
           case 'duplicate_barcode':
           case 'invalid':
+
             return new JsonResponse([
               'message' => $config->get("message_{$status}"),
               'help' => $config->get('message_help'),
@@ -159,10 +161,12 @@ class DaxkoBarcodeController extends ControllerBase {
    * Send the user's barcode to Daxko and parse the response.
    *
    * @param string $action_url
+   *   Action url.
    * @param string $barcode
+   *   Barcode value.
    *
    * @return array
-   *   An associative array of query strings from the response whose keys should include:
+   *   An assoc array of query strings from the response, should include:
    *   status, daxExpiration, daxSignature, and area_id.
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
@@ -194,11 +198,10 @@ class DaxkoBarcodeController extends ControllerBase {
   }
 
   /**
-   * Validate Daxko Barcode signature as per instructions here
-   * https://github.com/daxko/dax-signature-validation.
+   * Validate based on https://github.com/daxko/dax-signature-validation.
    *
    * @param string $dax_expiration
-   *   Daxko expiration time
+   *   Daxko expiration time.
    * @param string $status
    *   Status value.
    * @param string $area_id
