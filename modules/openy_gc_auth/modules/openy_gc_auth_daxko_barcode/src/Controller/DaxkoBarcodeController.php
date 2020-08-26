@@ -135,6 +135,7 @@ class DaxkoBarcodeController extends ControllerBase {
                   'primary' => 1,
                 ],
               ]);
+
           case 'not_found':
           case 'access_denied':
           case 'duplicate_barcode':
@@ -216,7 +217,7 @@ class DaxkoBarcodeController extends ControllerBase {
    */
   private function validDaxSignature($dax_expiration, $status, $area_id, $validation_secret, $dax_signature) {
 
-    $now = round(microtime(TRUE)*1000);
+    $now = round(microtime(TRUE) * 1000);
     if ($now > $dax_expiration) {
       return FALSE;
     }
@@ -232,9 +233,9 @@ class DaxkoBarcodeController extends ControllerBase {
    * Helper function for reCaptcha validation.
    *
    * @param array $content
-   *   Input data from user
+   *   Input data from user.
    * @param \Symfony\Component\HttpFoundation\Request $request
-   *   Request object
+   *   Request object.
    *
    * @return bool|JsonResponse
    *   True if success, or an error message if failure.
