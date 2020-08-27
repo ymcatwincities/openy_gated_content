@@ -5,6 +5,7 @@ import auth from './modules/auth';
 import settings from './modules/settings';
 import authDummy from './modules/auth/dummy';
 import authCustom from './modules/auth/custom';
+import authDaxkoBarcode from './modules/auth/daxkobarcode';
 import authDaxkoSSO from './modules/auth/daxkosso';
 import authPersonify from './modules/auth/personify';
 
@@ -29,6 +30,9 @@ export default new Vuex.Store({
     settings,
     auth,
     authDummy,
+    // @TODO: It seems like only one provider can use recaptcha at a time.
+    // This breaks `authCustom` and should be resolved before PR is merged.
+    authDaxkoBarcode,
     authCustom,
     authDaxkoSSO,
     authPersonify,
