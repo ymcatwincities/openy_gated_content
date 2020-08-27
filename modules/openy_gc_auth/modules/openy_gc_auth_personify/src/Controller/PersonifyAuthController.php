@@ -222,7 +222,7 @@ class PersonifyAuthController extends ControllerBase {
     }
 
     $body = '<StoredProcedureRequest>
-    <StoredProcedureName>YSV_OpenY_Member_Access</StoredProcedureName>
+    <StoredProcedureName>usr_OpenY_Member_Access</StoredProcedureName>
     <SPParameterList>
       <StoredProcedureParameter>
         <Name>ip_org_id</Name>
