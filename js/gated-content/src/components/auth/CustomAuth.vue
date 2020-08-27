@@ -22,7 +22,7 @@
         >
       </div>
       <div v-if="config.enableRecaptcha">
-        <ReCaptcha ref="recaptcha" v-model="form.recaptchaToken" />
+        <ReCaptcha ref="recaptcha" v-model="form.recaptchaToken" :reCaptchaKey="reCaptchaKey" />
       </div>
       <button @click.prevent="login" class="btn btn-lg btn-primary">Login</button>
     </form>
@@ -52,6 +52,9 @@ export default {
     };
   },
   computed: {
+    reCaptchaKey() {
+      return this.$store.getters.getCustomReCaptchaKey;
+    },
     config() {
       return this.$store.getters.getCustomConfig;
     },

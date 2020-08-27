@@ -49,6 +49,6 @@ export default {
   },
   getters: {
     getDaxkoBarcodeConfig: (state) => state.config,
-    getReCaptchaKey: (state) => state.config.reCaptchaKey,
+    getDaxkoBarcodeReCaptchaKey: (state) => state.config.reCaptchaKey,
   },
 };
