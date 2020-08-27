@@ -1,0 +1,28 @@
+<?php
+
+/**
+ * @file
+ * Installation file.
+ */
+
+use Drupal\user\Entity\Role;
+use Drupal\user\RoleInterface;
+
+/**
+ * Implements hook_install().
+ */
+function openy_gc_shared_content_server_install() {
+  $roles = Role::loadMultiple([
+    RoleInterface::ANONYMOUS_ID,
+    RoleInterface::AUTHENTICATED_ID,
+  ]);
+  $permissions = [
+    'restful post shared_source_create',
+  ];
+  foreach ($permissions as $permission) {
+    foreach ($roles as $role) {
+      $role->grantPermission($permission);
+      $role->save();
+    }
+  }
+}

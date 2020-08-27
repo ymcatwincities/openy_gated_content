@@ -24,11 +24,7 @@ class LogEntityAccessControlHandler extends EntityAccessControlHandler {
 
       case 'view':
 
-        if (!$entity->isPublished()) {
-          return AccessResult::allowedIfHasPermission($account, 'view unpublished log entity entities');
-        }
-
-        return AccessResult::allowedIfHasPermission($account, 'view published log entity entities');
+        return AccessResult::allowedIfHasPermission($account, 'view log entity entities');
 
       case 'update':
 

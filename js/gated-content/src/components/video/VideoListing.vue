@@ -80,6 +80,8 @@ export default {
         'field_gc_video_media.thumbnail',
         'field_gc_video_level',
         'field_gc_video_category',
+        'field_gc_video_image',
+        'field_gc_video_image.field_media_image',
       ],
     };
   },

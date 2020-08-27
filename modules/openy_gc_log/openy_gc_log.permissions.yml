@@ -12,8 +12,5 @@ delete log entity entities:
 edit log entity entities:
   title: 'Edit Log entity entities'
 
-view published log entity entities:
-  title: 'View published Log entity entities'
-
-view unpublished log entity entities:
-  title: 'View unpublished Log entity entities'
+view log entity entities:
+  title: 'View Log entity entities'

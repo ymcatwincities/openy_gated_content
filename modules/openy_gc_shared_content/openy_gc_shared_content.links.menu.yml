@@ -1,0 +1,13 @@
+shared_content_source.config:
+  title: 'Shared Content'
+  description: 'Virtual YMCA Shared Content.'
+  route_name: shared_content_source.config
+  parent: openy_gated_content.openy
+  weight: 25
+
+shared_content_source.source_server_list:
+  title: 'Source Servers'
+  description: 'Virtual YMCA Shared Content source servers.'
+  route_name: entity.shared_content_source_server.collection
+  parent: shared_content_source.config
+  weight: 1

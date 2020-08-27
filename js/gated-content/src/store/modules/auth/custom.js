@@ -81,6 +81,6 @@ export default {
   },
   getters: {
     getCustomConfig: (state) => state.config,
-    getReCaptchaKey: (state) => state.config.reCaptchaKey,
+    getCustomReCaptchaKey: (state) => state.config.reCaptchaKey,
   },
 };
