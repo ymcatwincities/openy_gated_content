@@ -8,18 +8,20 @@
     </div>
     <form v-else class="plugin-custom">
       <div v-if="error" class="alert alert-danger">
-        <span>{{ error }}</span>
+        <p>{{ error }}</p>
+        <p v-if="help" v-html="help"></p>
       </div>
       <div class="form-group">
-        <label for="auth-email">Email Address</label>
+        <label for="auth-barcode">{{ config.formLabel || 'Barcode' }}</label>
         <input
-          v-model="form.email"
-          placeholder="johndoe@example.com"
-          type="email"
-          id="auth-email"
+          v-model="form.barcode"
+          placeholder=""
+          type="text"
+          id="auth-barcode"
           class="form-control"
           required
         >
+        <small v-if="config.formDescription" class="form-text">{{ config.formDescription }}</small>
       </div>
       <div v-if="config.enableRecaptcha">
         <ReCaptcha ref="recaptcha" v-model="form.recaptchaToken" :reCaptchaKey="reCaptchaKey" />
@@ -34,7 +36,7 @@ import ReCaptcha from '@/components/ReCaptcha.vue';
 import Spinner from '@/components/Spinner.vue';
 
 export default {
-  name: 'CustomAuth',
+  name: 'DaxkoBarcode',
   components: {
     ReCaptcha,
     Spinner,
@@ -43,20 +45,20 @@ export default {
     return {
       loading: false,
       form: {
-        email: '',
+        barcode: '',
         recaptchaToken: '',
-        path: '',
       },
       error: '',
       message: '',
+      help: '',
     };
   },
   computed: {
     reCaptchaKey() {
-      return this.$store.getters.getCustomReCaptchaKey;
+      return this.$store.getters.getDaxkoBarcodeReCaptchaKey;
     },
     config() {
-      return this.$store.getters.getCustomConfig;
+      return this.$store.getters.getDaxkoBarcodeConfig;
     },
   },
   methods: {
@@ -70,11 +72,12 @@ export default {
         this.form.path = window.location.pathname;
       }
       await this.$store
-        .dispatch('customAuthorize', this.form)
+        .dispatch('daxkobarcodeAuthorize', this.form)
         .then((response) => {
           if (response.status === 202) {
             this.message = response.data.message;
-            this.form.email = '';
+            this.help = response.data.help;
+            this.form.barcode = '';
             this.loading = false;
             if (this.config.enableRecaptcha) {
               this.$refs.recaptcha.reset();
@@ -89,6 +92,7 @@ export default {
         })
         .catch((error) => {
           this.error = error.response ? error.response.data.message : 'Something went wrong!';
+          this.help = error.response ? error.response.data.help : '';
           this.loading = false;
         });
     },

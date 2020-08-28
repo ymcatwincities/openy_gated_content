@@ -222,7 +222,7 @@ class PersonifyAuthController extends ControllerBase {
     }
 
     $body = '<StoredProcedureRequest>
-    <StoredProcedureName>YSV_OpenY_Member_Access</StoredProcedureName>
+    <StoredProcedureName>usr_OpenY_Member_Access</StoredProcedureName>
     <SPParameterList>
       <StoredProcedureParameter>
         <Name>ip_org_id</Name>
@@ -258,7 +258,7 @@ class PersonifyAuthController extends ControllerBase {
 
     if ($data) {
       $results = json_decode($data['Data'], TRUE);
-      if (isset($results['Table'][0]['Access']) && ($results['Table'][0]['Access'] === 'Approved')) {
+      if (isset($results['Table'][0]['Access']) && (strtolower($results['Table'][0]['Access']) === 'approved')) {
         $isActive = TRUE;
       }
     }

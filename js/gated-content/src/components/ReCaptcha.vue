@@ -16,6 +16,10 @@ export default {
   name: 'ReCaptcha',
   components: { VueRecaptcha },
   props: {
+    reCaptchaKey: {
+      type: String,
+      default: '',
+    },
     value: {
       type: String,
       default: '',
@@ -23,7 +27,7 @@ export default {
   },
   computed: {
     siteKey() {
-      return this.$store.getters.getReCaptchaKey;
+      return this.$props.reCaptchaKey;
     },
   },
   methods: {
