@@ -29,7 +29,7 @@ process:
     plugin: default_value
     default_value: 1
   parent_id:
-    plugin: migration
+    plugin: migration_lookup
     migration: virtual_y_node_landing
     no_stub: true
     source: parent_id
