@@ -3,7 +3,7 @@
     "description": "Open Y Virtual Y Content",
     "type": "drupal-module",
     "require": {
-        "drupal/recurring_events": "*",
+        "drupal/recurring_events": "^2",
         "ymcatwincities/daxko_sso": "*",
         "ymcatwincities/jsonapi_image_styles": "dev-master",
         "drupal/csv_serialization": "^2",
