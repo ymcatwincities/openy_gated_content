@@ -16,7 +16,6 @@ source:
   enclosure: '"'
   header_row_count: 1
   track_changes: true
-  keys: [member_id]
   ids: [member_id]
   column_names:
     -
