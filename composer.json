@@ -5,8 +5,8 @@
     "require": {
         "drupal/recurring_events": "*",
         "ymcatwincities/daxko_sso": "*",
-        "drupal/jsonapi_image_styles": "^1.0@beta",
-        "drupal/csv_serialization": "^1",
+        "ymcatwincities/jsonapi_image_styles": "dev-master",
+        "drupal/csv_serialization": "^2",
         "ext-json": "*",
         "ext-zlib": "*"
     },
