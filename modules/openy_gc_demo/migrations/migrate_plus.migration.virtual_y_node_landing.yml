@@ -87,7 +87,7 @@ process:
     plugin: default_value
     source: layout
   field_header_content:
-    plugin: iterator
+    plugin: sub_process
     source: header_content
     process:
       target_id:
@@ -103,7 +103,7 @@ process:
           - virtual_y_paragraph_small_banner
         source: header_content_id
   field_content:
-    plugin: iterator
+    plugin: sub_process
     source: content
     process:
       target_id:
@@ -121,7 +121,7 @@ process:
           - virtual_y_paragraph_gated_content_login
         source: content_id
   field_bottom_content:
-    plugin: iterator
+    plugin: sub_process
     source: bottom_content
     process:
       target_id:
