@@ -57,7 +57,8 @@
       </div>
       <div class="video-category-wrapper">
         <div class="gated-container video-category">
-          <span v-for="(category_data, index) in video.relationships.field_gc_video_category.data">
+          <span v-for="(category_data, index) in video.relationships.field_gc_video_category.data"
+                :key="index">
             <router-link :to="{
               name: 'Category',
               params: {
