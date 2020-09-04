@@ -31,8 +31,14 @@
               class="video-footer__block">
               Instructor: {{ video.attributes.field_gc_video_instructor }}
             </div>
-            <div class="video-footer__block">
-              Category: {{ video.attributes.field_gc_video_category.name }}
+            <div
+              v-if="video.attributes.field_gc_video_category.length > 0"
+              class="video-footer__block video-footer__category">
+              Category:
+              <span v-for="category in video.attributes.field_gc_video_category"
+                    :key="category.drupal_internal__tid">
+                {{ category.name }}<i>,</i>
+              </span>
             </div>
             <div
               v-if="video.attributes.field_gc_video_equipment.length > 0"
@@ -51,14 +57,16 @@
       </div>
       <div class="video-category-wrapper">
         <div class="gated-container video-category">
-          <router-link :to="{
-            name: 'Category',
-            params: {
-              cid: video.relationships.field_gc_video_category.data.id
-            }
-          }">
-            {{ video.attributes.field_gc_video_category.name }}
-          </router-link>
+          <span v-for="(category_data, index) in video.relationships.field_gc_video_category.data">
+            <router-link :to="{
+              name: 'Category',
+              params: {
+                cid: category_data.id
+              }
+            }">
+            {{ video.attributes.field_gc_video_category[index].name }}<i>,</i>
+            </router-link>
+          </span>
         </div>
       </div>
       <VideoListing
