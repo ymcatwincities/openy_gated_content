@@ -70,7 +70,7 @@
         </div>
       </div>
       <VideoListing
-        :title="'UP NEXT'"
+        :title="config.components.gc_video.up_next_title"
         :excluded-video-id="video.id"
         :category="video.relationships.field_gc_video_category.data.id"
         :viewAll="true"
@@ -86,10 +86,11 @@ import Spinner from '@/components/Spinner.vue';
 import VideoListing from '@/components/video/VideoListing.vue';
 import MediaPlayer from '@/components/MediaPlayer.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
+import { SettingsMixin } from '@/mixins/SettingsMixin';
 
 export default {
   name: 'VideoPage',
-  mixins: [JsonApiCombineMixin],
+  mixins: [JsonApiCombineMixin, SettingsMixin],
   components: {
     MediaPlayer,
     VideoListing,

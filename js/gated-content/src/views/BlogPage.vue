@@ -21,7 +21,7 @@
       </div>
 
       <BlogListing
-        :title="'NEXT BLOG POSTS'"
+        :title="config.components.vy_blog_post.up_next_title"
         :excluded-id="blog.id"
         :viewAll="true"
         :limit="6"
@@ -35,10 +35,11 @@ import client from '@/client';
 import Spinner from '@/components/Spinner.vue';
 import BlogListing from '@/components/blog/BlogListing.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
+import { SettingsMixin } from '@/mixins/SettingsMixin';
 
 export default {
   name: 'BlogPage',
-  mixins: [JsonApiCombineMixin],
+  mixins: [JsonApiCombineMixin, SettingsMixin],
   components: {
     BlogListing,
     Spinner,
