@@ -83,7 +83,7 @@ You can upload source file directly to `private://gc_auth/import/gc_auth_custom_
 
 OR
 
-You can upload file from the Drupal UI in Migration Group settings at `/admin/structure/migrate/manage/gc_auth`.
+You can upload file from the Drupal UI in Migration Group settings at `/admin/structure/migrate/manage/gc_auth`. If you upload a file from the UI it must be entitled `gc_auth_custom_users.csv` exactly.
 
 ## Notes:
 

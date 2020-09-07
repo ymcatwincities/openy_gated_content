@@ -1,0 +1,42 @@
+{{ attach_library('openy_gated_content/gated-content-styles') }}
+<div id="gated-content">
+  <div>
+    <div class="gated-content-video-page">
+      <div class="video-wrapper">
+        <div class="video gated-container">
+          <div>
+            <div>{{ field_gc_video_media }}</div>
+          </div>
+        </div>
+      </div>
+      <div class="video-footer-wrapper">
+        <div class="video-footer gated-container">
+          <div>
+            <div class="video-footer__title">{{ title }}</div>
+            <div class="video-footer__description">
+              {{ description }}
+            </div>
+          </div>
+          <div>
+            <div class="video-footer__block"> Level: {{ field_gc_video_level[0] }} </div>
+            <div class="video-footer__block"> Instructor: {{ field_gc_video_instructor }} </div>
+            <div class="video-footer__block"> Category: {{ field_gc_video_category[0] }} </div>
+            <div class="video-footer__equipment">
+              <i class="fa fa-cubes"></i> Equipment:
+              <ul>
+                {% for equipment in field_gc_video_equipment %}
+                  <li>{{ equipment }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="video-category-wrapper">
+        <div class="gated-container video-category">
+          <a href="#" class=""> {{ field_gc_video_category[0] }} </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -31,7 +31,9 @@
               class="video-footer__block">
               Instructor: {{ video.attributes.field_gc_video_instructor }}
             </div>
-            <div class="video-footer__block">
+            <div
+              v-if="video.attributes.field_gc_video_category"
+              class="video-footer__block">
               Category: {{ video.attributes.field_gc_video_category.name }}
             </div>
             <div
@@ -49,7 +51,9 @@
           </div>
         </div>
       </div>
-      <div class="video-category-wrapper">
+      <div
+        v-if="video.attributes.field_gc_video_category"
+        class="video-category-wrapper">
         <div class="gated-container video-category">
           <router-link :to="{
             name: 'Category',
@@ -62,6 +66,7 @@
         </div>
       </div>
       <VideoListing
+        v-if="video.attributes.field_gc_video_category"
         :title="'UP NEXT'"
         :excluded-video-id="video.id"
         :category="video.relationships.field_gc_video_category.data.id"

@@ -1,0 +1,5 @@
+entity.shared_content_source.add_form:
+  route_name: entity.shared_content_source.add_form
+  title: 'Add Shared content source'
+  appears_on:
+    - entity.shared_content_source.collection

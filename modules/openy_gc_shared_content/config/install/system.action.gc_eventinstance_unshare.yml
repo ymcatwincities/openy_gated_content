@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - recurring_events
+id: gc_eventinstance_unshare
+label: 'Unshare from Virtual Y'
+type: eventinstance
+plugin: gc_eventinstance_unshare_action
+configuration: {  }

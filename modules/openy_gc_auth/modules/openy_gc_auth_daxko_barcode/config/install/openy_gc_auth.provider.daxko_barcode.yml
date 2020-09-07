@@ -1,0 +1,10 @@
+enable_recaptcha: 1
+secret:
+action_url: 'https://operations.daxko.com/online/XXXX/checkin/submit?area_id=YYYY'
+form_label: Barcode
+form_description: 'This is the number found on your ID card.'
+message_not_found: 'That barcode was not found.'
+message_access_denied: 'That barcode does not have access to virtual content.'
+message_duplicate_barcode: 'That barcode is assigned to multiple members.'
+message_invalid: 'Something went wrong.'
+message_help: 'If you need assistance, please contact us at 555-555-5555 or email help@exampleymca.org.'

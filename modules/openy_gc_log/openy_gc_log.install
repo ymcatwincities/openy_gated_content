@@ -1,0 +1,42 @@
+<?php
+
+/**
+ * @file
+ * Installation file for Open Y Virtual YMCA Log.
+ */
+
+use Drupal\Core\Config\FileStorage;
+
+/**
+ * Implements hook_install().
+ */
+function openy_gc_log_install()
+{
+  _openy_gc_log_check_files_route();
+}
+
+/**
+ * Ensure the route `view.files.page_1` exists and install if it does not.
+ */
+function openy_gc_log_update_8001()
+{
+  _openy_gc_log_check_files_route();
+}
+
+/**
+ * Ensure the route `view.files.page_1` exists and install if it does not.
+ */
+function _openy_gc_log_check_files_route() {
+  $moduleHandler = \Drupal::moduleHandler();
+  $routeProvider = \Drupal::service('router.route_provider');
+  $routes = [];
+  foreach ($routeProvider->getAllRoutes() as $route_name => $route) {
+    $routes[] = $route_name;
+  }
+
+  if ($moduleHandler->moduleExists('file') && !in_array('view.files.page_1', $routes)) {
+    $config_path = drupal_get_path('module', 'file') . '/config/optional';
+    $config_source = new FileStorage($config_path);
+    \Drupal::service('config.installer')->installOptionalConfig($config_source);
+  }
+}
