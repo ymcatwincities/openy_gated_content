@@ -32,7 +32,8 @@
               Instructor: {{ video.attributes.field_gc_video_instructor }}
             </div>
             <div
-              v-if="video.attributes.field_gc_video_category.length > 0"
+              v-if="video.attributes.field_gc_video_category &&
+              video.attributes.field_gc_video_category.length > 0"
               class="video-footer__block video-footer__category">
               Category:
               <span v-for="category in video.attributes.field_gc_video_category"
@@ -55,7 +56,10 @@
           </div>
         </div>
       </div>
-      <div class="video-category-wrapper">
+      <div
+        v-if="video.attributes.field_gc_video_category &&
+        video.attributes.field_gc_video_category.length > 0"
+        class="video-category-wrapper">
         <div class="gated-container video-category">
           <span v-for="(category_data, index) in video.relationships.field_gc_video_category.data"
                 :key="index">
@@ -71,6 +75,7 @@
         </div>
       </div>
       <VideoListing
+        v-if="video.attributes.field_gc_video_category"
         :title="config.components.gc_video.up_next_title"
         :excluded-video-id="video.id"
         :category="video.relationships.field_gc_video_category.data.id"
