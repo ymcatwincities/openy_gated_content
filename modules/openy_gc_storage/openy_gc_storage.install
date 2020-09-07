@@ -61,3 +61,17 @@ function openy_gc_storage_update_8002() {
     'field.storage.node.field_gc_video_image',
   ]);
 }
+
+/**
+ * Make video category multiple.
+ */
+function openy_gc_storage_update_8003() {
+  $config_dir = drupal_get_path('module', 'openy_gc_storage');
+  $config_dir .= '/config/install/';
+  // Update configuration.
+  $config_importer = \Drupal::service('openy_upgrade_tool.importer');
+  $config_importer->setDirectory($config_dir);
+  $config_importer->importConfigs([
+    'field.storage.node.field_gc_video_category',
+  ]);
+}

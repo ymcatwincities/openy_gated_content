@@ -27,6 +27,9 @@ export const EventMixin = {
       return this.video.attributes.field_ls_host_name ? this.video.attributes.field_ls_host_name
         : this.video.attributes.instructor;
     },
+    config() {
+      return this.$store.getters.getAppSettings;
+    },
   },
   methods: {
     formatDate: (date) => {
