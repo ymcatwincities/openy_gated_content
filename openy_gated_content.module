@@ -166,4 +166,3 @@ function openy_gated_content_user_pass_validation(array &$form, FormStateInterfa
     throw new AccessDeniedHttpException();
   }
 }
-
