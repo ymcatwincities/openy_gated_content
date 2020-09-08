@@ -10,16 +10,14 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_install().
  */
-function openy_gc_log_install()
-{
+function openy_gc_log_install() {
   _openy_gc_log_check_files_route();
 }
 
 /**
  * Ensure the route `view.files.page_1` exists and install if it does not.
  */
-function openy_gc_log_update_8001()
-{
+function openy_gc_log_update_8001() {
   _openy_gc_log_check_files_route();
 }
 

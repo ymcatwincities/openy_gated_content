@@ -54,6 +54,7 @@ class GCSettingsForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state): array {
     $config = $this->config('openy_gated_content.settings');
+    $form['#tree'] = TRUE;
 
     $form['app_settings'] = [
       '#type' => 'details',
@@ -67,6 +68,49 @@ class GCSettingsForm extends ConfigFormBase {
       '#type' => 'checkbox',
       '#default_value' => $config->get('event_add_to_calendar') ?? FALSE,
     ];
+
+    $form['app_settings']['components'] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('Components settings'),
+    ];
+
+    $components = [
+      'gc_video' => $this->t('Virtual Y video'),
+      'live_stream' => $this->t('Live streams'),
+      'virtual_meeting' => $this->t('Virtual meetings'),
+      'vy_blog_post' => $this->t('Blog posts'),
+    ];
+
+    foreach ($components as $id => $title) {
+      $form['app_settings']['components'][$id] = [
+        '#type' => 'details',
+        '#open' => FALSE,
+        '#title' => $title,
+      ];
+
+      $form['app_settings']['components'][$id]['status'] = [
+        '#title' => $this->t('Show on the VY home page'),
+        '#description' => $this->t('Enable/Disable "@name" component.', [
+          '@name' => $title,
+        ]),
+        '#type' => 'checkbox',
+        '#default_value' => $config->get('components.' . $id . '.status') ?? TRUE,
+      ];
+
+      $form['app_settings']['components'][$id]['title'] = [
+        '#type' => 'textfield',
+        '#title' => $this->t('Block title'),
+        '#required' => TRUE,
+        '#default_value' => $config->get('components.' . $id . '.title'),
+      ];
+
+      $form['app_settings']['components'][$id]['up_next_title'] = [
+        '#type' => 'textfield',
+        '#title' => $this->t('Up next block title'),
+        '#required' => TRUE,
+        '#default_value' => $config->get('components.' . $id . '.up_next_title'),
+      ];
+    }
 
     $form['actions']['#type'] = 'actions';
     $form['actions']['submit'] = [
@@ -83,7 +127,7 @@ class GCSettingsForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $settings = $this->config('openy_gated_content.settings');
-    $settings->set('event_add_to_calendar', $form_state->getValue('event_add_to_calendar'));
+    $settings->setData($form_state->getValue('app_settings'));
     $settings->save();
     parent::submitForm($form, $form_state);
   }
