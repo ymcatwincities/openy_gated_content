@@ -2,3 +2,9 @@ services:
   plugin.manager.gc_identity_provider:
     class: Drupal\openy_gc_auth\GCIdentityProviderManager
     parent: default_plugin_manager
+
+  openy_gc_auth.check_for_redirect:
+    class: Drupal\openy_gc_auth\EventSubscriber\VirtualYLoginRedirect
+    arguments: ['@current_route_match', '@current_user']
+    tags:
+      - { name: event_subscriber }
