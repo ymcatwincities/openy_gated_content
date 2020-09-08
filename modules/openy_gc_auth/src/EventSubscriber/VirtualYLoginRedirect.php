@@ -3,6 +3,7 @@
 
 namespace Drupal\openy_gc_auth\EventSubscriber;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\node\NodeInterface;
@@ -28,11 +29,23 @@ class VirtualYLoginRedirect implements EventSubscriberInterface {
   protected $currentUser;
 
   /**
+   * ConfigFactory
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * Constructor.
    */
-  public function __construct(CurrentRouteMatch $current_route_match, AccountProxyInterface $current_user) {
+  public function __construct(
+    CurrentRouteMatch $current_route_match,
+    AccountProxyInterface $current_user,
+    ConfigFactoryInterface $configFactory
+  ) {
     $this->routeMatch = $current_route_match;
     $this->currentUser = $current_user;
+    $this->configFactory = $configFactory;
   }
 
   /**
@@ -44,9 +57,14 @@ class VirtualYLoginRedirect implements EventSubscriberInterface {
     return $events;
   }
 
+  /**
+   * @param \Symfony\Component\EventDispatcher\Event $event
+   */
   public function checkForRedirect(Event $event) {
 
     $route_name = $this->routeMatch->getRouteName();
+    $config = $this->configFactory->get('openy_gated_content.settings');
+
 
     switch ($route_name) {
       case 'entity.node.canonical':
@@ -59,14 +77,14 @@ class VirtualYLoginRedirect implements EventSubscriberInterface {
           $currentUser->isAnonymous()
           && $this->checkIfParagraphAtNode($node, 'gated_content')
         ) {
-          $event->setResponse(new RedirectResponse('/virtual-y-login'));
+          $event->setResponse(new RedirectResponse($config->get('virtual_y_login_url')));
         }
 
         if (
           $currentUser->isAuthenticated()
           && $this->checkIfParagraphAtNode($node, 'gated_content_login')
         ) {
-          $event->setResponse(new RedirectResponse('/virtual-ymca'));
+          $event->setResponse(new RedirectResponse($config->get('virtual_y_url')));
         }
 
     }

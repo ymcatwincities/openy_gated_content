@@ -5,6 +5,6 @@ services:
 
   openy_gc_auth.check_for_redirect:
     class: Drupal\openy_gc_auth\EventSubscriber\VirtualYLoginRedirect
-    arguments: ['@current_route_match', '@current_user']
+    arguments: ['@current_route_match', '@current_user', '@config.factory']
     tags:
       - { name: event_subscriber }
