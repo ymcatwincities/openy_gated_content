@@ -115,6 +115,7 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
+  Store.state.auth.loggedIn = drupalSettings.user.id !== 0;
   if (to.meta.requiresAuth && !Store.getters.isLoggedIn) {
     return next({ name: 'Login' });
   }

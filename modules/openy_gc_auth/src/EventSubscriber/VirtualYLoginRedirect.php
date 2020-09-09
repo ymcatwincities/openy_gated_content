@@ -3,7 +3,7 @@
 
 namespace Drupal\openy_gc_auth\EventSubscriber;
 
-use Drupal\Core\Routing\CurrentRouteMatch;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\node\NodeInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -14,11 +14,11 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class VirtualYLoginRedirect implements EventSubscriberInterface {
 
   /**
-   * CurrentRouteMatch definition.
+   * The current route match.
    *
-   * @var Drupal\Core\Routing\CurrentRouteMatch
+   * @var \Drupal\Core\Routing\RouteMatchInterface
    */
-  protected $routeMatch;
+  protected $currentRouteMatch;
 
   /**
    * Current user object.
@@ -28,10 +28,13 @@ class VirtualYLoginRedirect implements EventSubscriberInterface {
   protected $currentUser;
 
   /**
-   * Constructor.
+   * Constructs a new VirtualYLoginRedirect.
+   *
+   * @param RouteMatchInterface $current_route_match
+   * @param AccountProxyInterface $current_user
    */
-  public function __construct(CurrentRouteMatch $current_route_match, AccountProxyInterface $current_user) {
-    $this->routeMatch = $current_route_match;
+  public function __construct(RouteMatchInterface $current_route_match, AccountProxyInterface $current_user) {
+    $this->currentRouteMatch = $current_route_match;
     $this->currentUser = $current_user;
   }
 
@@ -46,12 +49,12 @@ class VirtualYLoginRedirect implements EventSubscriberInterface {
 
   public function checkForRedirect(Event $event) {
 
-    $route_name = $this->routeMatch->getRouteName();
+    $route_name = $this->currentRouteMatch->getRouteName();
 
     switch ($route_name) {
       case 'entity.node.canonical':
         /** @var \Drupal\node\NodeInterface $node */
-        $node = $this->routeMatch->getParameter('node');
+        $node = $this->currentRouteMatch->getParameter('node');
 
         $currentUser = $this->currentUser;
 
@@ -83,6 +86,5 @@ class VirtualYLoginRedirect implements EventSubscriberInterface {
       ->execute()
       ->fetchCol());
   }
-
 
 }
