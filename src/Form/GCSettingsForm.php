@@ -12,6 +12,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class GCSettingsForm extends ConfigFormBase {
 
+  const PAGER_LIMIT_DEFAULT = 12;
+
   /**
    * The Identity Provider plugin manager.
    *
@@ -67,6 +69,13 @@ class GCSettingsForm extends ConfigFormBase {
       '#description' => $this->t('Enable/Disable "Add to Calendar" feature for events.'),
       '#type' => 'checkbox',
       '#default_value' => $config->get('event_add_to_calendar') ?? FALSE,
+    ];
+
+    $form['app_settings']['pager_limit'] = [
+      '#title' => $this->t('Pager limit'),
+      '#description' => $this->t('Items limit for blocks with pager.'),
+      '#type' => 'number',
+      '#default_value' => $config->get('pager_limit') ?? self::PAGER_LIMIT_DEFAULT,
     ];
 
     $form['app_settings']['components'] = [

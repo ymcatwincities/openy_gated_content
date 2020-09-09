@@ -35,7 +35,6 @@
 </template>
 
 <script>
-import Spinner from '@/components/Spinner.vue';
 import BlogListing from '@/components/blog/BlogListing.vue';
 import VideoListing from '@/components/video/VideoListing.vue';
 import EventListing from '@/components/event/EventListing.vue';
@@ -45,7 +44,6 @@ export default {
   name: 'Home',
   mixins: [SettingsMixin],
   components: {
-    Spinner,
     BlogListing,
     VideoListing,
     EventListing,
