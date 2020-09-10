@@ -2,7 +2,7 @@
   <nav class="text-center">
     <span v-if="currentPage === 0 && itemsCount < pageLimit" class="d-none"></span>
     <ul class="pagination justify-content-center m-4" v-else>
-      <li class="page-item" :class="{ disabled: currentPage === 0 }">
+      <li class="page-item" :class="{ disabled: disablePrev }">
         <router-link
           :to="paginateObject(currentPage - 1)"
           class="page-link prev"
@@ -11,7 +11,7 @@
       <li class="page-item active">
         <span class="page-link">{{ currentPage + 1 }}</span>
       </li>
-      <li class="page-item" :class="{ disabled: itemsCount < pageLimit }">
+      <li class="page-item" :class="{ disabled: disableNext }">
         <router-link
           :to="paginateObject(currentPage + 1)"
           class="page-link next"
@@ -34,6 +34,9 @@ export default {
       type: String,
       default: 'page',
     },
+    links: {
+      type: Object,
+    },
     itemsCount: {
       type: Number,
       default: 0,
@@ -41,6 +44,14 @@ export default {
     pageLimit: {
       type: Number,
       default: 12,
+    },
+  },
+  computed: {
+    disablePrev() {
+      return typeof this.links.prev === 'undefined';
+    },
+    disableNext() {
+      return typeof this.links.next === 'undefined';
     },
   },
   methods: {
