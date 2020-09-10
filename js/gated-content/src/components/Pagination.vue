@@ -3,16 +3,20 @@
     <span v-if="currentPage === 0 && itemsCount < pageLimit" class="d-none"></span>
     <ul class="pagination justify-content-center m-4" v-else>
       <li class="page-item" :class="{ disabled: disablePrev }">
+        <span class="page-link" v-if="disablePrev">Prev</span>
         <router-link
+          v-else
           :to="paginateObject(currentPage - 1)"
           class="page-link prev"
         >Prev</router-link>
       </li>
       <li class="page-item active">
-        <span class="page-link">{{ currentPage + 1 }}</span>
+        <span class="page-link" tabindex="-1">{{ currentPage + 1 }}</span>
       </li>
       <li class="page-item" :class="{ disabled: disableNext }">
+        <span class="page-link" v-if="disableNext">Next</span>
         <router-link
+          v-else
           :to="paginateObject(currentPage + 1)"
           class="page-link next"
         >Next</router-link>
