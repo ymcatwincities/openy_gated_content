@@ -28,6 +28,7 @@
     </div>
     <Pagination
       v-if="pagination"
+      :links="links"
       :itemsCount="listing.length"
       :pageLimit="parseInt(config.pager_limit, 10)"
     ></Pagination>
@@ -82,6 +83,7 @@ export default {
       loading: true,
       error: false,
       listing: [],
+      links: {},
       featuredLocal: false,
       params: [
         'field_vy_blog_image',
@@ -147,6 +149,7 @@ export default {
       client
         .get('jsonapi/node/vy_blog_post', { params })
         .then((response) => {
+          this.links = response.data.links;
           this.listing = this.combineMultiple(
             response.data.data,
             response.data.included,
