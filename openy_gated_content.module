@@ -151,7 +151,7 @@ function openy_gated_content_form_user_pass_alter(&$form, FormStateInterface $fo
 function openy_gated_content_user_login_validation(array &$form, FormStateInterface $form_state) {
   $account = \Drupal::entityTypeManager()->getStorage('user')->load($form_state->get('uid'));
   if ($account && $account->hasRole('virtual_y_user')) {
-    \Drupal::messenger()->addError('You\'re not allowing to login with Virtual Y user role.');
+    \Drupal::messenger()->addError('You\'re not allowed to login since you are Virtual Y user.');
     throw new AccessDeniedHttpException();
   }
 }
