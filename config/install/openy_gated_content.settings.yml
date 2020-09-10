@@ -1,4 +1,5 @@
 event_add_to_calendar: true
+pager_limit: 12
 components:
   gc_video:
     status: true

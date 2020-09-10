@@ -4,12 +4,16 @@
       <router-link :to="{ name: 'Home' }">Home</router-link> |
       <LogoutLink />
     </nav>
-    <router-view/>
+    <div v-if="!getAppSettings" class="text-center">
+      <Spinner></Spinner>
+    </div>
+    <router-view v-else/>
   </div>
 </template>
 
 <script>
 import LogoutLink from '@/components/LogoutLink.vue';
+import Spinner from '@/components/Spinner.vue';
 import { mapGetters } from 'vuex';
 
 export default {
@@ -25,10 +29,12 @@ export default {
   },
   components: {
     LogoutLink,
+    Spinner,
   },
   computed: {
     ...mapGetters([
       'isLoggedIn',
+      'getAppSettings',
     ]),
   },
   created() {

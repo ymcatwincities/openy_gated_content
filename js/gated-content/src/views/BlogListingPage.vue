@@ -1,6 +1,9 @@
 <template>
   <div class="blog-listing-page">
-    <BlogListing :title="config.components.vy_blog_post.title"/>
+    <BlogListing
+      :title="config.components.vy_blog_post.title"
+      :pagination="true"
+    />
   </div>
 </template>
 

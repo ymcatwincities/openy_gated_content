@@ -14,6 +14,7 @@
       <VideoListing
         :title="config.components.gc_video.title"
         :category="category.id"
+        :pagination="true"
       />
     </template>
   </div>
