@@ -6,6 +6,7 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Drupal\user\Entity\User;
 
 /**
  * Class VirtualYExampleLoginForm
@@ -15,7 +16,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class VirtualYExampleLoginForm extends FormBase {
 
   /**
-   * @var \Symfony\Component\HttpFoundation\Request|null 
+   * @var \Symfony\Component\HttpFoundation\Request|null
    */
   protected $currentRequest;
 
@@ -59,10 +60,21 @@ class VirtualYExampleLoginForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-
-    $email = 'dummy+' . $this->currentRequest->getClientIp() . '+' . rand(10000) . '@virtualy.org';
-    //@TODO create user account and log in it.
-
+    $name = 'dummy+' . $this->currentRequest->getClientIp() . '+' . rand(0, 10000);
+    $email = $name . '@virtualy.org';
+    $user = User::create();
+    $user->setPassword(user_password());
+    $user->enforceIsNew();
+    $user->setEmail($email);
+    $user->setUsername($name);
+    $user->addRole('virtual_y');
+    $user->activate();
+    $result = $account = $user->save();
+    if ($result) {
+      // We must load account because user has not id at save point.
+      $account = user_load_by_name($name);
+      user_login_finalize($account);
+    }
   }
 
 }

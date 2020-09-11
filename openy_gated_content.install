@@ -5,6 +5,9 @@
  * Installation file for Open Y Virtual YMCA.
  */
 
+use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\field\Entity\FieldConfig;
+
 /**
  * Add virtual_ymca_editor user role.
  */
@@ -19,4 +22,28 @@ function openy_gated_content_update_8001() {
     'system.action.user_remove_role_action.virtual_ymca_editor',
     'user.role.virtual_ymca_editor',
   ]);
+}
+
+/**
+ * Add new Virtual YMCA user roles.
+ */
+function openy_gated_content_update_8004() {
+  $config_dir = drupal_get_path('module', 'openy_gc_storage');
+  $config_dir .= '/config/install/';
+  // Import new configuration.
+  $config_importer = \Drupal::service('openy_upgrade_tool.importer');
+  $config_importer->setDirectory($config_dir);
+  $config_importer->importConfigs([
+    'user.role.virtual_y',
+    'user.role.virtual_y_premium',
+    'user.role.virtual_y_trial',
+  ]);
+}
+
+/**
+ * Remove field_link_to_gated_content_app completely.
+ */
+function openy_gated_content_update_8005() {
+  FieldConfig::loadByName('paragraph', 'gated_content_login', 'field_link_to_gated_content_app')->delete();
+  FieldStorageConfig::loadByName('paragraph', 'field_link_to_gated_content_app')->delete();
 }

@@ -1,8 +1,8 @@
 <?php
 
-
 namespace Drupal\openy_gc_auth\EventSubscriber;
 
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Session\AccountProxyInterface;
@@ -15,11 +15,11 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class VirtualYLoginRedirect implements EventSubscriberInterface {
 
   /**
-   * CurrentRouteMatch definition.
+   * The current route match.
    *
-   * @var Drupal\Core\Routing\CurrentRouteMatch
+   * @var \Drupal\Core\Routing\RouteMatchInterface
    */
-  protected $routeMatch;
+  protected $currentRouteMatch;
 
   /**
    * Current user object.
@@ -36,14 +36,17 @@ class VirtualYLoginRedirect implements EventSubscriberInterface {
   protected $configFactory;
 
   /**
-   * Constructor.
+   * Constructs a new VirtualYLoginRedirect.
+   *
+   * @param RouteMatchInterface $current_route_match
+   * @param AccountProxyInterface $current_user
    */
   public function __construct(
-    CurrentRouteMatch $current_route_match,
+    RouteMatchInterface $current_route_match,
     AccountProxyInterface $current_user,
     ConfigFactoryInterface $configFactory
   ) {
-    $this->routeMatch = $current_route_match;
+    $this->currentRouteMatch = $current_route_match;
     $this->currentUser = $current_user;
     $this->configFactory = $configFactory;
   }
@@ -62,14 +65,13 @@ class VirtualYLoginRedirect implements EventSubscriberInterface {
    */
   public function checkForRedirect(Event $event) {
 
-    $route_name = $this->routeMatch->getRouteName();
+    $route_name = $this->currentRouteMatch->getRouteName();
     $config = $this->configFactory->get('openy_gated_content.settings');
-
 
     switch ($route_name) {
       case 'entity.node.canonical':
         /** @var \Drupal\node\NodeInterface $node */
-        $node = $this->routeMatch->getParameter('node');
+        $node = $this->currentRouteMatch->getParameter('node');
 
         $currentUser = $this->currentUser;
 
@@ -101,6 +103,5 @@ class VirtualYLoginRedirect implements EventSubscriberInterface {
       ->execute()
       ->fetchCol());
   }
-
 
 }
