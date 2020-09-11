@@ -2,11 +2,12 @@
   <div class="container">
     <div v-if="message" class="alert alert-info">
       <span v-html="message"></span>
+      <a href="#" @click.prevent="resetForm">Back to Login form</a>
     </div>
     <div v-if="loading" class="spinner-center">
       <Spinner></Spinner>
     </div>
-    <form v-else class="plugin-custom">
+    <form v-show="!message && !loading" class="plugin-custom">
       <div v-if="error" class="alert alert-danger">
         <span>{{ error }}</span>
       </div>
@@ -60,6 +61,15 @@ export default {
     },
   },
   methods: {
+    resetForm() {
+      this.error = '';
+      this.message = '';
+      this.form.email = '';
+      this.loading = false;
+      if (this.config.enableRecaptcha && this.$refs.recaptcha) {
+        this.$refs.recaptcha.reset();
+      }
+    },
     async login() {
       this.loading = true;
       this.error = '';
