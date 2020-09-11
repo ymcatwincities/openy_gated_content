@@ -29,8 +29,6 @@
     <Pagination
       v-if="pagination"
       :links="links"
-      :itemsCount="listing.length"
-      :pageLimit="parseInt(config.pager_limit, 10)"
     ></Pagination>
   </div>
 </template>

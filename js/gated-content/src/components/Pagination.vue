@@ -1,6 +1,6 @@
 <template>
   <nav class="text-center">
-    <span v-if="currentPage === 0 && itemsCount < pageLimit" class="d-none"></span>
+    <span v-if="hidePager" class="d-none"></span>
     <ul class="pagination justify-content-center m-4" v-else>
       <li class="page-item" :class="{ disabled: disablePrev }">
         <span class="page-link" v-if="disablePrev">Prev</span>
@@ -41,14 +41,6 @@ export default {
     links: {
       type: Object,
     },
-    itemsCount: {
-      type: Number,
-      default: 0,
-    },
-    pageLimit: {
-      type: Number,
-      default: 12,
-    },
   },
   computed: {
     disablePrev() {
@@ -56,6 +48,9 @@ export default {
     },
     disableNext() {
       return typeof this.links.next === 'undefined';
+    },
+    hidePager() {
+      return this.disablePrev && this.disableNext;
     },
   },
   methods: {
