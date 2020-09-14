@@ -3,6 +3,7 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.teaser
+    - field.field.node.vy_blog_post.field_gc_video_category
     - field.field.node.vy_blog_post.field_vy_blog_description
     - field.field.node.vy_blog_post.field_vy_blog_image
     - node.type.vy_blog_post
@@ -19,6 +20,7 @@ content:
     third_party_settings: {  }
     region: content
 hidden:
+  field_gc_video_category: true
   field_vy_blog_description: true
   field_vy_blog_image: true
   langcode: true

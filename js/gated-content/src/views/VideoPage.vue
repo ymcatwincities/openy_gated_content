@@ -66,7 +66,8 @@
             <router-link :to="{
               name: 'Category',
               params: {
-                cid: category_data.id
+                cid: category_data.id,
+                type: 'video'
               }
             }">
             {{ video.attributes.field_gc_video_category[index].name }}<i>,</i>
