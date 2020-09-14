@@ -26,6 +26,11 @@
     <div v-else class="empty-listing">
       Blog posts not found.
     </div>
+    <Pagination
+      v-if="pagination"
+      :itemsCount="listing.length"
+      :pageLimit="parseInt(config.pager_limit, 10)"
+    ></Pagination>
   </div>
 </template>
 
@@ -33,14 +38,17 @@
 import client from '@/client';
 import BlogTeaser from '@/components/blog/BlogTeaser.vue';
 import Spinner from '@/components/Spinner.vue';
+import Pagination from '@/components/Pagination.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
+import { SettingsMixin } from '@/mixins/SettingsMixin';
 
 export default {
   name: 'BlogListing',
-  mixins: [JsonApiCombineMixin],
+  mixins: [JsonApiCombineMixin, SettingsMixin],
   components: {
     BlogTeaser,
     Spinner,
+    Pagination,
   },
   props: {
     title: {
@@ -60,6 +68,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    pagination: {
+      type: Boolean,
+      default: false,
+    },
     limit: {
       type: Number,
       default: 0,
@@ -69,7 +81,7 @@ export default {
     return {
       loading: true,
       error: false,
-      listing: null,
+      listing: [],
       featuredLocal: false,
       params: [
         'field_vy_blog_image',
@@ -120,7 +132,13 @@ export default {
         params.filter.field_gc_video_featured = 1;
       }
       params.filter.status = 1;
-      if (this.limit !== 0) {
+      if (this.pagination) {
+        const currentPage = parseInt(this.$route.query.page, 10) || 0;
+        params.page = {
+          limit: this.config.pager_limit,
+          offset: currentPage * this.config.pager_limit,
+        };
+      } else if (this.limit !== 0) {
         params.page = {
           limit: this.limit,
         };
