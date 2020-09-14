@@ -1,18 +1,22 @@
 <template>
   <nav class="text-center">
-    <span v-if="currentPage === 0 && itemsCount < pageLimit" class="d-none"></span>
+    <span v-if="hidePager" class="d-none"></span>
     <ul class="pagination justify-content-center m-4" v-else>
-      <li class="page-item" :class="{ disabled: currentPage === 0 }">
+      <li class="page-item" :class="{ disabled: disablePrev }">
+        <span class="page-link" v-if="disablePrev">Prev</span>
         <router-link
+          v-else
           :to="paginateObject(currentPage - 1)"
           class="page-link prev"
         >Prev</router-link>
       </li>
       <li class="page-item active">
-        <span class="page-link">{{ currentPage + 1 }}</span>
+        <span class="page-link" tabindex="-1">{{ currentPage + 1 }}</span>
       </li>
-      <li class="page-item" :class="{ disabled: itemsCount < pageLimit }">
+      <li class="page-item" :class="{ disabled: disableNext }">
+        <span class="page-link" v-if="disableNext">Next</span>
         <router-link
+          v-else
           :to="paginateObject(currentPage + 1)"
           class="page-link next"
         >Next</router-link>
@@ -34,13 +38,19 @@ export default {
       type: String,
       default: 'page',
     },
-    itemsCount: {
-      type: Number,
-      default: 0,
+    links: {
+      type: Object,
     },
-    pageLimit: {
-      type: Number,
-      default: 12,
+  },
+  computed: {
+    disablePrev() {
+      return typeof this.links.prev === 'undefined';
+    },
+    disableNext() {
+      return typeof this.links.next === 'undefined';
+    },
+    hidePager() {
+      return this.disablePrev && this.disableNext;
     },
   },
   methods: {

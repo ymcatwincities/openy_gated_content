@@ -28,8 +28,7 @@
     </div>
     <Pagination
       v-if="pagination"
-      :itemsCount="listing.length"
-      :pageLimit="parseInt(config.pager_limit, 10)"
+      :links="links"
     ></Pagination>
   </div>
 </template>
@@ -86,6 +85,7 @@ export default {
       loading: true,
       error: false,
       listing: [],
+      links: {},
       featuredLocal: false,
       params: [
         'field_gc_video_media',
@@ -159,6 +159,7 @@ export default {
       client
         .get('jsonapi/node/gc_video', { params })
         .then((response) => {
+          this.links = response.data.links;
           this.listing = this.combineMultiple(
             response.data.data,
             response.data.included,
