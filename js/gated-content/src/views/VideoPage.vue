@@ -76,10 +76,10 @@
         </div>
       </div>
       <VideoListing
-        v-if="video.attributes.field_gc_video_category"
+        v-if="firstCategory"
         :title="config.components.gc_video.up_next_title"
         :excluded-video-id="video.id"
-        :category="video.relationships.field_gc_video_category.data.id"
+        :category="firstCategory"
         :viewAll="true"
         :limit="6"
       />
@@ -128,6 +128,14 @@ export default {
   },
   async mounted() {
     await this.load();
+  },
+  computed: {
+    firstCategory() {
+      if (!this.video.relationships.field_gc_video_category.data) {
+        return null;
+      }
+      return this.video.relationships.field_gc_video_category.data[0].id;
+    },
   },
   methods: {
     async load() {
