@@ -26,7 +26,7 @@
               class="video-footer__description"
                  v-html="description.processed"
             ></div>
-            <AddToCalendar :event="event"></AddToCalendar>
+            <AddToCalendar :event="event" class="mt-3"></AddToCalendar>
           </div>
           <div>
             <div class="video-footer__block">
@@ -43,9 +43,12 @@
             <div class="video-footer__block" v-if="instructor">
               Instructor: {{ instructor }}
             </div>
-            <div class="video-footer__block">
-              Category:
-              {{ category }}
+            <div class="video-footer__block" v-if="category && category.length > 0">
+              <span>Category: </span>
+              <span v-for="(category_data, index) in category"
+                    :key="index">
+                {{ category_data.name }}<i v-if="index !== category.length - 1">, </i>
+              </span>
             </div>
             <div
               v-if="video.attributes.equipment.length > 0"
@@ -179,10 +182,14 @@ export default {
           // In included we have all referenced items, but in relationship only one.
           // So we need manually pass this items to this.video.attributes.equipment.
           this.video.attributes.equipment = [];
+          this.video.attributes.category = [];
           if (response.data.included.length > 0) {
             response.data.included.forEach((ref) => {
               if (ref.type === 'taxonomy_term--gc_equipment') {
                 this.video.attributes.equipment.push(ref.attributes);
+              }
+              if (ref.type === 'taxonomy_term--gc_category') {
+                this.video.attributes.category.push(ref.attributes);
               }
             });
           }

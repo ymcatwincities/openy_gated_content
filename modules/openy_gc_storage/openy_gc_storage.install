@@ -77,7 +77,7 @@ function openy_gc_storage_update_8003() {
 }
 
 /**
- * Add category field to blog post.
+ * Add category field to blog post + Make event category multiple.
  */
 function openy_gc_storage_update_8004() {
   $config_dir = drupal_get_path('module', 'openy_gc_storage');
@@ -90,5 +90,9 @@ function openy_gc_storage_update_8004() {
     'core.entity_view_display.node.vy_blog_post.default',
     'core.entity_view_display.node.vy_blog_post.teaser',
     'field.field.node.vy_blog_post.field_gc_video_category',
+    'field.storage.eventinstance.field_ls_category',
+    'field.storage.eventseries.field_ls_category',
+    'field_inheritance.field_inheritance.eventinstance_live_stream_category',
+    'field_inheritance.field_inheritance.eventinstance_virtual_meeting_category',
   ]);
 }
