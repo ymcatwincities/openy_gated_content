@@ -17,9 +17,9 @@
             <div
               v-if="description"
               class="video-footer__description mb-3"
-              v-html="description"
+              v-html="descriptionProcessed"
             ></div>
-            <AddToCalendar :event="event"></AddToCalendar>
+            <AddToCalendar :event="event" class="mt-3"></AddToCalendar>
           </div>
           <div>
             <div class="video-footer__block">
@@ -36,9 +36,12 @@
             <div class="video-footer__block" v-if="instructor">
               Instructor: {{ instructor }}
             </div>
-            <div class="video-footer__block">
-              Category:
-              {{ category }}
+            <div class="video-footer__block" v-if="category && category.length > 0">
+              <span>Category: </span>
+              <span v-for="(category_data, index) in category"
+                    :key="index">
+                {{ category_data.name }}<i v-if="index !== category.length - 1">, </i>
+              </span>
             </div>
             <div
               v-if="video.attributes.equipment.length > 0"
@@ -115,15 +118,15 @@ export default {
       return this.video.attributes.field_ls_media ? this.video.attributes.field_ls_media
         : this.video.attributes.media;
     },
-    description() {
-      return this.video.attributes.description ? this.video.attributes.description.processed : '';
+    descriptionProcessed() {
+      return this.description ? this.description.processed : '';
     },
     event() {
       return {
         start: this.formatDate(this.video.attributes.date.value),
         duration: [this.getDuration(this.video.attributes.date), 'hour'],
         title: this.video.attributes.title,
-        description: `${this.description}<br> Live stream page: ${this.pageUrl}`,
+        description: `${this.descriptionProcessed}<br> Live stream page: ${this.pageUrl}`,
         busy: true,
         guests: [],
       };
@@ -144,10 +147,14 @@ export default {
           // In included we have all referenced items, but in relationship only one.
           // So we need manually pass this items to this.video.attributes.equipment.
           this.video.attributes.equipment = [];
+          this.video.attributes.category = [];
           if (response.data.included.length > 0) {
             response.data.included.forEach((ref) => {
               if (ref.type === 'taxonomy_term--gc_equipment') {
                 this.video.attributes.equipment.push(ref.attributes);
+              }
+              if (ref.type === 'taxonomy_term--gc_category') {
+                this.video.attributes.category.push(ref.attributes);
               }
             });
           }

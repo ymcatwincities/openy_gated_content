@@ -3,7 +3,7 @@
     <div class="blogs__header videos__header">
       <h2 class="title">{{ title }}</h2>
       <router-link
-        :to="{ name: 'BlogListingPage' }"
+        :to="{ name: 'CategoryListing', params: { type: 'blog' }}"
         v-if="viewAll && listingIsNotEmpty"
         class="view-all"
       >
@@ -75,6 +75,10 @@ export default {
       type: Number,
       default: 0,
     },
+    category: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
@@ -128,6 +132,9 @@ export default {
         };
       }
 
+      if (this.category) {
+        params.filter['field_gc_video_category.id'] = this.category;
+      }
       if (this.featuredLocal) {
         params.filter.field_gc_video_featured = 1;
       }

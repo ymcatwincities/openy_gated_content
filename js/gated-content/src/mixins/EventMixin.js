@@ -20,8 +20,9 @@ export const EventMixin = {
         : this.video.attributes.level.name;
     },
     category() {
-      return this.video.attributes.field_ls_category ? this.video.attributes.field_ls_category.name
-        : this.video.attributes.category.name;
+      return this.video.attributes.field_ls_category.length > 0
+        ? this.video.attributes.field_ls_category
+        : this.video.attributes.category;
     },
     instructor() {
       return this.video.attributes.field_ls_host_name ? this.video.attributes.field_ls_host_name
