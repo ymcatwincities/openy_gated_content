@@ -178,7 +178,7 @@ class Personify extends GCIdentityProviderPluginBase {
    * @return string|null
    *   Personify login URL.
    */
-  private function getPersonifyLoginUrl($applicationUrl) {
+  public function getPersonifyLoginUrl($applicationUrl) {
     $options = [
       'absolute' => TRUE,
       'query' => [
@@ -199,12 +199,21 @@ class Personify extends GCIdentityProviderPluginBase {
 
     $env = $this->configFactory->get('personify.settings')->get('environment');
     $configLoginUrl = $this->configFactory->get('openy_gc_auth_personify.settings')->get($env . '_url_login');
+    $configLoginUrl = 'https://account.ymcamn.org/PersonifyEbusiness/CL_Login/PersonifyLogin';
     if (empty($configLoginUrl)) {
       $this->messenger->addWarning('Please, check Personify configs in settings.php.');
       return NULL;
     }
+    $loginUrl = Url::fromUri($configLoginUrl, $options)->toString();
 
-    return Url::fromUri($configLoginUrl, $options)->toString();
+    return $loginUrl;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getLoginForm() {
+    return \Drupal::formBuilder()->getForm('Drupal\openy_gc_auth_personify\Form\VirtualYPersonifyLoginForm');
   }
 
 }

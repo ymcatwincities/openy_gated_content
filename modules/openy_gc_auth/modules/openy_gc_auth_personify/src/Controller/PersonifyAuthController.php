@@ -8,9 +8,11 @@ use Drupal\Core\Routing\TrustedRedirectResponse;
 use Drupal\Core\Url;
 use Drupal\personify\PersonifyClient;
 use Drupal\personify\PersonifySSO;
+use Drupal\user\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -126,8 +128,7 @@ class PersonifyAuthController extends ControllerBase {
   /**
    * Check whether user is already logged in to Personify.
    *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   Response with user data or error.
+   * @return mixed
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
@@ -137,10 +138,8 @@ class PersonifyAuthController extends ControllerBase {
       $token = $request->cookies->get('Drupal_visitor_personify_authorized');
     }
     if (empty($token)) {
-      return new JsonResponse([
-        'message' => 'Personify user not found. Redirect to login page.',
-        'user' => [],
-      ]);
+      // Personify user not found. Redirect to login page.
+      return new RedirectResponse(Url::fromRoute('openy_gc_auth_personify.api_login_personify', [''])->toString());
     }
 
     if (!$this->userHasActiveMembership($token)) {
@@ -157,17 +156,29 @@ class PersonifyAuthController extends ControllerBase {
     $userInfo = $this->personifySSO->getCustomerInfo($token);
 
     if (!empty($userInfo) && !empty($userInfo['UserExists']) && empty($userInfo['DisableAccountFlag'])) {
-      $username = !empty($userInfo['UserName']) ? $userInfo['UserName'] : '';
+      $name = !empty($userInfo['UserName']) ? $userInfo['UserName'] : '';
       $email = !empty($userInfo['Email']) ? $userInfo['Email'] : '';
 
-      return new JsonResponse([
-        'message' => 'success',
-        'user' => [
-          'email' => $username,
-          'name' => $email,
-          'primary' => 1,
-        ],
-      ]);
+      // Create drupal user if it doesn't exist and login it.
+      $account = user_load_by_name($name);
+
+      if (!$account) {
+        $user = User::create();
+        $user->setPassword(user_password());
+        $user->enforceIsNew();
+        $user->setEmail($email);
+        $user->setUsername($name);
+        $user->addRole('virtual_y');
+        $user->activate();
+        $result = $account = $user->save();
+        if ($result) {
+          $account = user_load_by_name($name);
+        }
+      }
+
+      user_login_finalize($account);
+
+      return new RedirectResponse($this->configFactory->get('openy_gated_content.settings')->get('virtual_y_url'));
     }
 
     user_cookie_delete('personify_authorized');
@@ -177,6 +188,7 @@ class PersonifyAuthController extends ControllerBase {
       'message' => 'Personify user is found, but marked as not existed or disabled.',
       'user' => [],
     ], 403);
+
   }
 
   /**
@@ -264,6 +276,47 @@ class PersonifyAuthController extends ControllerBase {
     }
 
     return $isActive;
+  }
+
+  /**
+   * Login user to Personify.
+   *
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   Current request.
+   *
+   * @throws \GuzzleHttp\Exception\GuzzleException
+   */
+  public function apiLogin(Request $request) {
+    $options = [
+      'absolute' => TRUE,
+      'query' => [
+        'dest' => urlencode(Url::fromRoute('openy_gc_auth_personify.personify_auth')->toString()),
+      ],
+    ];
+
+    // Generate auth URL that would base of validation token.
+    $url = Url::fromRoute('openy_gc_auth_personify.personify_auth', [], $options)->toString();
+
+    $vendor_token = $this->personifySSO->getVendorToken($url);
+    $options = [
+      'query' => [
+        'vi' => $this->personifySSO->getConfigVendorId(),
+        'vt' => $vendor_token,
+      ],
+    ];
+
+    $env = $this->configFactory->get('personify.settings')->get('environment');
+    $configLoginUrl = $this->configFactory->get('openy_gc_auth_personify.settings')->get($env . '_url_login');
+    if (empty($configLoginUrl)) {
+      $this->messenger->addWarning('Please, check Personify configs in settings.php.');
+      return NULL;
+    }
+
+    $loginUrl = Url::fromUri($configLoginUrl, $options)->toString();
+    $redirect = new TrustedRedirectResponse($loginUrl);
+    $redirect->send();
+
+    exit();
   }
 
 }
