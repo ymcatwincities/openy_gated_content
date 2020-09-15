@@ -187,7 +187,6 @@ class Personify extends GCIdentityProviderPluginBase {
 
     $env = $this->configFactory->get('personify.settings')->get('environment');
     $configLoginUrl = $this->configFactory->get('openy_gc_auth_personify.settings')->get($env . '_url_login');
-    $configLoginUrl = 'https://account.ymcamn.org/PersonifyEbusiness/CL_Login/PersonifyLogin';
     if (empty($configLoginUrl)) {
       $this->messenger->addWarning('Please, check Personify configs in settings.php.');
       return NULL;
