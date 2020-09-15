@@ -17,7 +17,7 @@
             <div
               v-if="description"
               class="video-footer__description mb-3"
-              v-html="description"
+              v-html="descriptionProcessed"
             ></div>
             <AddToCalendar :event="event" class="mt-3"></AddToCalendar>
           </div>
@@ -118,15 +118,15 @@ export default {
       return this.video.attributes.field_ls_media ? this.video.attributes.field_ls_media
         : this.video.attributes.media;
     },
-    description() {
-      return this.video.attributes.description ? this.video.attributes.description.processed : '';
+    descriptionProcessed() {
+      return this.description ? this.description.processed : '';
     },
     event() {
       return {
         start: this.formatDate(this.video.attributes.date.value),
         duration: [this.getDuration(this.video.attributes.date), 'hour'],
         title: this.video.attributes.title,
-        description: `${this.description}<br> Live stream page: ${this.pageUrl}`,
+        description: `${this.descriptionProcessed}<br> Live stream page: ${this.pageUrl}`,
         busy: true,
         guests: [],
       };

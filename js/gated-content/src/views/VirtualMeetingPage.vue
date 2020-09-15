@@ -24,7 +24,7 @@
             <div
               v-if="description"
               class="video-footer__description"
-                 v-html="description.processed"
+                 v-html="descriptionProcessed"
             ></div>
             <AddToCalendar :event="event" class="mt-3"></AddToCalendar>
           </div>
@@ -156,12 +156,15 @@ export default {
       const regex = /https:\/\/([a-zA-Z0-9-]*\.)?zoom\.us/;
       return this.video && this.meetingLink.uri && regex.test(this.meetingLink.uri);
     },
+    descriptionProcessed() {
+      return this.description ? this.description.processed : '';
+    },
     event() {
       return {
         start: this.formatDate(this.video.attributes.date.value),
         duration: [this.getDuration(this.video.attributes.date), 'hour'],
         title: this.video.attributes.title,
-        description: `${this.description.processed}<br>${this.meetingLink.title}: ${this.meetingLink.uri} <br> Virtual meeting page: ${this.pageUrl}`,
+        description: `${this.descriptionProcessed}<br>${this.meetingLink.title}: ${this.meetingLink.uri} <br> Virtual meeting page: ${this.pageUrl}`,
         busy: true,
         guests: [],
       };
