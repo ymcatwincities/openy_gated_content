@@ -7,9 +7,8 @@ import CustomAuthEmailConfirm from '@/components/auth/CustomAuthEmailConfirm.vue
 import NotFound from '@/views/NotFound.vue';
 import VideoPage from '@/views/VideoPage.vue';
 import BlogPage from '@/views/BlogPage.vue';
-import BlogListingPage from '@/views/BlogListingPage.vue';
 import CategoryPage from '@/views/CategoryPage.vue';
-import VideoCategoriesListing from '@/views/VideoCategoriesListing.vue';
+import CategoriesListing from '@/views/CategoriesListing.vue';
 import LiveStreamPage from '@/views/LiveStreamPage.vue';
 import LiveStreamListingPage from '@/views/LiveStreamListingPage.vue';
 import VirtualMeetingPage from '@/views/VirtualMeetingPage.vue';
@@ -38,14 +37,14 @@ const routes = [
     meta: { requiresGuest: true },
   },
   {
-    path: '/categories',
+    path: '/categories/:type',
     name: 'CategoryListing',
-    component: VideoCategoriesListing,
+    component: CategoriesListing,
     props: true,
     meta: { requiresAuth: true },
   },
   {
-    path: '/category/:cid',
+    path: '/category/:type/:cid',
     name: 'Category',
     component: CategoryPage,
     props: true,
@@ -83,13 +82,6 @@ const routes = [
     path: '/virtual-meeting/:id',
     name: 'VirtualMeeting',
     component: VirtualMeetingPage,
-    props: true,
-    meta: { requiresAuth: true },
-  },
-  {
-    path: '/blog-post',
-    name: 'BlogListingPage',
-    component: BlogListingPage,
     props: true,
     meta: { requiresAuth: true },
   },
