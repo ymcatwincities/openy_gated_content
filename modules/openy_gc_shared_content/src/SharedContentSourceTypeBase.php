@@ -7,8 +7,10 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Messenger\MessengerTrait;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Driver\Exception\Exception;
 use Drupal\jsonapi\JsonApiResource\JsonApiDocumentTopLevel;
 use Drupal\jsonapi\ResourceType\ResourceTypeRepositoryInterface;
+use Drupal\openy_gc_shared_content_server\Entity\SharedContentSource;
 use GuzzleHttp\Client;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
@@ -194,6 +196,34 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
    * {@inheritdoc}
    */
   public function saveFromSource($url, $uuid) {
+
+    try {
+
+      $server_id = reset($this->entityTypeManager
+        ->getStorage('shared_content_source')
+        ->getQuery()
+        ->condition('url', $url)
+        ->execute());
+
+      $source = SharedContentSource::load($server_id);
+
+      $downloads_stat_push = $this->client->post($url . '/virtual-y-server/inc-downloads', [
+        'form_params' => [
+          'uuid' => $uuid,
+          'url' => 'http://openy.docksal',
+          'origin' => 'http://openy.docksal',
+          'token' => $source->getToken(),
+          'client_url' => 'http://openy.docksal'
+        ],
+        'headers' => [
+          'Content-type' => 'application/x-www-form-urlencoded',
+        ],
+      ]);
+
+    } catch (Exception $e) {
+      $this->messenger()->addError($this->t('Downloads stat update was failed'));
+    }
+
     if ($this->entityExists($uuid)) {
       $this->messenger()->addWarning($this->t('Entity with UUID "@uuid" already exists.', [
         '@uuid' => $uuid,
@@ -272,6 +302,9 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
 
       $entity->set('field_gc_origin', $url);
       $entity->save();
+
+
+
       $this->messenger()->addStatus($this->t('Entity {@type:@bundle} "@title" was fetched to site.', [
         '@type' => $this->getEntityType(),
         '@bundle' => $this->getEntityBundle(),

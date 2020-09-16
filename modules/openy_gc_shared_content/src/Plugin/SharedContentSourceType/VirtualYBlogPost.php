@@ -33,7 +33,7 @@ class VirtualYBlogPost extends SharedContentSourceTypeBase {
    */
   public function getFullJsonApiQueryArgs() {
     return [
-      'include' => 'field_vy_blog_image,field_vy_blog_image.field_media_image',
+      'include' => 'field_vy_blog_image,field_vy_blog_image.field_media_image, field_share_count, field_gc_origin',
       'filter[status]' => 1,
       'filter[field_gc_share]' => 1,
     ];
