@@ -3,7 +3,7 @@
     <div class="blogs__header videos__header">
       <h2 class="title">{{ title }}</h2>
       <router-link
-        :to="{ name: 'BlogListingPage' }"
+        :to="{ name: 'CategoryListing', params: { type: 'blog' }}"
         v-if="viewAll && listingIsNotEmpty"
         class="view-all"
       >
@@ -28,8 +28,7 @@
     </div>
     <Pagination
       v-if="pagination"
-      :itemsCount="listing.length"
-      :pageLimit="parseInt(config.pager_limit, 10)"
+      :links="links"
     ></Pagination>
   </div>
 </template>
@@ -76,12 +75,17 @@ export default {
       type: Number,
       default: 0,
     },
+    category: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
       loading: true,
       error: false,
       listing: [],
+      links: {},
       featuredLocal: false,
       params: [
         'field_vy_blog_image',
@@ -128,6 +132,9 @@ export default {
         };
       }
 
+      if (this.category) {
+        params.filter['field_gc_video_category.id'] = this.category;
+      }
       if (this.featuredLocal) {
         params.filter.field_gc_video_featured = 1;
       }
@@ -147,6 +154,7 @@ export default {
       client
         .get('jsonapi/node/vy_blog_post', { params })
         .then((response) => {
+          this.links = response.data.links;
           this.listing = this.combineMultiple(
             response.data.data,
             response.data.included,
