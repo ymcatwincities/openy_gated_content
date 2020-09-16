@@ -3,7 +3,7 @@
     <div class="videos__header">
       <h2 class="title">{{ title }}</h2>
       <router-link
-        :to="{ name: 'CategoryListing' }"
+        :to="{ name: 'CategoryListing', params: { type: 'video' }}"
         v-if="viewAll && listingIsNotEmpty"
         class="view-all"
       >
