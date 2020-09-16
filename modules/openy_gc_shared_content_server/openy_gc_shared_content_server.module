@@ -1,11 +1,16 @@
 <?php
 
+/**
+ * @file
+ */
+
+use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 
 /**
  * Implements hook_entity_base_field_info().
  */
-function openy_gc_shared_content_server_entity_base_field_info(\Drupal\Core\Entity\EntityTypeInterface $entity_type) {
+function openy_gc_shared_content_server_entity_base_field_info(EntityTypeInterface $entity_type) {
 
   $allowed_entity_types = [];
   $shared_content_manager = \Drupal::service('plugin.manager.shared_content_source_type');

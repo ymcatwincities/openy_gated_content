@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class DownloadsIncrementController
+ * Class DownloadsIncrementController.
  *
  * @package Drupal\openy_gc_shared_content_server\Controller
  */
@@ -61,7 +61,8 @@ class DownloadsIncrementController extends ControllerBase {
 
     if (!empty($id)) {
       $source = SharedContentSource::load($id);
-    } else {
+    }
+    else {
       $status = 'error';
     }
 
@@ -82,7 +83,8 @@ class DownloadsIncrementController extends ControllerBase {
       $current++;
       $node->field_share_count->value = $current;
       $node->save();
-    } else {
+    }
+    else {
       $status = 'error';
     }
 

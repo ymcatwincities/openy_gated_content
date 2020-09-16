@@ -213,14 +213,15 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
           'url' => 'http://openy.docksal',
           'origin' => 'http://openy.docksal',
           'token' => $source->getToken(),
-          'client_url' => 'http://openy.docksal'
+          'client_url' => 'http://openy.docksal',
         ],
         'headers' => [
           'Content-type' => 'application/x-www-form-urlencoded',
         ],
       ]);
 
-    } catch (Exception $e) {
+    }
+    catch (Exception $e) {
       $this->messenger()->addError($this->t('Downloads stat update was failed'));
     }
 
@@ -302,8 +303,6 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
 
       $entity->set('field_gc_origin', $url);
       $entity->save();
-
-
 
       $this->messenger()->addStatus($this->t('Entity {@type:@bundle} "@title" was fetched to site.', [
         '@type' => $this->getEntityType(),
