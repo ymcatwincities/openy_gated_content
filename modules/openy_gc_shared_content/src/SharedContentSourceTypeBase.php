@@ -210,10 +210,10 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
       $downloads_stat_push = $this->client->post($url . '/virtual-y-server/inc-downloads', [
         'form_params' => [
           'uuid' => $uuid,
-          'url' => 'http://openy.docksal',
-          'origin' => 'http://openy.docksal',
+          'url' => $url,
+          'origin' => $url,
           'token' => $source->getToken(),
-          'client_url' => 'http://openy.docksal',
+          'client_url' => $url,
         ],
         'headers' => [
           'Content-type' => 'application/x-www-form-urlencoded',
@@ -222,7 +222,7 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
 
     }
     catch (Exception $e) {
-      $this->messenger()->addError($this->t('Downloads stat update was failed'));
+      $this->messenger()->addError($this->t('Downloads stat update was failed @error', ['@error' => $e->getMessage()]));
     }
 
     if ($this->entityExists($uuid)) {
