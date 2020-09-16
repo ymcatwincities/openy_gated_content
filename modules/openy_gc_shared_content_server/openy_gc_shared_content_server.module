@@ -1,0 +1,35 @@
+<?php
+
+use Drupal\Core\Field\BaseFieldDefinition;
+
+/**
+ * Implements hook_entity_base_field_info().
+ */
+function openy_gc_shared_content_server_entity_base_field_info(\Drupal\Core\Entity\EntityTypeInterface $entity_type) {
+
+  $allowed_entity_types = [];
+  $shared_content_manager = \Drupal::service('plugin.manager.shared_content_source_type');
+  foreach ($shared_content_manager->getDefinitions() as $plugin_id => $plugin) {
+    $instance = $shared_content_manager->createInstance($plugin_id);
+    $allowed_entity_types[] = $instance->getEntityType();
+  }
+
+  if (in_array($entity_type->id(), $allowed_entity_types)) {
+    $fields = [];
+    $fields['field_share_count'] = BaseFieldDefinition::create('integer')
+      ->setLabel(t('Count of Downloads'))
+      ->setCustomStorage(FALSE)
+      ->setSetting('unsigned', TRUE)
+      ->setCardinality(1)
+      ->setSetting('size', 'big')
+      ->setProvider('openy_gc_shared_content_server')
+      ->setRequired(FALSE)
+      ->setRevisionable(FALSE)
+      ->setTranslatable(FALSE)
+      ->setDisplayConfigurable('view', FALSE)
+      ->setDisplayConfigurable('form', TRUE);
+
+    return $fields;
+  }
+
+}
