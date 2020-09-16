@@ -33,7 +33,7 @@ class VirtualYVideo extends SharedContentSourceTypeBase {
    */
   public function getFullJsonApiQueryArgs() {
     return [
-      'include' => 'field_gc_video_media,field_gc_video_media.thumbnail,field_gc_video_level,field_gc_video_category,field_gc_video_equipment, field_share_count, field_gc_origin',
+      'include' => 'field_gc_video_media,field_gc_video_media.thumbnail,field_gc_video_level,field_gc_video_category,field_gc_video_equipment',
       'filter[status]' => 1,
       'filter[field_gc_share]' => 1,
     ];
