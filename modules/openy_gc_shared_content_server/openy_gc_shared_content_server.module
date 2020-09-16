@@ -2,6 +2,7 @@
 
 /**
  * @file
+ * Contains openy_gc_shared_content.module.
  */
 
 use Drupal\Core\Entity\EntityTypeInterface;

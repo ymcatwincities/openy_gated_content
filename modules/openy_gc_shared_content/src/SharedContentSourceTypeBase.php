@@ -207,7 +207,7 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
 
       $source = SharedContentSource::load($server_id);
 
-      $downloads_stat_push = $this->client->post($url . '/virtual-y-server/inc-downloads', [
+      $this->client->post($url . '/virtual-y-server/inc-downloads', [
         'form_params' => [
           'uuid' => $uuid,
           'url' => $url,

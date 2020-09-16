@@ -18,8 +18,9 @@ use Symfony\Component\HttpFoundation\Request;
 class DownloadsIncrementController extends ControllerBase {
 
   /**
+   * EntityTypeManager service instance.
+   *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   *   EntityTypeManager service instance.
    */
   protected $entityTypemanager;
 
@@ -40,10 +41,13 @@ class DownloadsIncrementController extends ControllerBase {
   }
 
   /**
+   * Callback for increment execution.
+   *
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   Http request object.
    *
    * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   JsonResponse class instance.
    */
   public function execute(Request $request) {
 
