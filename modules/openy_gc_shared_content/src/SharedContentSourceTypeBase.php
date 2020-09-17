@@ -10,7 +10,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Driver\Exception\Exception;
 use Drupal\jsonapi\JsonApiResource\JsonApiDocumentTopLevel;
 use Drupal\jsonapi\ResourceType\ResourceTypeRepositoryInterface;
-use Drupal\openy_gc_shared_content_server\Entity\SharedContentSource;
+use Drupal\openy_gc_shared_content\Entity\SharedContentSourceServer;
 use GuzzleHttp\Client;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
@@ -205,7 +205,7 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
         ->condition('url', $url)
         ->execute());
 
-      $source = SharedContentSource::load($server_id);
+      $source = SharedContentSourceServer::load($server_id);
 
       $this->client->post($url . '/virtual-y-server/inc-downloads', [
         'form_params' => [
