@@ -29,7 +29,7 @@ display:
       access:
         type: perm
         options:
-          perm: 'access content'
+          perm: 'access gated content menu'
       cache:
         type: tag
         options: {  }
