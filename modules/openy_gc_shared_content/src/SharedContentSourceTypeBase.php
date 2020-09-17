@@ -200,7 +200,7 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
     try {
 
       $server_id = reset($this->entityTypeManager
-        ->getStorage('shared_content_source')
+        ->getStorage('shared_content_source_server')
         ->getQuery()
         ->condition('url', $url)
         ->execute());
