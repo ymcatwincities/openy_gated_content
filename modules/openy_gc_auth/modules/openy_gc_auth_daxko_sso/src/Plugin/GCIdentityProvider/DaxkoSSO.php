@@ -10,6 +10,7 @@ use Drupal\Core\Url;
 use Drupal\daxko_sso\DaxkoSSOClient;
 use Drupal\openy_gc_auth\GCIdentityProviderPluginBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -149,7 +150,7 @@ class DaxkoSSO extends GCIdentityProviderPluginBase {
    * {@inheritdoc}
    */
   public function getLoginForm() {
-    return \Drupal::formBuilder()->getForm('Drupal\openy_gc_auth_daxko_sso\Form\VirtualYDaxkoSSOLoginForm');
+    return new RedirectResponse(Url::fromRoute('openy_gc_auth_daxko_sso.daxko_link_controller_hello')->toString());
   }
 
 }

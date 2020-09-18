@@ -12,6 +12,7 @@ use Drupal\openy_gc_auth\GCIdentityProviderPluginBase;
 use Drupal\personify\PersonifyClient;
 use Drupal\personify\PersonifySSO;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Personify SSO identity provider plugin.
@@ -200,7 +201,7 @@ class Personify extends GCIdentityProviderPluginBase {
    * {@inheritdoc}
    */
   public function getLoginForm() {
-    return \Drupal::formBuilder()->getForm('Drupal\openy_gc_auth_personify\Form\VirtualYPersonifyLoginForm');
+    return new RedirectResponse(Url::fromRoute('openy_gc_auth_personify.personify_check')->toString());
   }
 
 }
