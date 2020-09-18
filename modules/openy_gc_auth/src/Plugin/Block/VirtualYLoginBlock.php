@@ -6,6 +6,7 @@ use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\openy_gc_auth\GCIdentityProviderManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
