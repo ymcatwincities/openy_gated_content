@@ -71,18 +71,6 @@ class GCSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('event_add_to_calendar') ?? FALSE,
     ];
 
-    $form['virtual_y_url'] = [
-      '#type' => 'textfield',
-      '#title' => 'Virtual Y Landing Page url',
-      '#default_value' => $config->get('virtual_y_url'),
-    ];
-
-    $form['virtual_y_login_url'] = [
-      '#type' => 'textfield',
-      '#title' => 'Virtual Y Login Landing Page url',
-      '#default_value' => $config->get('virtual_y_login_url'),
-    ];
-
     $form['app_settings']['pager_limit'] = [
       '#title' => $this->t('Pager limit'),
       '#description' => $this->t('Items limit for blocks with pager.'),
@@ -133,6 +121,18 @@ class GCSettingsForm extends ConfigFormBase {
       ];
     }
 
+    $form['app_settings']['virtual_y_url'] = [
+      '#type' => 'textfield',
+      '#title' => 'Virtual Y Landing Page url',
+      '#default_value' => $config->get('virtual_y_url'),
+    ];
+
+    $form['app_settings']['virtual_y_login_url'] = [
+      '#type' => 'textfield',
+      '#title' => 'Virtual Y Login Landing Page url',
+      '#default_value' => $config->get('virtual_y_login_url'),
+    ];
+
     $form['actions']['#type'] = 'actions';
     $form['actions']['submit'] = [
       '#type' => 'submit',
@@ -148,9 +148,6 @@ class GCSettingsForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $settings = $this->config('openy_gated_content.settings');
-    $settings->set('event_add_to_calendar', $form_state->getValue('event_add_to_calendar'));
-    $settings->set('virtual_y_url', $form_state->getValue('virtual_y_url'));
-    $settings->set('virtual_y_login_url', $form_state->getValue('virtual_y_login_url'));
     $settings->setData($form_state->getValue('app_settings'));
     $settings->save();
     parent::submitForm($form, $form_state);
