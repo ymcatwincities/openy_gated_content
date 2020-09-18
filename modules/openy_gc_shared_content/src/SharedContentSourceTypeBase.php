@@ -312,8 +312,10 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
       }
       $context = ['resource_type' => $resource_type];
       $data['data']['relationships'] = [];
+
       $entity = $this->serializer->denormalize($data, JsonApiDocumentTopLevel::class, 'api_json', $context);
       foreach ($included_relationships as $rel_name) {
+
         $entity->set($rel_name, $relationships_data[$rel_name]);
       }
 
