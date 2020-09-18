@@ -96,4 +96,11 @@ class Example extends GCIdentityProviderPluginBase {
     return $data;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getLoginForm() {
+    return \Drupal::formBuilder()->getForm('Drupal\openy_gc_auth_example\Form\VirtualYExampleLoginForm');
+  }
+
 }

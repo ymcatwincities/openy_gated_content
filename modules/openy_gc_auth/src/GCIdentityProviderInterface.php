@@ -38,4 +38,12 @@ interface GCIdentityProviderInterface extends PluginInspectionInterface, Configu
    */
   public function getDataForApp();
 
+  /**
+   * Get login form content for auth method.
+   *
+   * @return array
+   *   Render array for the form.
+   */
+  public function getLoginForm();
+
 }

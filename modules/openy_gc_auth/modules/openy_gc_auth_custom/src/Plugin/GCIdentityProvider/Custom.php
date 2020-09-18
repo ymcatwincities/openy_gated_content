@@ -164,4 +164,11 @@ class Custom extends GCIdentityProviderPluginBase {
     return $data;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getLoginFormId() {
+    return 'openy_gc_auth_example_login_form';
+  }
+
 }
