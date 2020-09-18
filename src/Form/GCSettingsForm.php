@@ -74,13 +74,13 @@ class GCSettingsForm extends ConfigFormBase {
     $form['virtual_y_url'] = [
       '#type' => 'textfield',
       '#title' => 'Virtual Y Landing Page url',
-      '#default_value' => $config->get('virtual_y_url')
+      '#default_value' => $config->get('virtual_y_url'),
     ];
 
     $form['virtual_y_login_url'] = [
       '#type' => 'textfield',
       '#title' => 'Virtual Y Login Landing Page url',
-      '#default_value' => $config->get('virtual_y_login_url')
+      '#default_value' => $config->get('virtual_y_login_url'),
     ];
 
     $form['app_settings']['pager_limit'] = [
