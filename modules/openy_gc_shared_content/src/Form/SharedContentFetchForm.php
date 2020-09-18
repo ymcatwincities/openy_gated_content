@@ -113,6 +113,8 @@ class SharedContentFetchForm extends EntityForm {
         '#type' => 'tableselect',
         '#header' => [
           'name' => $this->t('Name'),
+          'donated_by' => $this->t('Donated By'),
+          'count_of_downloads' => $this->t('YMCAS using content'),
           'operations' => [
             'data' => $this->t('Operations'),
           ],
@@ -124,6 +126,8 @@ class SharedContentFetchForm extends EntityForm {
         $form['fetched_data']['content']['#options'][$item['id']] = [
           // TODO: maybe we can highlight existing items here.
           'name' => $instance->formatItem($item),
+          'donated_by' => !empty($item['attributes']['field_gc_origin']) ? $item['attributes']['field_gc_origin'] : ' ',
+          'count_of_downloads' => !empty($item['attributes']['field_share_count']) ? $item['attributes']['field_share_count'] : '0',
           'operations' => [
             'data' => [
               '#type' => 'link',

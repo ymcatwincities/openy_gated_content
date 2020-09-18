@@ -68,6 +68,7 @@ class VirtualYVideo extends SharedContentSourceTypeBase {
   public function processJsonApiData(&$data) {
     unset($data['data']['attributes']['drupal_internal__nid']);
     unset($data['data']['attributes']['drupal_internal__vid']);
+    unset($data['data']['attributes']['field_share_count']);
   }
 
   /**
