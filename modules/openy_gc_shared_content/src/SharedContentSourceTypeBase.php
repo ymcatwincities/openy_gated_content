@@ -13,6 +13,7 @@ use Drupal\jsonapi\ResourceType\ResourceTypeRepositoryInterface;
 use Drupal\openy_gc_shared_content\Entity\SharedContentSourceServer;
 use GuzzleHttp\Client;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Exception\UnexpectedValueException;
@@ -55,6 +56,13 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
   protected $serializer;
 
   /**
+   * Request stack service.
+   *
+   * @var \Symfony\Component\HttpFoundation\Request|null
+   */
+  protected $requestStack;
+
+  /**
    * {@inheritdoc}
    */
   public function __construct(
@@ -64,13 +72,16 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
     Client $client,
     EntityTypeManagerInterface $entity_type_manager,
     ResourceTypeRepositoryInterface $resource_type_repository,
-    SerializerInterface $serializer) {
+    SerializerInterface $serializer,
+    RequestStack $requestStack
+    ) {
 
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->client = $client;
     $this->entityTypeManager = $entity_type_manager;
     $this->resourceTypeRepository = $resource_type_repository;
     $this->serializer = $serializer;
+    $this->requestStack = $requestStack->getCurrentRequest();
   }
 
   /**
@@ -86,7 +97,8 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
       $container->get('http_client'),
       $container->get('entity_type.manager'),
       $container->get('jsonapi.resource_type.repository'),
-      $container->get('jsonapi.serializer')
+      $container->get('jsonapi.serializer'),
+      $container->get('request_stack')
     );
   }
 
@@ -197,32 +209,35 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
    */
   public function saveFromSource($url, $uuid) {
 
-    try {
+    $server_id = reset($this->entityTypeManager
+      ->getStorage('shared_content_source_server')
+      ->getQuery()
+      ->condition('url', $url)
+      ->execute());
 
-      $server_id = reset($this->entityTypeManager
-        ->getStorage('shared_content_source_server')
-        ->getQuery()
-        ->condition('url', $url)
-        ->execute());
+    if (!empty($server_id)) {
 
       $source = SharedContentSourceServer::load($server_id);
+      $host = $this->requestStack->getSchemeAndHttpHost();
 
-      $this->client->post($url . '/virtual-y-server/inc-downloads', [
-        'form_params' => [
-          'uuid' => $uuid,
-          'url' => $url,
-          'origin' => $url,
-          'token' => $source->getToken(),
-          'client_url' => $url,
-        ],
-        'headers' => [
-          'Content-type' => 'application/x-www-form-urlencoded',
-        ],
-      ]);
+      try {
+        $this->client->post($url . '/virtual-y-server/inc-downloads', [
+          'form_params' => [
+            'uuid' => $uuid,
+            'url' => $host,
+            'origin' => '',
+            'token' => $source->getToken(),
+            'client_url' => $host,
+          ],
+          'headers' => [
+            'Content-type' => 'application/x-www-form-urlencoded',
+          ],
+        ]);
 
-    }
-    catch (Exception $e) {
-      $this->messenger()->addError($this->t('Downloads stat update was failed @error', ['@error' => $e->getMessage()]));
+      } catch (Exception $e) {
+        $this->messenger()
+          ->addError($this->t('Downloads stat update was failed @error', ['@error' => $e->getMessage()]));
+      }
     }
 
     if ($this->entityExists($uuid)) {
