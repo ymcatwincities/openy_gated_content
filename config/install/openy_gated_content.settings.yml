@@ -1,1 +1,19 @@
-event_add_to_calendar: 1
+event_add_to_calendar: true
+pager_limit: 12
+components:
+  gc_video:
+    status: true
+    title: 'Videos'
+    up_next_title: 'Up next'
+  live_stream:
+    status: true
+    title: 'Live streams'
+    up_next_title: 'Up next'
+  virtual_meeting:
+    status: true
+    title: 'Virtual meetings'
+    up_next_title: 'Up next'
+  vy_blog_post:
+    status: true
+    title: 'Blog posts'
+    up_next_title: 'Next blog posts'

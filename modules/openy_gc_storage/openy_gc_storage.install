@@ -61,3 +61,38 @@ function openy_gc_storage_update_8002() {
     'field.storage.node.field_gc_video_image',
   ]);
 }
+
+/**
+ * Make video category multiple.
+ */
+function openy_gc_storage_update_8003() {
+  $config_dir = drupal_get_path('module', 'openy_gc_storage');
+  $config_dir .= '/config/install/';
+  // Update configuration.
+  $config_importer = \Drupal::service('openy_upgrade_tool.importer');
+  $config_importer->setDirectory($config_dir);
+  $config_importer->importConfigs([
+    'field.storage.node.field_gc_video_category',
+  ]);
+}
+
+/**
+ * Add category field to blog post + Make event category multiple.
+ */
+function openy_gc_storage_update_8004() {
+  $config_dir = drupal_get_path('module', 'openy_gc_storage');
+  $config_dir .= '/config/install/';
+  // Update configuration.
+  $config_importer = \Drupal::service('openy_upgrade_tool.importer');
+  $config_importer->setDirectory($config_dir);
+  $config_importer->importConfigs([
+    'core.entity_form_display.node.vy_blog_post.default',
+    'core.entity_view_display.node.vy_blog_post.default',
+    'core.entity_view_display.node.vy_blog_post.teaser',
+    'field.field.node.vy_blog_post.field_gc_video_category',
+    'field.storage.eventinstance.field_ls_category',
+    'field.storage.eventseries.field_ls_category',
+    'field_inheritance.field_inheritance.eventinstance_live_stream_category',
+    'field_inheritance.field_inheritance.eventinstance_virtual_meeting_category',
+  ]);
+}

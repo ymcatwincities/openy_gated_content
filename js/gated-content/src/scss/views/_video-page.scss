@@ -59,9 +59,9 @@
     }
 
     .video-footer__block {
-      padding: 5px 0;
+      padding: 4px 0;
       font-size: 14px;
-      line-height: 14px;
+      line-height: 16px;
 
       &:first-child {
         padding-top: 0;
@@ -70,6 +70,12 @@
       .fa {
         font-size: 20px;
         margin-right: 10px;
+      }
+    }
+
+    .video-footer__category {
+      span:last-child i {
+        display: none;
       }
     }
 
@@ -92,6 +98,9 @@
 
   .video-category-wrapper {
     background-color: $dark-blue;
+    span:last-child i {
+      display: none;
+    }
   }
 
   .video-category {
