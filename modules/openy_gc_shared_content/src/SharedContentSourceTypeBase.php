@@ -234,7 +234,8 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
           ],
         ]);
 
-      } catch (Exception $e) {
+      }
+      catch (Exception $e) {
         $this->messenger()
           ->addError($this->t('Downloads stat update was failed @error', ['@error' => $e->getMessage()]));
       }
