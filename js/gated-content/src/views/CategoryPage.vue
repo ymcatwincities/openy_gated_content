@@ -12,7 +12,7 @@
         ></div>
       </div>
       <VideoListing
-        :title="'Videos'"
+        :title="config.components.gc_video.title"
         :category="category.id"
       />
     </template>
@@ -24,10 +24,11 @@ import client from '@/client';
 import 'vue-lazy-youtube-video/dist/style.css';
 import VideoListing from '@/components/video/VideoListing.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
+import { SettingsMixin } from '@/mixins/SettingsMixin';
 
 export default {
   name: 'CategoryPage',
-  mixins: [JsonApiCombineMixin],
+  mixins: [JsonApiCombineMixin, SettingsMixin],
   components: {
     VideoListing,
   },
@@ -70,7 +71,3 @@ export default {
   },
 };
 </script>
-
-<style>
-
-</style>

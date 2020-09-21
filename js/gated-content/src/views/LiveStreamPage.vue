@@ -56,7 +56,7 @@
         </div>
       </div>
       <EventListing
-        :title="'UP NEXT'"
+        :title="config.components.live_stream.up_next_title"
         :excluded-video-id="video.id"
         :viewAll="true"
         :limit="6"
