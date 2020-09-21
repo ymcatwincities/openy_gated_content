@@ -6,7 +6,7 @@
         "drupal/recurring_events": "*",
         "ymcatwincities/daxko_sso": "*",
         "drupal/jsonapi_image_styles": "^1.0@beta",
-        "drupal/csv_serialization": "^1",
+        "drupal/csv_serialization": "^1 || ^2",
         "ext-json": "*",
         "ext-zlib": "*"
     },
