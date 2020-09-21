@@ -22,9 +22,9 @@ source:
       content:
         -
           content_id: wherever_you_go_y_is_there
-        -
-          content_id: virtual_y_landing_page_login_app
       bottom_content:
+        -
+          bottom_content_id: virtual_y_landing_page_login_app
         -
           bottom_content_id: virtual_y_banner_bottom
     -
@@ -110,13 +110,11 @@ process:
         plugin: migration_lookup
         migration:
           - virtual_y_paragraph_simple_content
-          - virtual_y_paragraph_gated_content_login
         source: content_id
       target_revision_id:
         plugin: migration_lookup
         migration:
           - virtual_y_paragraph_simple_content
-          - virtual_y_paragraph_gated_content_login
         source: content_id
   field_bottom_content:
     plugin: sub_process
@@ -125,6 +123,7 @@ process:
       target_id:
         plugin: migration_lookup
         migration:
+          - virtual_y_paragraph_gated_content_login
           - virtual_y_paragraph_banner
           - virtual_y_paragraph_gated_content
           - virtual_y_paragraph_small_banner
@@ -132,6 +131,7 @@ process:
       target_revision_id:
         plugin: migration_lookup
         migration:
+          - virtual_y_paragraph_gated_content_login
           - virtual_y_paragraph_banner
           - virtual_y_paragraph_gated_content
           - virtual_y_paragraph_small_banner
