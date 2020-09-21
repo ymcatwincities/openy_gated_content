@@ -99,22 +99,22 @@ process:
   field_gc_video_featured: featured
   field_gc_video_media:
     -
-      plugin: migration
+      plugin: migration_lookup
       migration: virtual_y_media_video
       source: video
   field_gc_video_category:
     -
-      plugin: migration
+      plugin: migration_lookup
       migration: virtual_y_gc_category
       source: category
   field_gc_video_equipment:
     -
-      plugin: migration
+      plugin: migration_lookup
       migration: virtual_y_gc_equipment
       source: equipment
   field_gc_video_level:
     -
-      plugin: migration
+      plugin: migration_lookup
       migration: virtual_y_gc_level
       source: level
   field_gc_video_image:
@@ -123,7 +123,7 @@ process:
       method: process
       source: image
     -
-      plugin: migration
+      plugin: migration_lookup
       migration: virtual_y_media_image
       source: image
 
