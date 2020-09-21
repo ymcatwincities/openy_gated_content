@@ -72,7 +72,7 @@ class VirtualYExampleLoginForm extends FormBase {
     $result = $account = $user->save();
     if ($result) {
       // We must load account because user has not id at save point.
-      $account = user_load_by_name($name);
+      $account = user_load_by_mail($email);
       user_login_finalize($account);
     }
   }

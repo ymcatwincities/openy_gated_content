@@ -160,7 +160,7 @@ class PersonifyAuthController extends ControllerBase {
       $email = !empty($userInfo['Email']) ? $userInfo['Email'] : '';
 
       // Create drupal user if it doesn't exist and login it.
-      $account = user_load_by_name($name);
+      $account = user_load_by_mail($email);
 
       if (!$account) {
         $user = User::create();
@@ -172,7 +172,7 @@ class PersonifyAuthController extends ControllerBase {
         $user->activate();
         $result = $account = $user->save();
         if ($result) {
-          $account = user_load_by_name($name);
+          $account = user_load_by_mail($email);
         }
       }
 

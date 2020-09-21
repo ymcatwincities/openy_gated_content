@@ -124,10 +124,11 @@ class DaxkoLinkController extends ControllerBase {
     if ($userDetails->active) {
       // Create drupal user if it doesn't exist and login it.
       $name = $userDetails->name->first_name . ' ' . $userDetails->name->last_name;
-      $account = user_load_by_name($name);
+      $email = $userDetails->emails[0]->email;
+
+      $account = user_load_by_mail($email);
 
       if (!$account) {
-        $email = $userDetails->emails[0]->email;
         $user = User::create();
         $user->setPassword(user_password());
         $user->enforceIsNew();
@@ -137,7 +138,7 @@ class DaxkoLinkController extends ControllerBase {
         $user->activate();
         $result = $account = $user->save();
         if ($result) {
-          $account = user_load_by_name($name);
+          $account = user_load_by_mail($email);
         }
       }
 
