@@ -63,7 +63,7 @@
         </div>
       </div>
       <EventListing
-        :title="'UP NEXT'"
+        :title="config.components.virtual_meeting.up_next_title"
         :excluded-video-id="video.id"
         :eventType="'virtual_meeting'"
         :viewAll="true"
@@ -149,7 +149,9 @@ export default {
       return link;
     },
     isZoomMeetingLink() {
-      return this.video && this.meetingLink.uri && this.meetingLink.uri.includes('https://zoom.us/');
+      // Allow regular (zoom.us) or vanity (ymca.zoom.us) URLs.
+      const regex = /https:\/\/([a-zA-Z0-9-]*\.)?zoom\.us/;
+      return this.video && this.meetingLink.uri && regex.test(this.meetingLink.uri);
     },
     event() {
       return {

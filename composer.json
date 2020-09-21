@@ -3,10 +3,10 @@
     "description": "Open Y Virtual Y Content",
     "type": "drupal-module",
     "require": {
-        "drupal/recurring_events": "^2",
-        "ymcatwincities/daxko_sso": "dev-master",
-        "ymcatwincities/jsonapi_image_styles": "dev-master",
-        "drupal/csv_serialization": "^2",
+        "drupal/recurring_events": "*",
+        "ymcatwincities/daxko_sso": "*",
+        "drupal/jsonapi_image_styles": "^1.0@beta || dev-master",
+        "drupal/csv_serialization": "^1 || ^2",
         "ext-json": "*",
         "ext-zlib": "*"
     },
