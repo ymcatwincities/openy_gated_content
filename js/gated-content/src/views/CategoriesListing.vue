@@ -22,16 +22,20 @@ import Spinner from '@/components/Spinner.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
 
 export default {
-  name: 'VideoCategoriesListing',
+  name: 'CategoriesListing',
   mixins: [JsonApiCombineMixin],
   components: {
     CategoryTeaser,
     Spinner,
   },
   props: {
-    title: {
+    type: {
       type: String,
-      default: 'Categories',
+      required: true,
+      validator(value) {
+        // Can be video or blog.
+        return ['video', 'blog'].indexOf(value) !== -1;
+      },
     },
     msg: String,
   },
@@ -55,16 +59,20 @@ export default {
     listingIsNotEmpty() {
       return this.listing !== null && this.listing.length > 0;
     },
+    title() {
+      return this.type === 'video' ? 'Video categories' : 'Blog categories';
+    },
   },
   methods: {
     async load() {
       const params = {};
+      const bundle = this.type === 'video' ? 'gc_video' : 'vy_blog_post';
       if (this.params) {
         params.include = this.params.join(',');
       }
 
       client
-        .get('api/video-categories-list', { params })
+        .get(`api/video-categories-list/${bundle}`, { params })
         .then((response) => {
           params.filter = {};
           if (response.data.length > 0) {

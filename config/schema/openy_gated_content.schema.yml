@@ -1,0 +1,40 @@
+# Schema for the configuration files of the openy_gated_content module.
+vy_component_settings:
+  type: config_object
+  mapping:
+    title:
+      type: string
+      label: 'Block title'
+    up_next_title:
+      type: string
+      label: 'Up next block title'
+    status:
+      type: boolean
+      label: 'Enable/Disable component'
+
+openy_gated_content.settings:
+  type: config_object
+  label: 'Open Y gated content settings'
+  mapping:
+    event_add_to_calendar:
+      type: boolean
+      label: 'Add to Calendar'
+    pager_limit:
+      type: integer
+      label: 'Pager limit'
+    components:
+      type: mapping
+      label: 'Components settings'
+      mapping:
+        gc_video:
+          type: vy_component_settings
+          label: 'Virtual Y video'
+        live_stream:
+          type: vy_component_settings
+          label: 'Live streams'
+        virtual_meeting:
+          type: vy_component_settings
+          label: 'Virtual meetings'
+        vy_blog_post:
+          type: vy_component_settings
+          label: 'Blog posts'

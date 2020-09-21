@@ -1,5 +1,7 @@
 # Open Y Virtual Y content
 
+Active development is currently happening at [fivejars/openy_gated_content](https://github.com/fivejars/openy_gated_content). Pull requests should be submitted there. They will be pulled into this repo as they are reviewed and released.
+
 ## Development
 
 This is just a set of drupal modules. Install it as you would do with any

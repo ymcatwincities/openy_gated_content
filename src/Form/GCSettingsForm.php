@@ -12,6 +12,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class GCSettingsForm extends ConfigFormBase {
 
+  const PAGER_LIMIT_DEFAULT = 12;
+
   /**
    * The Identity Provider plugin manager.
    *
@@ -54,6 +56,7 @@ class GCSettingsForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state): array {
     $config = $this->config('openy_gated_content.settings');
+    $form['#tree'] = TRUE;
 
     $form['app_settings'] = [
       '#type' => 'details',
@@ -71,14 +74,64 @@ class GCSettingsForm extends ConfigFormBase {
     $form['virtual_y_url'] = [
       '#type' => 'textfield',
       '#title' => 'Virtual Y Landing Page url',
-      '#default_value' => $config->get('virtual_y_url')
+      '#default_value' => $config->get('virtual_y_url'),
     ];
 
     $form['virtual_y_login_url'] = [
       '#type' => 'textfield',
       '#title' => 'Virtual Y Login Landing Page url',
-      '#default_value' => $config->get('virtual_y_login_url')
+      '#default_value' => $config->get('virtual_y_login_url'),
     ];
+
+    $form['app_settings']['pager_limit'] = [
+      '#title' => $this->t('Pager limit'),
+      '#description' => $this->t('Items limit for blocks with pager.'),
+      '#type' => 'number',
+      '#default_value' => $config->get('pager_limit') ?? self::PAGER_LIMIT_DEFAULT,
+    ];
+
+    $form['app_settings']['components'] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('Components settings'),
+    ];
+
+    $components = [
+      'gc_video' => $this->t('Virtual Y video'),
+      'live_stream' => $this->t('Live streams'),
+      'virtual_meeting' => $this->t('Virtual meetings'),
+      'vy_blog_post' => $this->t('Blog posts'),
+    ];
+
+    foreach ($components as $id => $title) {
+      $form['app_settings']['components'][$id] = [
+        '#type' => 'details',
+        '#open' => FALSE,
+        '#title' => $title,
+      ];
+
+      $form['app_settings']['components'][$id]['status'] = [
+        '#title' => $this->t('Show on the VY home page'),
+        '#description' => $this->t('Enable/Disable "@name" component.', [
+          '@name' => $title,
+        ]),
+        '#type' => 'checkbox',
+        '#default_value' => $config->get('components.' . $id . '.status') ?? TRUE,
+      ];
+
+      $form['app_settings']['components'][$id]['title'] = [
+        '#type' => 'textfield',
+        '#title' => $this->t('Block title'),
+        '#required' => TRUE,
+        '#default_value' => $config->get('components.' . $id . '.title'),
+      ];
+
+      $form['app_settings']['components'][$id]['up_next_title'] = [
+        '#type' => 'textfield',
+        '#title' => $this->t('Up next block title'),
+        '#required' => TRUE,
+        '#default_value' => $config->get('components.' . $id . '.up_next_title'),
+      ];
+    }
 
     $form['actions']['#type'] = 'actions';
     $form['actions']['submit'] = [
@@ -98,6 +151,7 @@ class GCSettingsForm extends ConfigFormBase {
     $settings->set('event_add_to_calendar', $form_state->getValue('event_add_to_calendar'));
     $settings->set('virtual_y_url', $form_state->getValue('virtual_y_url'));
     $settings->set('virtual_y_login_url', $form_state->getValue('virtual_y_login_url'));
+    $settings->setData($form_state->getValue('app_settings'));
     $settings->save();
     parent::submitForm($form, $form_state);
   }

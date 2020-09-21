@@ -21,18 +21,25 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class VirtualYLoginBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
-   * The configuration factory.
+   * ConfigFactory.
    *
-   * @var ConfigFactoryInterface
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
   protected $configFactory;
 
   /**
-   * Current user service instance.
+   * Current user object.
    *
-   * @var AccountProxyInterface
+   * @var \Drupal\Core\Session\AccountProxyInterface
    */
   protected $currentUser;
+
+  /**
+   * GC Identity Provider Manager.
+   *
+   * @var \Drupal\openy_gc_auth\GCIdentityProviderManager
+   */
+  protected $identityProviderManager;
 
   /**
    * {@inheritdoc}
@@ -42,11 +49,13 @@ class VirtualYLoginBlock extends BlockBase implements ContainerFactoryPluginInte
     $plugin_id,
     $plugin_definition,
     ConfigFactoryInterface $config_factory,
-    AccountProxyInterface $current_user
+    AccountProxyInterface $current_user,
+    GCIdentityProviderManager $identityProviderManager
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->configFactory = $config_factory;
     $this->currentUser = $current_user;
+    $this->identityProviderManager = $identityProviderManager;
   }
 
   /**
@@ -58,7 +67,8 @@ class VirtualYLoginBlock extends BlockBase implements ContainerFactoryPluginInte
       $plugin_id,
       $plugin_definition,
       $container->get('config.factory'),
-      $container->get('current_user')
+      $container->get('current_user'),
+      $container->get('plugin.manager.gc_identity_provider')
     );
   }
 
@@ -69,14 +79,13 @@ class VirtualYLoginBlock extends BlockBase implements ContainerFactoryPluginInte
 
     $virtual_y_config = $this->configFactory->get('openy_gc_auth.settings');
     $active_provider = $virtual_y_config->get('active_provider');
-    $identityProviderManager = \Drupal::service('plugin.manager.gc_identity_provider');
-    $plugin_definition = $identityProviderManager->getDefinition($virtual_y_config->get('active_provider'), FALSE);
+    $plugin_definition = $this->identityProviderManager->getDefinition($virtual_y_config->get('active_provider'), FALSE);
     if (!$plugin_definition) {
       return [
-        '#markup' => 'Error: Auth plugin is not found'
+        '#markup' => 'Error: Auth plugin is not found',
       ];
     }
-    $plugin_instance = $identityProviderManager->createInstance($active_provider);
+    $plugin_instance = $this->identityProviderManager->createInstance($active_provider);
     $form = $plugin_instance->getLoginForm();
 
     // For some providers e.g. Daxko, Personify we do not display form but redirect to login immediately.
@@ -86,9 +95,9 @@ class VirtualYLoginBlock extends BlockBase implements ContainerFactoryPluginInte
 
     return [
       [
-        '#markup' => '<h1>Test</h1>'
+        '#markup' => '<h1>Test</h1>',
       ],
-      $form
+      $form,
     ];
   }
 

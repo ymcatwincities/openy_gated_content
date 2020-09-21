@@ -9,13 +9,15 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\user\Entity\User;
 
 /**
- * Class VirtualYExampleLoginForm
+ * Class VirtualYExampleLoginForm.
  *
  * @package Drupal\openy_gc_auth_example\Form
  */
 class VirtualYExampleLoginForm extends FormBase {
 
   /**
+   * The current request.
+   *
    * @var \Symfony\Component\HttpFoundation\Request|null
    */
   protected $currentRequest;

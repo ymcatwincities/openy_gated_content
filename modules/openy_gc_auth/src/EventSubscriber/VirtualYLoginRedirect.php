@@ -12,6 +12,9 @@ use Symfony\Component\EventDispatcher\Event;
 use Drupal\Core\Database\Database;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
+/**
+ * Class VirtualYLoginRedirect.
+ */
 class VirtualYLoginRedirect implements EventSubscriberInterface {
 
   /**
@@ -29,7 +32,7 @@ class VirtualYLoginRedirect implements EventSubscriberInterface {
   protected $currentUser;
 
   /**
-   * ConfigFactory
+   * ConfigFactory.
    *
    * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
@@ -38,8 +41,12 @@ class VirtualYLoginRedirect implements EventSubscriberInterface {
   /**
    * Constructs a new VirtualYLoginRedirect.
    *
-   * @param RouteMatchInterface $current_route_match
-   * @param AccountProxyInterface $current_user
+   * @param \Drupal\Core\Routing\RouteMatchInterface $current_route_match
+   *   The current route match.
+   * @param \Drupal\Core\Session\AccountProxyInterface $current_user
+   *   The current user.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
+   *   The config factory.
    */
   public function __construct(
     RouteMatchInterface $current_route_match,
@@ -54,14 +61,17 @@ class VirtualYLoginRedirect implements EventSubscriberInterface {
   /**
    * {@inheritdoc}
    */
-  static function getSubscribedEvents() {
+  public static function getSubscribedEvents() {
     $events['kernel.response'] = ['checkForRedirect'];
 
     return $events;
   }
 
   /**
+   * A method to be called whenever a kernel.response event is dispatched.
+   *
    * @param \Symfony\Component\EventDispatcher\Event $event
+   *   The event triggered by the response.
    */
   public function checkForRedirect(Event $event) {
 
@@ -92,6 +102,9 @@ class VirtualYLoginRedirect implements EventSubscriberInterface {
     }
   }
 
+  /**
+   * Check if provided paragraph exists on the node.
+   */
   private function checkIfParagraphAtNode(NodeInterface $node, $paragraph_id) {
     $connection = Database::getConnection();
 

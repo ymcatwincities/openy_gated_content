@@ -24,9 +24,9 @@
             <div
               v-if="description"
               class="video-footer__description"
-                 v-html="description.processed"
+                 v-html="descriptionProcessed"
             ></div>
-            <AddToCalendar :event="event"></AddToCalendar>
+            <AddToCalendar :event="event" class="mt-3"></AddToCalendar>
           </div>
           <div>
             <div class="video-footer__block">
@@ -43,9 +43,12 @@
             <div class="video-footer__block" v-if="instructor">
               Instructor: {{ instructor }}
             </div>
-            <div class="video-footer__block">
-              Category:
-              {{ category }}
+            <div class="video-footer__block" v-if="category && category.length > 0">
+              <span>Category: </span>
+              <span v-for="(category_data, index) in category"
+                    :key="index">
+                {{ category_data.name }}<i v-if="index !== category.length - 1">, </i>
+              </span>
             </div>
             <div
               v-if="video.attributes.equipment.length > 0"
@@ -63,7 +66,7 @@
         </div>
       </div>
       <EventListing
-        :title="'UP NEXT'"
+        :title="config.components.virtual_meeting.up_next_title"
         :excluded-video-id="video.id"
         :eventType="'virtual_meeting'"
         :viewAll="true"
@@ -153,12 +156,15 @@ export default {
       const regex = /https:\/\/([a-zA-Z0-9-]*\.)?zoom\.us/;
       return this.video && this.meetingLink.uri && regex.test(this.meetingLink.uri);
     },
+    descriptionProcessed() {
+      return this.description ? this.description.processed : '';
+    },
     event() {
       return {
         start: this.formatDate(this.video.attributes.date.value),
         duration: [this.getDuration(this.video.attributes.date), 'hour'],
         title: this.video.attributes.title,
-        description: `${this.description.processed}<br>${this.meetingLink.title}: ${this.meetingLink.uri} <br> Virtual meeting page: ${this.pageUrl}`,
+        description: `${this.descriptionProcessed}<br>${this.meetingLink.title}: ${this.meetingLink.uri} <br> Virtual meeting page: ${this.pageUrl}`,
         busy: true,
         guests: [],
       };
@@ -179,10 +185,14 @@ export default {
           // In included we have all referenced items, but in relationship only one.
           // So we need manually pass this items to this.video.attributes.equipment.
           this.video.attributes.equipment = [];
+          this.video.attributes.category = [];
           if (response.data.included.length > 0) {
             response.data.included.forEach((ref) => {
               if (ref.type === 'taxonomy_term--gc_equipment') {
                 this.video.attributes.equipment.push(ref.attributes);
+              }
+              if (ref.type === 'taxonomy_term--gc_category') {
+                this.video.attributes.category.push(ref.attributes);
               }
             });
           }

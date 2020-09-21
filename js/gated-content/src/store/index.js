@@ -4,7 +4,6 @@ import VuexPersistence from 'vuex-persist';
 import auth from './modules/auth';
 import settings from './modules/settings';
 import authCustom from './modules/auth/custom';
-import authDaxkoBarcode from './modules/auth/daxkobarcode';
 
 Vue.use(Vuex);
 

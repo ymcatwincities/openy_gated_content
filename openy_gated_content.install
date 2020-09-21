@@ -25,6 +25,36 @@ function openy_gated_content_update_8001() {
 }
 
 /**
+ * Add components settings to openy_gated_content.settings.
+ */
+function openy_gated_content_update_8002() {
+  $config_importer = \Drupal::service('openy_upgrade_tool.param_updater');
+  $config = drupal_get_path('module', 'openy_gated_content');
+  $config .= '/config/install/';
+  $config .= 'openy_gated_content.settings.yml';
+  $config_importer->update(
+    $config,
+    'openy_gated_content.settings',
+    'components'
+  );
+}
+
+/**
+ * Add pager limit setting to openy_gated_content.settings.
+ */
+function openy_gated_content_update_8003() {
+  $config_importer = \Drupal::service('openy_upgrade_tool.param_updater');
+  $config = drupal_get_path('module', 'openy_gated_content');
+  $config .= '/config/install/';
+  $config .= 'openy_gated_content.settings.yml';
+  $config_importer->update(
+    $config,
+    'openy_gated_content.settings',
+    'pager_limit'
+  );
+}
+
+/**
  * Add new Virtual YMCA user roles.
  */
 function openy_gated_content_update_8004() {

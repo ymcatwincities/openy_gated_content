@@ -3,17 +3,32 @@
     <div v-if="loading">Loading</div>
     <div v-else-if="error">Error loading</div>
     <template v-else>
-      <div class="category-details gated-container">
-        <router-link :to="{ name: 'CategoryListing' }">← Back to all categories</router-link>
-        <h2>{{ category.attributes.name }}</h2>
-        <div
-          v-if="category.attributes.description"
-          v-html="category.attributes.description.processed"
-        ></div>
+      <div class="category-details">
+        <div class="gated-container">
+          <h2>{{ category.attributes.name }}</h2>
+          <div
+            v-if="category.attributes.description"
+            v-html="category.attributes.description.processed"
+            class="mb-3"
+          ></div>
+        </div>
+      </div>
+      <div class="back-to-categories-wrapper">
+        <div class="gated-container">
+          <router-link :to="{ name: 'CategoryListing' }">← Back to all categories</router-link>
+        </div>
       </div>
       <VideoListing
-        :title="'Videos'"
+        v-if="type === 'video'"
+        :title="config.components.gc_video.title"
         :category="category.id"
+        :pagination="true"
+      />
+      <BlogListing
+        v-if="type === 'blog'"
+        :title="config.components.vy_blog_post.title"
+        :category="category.id"
+        :pagination="true"
       />
     </template>
   </div>
@@ -23,15 +38,26 @@
 import client from '@/client';
 import 'vue-lazy-youtube-video/dist/style.css';
 import VideoListing from '@/components/video/VideoListing.vue';
+import BlogListing from '@/components/blog/BlogListing.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
+import { SettingsMixin } from '@/mixins/SettingsMixin';
 
 export default {
   name: 'CategoryPage',
-  mixins: [JsonApiCombineMixin],
+  mixins: [JsonApiCombineMixin, SettingsMixin],
   components: {
     VideoListing,
+    BlogListing,
   },
   props: {
+    type: {
+      type: String,
+      required: true,
+      validator(value) {
+        // Can be video or blog.
+        return ['video', 'blog'].indexOf(value) !== -1;
+      },
+    },
     cid: {
       type: String,
       required: true,
@@ -70,7 +96,3 @@ export default {
   },
 };
 </script>
-
-<style>
-
-</style>
