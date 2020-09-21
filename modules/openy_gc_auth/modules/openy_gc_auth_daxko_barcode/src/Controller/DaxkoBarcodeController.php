@@ -111,7 +111,7 @@ class DaxkoBarcodeController extends ControllerBase {
           case 'success':
 
             $name = 'daxkoBarcode+' . $barcode;
-            $email = $name . '@virtualy.org';
+            $email = $name . '@virtualy.openy.org';
 
             // Create drupal user if it doesn't exist and login it.
             $account = user_load_by_name($name);
