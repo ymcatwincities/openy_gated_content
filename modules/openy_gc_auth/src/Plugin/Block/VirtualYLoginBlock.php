@@ -86,14 +86,7 @@ class VirtualYLoginBlock extends BlockBase implements ContainerFactoryPluginInte
       ];
     }
     $plugin_instance = $this->identityProviderManager->createInstance($active_provider);
-    $form = $plugin_instance->getLoginForm();
-
-    return [
-      [
-        '#markup' => '<h1>Test</h1>',
-      ],
-      $form,
-    ];
+    return $plugin_instance->getLoginForm();
   }
 
 }
