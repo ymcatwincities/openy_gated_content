@@ -1,4 +1,3 @@
-enable_recaptcha: 1
 secret:
 action_url: 'https://operations.daxko.com/online/XXXX/checkin/submit?area_id=YYYY'
 form_label: Barcode

@@ -6,13 +6,14 @@ use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Logger\LoggerChannelFactory;
+use Drupal\Core\Url;
+use Drupal\redirect\Entity\Redirect;
+use Drupal\user\Entity\User;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
-use ReCaptcha\ReCaptcha;
-use ReCaptcha\RequestMethod\Drupal8Post;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -78,35 +79,17 @@ class DaxkoBarcodeController extends ControllerBase {
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   The HTTP request object.
    *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   Response with user data or error.
+   * @return mixed
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
-  public function validate(Request $request) {
-    $content = Json::decode($request->getContent());
+  public function validate(Request $request, $barcode) {
     $config = $this->configFactory->get('openy_gc_auth.provider.daxco_barcode');
 
-    // First make sure we got something in our $request.
-    if (!is_array($content) || empty($content)) {
-      return new JsonResponse(['message' => $this->t('Bad Request.')], 400);
-    }
-
-    $barcode = $content['barcode'];
-    // Not sure how we'd get here without a barcode, but just in case.
+    // First make sure we have barcode in $request.
     if (empty($barcode)) {
-      return new JsonResponse([
-        'message' => 'No barcode passed. Please try again.',
-        'user' => [],
-      ], 403);
-    }
-
-    // Validate recaptchaToken if enabled in the provider config.
-    if ($config->get('enable_recaptcha')) {
-      $validation_result = $this->validateRecaptcha($content, $request);
-      if ($validation_result instanceof JsonResponse) {
-        return $validation_result;
-      }
+      \Drupal::messenger()->addError('No barcode passed. Please try again.');
+      return new RedirectResponse($this->configFactory->get('openy_gated_content.settings')->get('virtual_y_login_url'));
     }
 
     $validation_secret = $config->get('secret');
@@ -127,40 +110,47 @@ class DaxkoBarcodeController extends ControllerBase {
         switch ($status) {
           case 'success':
 
-            return new JsonResponse(
-              [
-                'message' => 'success',
-                'user' => [
-                  'barcode' => $barcode,
-                  'primary' => 1,
-                ],
-              ]);
+            $name = 'daxkoBarcode+' . $barcode;
+            $email = $name . '@virtualy.openy.org';
+
+            // Create drupal user if it doesn't exist and login it.
+            $account = user_load_by_mail($email);
+
+            if (!$account) {
+              $user = User::create();
+              $user->setPassword(user_password());
+              $user->enforceIsNew();
+              $user->setEmail($email);
+              $user->setUsername($name);
+              $user->addRole('virtual_y');
+              $user->activate();
+              $result = $account = $user->save();
+              if ($result) {
+                $account = user_load_by_mail($email);
+              }
+            }
+
+            user_login_finalize($account);
+            return new RedirectResponse($this->configFactory->get('openy_gated_content.settings')->get('virtual_y_url'));
 
           case 'not_found':
           case 'access_denied':
           case 'duplicate_barcode':
           case 'invalid':
 
-            return new JsonResponse([
-              'message' => $config->get("message_{$status}"),
-              'help' => $config->get('message_help'),
-              'user' => [],
-            ], 403);
+          \Drupal::messenger()->addError($config->get("message_{$status}") . '. ' . $config->get('message_help'));
+          return new RedirectResponse($this->configFactory->get('openy_gated_content.settings')->get('virtual_y_login_url'));
         }
 
       }
       else {
-        return new JsonResponse([
-          'message' => 'Signature check failed',
-          'user' => [],
-        ], 403);
+        \Drupal::messenger()->addError('Signature check failed.');
+        return new RedirectResponse($this->configFactory->get('openy_gated_content.settings')->get('virtual_y_login_url'));
       }
     }
     else {
-      return new JsonResponse([
-        'message' => $config->get('message_invalid'),
-        'user' => [],
-      ], 403);
+      \Drupal::messenger()->addError($config->get('message_invalid'));
+      return new RedirectResponse($this->configFactory->get('openy_gated_content.settings')->get('virtual_y_login_url'));
     }
   }
 
@@ -233,40 +223,6 @@ class DaxkoBarcodeController extends ControllerBase {
     $our_signature = strtoupper(hash_hmac("sha256", $input_string, $key));
 
     return hash_equals($our_signature, $dax_signature);
-  }
-
-  /**
-   * Helper function for reCaptcha validation.
-   *
-   * @param array $content
-   *   Input data from user.
-   * @param \Symfony\Component\HttpFoundation\Request $request
-   *   Request object.
-   *
-   * @return bool|JsonResponse
-   *   True if success, or an error message if failure.
-   */
-  protected function validateRecaptcha(array $content, Request $request) {
-    if (!$content['recaptchaToken']) {
-      return new JsonResponse(
-        ['message' => $this->t('ReCaptcha token required.')],
-        400);
-    }
-
-    $config = $this->configFactory->get('recaptcha.settings');
-    $recaptcha_secret_key = $config->get('secret_key');
-    $recaptcha = new ReCaptcha($recaptcha_secret_key, new Drupal8Post());
-    if ($config->get('verify_hostname')) {
-      $recaptcha->setExpectedHostname($_SERVER['SERVER_NAME']);
-    }
-    $resp = $recaptcha->verify($content['recaptchaToken'], $request->getClientIp());
-    if (!$resp->isSuccess()) {
-      return new JsonResponse(
-        ['message' => $this->t('ReCaptcha token invalid.')],
-        400);
-    }
-
-    return TRUE;
   }
 
 }

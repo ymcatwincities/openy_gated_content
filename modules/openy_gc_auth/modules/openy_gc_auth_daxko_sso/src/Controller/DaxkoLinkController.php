@@ -4,10 +4,12 @@ namespace Drupal\openy_gc_auth_daxko_sso\Controller;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\daxko_sso\DaxkoSSOClient;
+use Drupal\user\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Routing\TrustedRedirectResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -93,8 +95,7 @@ class DaxkoLinkController extends ControllerBase {
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   Current request object.
    *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   Json array with user fields or error.
+   * @return mixed
    */
   public function backlink(Request $request) {
 
@@ -121,24 +122,33 @@ class DaxkoLinkController extends ControllerBase {
     $userDetails = $this->daxkoClient->getRequest('members/' . $userData->member_id);
     // Check if this user is an active client.
     if ($userDetails->active) {
-      return new JsonResponse(
-        [
-          'error' => 0,
-          'token' => $token,
-          'user' => [
-            'name' => $userDetails->name->first_name,
-            'email' => $userDetails->emails[0]->email,
-          ],
-        ]
-      );
+      // Create drupal user if it doesn't exist and login it.
+      $name = $userDetails->name->first_name . ' ' . $userDetails->name->last_name;
+      $email = $userDetails->emails[0]->email;
+
+      $account = user_load_by_mail($email);
+
+      if (!$account) {
+        $user = User::create();
+        $user->setPassword(user_password());
+        $user->enforceIsNew();
+        $user->setEmail($email);
+        $user->setUsername($name);
+        $user->addRole('virtual_y');
+        $user->activate();
+        $result = $account = $user->save();
+        if ($result) {
+          $account = user_load_by_mail($email);
+        }
+      }
+
+      user_login_finalize($account);
+
+      return new RedirectResponse($this->configFactory->get('openy_gated_content.settings')->get('virtual_y_url'));
     }
     else {
-      return new JsonResponse(
-        [
-          'error' => 1,
-          'message' => 'User is not active client',
-        ]
-      );
+      // Redirect back to Virual Y login page.
+      return new RedirectResponse($this->configFactory->get('openy_gated_content.settings')->get('virtual_y_login_url'));
     }
   }
 
