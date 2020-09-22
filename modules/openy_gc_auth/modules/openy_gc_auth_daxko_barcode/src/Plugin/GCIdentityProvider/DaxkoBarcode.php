@@ -3,7 +3,6 @@
 namespace Drupal\openy_gc_auth_daxko_barcode\Plugin\GCIdentityProvider;
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Drupal\openy_gc_auth\GCIdentityProviderPluginBase;
 
@@ -114,13 +113,6 @@ class DaxkoBarcode extends GCIdentityProviderPluginBase {
     ];
 
     return $form;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function validateConfigurationForm(array &$form, FormStateInterface $form_state) {
-    parent::validateConfigurationForm($form, $form_state);
   }
 
   /**

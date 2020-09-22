@@ -96,6 +96,7 @@ class DaxkoLinkController extends ControllerBase {
    *   Current request object.
    *
    * @return mixed
+   *    Returns RedirectResponse or JsonResponse.
    */
   public function backlink(Request $request) {
 

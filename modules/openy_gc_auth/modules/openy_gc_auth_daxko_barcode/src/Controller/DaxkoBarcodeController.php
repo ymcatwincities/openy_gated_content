@@ -2,12 +2,10 @@
 
 namespace Drupal\openy_gc_auth_daxko_barcode\Controller;
 
-use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Logger\LoggerChannelFactory;
-use Drupal\Core\Url;
-use Drupal\redirect\Entity\Redirect;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\user\Entity\User;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
@@ -43,6 +41,13 @@ class DaxkoBarcodeController extends ControllerBase {
   protected $httpClient;
 
   /**
+   * The messenger service.
+   *
+   * @var \Drupal\Core\Messenger\MessengerInterface
+   */
+  protected $messenger;
+
+  /**
    * DaxkoBarcodeController constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
@@ -51,15 +56,19 @@ class DaxkoBarcodeController extends ControllerBase {
    *   Logger factory.
    * @param \GuzzleHttp\Client $http_client
    *   HTTP client.
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   The messenger.
    */
   public function __construct(
     ConfigFactoryInterface $configFactory,
     LoggerChannelFactory $loggerChannelFactory,
-    Client $http_client
+    Client $http_client,
+    MessengerInterface $messenger
   ) {
     $this->configFactory = $configFactory;
     $this->logger = $loggerChannelFactory->get('openy_gc_auth_daxko_barcode');
     $this->httpClient = $http_client;
+    $this->messenger = $messenger;
   }
 
   /**
@@ -69,7 +78,8 @@ class DaxkoBarcodeController extends ControllerBase {
     return new static(
       $container->get('config.factory'),
       $container->get('logger.factory'),
-      $container->get('http_client')
+      $container->get('http_client'),
+      $container->get('messenger')
     );
   }
 
@@ -79,7 +89,11 @@ class DaxkoBarcodeController extends ControllerBase {
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   The HTTP request object.
    *
-   * @return mixed
+   * @param string $barcode
+   *   Daxko barcode.
+   *
+   * @return RedirectResponse.
+   *   A RedirectResponse object.
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
@@ -88,7 +102,7 @@ class DaxkoBarcodeController extends ControllerBase {
 
     // First make sure we have barcode in $request.
     if (empty($barcode)) {
-      \Drupal::messenger()->addError('No barcode passed. Please try again.');
+      $this->messenger->addError('No barcode passed. Please try again.');
       return new RedirectResponse($this->configFactory->get('openy_gated_content.settings')->get('virtual_y_login_url'));
     }
 
@@ -138,18 +152,18 @@ class DaxkoBarcodeController extends ControllerBase {
           case 'duplicate_barcode':
           case 'invalid':
 
-          \Drupal::messenger()->addError($config->get("message_{$status}") . '. ' . $config->get('message_help'));
-          return new RedirectResponse($this->configFactory->get('openy_gated_content.settings')->get('virtual_y_login_url'));
+            $this->messenger->addError($config->get("message_{$status}") . '. ' . $config->get('message_help'));
+            return new RedirectResponse($this->configFactory->get('openy_gated_content.settings')->get('virtual_y_login_url'));
         }
 
       }
       else {
-        \Drupal::messenger()->addError('Signature check failed.');
+        $this->messenger->addError('Signature check failed.');
         return new RedirectResponse($this->configFactory->get('openy_gated_content.settings')->get('virtual_y_login_url'));
       }
     }
     else {
-      \Drupal::messenger()->addError($config->get('message_invalid'));
+      $this->messenger->addError($config->get('message_invalid'));
       return new RedirectResponse($this->configFactory->get('openy_gated_content.settings')->get('virtual_y_login_url'));
     }
   }

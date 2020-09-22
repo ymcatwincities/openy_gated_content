@@ -4,20 +4,20 @@ namespace Drupal\openy_gc_auth_daxko_barcode\Form;
 
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Routing\TrustedRedirectResponse;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Drupal\user\Entity\User;
 
 /**
- * Class VirtualYDaxkoBarcodeLoginForm
+ * Class VirtualYDaxkoBarcodeLoginForm.
  *
  * @package Drupal\openy_gc_auth_daxko_barcode\Form
  */
 class VirtualYDaxkoBarcodeLoginForm extends FormBase {
 
   /**
+   * A request object.
+   *
    * @var \Symfony\Component\HttpFoundation\Request|null
    */
   protected $currentRequest;

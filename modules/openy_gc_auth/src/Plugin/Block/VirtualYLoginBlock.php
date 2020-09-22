@@ -88,7 +88,8 @@ class VirtualYLoginBlock extends BlockBase implements ContainerFactoryPluginInte
     $plugin_instance = $this->identityProviderManager->createInstance($active_provider);
     $form = $plugin_instance->getLoginForm();
 
-    // For some providers e.g. Daxko, Personify we do not display form but redirect to login immediately.
+    // For some providers e.g. Daxko, Personify we do not display form
+    // but redirect to login immediately.
     if ($form instanceof RedirectResponse) {
       return $form->send();
     }
