@@ -27,7 +27,6 @@ export default new Vuex.Store({
     auth,
     // @TODO: It seems like only one provider can use recaptcha at a time.
     // This breaks `authCustom` and should be resolved before PR is merged.
-    authDaxkoBarcode,
     authCustom,
   },
   plugins: [vuexLocalStorage.plugin],
