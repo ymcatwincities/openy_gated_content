@@ -101,7 +101,7 @@ class SharedContentFetchForm extends EntityForm {
     $form['fetched_data'] = [
       '#type' => 'container',
       '#prefix' => '<div id="fetched-data">',
-      '#suffix' => '</div>'
+      '#suffix' => '</div>',
     ];
 
     // Add filters according to selected plugin instance.
@@ -122,7 +122,7 @@ class SharedContentFetchForm extends EntityForm {
             'effect' => 'fade',
             'progress' => [
               'type' => 'throbber',
-              'message' => t('Loading content..'),
+              'message' => $this->t('Loading content..'),
             ],
           ],
         ],
