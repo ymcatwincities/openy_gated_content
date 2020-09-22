@@ -129,7 +129,7 @@ class PersonifyAuthController extends ControllerBase {
    * Check whether user is already logged in to Personify.
    *
    * @return mixed
-   *    Returns RedirectResponse or JsonResponse.
+   *   Returns RedirectResponse or JsonResponse.
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
    */

@@ -88,12 +88,11 @@ class DaxkoBarcodeController extends ControllerBase {
    *
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   The HTTP request object.
-   *
    * @param string $barcode
    *   Daxko barcode.
    *
-   * @return RedirectResponse.
-   *   A RedirectResponse object.
+   * @return \Symfony\Component\HttpFoundation\RedirectResponse
+   *   A redirect response object that may be returned by the controller.
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
