@@ -100,7 +100,7 @@ class UserController extends ControllerBase {
     if (!$uid || !$hash || !$timestamp) {
       throw new AccessDeniedHttpException();
     }
-    $vy_settings = $this->configFactory->get('openy_gated_content.settings');
+    $vy_settings = $this->config('openy_gated_content.settings');
     $account = $this->currentUser();
     // When processing the one-time login link, we have to make sure that a user
     // isn't already logged in.

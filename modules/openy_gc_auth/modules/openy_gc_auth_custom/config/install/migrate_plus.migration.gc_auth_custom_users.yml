@@ -41,7 +41,7 @@ process:
     source:
       - first_name
       - member_id
-    delimiter: ' #'
+    delimiter: ' '
   mail:
     - plugin: get
       source: email

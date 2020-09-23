@@ -8,9 +8,9 @@ use Drupal\Core\Flood\FloodInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Mail\MailManagerInterface;
+use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -56,14 +56,22 @@ class VirtualYCustomLoginForm extends FormBase {
   protected $flood;
 
   /**
+   * Private storage.
+   *
+   * @var \Drupal\Core\TempStore\PrivateTempStoreFactory
+   */
+  protected $privateTempStore;
+
+  /**
    * {@inheritdoc}
    */
-  public function __construct(RequestStack $requestStack, ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager, MailManagerInterface $mail_manager, FloodInterface $flood) {
+  public function __construct(RequestStack $requestStack, ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager, MailManagerInterface $mail_manager, FloodInterface $flood, PrivateTempStoreFactory $private_temp_store) {
     $this->currentRequest = $requestStack->getCurrentRequest();
     $this->configFactory = $config_factory;
     $this->entityTypeManager = $entity_type_manager;
     $this->mailManager = $mail_manager;
     $this->flood = $flood;
+    $this->privateTempStore = $private_temp_store->get('openy_gc_auth.provider.custom');
   }
 
   /**
@@ -75,7 +83,8 @@ class VirtualYCustomLoginForm extends FormBase {
       $container->get('config.factory'),
       $container->get('entity_type.manager'),
       $container->get('plugin.manager.mail'),
-      $container->get('flood')
+      $container->get('flood'),
+      $container->get('tempstore.private')
     );
   }
 
@@ -91,8 +100,6 @@ class VirtualYCustomLoginForm extends FormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $provider_config = $this->configFactory->get('openy_gc_auth.provider.custom');
-    $form['#prefix'] = '<div id="form-wrapper">';
-    $form['#suffix'] = '</div>';
     $form['#attributes'] = [
       'class' => ['container', 'mb-4'],
     ];
@@ -125,17 +132,13 @@ class VirtualYCustomLoginForm extends FormBase {
       ];
     }
 
-    $form['submit'] = [
+    $form['actions'] = [
+      '#type' => 'actions',
+    ];
+
+    $form['actions']['submit'] = [
       '#type' => 'submit',
       '#value' => $this->t('Enter Virtual Y'),
-      '#ajax' => [
-        'callback' => '::submitAjax',
-        'wrapper' => 'form-wrapper',
-        'effect' => 'fade',
-        'progress' => [
-          'type' => 'fullscreen',
-        ],
-      ],
     ];
 
     return $form;
@@ -171,13 +174,6 @@ class VirtualYCustomLoginForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function submitAjax(array &$form, FormStateInterface $form_state) {
-    return $form;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $provider_config = $this->configFactory->get('openy_gc_auth.provider.custom');
     $mail = $form_state->getValue('email');
@@ -186,7 +182,7 @@ class VirtualYCustomLoginForm extends FormBase {
       ->loadByProperties(['mail' => $mail]);
     $user = reset($users);
     if (!$user->isActive()) {
-      if ($provider_config->get('enable_email_verification') && !$form_state->getValue('verified', FALSE)) {
+      if ($provider_config->get('enable_email_verification')) {
         $this->sendEmailVerification($user, $provider_config, $mail);
         $form_state->setValue('verified', TRUE);
         $form_state->setRebuild(TRUE);
@@ -200,20 +196,29 @@ class VirtualYCustomLoginForm extends FormBase {
     }
 
     user_login_finalize($user);
-    $vy_settings = $this->configFactory->get('openy_gated_content.settings');
-    $form_state->setResponse(new RedirectResponse($vy_settings->get('virtual_y_url'), 302));
+    $path = $this->configFactory->get('openy_gated_content.settings')->get('virtual_y_url');
+    $form_state->setRedirectUrl(Url::fromUserInput($path));
   }
 
   /**
    * Helper function for verification email sending.
    */
   protected function sendEmailVerification($user, $provider_config, $mail) {
+    // Due to form rebuild we have double submit, to avoid double email send
+    // we use tempstore to determinate that email already sent.
+    if ($this->privateTempStore->get($mail)) {
+      // Email already sent, clear tempstore.
+      $this->privateTempStore->delete($mail);
+      return;
+    }
+
     $path = str_replace('user/reset', 'vy-user/verification', user_pass_reset_url($user));
     $params = [
       'message' => $provider_config->get('email_verification_text') . '<br>',
     ];
     $params['message'] .= 'Click to verify your email: ' . $path;
     $this->mailManager->mail('openy_gc_auth_custom', 'email_verification', $mail, 'en', $params, NULL, TRUE);
+    $this->privateTempStore->set($mail, TRUE);
   }
 
 }

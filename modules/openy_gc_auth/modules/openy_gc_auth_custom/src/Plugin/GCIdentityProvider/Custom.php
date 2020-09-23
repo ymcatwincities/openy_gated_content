@@ -124,23 +124,6 @@ class Custom extends GCIdentityProviderPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function getDataForApp():array {
-    $data = parent::getDataForApp();
-    $data['enableRecaptcha'] = (bool) $this->configuration['enable_recaptcha'];
-    $data['emailVerification'] = (bool) $this->configuration['enable_email_verification'];
-    $data['apiEndpoint'] = $this->configuration['api_endpoint'];
-    $data['emailVerificationApiEndpoint'] = $this->configuration['email_verification_api_endpoint'];
-    $this->configFactory->get('recaptcha.settings')->get('site_key');
-    $data['reCaptchaKey'] = $this->configFactory
-      ->get('recaptcha.settings')
-      ->get('site_key');
-
-    return $data;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function getLoginForm() {
     return $this->formBuilder->getForm('Drupal\openy_gc_auth_custom\Form\VirtualYCustomLoginForm');
   }
