@@ -4,8 +4,7 @@ Active development is currently happening at [fivejars/openy_gated_content](http
 
 ## Installation
 
-See also the [video version of these instructions](https://youtu.be
-/vlqv4ly3iak). This assumes you've already [built an Open Y site](https://github.com/ymcatwincities/openy-project#installation) and have it
+See also the [video version of these instructions](https://youtu.be/vlqv4ly3iak). This assumes you've already [built an Open Y site](https://github.com/ymcatwincities/openy-project#installation) and have it
  running.
 
 - Add this module to your codebase.
