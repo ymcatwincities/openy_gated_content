@@ -46,7 +46,7 @@ function openy_gated_content_preprocess_paragraph(&$variables) {
     return;
   }
 
-  if ($variables['paragraph']->getType() === 'gated_content_login') {
+  if ($variables['paragraph']->getType() === 'gated_content_login' && $variables['paragraph']->field_link_to_gated_content_app) {
     $variables['app_url'] = $variables['paragraph']
       ->field_link_to_gated_content_app->get(0)->getUrl()->toString();
   }
