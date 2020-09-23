@@ -92,12 +92,17 @@ class VirtualYLoginBlock extends BlockBase implements ContainerFactoryPluginInte
     // For some providers e.g. Daxko, Personify we do not display form
     // but redirect to login immediately.
     if ($form instanceof RedirectResponse) {
-      return $form->send();
+      return [
+        '#cache' => [
+          'max-age' => 0
+        ],
+        $form->send()
+      ];
     }
 
     return [
-      [
-        '#markup' => '<h1>Test</h1>',
+      '#cache' => [
+        'max-age' => 0
       ],
       $form,
     ];
