@@ -76,7 +76,4 @@ function openy_gated_content_update_8004() {
 function openy_gated_content_update_8005() {
   FieldConfig::loadByName('paragraph', 'gated_content_login', 'field_link_to_gated_content_app')->delete();
   FieldStorageConfig::loadByName('paragraph', 'field_link_to_gated_content_app')->delete();
-  // TODO: add virtual_y_url and virtual_y_login_url settings to
-  // openy_gated_content.settings.yml
-  // (load pages with paragraphs and get alias).
 }

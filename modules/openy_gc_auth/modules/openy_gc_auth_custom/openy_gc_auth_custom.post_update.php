@@ -7,8 +7,6 @@
 
 /**
  * Delete deprecated gc_auth_custom_user instances.
- *
- * TODO: test this!!!
  */
 function openy_gc_auth_custom_post_update_delete_custom_users(&$sandbox) {
   \Drupal::database()->truncate('gc_auth_custom_user')->execute();
