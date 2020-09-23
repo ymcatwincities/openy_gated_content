@@ -2,6 +2,33 @@
 
 Active development is currently happening at [fivejars/openy_gated_content](https://github.com/fivejars/openy_gated_content). Pull requests should be submitted there. They will be pulled into this repo as they are reviewed and released.
 
+## Installation
+
+See also the [video version of these instructions](https://youtu.be/vlqv4ly3iak).
+
+- Add this module to your codebase.
+  - via composer: `composer require ymcatwincities
+/openy_gated_content`
+  - without composer: this is not recommended.
+- Enable the modules
+   - Through the UI:
+     - Visit **Extend** in your toolbar.
+     - Check "Virtual Y Base", "Open Y Virtual YMCA Storage", and "Open Y
+      Virtual YMCA Auth Example".
+      - Install and say "yes" to add all required dependencies.
+   - Via drush: `drush en openy_gated_content openy_gc_storage
+    openy_gc_auth_example -y`
+- Add content in these vocabularies via **Structure** > **Taxonomies**
+  - Virtual Y Category
+  - Virtual Y Equipment
+  - Virtual Y Level
+- Create a **Landing Page** and add the **Gated Content** paragraph to the
+ **Content** section.
+- From the toolbar go to **Virtual Y** > **Videos** > **Add Video** and add a
+ piece of video content.
+- Visit the landing page you created, click to log in, and observe your new
+ Virtual Y.
+
 ## Development
 
 This is just a set of drupal modules. Install it as you would do with any
