@@ -29,6 +29,14 @@ function openy_gated_content_post_update_create_login_page(&$sandbox) {
     $gated_content_login_prgf = $prgf_storage->create([
       'type' => 'gated_content_login',
     ]);
+    $gated_content_login_page = FALSE;
+  }
+  else {
+    $gated_content_login_prgf = reset($gated_content_login_prgf);
+    $gated_content_login_page = $gated_content_login_prgf->getParentEntity();
+  }
+
+  if (!$gated_content_login_page) {
     $gated_content_login_page = \Drupal::entityTypeManager()
       ->getStorage('node')
       ->create([
@@ -37,23 +45,8 @@ function openy_gated_content_post_update_create_login_page(&$sandbox) {
         'field_content' => [$gated_content_login_prgf],
       ]);
     $gated_content_login_page->save();
-    $gated_content_login_alias = $path_alias_manager->getAliasByPath('/node/' . $gated_content_login_page->id());
   }
-  else {
-    $gated_content_login_prgf = reset($gated_content_login_prgf);
-    $gated_content_login_page = $gated_content_login_prgf->getParentEntity();
-    if (!$gated_content_login_page) {
-      $gated_content_login_page = \Drupal::entityTypeManager()
-        ->getStorage('node')
-        ->create([
-          'type' => 'landing_page',
-          'title' => 'VIRTUAL Y Login',
-          'field_content' => [$gated_content_login_prgf],
-        ]);
-      $gated_content_login_page->save();
-    }
-    $gated_content_login_alias = $path_alias_manager->getAliasByPath('/node/' . $gated_content_login_page->id());
-  }
+  $gated_content_login_alias = $path_alias_manager->getAliasByPath('/node/' . $gated_content_login_page->id());
 
   $gated_content_settings = \Drupal::configFactory()->getEditable('openy_gated_content.settings');
   $gated_content_settings->set('virtual_y_url', $gated_content_page_alias);
