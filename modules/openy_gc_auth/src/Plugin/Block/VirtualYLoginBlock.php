@@ -7,8 +7,8 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\openy_gc_auth\GCIdentityProviderManager;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a 'Virtual Y login' block.
@@ -87,6 +87,7 @@ class VirtualYLoginBlock extends BlockBase implements ContainerFactoryPluginInte
       ];
     }
     $plugin_instance = $this->identityProviderManager->createInstance($active_provider);
+
     $form = $plugin_instance->getLoginForm();
 
     // For some providers e.g. Daxko, Personify we do not display form
@@ -94,18 +95,13 @@ class VirtualYLoginBlock extends BlockBase implements ContainerFactoryPluginInte
     if ($form instanceof RedirectResponse) {
       return [
         '#cache' => [
-          'max-age' => 0
+          'max-age' => 0,
         ],
-        $form->send()
+        $form->send(),
       ];
     }
 
-    return [
-      '#cache' => [
-        'max-age' => 0
-      ],
-      $form,
-    ];
+    return $form;
   }
 
 }

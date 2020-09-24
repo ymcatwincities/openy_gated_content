@@ -96,9 +96,37 @@ class SharedContentFetchForm extends EntityForm {
     ];
     $instance = $this->sharedSourceTypeManager->createInstance($type);
     $query_arg = array_merge($instance->getTeaserJsonApiQueryArgs(), $pager_query);
+    $instance->applyFormFilters($query_arg, $form_state);
     $source_data = $instance->jsonApiCall($this->entity->getUrl(), $query_arg);
     $form['fetched_data'] = [
       '#type' => 'container',
+      '#prefix' => '<div id="fetched-data">',
+      '#suffix' => '</div>',
+    ];
+
+    // Add filters according to selected plugin instance.
+    $form['fetched_data']['filters'] = [
+      '#type' => 'container',
+      '#attributes' => [
+        'class' => ['form--inline', 'clearfix'],
+      ],
+      'fields' => $instance->getFormFilters($this->entity->getUrl()),
+      'filter_actions' => [
+        '#type' => 'actions',
+        'button' => [
+          '#type' => 'button',
+          '#value' => $this->t('Apply'),
+          '#ajax' => [
+            'callback' => '::fetchSourceDataAjax',
+            'wrapper' => 'fetched-data',
+            'effect' => 'fade',
+            'progress' => [
+              'type' => 'throbber',
+              'message' => $this->t('Loading content..'),
+            ],
+          ],
+        ],
+      ],
     ];
 
     if (empty($source_data)) {
@@ -113,6 +141,8 @@ class SharedContentFetchForm extends EntityForm {
         '#type' => 'tableselect',
         '#header' => [
           'name' => $this->t('Name'),
+          'donated_by' => $this->t('Donated By'),
+          'count_of_downloads' => $this->t('YMCAS using content'),
           'operations' => [
             'data' => $this->t('Operations'),
           ],
@@ -124,6 +154,8 @@ class SharedContentFetchForm extends EntityForm {
         $form['fetched_data']['content']['#options'][$item['id']] = [
           // TODO: maybe we can highlight existing items here.
           'name' => $instance->formatItem($item),
+          'donated_by' => !empty($item['attributes']['field_gc_origin']) ? $item['attributes']['field_gc_origin'] : ' ',
+          'count_of_downloads' => !empty($item['attributes']['field_share_count']) ? $item['attributes']['field_share_count'] : '0',
           'operations' => [
             'data' => [
               '#type' => 'link',
@@ -153,6 +185,14 @@ class SharedContentFetchForm extends EntityForm {
     $form['#attached']['library'][] = 'core/drupal.dialog.ajax';
 
     return $form;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function fetchSourceDataAjax(array &$form, FormStateInterface $form_state) {
+    $form_state->setRebuild(TRUE);
+    return $form['fetched_data'];
   }
 
   /**

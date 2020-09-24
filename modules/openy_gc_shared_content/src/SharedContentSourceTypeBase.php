@@ -4,13 +4,18 @@ namespace Drupal\openy_gc_shared_content;
 
 use Drupal\Component\Plugin\PluginBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Messenger\MessengerTrait;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Driver\Exception\Exception;
 use Drupal\jsonapi\JsonApiResource\JsonApiDocumentTopLevel;
 use Drupal\jsonapi\ResourceType\ResourceTypeRepositoryInterface;
+use Drupal\openy_gc_shared_content\Entity\SharedContentSourceServer;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Exception\UnexpectedValueException;
@@ -53,6 +58,13 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
   protected $serializer;
 
   /**
+   * Request stack service.
+   *
+   * @var \Symfony\Component\HttpFoundation\Request|null
+   */
+  protected $requestStack;
+
+  /**
    * {@inheritdoc}
    */
   public function __construct(
@@ -62,13 +74,16 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
     Client $client,
     EntityTypeManagerInterface $entity_type_manager,
     ResourceTypeRepositoryInterface $resource_type_repository,
-    SerializerInterface $serializer) {
+    SerializerInterface $serializer,
+    RequestStack $requestStack
+    ) {
 
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->client = $client;
     $this->entityTypeManager = $entity_type_manager;
     $this->resourceTypeRepository = $resource_type_repository;
     $this->serializer = $serializer;
+    $this->requestStack = $requestStack->getCurrentRequest();
   }
 
   /**
@@ -84,7 +99,8 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
       $container->get('http_client'),
       $container->get('entity_type.manager'),
       $container->get('jsonapi.resource_type.repository'),
-      $container->get('jsonapi.serializer')
+      $container->get('jsonapi.serializer'),
+      $container->get('request_stack')
     );
   }
 
@@ -177,11 +193,16 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
    * {@inheritdoc}
    */
   public function jsonApiCall($url, array $query_args = [], $uuid = NULL) {
-    $request = $this->client->request(
-      'GET',
-      $url . '/' . $this->getJsonApiEndpoint($uuid),
-      ['query' => $query_args]
-    );
+    try {
+      $request = $this->client->request(
+        'GET',
+        $url . '/' . $this->getJsonApiEndpoint($uuid),
+        ['query' => $query_args]
+      );
+    }
+    catch (ClientException $e) {
+      return FALSE;
+    }
 
     if ($request->getStatusCode() != 200) {
       return FALSE;
@@ -193,7 +214,103 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
   /**
    * {@inheritdoc}
    */
+  public function getFormFilters($url) {
+    $query_args = [];
+    $request = $this->client->request(
+      'GET',
+      $url . '/jsonapi/taxonomy_term/gc_category',
+      ['query' => $query_args]
+    );
+
+    if ($request->getStatusCode() != 200) {
+      return [];
+    }
+
+    $data = $this->serializer->decode($request->getBody()->getContents(), 'api_json');
+    $options = ['none' => $this->t('- None -')];
+    foreach ($data['data'] as $category) {
+      $options[$category['id']] = $category['attributes']['name'];
+    }
+
+    $form['title'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Title'),
+      '#size' => 25,
+      '#maxlength' => 128,
+    ];
+    // TODO: use select list for donated_by.
+    $form['donated_by'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Donated By'),
+      '#size' => 25,
+      '#maxlength' => 128,
+    ];
+    $form['category'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Category'),
+      '#options' => $options,
+      '#default' => 'none',
+    ];
+
+    return $form;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function applyFormFilters(&$query_arg, FormStateInterface $form_state) {
+    $values = $form_state->getUserInput('category');
+    if (isset($values['category']) && $values['category'] != 'none') {
+      $query_arg['filter[field_gc_video_category.id]'] = $values['category'];
+    }
+    if (isset($values['title']) && $values['title'] != '') {
+      $query_arg['filter[title-filter][condition][path]'] = 'title';
+      $query_arg['filter[title-filter][condition][operator]'] = 'CONTAINS';
+      $query_arg['filter[title-filter][condition][value]'] = $values['title'];
+    }
+    if (isset($values['donated_by']) && $values['donated_by'] != '') {
+      $query_arg['filter[field_gc_origin-filter][condition][path]'] = 'field_gc_origin';
+      $query_arg['filter[field_gc_origin-filter][condition][operator]'] = 'CONTAINS';
+      $query_arg['filter[field_gc_origin-filter][condition][value]'] = $values['donated_by'];
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function saveFromSource($url, $uuid) {
+    $servers = $this->entityTypeManager
+      ->getStorage('shared_content_source_server')
+      ->getQuery()
+      ->condition('url', $url)
+      ->execute();
+    $server_id = reset($servers);
+
+    if (!empty($server_id)) {
+      $source = SharedContentSourceServer::load($server_id);
+      $host = $this->requestStack->getSchemeAndHttpHost();
+
+      try {
+        $this->client->post($url . '/virtual-y-server/inc-downloads', [
+          'form_params' => [
+            'uuid' => $uuid,
+            'url' => $host,
+            'origin' => '',
+            'token' => $source->getToken(),
+            'client_url' => $host,
+          ],
+          'headers' => [
+            'Content-type' => 'application/x-www-form-urlencoded',
+          ],
+        ]);
+
+      }
+      catch (Exception $e) {
+        $this->messenger()
+          ->addError($this->t('Downloads stat update was failed @error', ['@error' => $e->getMessage()]));
+      }
+    }
+
     if ($this->entityExists($uuid)) {
       $this->messenger()->addWarning($this->t('Entity with UUID "@uuid" already exists.', [
         '@uuid' => $uuid,
@@ -265,13 +382,16 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
       }
       $context = ['resource_type' => $resource_type];
       $data['data']['relationships'] = [];
+
       $entity = $this->serializer->denormalize($data, JsonApiDocumentTopLevel::class, 'api_json', $context);
       foreach ($included_relationships as $rel_name) {
+
         $entity->set($rel_name, $relationships_data[$rel_name]);
       }
 
       $entity->set('field_gc_origin', $url);
       $entity->save();
+
       $this->messenger()->addStatus($this->t('Entity {@type:@bundle} "@title" was fetched to site.', [
         '@type' => $this->getEntityType(),
         '@bundle' => $this->getEntityBundle(),

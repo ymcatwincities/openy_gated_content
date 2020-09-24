@@ -52,7 +52,7 @@ class VirtualYDaxkoBarcodeLoginForm extends FormBase {
 
     $form['barcode'] = [
       '#title' => $this->t('Barcode'),
-      '#description' => $this->t('User name/email for access dummy identity provider.'),
+      '#description' => '',
       '#type' => 'textfield',
       '#default_value' => '',
       '#required' => TRUE,
