@@ -100,9 +100,6 @@ class VirtualYCustomLoginForm extends FormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $provider_config = $this->configFactory->get('openy_gc_auth.provider.custom');
-    $form['#attributes'] = [
-      'class' => ['container', 'mb-4'],
-    ];
 
     if ($form_state->getValue('verified', FALSE)) {
       $link = Url::fromRoute(
