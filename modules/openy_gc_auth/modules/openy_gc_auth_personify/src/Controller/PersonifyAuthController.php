@@ -14,6 +14,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Drupal\Core\Messenger\MessengerInterface;
 
 /**
  * Personify controller to handle Personify SSO authentication.
@@ -49,6 +50,13 @@ class PersonifyAuthController extends ControllerBase {
   protected $configFactory;
 
   /**
+   * The messenger.
+   *
+   * @var \Drupal\Core\Messenger\MessengerInterface
+   */
+  protected $messenger;
+
+  /**
    * PersonifyAuthController constructor.
    *
    * @param \Drupal\personify\PersonifySSO $personifySSO
@@ -59,17 +67,21 @@ class PersonifyAuthController extends ControllerBase {
    *   Config factory.
    * @param \Drupal\Core\Logger\LoggerChannelFactory $loggerChannelFactory
    *   Logger factory.
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   The messenger.
    */
   public function __construct(
     PersonifySSO $personifySSO,
     PersonifyClient $personifyClient,
     ConfigFactoryInterface $configFactory,
-    LoggerChannelFactory $loggerChannelFactory
+    LoggerChannelFactory $loggerChannelFactory,
+    MessengerInterface $messenger
   ) {
     $this->personifySSO = $personifySSO;
     $this->personifyClient = $personifyClient;
     $this->configFactory = $configFactory;
     $this->logger = $loggerChannelFactory->get('openy_gc_auth_personify');
+    $this->messenger = $messenger;
   }
 
   /**
@@ -80,7 +92,8 @@ class PersonifyAuthController extends ControllerBase {
       $container->get('personify.sso_client'),
       $container->get('personify.client'),
       $container->get('config.factory'),
-      $container->get('logger.factory')
+      $container->get('logger.factory'),
+      $container->get('messenger')
     );
   }
 
@@ -147,10 +160,8 @@ class PersonifyAuthController extends ControllerBase {
       user_cookie_delete('personify_authorized');
       user_cookie_delete('personify_time');
 
-      return new JsonResponse([
-        'message' => 'Personify user doesn\'t have active membership.',
-        'user' => [],
-      ], 403);
+      $this->messenger->addError('Personify user doesn\'t have active membership.');
+      return new RedirectResponse($this->configFactory->get('openy_gated_content.settings')->get('virtual_y_login_url'));
     }
 
     // {"UserExists":true|false,"UserName":"","Email":"","DisableAccountFlag":false|true}.
@@ -185,10 +196,8 @@ class PersonifyAuthController extends ControllerBase {
     user_cookie_delete('personify_authorized');
     user_cookie_delete('personify_time');
 
-    return new JsonResponse([
-      'message' => 'Personify user is found, but marked as not existed or disabled.',
-      'user' => [],
-    ], 403);
+    $this->messenger->addError('Personify user is found, but marked as not existed or disabled.');
+    return new RedirectResponse($this->configFactory->get('openy_gated_content.settings')->get('virtual_y_login_url'));
 
   }
 
