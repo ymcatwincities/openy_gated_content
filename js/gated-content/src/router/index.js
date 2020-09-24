@@ -3,7 +3,6 @@ import VueRouter from 'vue-router';
 import Store from '@/store';
 import Home from '@/views/Home.vue';
 import Login from '@/views/Login.vue';
-import CustomAuthEmailConfirm from '@/components/auth/CustomAuthEmailConfirm.vue';
 import NotFound from '@/views/NotFound.vue';
 import VideoPage from '@/views/VideoPage.vue';
 import BlogPage from '@/views/BlogPage.vue';
@@ -27,13 +26,6 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: Login,
-    meta: { requiresGuest: true },
-  },
-  {
-    path: '/login/:id/:token/confirm',
-    name: 'CustomAuthEmailConfirm',
-    component: CustomAuthEmailConfirm,
-    props: true,
     meta: { requiresGuest: true },
   },
   {
