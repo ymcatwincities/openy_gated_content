@@ -152,6 +152,9 @@ class GCSettingsForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $settings = $this->config('openy_gated_content.settings');
     $settings->setData($form_state->getValue('app_settings'));
+    $settings->set('event_add_to_calendar', $form_state->getValue('event_add_to_calendar'));
+    $settings->set('virtual_y_url', $form_state->getValue('virtual_y_url'));
+    $settings->set('virtual_y_login_url', $form_state->getValue('virtual_y_login_url'));
     $settings->save();
     parent::submitForm($form, $form_state);
   }

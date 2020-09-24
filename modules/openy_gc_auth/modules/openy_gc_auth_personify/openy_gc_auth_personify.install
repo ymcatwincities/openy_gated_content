@@ -13,7 +13,6 @@ function openy_gc_auth_personify_update_8001(&$sandbox) {
   // Update multiple configurations.
   $configs = [
     'openy_gc_auth.provider.personify' => [
-      'application_url',
       'error_accompanying_message',
     ],
   ];

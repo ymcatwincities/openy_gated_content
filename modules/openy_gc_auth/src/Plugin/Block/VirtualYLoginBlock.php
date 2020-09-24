@@ -6,6 +6,7 @@ use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountProxyInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Drupal\openy_gc_auth\GCIdentityProviderManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -86,7 +87,23 @@ class VirtualYLoginBlock extends BlockBase implements ContainerFactoryPluginInte
       ];
     }
     $plugin_instance = $this->identityProviderManager->createInstance($active_provider);
-    return $plugin_instance->getLoginForm();
+
+    $form = $plugin_instance->getLoginForm();
+
+    // For some providers e.g. Daxko, Personify we do not display form
+    // but redirect to login immediately.
+    // phpcs:disable
+    if ($form instanceof RedirectResponse) {
+      return [
+        '#cache' => [
+          'max-age' => 0,
+        ],
+        $form->send(),
+      ];
+    }
+    // phpcs:enable
+
+    return $form;
   }
 
 }

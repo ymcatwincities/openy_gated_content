@@ -10,6 +10,7 @@ use Drupal\Core\Url;
 use Drupal\daxko_sso\DaxkoSSOClient;
 use Drupal\openy_gc_auth\GCIdentityProviderPluginBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -103,7 +104,7 @@ class DaxkoSSO extends GCIdentityProviderPluginBase {
 
     $form['redirect_url'] = [
       '#title' => $this->t('Url'),
-      '#description' => $this->t('Link to the Virtual YMCA Landing Page at your project.'),
+      '#description' => $this->t('Daxko back link redirect e.g. /openy-gc-auth-daxko-sso/back-redirect'),
       '#type' => 'textfield',
       '#default_value' => $config['redirect_url'],
       '#required' => TRUE,
@@ -143,6 +144,13 @@ class DaxkoSSO extends GCIdentityProviderPluginBase {
     $data['login_url'] = Url::fromRoute('openy_gc_auth_daxko_sso.daxko_link_controller_hello')->toString();
     $data['check_url'] = Url::fromRoute('openy_gc_auth_daxko_sso.daxko_back_redirect')->toString();
     return $data;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getLoginForm() {
+    return new RedirectResponse(Url::fromRoute('openy_gc_auth_daxko_sso.daxko_link_controller_hello')->toString());
   }
 
 }

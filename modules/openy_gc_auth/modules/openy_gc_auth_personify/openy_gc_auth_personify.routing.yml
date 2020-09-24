@@ -27,3 +27,13 @@ openy_gc_auth_personify.personify_auth:
     _permission: 'access content'
   options:
     no_cache: TRUE
+
+openy_gc_auth_personify.api_login_personify:
+  path: /openy_gc_auth_personify/api_login
+  defaults:
+    _controller: \Drupal\openy_gc_auth_personify\Controller\PersonifyAuthController::apiLogin
+    _title: Personify Login
+  requirements:
+    _permission: 'access content'
+  options:
+    no_cache: TRUE
