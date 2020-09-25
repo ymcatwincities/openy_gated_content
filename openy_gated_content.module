@@ -143,6 +143,9 @@ function openy_gated_content_form_user_pass_alter(&$form, FormStateInterface $fo
  * Checks if user has related to Virtual Y role.
  */
 function openy_gated_content_user_login_validation(array &$form, FormStateInterface $form_state) {
+  if (!$form_state->get('uid')) {
+    return;
+  }
   $account = \Drupal::entityTypeManager()->getStorage('user')->load($form_state->get('uid'));
   if ($account) {
     $roles = $account->getRoles();
