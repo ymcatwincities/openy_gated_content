@@ -1,7 +1,7 @@
 services:
   openy_gc_log.logger:
     class: Drupal\openy_gc_log\Logger
-    arguments: ['@logger.channel.openy_gc_log']
+    arguments: ['@logger.channel.openy_gc_log', '@entity_type.manager']
 
   openy_gc_log.log_archiver:
     class: Drupal\openy_gc_log\LogArchiver
