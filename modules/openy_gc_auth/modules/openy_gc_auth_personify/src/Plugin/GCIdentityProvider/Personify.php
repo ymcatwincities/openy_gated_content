@@ -4,6 +4,7 @@ namespace Drupal\openy_gc_auth_personify\Plugin\GCIdentityProvider;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
@@ -47,6 +48,13 @@ class Personify extends GCIdentityProviderPluginBase {
   protected $messenger;
 
   /**
+   * The form builder service.
+   *
+   * @var \Drupal\Core\Form\FormBuilderInterface
+   */
+  protected $formBuilder;
+
+  /**
    * {@inheritdoc}
    */
   public function __construct(
@@ -57,9 +65,10 @@ class Personify extends GCIdentityProviderPluginBase {
     EntityTypeManagerInterface $entity_type_manager,
     MessengerInterface $messenger,
     PersonifySSO $personifySSO,
-    PersonifyClient $personifyClient
+    PersonifyClient $personifyClient,
+    FormBuilderInterface $form_builder
   ) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $config, $entity_type_manager);
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $config, $entity_type_manager, $form_builder);
     $this->messenger = $messenger;
     $this->personifySSO = $personifySSO;
     $this->personifyClient = $personifyClient;
@@ -77,7 +86,8 @@ class Personify extends GCIdentityProviderPluginBase {
       $container->get('entity_type.manager'),
       $container->get('messenger'),
       $container->get('personify.sso_client'),
-      $container->get('personify.client')
+      $container->get('personify.client'),
+      $container->get('form_builder')
     );
   }
 
