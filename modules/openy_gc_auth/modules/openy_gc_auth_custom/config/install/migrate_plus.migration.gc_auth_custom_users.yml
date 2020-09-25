@@ -30,31 +30,24 @@ source:
       package_name: 'Package Name'
     -
       package_site: 'Package Site'
+  constants:
+    roles:
+      - authenticated
+      - virtual_y
 process:
-  member_id:
-    plugin: get
-    source: member_id
-  first_name:
-    plugin: get
-    source: first_name
-  primary:
-    plugin: static_map
-    source: primary
-    map:
-      'Yes': 1
-      'No': 0
-    default_value: NULL
-  email:
-    plugin: get
-    source: email
-  package_name:
-    plugin: get
-    source: package_name
-  package_site:
-    plugin: get
-    source: package_site
-  field_mail:
-    plugin: get
-    source: field_mail
+  roles: 'constants/roles'
+  name:
+    plugin: concat
+    source:
+      - first_name
+      - member_id
+    delimiter: ' '
+  mail:
+    - plugin: get
+      source: email
+    - plugin: skip_on_empty
+      method: row
+      source: email
+      message: 'Field email is missed'
 destination:
-  plugin: 'entity:gc_auth_custom_user'
+  plugin: 'entity:user'

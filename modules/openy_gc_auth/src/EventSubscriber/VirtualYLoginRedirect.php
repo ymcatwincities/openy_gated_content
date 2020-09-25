@@ -4,7 +4,6 @@ namespace Drupal\openy_gc_auth\EventSubscriber;
 
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\node\NodeInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -108,13 +107,14 @@ class VirtualYLoginRedirect implements EventSubscriberInterface {
   private function checkIfParagraphAtNode(NodeInterface $node, $paragraph_id) {
     $connection = Database::getConnection();
 
-    return reset($connection->select('paragraphs_item_field_data', 'pd')
+    $result = $connection->select('paragraphs_item_field_data', 'pd')
       ->fields('pd', ['id'])
       ->condition('pd.parent_id', $node->id())
       ->condition('pd.type', $paragraph_id)
       ->countQuery()
       ->execute()
-      ->fetchCol());
+      ->fetchCol();
+    return reset($result);
   }
 
 }

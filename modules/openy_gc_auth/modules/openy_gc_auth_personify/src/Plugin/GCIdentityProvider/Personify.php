@@ -4,6 +4,7 @@ namespace Drupal\openy_gc_auth_personify\Plugin\GCIdentityProvider;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
@@ -12,6 +13,7 @@ use Drupal\openy_gc_auth\GCIdentityProviderPluginBase;
 use Drupal\personify\PersonifyClient;
 use Drupal\personify\PersonifySSO;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Personify SSO identity provider plugin.
@@ -46,6 +48,13 @@ class Personify extends GCIdentityProviderPluginBase {
   protected $messenger;
 
   /**
+   * The form builder service.
+   *
+   * @var \Drupal\Core\Form\FormBuilderInterface
+   */
+  protected $formBuilder;
+
+  /**
    * {@inheritdoc}
    */
   public function __construct(
@@ -56,9 +65,10 @@ class Personify extends GCIdentityProviderPluginBase {
     EntityTypeManagerInterface $entity_type_manager,
     MessengerInterface $messenger,
     PersonifySSO $personifySSO,
-    PersonifyClient $personifyClient
+    PersonifyClient $personifyClient,
+    FormBuilderInterface $form_builder
   ) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $config, $entity_type_manager);
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $config, $entity_type_manager, $form_builder);
     $this->messenger = $messenger;
     $this->personifySSO = $personifySSO;
     $this->personifyClient = $personifyClient;
@@ -76,7 +86,8 @@ class Personify extends GCIdentityProviderPluginBase {
       $container->get('entity_type.manager'),
       $container->get('messenger'),
       $container->get('personify.sso_client'),
-      $container->get('personify.client')
+      $container->get('personify.client'),
+      $container->get('form_builder')
     );
   }
 
@@ -84,9 +95,7 @@ class Personify extends GCIdentityProviderPluginBase {
    * {@inheritdoc}
    */
   public function defaultConfiguration():array {
-    return [
-      'application_url' => '/gated-content',
-    ];
+    return [];
   }
 
   /**
@@ -113,14 +122,6 @@ class Personify extends GCIdentityProviderPluginBase {
     if (empty($env) || empty($configLoginUrl) || empty($wsdl) || empty($endpoint)) {
       $this->messenger->addError($this->t('You have to add all configs to settings.php based on @readme.', ['@readme' => $readMeUrl]));
     }
-
-    $form['application_url'] = [
-      '#title' => $this->t('Virtual YMCA application URL'),
-      '#description' => $this->t('Specify Virtual YMCA application URL to create Personify login url started with "/".'),
-      '#type' => 'textfield',
-      '#default_value' => $config['application_url'],
-      '#required' => TRUE,
-    ];
 
     $form['help'] = [
       '#type' => 'container',
@@ -149,7 +150,6 @@ class Personify extends GCIdentityProviderPluginBase {
    */
   public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
     if (!$form_state->getErrors()) {
-      $this->configuration['application_url'] = $form_state->getValue('application_url');
       $this->configuration['error_accompanying_message'] = $form_state->getValue('error_accompanying_message');
       parent::submitConfigurationForm($form, $form_state);
     }
@@ -161,7 +161,6 @@ class Personify extends GCIdentityProviderPluginBase {
   public function getDataForApp():array {
     $data = parent::getDataForApp();
 
-    $data['api_login_personify'] = $this->getPersonifyLoginUrl($this->configuration['application_url']);
     $data['api_login_check'] = Url::fromRoute('openy_gc_auth_personify.personify_check')->toString();
     $data['api_auth'] = Url::fromRoute('openy_gc_auth_personify.personify_auth')->toString();
     $data['api_logout'] = Url::fromRoute('openy_gc_auth_personify.personify_logout')->toString();
@@ -178,7 +177,7 @@ class Personify extends GCIdentityProviderPluginBase {
    * @return string|null
    *   Personify login URL.
    */
-  private function getPersonifyLoginUrl($applicationUrl) {
+  public function getPersonifyLoginUrl($applicationUrl) {
     $options = [
       'absolute' => TRUE,
       'query' => [
@@ -203,8 +202,16 @@ class Personify extends GCIdentityProviderPluginBase {
       $this->messenger->addWarning('Please, check Personify configs in settings.php.');
       return NULL;
     }
+    $loginUrl = Url::fromUri($configLoginUrl, $options)->toString();
 
-    return Url::fromUri($configLoginUrl, $options)->toString();
+    return $loginUrl;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getLoginForm() {
+    return new RedirectResponse(Url::fromRoute('openy_gc_auth_personify.personify_check')->toString());
   }
 
 }

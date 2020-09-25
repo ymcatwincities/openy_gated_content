@@ -3,10 +3,6 @@ import Vuex from 'vuex';
 import VuexPersistence from 'vuex-persist';
 import auth from './modules/auth';
 import settings from './modules/settings';
-import authCustom from './modules/auth/custom';
-import authDaxkoBarcode from './modules/auth/daxkobarcode';
-import authDaxkoSSO from './modules/auth/daxkosso';
-import authPersonify from './modules/auth/personify';
 
 Vue.use(Vuex);
 
@@ -28,12 +24,6 @@ export default new Vuex.Store({
   modules: {
     settings,
     auth,
-    // @TODO: It seems like only one provider can use recaptcha at a time.
-    // This breaks `authCustom` and should be resolved before PR is merged.
-    authDaxkoBarcode,
-    authCustom,
-    authDaxkoSSO,
-    authPersonify,
   },
   plugins: [vuexLocalStorage.plugin],
 });
