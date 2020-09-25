@@ -13,6 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Drupal\openy_gc_log\Logger;
 
 /**
  * Personify controller to handle Personify SSO authentication.
@@ -48,6 +49,13 @@ class DaxkoBarcodeController extends ControllerBase {
   protected $messenger;
 
   /**
+   * The Gated Content Logger.
+   *
+   * @var \Drupal\openy_gc_log\Logger
+   */
+  protected $gcLogger;
+
+  /**
    * DaxkoBarcodeController constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
@@ -58,17 +66,21 @@ class DaxkoBarcodeController extends ControllerBase {
    *   HTTP client.
    * @param \Drupal\Core\Messenger\MessengerInterface $messenger
    *   The messenger.
+   * @param \Drupal\openy_gc_log\Logger $gcLogger
+   *   The Gated Content Logger.
    */
   public function __construct(
     ConfigFactoryInterface $configFactory,
     LoggerChannelFactory $loggerChannelFactory,
     Client $http_client,
-    MessengerInterface $messenger
+    MessengerInterface $messenger,
+    Logger $gcLogger
   ) {
     $this->configFactory = $configFactory;
     $this->logger = $loggerChannelFactory->get('openy_gc_auth_daxko_barcode');
     $this->httpClient = $http_client;
     $this->messenger = $messenger;
+    $this->gcLogger = $gcLogger;
   }
 
   /**
@@ -79,7 +91,8 @@ class DaxkoBarcodeController extends ControllerBase {
       $container->get('config.factory'),
       $container->get('logger.factory'),
       $container->get('http_client'),
-      $container->get('messenger')
+      $container->get('messenger'),
+      $container->get('openy_gc_log.logger')
     );
   }
 
@@ -142,7 +155,11 @@ class DaxkoBarcodeController extends ControllerBase {
                 $account = user_load_by_mail($email);
               }
             }
-
+            // Log user login.
+            $this->gcLogger->addLog([
+              'email' => $email,
+              'event_type' => 'userLoggedIn',
+            ]);
             user_login_finalize($account);
             return new RedirectResponse($this->configFactory->get('openy_gated_content.settings')->get('virtual_y_url'));
 

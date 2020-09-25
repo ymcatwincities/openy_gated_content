@@ -8,6 +8,7 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\openy_gc_log\Entity\LogEntity;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Drupal\openy_gc_log\Logger;
 
 /**
  * Class LogController.
@@ -22,13 +23,26 @@ class LogController extends ControllerBase {
   protected $logger;
 
   /**
+   * The Gated Content Logger.
+   *
+   * @var \Drupal\openy_gc_log\Logger
+   */
+  protected $gcLogger;
+
+  /**
    * Constructor.
    *
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $loggerFactory
    *   Logger Factory.
+   * @param \Drupal\openy_gc_log\Logger $gcLogger
+   *   The Gated Content Logger.
    */
-  public function __construct(LoggerChannelFactoryInterface $loggerFactory) {
+  public function __construct(
+    LoggerChannelFactoryInterface $loggerFactory,
+    Logger $gcLogger
+  ) {
     $this->logger = $loggerFactory->get('openy_gc_log');
+    $this->gcLogger = $gcLogger;
   }
 
   /**
@@ -36,7 +50,8 @@ class LogController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('logger.factory')
+      $container->get('logger.factory'),
+      $container->get('openy_gc_log.logger')
     );
   }
 
@@ -47,25 +62,15 @@ class LogController extends ControllerBase {
    *   Return status
    */
   public function index(Request $request) {
-    try {
-      $content = $request->getContent();
-      if ($content) {
-        $params = json_decode($content, TRUE);
-
-        $log = new LogEntity([], 'log_entity');
-        foreach ($params as $param => $value) {
-          $log->set($param, $value);
-        }
-        $log->setCreatedTime(time());
-        $log->save();
-      }
-
+    $content = $request->getContent();
+    $params = json_decode($content, TRUE);
+    $status = $this->gcLogger->addLog($params);
+    if ($status instanceof LogEntity) {
       return new AjaxResponse([
         'status' => 'ok',
       ]);
     }
-    catch (\Exception $e) {
-      $this->logger->error($e->getMessage());
+    else {
       return new AjaxResponse([
         'status' => 'error',
       ], AjaxResponse::HTTP_INTERNAL_SERVER_ERROR);
