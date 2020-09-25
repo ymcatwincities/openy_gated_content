@@ -10,6 +10,9 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Drupal\openy_gated_content\SegmentContentAceessCheck;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
 
 /**
  * Implements hook_theme().
@@ -175,4 +178,48 @@ function openy_gated_content_user_pass_validation(array &$form, FormStateInterfa
       }
     }
   }
+}
+
+/**
+ * Implements hook_entity_base_field_info().
+ */
+function openy_gated_content_entity_base_field_info(EntityTypeInterface $entity_type) {
+
+  $allowed_entity_types = [
+    'node',
+    'eventinstance',
+    'eventseries'
+  ];
+
+  if (in_array($entity_type->id(), $allowed_entity_types)) {
+    $fields = [];
+    $fields['field_vy_permission'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Virtual Y Access Group'))
+      ->setCardinality(1)
+      ->setProvider('openy_gated_content')
+      ->setRequired(FALSE)
+      ->setRevisionable(FALSE)
+      ->setTranslatable(FALSE)
+      ->setDisplayConfigurable('view', FALSE)
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayOptions('form', [
+        'type' => 'string_textfield',
+        'settings' => [
+          'size' => '255',
+        ],
+      ]);
+
+    return $fields;
+  }
+
+}
+
+/**
+ * Implements hook_entity_access().
+ */
+function openy_gated_content_entity_access(EntityInterface $entity, $operation, AccountInterface $account) {
+  return \Drupal::service('class_resolver')
+    ->getInstanceFromDefinition(SegmentContentAceessCheck::class)
+    ->checkAccess($entity,  $operation, $account);
+
 }
