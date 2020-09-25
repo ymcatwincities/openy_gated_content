@@ -19,8 +19,7 @@ function openy_gated_content_theme() {
     'paragraph__gated_content' => [
       'base hook' => 'paragraph',
       'variables' => [
-        'auth_provider_id' => '',
-        'auth_configuration' => '',
+        'app_settings' => '',
       ],
     ],
     'paragraph__gated_content_login' => [
@@ -55,8 +54,6 @@ function openy_gated_content_preprocess_paragraph(&$variables) {
   }
   $plugin_instance = $identityProviderManager->createInstance($active_provider);
   $app_config = \Drupal::config('openy_gated_content.settings')->getOriginal();
-  $variables['auth_provider_id'] = $plugin_instance->getId();
-  $variables['auth_configuration'] = json_encode($plugin_instance->getDataForApp());
   $variables['app_settings'] = json_encode($app_config);
   $variables['#cache']['tags'][] = 'config:' . $plugin_instance->getConfigName();
 }
