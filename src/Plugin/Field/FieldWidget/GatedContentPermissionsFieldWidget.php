@@ -40,7 +40,7 @@ class GatedContentPermissionsFieldWidget extends WidgetBase {
     $select_options = [];
     foreach ($roles as $role_key => $role) {
       if ((strpos($role_key, 'virtual_y') !== FALSE)
-        && ($role_key!== 'virtual_ymca_editor')) {
+        && ($role_key !== 'virtual_ymca_editor')) {
         $select_options[$role_key] = $role->label();
       }
     }
@@ -52,7 +52,6 @@ class GatedContentPermissionsFieldWidget extends WidgetBase {
       '#options' => $select_options,
       '#multiple' => TRUE,
       '#element_validate' => [get_class($this), 'validate'],
-      //'#value_callback' => [get_class($this), 'value'],
       '#default_value' => !empty($values) ? explode(',', $values) : NULL,
     ];
 
