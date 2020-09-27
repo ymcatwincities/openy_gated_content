@@ -9,6 +9,9 @@ use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\Core\Field\BaseFieldDefinition;
 
+/**
+ * Virtual Y install.
+ */
 function openy_gated_content_install() {
 
   $field_permission = BaseFieldDefinition::create('string')
@@ -20,7 +23,7 @@ function openy_gated_content_install() {
     ->setDisplayConfigurable('view', FALSE)
     ->setDisplayConfigurable('form', TRUE)
     ->setDisplayOptions('form', [
-      'type' => 'string_textfield',
+      'type' => 'virtual_y_roles_select',
       'settings' => [
         'size' => '255',
       ],
@@ -106,28 +109,26 @@ function openy_gated_content_update_8005() {
 /**
  * Install permissions field.
  */
-function openy_gated_content_update_8013() {
+function openy_gated_content_update_8006() {
 
-  $storage_definition = BaseFieldDefinition::create('boolean')
-    ->setLabel(t('test'))
-    ->setDescription(t('Test'))
-    ->setReadOnly(TRUE)
-    ->setRevisionable(TRUE)
-    ->setTranslatable(TRUE);
-
-  \Drupal::entityDefinitionUpdateManager()
-    ->installFieldStorageDefinition('field_test', 'node', 'openy_gated_content', $storage_definition);
-
-  $field_gc_permissions = BaseFieldDefinition::create('string')
+  $field_permission = BaseFieldDefinition::create('string')
     ->setLabel(t('Virtual Y Access Group'))
-    ->setDescription(t('Virtual y segmentation content permisfin drush en devl -ysions field'))
-    ->setSetting('is_ascii', TRUE)
-    ->setSetting('max_length', 128);
+    ->setSetting('max_length', 240)
+    ->setRequired(FALSE)
+    ->setRevisionable(FALSE)
+    ->setTranslatable(FALSE)
+    ->setDisplayConfigurable('view', FALSE)
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayOptions('form', [
+      'type' => 'virtual_y_roles_select',
+      'settings' => [
+        'size' => '255',
+      ],
+    ]);
 
-  \Drupal::entityDefinitionUpdateManager()
-    ->installFieldStorageDefinition('field_vy_permissions', 'node', 'openy_gated_content', $field_gc_permissions);
-
-  //$definition_manager->installFieldStorageDefinition('field_gc_permissions', 'eventseries', 'openy_gated_content', $field_gc_permissions);
-  //$definition_manager->installFieldStorageDefinition('field_gc_permissions', 'eventinstance', 'openy_gated_content', $field_gc_permissions);
+  $definition_manager = \Drupal::entityDefinitionUpdateManager();
+  $definition_manager->installFieldStorageDefinition('field_vy_permission', 'node', 'openy_gated_content', $field_permission);
+  $definition_manager->installFieldStorageDefinition('field_vy_permission', 'eventseries', 'openy_gated_content', $field_permission);
+  $definition_manager->installFieldStorageDefinition('field_vy_permission', 'eventinstance', 'openy_gated_content', $field_permission);
 
 }

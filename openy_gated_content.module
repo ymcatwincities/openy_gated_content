@@ -185,7 +185,7 @@ function openy_gated_content_entity_base_field_info(EntityTypeInterface $entity_
   $allowed_entity_types = [
     'node',
     'eventinstance',
-    'eventseries'
+    'eventseries',
   ];
 
   if (in_array($entity_type->id(), $allowed_entity_types)) {
@@ -200,7 +200,7 @@ function openy_gated_content_entity_base_field_info(EntityTypeInterface $entity_
       ->setDisplayConfigurable('view', FALSE)
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayOptions('form', [
-        'type' => 'string_textfield',
+        'type' => 'virtual_y_roles_select',
         'settings' => [
           'size' => '255',
         ],
@@ -217,6 +217,6 @@ function openy_gated_content_entity_base_field_info(EntityTypeInterface $entity_
 function openy_gated_content_entity_access(EntityInterface $entity, $operation, AccountInterface $account) {
   return \Drupal::service('class_resolver')
     ->getInstanceFromDefinition(SegmentContentAceessCheck::class)
-    ->checkAccess($entity,  $operation, $account);
+    ->checkAccess($entity, $operation, $account);
 
 }
