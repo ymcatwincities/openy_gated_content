@@ -71,7 +71,7 @@ class GatedContentPermissionsFieldWidget extends WidgetBase implements Container
       $configuration['field_definition'],
       $configuration['settings'],
       $configuration['third_party_settings'],
-      $container->get('entity_type.manager'),
+      $container->get('entity_type.manager')
     );
   }
 
