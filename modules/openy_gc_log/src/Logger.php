@@ -57,9 +57,6 @@ class Logger {
         $params['email'] = $user->getEmail();
         unset($params['uid']);
       }
-      else {
-        return FALSE;
-      }
       foreach ($params as $param => $value) {
         $log->set($param, $value);
       }

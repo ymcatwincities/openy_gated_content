@@ -39,7 +39,7 @@ class LogController extends ControllerBase {
    */
   public function __construct(
     LoggerChannelFactoryInterface $loggerFactory,
-    Logger $gcLogger
+    Logger $gcLogger = NULL
   ) {
     $this->logger = $loggerFactory->get('openy_gc_log');
     $this->gcLogger = $gcLogger;
@@ -51,7 +51,7 @@ class LogController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('logger.factory'),
-      $container->get('openy_gc_log.logger')
+      $container->has('openy_gc_log.logger') ? $container->get('openy_gc_log.logger') : NULL
     );
   }
 

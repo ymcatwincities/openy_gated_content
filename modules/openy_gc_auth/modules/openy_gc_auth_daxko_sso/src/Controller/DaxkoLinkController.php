@@ -52,7 +52,7 @@ class DaxkoLinkController extends ControllerBase {
   public function __construct(
     ConfigFactoryInterface $configFactory,
     DaxkoSSOClient $daxkoSSOClient,
-    Logger $gcLogger
+    Logger $gcLogger = NULL
   ) {
     $this->configFactory = $configFactory;
     $this->daxkoClient = $daxkoSSOClient;
@@ -66,7 +66,7 @@ class DaxkoLinkController extends ControllerBase {
     return new static(
       $container->get('config.factory'),
       $container->get('daxko_sso.client'),
-      $container->get('openy_gc_log.logger')
+      $container->has('openy_gc_log.logger') ? $container->get('openy_gc_log.logger') : NULL
     );
   }
 
@@ -158,10 +158,12 @@ class DaxkoLinkController extends ControllerBase {
       }
 
       // Log user login.
-      $this->gcLogger->addLog([
-        'email' => $email,
-        'event_type' => 'userLoggedIn',
-      ]);
+      if ($this->gcLogger instanceof Logger) {
+        $this->gcLogger->addLog([
+          'email' => $email,
+          'event_type' => 'userLoggedIn',
+        ]);
+      }
       user_login_finalize($account);
 
       return new RedirectResponse($this->configFactory->get('openy_gated_content.settings')->get('virtual_y_url'));

@@ -35,7 +35,7 @@ class VirtualYExampleLoginForm extends FormBase {
    */
   public function __construct(
     RequestStack $requestStack,
-    Logger $gcLogger
+    Logger $gcLogger = NULL
   ) {
     $this->currentRequest = $requestStack->getCurrentRequest();
     $this->gcLogger = $gcLogger;
@@ -47,7 +47,7 @@ class VirtualYExampleLoginForm extends FormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('request_stack'),
-      $container->get('openy_gc_log.logger')
+      $container->has('openy_gc_log.logger') ? $container->get('openy_gc_log.logger') : NULL
     );
   }
 
@@ -89,10 +89,12 @@ class VirtualYExampleLoginForm extends FormBase {
       // We must load account because user has not id at save point.
       $account = user_load_by_mail($email);
       // Log user login.
-      $this->gcLogger->addLog([
-        'email' => $email,
-        'event_type' => 'userLoggedIn',
-      ]);
+      if ($this->gcLogger instanceof Logger) {
+        $this->gcLogger->addLog([
+          'email' => $email,
+          'event_type' => 'userLoggedIn',
+        ]);
+      }
       user_login_finalize($account);
     }
   }

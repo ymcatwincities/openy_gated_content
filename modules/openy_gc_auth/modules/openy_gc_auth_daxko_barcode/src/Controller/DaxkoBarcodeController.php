@@ -74,7 +74,7 @@ class DaxkoBarcodeController extends ControllerBase {
     LoggerChannelFactory $loggerChannelFactory,
     Client $http_client,
     MessengerInterface $messenger,
-    Logger $gcLogger
+    Logger $gcLogger = NULL
   ) {
     $this->configFactory = $configFactory;
     $this->logger = $loggerChannelFactory->get('openy_gc_auth_daxko_barcode');
@@ -92,7 +92,7 @@ class DaxkoBarcodeController extends ControllerBase {
       $container->get('logger.factory'),
       $container->get('http_client'),
       $container->get('messenger'),
-      $container->get('openy_gc_log.logger')
+      $container->has('openy_gc_log.logger') ? $container->get('openy_gc_log.logger') : NULL
     );
   }
 
@@ -156,10 +156,12 @@ class DaxkoBarcodeController extends ControllerBase {
               }
             }
             // Log user login.
-            $this->gcLogger->addLog([
-              'email' => $email,
-              'event_type' => 'userLoggedIn',
-            ]);
+            if ($this->gcLogger instanceof Logger) {
+              $this->gcLogger->addLog([
+                'email' => $email,
+                'event_type' => 'userLoggedIn',
+              ]);
+            }
             user_login_finalize($account);
             return new RedirectResponse($this->configFactory->get('openy_gated_content.settings')->get('virtual_y_url'));
 

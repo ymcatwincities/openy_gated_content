@@ -86,7 +86,7 @@ class PersonifyAuthController extends ControllerBase {
     ConfigFactoryInterface $configFactory,
     LoggerChannelFactory $loggerChannelFactory,
     MessengerInterface $messenger,
-    Logger $gcLogger
+    Logger $gcLogger = NULL
   ) {
     $this->personifySSO = $personifySSO;
     $this->personifyClient = $personifyClient;
@@ -106,7 +106,7 @@ class PersonifyAuthController extends ControllerBase {
       $container->get('config.factory'),
       $container->get('logger.factory'),
       $container->get('messenger'),
-      $container->get('openy_gc_log.logger')
+      $container->has('openy_gc_log.logger') ? $container->get('openy_gc_log.logger') : NULL
     );
   }
 
@@ -202,10 +202,12 @@ class PersonifyAuthController extends ControllerBase {
       }
 
       // Log user login.
-      $this->gcLogger->addLog([
-        'email' => $email,
-        'event_type' => 'userLoggedIn',
-      ]);
+      if ($this->gcLogger instanceof Logger) {
+        $this->gcLogger->addLog([
+          'email' => $email,
+          'event_type' => 'userLoggedIn',
+        ]);
+      }
       user_login_finalize($account);
 
       return new RedirectResponse($this->configFactory->get('openy_gated_content.settings')->get('virtual_y_url'));
