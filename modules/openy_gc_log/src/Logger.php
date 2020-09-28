@@ -5,7 +5,6 @@ namespace Drupal\openy_gc_log;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannel;
 use Drupal\openy_gc_log\Entity\LogEntity;
-use Drupal\user\Entity\User;
 
 /**
  * Logger service.
