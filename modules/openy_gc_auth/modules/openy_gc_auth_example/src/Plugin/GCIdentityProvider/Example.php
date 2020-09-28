@@ -89,16 +89,6 @@ class Example extends GCIdentityProviderPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function getDataForApp():array {
-    $data = parent::getDataForApp();
-    $data['token'] = $this->configuration['token'];
-    $data['redirect_url'] = $this->configuration['redirect_url'];
-    return $data;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function getLoginForm() {
     return \Drupal::formBuilder()->getForm('Drupal\openy_gc_auth_example\Form\VirtualYExampleLoginForm');
   }

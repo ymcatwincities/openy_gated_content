@@ -95,7 +95,7 @@ function openy_gc_storage_update_8004() {
 /**
  * Fix permissions for Users rebuild.
  */
-function openy_gc_storage_update_8005() {
+function openy_gc_storage_update_8007() {
   $role_object = Role::load(RoleInterface::ANONYMOUS_ID);
   // Disallow anonymous view events entities (for JSON API).
   $role_object->revokePermission('view eventinstance entity');
@@ -105,5 +105,8 @@ function openy_gc_storage_update_8005() {
   $role2_object = Role::load(RoleInterface::AUTHENTICATED_ID);
   // Disallow authenticated users access Virtual YMCA entities pages.
   $role2_object->revokePermission('view gated content entities pages');
+  // Allow authenticated view events entities (for JSON API).
+  $role2_object->grantPermission('view eventinstance entity');
+  $role2_object->grantPermission('view eventseries entity');
   $role2_object->save();
 }
