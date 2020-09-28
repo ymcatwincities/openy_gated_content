@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\openy_gc_log\Logger;
 
 /**
  * Personify controller to handle Personify SSO authentication.
@@ -57,6 +58,13 @@ class PersonifyAuthController extends ControllerBase {
   protected $messenger;
 
   /**
+   * The Gated Content Logger.
+   *
+   * @var \Drupal\openy_gc_log\Logger
+   */
+  protected $gcLogger;
+
+  /**
    * PersonifyAuthController constructor.
    *
    * @param \Drupal\personify\PersonifySSO $personifySSO
@@ -69,19 +77,23 @@ class PersonifyAuthController extends ControllerBase {
    *   Logger factory.
    * @param \Drupal\Core\Messenger\MessengerInterface $messenger
    *   The messenger.
+   * @param \Drupal\openy_gc_log\Logger $gcLogger
+   *   The Gated Content Logger.
    */
   public function __construct(
     PersonifySSO $personifySSO,
     PersonifyClient $personifyClient,
     ConfigFactoryInterface $configFactory,
     LoggerChannelFactory $loggerChannelFactory,
-    MessengerInterface $messenger
+    MessengerInterface $messenger,
+    Logger $gcLogger = NULL
   ) {
     $this->personifySSO = $personifySSO;
     $this->personifyClient = $personifyClient;
     $this->configFactory = $configFactory;
     $this->logger = $loggerChannelFactory->get('openy_gc_auth_personify');
     $this->messenger = $messenger;
+    $this->gcLogger = $gcLogger;
   }
 
   /**
@@ -93,7 +105,8 @@ class PersonifyAuthController extends ControllerBase {
       $container->get('personify.client'),
       $container->get('config.factory'),
       $container->get('logger.factory'),
-      $container->get('messenger')
+      $container->get('messenger'),
+      $container->has('openy_gc_log.logger') ? $container->get('openy_gc_log.logger') : NULL
     );
   }
 
@@ -188,6 +201,13 @@ class PersonifyAuthController extends ControllerBase {
         }
       }
 
+      // Log user login.
+      if ($this->gcLogger instanceof Logger) {
+        $this->gcLogger->addLog([
+          'email' => $email,
+          'event_type' => 'userLoggedIn',
+        ]);
+      }
       user_login_finalize($account);
 
       return new RedirectResponse($this->configFactory->get('openy_gated_content.settings')->get('virtual_y_url'));

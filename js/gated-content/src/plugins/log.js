@@ -6,6 +6,7 @@ const Log = {
       trackEventEntityView(entityType, entityBundle, entityId) {
         const event = new CustomEvent('virtual-y-log', {
           detail: {
+            uid: window.drupalSettings.user.uid !== undefined ? window.drupalSettings.user.uid : '',
             event_type: 'entityView',
             entity_type: entityType,
             entity_bundle: entityBundle,
