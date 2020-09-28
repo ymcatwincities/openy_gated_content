@@ -17,6 +17,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class SegmentContentAceessCheck implements ContainerInjectionInterface {
 
+  const EDITOR_ROLE = 'virtual_ymca_editor';
+
   /**
    * Messenger service.
    *
@@ -77,6 +79,16 @@ class SegmentContentAceessCheck implements ContainerInjectionInterface {
 
       if (in_array($bundle, $permissions_config[$type])) {
 
+        $account_roles = $account->getRoles();
+
+        // Use Drupal permissions for administrators and editors.
+        if (
+          in_array(self::EDITOR_ROLE, $account_roles)
+          || in_array('administrator', $account_roles)
+        ) {
+          return AccessResult::neutral();
+        }
+
         $content_access_mask = $entity->get('field_vy_permission')->getValue();
 
         // For Eventinstance we have to check parent as well.
@@ -93,7 +105,7 @@ class SegmentContentAceessCheck implements ContainerInjectionInterface {
 
         // Get roles, available for this user.
         $available_roles = explode(',', $content_access_mask[0]['value']);
-        $account_roles = $account->getRoles();
+
         foreach ($account_roles as $account_role) {
           if (in_array($account_role, $available_roles)) {
             return AccessResult::allowed();
