@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\openy_gc_shared_content\Controller\SharedContentProxyController;
 use Drupal\user\Entity\User;
 
 /**
@@ -75,7 +76,7 @@ function openy_gc_shared_content_update_8001() {
  */
 function _create_shared_content_user() {
   $user = User::create([
-    'mail' => 'shared.content@openy.com',
+    'mail' => SharedContentProxyController::SHARED_USER_MAIL,
     'name' => 'Shared content user',
     'status' => TRUE,
   ]);

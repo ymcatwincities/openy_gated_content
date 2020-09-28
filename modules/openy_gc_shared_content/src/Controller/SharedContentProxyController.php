@@ -14,6 +14,8 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class SharedContentProxyController extends ControllerBase {
 
+  const SHARED_USER_MAIL = 'shared.content@openy.org';
+
   /**
    * The entity type manager.
    *
@@ -87,7 +89,7 @@ class SharedContentProxyController extends ControllerBase {
     if (!$account->isAuthenticated()) {
       $user_storage = $this->entityTypeManager->getStorage('user');
       $users = $user_storage->loadByProperties([
-        'mail' => 'shared.content@openy.com',
+        'mail' => self::SHARED_USER_MAIL,
       ]);
       if (empty($users)) {
         return new JsonResponse(['message' => 'There no shared content user on selected server.'], 400);
