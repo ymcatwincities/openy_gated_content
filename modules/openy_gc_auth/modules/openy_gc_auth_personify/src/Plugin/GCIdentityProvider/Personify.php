@@ -156,19 +156,6 @@ class Personify extends GCIdentityProviderPluginBase {
   }
 
   /**
-   * {@inheritdoc}
-   */
-  public function getDataForApp():array {
-    $data = parent::getDataForApp();
-
-    $data['api_login_check'] = Url::fromRoute('openy_gc_auth_personify.personify_check')->toString();
-    $data['api_auth'] = Url::fromRoute('openy_gc_auth_personify.personify_auth')->toString();
-    $data['api_logout'] = Url::fromRoute('openy_gc_auth_personify.personify_logout')->toString();
-    $data['error_accompanying_message'] = $this->configuration['error_accompanying_message'];
-    return $data;
-  }
-
-  /**
    * Create Personify login URL.
    *
    * @param string $applicationUrl
