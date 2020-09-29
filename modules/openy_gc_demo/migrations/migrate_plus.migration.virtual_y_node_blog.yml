@@ -101,6 +101,9 @@ process:
       plugin: migration
       migration: virtual_y_gc_category
       source: category
+  field_vy_permission:
+    plugin: default_value
+    default_value: virtual_y
 
 destination:
   plugin: 'entity:node'

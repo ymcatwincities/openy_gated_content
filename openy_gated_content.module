@@ -10,6 +10,9 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Drupal\openy_gated_content\SegmentContentAccessCheck;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
 
 /**
  * Implements hook_theme().
@@ -97,6 +100,40 @@ function openy_gated_content_form_alter(&$form, FormStateInterface $form_state, 
     // Collapse field_inheritance by default in event instance edit form.
     $form['field_inheritance']['#open'] = FALSE;
   }
+
+  if (!isset($form['field_vy_permission'])) {
+    return;
+  }
+
+  $gcConfig = \Drupal::config('openy_gated_config.settings')->getRawData();
+  $allowedForms = [];
+  if (!empty($gcConfig['permissions_entities'])) {
+    $permissionEnabledEntities = $gcConfig['permissions_entities'];
+    foreach ($permissionEnabledEntities as $entity_key => $bundle_list) {
+      foreach ($bundle_list as $bundle) {
+        $allowedForms[] = $entity_key . '_' . $bundle . '_form';
+        $allowedForms[] = $entity_key . '_' . $bundle . '_edit_form';
+      }
+    }
+  }
+
+  $form['virtual_y_permissions'] = [
+    '#type' => 'details',
+    '#title' => t('Virtual Y Permissions'),
+    '#description' => t('Select user segments that available to see this content.'),
+    '#open' => FALSE,
+    '#group' => 'advanced',
+    '#weight' => 125,
+  ];
+
+  $form['field_vy_permission']['#group'] = 'virtual_y_permissions';
+
+  if (!in_array($form_id, $allowedForms)) {
+    // Close access to permissions field for all entities except of enabled.
+    $form['shared_content_settings']['#access'] = FALSE;
+    return;
+  }
+
 }
 
 /**
@@ -169,4 +206,48 @@ function openy_gated_content_user_pass_validation(array &$form, FormStateInterfa
       }
     }
   }
+}
+
+/**
+ * Implements hook_entity_base_field_info().
+ */
+function openy_gated_content_entity_base_field_info(EntityTypeInterface $entity_type) {
+
+  $allowed_entity_types = [
+    'node',
+    'eventinstance',
+    'eventseries',
+  ];
+
+  if (in_array($entity_type->id(), $allowed_entity_types)) {
+    $fields = [];
+    $fields['field_vy_permission'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Virtual Y Access Group'))
+      ->setCardinality(1)
+      ->setProvider('openy_gated_content')
+      ->setRequired(FALSE)
+      ->setRevisionable(FALSE)
+      ->setTranslatable(FALSE)
+      ->setDisplayConfigurable('view', FALSE)
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayOptions('form', [
+        'type' => 'virtual_y_roles_select',
+        'settings' => [
+          'size' => '255',
+        ],
+      ]);
+
+    return $fields;
+  }
+
+}
+
+/**
+ * Implements hook_entity_access().
+ */
+function openy_gated_content_entity_access(EntityInterface $entity, $operation, AccountInterface $account) {
+  return \Drupal::service('class_resolver')
+    ->getInstanceFromDefinition(SegmentContentAccessCheck::class)
+    ->checkAccess($entity, $operation, $account);
+
 }
