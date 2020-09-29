@@ -157,13 +157,4 @@ abstract class GCIdentityProviderPluginBase extends PluginBase implements GCIden
     }
   }
 
-  /**
-   * {@inheritdoc}
-   */
-  public function getDataForApp():array {
-    return [
-      'type' => $this->getId(),
-    ];
-  }
-
 }

@@ -11,6 +11,7 @@ use Drupal\Core\Routing\TrustedRedirectResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Drupal\openy_gc_log\Logger;
 
 /**
  * Class DaxkoLinkController.
@@ -32,18 +33,30 @@ class DaxkoLinkController extends ControllerBase {
   protected $daxkoClient;
 
   /**
+   * The Gated Content Logger.
+   *
+   * @var \Drupal\openy_gc_log\Logger
+   */
+  protected $gcLogger;
+
+  /**
    * DaxkoLinkController constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   Config factory instance.
    * @param \Drupal\daxko_sso\DaxkoSSOClient $daxkoSSOClient
    *   Daxko client instance.
+   * @param \Drupal\openy_gc_log\Logger $gcLogger
+   *   The Gated Content Logger.
    */
   public function __construct(
     ConfigFactoryInterface $configFactory,
-    DaxkoSSOClient $daxkoSSOClient) {
+    DaxkoSSOClient $daxkoSSOClient,
+    Logger $gcLogger = NULL
+  ) {
     $this->configFactory = $configFactory;
     $this->daxkoClient = $daxkoSSOClient;
+    $this->gcLogger = $gcLogger;
   }
 
   /**
@@ -52,7 +65,8 @@ class DaxkoLinkController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('config.factory'),
-      $container->get('daxko_sso.client')
+      $container->get('daxko_sso.client'),
+      $container->has('openy_gc_log.logger') ? $container->get('openy_gc_log.logger') : NULL
     );
   }
 
@@ -143,6 +157,13 @@ class DaxkoLinkController extends ControllerBase {
         }
       }
 
+      // Log user login.
+      if ($this->gcLogger instanceof Logger) {
+        $this->gcLogger->addLog([
+          'email' => $email,
+          'event_type' => 'userLoggedIn',
+        ]);
+      }
       user_login_finalize($account);
 
       return new RedirectResponse($this->configFactory->get('openy_gated_content.settings')->get('virtual_y_url'));
