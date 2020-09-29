@@ -18,7 +18,7 @@ function openy_gated_content_install() {
     ->setLabel(t('Virtual Y Access Group'))
     ->setSettings([
       'max_length' => 240,
-      'default_value' => 'virtual_y'
+      'default_value' => 'virtual_y',
     ])
     ->setRequired(FALSE)
     ->setRevisionable(FALSE)
@@ -118,7 +118,7 @@ function openy_gated_content_update_8006() {
     ->setLabel(t('Virtual Y Access Group'))
     ->setSettings([
       'max_length' => 240,
-      'default_value' => 'virtual_y'
+      'default_value' => 'virtual_y',
     ])
     ->setRequired(FALSE)
     ->setRevisionable(FALSE)
