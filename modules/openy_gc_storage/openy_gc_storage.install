@@ -93,9 +93,23 @@ function openy_gc_storage_update_8004() {
 }
 
 /**
+ * Add recurring event series config to set interval and start time.
+ */
+function openy_gc_storage_update_8005() {
+  $config_dir = drupal_get_path('module', 'openy_gc_storage');
+  $config_dir .= '/config/install/';
+  // Update configuration.
+  $config_importer = \Drupal::service('openy_upgrade_tool.importer');
+  $config_importer->setDirectory($config_dir);
+  $config_importer->importConfigs([
+    'recurring_events.eventseries.config',
+  ]);
+}
+
+/**
  * Fix permissions for Users rebuild.
  */
-function openy_gc_storage_update_8007() {
+function openy_gc_storage_update_8006() {
   $role_object = Role::load(RoleInterface::ANONYMOUS_ID);
   // Disallow anonymous view events entities (for JSON API).
   $role_object->revokePermission('view eventinstance entity');
