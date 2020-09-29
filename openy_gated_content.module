@@ -10,7 +10,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Drupal\openy_gated_content\SegmentContentAceessCheck;
+use Drupal\openy_gated_content\SegmentContentAccessCheck;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 
@@ -103,6 +103,40 @@ function openy_gated_content_form_alter(&$form, FormStateInterface $form_state, 
     // Collapse field_inheritance by default in event instance edit form.
     $form['field_inheritance']['#open'] = FALSE;
   }
+
+  if (!isset($form['field_vy_permission'])) {
+    return;
+  }
+
+  $permissionEnabledEntities = [];
+  $gcConfig = \Drupal::config('openy_gated_config.settings')->getRawData();
+  if (!empty($gcConfig['permissions_entities'])) {
+    $permissionEnabledEntities = $gcConfig['permissions_entities'];
+    foreach ($permissionEnabledEntities as $entity_key => $bundle_list) {
+      foreach ($bundle_list as $bundle) {
+        $allowedForms[] = $entity_key . '_' . $bundle . '_form';
+        $allowedForms[] = $entity_key . '_' . $bundle . '_edit_form';
+      }
+    }
+  }
+
+  $form['virtual_y_permissions'] = [
+    '#type' => 'details',
+    '#title' => t('Virtual Y Permissions'),
+    '#description' => t('Select user segments that available to see this content.'),
+    '#open' => FALSE,
+    '#group' => 'advanced',
+    '#weight' => 125,
+  ];
+
+  $form['field_vy_permission']['#group'] = 'virtual_y_permissions';
+
+  if (!in_array($form_id, [])) {
+    // Close access to permissions field for all entities except of enabled.
+    $form['shared_content_settings']['#access'] = FALSE;
+    return;
+  }
+
 }
 
 /**
@@ -216,7 +250,7 @@ function openy_gated_content_entity_base_field_info(EntityTypeInterface $entity_
  */
 function openy_gated_content_entity_access(EntityInterface $entity, $operation, AccountInterface $account) {
   return \Drupal::service('class_resolver')
-    ->getInstanceFromDefinition(SegmentContentAceessCheck::class)
+    ->getInstanceFromDefinition(SegmentContentAccessCheck::class)
     ->checkAccess($entity, $operation, $account);
 
 }
