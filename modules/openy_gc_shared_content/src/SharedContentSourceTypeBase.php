@@ -12,6 +12,7 @@ use Drupal\Driver\Exception\Exception;
 use Drupal\jsonapi\JsonApiResource\JsonApiDocumentTopLevel;
 use Drupal\jsonapi\ResourceType\ResourceTypeRepositoryInterface;
 use Drupal\openy_gc_shared_content\Entity\SharedContentSourceServer;
+use Drupal\openy_gc_shared_content\Entity\SharedContentSourceServerInterface;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -179,7 +180,7 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
    */
   public function getJsonApiEndpoint($uuid = NULL) {
     $url_parts = [
-      'jsonapi',
+      'vy-shared-proxy',
       $this->getEntityType(),
       $this->getEntityBundle(),
     ];
@@ -192,23 +193,29 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
   /**
    * {@inheritdoc}
    */
-  public function jsonApiCall($url, array $query_args = [], $uuid = NULL) {
+  public function jsonApiCall(SharedContentSourceServerInterface $shared_content_server, array $query_args = [], $uuid = NULL) {
     try {
-      $request = $this->client->request(
-        'GET',
-        $url . '/' . $this->getJsonApiEndpoint($uuid),
-        ['query' => $query_args]
+      $response = $this->client->request(
+        'POST',
+        $shared_content_server->getUrl() . '/' . $this->getJsonApiEndpoint($uuid),
+        [
+          'body' => json_encode([
+            'url' => $this->requestStack->getSchemeAndHttpHost(),
+            'token' => $shared_content_server->getToken(),
+          ]),
+          'query' => $query_args,
+        ]
       );
     }
     catch (ClientException $e) {
       return FALSE;
     }
 
-    if ($request->getStatusCode() != 200) {
+    if ($response->getStatusCode() != 200) {
       return FALSE;
     }
 
-    return $this->serializer->decode($request->getBody()->getContents(), 'api_json');
+    return $this->serializer->decode($response->getBody()->getContents(), 'api_json');
   }
 
   /**
@@ -320,7 +327,7 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
     $entity = NULL;
     $resource_type = $this->resourceTypeRepository->get($this->getEntityType(), $this->getEntityBundle());
     $query_args = $this->getFullJsonApiQueryArgs();
-    $data = $this->jsonApiCall($url, $query_args, $uuid);
+    $data = $this->jsonApiCall($source, $query_args, $uuid);
     if (!$data) {
       // TODO: or message with warning.
       return FALSE;

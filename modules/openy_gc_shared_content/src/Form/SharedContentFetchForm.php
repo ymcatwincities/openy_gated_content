@@ -97,7 +97,7 @@ class SharedContentFetchForm extends EntityForm {
     $instance = $this->sharedSourceTypeManager->createInstance($type);
     $query_arg = array_merge($instance->getTeaserJsonApiQueryArgs(), $pager_query);
     $instance->applyFormFilters($query_arg, $form_state);
-    $source_data = $instance->jsonApiCall($this->entity->getUrl(), $query_arg);
+    $source_data = $instance->jsonApiCall($this->entity, $query_arg);
     $form['fetched_data'] = [
       '#type' => 'container',
       '#prefix' => '<div id="fetched-data">',

@@ -7,6 +7,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\user\Entity\User;
+use Drupal\openy_gc_log\Logger;
 
 /**
  * Class VirtualYExampleLoginForm.
@@ -23,10 +24,21 @@ class VirtualYExampleLoginForm extends FormBase {
   protected $currentRequest;
 
   /**
+   * The Gated Content Logger.
+   *
+   * @var \Drupal\openy_gc_log\Logger
+   */
+  protected $gcLogger;
+
+  /**
    * {@inheritdoc}
    */
-  public function __construct(RequestStack $requestStack) {
+  public function __construct(
+    RequestStack $requestStack,
+    Logger $gcLogger = NULL
+  ) {
     $this->currentRequest = $requestStack->getCurrentRequest();
+    $this->gcLogger = $gcLogger;
   }
 
   /**
@@ -34,7 +46,8 @@ class VirtualYExampleLoginForm extends FormBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('request_stack')
+      $container->get('request_stack'),
+      $container->has('openy_gc_log.logger') ? $container->get('openy_gc_log.logger') : NULL
     );
   }
 
@@ -71,10 +84,17 @@ class VirtualYExampleLoginForm extends FormBase {
     $user->setUsername($name);
     $user->addRole('virtual_y');
     $user->activate();
-    $result = $account = $user->save();
+    $result = $user->save();
     if ($result) {
       // We must load account because user has not id at save point.
       $account = user_load_by_mail($email);
+      // Log user login.
+      if ($this->gcLogger instanceof Logger) {
+        $this->gcLogger->addLog([
+          'email' => $email,
+          'event_type' => 'userLoggedIn',
+        ]);
+      }
       user_login_finalize($account);
     }
   }

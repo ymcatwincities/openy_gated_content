@@ -31,14 +31,6 @@ interface GCIdentityProviderInterface extends PluginInspectionInterface, Configu
   public function getConfigName();
 
   /**
-   * Get plugin configuration data for application.
-   *
-   * @return array
-   *   Configuration Data.
-   */
-  public function getDataForApp();
-
-  /**
    * Get login form content for auth method.
    *
    * @return array
