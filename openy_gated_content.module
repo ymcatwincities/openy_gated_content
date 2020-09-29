@@ -109,6 +109,7 @@ function openy_gated_content_form_alter(&$form, FormStateInterface $form_state, 
   }
 
   $gcConfig = \Drupal::config('openy_gated_config.settings')->getRawData();
+  $allowedForms = [];
   if (!empty($gcConfig['permissions_entities'])) {
     $permissionEnabledEntities = $gcConfig['permissions_entities'];
     foreach ($permissionEnabledEntities as $entity_key => $bundle_list) {
@@ -130,7 +131,7 @@ function openy_gated_content_form_alter(&$form, FormStateInterface $form_state, 
 
   $form['field_vy_permission']['#group'] = 'virtual_y_permissions';
 
-  if (!in_array($form_id, [])) {
+  if (!in_array($form_id, $allowedForms)) {
     // Close access to permissions field for all entities except of enabled.
     $form['shared_content_settings']['#access'] = FALSE;
     return;
