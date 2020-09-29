@@ -103,7 +103,6 @@ class GatedContentPermissionsFieldWidget extends WidgetBase implements Container
       '#title' => 'Select Virtual Y segment for this content',
       '#options' => $select_options,
       '#multiple' => TRUE,
-      '#element_validate' => [get_class($this), 'validate'],
       '#default_value' => !empty($values) ? explode(',', $values) : NULL,
     ];
 
