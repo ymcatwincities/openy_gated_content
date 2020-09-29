@@ -57,7 +57,7 @@ function openy_gated_content_post_update_create_login_page(&$sandbox) {
 /**
  * Helper function for post updates of permissions field.
  */
-function _openy_gated_content_permissions(&$sandbox, string $entity_type, string $bundle) {
+function _openy_gated_content_permissions(&$sandbox, string $entity_type, string $bundle, $id = 'nid') {
   if (!isset($sandbox['progress'])) {
     $sandbox['progress'] = 0;
     $sandbox['current'] = 0;
@@ -68,9 +68,9 @@ function _openy_gated_content_permissions(&$sandbox, string $entity_type, string
   }
   $ids = \Drupal::entityQuery($entity_type)
     ->condition('type', $bundle)
-    ->condition('nid', $sandbox['current'], '>')
+    ->condition($id, $sandbox['current'], '>')
     ->range(0, 5)
-    ->sort('nid')
+    ->sort($id)
     ->execute();
   $nodes = \Drupal::entityTypeManager()->getStorage('node')->loadMultiple($ids);
   foreach ($nodes as $node) {
@@ -103,12 +103,12 @@ function openy_gated_content_post_update_permissions_blog_posts(&$sandbox) {
  * Update all existed Virtual Y Online streams with default permissions field.
  */
 function openy_gated_content_post_update_eventseries_livestream(&$sandbox) {
-  _openy_gated_content_permissions($sandbox, 'eventseries', 'live_stream');
+  _openy_gated_content_permissions($sandbox, 'eventseries', 'live_stream', 'id');
 }
 
 /**
  * Update all existed Virtual Y Virtual meetings with default permissions field.
  */
 function openy_gated_content_post_update_eventseries_meeting(&$sandbox) {
-  _openy_gated_content_permissions($sandbox, 'eventseries', 'virtual_meeting');
+  _openy_gated_content_permissions($sandbox, 'eventseries', 'virtual_meeting', 'id');
 }
