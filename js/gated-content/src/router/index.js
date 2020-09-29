@@ -1,9 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Store from '@/store';
 import Home from '@/views/Home.vue';
-import Login from '@/views/Login.vue';
-import CustomAuthEmailConfirm from '@/components/auth/CustomAuthEmailConfirm.vue';
 import NotFound from '@/views/NotFound.vue';
 import VideoPage from '@/views/VideoPage.vue';
 import BlogPage from '@/views/BlogPage.vue';
@@ -22,19 +19,6 @@ const routes = [
     name: 'Home',
     component: Home,
     meta: { requiresAuth: true },
-  },
-  {
-    path: '/login',
-    name: 'Login',
-    component: Login,
-    meta: { requiresGuest: true },
-  },
-  {
-    path: '/login/:id/:token/confirm',
-    name: 'CustomAuthEmailConfirm',
-    component: CustomAuthEmailConfirm,
-    props: true,
-    meta: { requiresGuest: true },
   },
   {
     path: '/categories/:type',
@@ -104,16 +88,6 @@ const router = new VueRouter({
   scrollBehavior() {
     return { x: 0, y: 0 };
   },
-});
-
-router.beforeEach((to, from, next) => {
-  if (to.meta.requiresAuth && !Store.getters.isLoggedIn) {
-    return next({ name: 'Login' });
-  }
-  if (to.meta.requiresGuest && Store.getters.isLoggedIn) {
-    return next({ name: 'Home' });
-  }
-  return next();
 });
 
 export default router;

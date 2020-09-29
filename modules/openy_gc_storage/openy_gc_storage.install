@@ -12,16 +12,11 @@ use Drupal\user\RoleInterface;
  * Implements hook_install().
  */
 function openy_gc_storage_install() {
-  $role_object = Role::load(RoleInterface::ANONYMOUS_ID);
-  // Allow anonymous view events entities (for JSON API).
+  $role_object = Role::load(RoleInterface::AUTHENTICATED_ID);
+  // Allow authenticated users access Virtual YMCA entities pages.
   $role_object->grantPermission('view eventinstance entity');
   $role_object->grantPermission('view eventseries entity');
   $role_object->save();
-
-  $role2_object = Role::load(RoleInterface::AUTHENTICATED_ID);
-  // Allow authenticated users access Virtual YMCA entities pages.
-  $role2_object->grantPermission('view gated content entities pages');
-  $role2_object->save();
 
   $config_factory = \Drupal::configFactory();
   $config = $config_factory->getEditable('jsonapi_image_styles.settings');
@@ -109,4 +104,23 @@ function openy_gc_storage_update_8005() {
   $config_importer->importConfigs([
     'recurring_events.eventseries.config',
   ]);
+}
+
+/**
+ * Fix permissions for Users rebuild.
+ */
+function openy_gc_storage_update_8006() {
+  $role_object = Role::load(RoleInterface::ANONYMOUS_ID);
+  // Disallow anonymous view events entities (for JSON API).
+  $role_object->revokePermission('view eventinstance entity');
+  $role_object->revokePermission('view eventseries entity');
+  $role_object->save();
+
+  $role2_object = Role::load(RoleInterface::AUTHENTICATED_ID);
+  // Disallow authenticated users access Virtual YMCA entities pages.
+  $role2_object->revokePermission('view gated content entities pages');
+  // Allow authenticated view events entities (for JSON API).
+  $role2_object->grantPermission('view eventinstance entity');
+  $role2_object->grantPermission('view eventseries entity');
+  $role2_object->save();
 }

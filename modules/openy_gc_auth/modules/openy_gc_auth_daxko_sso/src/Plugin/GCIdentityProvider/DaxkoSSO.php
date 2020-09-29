@@ -4,12 +4,14 @@ namespace Drupal\openy_gc_auth_daxko_sso\Plugin\GCIdentityProvider;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Messenger\MessengerTrait;
 use Drupal\Core\Url;
 use Drupal\daxko_sso\DaxkoSSOClient;
 use Drupal\openy_gc_auth\GCIdentityProviderPluginBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -54,6 +56,13 @@ class DaxkoSSO extends GCIdentityProviderPluginBase {
   protected $request;
 
   /**
+   * The form builder service.
+   *
+   * @var \Drupal\Core\Form\FormBuilderInterface
+   */
+  protected $formBuilder;
+
+  /**
    * {@inheritdoc}
    */
   public function defaultConfiguration():array {
@@ -72,9 +81,10 @@ class DaxkoSSO extends GCIdentityProviderPluginBase {
     ConfigFactoryInterface $config,
     EntityTypeManagerInterface $entity_type_manager,
     DaxkoSSOClient $daxkoSSOClient,
-    RequestStack $requestStack
+    RequestStack $requestStack,
+    FormBuilderInterface $form_builder
   ) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $config, $entity_type_manager);
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $config, $entity_type_manager, $form_builder);
     $this->daxkoClient = $daxkoSSOClient;
     $this->request = $requestStack->getCurrentRequest();
   }
@@ -90,7 +100,8 @@ class DaxkoSSO extends GCIdentityProviderPluginBase {
       $container->get('config.factory'),
       $container->get('entity_type.manager'),
       $container->get('daxko_sso.client'),
-      $container->get('request_stack')
+      $container->get('request_stack'),
+      $container->get('form_builder')
       );
   }
 
@@ -103,7 +114,7 @@ class DaxkoSSO extends GCIdentityProviderPluginBase {
 
     $form['redirect_url'] = [
       '#title' => $this->t('Url'),
-      '#description' => $this->t('Link to the Virtual YMCA Landing Page at your project.'),
+      '#description' => $this->t('Daxko back link redirect e.g. /openy-gc-auth-daxko-sso/back-redirect'),
       '#type' => 'textfield',
       '#default_value' => $config['redirect_url'],
       '#required' => TRUE,
@@ -138,11 +149,8 @@ class DaxkoSSO extends GCIdentityProviderPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function getDataForApp():array {
-    $data = parent::getDataForApp();
-    $data['login_url'] = Url::fromRoute('openy_gc_auth_daxko_sso.daxko_link_controller_hello')->toString();
-    $data['check_url'] = Url::fromRoute('openy_gc_auth_daxko_sso.daxko_back_redirect')->toString();
-    return $data;
+  public function getLoginForm() {
+    return new RedirectResponse(Url::fromRoute('openy_gc_auth_daxko_sso.daxko_link_controller_hello')->toString());
   }
 
 }

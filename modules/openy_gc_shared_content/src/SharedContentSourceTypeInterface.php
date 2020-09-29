@@ -3,6 +3,7 @@
 namespace Drupal\openy_gc_shared_content;
 
 use Drupal\Component\Plugin\PluginInspectionInterface;
+use Drupal\openy_gc_shared_content\Entity\SharedContentSourceServerInterface;
 
 /**
  * Defines the common interface for all SharedContentSourceType classes.
@@ -134,7 +135,7 @@ interface SharedContentSourceTypeInterface extends PluginInspectionInterface {
    *
    * This method used for data fetching from remote source server.
    *
-   * @param string $url
+   * @param \Drupal\openy_gc_shared_content\Entity\SharedContentSourceServerInterface $shared_content_server
    *   Server URL.
    * @param array $query_args
    *   Query arguments for JSON API request.
@@ -144,6 +145,6 @@ interface SharedContentSourceTypeInterface extends PluginInspectionInterface {
    * @return array
    *   Decoded JSON API response data.
    */
-  public function jsonApiCall($url, array $query_args = [], $uuid = NULL);
+  public function jsonApiCall(SharedContentSourceServerInterface $shared_content_server, array $query_args = [], $uuid = NULL);
 
 }

@@ -76,6 +76,7 @@ class GCSettingsForm extends ConfigFormBase {
       '#description' => $this->t('Items limit for blocks with pager.'),
       '#type' => 'number',
       '#default_value' => $config->get('pager_limit') ?? self::PAGER_LIMIT_DEFAULT,
+      '#required' => TRUE,
     ];
 
     $form['app_settings']['components'] = [
@@ -120,6 +121,20 @@ class GCSettingsForm extends ConfigFormBase {
         '#default_value' => $config->get('components.' . $id . '.up_next_title'),
       ];
     }
+
+    $form['app_settings']['virtual_y_url'] = [
+      '#type' => 'textfield',
+      '#title' => 'Virtual Y Landing Page url',
+      '#default_value' => $config->get('virtual_y_url'),
+      '#required' => TRUE,
+    ];
+
+    $form['app_settings']['virtual_y_login_url'] = [
+      '#type' => 'textfield',
+      '#title' => 'Virtual Y Login Landing Page url',
+      '#default_value' => $config->get('virtual_y_login_url'),
+      '#required' => TRUE,
+    ];
 
     $form['actions']['#type'] = 'actions';
     $form['actions']['submit'] = [

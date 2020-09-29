@@ -5,13 +5,18 @@ dependencies:
     module:
       - openy_gc_demo
       - openy_gc_auth_custom
-id: virtual_y_gc_auth_custom_user
+id: virtual_y_gc_auth_custom_user_demo
 migration_tags:
   - openy_complete_installation
 migration_group: virtual_y
-label: 'GC auth custom users'
+label: 'GC auth users demo'
 source:
   plugin: embedded_data
+  constants:
+    status: 0
+    roles:
+      - authenticated
+      - virtual_y
   data_rows:
     -
       id: 1
@@ -47,20 +52,20 @@ source:
     id:
       type: integer
 process:
-  status:
-    plugin: default_value
-    default_value: 0
-  primary:
-    plugin: default_value
-    default_value: 1
-  package_name:
-    plugin: default_value
-    default_value: 'Virtual Y'
-  package_site:
-    plugin: default_value
-    default_value: 'Test YMCA'
-  member_id: member_id
-  first_name: first_name
-  email: email
+  status: 'constants/status'
+  roles: 'constants/roles'
+  name:
+    plugin: concat
+    source:
+      - first_name
+      - member_id
+    delimiter: ' '
+  mail:
+    - plugin: get
+      source: email
+    - plugin: skip_on_empty
+      method: row
+      source: email
+      message: 'Field email is missed'
 destination:
-  plugin: entity:gc_auth_custom_user
+  plugin: entity:user

@@ -19,8 +19,7 @@ function openy_gated_content_theme() {
     'paragraph__gated_content' => [
       'base hook' => 'paragraph',
       'variables' => [
-        'auth_provider_id' => '',
-        'auth_configuration' => '',
+        'app_settings' => '',
       ],
     ],
     'paragraph__gated_content_login' => [
@@ -28,7 +27,6 @@ function openy_gated_content_theme() {
       'variables' => [
         'auth_provider_id' => '',
         'auth_configuration' => '',
-        'app_url' => '',
       ],
     ],
   ];
@@ -46,11 +44,6 @@ function openy_gated_content_preprocess_paragraph(&$variables) {
     return;
   }
 
-  if ($variables['paragraph']->getType() === 'gated_content_login') {
-    $variables['app_url'] = $variables['paragraph']
-      ->field_link_to_gated_content_app->get(0)->getUrl()->toString();
-  }
-
   $variables['#cache']['tags'][] = 'config:openy_gated_content.settings';
   $variables['#cache']['tags'][] = 'config:openy_gc_auth.settings';
   $active_provider = \Drupal::config('openy_gc_auth.settings')->get('active_provider');
@@ -61,8 +54,6 @@ function openy_gated_content_preprocess_paragraph(&$variables) {
   }
   $plugin_instance = $identityProviderManager->createInstance($active_provider);
   $app_config = \Drupal::config('openy_gated_content.settings')->getOriginal();
-  $variables['auth_provider_id'] = $plugin_instance->getId();
-  $variables['auth_configuration'] = json_encode($plugin_instance->getDataForApp());
   $variables['app_settings'] = json_encode($app_config);
   $variables['#cache']['tags'][] = 'config:' . $plugin_instance->getConfigName();
 }
@@ -149,6 +140,9 @@ function openy_gated_content_form_user_pass_alter(&$form, FormStateInterface $fo
  * Checks if user has related to Virtual Y role.
  */
 function openy_gated_content_user_login_validation(array &$form, FormStateInterface $form_state) {
+  if (!$form_state->get('uid')) {
+    return;
+  }
   $account = \Drupal::entityTypeManager()->getStorage('user')->load($form_state->get('uid'));
   if ($account) {
     $roles = $account->getRoles();

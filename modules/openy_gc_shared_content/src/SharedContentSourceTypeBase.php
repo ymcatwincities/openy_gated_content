@@ -4,6 +4,7 @@ namespace Drupal\openy_gc_shared_content;
 
 use Drupal\Component\Plugin\PluginBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Messenger\MessengerTrait;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -11,7 +12,9 @@ use Drupal\Driver\Exception\Exception;
 use Drupal\jsonapi\JsonApiResource\JsonApiDocumentTopLevel;
 use Drupal\jsonapi\ResourceType\ResourceTypeRepositoryInterface;
 use Drupal\openy_gc_shared_content\Entity\SharedContentSourceServer;
+use Drupal\openy_gc_shared_content\Entity\SharedContentSourceServerInterface;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
@@ -177,7 +180,7 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
    */
   public function getJsonApiEndpoint($uuid = NULL) {
     $url_parts = [
-      'jsonapi',
+      'vy-shared-proxy',
       $this->getEntityType(),
       $this->getEntityBundle(),
     ];
@@ -190,33 +193,107 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
   /**
    * {@inheritdoc}
    */
-  public function jsonApiCall($url, array $query_args = [], $uuid = NULL) {
+  public function jsonApiCall(SharedContentSourceServerInterface $shared_content_server, array $query_args = [], $uuid = NULL) {
+    try {
+      $response = $this->client->request(
+        'POST',
+        $shared_content_server->getUrl() . '/' . $this->getJsonApiEndpoint($uuid),
+        [
+          'body' => json_encode([
+            'url' => $this->requestStack->getSchemeAndHttpHost(),
+            'token' => $shared_content_server->getToken(),
+          ]),
+          'query' => $query_args,
+        ]
+      );
+    }
+    catch (ClientException $e) {
+      return FALSE;
+    }
+
+    if ($response->getStatusCode() != 200) {
+      return FALSE;
+    }
+
+    return $this->serializer->decode($response->getBody()->getContents(), 'api_json');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getFormFilters($url) {
+    $query_args = [];
     $request = $this->client->request(
       'GET',
-      $url . '/' . $this->getJsonApiEndpoint($uuid),
+      $url . '/jsonapi/taxonomy_term/gc_category',
       ['query' => $query_args]
     );
 
     if ($request->getStatusCode() != 200) {
-      return FALSE;
+      return [];
     }
 
-    return $this->serializer->decode($request->getBody()->getContents(), 'api_json');
+    $data = $this->serializer->decode($request->getBody()->getContents(), 'api_json');
+    $options = ['none' => $this->t('- None -')];
+    foreach ($data['data'] as $category) {
+      $options[$category['id']] = $category['attributes']['name'];
+    }
+
+    $form['title'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Title'),
+      '#size' => 25,
+      '#maxlength' => 128,
+    ];
+    // TODO: use select list for donated_by.
+    $form['donated_by'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Donated By'),
+      '#size' => 25,
+      '#maxlength' => 128,
+    ];
+    $form['category'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Category'),
+      '#options' => $options,
+      '#default' => 'none',
+    ];
+
+    return $form;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function applyFormFilters(&$query_arg, FormStateInterface $form_state) {
+    $values = $form_state->getUserInput('category');
+    if (isset($values['category']) && $values['category'] != 'none') {
+      $query_arg['filter[field_gc_video_category.id]'] = $values['category'];
+    }
+    if (isset($values['title']) && $values['title'] != '') {
+      $query_arg['filter[title-filter][condition][path]'] = 'title';
+      $query_arg['filter[title-filter][condition][operator]'] = 'CONTAINS';
+      $query_arg['filter[title-filter][condition][value]'] = $values['title'];
+    }
+    if (isset($values['donated_by']) && $values['donated_by'] != '') {
+      $query_arg['filter[field_gc_origin-filter][condition][path]'] = 'field_gc_origin';
+      $query_arg['filter[field_gc_origin-filter][condition][operator]'] = 'CONTAINS';
+      $query_arg['filter[field_gc_origin-filter][condition][value]'] = $values['donated_by'];
+    }
   }
 
   /**
    * {@inheritdoc}
    */
   public function saveFromSource($url, $uuid) {
-
-    $server_id = reset($this->entityTypeManager
+    $servers = $this->entityTypeManager
       ->getStorage('shared_content_source_server')
       ->getQuery()
       ->condition('url', $url)
-      ->execute());
+      ->execute();
+    $server_id = reset($servers);
 
     if (!empty($server_id)) {
-
       $source = SharedContentSourceServer::load($server_id);
       $host = $this->requestStack->getSchemeAndHttpHost();
 
@@ -250,7 +327,7 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
     $entity = NULL;
     $resource_type = $this->resourceTypeRepository->get($this->getEntityType(), $this->getEntityBundle());
     $query_args = $this->getFullJsonApiQueryArgs();
-    $data = $this->jsonApiCall($url, $query_args, $uuid);
+    $data = $this->jsonApiCall($source, $query_args, $uuid);
     if (!$data) {
       // TODO: or message with warning.
       return FALSE;
