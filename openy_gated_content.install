@@ -16,7 +16,10 @@ function openy_gated_content_install() {
 
   $field_permission = BaseFieldDefinition::create('string')
     ->setLabel(t('Virtual Y Access Group'))
-    ->setSetting('max_length', 240)
+    ->setSettings([
+      'max_length' => 240,
+      'default_value' => 'virtual_y'
+    ])
     ->setRequired(FALSE)
     ->setRevisionable(FALSE)
     ->setTranslatable(FALSE)
@@ -113,7 +116,10 @@ function openy_gated_content_update_8006() {
 
   $field_permission = BaseFieldDefinition::create('string')
     ->setLabel(t('Virtual Y Access Group'))
-    ->setSetting('max_length', 240)
+    ->setSettings([
+      'max_length' => 240,
+      'default_value' => 'virtual_y'
+    ])
     ->setRequired(FALSE)
     ->setRevisionable(FALSE)
     ->setTranslatable(FALSE)
@@ -131,4 +137,24 @@ function openy_gated_content_update_8006() {
   $definition_manager->installFieldStorageDefinition('field_vy_permission', 'eventseries', 'openy_gated_content', $field_permission);
   $definition_manager->installFieldStorageDefinition('field_vy_permission', 'eventinstance', 'openy_gated_content', $field_permission);
 
+}
+
+/**
+ * Add virtual y permissions settings.
+ */
+function openy_gated_content_update_8007() {
+  $config_dir = drupal_get_path('module', 'openy_gated_content') . '/config/install/';
+  // Update multiple configurations.
+  $configs = [
+    'openy_gated_content.settings' => [
+      'permissions_entities',
+    ],
+  ];
+  $config_updater = \Drupal::service('openy_upgrade_tool.param_updater');
+  foreach ($configs as $config_name => $params) {
+    $config = $config_dir . $config_name . '.yml';
+    foreach ($params as $param) {
+      $config_updater->update($config, $config_name, $param);
+    }
+  }
 }
