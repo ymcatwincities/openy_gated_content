@@ -216,11 +216,13 @@ function openy_gated_content_user_pass_validation(array &$form, FormStateInterfa
  */
 function openy_gated_content_entity_base_field_info(EntityTypeInterface $entity_type) {
 
-  $allowed_entity_types = [
-    'node',
-    'eventinstance',
-    'eventseries',
-  ];
+  $allowed_entity_types = [];
+
+  $gcConfig = \Drupal::config('openy_gated_config.settings')->getRawData();
+  if (!empty($gcConfig['permissions_entities'])) {
+    $permissionEnabledEntities = $gcConfig['permissions_entities'];
+    $allowed_entity_types = array_keys($permissionEnabledEntities);
+  }
 
   if (in_array($entity_type->id(), $allowed_entity_types)) {
     $fields = [];
