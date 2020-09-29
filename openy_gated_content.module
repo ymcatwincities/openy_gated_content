@@ -108,7 +108,6 @@ function openy_gated_content_form_alter(&$form, FormStateInterface $form_state, 
     return;
   }
 
-  $permissionEnabledEntities = [];
   $gcConfig = \Drupal::config('openy_gated_config.settings')->getRawData();
   if (!empty($gcConfig['permissions_entities'])) {
     $permissionEnabledEntities = $gcConfig['permissions_entities'];
