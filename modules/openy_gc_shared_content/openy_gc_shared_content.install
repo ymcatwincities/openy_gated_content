@@ -6,8 +6,6 @@
  */
 
 use Drupal\Core\Field\BaseFieldDefinition;
-use Drupal\openy_gc_shared_content\Controller\SharedContentProxyController;
-use Drupal\user\Entity\User;
 
 /**
  * Implements hook_install().

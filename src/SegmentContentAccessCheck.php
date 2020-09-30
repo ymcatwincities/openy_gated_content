@@ -50,7 +50,7 @@ class SegmentContentAccessCheck implements ContainerInjectionInterface {
    * @param \Drupal\Core\TempStore\PrivateTempStoreFactory $private_temp_store
    *   Private Temp Store service.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request
-   *   The request stack
+   *   The request stack.
    */
   public function __construct(ConfigFactoryInterface $configFactory, PrivateTempStoreFactory $private_temp_store, RequestStack $request) {
     $this->config = $configFactory->get('openy_gated_content.settings');
