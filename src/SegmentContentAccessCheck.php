@@ -7,8 +7,10 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\recurring_events\Entity\EventInstance;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Class SegmentContentAccessCheck.
@@ -27,13 +29,33 @@ class SegmentContentAccessCheck implements ContainerInjectionInterface {
   protected $config;
 
   /**
+   * Private storage.
+   *
+   * @var \Drupal\Core\TempStore\PrivateTempStoreFactory
+   */
+  protected $privateTempStore;
+
+  /**
+   * The currently active request object.
+   *
+   * @var \Symfony\Component\HttpFoundation\Request
+   */
+  protected $request;
+
+  /**
    * SegmentContentAccessCheck constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   ConfigFacroty service.
+   * @param \Drupal\Core\TempStore\PrivateTempStoreFactory $private_temp_store
+   *   Private Temp Store service.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request
+   *   The request stack
    */
-  public function __construct(ConfigFactoryInterface $configFactory) {
+  public function __construct(ConfigFactoryInterface $configFactory, PrivateTempStoreFactory $private_temp_store, RequestStack $request) {
     $this->config = $configFactory->get('openy_gated_content.settings');
+    $this->privateTempStore = $private_temp_store->get('openy_gc_shared_content_temp');
+    $this->request = $request->getCurrentRequest();
   }
 
   /**
@@ -41,7 +63,9 @@ class SegmentContentAccessCheck implements ContainerInjectionInterface {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('config.factory')
+      $container->get('config.factory'),
+      $container->get('tempstore.private'),
+      $container->get('request_stack')
     );
   }
 
@@ -78,6 +102,12 @@ class SegmentContentAccessCheck implements ContainerInjectionInterface {
       $bundle = $entity->bundle();
 
       if (in_array($bundle, $permissions_config[$type])) {
+
+        $shared_content_client = $this->privateTempStore->get($this->request->getClientIp());
+        if ($shared_content_client) {
+          // Bypass permissions for shared content client servers.
+          return AccessResult::neutral();
+        }
 
         $account_roles = $account->getRoles();
 

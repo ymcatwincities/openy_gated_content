@@ -5,6 +5,7 @@ namespace Drupal\openy_gc_shared_content\Controller;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,8 +14,6 @@ use Symfony\Component\HttpFoundation\Request;
  * Preview Controller for SharedContentFetchForm.
  */
 class SharedContentProxyController extends ControllerBase {
-
-  const SHARED_USER_MAIL = 'shared.content@openy.org';
 
   /**
    * The entity type manager.
@@ -31,11 +30,19 @@ class SharedContentProxyController extends ControllerBase {
   protected $moduleHandler;
 
   /**
+   * Private storage.
+   *
+   * @var \Drupal\Core\TempStore\PrivateTempStoreFactory
+   */
+  protected $privateTempStore;
+
+  /**
    * {@inheritdoc}
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, ModuleHandlerInterface $module_handler) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, ModuleHandlerInterface $module_handler, PrivateTempStoreFactory $private_temp_store) {
     $this->entityTypeManager = $entity_type_manager;
     $this->moduleHandler = $module_handler;
+    $this->privateTempStore = $private_temp_store->get('openy_gc_shared_content_temp');
   }
 
   /**
@@ -44,7 +51,8 @@ class SharedContentProxyController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('entity_type.manager'),
-      $container->get('module_handler')
+      $container->get('module_handler'),
+      $container->get('tempstore.private')
     );
   }
 
@@ -85,19 +93,8 @@ class SharedContentProxyController extends ControllerBase {
       return new JsonResponse(['message' => 'There no servers with specified url and token.'], 400);
     }
 
-    $account = $this->currentUser();
-    if (!$account->isAuthenticated()) {
-      $user_storage = $this->entityTypeManager->getStorage('user');
-      $users = $user_storage->loadByProperties([
-        'mail' => self::SHARED_USER_MAIL,
-      ]);
-      if (empty($users)) {
-        return new JsonResponse(['message' => 'There no shared content user on selected server.'], 400);
-      }
-
-      $user = reset($users);
-      user_login_finalize($user);
-    }
+    // Add client server IP to shared content private temp store.
+    $this->privateTempStore->set($request->getClientIp(), TRUE);
 
     if ($uuid) {
       return $this->redirect('jsonapi.' . $entity_type . '--' . $entity_bundle . '.individual', ['entity' => $uuid], ['query' => $query]);
