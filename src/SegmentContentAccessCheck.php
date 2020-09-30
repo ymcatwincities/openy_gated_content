@@ -106,7 +106,7 @@ class SegmentContentAccessCheck implements ContainerInjectionInterface {
         $shared_content_client = $this->privateTempStore->get($this->request->getClientIp());
         if ($shared_content_client) {
           // Bypass permissions for shared content client servers.
-          return AccessResult::neutral();
+          return AccessResult::allowed();
         }
 
         $account_roles = $account->getRoles();
