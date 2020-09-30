@@ -7,6 +7,37 @@
 
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\field\Entity\FieldConfig;
+use Drupal\Core\Field\BaseFieldDefinition;
+
+/**
+ * Virtual Y install.
+ */
+function openy_gated_content_install() {
+
+  $field_permission = BaseFieldDefinition::create('string')
+    ->setLabel(t('Virtual Y Access Group'))
+    ->setSettings([
+      'max_length' => 240,
+      'default_value' => 'virtual_y',
+    ])
+    ->setRequired(FALSE)
+    ->setRevisionable(FALSE)
+    ->setTranslatable(FALSE)
+    ->setDisplayConfigurable('view', FALSE)
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayOptions('form', [
+      'type' => 'virtual_y_roles_select',
+      'settings' => [
+        'size' => '255',
+      ],
+    ]);
+
+  $definition_manager = \Drupal::entityDefinitionUpdateManager();
+  $definition_manager->installFieldStorageDefinition('field_vy_permission', 'node', 'openy_gated_content', $field_permission);
+  $definition_manager->installFieldStorageDefinition('field_vy_permission', 'eventseries', 'openy_gated_content', $field_permission);
+  $definition_manager->installFieldStorageDefinition('field_vy_permission', 'eventinstance', 'openy_gated_content', $field_permission);
+
+}
 
 /**
  * Add virtual_ymca_editor user role.
@@ -79,10 +110,60 @@ function openy_gated_content_update_8005() {
 }
 
 /**
- * Update virtual_ymca_editor user role.
+ * Install permissions field.
  */
 function openy_gated_content_update_8006() {
-  $config_dir = drupal_get_path('module', 'openy_gc_storage');
+
+  $field_permission = BaseFieldDefinition::create('string')
+    ->setLabel(t('Virtual Y Access Group'))
+    ->setSettings([
+      'max_length' => 240,
+      'default_value' => 'virtual_y',
+    ])
+    ->setRequired(FALSE)
+    ->setRevisionable(FALSE)
+    ->setTranslatable(FALSE)
+    ->setDisplayConfigurable('view', FALSE)
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayOptions('form', [
+      'type' => 'virtual_y_roles_select',
+      'settings' => [
+        'size' => '255',
+      ],
+    ]);
+
+  $definition_manager = \Drupal::entityDefinitionUpdateManager();
+  $definition_manager->installFieldStorageDefinition('field_vy_permission', 'node', 'openy_gated_content', $field_permission);
+  $definition_manager->installFieldStorageDefinition('field_vy_permission', 'eventseries', 'openy_gated_content', $field_permission);
+  $definition_manager->installFieldStorageDefinition('field_vy_permission', 'eventinstance', 'openy_gated_content', $field_permission);
+
+}
+
+/**
+ * Add virtual y permissions settings.
+ */
+function openy_gated_content_update_8007() {
+  $config_dir = drupal_get_path('module', 'openy_gated_content') . '/config/install/';
+  // Update multiple configurations.
+  $configs = [
+    'openy_gated_content.settings' => [
+      'permissions_entities',
+    ],
+  ];
+  $config_updater = \Drupal::service('openy_upgrade_tool.param_updater');
+  foreach ($configs as $config_name => $params) {
+    $config = $config_dir . $config_name . '.yml';
+    foreach ($params as $param) {
+      $config_updater->update($config, $config_name, $param);
+    }
+  }
+}
+
+/**
+ * Update virtual_ymca_editor user role.
+ */
+function openy_gated_content_update_8008() {
+  $config_dir = drupal_get_path('module', 'openy_gated_content');
   $config_dir .= '/config/install/';
   $config_importer = \Drupal::service('openy_upgrade_tool.importer');
   $config_importer->setDirectory($config_dir);
