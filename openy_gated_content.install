@@ -163,7 +163,7 @@ function openy_gated_content_update_8007() {
  * Update virtual_ymca_editor user role.
  */
 function openy_gated_content_update_8008() {
-  $config_dir = drupal_get_path('module', 'openy_gc_storage');
+  $config_dir = drupal_get_path('module', 'openy_gated_content');
   $config_dir .= '/config/install/';
   $config_importer = \Drupal::service('openy_upgrade_tool.importer');
   $config_importer->setDirectory($config_dir);
