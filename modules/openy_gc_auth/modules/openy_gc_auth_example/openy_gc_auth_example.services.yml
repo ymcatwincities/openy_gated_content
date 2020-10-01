@@ -1,0 +1,5 @@
+services:
+  gated_content_events_user_login:
+    class: '\Drupal\openy_gc_auth_example\EventSubscriber\GCExampleUserLoginSubscriber'
+    tags:
+      - { name: 'event_subscriber' }
