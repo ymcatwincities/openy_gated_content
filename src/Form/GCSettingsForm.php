@@ -151,7 +151,10 @@ class GCSettingsForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $settings = $this->config('openy_gated_content.settings');
+    $permissions = $settings->get('permissions_entities');
     $settings->setData($form_state->getValue('app_settings'));
+    // Hard save for setting that is not present at form.
+    $settings->set('permissions_entities', $permissions);
     $settings->save();
     parent::submitForm($form, $form_state);
   }

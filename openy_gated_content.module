@@ -105,7 +105,7 @@ function openy_gated_content_form_alter(&$form, FormStateInterface $form_state, 
     return;
   }
 
-  $gcConfig = \Drupal::config('openy_gated_config.settings')->getRawData();
+  $gcConfig = \Drupal::config('openy_gated_content.settings')->getRawData();
   $allowedForms = [];
   if (!empty($gcConfig['permissions_entities'])) {
     $permissionEnabledEntities = $gcConfig['permissions_entities'];
@@ -130,7 +130,8 @@ function openy_gated_content_form_alter(&$form, FormStateInterface $form_state, 
 
   if (!in_array($form_id, $allowedForms)) {
     // Close access to permissions field for all entities except of enabled.
-    $form['shared_content_settings']['#access'] = FALSE;
+    $form['virtual_y_permissions']['#access'] = FALSE;
+    $form['field_vy_permission']['#access'] = FALSE;
     return;
   }
 
@@ -215,7 +216,7 @@ function openy_gated_content_entity_base_field_info(EntityTypeInterface $entity_
 
   $allowed_entity_types = [];
 
-  $gcConfig = \Drupal::config('openy_gated_config.settings')->getRawData();
+  $gcConfig = \Drupal::config('openy_gated_content.settings')->getRawData();
   if (!empty($gcConfig['permissions_entities'])) {
     $permissionEnabledEntities = $gcConfig['permissions_entities'];
     $allowed_entity_types = array_keys($permissionEnabledEntities);
@@ -226,6 +227,7 @@ function openy_gated_content_entity_base_field_info(EntityTypeInterface $entity_
     $fields['field_vy_permission'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Virtual Y Access Group'))
       ->setCardinality(1)
+      ->setDefaultValue('virtual_y')
       ->setProvider('openy_gated_content')
       ->setRequired(FALSE)
       ->setRevisionable(FALSE)
