@@ -4,7 +4,6 @@ namespace Drupal\openy_gc_auth_daxko_sso\Controller;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\daxko_sso\DaxkoSSOClient;
-use Drupal\user\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Routing\TrustedRedirectResponse;

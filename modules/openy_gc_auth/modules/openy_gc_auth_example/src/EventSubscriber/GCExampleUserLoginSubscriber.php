@@ -50,7 +50,7 @@ class GCExampleUserLoginSubscriber implements EventSubscriberInterface {
       // Remove role in case if you need to change any.
       if (in_array('virtual_y', $roles)) {
         $event->account->removeRole('virtual_y');
-        // Add new roles e.g. virtual_y, virtual_y_premium, virtual_y_trial, etc.
+        // Add new roles virtual_y, virtual_y_premium, virtual_y_trial, etc.
         // Let's keep the same default one for example.
         $event->account->addRole('virtual');
         $event->account->save();

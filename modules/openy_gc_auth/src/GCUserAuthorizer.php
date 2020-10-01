@@ -5,8 +5,7 @@ namespace Drupal\openy_gc_auth;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\openy_gc_auth\Event\GCUserLoginEvent;
 use Drupal\openy_gc_log\Logger;
-use Drupal\user\Entity\User;
-use Drupal\user\UserStorageInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * GCUserAuthorizer class.
@@ -21,6 +20,13 @@ class GCUserAuthorizer {
   protected $userStorage;
 
   /**
+   * The event dispatcher.
+   *
+   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+   */
+  protected $eventDispatcher;
+
+  /**
    * The Gated Content Logger.
    *
    * @var \Drupal\openy_gc_log\Logger
@@ -30,13 +36,16 @@ class GCUserAuthorizer {
   /**
    * GCUserAuthorizer constructor.
    *
-   * @param \Drupal\User\UserStorageInterface $user_storage
-   *   User entity storage.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+   *   Entity Type Manager.
+   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher
+   *   Event dispatcher.
    * @param \Drupal\openy_gc_log\Logger $gcLogger
    *   The Gated Content Logger.
    */
-  public function __construct(EntityTypeManagerInterface $entityTypeManager, Logger $gcLogger = NULL) {
+  public function __construct(EntityTypeManagerInterface $entityTypeManager, EventDispatcherInterface $event_dispatcher, Logger $gcLogger = NULL) {
     $this->userStorage = $entityTypeManager->getStorage('user');
+    $this->eventDispatcher = $event_dispatcher;
     $this->gcLogger = $gcLogger;
   }
 
@@ -73,10 +82,11 @@ class GCUserAuthorizer {
 
     // Instantiate GC login user event.
     $event = new GCUserLoginEvent($account);
-    // Get the event_dispatcher service and dispatch the event.
-    $event_dispatcher = \Drupal::service('event_dispatcher');
-    $event_dispatcher->dispatch(GCUserLoginEvent::EVENT_NAME, $event);
+    // Dispatch the event.
+    $this->eventDispatcher->dispatch(GCUserLoginEvent::EVENT_NAME, $event);
 
     user_login_finalize($account);
+
   }
+
 }
