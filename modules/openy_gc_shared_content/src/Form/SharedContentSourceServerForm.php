@@ -147,6 +147,9 @@ class SharedContentSourceServerForm extends EntityForm {
       $this->messenger()->addMessage($this->t('The %label shared source created.', [
         '%label' => $entity->label(),
       ]));
+      $this->messenger()->addMessage($this->t('Your request to use Virtual Y Shared Content network was sent. You can use it after administrator\'s approval.', [
+        '%label' => $entity->label(),
+      ]));
     }
     else {
       $this->messenger()->addMessage($this->t('The %label shared source updated.', [
