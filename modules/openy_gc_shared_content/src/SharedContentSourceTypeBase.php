@@ -180,7 +180,7 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
    */
   public function getJsonApiEndpoint($uuid = NULL) {
     $url_parts = [
-      'vy-shared-proxy',
+      'jsonapi',
       $this->getEntityType(),
       $this->getEntityBundle(),
     ];
@@ -196,14 +196,17 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
   public function jsonApiCall(SharedContentSourceServerInterface $shared_content_server, array $query_args = [], $uuid = NULL) {
     try {
       $response = $this->client->request(
-        'POST',
+        'GET',
         $shared_content_server->getUrl() . '/' . $this->getJsonApiEndpoint($uuid),
         [
-          'body' => json_encode([
-            'url' => $this->requestStack->getSchemeAndHttpHost(),
-            'token' => $shared_content_server->getToken(),
-          ]),
           'query' => $query_args,
+          'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+            'Referer' => $this->requestStack->getSchemeAndHttpHost(),
+            'Authorization' => 'Bearer ' . $shared_content_server->getToken(),
+            'X-Shared-Content' => TRUE,
+          ],
         ]
       );
     }
