@@ -24,6 +24,8 @@ use Drupal\Core\Field\BaseFieldDefinition;
  *   fieldable = FALSE,
  *   admin_permission = "administer gated content configuration",
  * )
+ *
+ * @deprecated in openy_gated_content:0.16.
  */
 class AuthCustomUser extends ContentEntityBase implements AuthCustomUserInterface {
 

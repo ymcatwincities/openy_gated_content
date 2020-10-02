@@ -5,6 +5,38 @@
  * Installation file for Open Y Virtual YMCA.
  */
 
+use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\field\Entity\FieldConfig;
+use Drupal\Core\Field\BaseFieldDefinition;
+
+/**
+ * Virtual Y install.
+ */
+function openy_gated_content_install() {
+
+  $field_permission = BaseFieldDefinition::create('string')
+    ->setLabel(t('Virtual Y Access Group'))
+    ->setSetting('max_length', 240)
+    ->setDefaultValue('virtual_y')
+    ->setRequired(FALSE)
+    ->setRevisionable(FALSE)
+    ->setTranslatable(FALSE)
+    ->setDisplayConfigurable('view', FALSE)
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayOptions('form', [
+      'type' => 'virtual_y_roles_select',
+      'settings' => [
+        'size' => '255',
+      ],
+    ]);
+
+  $definition_manager = \Drupal::entityDefinitionUpdateManager();
+  $definition_manager->installFieldStorageDefinition('field_vy_permission', 'node', 'openy_gated_content', $field_permission);
+  $definition_manager->installFieldStorageDefinition('field_vy_permission', 'eventseries', 'openy_gated_content', $field_permission);
+  $definition_manager->installFieldStorageDefinition('field_vy_permission', 'eventinstance', 'openy_gated_content', $field_permission);
+
+}
+
 /**
  * Add virtual_ymca_editor user role.
  */
@@ -49,4 +81,89 @@ function openy_gated_content_update_8003() {
     'openy_gated_content.settings',
     'pager_limit'
   );
+}
+
+/**
+ * Add new Virtual YMCA user roles.
+ */
+function openy_gated_content_update_8004() {
+  $config_dir = drupal_get_path('module', 'openy_gated_content');
+  $config_dir .= '/config/install/';
+  // Import new configuration.
+  $config_importer = \Drupal::service('openy_upgrade_tool.importer');
+  $config_importer->setDirectory($config_dir);
+  $config_importer->importConfigs([
+    'user.role.virtual_y',
+    'user.role.virtual_y_premium',
+    'user.role.virtual_y_trial',
+  ]);
+}
+
+/**
+ * Remove field_link_to_gated_content_app completely.
+ */
+function openy_gated_content_update_8005() {
+  FieldConfig::loadByName('paragraph', 'gated_content_login', 'field_link_to_gated_content_app')->delete();
+  FieldStorageConfig::loadByName('paragraph', 'field_link_to_gated_content_app')->delete();
+}
+
+/**
+ * Install permissions field.
+ */
+function openy_gated_content_update_8006() {
+
+  $field_permission = BaseFieldDefinition::create('string')
+    ->setLabel(t('Virtual Y Access Group'))
+    ->setSetting('max_length', 240)
+    ->setDefaultValue('virtual_y')
+    ->setRequired(FALSE)
+    ->setRevisionable(FALSE)
+    ->setTranslatable(FALSE)
+    ->setDisplayConfigurable('view', FALSE)
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayOptions('form', [
+      'type' => 'virtual_y_roles_select',
+      'settings' => [
+        'size' => '255',
+      ],
+    ]);
+
+  $definition_manager = \Drupal::entityDefinitionUpdateManager();
+  $definition_manager->installFieldStorageDefinition('field_vy_permission', 'node', 'openy_gated_content', $field_permission);
+  $definition_manager->installFieldStorageDefinition('field_vy_permission', 'eventseries', 'openy_gated_content', $field_permission);
+  $definition_manager->installFieldStorageDefinition('field_vy_permission', 'eventinstance', 'openy_gated_content', $field_permission);
+
+}
+
+/**
+ * Add virtual y permissions settings.
+ */
+function openy_gated_content_update_8007() {
+  $config_dir = drupal_get_path('module', 'openy_gated_content') . '/config/install/';
+  // Update multiple configurations.
+  $configs = [
+    'openy_gated_content.settings' => [
+      'permissions_entities',
+    ],
+  ];
+  $config_updater = \Drupal::service('openy_upgrade_tool.param_updater');
+  foreach ($configs as $config_name => $params) {
+    $config = $config_dir . $config_name . '.yml';
+    foreach ($params as $param) {
+      $config_updater->update($config, $config_name, $param);
+    }
+  }
+}
+
+/**
+ * Update virtual_ymca_editor user role.
+ */
+function openy_gated_content_update_8008() {
+  $config_dir = drupal_get_path('module', 'openy_gated_content');
+  $config_dir .= '/config/install/';
+  $config_importer = \Drupal::service('openy_upgrade_tool.importer');
+  $config_importer->setDirectory($config_dir);
+  $config_importer->importConfigs([
+    'user.role.virtual_ymca_editor',
+  ]);
 }

@@ -76,6 +76,7 @@ class GCSettingsForm extends ConfigFormBase {
       '#description' => $this->t('Items limit for blocks with pager.'),
       '#type' => 'number',
       '#default_value' => $config->get('pager_limit') ?? self::PAGER_LIMIT_DEFAULT,
+      '#required' => TRUE,
     ];
 
     $form['app_settings']['components'] = [
@@ -121,6 +122,20 @@ class GCSettingsForm extends ConfigFormBase {
       ];
     }
 
+    $form['app_settings']['virtual_y_url'] = [
+      '#type' => 'textfield',
+      '#title' => 'Virtual Y Landing Page url',
+      '#default_value' => $config->get('virtual_y_url'),
+      '#required' => TRUE,
+    ];
+
+    $form['app_settings']['virtual_y_login_url'] = [
+      '#type' => 'textfield',
+      '#title' => 'Virtual Y Login Landing Page url',
+      '#default_value' => $config->get('virtual_y_login_url'),
+      '#required' => TRUE,
+    ];
+
     $form['actions']['#type'] = 'actions';
     $form['actions']['submit'] = [
       '#type' => 'submit',
@@ -136,7 +151,10 @@ class GCSettingsForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $settings = $this->config('openy_gated_content.settings');
+    $permissions = $settings->get('permissions_entities');
     $settings->setData($form_state->getValue('app_settings'));
+    // Hard save for setting that is not present at form.
+    $settings->set('permissions_entities', $permissions);
     $settings->save();
     parent::submitForm($form, $form_state);
   }

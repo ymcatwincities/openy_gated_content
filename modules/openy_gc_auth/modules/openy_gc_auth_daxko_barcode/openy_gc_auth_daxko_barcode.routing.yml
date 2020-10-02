@@ -1,8 +1,9 @@
 openy_gc_auth_daxko_barcode.validate:
-  path: /openy_gc_auth_daxko_barcode/validate
+  path: /openy_gc_auth_daxko_barcode/validate/{barcode}
   defaults:
     _controller: \Drupal\openy_gc_auth_daxko_barcode\Controller\DaxkoBarcodeController::validate
     _title: Daxko barcode validation
+    barcode: ''
   requirements:
     _permission: 'access content'
   options:
