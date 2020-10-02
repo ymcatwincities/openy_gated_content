@@ -35,7 +35,8 @@ class SourceMigrationDeriver extends DeriverBase implements DeriverInterface, Co
   public function __construct(EntityTypeManager $entityTypeManager) {
     $this->sharedContentStorage = $entityTypeManager
       ->getStorage('shared_content_source')
-      ->getQuery();
+      ->getQuery()
+      ->condition('status', 1);
   }
 
   /**
