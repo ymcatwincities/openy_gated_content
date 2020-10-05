@@ -3,7 +3,7 @@
     <div class="videos__header">
       <h2 class="title">{{ title }}</h2>
       <router-link
-        :to="{ name: 'CategoryListing' }"
+        :to="{ name: 'CategoryListing', params: { type: 'video' }}"
         v-if="viewAll && listingIsNotEmpty"
         class="view-all"
       >
@@ -26,6 +26,10 @@
     <div v-else class="empty-listing">
       Videos not found.
     </div>
+    <Pagination
+      v-if="pagination"
+      :links="links"
+    ></Pagination>
   </div>
 </template>
 
@@ -33,14 +37,17 @@
 import client from '@/client';
 import VideoTeaser from '@/components/video/VideoTeaser.vue';
 import Spinner from '@/components/Spinner.vue';
+import Pagination from '@/components/Pagination.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
+import { SettingsMixin } from '@/mixins/SettingsMixin';
 
 export default {
   name: 'VideoListing',
-  mixins: [JsonApiCombineMixin],
+  mixins: [JsonApiCombineMixin, SettingsMixin],
   components: {
     VideoTeaser,
     Spinner,
+    Pagination,
   },
   props: {
     title: {
@@ -68,12 +75,17 @@ export default {
       type: Number,
       default: 0,
     },
+    pagination: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
       loading: true,
       error: false,
-      listing: null,
+      listing: [],
+      links: {},
       featuredLocal: false,
       params: [
         'field_gc_video_media',
@@ -132,7 +144,13 @@ export default {
         params.filter.field_gc_video_featured = 1;
       }
       params.filter.status = 1;
-      if (this.limit !== 0) {
+      if (this.pagination) {
+        const currentPage = parseInt(this.$route.query.page, 10) || 0;
+        params.page = {
+          limit: this.config.pager_limit,
+          offset: currentPage * this.config.pager_limit,
+        };
+      } else if (this.limit !== 0) {
         params.page = {
           limit: this.limit,
         };
@@ -141,6 +159,7 @@ export default {
       client
         .get('jsonapi/node/gc_video', { params })
         .then((response) => {
+          this.links = response.data.links;
           this.listing = this.combineMultiple(
             response.data.data,
             response.data.included,

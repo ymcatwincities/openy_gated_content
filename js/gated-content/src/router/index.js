@@ -1,15 +1,11 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Store from '@/store';
 import Home from '@/views/Home.vue';
-import Login from '@/views/Login.vue';
-import CustomAuthEmailConfirm from '@/components/auth/CustomAuthEmailConfirm.vue';
 import NotFound from '@/views/NotFound.vue';
 import VideoPage from '@/views/VideoPage.vue';
 import BlogPage from '@/views/BlogPage.vue';
-import BlogListingPage from '@/views/BlogListingPage.vue';
 import CategoryPage from '@/views/CategoryPage.vue';
-import VideoCategoriesListing from '@/views/VideoCategoriesListing.vue';
+import CategoriesListing from '@/views/CategoriesListing.vue';
 import LiveStreamPage from '@/views/LiveStreamPage.vue';
 import LiveStreamListingPage from '@/views/LiveStreamListingPage.vue';
 import VirtualMeetingPage from '@/views/VirtualMeetingPage.vue';
@@ -25,27 +21,14 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
-    path: '/login',
-    name: 'Login',
-    component: Login,
-    meta: { requiresGuest: true },
-  },
-  {
-    path: '/login/:id/:token/confirm',
-    name: 'CustomAuthEmailConfirm',
-    component: CustomAuthEmailConfirm,
-    props: true,
-    meta: { requiresGuest: true },
-  },
-  {
-    path: '/categories',
+    path: '/categories/:type',
     name: 'CategoryListing',
-    component: VideoCategoriesListing,
+    component: CategoriesListing,
     props: true,
     meta: { requiresAuth: true },
   },
   {
-    path: '/category/:cid',
+    path: '/category/:type/:cid',
     name: 'Category',
     component: CategoryPage,
     props: true,
@@ -87,13 +70,6 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
-    path: '/blog-post',
-    name: 'BlogListingPage',
-    component: BlogListingPage,
-    props: true,
-    meta: { requiresAuth: true },
-  },
-  {
     path: '/blog-post/:id',
     name: 'BlogPage',
     component: BlogPage,
@@ -112,16 +88,6 @@ const router = new VueRouter({
   scrollBehavior() {
     return { x: 0, y: 0 };
   },
-});
-
-router.beforeEach((to, from, next) => {
-  if (to.meta.requiresAuth && !Store.getters.isLoggedIn) {
-    return next({ name: 'Login' });
-  }
-  if (to.meta.requiresGuest && Store.getters.isLoggedIn) {
-    return next({ name: 'Home' });
-  }
-  return next();
 });
 
 export default router;

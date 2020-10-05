@@ -4,11 +4,14 @@ namespace Drupal\openy_gc_auth_daxko_sso\Controller;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\daxko_sso\DaxkoSSOClient;
+use Drupal\user\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Routing\TrustedRedirectResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Drupal\openy_gc_log\Logger;
 
 /**
  * Class DaxkoLinkController.
@@ -30,18 +33,30 @@ class DaxkoLinkController extends ControllerBase {
   protected $daxkoClient;
 
   /**
+   * The Gated Content Logger.
+   *
+   * @var \Drupal\openy_gc_log\Logger
+   */
+  protected $gcLogger;
+
+  /**
    * DaxkoLinkController constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   Config factory instance.
    * @param \Drupal\daxko_sso\DaxkoSSOClient $daxkoSSOClient
    *   Daxko client instance.
+   * @param \Drupal\openy_gc_log\Logger $gcLogger
+   *   The Gated Content Logger.
    */
   public function __construct(
     ConfigFactoryInterface $configFactory,
-    DaxkoSSOClient $daxkoSSOClient) {
+    DaxkoSSOClient $daxkoSSOClient,
+    Logger $gcLogger = NULL
+  ) {
     $this->configFactory = $configFactory;
     $this->daxkoClient = $daxkoSSOClient;
+    $this->gcLogger = $gcLogger;
   }
 
   /**
@@ -50,7 +65,8 @@ class DaxkoLinkController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('config.factory'),
-      $container->get('daxko_sso.client')
+      $container->get('daxko_sso.client'),
+      $container->has('openy_gc_log.logger') ? $container->get('openy_gc_log.logger') : NULL
     );
   }
 
@@ -93,8 +109,8 @@ class DaxkoLinkController extends ControllerBase {
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   Current request object.
    *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   Json array with user fields or error.
+   * @return mixed
+   *   Returns RedirectResponse or JsonResponse.
    */
   public function backlink(Request $request) {
 
@@ -121,24 +137,40 @@ class DaxkoLinkController extends ControllerBase {
     $userDetails = $this->daxkoClient->getRequest('members/' . $userData->member_id);
     // Check if this user is an active client.
     if ($userDetails->active) {
-      return new JsonResponse(
-        [
-          'error' => 0,
-          'token' => $token,
-          'user' => [
-            'name' => $userDetails->name->first_name,
-            'email' => $userDetails->emails[0]->email,
-          ],
-        ]
-      );
+      // Create drupal user if it doesn't exist and login it.
+      $name = $userDetails->name->first_name . ' ' . $userDetails->name->last_name;
+      $email = $userDetails->emails[0]->email;
+
+      $account = user_load_by_mail($email);
+
+      if (!$account) {
+        $user = User::create();
+        $user->setPassword(user_password());
+        $user->enforceIsNew();
+        $user->setEmail($email);
+        $user->setUsername($name);
+        $user->addRole('virtual_y');
+        $user->activate();
+        $result = $account = $user->save();
+        if ($result) {
+          $account = user_load_by_mail($email);
+        }
+      }
+
+      // Log user login.
+      if ($this->gcLogger instanceof Logger) {
+        $this->gcLogger->addLog([
+          'email' => $email,
+          'event_type' => 'userLoggedIn',
+        ]);
+      }
+      user_login_finalize($account);
+
+      return new RedirectResponse($this->configFactory->get('openy_gated_content.settings')->get('virtual_y_url'));
     }
     else {
-      return new JsonResponse(
-        [
-          'error' => 1,
-          'message' => 'User is not active client',
-        ]
-      );
+      // Redirect back to Virual Y login page.
+      return new RedirectResponse($this->configFactory->get('openy_gated_content.settings')->get('virtual_y_login_url'));
     }
   }
 

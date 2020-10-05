@@ -8,7 +8,12 @@
  * @ingroup themeable
  */
 #}
-{{ attach_library('openy_gated_content/gated-content-vue') }}
+{{ attach_library('openy_gated_content/gated-content-styles') }}
 <div id="gated-content">
-  <App auth="{{ auth_provider_id }}" config="{{ auth_configuration }}" settings="{{ app_settings }}" app-url="{{ app_url }}"></App>
+  <div class="login">
+    <h2 class="title">{{ 'Sign In'|t }}</h2>
+    <div class="container">
+      {{ drupal_block('virtual_y_login') }}
+    </div>
+  </div>
 </div>

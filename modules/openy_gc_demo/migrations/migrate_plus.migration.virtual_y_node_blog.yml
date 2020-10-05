@@ -15,6 +15,7 @@ source:
     -
       id: 1
       title: 'WHY YOU SHOULD GIVE WALKING A TRY'
+      category: 7
       description: |
         <p>Learn about the very real benefits that walking can bring. According to Harvard Medical School, “Walking doesn’t get the respect it deserves, either for its health benefits, its value for transportation, or its role in recreation.” Harvard explains the primary difference between walking and running—and it’s not simply pace. At any speed, walkers have one foot on the ground at all times—runners spend time in each stride being airborne, which makes it a more high-impact activity (meaning it’s more stressful on joints and can bring a higher risk for injury). If you’re not convinced that walking can be a good workout, you can always kick things up a notch by walking with weights, taking your walk to the stairs or walking in the pool. Health benefits The Mayo Clinic says that regular brisk walking can help you:
            Maintain a healthy weight <br>
@@ -27,6 +28,7 @@ source:
     -
       id: 2
       title: 'GROWN-UP FUN IN ADULT SPORTS LEAGUES'
+      category: 7
       description: |
         <p>At the Y, kids don’t have all the fun—adults can participate in sports leagues, too. In addition to having a great time, sports can help you: Automatically build physical exercise into your week Through practice and play you’ll get a great workout. Adding a sport to your regular routine of running, walking or cycling can help you cross-train your body. Not only do you get the body benefits of working out regularly, you have built-in accountability to your team to show up each week, which can help you build fitness into your regular routine. Work on your mental health The benefits aren’t all physical. Participating in sports can be a great way to:
            Improve your mood
@@ -39,6 +41,7 @@ source:
     -
       id: 3
       title: 'LIFESTYLE CHANGES BEYOND THE FIRST TWO WEEKS'
+      category: 7
       description: |
         <p>Tip: Staying motivated once the novelty of making changes wears off can be challenging – reinforce your successes, revise your plan to fit your changing needs and fill the gaps left by discarding old habits to keep moving forward toward a lifetime of feeling your best. By the Chef Marshall O’Brien Group After a couple weeks following your Personal Wellness Plan, you are falling into a rhythm and you have had some success. But when the novelty of making lifestyle change wears off, it is easy to slip back into apathy and old habits. This week, we discuss ways to stay motivated and what to do when you feel yourself slipping. Look over your completed 2-Week Personal Plan Towards Wellness before addressing the items below. Keep moving forward so your first two weeks become a permanent new reality of healthier living and feeling your best! Reinforce Your Successes First and foremost, recognize the goals you have met over the past couple weeks and examine what enabled you to succeed. Making permanent changes is challenging, and you should feel proud when you successfully take a step to improve your life. The longer these changes are part of your routine, the easier and more natural they are to maintain. Reinforce your successes by rewarding yourself. Steer clear of food rewards; choose something that supports your wellness and motivates you to keep working towards change:
            Buy a new workout outfit
@@ -93,6 +96,14 @@ process:
     - plugin: migration_lookup
       migration: virtual_y_media_image
       source: image
+  field_gc_video_category:
+    -
+      plugin: migration
+      migration: virtual_y_gc_category
+      source: category
+  field_vy_permission:
+    plugin: default_value
+    default_value: virtual_y
 
 destination:
   plugin: 'entity:node'
@@ -101,4 +112,5 @@ destination:
 migration_dependencies:
   required:
     - virtual_y_media_image
+    - virtual_y_gc_category
   optional: {  }

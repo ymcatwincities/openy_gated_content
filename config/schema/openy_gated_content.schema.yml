@@ -19,6 +19,15 @@ openy_gated_content.settings:
     event_add_to_calendar:
       type: boolean
       label: 'Add to Calendar'
+    pager_limit:
+      type: integer
+      label: 'Pager limit'
+    virtual_y_url:
+      type: string
+      label: 'Virtual Y Landing Page url'
+    virtual_y_login_url:
+      type: string
+      label: 'Virtual Y Login Landing Page url'
     components:
       type: mapping
       label: 'Components settings'

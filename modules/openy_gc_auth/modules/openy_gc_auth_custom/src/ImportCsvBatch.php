@@ -218,6 +218,7 @@ class ImportCsvBatch {
 
     /** @var \Drupal\migrate\Plugin\Migration $migration */
     $migration = $config['migration'];
+    $migration->set('syncSource', TRUE);
     $migration_result = MigrationInterface::RESULT_FAILED;
     if ($migration) {
       static::$messages = new MigrateMessage();

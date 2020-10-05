@@ -1,0 +1,7 @@
+openy_gc_shared_content_server.increase_downloads_stat:
+  path: '/virtual-y-server/inc-downloads'
+  defaults:
+    _controller: '\Drupal\openy_gc_shared_content_server\Controller\DownloadsIncrementController::execute'
+  methods: [POST]
+  requirements:
+    _permission: 'access content'

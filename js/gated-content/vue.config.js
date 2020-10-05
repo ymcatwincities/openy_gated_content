@@ -8,8 +8,6 @@ module.exports = {
       axios: 'axios',
       'vue-router': 'VueRouter',
       vuex: 'Vuex',
-      'vuex-persist': 'VuexPersistence',
-      'vue-recaptcha': 'VueRecaptcha',
     },
   },
   pluginOptions: {

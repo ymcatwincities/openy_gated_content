@@ -3,7 +3,6 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.eventseries.list
-    - system.menu.main
   module:
     - options
     - recurring_events
@@ -1356,7 +1355,7 @@ display:
       display_extenders: {  }
       path: events/series
       menu:
-        type: normal
+        type: none
         title: 'Event Series'
         description: 'Event series listing'
         expanded: false

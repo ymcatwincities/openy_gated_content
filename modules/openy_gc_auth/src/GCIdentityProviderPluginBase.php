@@ -6,6 +6,7 @@ use Drupal\Component\Plugin\PluginBase;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -38,22 +39,37 @@ abstract class GCIdentityProviderPluginBase extends PluginBase implements GCIden
   protected $entityTypeManager;
 
   /**
+   * The form builder service.
+   *
+   * @var \Drupal\Core\Form\FormBuilderInterface
+   */
+  protected $formBuilder;
+
+  /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config, EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config, EntityTypeManagerInterface $entity_type_manager, FormBuilderInterface $form_builder) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->configFactory = $config;
     // We use pre-saved configuration here.
     $configuration = $this->configFactory->get($this->getConfigName())->get();
     $this->setConfiguration($configuration);
     $this->entityTypeManager = $entity_type_manager;
+    $this->formBuilder = $form_builder;
   }
 
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    return new static($configuration, $plugin_id, $plugin_definition, $container->get('config.factory'), $container->get('entity_type.manager'));
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $container->get('config.factory'),
+      $container->get('entity_type.manager'),
+      $container->get('form_builder')
+    );
   }
 
   /**
@@ -139,15 +155,6 @@ abstract class GCIdentityProviderPluginBase extends PluginBase implements GCIden
       $configuration->setData($this->configuration);
       $configuration->save();
     }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getDataForApp():array {
-    return [
-      'type' => $this->getId(),
-    ];
   }
 
 }
