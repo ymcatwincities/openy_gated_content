@@ -7,8 +7,6 @@ dependencies:
   module:
     - openy_gc_log
     - user
-_core:
-  default_config_hash: IznglBTuuCmBnXCbRrnLdgGq2NOzuMQ3axmujUAS5kM
 id: virtual_y_logs
 label: 'Virtual Y Logs'
 module: views
