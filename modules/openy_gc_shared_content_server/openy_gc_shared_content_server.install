@@ -45,3 +45,31 @@ function openy_gc_shared_content_server_install() {
   $definition_manager->installFieldStorageDefinition('field_share_count', 'node', 'openy_gc_shared_content_server', $field_share_count);
 
 }
+
+/**
+ * Add 'status' field to 'shared_content_source' entity type.
+ */
+function openy_gc_shared_content_server_update_8001() {
+  $definition_update_manager = \Drupal::entityDefinitionUpdateManager();
+
+  $entity_type = $definition_update_manager->getEntityType('shared_content_source');
+  $entity_keys = $entity_type->getKeys();
+  $entity_keys['published'] = 'status';
+  $entity_type->set('entity_keys', $entity_keys);
+  $definition_update_manager->updateEntityType($entity_type);
+
+  $status = BaseFieldDefinition::create('boolean')
+    ->setLabel(t('Status'))
+    ->setDescription(t('Indicating whether the Shared content source Entity is approved.'))
+    ->setDisplayOptions('form', [
+      'type' => 'boolean_checkbox',
+      'settings' => [
+        'display_label' => TRUE,
+      ],
+      'weight' => 5,
+    ])
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDefaultValue(FALSE);
+
+  $definition_update_manager->installFieldStorageDefinition('status', 'shared_content_source', 'shared_content_source', $status);
+}

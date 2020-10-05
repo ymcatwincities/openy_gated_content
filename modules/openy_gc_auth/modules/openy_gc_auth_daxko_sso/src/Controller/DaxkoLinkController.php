@@ -4,14 +4,13 @@ namespace Drupal\openy_gc_auth_daxko_sso\Controller;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\daxko_sso\DaxkoSSOClient;
-use Drupal\user\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Routing\TrustedRedirectResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Drupal\openy_gc_log\Logger;
+use Drupal\openy_gc_auth\GCUserAuthorizer;
 
 /**
  * Class DaxkoLinkController.
@@ -33,11 +32,11 @@ class DaxkoLinkController extends ControllerBase {
   protected $daxkoClient;
 
   /**
-   * The Gated Content Logger.
+   * The Gated Content User Authorizer.
    *
-   * @var \Drupal\openy_gc_log\Logger
+   * @var \Drupal\openy_gc_auth\GCUserAuthorizer
    */
-  protected $gcLogger;
+  protected $gcUserAuthorizer;
 
   /**
    * DaxkoLinkController constructor.
@@ -46,17 +45,17 @@ class DaxkoLinkController extends ControllerBase {
    *   Config factory instance.
    * @param \Drupal\daxko_sso\DaxkoSSOClient $daxkoSSOClient
    *   Daxko client instance.
-   * @param \Drupal\openy_gc_log\Logger $gcLogger
-   *   The Gated Content Logger.
+   * @param \Drupal\openy_gc_auth\GCUserAuthorizer $gcUserAuthorizer
+   *   The Gated User Authorizer.
    */
   public function __construct(
     ConfigFactoryInterface $configFactory,
     DaxkoSSOClient $daxkoSSOClient,
-    Logger $gcLogger = NULL
+    GCUserAuthorizer $gcUserAuthorizer
   ) {
     $this->configFactory = $configFactory;
     $this->daxkoClient = $daxkoSSOClient;
-    $this->gcLogger = $gcLogger;
+    $this->gcUserAuthorizer = $gcUserAuthorizer;
   }
 
   /**
@@ -66,7 +65,7 @@ class DaxkoLinkController extends ControllerBase {
     return new static(
       $container->get('config.factory'),
       $container->get('daxko_sso.client'),
-      $container->has('openy_gc_log.logger') ? $container->get('openy_gc_log.logger') : NULL
+      $container->get('openy_gc_auth.user_authorizer')
     );
   }
 
@@ -141,30 +140,8 @@ class DaxkoLinkController extends ControllerBase {
       $name = $userDetails->name->first_name . ' ' . $userDetails->name->last_name;
       $email = $userDetails->emails[0]->email;
 
-      $account = user_load_by_mail($email);
-
-      if (!$account) {
-        $user = User::create();
-        $user->setPassword(user_password());
-        $user->enforceIsNew();
-        $user->setEmail($email);
-        $user->setUsername($name);
-        $user->addRole('virtual_y');
-        $user->activate();
-        $result = $account = $user->save();
-        if ($result) {
-          $account = user_load_by_mail($email);
-        }
-      }
-
-      // Log user login.
-      if ($this->gcLogger instanceof Logger) {
-        $this->gcLogger->addLog([
-          'email' => $email,
-          'event_type' => 'userLoggedIn',
-        ]);
-      }
-      user_login_finalize($account);
+      // Authorize user (register, login, log, etc).
+      $this->gcUserAuthorizer->authorizeUser($name, $email);
 
       return new RedirectResponse($this->configFactory->get('openy_gated_content.settings')->get('virtual_y_url'));
     }
