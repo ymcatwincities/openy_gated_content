@@ -26,7 +26,7 @@ export const EventMixin = {
     },
     instructor() {
       return this.video.attributes.field_ls_host_name ? this.video.attributes.field_ls_host_name
-        : this.video.attributes.instructor;
+        : this.video.attributes.host_name;
     },
     config() {
       return this.$store.getters.getAppSettings;

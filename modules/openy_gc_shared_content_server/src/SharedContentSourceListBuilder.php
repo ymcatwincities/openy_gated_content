@@ -18,6 +18,7 @@ class SharedContentSourceListBuilder extends EntityListBuilder {
    */
   public function buildHeader() {
     $header['id'] = $this->t('Shared content source ID');
+    $header['status'] = $this->t('Status');
     $header['name'] = $this->t('Name');
     $header['url'] = $this->t('Url');
     return $header + parent::buildHeader();
@@ -29,6 +30,7 @@ class SharedContentSourceListBuilder extends EntityListBuilder {
   public function buildRow(EntityInterface $entity) {
     /* @var \Drupal\openy_gc_shared_content_server\Entity\SharedContentSource $entity */
     $row['id'] = $entity->id();
+    $row['status'] = $entity->getStatus() == 1 ? $this->t('Approved') : $this->t('Unapproved');
     $row['name'] = Link::createFromRoute(
       $entity->label(),
       'entity.shared_content_source.edit_form',
