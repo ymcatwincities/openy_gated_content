@@ -4,7 +4,7 @@ Virtual Y provide's pluginable system for authentication variants.
 You could easily implement your own integration with your CRM if it doesent exist yet.
 At now, we have implemented next authentication plugins:
 
-## [Dummy](/modules/openy_gc_auth/modules/openy_gc_auth_demo/README.md)
+## [Dummy](modules/openy_gc_auth/modules/openy_gc_auth_demo/README.md)
 
 Demo or bypass plugin. User could enter your gated area by clicking on Enter Virtual YMCA button.
 Could be used for testing of your Virtual Y or for demonstration of Virtual Y features.
