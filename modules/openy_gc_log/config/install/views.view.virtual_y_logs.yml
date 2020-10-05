@@ -1,8 +1,14 @@
 langcode: en
 status: true
 dependencies:
+  config:
+    - user.role.administrator
+    - user.role.virtual_ymca_editor
   module:
     - openy_gc_log
+    - user
+_core:
+  default_config_hash: IznglBTuuCmBnXCbRrnLdgGq2NOzuMQ3axmujUAS5kM
 id: virtual_y_logs
 label: 'Virtual Y Logs'
 module: views
@@ -18,8 +24,11 @@ display:
     position: 0
     display_options:
       access:
-        type: none
-        options: {  }
+        type: role
+        options:
+          role:
+            virtual_ymca_editor: virtual_ymca_editor
+            administrator: administrator
       cache:
         type: tag
         options: {  }
@@ -390,16 +399,13 @@ display:
           entity_type: log_entity
           plugin_id: field
         operations:
+          id: operations
           table: log_entity
           field: operations
-          id: operations
-          entity_type: null
-          entity_field: null
-          plugin_id: entity_operations
           relationship: none
           group_type: group
           admin_label: ''
-          label: ''
+          label: Operations
           exclude: false
           alter:
             alter_text: false
@@ -441,6 +447,9 @@ display:
           empty_zero: false
           hide_alter_empty: true
           destination: false
+          entity_type: null
+          entity_field: null
+          plugin_id: entity_operations
       filters:
         created:
           id: created
@@ -783,6 +792,7 @@ display:
         - 'languages:language_interface'
         - url
         - url.query_args
+        - user.roles
       tags: {  }
   page_1:
     display_plugin: page
@@ -800,4 +810,5 @@ display:
         - 'languages:language_interface'
         - url
         - url.query_args
+        - user.roles
       tags: {  }
