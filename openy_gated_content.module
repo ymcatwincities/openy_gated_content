@@ -113,6 +113,7 @@ function openy_gated_content_form_alter(&$form, FormStateInterface $form_state, 
       foreach ($bundle_list as $bundle) {
         $allowedForms[] = $entity_key . '_' . $bundle . '_form';
         $allowedForms[] = $entity_key . '_' . $bundle . '_edit_form';
+        $allowedForms[] = $entity_key . '_' . $bundle . '_add_form';
       }
     }
   }
