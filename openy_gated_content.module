@@ -244,7 +244,8 @@ function openy_gated_content_entity_base_field_info(EntityTypeInterface $entity_
             'size' => '255',
           ],
         ]);
-    } else {
+    }
+    else {
 
       $fields['field_vy_permission'] = BaseFieldDefinition::create('string')
         ->setLabel(t('Virtual Y Access Group'))

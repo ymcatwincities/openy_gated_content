@@ -91,8 +91,6 @@ function openy_gc_storage_update_8004() {
     'field_inheritance.field_inheritance.eventinstance_virtual_meeting_category',
   ]);
 
-
-
 }
 
 /**
