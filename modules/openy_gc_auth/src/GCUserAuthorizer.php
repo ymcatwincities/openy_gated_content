@@ -11,6 +11,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class GCUserAuthorizer {
 
+  const VIRTUAL_Y_DEFAULT_ROLE = 'virtual_y';
+
   /**
    * User entity storage.
    *
@@ -54,7 +56,7 @@ class GCUserAuthorizer {
       $user->enforceIsNew();
       $user->setEmail($email);
       $user->setUsername($name);
-      $user->addRole('virtual_y');
+      $user->addRole(self::VIRTUAL_Y_DEFAULT_ROLE);
       $user->activate();
       $result = $account = $user->save();
       if ($result) {
