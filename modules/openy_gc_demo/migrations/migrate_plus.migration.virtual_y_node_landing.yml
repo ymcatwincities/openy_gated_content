@@ -91,13 +91,13 @@ process:
     source: header_content
     process:
       target_id:
-        plugin: migration
+        plugin: migration_lookup
         migration:
           - virtual_y_paragraph_banner
           - virtual_y_paragraph_small_banner
         source: header_content_id
       target_revision_id:
-        plugin: migration
+        plugin: migration_lookup
         migration:
           - virtual_y_paragraph_banner
           - virtual_y_paragraph_small_banner
@@ -107,14 +107,14 @@ process:
     source: content
     process:
       target_id:
-        plugin: migration
+        plugin: migration_lookup
         migration:
           - virtual_y_paragraph_simple_content
           - virtual_y_paragraph_gated_content
           - virtual_y_paragraph_gated_content_login
         source: content_id
       target_revision_id:
-        plugin: migration
+        plugin: migration_lookup
         migration:
           - virtual_y_paragraph_simple_content
           - virtual_y_paragraph_gated_content
@@ -125,13 +125,13 @@ process:
     source: bottom_content
     process:
       target_id:
-        plugin: migration
+        plugin: migration_lookup
         migration:
           - virtual_y_paragraph_banner
           - virtual_y_paragraph_small_banner
         source: bottom_content_id
       target_revision_id:
-        plugin: migration
+        plugin: migration_lookup
         migration:
           - virtual_y_paragraph_banner
           - virtual_y_paragraph_small_banner
