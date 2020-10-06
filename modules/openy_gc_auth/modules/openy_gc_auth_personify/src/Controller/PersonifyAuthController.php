@@ -139,7 +139,7 @@ class PersonifyAuthController extends ControllerBase {
       $this->logger->warning($errorMessage);
     }
 
-    $redirect_url = Url::fromRoute('<front>')->toString();
+    $redirect_url = $this->configFactory->get('openy_gated_content.settings')->get('virtual_y_url');
     if (isset($query['dest'])) {
       $redirect_url = urldecode($query['dest']);
     }
@@ -172,8 +172,11 @@ class PersonifyAuthController extends ControllerBase {
       user_cookie_delete('personify_authorized');
       user_cookie_delete('personify_time');
 
-      $this->messenger->addError('Personify user doesn\'t have active membership.');
-      return new RedirectResponse($this->configFactory->get('openy_gated_content.settings')->get('virtual_y_login_url'));
+      $path = URL::fromUserInput(
+        $this->configFactory->get('openy_gated_content.settings')->get('virtual_y_login_url'),
+        ['query' => ['personify-error' => '1']]
+      )->toString();
+      return new RedirectResponse($path);
     }
 
     // {"UserExists":true|false,"UserName":"","Email":"","DisableAccountFlag":false|true}.
@@ -192,9 +195,11 @@ class PersonifyAuthController extends ControllerBase {
     user_cookie_delete('personify_authorized');
     user_cookie_delete('personify_time');
 
-    $this->messenger->addError('Personify user is found, but marked as not existed or disabled.');
-    return new RedirectResponse($this->configFactory->get('openy_gated_content.settings')->get('virtual_y_login_url'));
-
+    $path = URL::fromUserInput(
+      $this->configFactory->get('openy_gated_content.settings')->get('virtual_y_login_url'),
+      ['query' => ['personify-error' => '1']]
+    )->toString();
+    return new RedirectResponse($path);
   }
 
   /**
