@@ -225,22 +225,43 @@ function openy_gated_content_entity_base_field_info(EntityTypeInterface $entity_
 
   if (in_array($entity_type->id(), $allowed_entity_types)) {
     $fields = [];
-    $fields['field_vy_permission'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('Virtual Y Access Group'))
-      ->setCardinality(1)
-      ->setDefaultValue('virtual_y,virtual_y_premium')
-      ->setProvider('openy_gated_content')
-      ->setRequired(FALSE)
-      ->setRevisionable(FALSE)
-      ->setTranslatable(FALSE)
-      ->setDisplayConfigurable('view', FALSE)
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayOptions('form', [
-        'type' => 'virtual_y_roles_select',
-        'settings' => [
-          'size' => '255',
-        ],
-      ]);
+
+    if ($entity_type->id() !== 'eventinstance') {
+
+      $fields['field_vy_permission'] = BaseFieldDefinition::create('string')
+        ->setLabel(t('Virtual Y Access Group'))
+        ->setCardinality(1)
+        ->setDefaultValue('virtual_y,virtual_y_premium')
+        ->setProvider('openy_gated_content')
+        ->setRequired(FALSE)
+        ->setRevisionable(FALSE)
+        ->setTranslatable(FALSE)
+        ->setDisplayConfigurable('view', FALSE)
+        ->setDisplayConfigurable('form', TRUE)
+        ->setDisplayOptions('form', [
+          'type' => 'virtual_y_roles_select',
+          'settings' => [
+            'size' => '255',
+          ],
+        ]);
+    } else {
+
+      $fields['field_vy_permission'] = BaseFieldDefinition::create('string')
+        ->setLabel(t('Virtual Y Access Group'))
+        ->setCardinality(1)
+        ->setProvider('openy_gated_content')
+        ->setRequired(FALSE)
+        ->setRevisionable(FALSE)
+        ->setTranslatable(FALSE)
+        ->setDisplayConfigurable('view', FALSE)
+        ->setDisplayConfigurable('form', TRUE)
+        ->setDisplayOptions('form', [
+          'type' => 'virtual_y_roles_select',
+          'settings' => [
+            'size' => '255',
+          ],
+        ]);
+    }
 
     return $fields;
   }
