@@ -113,6 +113,7 @@ function openy_gated_content_form_alter(&$form, FormStateInterface $form_state, 
       foreach ($bundle_list as $bundle) {
         $allowedForms[] = $entity_key . '_' . $bundle . '_form';
         $allowedForms[] = $entity_key . '_' . $bundle . '_edit_form';
+        $allowedForms[] = $entity_key . '_' . $bundle . '_add_form';
       }
     }
   }
@@ -227,7 +228,7 @@ function openy_gated_content_entity_base_field_info(EntityTypeInterface $entity_
     $fields['field_vy_permission'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Virtual Y Access Group'))
       ->setCardinality(1)
-      ->setDefaultValue('virtual_y')
+      ->setDefaultValue('virtual_y,virtual_y_premium')
       ->setProvider('openy_gated_content')
       ->setRequired(FALSE)
       ->setRevisionable(FALSE)

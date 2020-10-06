@@ -2,6 +2,15 @@
 
 Active development is currently happening at [fivejars/openy_gated_content](https://github.com/fivejars/openy_gated_content). Pull requests should be submitted there. They will be pulled into this repo as they are reviewed and released.
 
+## Submodules
+
+1. [Authentication system](https://github.com/ymcatwincities/openy_gated_content/tree/master/modules/openy_gc_auth) - pluginable system for different authentication types.
+2. [Demo](https://github.com/ymcatwincities/openy_gated_content/tree/master/modules/openy_gc_demo) - set of migrations that installs Demo content at the initial step of your Virtual Y
+3. [Storage](https://github.com/ymcatwincities/openy_gated_content/tree/master/modules/openy_gc_storage) - set of entities, needed for Virtual Y
+4. [Log](https://github.com/ymcatwincities/openy_gated_content/tree/master/modules/openy_gc_log) Features for tracking activities of your Virtual Y users.
+5. [Shared content](https://github.com/ymcatwincities/openy_gated_content/tree/master/modules/openy_gc_shared_content) - module that give's you ability to download content from shared network.
+6. [Shared content server](https://github.com/ymcatwincities/openy_gated_content/tree/master/modules/openy_gc_shared_content_server) - module for shared.openy.org server.  
+
 ## Installation
 
 See also the [video version of these instructions](https://youtu.be/vlqv4ly3iak). This assumes you've already [built an Open Y site](https://github.com/ymcatwincities/openy-project#installation) and have it
@@ -16,7 +25,7 @@ See also the [video version of these instructions](https://youtu.be/vlqv4ly3iak)
      - Check "Virtual Y Base", "Open Y Virtual YMCA Storage", and "Open Y
       Virtual YMCA Auth Example".
       - Install and say "yes" to add all required dependencies.
-   - Via drush: `drush en openy_gated_content openy_gc_storage
+   - Via drush: `drush en openy_gated_content
     openy_gc_auth_example -y`
 - Add at least one term in these vocabularies via **Structure** > **Taxonomies**
   - Virtual Y Category
