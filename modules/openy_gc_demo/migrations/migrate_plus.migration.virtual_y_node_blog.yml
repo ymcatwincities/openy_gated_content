@@ -98,7 +98,7 @@ process:
       source: image
   field_gc_video_category:
     -
-      plugin: migration
+      plugin: migration_lookup
       migration: virtual_y_gc_category
       source: category
   field_vy_permission:
