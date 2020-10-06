@@ -103,7 +103,7 @@ process:
       source: category
   field_vy_permission:
     plugin: default_value
-    default_value: virtual_y
+    default_value: virtual_y,virtual_y_premium
 
 destination:
   plugin: 'entity:node'
