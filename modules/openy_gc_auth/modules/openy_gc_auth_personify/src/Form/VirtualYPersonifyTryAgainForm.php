@@ -68,7 +68,7 @@ class VirtualYPersonifyTryAgainForm extends FormBase {
       '#value' => $this->t('Try Again'),
     ];
 
-    $form['#suffix'] = '<div class="alert alert-info text-center">' .$this->configFactory->get('openy_gc_auth.provider.personify')->get('error_accompanying_message') . '</div>';
+    $form['#suffix'] = '<div class="alert alert-info text-center">' . $this->configFactory->get('openy_gc_auth.provider.personify')->get('error_accompanying_message') . '</div>';
 
     return $form;
   }
