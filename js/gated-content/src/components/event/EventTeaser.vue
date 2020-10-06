@@ -18,7 +18,7 @@
       <div class="title">{{ video.attributes.title }}</div>
       <div class="meta">
         <div class="schedule">
-          <i class="fa fa-clock-o" aria-hidden="true"></i>
+          <i class="fa fa-clock-o fa-clock" aria-hidden="true"></i>
           {{ this.video.attributes.date | schedule }}
         </div>
       </div>
