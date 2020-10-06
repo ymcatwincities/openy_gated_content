@@ -36,7 +36,7 @@ process:
     default_value: 1
   field_prgf_headline: headline
   field_prgf_color:
-    plugin: migration
+    plugin: migration_lookup
     migration: openy_demo_taxonomy_term_color
     source: color
   field_prgf_description/value: description

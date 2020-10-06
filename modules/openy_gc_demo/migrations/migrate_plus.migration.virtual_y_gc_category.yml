@@ -54,7 +54,7 @@ process:
   name: title
   field_gc_category_media:
     -
-      plugin: migration
+      plugin: migration_lookup
       migration: virtual_y_media_image
       source: image
 destination:
