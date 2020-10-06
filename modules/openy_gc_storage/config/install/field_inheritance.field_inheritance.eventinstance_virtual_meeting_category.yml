@@ -10,4 +10,4 @@ sourceEntityBundle: virtual_meeting
 destinationEntityBundle: virtual_meeting
 sourceField: field_ls_category
 destinationField: field_ls_category
-plugin: entity_reference_inheritance
+plugin: default_inheritance

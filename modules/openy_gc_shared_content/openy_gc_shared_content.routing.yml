@@ -23,7 +23,7 @@ entity.shared_content_source_server.add_form:
     _permission: 'administer gated content configuration'
 
 entity.shared_content_source_server.edit_form:
-  path: '/admin/virtual-y/shared-content/server/{shared_content_source_server}'
+  path: '/admin/virtual-y/shared-content/server/{shared_content_source_server}/edit'
   defaults:
     _entity_form: 'shared_content_source_server.edit'
     _title: 'Edit shared content source'
@@ -46,6 +46,8 @@ entity.shared_content_source_server.fetch_form:
     type: 'vy_blog_post'
   requirements:
     _permission: 'administer gated content configuration'
+  options:
+    no_cache: TRUE
 
 entity.shared_content_source_server.preview:
   path: '/admin/virtual-y/shared-content/server/{shared_content_source_server}/preview/{type}/{uuid}'

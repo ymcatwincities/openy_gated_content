@@ -1,0 +1,27 @@
+<?php
+
+/**
+ * @file
+ * Contains openy_gc_storage.module.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_field_widget_form_alter().
+ */
+function openy_gc_storage_field_widget_form_alter(&$element, FormStateInterface $form_state, $context) {
+  $field_definition = $context['items']->getFieldDefinition();
+  if ($field_definition->getType() == 'video_embed_field') {
+    $allowed_providers = $field_definition->getSetting('allowed_providers');
+    $providers = \Drupal::service('video_embed_field.provider_manager')->loadDefinitionsFromOptionList($allowed_providers);
+    $element['value']['#description'] = t('Allowed providers:');
+    $providers_list = [];
+    foreach ($providers as $provider) {
+      $providers_list[] = $provider['title']->render();
+    }
+    sort($providers_list);
+    // Add Allowed providers list to description.
+    $element['value']['#description'] .= ' ' . implode(', ', $providers_list);
+  }
+}

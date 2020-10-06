@@ -45,7 +45,7 @@ class PreviewController extends ControllerBase {
     $response = new AjaxResponse();
     $instance = $this->sharedSourceTypeManager->createInstance($type);
     $query_args = $instance->getFullJsonApiQueryArgs();
-    $data = $instance->jsonApiCall($shared_content_source_server->getUrl(), $query_args, $uuid);
+    $data = $instance->jsonApiCall($shared_content_source_server, $query_args, $uuid);
     $content = $instance->formatItem($data, FALSE);
     $content['#server'] = $shared_content_source_server->getUrl();
     $response->addCommand(new OpenModalDialogCommand('Preview', $content, ['width' => '900']));

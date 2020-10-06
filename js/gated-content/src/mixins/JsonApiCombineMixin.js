@@ -24,16 +24,18 @@ export const JsonApiCombineMixin = {
           rel.forEach((relItem) => {
             const includedItem = included
               .find((obj) => obj.type === relItem.type && obj.id === relItem.id);
-            item.attributes[field].push(includedItem.attributes);
+            if (includedItem) {
+              item.attributes[field].push(includedItem.attributes);
 
-            if (subRel.length > 0) {
-              // In case this field contains sub-relationship add this relationship to parent.
-              // On next iteration with sub-relationship it well be in rel.
-              subRel.forEach((subRelItem) => {
-                const subRelItemName = subRelItem.split('.').pop();
-                item.relationships[field] = includedItem.relationships[subRelItemName]
-                  ? includedItem.relationships[subRelItemName] : null;
-              });
+              if (subRel.length > 0) {
+                // In case this field contains sub-relationship add this relationship to parent.
+                // On next iteration with sub-relationship it well be in rel.
+                subRel.forEach((subRelItem) => {
+                  const subRelItemName = subRelItem.split('.').pop();
+                  item.relationships[field] = includedItem.relationships[subRelItemName]
+                    ? includedItem.relationships[subRelItemName] : null;
+                });
+              }
             }
           });
         } else {
