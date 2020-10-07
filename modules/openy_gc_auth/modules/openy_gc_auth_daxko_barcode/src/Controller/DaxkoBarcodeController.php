@@ -6,14 +6,13 @@ use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\Core\Messenger\MessengerInterface;
-use Drupal\user\Entity\User;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Drupal\openy_gc_log\Logger;
+use Drupal\openy_gc_auth\GCUserAuthorizer;
 
 /**
  * Personify controller to handle Personify SSO authentication.
@@ -49,11 +48,11 @@ class DaxkoBarcodeController extends ControllerBase {
   protected $messenger;
 
   /**
-   * The Gated Content Logger.
+   * The Gated Content User Authorizer.
    *
-   * @var \Drupal\openy_gc_log\Logger
+   * @var \Drupal\openy_gc_auth\GCUserAuthorizer
    */
-  protected $gcLogger;
+  protected $gcUserAuthorizer;
 
   /**
    * DaxkoBarcodeController constructor.
@@ -66,21 +65,21 @@ class DaxkoBarcodeController extends ControllerBase {
    *   HTTP client.
    * @param \Drupal\Core\Messenger\MessengerInterface $messenger
    *   The messenger.
-   * @param \Drupal\openy_gc_log\Logger $gcLogger
-   *   The Gated Content Logger.
+   * @param \Drupal\openy_gc_auth\GCUserAuthorizer $gcUserAuthorizer
+   *   The Gated User Authorizer.
    */
   public function __construct(
     ConfigFactoryInterface $configFactory,
     LoggerChannelFactory $loggerChannelFactory,
     Client $http_client,
     MessengerInterface $messenger,
-    Logger $gcLogger = NULL
+    GCUserAuthorizer $gcUserAuthorizer
   ) {
     $this->configFactory = $configFactory;
     $this->logger = $loggerChannelFactory->get('openy_gc_auth_daxko_barcode');
     $this->httpClient = $http_client;
     $this->messenger = $messenger;
-    $this->gcLogger = $gcLogger;
+    $this->gcUserAuthorizer = $gcUserAuthorizer;
   }
 
   /**
@@ -92,7 +91,7 @@ class DaxkoBarcodeController extends ControllerBase {
       $container->get('logger.factory'),
       $container->get('http_client'),
       $container->get('messenger'),
-      $container->has('openy_gc_log.logger') ? $container->get('openy_gc_log.logger') : NULL
+      $container->get('openy_gc_auth.user_authorizer')
     );
   }
 
@@ -139,30 +138,9 @@ class DaxkoBarcodeController extends ControllerBase {
             $name = 'daxkoBarcode+' . $barcode;
             $email = $name . '@virtualy.openy.org';
 
-            // Create drupal user if it doesn't exist and login it.
-            $account = user_load_by_mail($email);
+            // Authorize user (register, login, log, etc).
+            $this->gcUserAuthorizer->authorizeUser($name, $email);
 
-            if (!$account) {
-              $user = User::create();
-              $user->setPassword(user_password());
-              $user->enforceIsNew();
-              $user->setEmail($email);
-              $user->setUsername($name);
-              $user->addRole('virtual_y');
-              $user->activate();
-              $result = $account = $user->save();
-              if ($result) {
-                $account = user_load_by_mail($email);
-              }
-            }
-            // Log user login.
-            if ($this->gcLogger instanceof Logger) {
-              $this->gcLogger->addLog([
-                'email' => $email,
-                'event_type' => 'userLoggedIn',
-              ]);
-            }
-            user_login_finalize($account);
             return new RedirectResponse($this->configFactory->get('openy_gated_content.settings')->get('virtual_y_url'));
 
           case 'not_found':

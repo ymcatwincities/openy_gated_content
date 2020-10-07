@@ -10,3 +10,9 @@ services:
   logger.channel.openy_gc_log:
     parent: logger.channel_base
     arguments: ['openy_gc_log']
+
+  gated_content_events_user_login:
+    class: '\Drupal\openy_gc_log\EventSubscriber\GCLogUserLoginSubscriber'
+    arguments: ['@openy_gc_log.logger']
+    tags:
+      - { name: 'event_subscriber' }
