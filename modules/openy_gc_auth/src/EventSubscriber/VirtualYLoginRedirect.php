@@ -2,9 +2,11 @@
 
 namespace Drupal\openy_gc_auth\EventSubscriber;
 
+use Drupal\Core\Messenger\Messenger;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\EventDispatcher\Event;
@@ -38,6 +40,13 @@ class VirtualYLoginRedirect implements EventSubscriberInterface {
   protected $configFactory;
 
   /**
+   * Messenger service instance.
+   *
+   * @var \Drupal\Core\Messenger\Messenger
+   */
+  protected $messenger;
+
+  /**
    * Constructs a new VirtualYLoginRedirect.
    *
    * @param \Drupal\Core\Routing\RouteMatchInterface $current_route_match
@@ -46,15 +55,19 @@ class VirtualYLoginRedirect implements EventSubscriberInterface {
    *   The current user.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   The config factory.
+   * @param \Drupal\Core\Messenger\Messenger $messenger
+   *   Messenger service.
    */
   public function __construct(
     RouteMatchInterface $current_route_match,
     AccountProxyInterface $current_user,
-    ConfigFactoryInterface $configFactory
+    ConfigFactoryInterface $configFactory,
+    Messenger $messenger
   ) {
     $this->currentRouteMatch = $current_route_match;
     $this->currentUser = $current_user;
     $this->configFactory = $configFactory;
+    $this->messenger = $messenger;
   }
 
   /**
@@ -88,14 +101,30 @@ class VirtualYLoginRedirect implements EventSubscriberInterface {
           $currentUser->isAnonymous()
           && $this->checkIfParagraphAtNode($node, 'gated_content')
         ) {
-          $event->setResponse(new RedirectResponse($config->get('virtual_y_login_url')));
+          if (!empty($config->get('virtual_y_login_url'))) {
+            $event->setResponse(new RedirectResponse($config->get('virtual_y_login_url')));
+          }
+          else {
+            $link = Url::fromRoute('openy_gated_content.settings')->toString();
+            $this->messenger->addError('Virtual Landing Pages are not configured, please <a href="@link">set them up here</a>.', [
+              '@link' => $link,
+            ]);
+          }
         }
 
         if (
           $currentUser->isAuthenticated()
           && $this->checkIfParagraphAtNode($node, 'gated_content_login')
         ) {
-          $event->setResponse(new RedirectResponse($config->get('virtual_y_url')));
+          if (!empty($config->get('virtual_y_login_url'))) {
+            $event->setResponse(new RedirectResponse($config->get('virtual_y_url')));
+          }
+          else {
+            $link = Url::fromRoute('openy_gated_content.settings')->toString();
+            $this->messenger->addError('Virtual Landing Pages are not configured, please <a href="@link">set them up here</a>.', [
+              '@link' => $link,
+            ]);
+          }
         }
 
     }
