@@ -90,6 +90,30 @@ function openy_gc_storage_update_8004() {
     'field_inheritance.field_inheritance.eventinstance_live_stream_category',
     'field_inheritance.field_inheritance.eventinstance_virtual_meeting_category',
   ]);
+
+  /** @var \Drupal\Core\Field\BaseFieldDefinition $storage_definition */
+  $storage_definition = \Drupal::entityDefinitionUpdateManager()
+    ->getFieldStorageDefinition('field_gc_video_category', 'node');
+  $storage_definition->setCardinality(-1);
+
+  \Drupal::entityDefinitionUpdateManager()
+    ->updateFieldStorageDefinition($storage_definition);
+
+  /** @var \Drupal\Core\Field\BaseFieldDefinition $storage_definition */
+  $storage_definition = \Drupal::entityDefinitionUpdateManager()
+    ->getFieldStorageDefinition('field_ls_category', 'eventseries');
+  $storage_definition->setCardinality(-1);
+
+  \Drupal::entityDefinitionUpdateManager()
+    ->updateFieldStorageDefinition($storage_definition);
+
+  /** @var \Drupal\Core\Field\BaseFieldDefinition $storage_definition */
+  $storage_definition = \Drupal::entityDefinitionUpdateManager()
+    ->getFieldStorageDefinition('field_ls_category', 'eventinstance');
+  $storage_definition->setCardinality(-1);
+
+  \Drupal::entityDefinitionUpdateManager()
+    ->updateFieldStorageDefinition($storage_definition);
 }
 
 /**
