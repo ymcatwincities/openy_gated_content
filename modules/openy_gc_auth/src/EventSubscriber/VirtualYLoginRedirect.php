@@ -2,11 +2,12 @@
 
 namespace Drupal\openy_gc_auth\EventSubscriber;
 
+use Drupal\Core\Link;
 use Drupal\Core\Messenger\Messenger;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Session\AccountProxyInterface;
-use Drupal\Core\Url;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\node\NodeInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\EventDispatcher\Event;
@@ -17,6 +18,8 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  * Class VirtualYLoginRedirect.
  */
 class VirtualYLoginRedirect implements EventSubscriberInterface {
+
+  use StringTranslationTrait;
 
   /**
    * The current route match.
@@ -105,10 +108,18 @@ class VirtualYLoginRedirect implements EventSubscriberInterface {
             $event->setResponse(new RedirectResponse($config->get('virtual_y_login_url')));
           }
           else {
-            $link = Url::fromRoute('openy_gated_content.settings')->toString();
-            $this->messenger->addError('Virtual Landing Pages are not configured, please <a href="@link">set them up here</a>.', [
+            $link = Link::createFromRoute($this->t('Setup Virtual Y'),
+              'openy_gated_content.settings',
+              [],
+              [
+                'attributes' => [
+                  'target' => '_blank',
+                ],
+              ]
+            )->toString();
+            $this->messenger->addError($this->t('Virtual Landing Pages are not configured. @link', [
               '@link' => $link,
-            ]);
+            ]));
           }
         }
 
@@ -120,10 +131,18 @@ class VirtualYLoginRedirect implements EventSubscriberInterface {
             $event->setResponse(new RedirectResponse($config->get('virtual_y_url')));
           }
           else {
-            $link = Url::fromRoute('openy_gated_content.settings')->toString();
-            $this->messenger->addError('Virtual Landing Pages are not configured, please <a href="@link">set them up here</a>.', [
+            $link = Link::createFromRoute($this->t('Setup Virtual Y'),
+              'openy_gated_content.settings',
+              [],
+              [
+                'attributes' => [
+                  'target' => '_blank',
+                ],
+              ]
+            )->toString();
+            $this->messenger->addError($this->t('Virtual Landing Pages are not configured. @link', [
               '@link' => $link,
-            ]);
+            ]));
           }
         }
 
