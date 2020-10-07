@@ -74,7 +74,7 @@ function _openy_gated_content_permissions(&$sandbox, string $entity_type, string
     ->execute();
   $nodes = \Drupal::entityTypeManager()->getStorage('node')->loadMultiple($ids);
   foreach ($nodes as $node) {
-    $node->field_vy_permission->value = 'virtual_y';
+    $node->field_vy_permission->value = 'virtual_y,virtual_y_premium';
     $node->save();
     $sandbox['progress']++;
     $sandbox['current'] = $node->id();

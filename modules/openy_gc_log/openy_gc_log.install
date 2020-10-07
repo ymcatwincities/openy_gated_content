@@ -38,3 +38,16 @@ function _openy_gc_log_check_files_route() {
     \Drupal::service('config.installer')->installOptionalConfig($config_source);
   }
 }
+
+/**
+ * Update logs view.
+ */
+function openy_gc_log_update_8002() {
+  $config_dir = drupal_get_path('module', 'openy_gc_log');
+  $config_dir .= '/config/install/';
+  $config_importer = \Drupal::service('openy_upgrade_tool.importer');
+  $config_importer->setDirectory($config_dir);
+  $config_importer->importConfigs([
+    'views.view.virtual_y_logs',
+  ]);
+}
