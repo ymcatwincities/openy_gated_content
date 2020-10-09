@@ -59,27 +59,41 @@ function openy_gated_content_post_update_create_login_page(&$sandbox) {
  */
 function _openy_gated_content_permissions(&$sandbox, string $entity_type, string $bundle, $id = 'nid') {
   if (!isset($sandbox['progress'])) {
-    $sandbox['progress'] = 0;
-    $sandbox['current'] = 0;
     $sandbox['max'] = \Drupal::entityQuery($entity_type)
       ->condition('type', $bundle)
+      ->notExists('field_vy_permission')
       ->count()
       ->execute();
+    $sandbox['ids'] = \Drupal::entityQuery($entity_type)
+      ->condition('type', $bundle)
+      ->notExists('field_vy_permission')
+      ->execute();
+
   }
-  $ids = \Drupal::entityQuery($entity_type)
-    ->condition('type', $bundle)
-    ->condition($id, $sandbox['current'], '>')
-    ->range(0, 5)
-    ->sort($id)
-    ->execute();
-  $nodes = \Drupal::entityTypeManager()->getStorage('node')->loadMultiple($ids);
+  $ids = array_slice($sandbox['ids'], 0, 5);
+
+  // Doublecheck that ids are int, not string.
+  $ids = array_map(
+    function ($value) {
+      return (int) $value;
+    },
+    $ids
+  );
+  $nodes = \Drupal::entityTypeManager()
+    ->getStorage($entity_type)
+    ->loadMultiple($ids);
+  $not_existed = array_diff($ids, array_keys($nodes));
+  if (!empty($not_existed)) {
+    $sandbox['ids'] = array_diff($sandbox['ids'], $not_existed);
+  }
+
   foreach ($nodes as $node) {
     $node->field_vy_permission->value = 'virtual_y,virtual_y_premium';
     $node->save();
-    $sandbox['progress']++;
-    $sandbox['current'] = $node->id();
+    $sandbox['ids'] = array_diff($sandbox['ids'], [$node->id()]);
+
   }
-  $sandbox['#finished'] = $sandbox['progress'] >= $sandbox['max'] ? TRUE : $sandbox['progress'] / $sandbox['max'];
+  $sandbox['#finished'] = (count($sandbox['ids']) === 0) ? TRUE : count($sandbox['ids']) / $sandbox['max'];
   if ($sandbox['#finished']) {
     return t('Fields data were migrated for @count entities', ['@count' => $sandbox['max']]);
   }
