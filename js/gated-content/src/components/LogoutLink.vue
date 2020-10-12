@@ -5,12 +5,12 @@
 </template>
 
 <script>
-  export default {
-    name: 'LogoutLink',
-    data() {
-      return {
-        logoutUrl: window.drupalSettings.openy_gated_content.logoutUrl,
-      };
-    }
-  };
+export default {
+  name: 'LogoutLink',
+  data() {
+    return {
+      logoutUrl: window.drupalSettings.openy_gated_content.logoutUrl,
+    };
+  },
+};
 </script>
