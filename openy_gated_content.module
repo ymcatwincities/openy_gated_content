@@ -57,6 +57,7 @@ function openy_gated_content_preprocess_paragraph(&$variables) {
   }
   $plugin_instance = $identityProviderManager->createInstance($active_provider);
   $app_config = \Drupal::config('openy_gated_content.settings')->getOriginal();
+  $variables['#attached']['drupalSettings']['openy_gated_content']['logoutUrl'] = !empty($app_config['virtual_y_logout_url']) ? $app_config['virtual_y_logout_url'] : base_path() . 'user/logout';
   $variables['app_settings'] = json_encode($app_config);
   $variables['#cache']['tags'][] = 'config:' . $plugin_instance->getConfigName();
 }
