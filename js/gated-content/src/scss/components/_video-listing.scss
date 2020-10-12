@@ -4,6 +4,18 @@
     align-items: center;
     justify-content: space-between;
 
+    &.with-date-filter {
+      @media (max-width: 600px) {
+        flex-direction: column;
+
+        .videos__date-filter {
+          .date {
+            min-width: auto;
+          }
+        }
+      }
+    }
+
     @media all and (max-width: 600px) {
       align-items: flex-start;
 
