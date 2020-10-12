@@ -7,11 +7,9 @@
     <template v-else>
       <div
         class="virtual-meeting-page__image"
-        v-bind:class="{ 'zoom-wrapper': isZoomMeetingLink }"
         v-bind:style="{ backgroundImage: `url(${image})` }"
       >
-        <ZoomIframe :src="meetingLink.uri" v-if="isZoomMeetingLink"></ZoomIframe>
-        <div class="virtual-meeting-page__link" v-else>
+        <div class="virtual-meeting-page__link">
           <a :href="meetingLink.uri" target="_blank" class="btn btn-lg btn-primary">
             {{ meetingLink.title }}
           </a>
@@ -80,7 +78,6 @@
 <script>
 import client from '@/client';
 import Spinner from '@/components/Spinner.vue';
-import ZoomIframe from '@/components/ZoomIframe.vue';
 import EventListing from '@/components/event/EventListing.vue';
 import AddToCalendar from '@/components/event/AddToCalendar.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
@@ -93,7 +90,6 @@ export default {
     EventListing,
     AddToCalendar,
     Spinner,
-    ZoomIframe,
   },
   props: {
     id: {
@@ -150,11 +146,6 @@ export default {
         }
       }
       return link;
-    },
-    isZoomMeetingLink() {
-      // Allow regular (zoom.us) or vanity (ymca.zoom.us) URLs.
-      const regex = /https:\/\/([a-zA-Z0-9-]*\.)?zoom\.us/;
-      return this.video && this.meetingLink.uri && regex.test(this.meetingLink.uri);
     },
     descriptionProcessed() {
       return this.description ? this.description.processed : '';
