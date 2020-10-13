@@ -14,9 +14,7 @@ export default {
       'getAppSettings',
     ]),
     logoutUrl() {
-      if (this.getAppSettings !== null) {
-        return this.getAppSettings.virtual_y_logout_url;
-      }
+      return this.getAppSettings !== null ? this.getAppSettings.virtual_y_logout_url : '';
     },
   },
 };
