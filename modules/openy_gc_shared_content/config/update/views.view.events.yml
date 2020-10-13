@@ -3,7 +3,6 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.eventinstance.list
-    - system.menu.main
   module:
     - datetime
     - datetime_range
@@ -1541,7 +1540,7 @@ display:
       display_extenders: {  }
       path: events
       menu:
-        type: normal
+        type: none
         title: Events
         description: 'Events listing page'
         expanded: false

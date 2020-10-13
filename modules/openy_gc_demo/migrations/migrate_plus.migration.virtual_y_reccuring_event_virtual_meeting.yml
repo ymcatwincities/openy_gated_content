@@ -65,27 +65,27 @@ process:
   body: description
   field_vy_permission:
     plugin: default_value
-    default_value: virtual_y
+    default_value: virtual_y,virtual_y_premium
   field_ls_host_name: instructor
   'field_vm_link/uri': link
   field_ls_image:
     -
-      plugin: migration
+      plugin: migration_lookup
       migration: virtual_y_media_image
       source: image
   field_ls_category:
     -
-      plugin: migration
+      plugin: migration_lookup
       migration: virtual_y_gc_category
       source: category
   field_ls_equipment:
     -
-      plugin: migration
+      plugin: migration_lookup
       migration: virtual_y_gc_equipment
       source: equipment
   field_ls_level:
     -
-      plugin: migration
+      plugin: migration_lookup
       migration: virtual_y_gc_level
       source: level
   recur_type:

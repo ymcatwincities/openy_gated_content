@@ -93,17 +93,17 @@ process:
     plugin: default_value
     default_value: full_html
   field_vy_blog_image:
-    - plugin: migration
+    - plugin: migration_lookup
       migration: virtual_y_media_image
       source: image
   field_gc_video_category:
     -
-      plugin: migration
+      plugin: migration_lookup
       migration: virtual_y_gc_category
       source: category
   field_vy_permission:
     plugin: default_value
-    default_value: virtual_y
+    default_value: virtual_y,virtual_y_premium
 
 destination:
   plugin: 'entity:node'

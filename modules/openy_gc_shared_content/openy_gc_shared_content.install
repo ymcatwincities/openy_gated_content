@@ -6,8 +6,6 @@
  */
 
 use Drupal\Core\Field\BaseFieldDefinition;
-use Drupal\openy_gc_shared_content\Controller\SharedContentProxyController;
-use Drupal\user\Entity\User;
 
 /**
  * Implements hook_install().
@@ -60,30 +58,4 @@ function openy_gc_shared_content_install() {
     'views.view.event_series',
     'views.view.events',
   ]);
-
-  _create_shared_content_user();
-}
-
-/**
- * Create shared content user.
- */
-function openy_gc_shared_content_update_8001() {
-  _create_shared_content_user();
-}
-
-/**
- * Helper function for shared content user creating.
- */
-function _create_shared_content_user() {
-  $user = User::create([
-    'mail' => SharedContentProxyController::SHARED_USER_MAIL,
-    'name' => 'Shared content user',
-    'status' => TRUE,
-  ]);
-
-  $user->setPassword(user_password());
-  $user->addRole('virtual_y');
-  $user->addRole('virtual_y_premium');
-  $user->addRole('virtual_y_trial');
-  $user->save();
 }

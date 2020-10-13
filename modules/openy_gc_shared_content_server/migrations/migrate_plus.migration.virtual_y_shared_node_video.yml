@@ -94,23 +94,23 @@ process:
   field_gc_video_duration: field_gc_video_duration
   field_gc_video_instructor: field_gc_video_instructor
   field_gc_video_media:
-    plugin: migration
+    plugin: migration_lookup
     migration: virtual_y_shared_media_video:REPLACE_ME
     source: field_gc_video_media_id
   field_gc_video_image:
-    plugin: migration
+    plugin: migration_lookup
     migration: virtual_y_shared_media_video_image:REPLACE_ME
     source: field_gc_video_image_id
   field_gc_video_category:
-    plugin: migration
+    plugin: migration_lookup
     migration: virtual_y_shared_gc_category:REPLACE_ME
     source: field_gc_video_category_id
   field_gc_video_equipment:
-    plugin: migration
+    plugin: migration_lookup
     migration: virtual_y_shared_gc_equipment:REPLACE_ME
     source: field_gc_video_equipment_id
   field_gc_video_level:
-    plugin: migration
+    plugin: migration_lookup
     migration: virtual_y_shared_gc_level:REPLACE_ME
     source: field_gc_video_level_id
 

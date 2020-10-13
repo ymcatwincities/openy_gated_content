@@ -105,7 +105,7 @@ function openy_gated_content_form_alter(&$form, FormStateInterface $form_state, 
     return;
   }
 
-  $gcConfig = \Drupal::config('openy_gated_config.settings')->getRawData();
+  $gcConfig = \Drupal::config('openy_gated_content.settings')->getRawData();
   $allowedForms = [];
   if (!empty($gcConfig['permissions_entities'])) {
     $permissionEnabledEntities = $gcConfig['permissions_entities'];
@@ -113,6 +113,7 @@ function openy_gated_content_form_alter(&$form, FormStateInterface $form_state, 
       foreach ($bundle_list as $bundle) {
         $allowedForms[] = $entity_key . '_' . $bundle . '_form';
         $allowedForms[] = $entity_key . '_' . $bundle . '_edit_form';
+        $allowedForms[] = $entity_key . '_' . $bundle . '_add_form';
       }
     }
   }
@@ -130,7 +131,8 @@ function openy_gated_content_form_alter(&$form, FormStateInterface $form_state, 
 
   if (!in_array($form_id, $allowedForms)) {
     // Close access to permissions field for all entities except of enabled.
-    $form['shared_content_settings']['#access'] = FALSE;
+    $form['virtual_y_permissions']['#access'] = FALSE;
+    $form['field_vy_permission']['#access'] = FALSE;
     return;
   }
 
@@ -213,29 +215,54 @@ function openy_gated_content_user_pass_validation(array &$form, FormStateInterfa
  */
 function openy_gated_content_entity_base_field_info(EntityTypeInterface $entity_type) {
 
-  $allowed_entity_types = [
-    'node',
-    'eventinstance',
-    'eventseries',
-  ];
+  $allowed_entity_types = [];
+
+  $gcConfig = \Drupal::config('openy_gated_content.settings')->getRawData();
+  if (!empty($gcConfig['permissions_entities'])) {
+    $permissionEnabledEntities = $gcConfig['permissions_entities'];
+    $allowed_entity_types = array_keys($permissionEnabledEntities);
+  }
 
   if (in_array($entity_type->id(), $allowed_entity_types)) {
     $fields = [];
-    $fields['field_vy_permission'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('Virtual Y Access Group'))
-      ->setCardinality(1)
-      ->setProvider('openy_gated_content')
-      ->setRequired(FALSE)
-      ->setRevisionable(FALSE)
-      ->setTranslatable(FALSE)
-      ->setDisplayConfigurable('view', FALSE)
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayOptions('form', [
-        'type' => 'virtual_y_roles_select',
-        'settings' => [
-          'size' => '255',
-        ],
-      ]);
+
+    if ($entity_type->id() !== 'eventinstance') {
+
+      $fields['field_vy_permission'] = BaseFieldDefinition::create('string')
+        ->setLabel(t('Virtual Y Access Group'))
+        ->setCardinality(1)
+        ->setDefaultValue('virtual_y,virtual_y_premium')
+        ->setProvider('openy_gated_content')
+        ->setRequired(FALSE)
+        ->setRevisionable(FALSE)
+        ->setTranslatable(FALSE)
+        ->setDisplayConfigurable('view', FALSE)
+        ->setDisplayConfigurable('form', TRUE)
+        ->setDisplayOptions('form', [
+          'type' => 'virtual_y_roles_select',
+          'settings' => [
+            'size' => '255',
+          ],
+        ]);
+    }
+    else {
+
+      $fields['field_vy_permission'] = BaseFieldDefinition::create('string')
+        ->setLabel(t('Virtual Y Access Group'))
+        ->setCardinality(1)
+        ->setProvider('openy_gated_content')
+        ->setRequired(FALSE)
+        ->setRevisionable(FALSE)
+        ->setTranslatable(FALSE)
+        ->setDisplayConfigurable('view', FALSE)
+        ->setDisplayConfigurable('form', TRUE)
+        ->setDisplayOptions('form', [
+          'type' => 'virtual_y_roles_select',
+          'settings' => [
+            'size' => '255',
+          ],
+        ]);
+    }
 
     return $fields;
   }

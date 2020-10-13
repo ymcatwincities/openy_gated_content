@@ -1,8 +1,8 @@
 name: Virtual Y Base
 type: module
-description: 'Provides Open Y Virtual Y base module.'
+description: 'Virtual Y base module.'
 package: Open Y Virtual YMCA
-version: 0.2
+version: 1.0.1
 core: 8.x
 core_version_requirement: ^8 || ^9
 dependencies:

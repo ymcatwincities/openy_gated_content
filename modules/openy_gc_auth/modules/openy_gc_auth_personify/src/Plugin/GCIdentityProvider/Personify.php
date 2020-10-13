@@ -14,6 +14,7 @@ use Drupal\personify\PersonifyClient;
 use Drupal\personify\PersonifySSO;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Personify SSO identity provider plugin.
@@ -55,6 +56,13 @@ class Personify extends GCIdentityProviderPluginBase {
   protected $formBuilder;
 
   /**
+   * The current request.
+   *
+   * @var \Symfony\Component\HttpFoundation\Request|null
+   */
+  protected $currentRequest;
+
+  /**
    * {@inheritdoc}
    */
   public function __construct(
@@ -66,12 +74,14 @@ class Personify extends GCIdentityProviderPluginBase {
     MessengerInterface $messenger,
     PersonifySSO $personifySSO,
     PersonifyClient $personifyClient,
-    FormBuilderInterface $form_builder
+    FormBuilderInterface $form_builder,
+    RequestStack $requestStack
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $config, $entity_type_manager, $form_builder);
     $this->messenger = $messenger;
     $this->personifySSO = $personifySSO;
     $this->personifyClient = $personifyClient;
+    $this->currentRequest = $requestStack->getCurrentRequest();
   }
 
   /**
@@ -87,7 +97,8 @@ class Personify extends GCIdentityProviderPluginBase {
       $container->get('messenger'),
       $container->get('personify.sso_client'),
       $container->get('personify.client'),
-      $container->get('form_builder')
+      $container->get('form_builder'),
+      $container->get('request_stack')
     );
   }
 
@@ -198,6 +209,9 @@ class Personify extends GCIdentityProviderPluginBase {
    * {@inheritdoc}
    */
   public function getLoginForm() {
+    if ($this->currentRequest->query->has('personify-error')) {
+      return $this->formBuilder->getForm('Drupal\openy_gc_auth_personify\Form\VirtualYPersonifyTryAgainForm');
+    }
     return new RedirectResponse(Url::fromRoute('openy_gc_auth_personify.personify_check')->toString());
   }
 

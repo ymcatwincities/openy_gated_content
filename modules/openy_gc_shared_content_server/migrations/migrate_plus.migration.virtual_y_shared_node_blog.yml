@@ -76,7 +76,7 @@ process:
     plugin: default_value
     default_value: full_html
   field_vy_blog_image:
-    plugin: migration
+    plugin: migration_lookup
     migration: virtual_y_shared_media_blog_image:REPLACE_ME
     source: field_vy_blog_image_id
 destination:
