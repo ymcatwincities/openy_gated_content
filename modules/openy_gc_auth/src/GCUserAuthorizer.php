@@ -49,6 +49,11 @@ class GCUserAuthorizer {
     }
     // Create drupal user if it doesn't exist and login it.
     $account = user_load_by_mail($email);
+    // Activate user if it's not.
+    if (!$account->isActive()) {
+      $account->activate();
+      $account->save();
+    }
 
     if (!$account) {
       $user = $this->userStorage->create();
@@ -69,6 +74,36 @@ class GCUserAuthorizer {
     $this->eventDispatcher->dispatch(GCUserLoginEvent::EVENT_NAME, $event);
 
     user_login_finalize($account);
+
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function createUser($name, $email, $active) {
+    if (empty($name) || empty($email)) {
+      return;
+    }
+    // Create drupal user if it doesn't exist and login it.
+    $account = user_load_by_mail($email);
+
+    if (!$account) {
+      $user = $this->userStorage->create();
+      $user->setPassword(user_password());
+      $user->enforceIsNew();
+      $user->setEmail($email);
+      $user->setUsername($name);
+      $user->addRole(self::VIRTUAL_Y_DEFAULT_ROLE);
+      if ($active) {
+        $user->activate();
+      }
+      $result = $account = $user->save();
+      if ($result) {
+        $account = user_load_by_mail($email);
+      }
+    }
+
+    return $account;
 
   }
 
