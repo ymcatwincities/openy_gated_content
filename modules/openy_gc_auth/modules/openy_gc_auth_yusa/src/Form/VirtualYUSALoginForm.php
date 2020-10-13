@@ -66,6 +66,8 @@ class VirtualYUSALoginForm extends FormBase {
   protected $privateTempStore;
 
   /**
+   * Http client.
+   *
    * @var \GuzzleHttp\Client
    */
   protected $client;
@@ -182,8 +184,8 @@ class VirtualYUSALoginForm extends FormBase {
       $result['Status'] == 'Active' &&
       !empty($result['FirstName']) &&
       !empty($result['LastName']) &&
-      !empty($result['Email']))
-    {
+      !empty($result['Email'])
+    ) {
       $name = $result['FirstName'] . ' ' . $result['LastName'];
       $email = $result['Email'];
 
@@ -240,15 +242,21 @@ class VirtualYUSALoginForm extends FormBase {
   }
 
   /**
+   * Provides a method for API call.
+   *
    * @param string $type
-   * @param string $method
+   *   Request's type.
    * @param array $body
+   *   Request's body.
    * @param string $body_format
+   *   Format of request's body.
    *
    * @return array|mixed
+   *   Return content response or empty.
+   *
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
-  public function doAPIcall($type = 'GET', $body = [], $body_format = 'json') {
+  public function doApiCall($type = 'GET', array $body = [], $body_format = 'json') {
     $provider_config = $this->configFactory->get('openy_gc_auth.provider.yusa');
 
     $body_key = 'body';
@@ -263,8 +271,8 @@ class VirtualYUSALoginForm extends FormBase {
       ],
       'auth' => [
         $provider_config->get('auth_login'),
-        $provider_config->get('auth_pass')
-      ]
+        $provider_config->get('auth_pass'),
+      ],
     ];
 
     try {
@@ -304,7 +312,7 @@ class VirtualYUSALoginForm extends FormBase {
         'Email' => $id,
       ];
     }
-    return $this->doAPIcall('POST', $json);
+    return $this->doApiCall('POST', $json);
   }
 
 }

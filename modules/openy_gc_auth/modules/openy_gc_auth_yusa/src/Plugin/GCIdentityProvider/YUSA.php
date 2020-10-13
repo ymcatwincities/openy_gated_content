@@ -3,7 +3,6 @@
 namespace Drupal\openy_gc_auth_yusa\Plugin\GCIdentityProvider;
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Url;
 use Drupal\openy_gc_auth\GCIdentityProviderPluginBase;
 
 /**
