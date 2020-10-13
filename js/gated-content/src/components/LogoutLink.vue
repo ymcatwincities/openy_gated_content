@@ -5,12 +5,19 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   name: 'LogoutLink',
-  data() {
-    return {
-      logoutUrl: window.drupalSettings.openy_gated_content.logoutUrl,
-    };
+  computed: {
+    ...mapGetters([
+      'getAppSettings',
+    ]),
+    logoutUrl() {
+      if (this.getAppSettings !== null) {
+        return this.getAppSettings.virtual_y_logout_url;
+      }
+    },
   },
 };
 </script>
