@@ -31,11 +31,10 @@ class GCUserLoginEvent extends Event {
    *
    * @param \Drupal\user\UserInterface $account
    *   The account of the user logged in.
-   *
    * @param array $extra_data
    *   Array with optional data.
    */
-  public function __construct(UserInterface $account, $extra_data) {
+  public function __construct(UserInterface $account, array $extra_data) {
     $this->account = $account;
     $this->extraData = $extra_data;
   }

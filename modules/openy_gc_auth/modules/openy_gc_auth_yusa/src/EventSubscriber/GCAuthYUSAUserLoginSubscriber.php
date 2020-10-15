@@ -2,6 +2,7 @@
 
 namespace Drupal\openy_gc_auth_yusa\EventSubscriber;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\openy_gc_auth\Event\GCUserLoginEvent;
 use Drupal\user\Entity\User;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -14,10 +15,21 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class GCAuthYUSAUserLoginSubscriber implements EventSubscriberInterface {
 
   /**
+   * Config factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * Constructs a new GCAuthYUSAUserLoginSubscriber.
    *
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
+   *   Config factory.
    */
-  public function __construct() {}
+  public function __construct(ConfigFactoryInterface $configFactory) {
+    $this->configFactory = $configFactory;
+  }
 
   /**
    * {@inheritdoc}
@@ -36,7 +48,7 @@ class GCAuthYUSAUserLoginSubscriber implements EventSubscriberInterface {
    *   Event object.
    */
   public function onUserLogin(GCUserLoginEvent $event) {
-    $permissions_mapping = \Drupal::configFactory()->get('openy_gc_auth.provider.yusa')->get('permissions_mapping');
+    $permissions_mapping = $this->configFactory->get('openy_gc_auth.provider.yusa')->get('permissions_mapping');
     if ($event->account instanceof User && !empty($event->extraData)) {
       $account = $event->account;
       if (isset($event->extraData['Memberships'])) {

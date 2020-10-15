@@ -168,6 +168,9 @@ class YUSA extends GCIdentityProviderPluginBase {
     return $form;
   }
 
+  /**
+   * Get list of Virtual Y roles.
+   */
   private function getRoles() {
     $roles = ['' => $this->t('None')];
     foreach ($this->entityTypeManager->getStorage('user_role')->loadMultiple() as $role_name => $role) {
