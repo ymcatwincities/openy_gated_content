@@ -43,7 +43,7 @@ class GCUserAuthorizer {
   /**
    * {@inheritdoc}
    */
-  public function authorizeUser($name, $email) {
+  public function authorizeUser($name, $email, array $extra_data = []) {
     if (empty($name) || empty($email)) {
       return;
     }
@@ -69,7 +69,7 @@ class GCUserAuthorizer {
       }
     }
     // Instantiate GC login user event.
-    $event = new GCUserLoginEvent($account);
+    $event = new GCUserLoginEvent($account, $extra_data);
     // Dispatch the event.
     $this->eventDispatcher->dispatch(GCUserLoginEvent::EVENT_NAME, $event);
 

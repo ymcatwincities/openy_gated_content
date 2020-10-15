@@ -1,0 +1,5 @@
+services:
+  openy_gc_auth_yusa_user_login_suscriber:
+    class: '\Drupal\openy_gc_auth_yusa\EventSubscriber\GCAuthYUSAUserLoginSubscriber'
+    tags:
+      - { name: 'event_subscriber' }

@@ -1,6 +1,6 @@
-name: Open Y Virtual YMCA Auth Y USA
+name: Open Y Virtual YMCA Auth Y-USA
 type: module
-description: 'Provides Open Y Virtual YMCA Y USA authentication.'
+description: 'Provides Open Y Virtual YMCA Y-USA authentication.'
 package: Open Y Virtual YMCA
 version: 0.2
 core: 8.x
