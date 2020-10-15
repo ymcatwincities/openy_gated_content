@@ -167,3 +167,22 @@ function openy_gated_content_update_8008() {
     'user.role.virtual_ymca_editor',
   ]);
 }
+
+/**
+ * Add virtual y logout url.
+ */
+function openy_gated_content_update_8009() {
+  $config_dir = drupal_get_path('module', 'openy_gated_content') . '/config/install/';
+  $configs = [
+    'openy_gated_content.settings' => [
+      'virtual_y_logout_url',
+    ],
+  ];
+  $config_updater = \Drupal::service('openy_upgrade_tool.param_updater');
+  foreach ($configs as $config_name => $params) {
+    $config = $config_dir . $config_name . '.yml';
+    foreach ($params as $param) {
+      $config_updater->update($config, $config_name, $param);
+    }
+  }
+}
