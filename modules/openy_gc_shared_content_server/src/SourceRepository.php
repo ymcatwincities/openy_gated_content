@@ -5,7 +5,7 @@ namespace Drupal\openy_gc_shared_content_server;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 
 /**
- * SourceRepository.
+ * Source Repository class.
  */
 class SourceRepository {
 

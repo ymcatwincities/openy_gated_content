@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Class VirtualYDaxkoBarcodeLoginForm.
+ * Class VirtualYDaxkoBarcodeLogin Form.
  *
  * @package Drupal\openy_gc_auth_daxko_barcode\Form
  */

@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Class SegmentContentAccessCheck.
+ * Class Segment Content Access Check.
  *
  * @package Drupal\openy_gated_content
  */

@@ -8,7 +8,7 @@ use Drupal\user\Entity\User;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Class GCLogUserLoginSubscriber.
+ * Class GCLogUserLogin Subscriber.
  *
  * @package Drupal\openy_gc_log\EventSubscriber
  */

@@ -27,7 +27,9 @@ class LogEntityListBuilder extends EntityListBuilder {
    * {@inheritdoc}
    */
   public function buildRow(EntityInterface $entity) {
-    /* @var \Drupal\openy_gc_log\Entity\LogEntity $entity */
+    /**
+     * @var \Drupal\openy_gc_log\Entity\LogEntity $entity
+     */
     $row['id'] = $entity->id();
     $row['email'] = $entity->get('email')->value;
     $row['event_type'] = $entity->get('event_type')->value;

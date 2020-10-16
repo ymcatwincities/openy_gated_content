@@ -13,8 +13,8 @@ use Drupal\Core\Routing\RouteMatchInterface;
 function openy_gc_log_preprocess_paragraph(array &$variables) {
   /** @var \Drupal\paragraphs\Entity\Paragraph $paragraph */
   $paragraph = $variables['paragraph'];
-
-  if (!in_array($paragraph->bundle(), ['gated_content', 'gated_content_login'])) {
+  $paragraphs_list = ['gated_content', 'gated_content_login'];
+  if (!in_array($paragraph->bundle(), $paragraphs_list)) {
     return;
   }
 
