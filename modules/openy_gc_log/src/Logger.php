@@ -7,7 +7,7 @@ use Drupal\Core\Logger\LoggerChannel;
 use Drupal\openy_gc_log\Entity\LogEntity;
 
 /**
- * Service Logger.
+ * Service logger.
  */
 class Logger {
 

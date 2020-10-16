@@ -3,7 +3,7 @@
 namespace Drupal\openy_gc_auth_custom\Plugin\GCIdentityProvider;
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Url;
+use Drupal\Core\Link;
 use Drupal\openy_gc_auth\GCIdentityProviderPluginBase;
 
 /**
@@ -39,14 +39,6 @@ class Custom extends GCIdentityProviderPluginBase {
     $config = $this->getConfiguration();
     $form = parent::buildConfigurationForm($form, $form_state);
 
-    $form['import'] = [
-      '#title' => $this->t('Run users import'),
-      '#type' => 'link',
-      '#weight' => 0,
-      '#url' => Url::fromRoute('openy_gc_auth_custom.import_csv'),
-      '#attributes' => ['class' => ['button']],
-    ];
-
     $form['enable_recaptcha'] = [
       '#title' => $this->t('Enable ReCaptcha'),
       '#description' => $this->t('Set to TRUE if you want ReCaptcha validation on login form.'),
@@ -57,7 +49,7 @@ class Custom extends GCIdentityProviderPluginBase {
     $form['verification'] = [
       '#type' => 'details',
       '#title' => $this->t('Email verification'),
-      '#open' => TRUE,
+      '#open' => FALSE,
     ];
 
     $form['verification']['enable_email_verification'] = [
@@ -100,6 +92,36 @@ class Custom extends GCIdentityProviderPluginBase {
       '#format' => 'full_html',
       '#default_value' => $config['verification_message'],
       '#required' => TRUE,
+    ];
+
+    $form['migrate'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Migration settings'),
+      '#open' => FALSE,
+    ];
+
+    $form['migrate']['info'] = [
+      '#theme' => 'item_list',
+      '#list_type' => 'ul',
+      '#items' => [
+        $this->t('You can upload your CSV file on this @link.', [
+          '@link' => Link::createFromRoute(
+            $this->t('form'),
+            'openy_gc_auth_custom.upload_csv',
+            [],
+            ['attributes' => ['target' => '_blank']])->toString(),
+        ]),
+        $this->t('You can execute migration on this @link.', [
+          '@link' => Link::createFromRoute(
+            $this->t('page'),
+            'migrate_tools.execute',
+            [
+              'migration_group' => 'gc_auth',
+              'migration' => 'gc_auth_custom_users',
+            ],
+            ['attributes' => ['target' => '_blank']])->toString(),
+        ]),
+      ],
     ];
 
     return $form;

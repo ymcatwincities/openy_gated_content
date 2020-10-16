@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Class VirtualYCustomLoginForm.
+ * Class VirtualYCustomLogin Form.
  *
  * @package Drupal\openy_gc_auth_custom\Form
  */
