@@ -130,8 +130,6 @@ class ImportCsvForm extends FormBase {
       return;
     }
 
-    $fid = $form_state->getValue(['csv_file', 0]);
-    $csv_file_id = $form_state->get('csv_file_id');
     $file_storage = $this->entityTypeManager->getStorage('file');
     // Handle old file.
     if ($csv_file_id && $file = $file_storage->load($csv_file_id)) {
