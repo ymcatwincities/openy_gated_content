@@ -9,11 +9,3 @@ label: GC Auth Custom users
 description: 'Open Y Virtual YMCA Auth Custom users migration group'
 source_type: 'CSV files with customers'
 module: openy_gc_auth_custom
-shared_configuration:
-  source:
-    plugin: csv_limit
-    path: 'private://gc_auth/import/gc_auth_custom_users.csv'
-    header_row_count: 1
-    delimiter: ','
-    offset: 0
-    count: 0
