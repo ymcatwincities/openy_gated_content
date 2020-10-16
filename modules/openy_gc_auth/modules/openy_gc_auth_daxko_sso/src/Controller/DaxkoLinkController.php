@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Drupal\openy_gc_auth\GCUserAuthorizer;
 
 /**
- * Class DaxkoLinkController.
+ * Class DaxkoLink Controller.
  */
 class DaxkoLinkController extends ControllerBase {
 
