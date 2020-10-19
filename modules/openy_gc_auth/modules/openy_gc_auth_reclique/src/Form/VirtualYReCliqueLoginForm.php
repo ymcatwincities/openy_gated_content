@@ -232,7 +232,7 @@ class VirtualYReCliqueLoginForm extends FormBase {
       return;
     }
 
-    $path = str_replace('user/reset', 'vy-user/verification', user_pass_reset_url($user));
+    $path = str_replace('user/reset', 'reclique-user/verification', user_pass_reset_url($user));
     $params = [
       'message' => $provider_config->get('email_verification_text') . '<br>',
     ];
