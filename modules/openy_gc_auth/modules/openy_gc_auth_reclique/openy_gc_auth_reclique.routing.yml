@@ -1,0 +1,9 @@
+openy_gc_auth_reclique.account_verification:
+  path: '/vy-user/verification/{uid}/{timestamp}/{hash}'
+  defaults:
+    _controller: '\Drupal\openy_gc_auth_reclique\Controller\UserController::verifyAccount'
+    _title: 'Account verification'
+  requirements:
+    _user_is_logged_in: 'FALSE'
+  options:
+    no_cache: TRUE
