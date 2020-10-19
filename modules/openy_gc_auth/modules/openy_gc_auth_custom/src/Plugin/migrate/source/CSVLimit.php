@@ -10,25 +10,9 @@ use Drupal\migrate_source_csv\Plugin\migrate\source\CSV;
  * @MigrateSource(
  *   id = "csv_limit"
  * )
+ *
+ * @deprecated in openy_gated_content:1.01.
  */
 class CSVLimit extends CSV {
-
-  /**
-   * {@inheritdoc}
-   */
-  public function initializeIterator() {
-    parent::initializeIterator();
-
-    if (!isset($this->configuration['offset']) || empty($this->configuration['count'])) {
-      return $this->file;
-    }
-
-    $offset = $this->configuration['offset'];
-    if (!empty($this->configuration['header_row_count'])) {
-      $offset += $this->configuration['header_row_count'];
-    }
-
-    return new \LimitIterator($this->file, $offset, $this->configuration['count']);
-  }
 
 }

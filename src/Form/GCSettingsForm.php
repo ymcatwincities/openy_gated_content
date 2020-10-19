@@ -136,6 +136,15 @@ class GCSettingsForm extends ConfigFormBase {
       '#required' => TRUE,
     ];
 
+    $form['app_settings']['virtual_y_logout_url'] = [
+      '#type' => 'textfield',
+      '#title' => 'Virtual Y Logout url',
+      '#default_value' => $config->get('virtual_y_logout_url'),
+      '#required' => TRUE,
+      '#description' => $this->t('You may use /user/logout?destination=example_url for redirecting a user after logout.'),
+      '#placeholder' => '/user/logout',
+    ];
+
     $form['actions']['#type'] = 'actions';
     $form['actions']['submit'] = [
       '#type' => 'submit',

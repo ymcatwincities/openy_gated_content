@@ -42,8 +42,8 @@ function openy_gated_content_preprocess_paragraph(&$variables) {
   if (!isset($variables['paragraph'])) {
     return;
   }
-
-  if (!in_array($variables['paragraph']->getType(), ['gated_content', 'gated_content_login'])) {
+  $paragraphs_list = ['gated_content', 'gated_content_login'];
+  if (!in_array($variables['paragraph']->getType(), $paragraphs_list)) {
     return;
   }
 

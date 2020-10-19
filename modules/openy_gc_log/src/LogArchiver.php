@@ -11,7 +11,7 @@ use Drupal\csv_serialization\Encoder\CsvEncoder;
 use Drupal\file\Entity\File;
 
 /**
- * LogArchiver service.
+ * Log Archiver service.
  */
 class LogArchiver {
 

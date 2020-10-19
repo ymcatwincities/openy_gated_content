@@ -28,7 +28,9 @@ class SharedContentSourceListBuilder extends EntityListBuilder {
    * {@inheritdoc}
    */
   public function buildRow(EntityInterface $entity) {
-    /* @var \Drupal\openy_gc_shared_content_server\Entity\SharedContentSource $entity */
+    /**
+     * @var \Drupal\openy_gc_shared_content_server\Entity\SharedContentSource $entity
+     */
     $row['id'] = $entity->id();
     $row['status'] = $entity->getStatus() == 1 ? $this->t('Approved') : $this->t('Unapproved');
     $row['name'] = Link::createFromRoute(

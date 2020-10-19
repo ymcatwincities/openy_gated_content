@@ -7,7 +7,7 @@ use Drupal\openy_gc_auth\Event\GCUserLoginEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * GCUserAuthorizer class.
+ * User Authorizer class.
  */
 class GCUserAuthorizer {
 
