@@ -10,7 +10,7 @@
  */
 function openy_gc_auth_yusa_mail($key, &$message, $params) {
   switch ($key) {
-    case 'email_verification':
+    case 'openy_gc_auth_yusa_email_verification':
       $site_config = \Drupal::config('system.site');
       $message['from'] = $site_config->get('mail');
       $message['subject'] = t('@site_name: Virtual Y email verification', [

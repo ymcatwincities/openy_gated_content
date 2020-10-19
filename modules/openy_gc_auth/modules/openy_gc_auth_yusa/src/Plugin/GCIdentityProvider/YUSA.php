@@ -45,7 +45,8 @@ class YUSA extends GCIdentityProviderPluginBase {
     ];
 
     $permissions_mapping = explode(';', $config['permissions_mapping']);
-    for ($i = 0; $i < count($this->getRoles()); $i++) {
+    $roles = $this->GCUserService->getRoles();
+    for ($i = 0; $i < count($roles); $i++) {
       $role = isset($permissions_mapping[$i]) ? explode(':', $permissions_mapping[$i]) : '';
       $form['permissions_mapping'][$i]['permissions_mapping_y_usa_role'] = [
         '#title' => $this->t('Y-USA membership'),
@@ -58,7 +59,7 @@ class YUSA extends GCIdentityProviderPluginBase {
       $form['permissions_mapping'][$i]['permissions_mapping_role'] = [
         '#title' => $this->t('Virtual Y role'),
         '#type' => 'select',
-        '#options' => $this->getRoles(),
+        '#options' => ['' => $this->t('None')] + $roles,
         '#default_value' => isset($role[1]) ? $role[1] : '',
         '#suffix' => '</div>',
       ];
@@ -166,19 +167,6 @@ class YUSA extends GCIdentityProviderPluginBase {
     ];
 
     return $form;
-  }
-
-  /**
-   * Get list of Virtual Y roles.
-   */
-  private function getRoles() {
-    $roles = ['' => $this->t('None')];
-    foreach ($this->entityTypeManager->getStorage('user_role')->loadMultiple() as $role_name => $role) {
-      if (strstr($role_name, 'virtual_y')) {
-        $roles[$role_name] = $role->label();
-      }
-    }
-    return $roles;
   }
 
   /**

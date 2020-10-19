@@ -237,7 +237,7 @@ class VirtualYUSALoginForm extends FormBase {
       'message' => $provider_config->get('email_verification_text') . '<br>',
     ];
     $params['message'] .= 'Click to verify your email: ' . $path;
-    $this->mailManager->mail('openy_gc_auth_yusa', 'email_verification', $mail, 'en', $params, NULL, TRUE);
+    $this->mailManager->mail('openy_gc_auth_yusa', 'openy_gc_auth_yusa_email_verification', $mail, 'en', $params, NULL, TRUE);
     $this->privateTempStore->set($mail, TRUE);
   }
 
@@ -284,7 +284,7 @@ class VirtualYUSALoginForm extends FormBase {
       }
     }
     catch (\Exception $e) {
-      watchdog_exception('virtual_y', $e);
+      $this->loggerFactory->get('virtual_y')->error($e->getMessage());
     }
     return [];
   }
