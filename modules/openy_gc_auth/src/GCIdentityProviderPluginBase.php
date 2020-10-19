@@ -51,7 +51,7 @@ abstract class GCIdentityProviderPluginBase extends PluginBase implements GCIden
    *
    * @var \Drupal\openy_gated_content\GCUserService
    */
-  protected $GCUserService;
+  protected $gcUserService;
 
   /**
    * {@inheritdoc}
@@ -64,7 +64,7 @@ abstract class GCIdentityProviderPluginBase extends PluginBase implements GCIden
     $this->setConfiguration($configuration);
     $this->entityTypeManager = $entity_type_manager;
     $this->formBuilder = $form_builder;
-    $this->GCUserService = $gc_user_service;
+    $this->gcUserService = $gc_user_service;
   }
 
   /**

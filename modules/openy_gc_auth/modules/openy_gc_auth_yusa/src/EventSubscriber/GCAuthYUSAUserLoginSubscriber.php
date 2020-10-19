@@ -8,7 +8,7 @@ use Drupal\user\Entity\User;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Class GCAuthYUSAUserLoginSubscriber.
+ * Class GCAuthYUSAUserLoginSubscriber provides Y-USA login Subscriber.
  *
  * @package Drupal\openy_gc_auth_yusa\EventSubscriber
  */

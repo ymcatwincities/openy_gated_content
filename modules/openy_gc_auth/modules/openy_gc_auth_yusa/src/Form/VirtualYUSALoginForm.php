@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Class VirtualYUSALoginForm.
+ * Class VirtualYUSALoginForm provides Y-USA login form.
  *
  * @package Drupal\openy_gc_auth_yusa\Form
  */

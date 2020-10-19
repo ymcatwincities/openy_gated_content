@@ -45,7 +45,7 @@ class YUSA extends GCIdentityProviderPluginBase {
     ];
 
     $permissions_mapping = explode(';', $config['permissions_mapping']);
-    $roles = $this->GCUserService->getRoles();
+    $roles = $this->gcUserService->getRoles();
     for ($i = 0; $i < count($roles); $i++) {
       $role = isset($permissions_mapping[$i]) ? explode(':', $permissions_mapping[$i]) : '';
       $form['permissions_mapping'][$i]['permissions_mapping_y_usa_role'] = [
