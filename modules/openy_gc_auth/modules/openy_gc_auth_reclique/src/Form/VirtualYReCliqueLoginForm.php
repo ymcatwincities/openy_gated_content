@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Class VirtualYReCliqueLoginForm.
+ * Class VirtualYReCliqueLoginForm provides ReClique Login Form.
  *
  * @package Drupal\openy_gc_auth_reclique\Form
  */

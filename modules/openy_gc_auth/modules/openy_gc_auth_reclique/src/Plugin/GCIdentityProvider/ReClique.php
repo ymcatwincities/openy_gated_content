@@ -39,7 +39,6 @@ class ReClique extends GCIdentityProviderPluginBase {
     $form = parent::buildConfigurationForm($form, $form_state);
     $form['#tree'] = TRUE;
 
-
     $form['verification_url'] = [
       '#title' => $this->t('Verification URL'),
       '#type' => 'textfield',
