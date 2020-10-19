@@ -2,6 +2,7 @@
 
 namespace Drupal\openy_gated_content\Controller;
 
+use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -10,7 +11,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 /**
  * Class CategoriesResource Controller.
  */
-class CategoriesController implements ContainerInjectionInterface {
+class CategoriesController extends ControllerBase implements ContainerInjectionInterface {
 
   /**
    * The current active database's master connection.
@@ -51,12 +52,37 @@ class CategoriesController implements ContainerInjectionInterface {
    *   Json Array with uuid's.
    */
   public function list(string $type) {
+    $user = $this->currentUser();
+    $pattern = 'virtual_y';
+    // Get list of vy roles for current user.
+    $y_roles = array_filter($user->getRoles(), function ($role) use ($pattern) {
+      return strpos($role, $pattern) !== FALSE;
+    });
+
     $query = $this->database->select('node__field_gc_video_category', 'n');
+    $query->leftJoin('node_field_data', 'nd', 'n.entity_id = nd.nid');
     $query->leftJoin('taxonomy_term_data', 't', 't.tid = n.field_gc_video_category_target_id');
     $query->leftJoin('taxonomy_term_field_data', 'tf', 't.tid = tf.tid');
     $query->condition('n.bundle', $type);
     $query->condition('t.vid', 'gc_category');
     $query->condition('tf.status', 1);
+
+    if (!empty($y_roles)) {
+      $or_group = $query->orConditionGroup();
+      foreach ($y_roles as $role) {
+        if ($role == 'virtual_y') {
+          // The rest of roles already contains `virtual_y` string, so we need
+          // more strict condition here.
+          $or_group->condition('nd.field_vy_permission', $role, 'LIKE');
+          $or_group->condition('nd.field_vy_permission', $role . ',%', 'LIKE');
+        }
+        else {
+          $or_group->condition('nd.field_vy_permission', '%' . $role . '%', 'LIKE');
+        }
+      }
+      $query->condition($or_group);
+    }
+
     $query->fields('t', ['uuid']);
     $query->distinct(TRUE);
     $result = $query->execute()->fetchCol();
