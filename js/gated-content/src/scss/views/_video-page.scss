@@ -78,8 +78,9 @@
     }
 
     .video-footer__category {
-      span:last-child i {
-        display: none;
+      span+span::before {
+        content: ', ';
+        display: inline;
       }
     }
 
@@ -102,8 +103,10 @@
 
   .video-category-wrapper {
     background-color: $dark-blue;
-    span:last-child i {
-      display: none;
+
+    span+span::before {
+      content: ', ';
+      display: inline;
     }
   }
 
