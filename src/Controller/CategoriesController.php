@@ -70,15 +70,9 @@ class CategoriesController extends ControllerBase implements ContainerInjectionI
     if (!empty($y_roles)) {
       $or_group = $query->orConditionGroup();
       foreach ($y_roles as $role) {
-        if ($role == 'virtual_y') {
-          // The rest of roles already contains `virtual_y` string, so we need
-          // more strict condition here.
-          $or_group->condition('nd.field_vy_permission', $role, 'LIKE');
-          $or_group->condition('nd.field_vy_permission', $role . ',%', 'LIKE');
-        }
-        else {
-          $or_group->condition('nd.field_vy_permission', '%' . $role . '%', 'LIKE');
-        }
+        $or_group->condition('nd.field_vy_permission', $role, '=');
+        $or_group->condition('nd.field_vy_permission', '%' . $role . ',%', 'LIKE');
+        $or_group->condition('nd.field_vy_permission', '%,' . $role, 'LIKE');
       }
       $query->condition($or_group);
     }
