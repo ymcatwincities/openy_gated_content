@@ -78,7 +78,7 @@ class YUSA extends GCIdentityProviderPluginBase {
 
     $form['permissions_mapping']['actions']['add'] = [
       '#type' => 'submit',
-      '#value' => t('Add one more'),
+      '#value' => $this->t('Add one more'),
       '#submit' => [[get_class($this), 'addOne']],
       '#ajax' => [
         'callback' => [get_class($this), 'addmoreCallback'],
@@ -190,9 +190,14 @@ class YUSA extends GCIdentityProviderPluginBase {
     $form_state->setCached(FALSE);
     return $form;
   }
+
   /**
+   * Add more item.
+   *
    * @param array $form
+   *   Form data.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   Form state.
    */
   public function addOne(array &$form, FormStateInterface $form_state) {
     $permissions_mapping_items = $form_state->get('permissions_mapping_items_count');
@@ -202,9 +207,15 @@ class YUSA extends GCIdentityProviderPluginBase {
   }
 
   /**
+   * Add more callback.
+   *
    * @param array $form
+   *   Form data.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   Form state.
+   *
    * @return mixed
+   *  Return array with data.
    */
   public function addmoreCallback(array &$form, FormStateInterface $form_state) {
     return $form['settings']['permissions_mapping'];

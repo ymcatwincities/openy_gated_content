@@ -56,7 +56,7 @@ abstract class GCIdentityProviderPluginBase extends PluginBase implements GCIden
   /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config, EntityTypeManagerInterface $entity_type_manager, FormBuilderInterface $form_builder, GCUserService $gc_user_service = null) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config, EntityTypeManagerInterface $entity_type_manager, FormBuilderInterface $form_builder, GCUserService $gc_user_service = NULL) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->configFactory = $config;
     // We use pre-saved configuration here.
