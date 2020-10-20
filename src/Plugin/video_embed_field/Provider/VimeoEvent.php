@@ -76,7 +76,7 @@ class VimeoEvent extends ProviderPluginBase {
    * {@inheritdoc}
    */
   public static function getIdFromInput($input) {
-    preg_match('/^https?:\/\/vimeo\.com\/event\/(?<id>[0-9]*)?$/', $input, $matches);
+    preg_match('/^https?:\/\/vimeo\.com\/event\/(?<id>[0-9]*)?(\/[a-zA-Z0-9]+)?$/', $input, $matches);
     return isset($matches['id']) ? $matches['id'] : FALSE;
   }
 
