@@ -37,9 +37,7 @@
               class="video-footer__block video-footer__category">
               Category:
               <span v-for="category in video.attributes.field_gc_video_category"
-                    :key="category.drupal_internal__tid">
-                {{ category.name }}<i>,</i>
-              </span>
+                    :key="category.drupal_internal__tid">{{ category.name }}</span>
             </div>
             <div
               v-if="video.attributes.field_gc_video_equipment.length > 0"
@@ -69,9 +67,7 @@
                 cid: category_data.id,
                 type: 'video'
               }
-            }">
-            {{ video.attributes.field_gc_video_category[index].name }}<i>,</i>
-            </router-link>
+            }">{{ video.attributes.field_gc_video_category[index].name }}</router-link>
           </span>
         </div>
       </div>
