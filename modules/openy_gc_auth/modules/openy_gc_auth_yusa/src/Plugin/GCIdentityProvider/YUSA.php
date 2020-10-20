@@ -51,9 +51,9 @@ class YUSA extends GCIdentityProviderPluginBase {
     if (!$form_state->has('permissions_mapping_items_count')) {
       $form_state->set('permissions_mapping_items_count', count($permissions_mapping));
     }
-    $name_field = $form_state->get('permissions_mapping_items_count');
+    $permissions_mapping_items = $form_state->get('permissions_mapping_items_count');
     $roles = $this->gcUserService->getRoles();
-    for ($i = 0; $i < $name_field; $i++) {
+    for ($i = 0; $i < $permissions_mapping_items; $i++) {
       $role = isset($permissions_mapping[$i]) ? explode(':', $permissions_mapping[$i]) : '';
       $form['permissions_mapping'][$i]['permissions_mapping_y_usa_role'] = [
         '#title' => $this->t('Y-USA membership'),
@@ -76,7 +76,7 @@ class YUSA extends GCIdentityProviderPluginBase {
       '#type' => 'actions',
     ];
 
-    $form['permissions_mapping']['actions']['add_name'] = [
+    $form['permissions_mapping']['actions']['add'] = [
       '#type' => 'submit',
       '#value' => t('Add one more'),
       '#submit' => [[get_class($this), 'addOne']],
@@ -195,8 +195,8 @@ class YUSA extends GCIdentityProviderPluginBase {
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    */
   public function addOne(array &$form, FormStateInterface $form_state) {
-    $name_field = $form_state->get('permissions_mapping_items_count');
-    $add_button = $name_field + 1;
+    $permissions_mapping_items = $form_state->get('permissions_mapping_items_count');
+    $add_button = $permissions_mapping_items + 1;
     $form_state->set('permissions_mapping_items_count', $add_button);
     $form_state->setRebuild();
   }
