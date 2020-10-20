@@ -60,7 +60,6 @@ class CategoriesController extends ControllerBase implements ContainerInjectionI
     });
 
     $query = $this->database->select('node__field_gc_video_category', 'n');
-    $query->leftJoin('node_field_data', 'nd', 'n.entity_id = nd.nid');
     $query->leftJoin('taxonomy_term_data', 't', 't.tid = n.field_gc_video_category_target_id');
     $query->leftJoin('taxonomy_term_field_data', 'tf', 't.tid = tf.tid');
     $query->condition('n.bundle', $type);
@@ -68,6 +67,7 @@ class CategoriesController extends ControllerBase implements ContainerInjectionI
     $query->condition('tf.status', 1);
 
     if (!empty($y_roles)) {
+      $query->leftJoin('node_field_data', 'nd', 'n.entity_id = nd.nid');
       $or_group = $query->orConditionGroup();
       foreach ($y_roles as $role) {
         $or_group->condition('nd.field_vy_permission', $role, '=');
