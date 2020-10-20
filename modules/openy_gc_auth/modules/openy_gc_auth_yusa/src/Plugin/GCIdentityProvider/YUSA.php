@@ -2,6 +2,7 @@
 
 namespace Drupal\openy_gc_auth_yusa\Plugin\GCIdentityProvider;
 
+use Drupal\Core\DependencyInjection\DependencySerializationTrait;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\openy_gc_auth\GCIdentityProviderPluginBase;
 
@@ -15,6 +16,7 @@ use Drupal\openy_gc_auth\GCIdentityProviderPluginBase;
  * )
  */
 class YUSA extends GCIdentityProviderPluginBase {
+  use DependencySerializationTrait;
 
   const DEFAULT_LINK_LIFE_TIME = 14400;
 
@@ -42,11 +44,16 @@ class YUSA extends GCIdentityProviderPluginBase {
       '#title' => $this->t('Permissions mapping'),
       '#type' => 'details',
       '#open' => TRUE,
+      '#prefix' => '<div id="permissions-mapping-fieldset-wrapper">',
+      '#suffix' => '</div>',
     ];
-
     $permissions_mapping = explode(';', $config['permissions_mapping']);
+    if (!$form_state->has('permissions_mapping_items_count')) {
+      $form_state->set('permissions_mapping_items_count', count($permissions_mapping));
+    }
+    $name_field = $form_state->get('permissions_mapping_items_count');
     $roles = $this->gcUserService->getRoles();
-    for ($i = 0; $i < count($roles); $i++) {
+    for ($i = 0; $i < $name_field; $i++) {
       $role = isset($permissions_mapping[$i]) ? explode(':', $permissions_mapping[$i]) : '';
       $form['permissions_mapping'][$i]['permissions_mapping_y_usa_role'] = [
         '#title' => $this->t('Y-USA membership'),
@@ -64,6 +71,20 @@ class YUSA extends GCIdentityProviderPluginBase {
         '#suffix' => '</div>',
       ];
     }
+
+    $form['permissions_mapping']['actions'] = [
+      '#type' => 'actions',
+    ];
+
+    $form['permissions_mapping']['actions']['add_name'] = [
+      '#type' => 'submit',
+      '#value' => t('Add one more'),
+      '#submit' => [[get_class($this), 'addOne']],
+      '#ajax' => [
+        'callback' => [get_class($this), 'addmoreCallback'],
+        'wrapper' => 'permissions-mapping-fieldset-wrapper',
+      ],
+    ];
 
     $form['association_number'] = [
       '#title' => $this->t('Association number'),
@@ -166,7 +187,27 @@ class YUSA extends GCIdentityProviderPluginBase {
       '#required' => TRUE,
     ];
 
+    $form_state->setCached(FALSE);
     return $form;
+  }
+  /**
+   * @param array $form
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   */
+  public function addOne(array &$form, FormStateInterface $form_state) {
+    $name_field = $form_state->get('permissions_mapping_items_count');
+    $add_button = $name_field + 1;
+    $form_state->set('permissions_mapping_items_count', $add_button);
+    $form_state->setRebuild();
+  }
+
+  /**
+   * @param array $form
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   * @return mixed
+   */
+  public function addmoreCallback(array &$form, FormStateInterface $form_state) {
+    return $form['settings']['permissions_mapping'];
   }
 
   /**
