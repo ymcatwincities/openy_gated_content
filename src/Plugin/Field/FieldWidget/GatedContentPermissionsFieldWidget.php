@@ -116,7 +116,9 @@ class GatedContentPermissionsFieldWidget extends WidgetBase implements Container
 
     $new_value = '';
     foreach ($values as $value) {
-      unset($value['_original_delta']);
+      if (isset($value['_original_delta'])) {
+        unset($value['_original_delta']);
+      }
       $new_value .= implode(',', $value);
     }
     return $new_value;
