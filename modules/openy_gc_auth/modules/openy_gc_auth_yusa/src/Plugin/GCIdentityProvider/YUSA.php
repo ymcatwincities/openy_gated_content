@@ -200,7 +200,7 @@ class YUSA extends GCIdentityProviderPluginBase {
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   Form state.
    */
-  public function addOne(array &$form, FormStateInterface $form_state) {
+  public static function addOne(array &$form, FormStateInterface $form_state) {
     $permissions_mapping_items = $form_state->get('permissions_mapping_items_count');
     $add_button = $permissions_mapping_items + 1;
     $form_state->set('permissions_mapping_items_count', $add_button);
@@ -218,7 +218,7 @@ class YUSA extends GCIdentityProviderPluginBase {
    * @return mixed
    *   Return array with data.
    */
-  public function addmoreCallback(array &$form, FormStateInterface $form_state) {
+  public static function addmoreCallback(array &$form, FormStateInterface $form_state) {
     return $form['settings']['permissions_mapping'];
   }
 
