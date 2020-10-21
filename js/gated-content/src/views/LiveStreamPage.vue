@@ -36,12 +36,11 @@
             <div class="video-footer__block" v-if="instructor">
               Instructor: {{ instructor }}
             </div>
-            <div class="video-footer__block" v-if="category && category.length > 0">
-              <span>Category: </span>
+            <div class="video-footer__block video-footer__category"
+                 v-if="category && category.length > 0">
+              Category:
               <span v-for="(category_data, index) in category"
-                    :key="index">
-                {{ category_data.name }}<i v-if="index !== category.length - 1">, </i>
-              </span>
+                    :key="index">{{ category_data.name }}</span>
             </div>
             <div
               v-if="video.attributes.equipment.length > 0"
