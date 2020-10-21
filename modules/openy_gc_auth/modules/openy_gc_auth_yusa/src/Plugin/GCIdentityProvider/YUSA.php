@@ -120,6 +120,7 @@ class YUSA extends GCIdentityProviderPluginBase {
       '#options' => [
         'membership_id' => $this->t('Membership ID'),
         'email' => $this->t('Email'),
+        'barcode' => $this->t('Barcode'),
       ],
       '#default_value' => $config['verification_type'],
       '#required' => TRUE,
@@ -215,7 +216,7 @@ class YUSA extends GCIdentityProviderPluginBase {
    *   Form state.
    *
    * @return mixed
-   *  Return array with data.
+   *   Return array with data.
    */
   public function addmoreCallback(array &$form, FormStateInterface $form_state) {
     return $form['settings']['permissions_mapping'];

@@ -312,6 +312,12 @@ class VirtualYUSALoginForm extends FormBase {
         'Email' => $id,
       ];
     }
+    if ($provider_config->get('verification_type') == 'barcode') {
+      $json = [
+        'AssociationNumber' => $provider_config->get('association_number'),
+        'Barcode' => $id,
+      ];
+    }
     return $this->doApiCall('POST', $json);
   }
 
