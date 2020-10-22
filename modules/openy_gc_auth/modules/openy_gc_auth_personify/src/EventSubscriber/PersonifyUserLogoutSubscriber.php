@@ -4,13 +4,11 @@ namespace Drupal\openy_gc_auth_personify\EventSubscriber;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
-use Drupal\Core\Url;
 use Drupal\openy_gc_auth\Event\GCUserLogoutEvent;
-use Drupal\user\Entity\User;
 use GuzzleHttp\Client;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Class PersonifyUserLogoutSubscriber Subscriber.
@@ -18,6 +16,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
  * @package Drupal\openy_gc_auth_personify\EventSubscriber
  */
 class PersonifyUserLogoutSubscriber implements EventSubscriberInterface {
+
+  use StringTranslationTrait;
 
   /**
    * The current request.
@@ -126,12 +126,12 @@ class PersonifyUserLogoutSubscriber implements EventSubscriberInterface {
         $settings->get($env . 'username'),
         $settings->get($env . 'password'),
       ],
-      'verify' => false,
+      'verify' => FALSE,
       'form_params' => [
         'vendorUsername' => $settings->get('vendor_username'),
         'vendorPassword' => $settings->get('vendor_password'),
         'customerToken' => $customerToken,
-      ]
+      ],
     ];
 
     try {
@@ -141,7 +141,7 @@ class PersonifyUserLogoutSubscriber implements EventSubscriberInterface {
       $response = $this->client->request('POST', $endpoint, $options);
 
       if ($response->getStatusCode() != '200') {
-        $this->logger->error(t('Failed attempt to logout a user from Personify'));
+        $this->logger->error($this->t('Failed attempt to logout a user from Personify'));
         return FALSE;
       }
 
