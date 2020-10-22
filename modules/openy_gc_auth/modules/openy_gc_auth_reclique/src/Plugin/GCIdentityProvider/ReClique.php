@@ -1,21 +1,22 @@
 <?php
 
-namespace Drupal\openy_gc_auth_yusa\Plugin\GCIdentityProvider;
+namespace Drupal\openy_gc_auth_reclique\Plugin\GCIdentityProvider;
 
 use Drupal\Core\DependencyInjection\DependencySerializationTrait;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\openy_gc_auth\GCIdentityProviderPluginBase;
 
 /**
- * Y-USA identity provider plugin.
+ * ReClique identity provider plugin.
  *
  * @GCIdentityProvider(
- *   id="yusa",
- *   label = @Translation("Y-USA provider"),
- *   config="openy_gc_auth.provider.yusa"
+ *   id="reclique",
+ *   label = @Translation("ReClique provider"),
+ *   config="openy_gc_auth.provider.reclique"
  * )
  */
-class YUSA extends GCIdentityProviderPluginBase {
+class ReClique extends GCIdentityProviderPluginBase {
+
   use DependencySerializationTrait;
 
   const DEFAULT_LINK_LIFE_TIME = 14400;
@@ -55,8 +56,8 @@ class YUSA extends GCIdentityProviderPluginBase {
     $roles = $this->gcUserService->getRoles();
     for ($i = 0; $i < $permissions_mapping_items; $i++) {
       $role = isset($permissions_mapping[$i]) ? explode(':', $permissions_mapping[$i]) : '';
-      $form['permissions_mapping'][$i]['permissions_mapping_y_usa_role'] = [
-        '#title' => $this->t('Y-USA membership'),
+      $form['permissions_mapping'][$i]['permissions_mapping_reclique_role'] = [
+        '#title' => $this->t('ReClique membership'),
         '#type' => 'textfield',
         '#default_value' => isset($role[0]) ? $role[0] : '',
         '#size' => 30,
@@ -86,13 +87,6 @@ class YUSA extends GCIdentityProviderPluginBase {
       ],
     ];
 
-    $form['association_number'] = [
-      '#title' => $this->t('Association number'),
-      '#type' => 'textfield',
-      '#default_value' => $config['association_number'],
-      '#required' => TRUE,
-    ];
-
     $form['verification_url'] = [
       '#title' => $this->t('Verification URL'),
       '#type' => 'textfield',
@@ -111,18 +105,6 @@ class YUSA extends GCIdentityProviderPluginBase {
       '#title' => $this->t('Authentication password'),
       '#type' => 'textfield',
       '#default_value' => $config['auth_pass'],
-      '#required' => TRUE,
-    ];
-
-    $form['verification_type'] = [
-      '#title' => $this->t('Verification type'),
-      '#type' => 'radios',
-      '#options' => [
-        'membership_id' => $this->t('Membership ID'),
-        'email' => $this->t('Email'),
-        'barcode' => $this->t('Barcode'),
-      ],
-      '#default_value' => $config['verification_type'],
       '#required' => TRUE,
     ];
 
@@ -188,7 +170,6 @@ class YUSA extends GCIdentityProviderPluginBase {
       '#required' => TRUE,
     ];
 
-    $form_state->setCached(FALSE);
     return $form;
   }
 
@@ -229,18 +210,16 @@ class YUSA extends GCIdentityProviderPluginBase {
     if (!$form_state->getErrors()) {
       $this->configuration['enable_recaptcha'] = $form_state->getValue('settings')['enable_recaptcha'];
       $this->configuration['verification_url'] = $form_state->getValue('settings')['verification_url'];
-      $this->configuration['association_number'] = $form_state->getValue('settings')['association_number'];
       $this->configuration['auth_login'] = $form_state->getValue('settings')['auth_login'];
       $this->configuration['auth_pass'] = $form_state->getValue('settings')['auth_pass'];
-      $this->configuration['verification_type'] = $form_state->getValue('settings')['verification_type'];
       $this->configuration['id_field_text'] = $form_state->getValue('settings')['id_field_text'];
       $this->configuration['enable_email_verification'] = $form_state->getValue('settings')['verification']['enable_email_verification'];
       $this->configuration['email_verification_link_life_time'] = $form_state->getValue('settings')['verification']['email_verification_link_life_time'];
       $this->configuration['email_verification_text'] = !empty($form_state->getValue('settings')['verification']['email_verification_text']) ? $form_state->getValue('settings')['verification']['email_verification_text']['value'] : '';
       $this->configuration['verification_message'] = !empty($form_state->getValue('settings')['verification']['verification_message']) ? $form_state->getValue('settings')['verification']['verification_message']['value'] : '';
       foreach ($form_state->getValue('settings')['permissions_mapping'] as $mapping) {
-        if (!empty($mapping['permissions_mapping_y_usa_role'])) {
-          $permissions_mapping[] = $mapping['permissions_mapping_y_usa_role'] . ':' . $mapping['permissions_mapping_role'];
+        if (!empty($mapping['permissions_mapping_reclique_role'])) {
+          $permissions_mapping[] = $mapping['permissions_mapping_reclique_role'] . ':' . $mapping['permissions_mapping_role'];
         }
       }
       $this->configuration['permissions_mapping'] = !empty($permissions_mapping) ? implode(';', $permissions_mapping) : '';
@@ -252,7 +231,7 @@ class YUSA extends GCIdentityProviderPluginBase {
    * {@inheritdoc}
    */
   public function getLoginForm() {
-    return $this->formBuilder->getForm('Drupal\openy_gc_auth_yusa\Form\VirtualYUSALoginForm');
+    return $this->formBuilder->getForm('Drupal\openy_gc_auth_reclique\Form\VirtualYReCliqueLoginForm');
   }
 
 }
