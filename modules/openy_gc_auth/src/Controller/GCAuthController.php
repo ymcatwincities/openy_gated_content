@@ -3,22 +3,12 @@
 namespace Drupal\openy_gc_auth\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\Core\Routing\TrustedRedirectResponse;
-use Drupal\Core\Url;
-use Drupal\openy_gc_auth\Event\GCUserLoginEvent;
 use Drupal\openy_gc_auth\Event\GCUserLogoutEvent;
-use Drupal\personify\PersonifyClient;
-use Drupal\personify\PersonifySSO;
-use GuzzleHttp\Client;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Drupal\Core\Messenger\MessengerInterface;
-use Drupal\openy_gc_auth\GCUserAuthorizer;
 
 /**
  * Auth controller.
