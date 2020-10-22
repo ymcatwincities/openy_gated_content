@@ -49,12 +49,6 @@ class GCUserAuthorizer {
     }
     // Create drupal user if it doesn't exist and login it.
     $account = user_load_by_mail($email);
-    // Activate user if it's not.
-    if (!$account->isActive()) {
-      $account->activate();
-      $account->save();
-    }
-
     if (!$account) {
       $user = $this->userStorage->create();
       $user->setPassword(user_password());
@@ -66,6 +60,13 @@ class GCUserAuthorizer {
       $result = $account = $user->save();
       if ($result) {
         $account = user_load_by_mail($email);
+      }
+    }
+    else {
+      // Activate user if it's not.
+      if (!$account->isActive()) {
+        $account->activate();
+        $account->save();
       }
     }
     // Instantiate GC login user event.
