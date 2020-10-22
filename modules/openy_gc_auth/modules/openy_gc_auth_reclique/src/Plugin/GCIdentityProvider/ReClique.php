@@ -87,7 +87,6 @@ class ReClique extends GCIdentityProviderPluginBase {
       ],
     ];
 
-
     $form['verification_url'] = [
       '#title' => $this->t('Verification URL'),
       '#type' => 'textfield',
