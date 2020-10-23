@@ -186,3 +186,47 @@ function openy_gated_content_update_8009() {
     }
   }
 }
+
+/**
+ * Fix field_vy_permission scheme and definition.
+ */
+function openy_gated_content_update_8010() {
+  // Get the current schema, change the length.
+  $key_value_store_schema = \Drupal::keyValue('entity.storage_schema.sql');
+  $schema = $key_value_store_schema->get('eventinstance.field_schema_data.field_vy_permission');
+  $schema['eventinstance_field_data']['fields']['field_vy_permission']['length'] = 255;
+
+  // Update the last installed field definition and field schema.
+  /** @var \Drupal\Core\KeyValueStore\KeyValueStoreInterface $key_value_store */
+  \Drupal::service('entity_field.manager')->clearCachedFieldDefinitions();
+  $key_value_store_definition = \Drupal::keyValue('entity.definitions.installed');
+  $storage_definitions = $key_value_store_definition->get('eventinstance.field_storage_definitions');
+  $storage_definitions['field_vy_permission'] = $storage_definition = \Drupal::service('entity_field.manager')
+    ->getFieldStorageDefinitions('eventinstance')['field_vy_permission'];
+  $key_value_store_definition->set('eventinstance.field_storage_definitions', $storage_definitions);
+
+  // Update the stored schema.
+  $key_value_store_schema->set('eventinstance.field_schema_data.field_vy_permission', $schema);
+}
+
+/**
+ * Fix field_vy_permission scheme and definition.
+ */
+function openy_gated_content_update_8011() {
+  // Get the current schema, change the length.
+  $key_value_store_schema = \Drupal::keyValue('entity.storage_schema.sql');
+  $schema = $key_value_store_schema->get('eventseries.field_schema_data.field_vy_permission');
+  $schema['eventseries_field_data']['fields']['field_vy_permission']['length'] = 255;
+
+  // Update the last installed field definition and field schema.
+  /** @var \Drupal\Core\KeyValueStore\KeyValueStoreInterface $key_value_store */
+  \Drupal::service('entity_field.manager')->clearCachedFieldDefinitions();
+  $key_value_store_definition = \Drupal::keyValue('entity.definitions.installed');
+  $storage_definitions = $key_value_store_definition->get('eventseries.field_storage_definitions');
+  $storage_definitions['field_vy_permission'] = $storage_definition = \Drupal::service('entity_field.manager')
+    ->getFieldStorageDefinitions('eventseries')['field_vy_permission'];
+  $key_value_store_definition->set('eventseries.field_storage_definitions', $storage_definitions);
+
+  // Update the stored schema.
+  $key_value_store_schema->set('eventseries.field_schema_data.field_vy_permission', $schema);
+}

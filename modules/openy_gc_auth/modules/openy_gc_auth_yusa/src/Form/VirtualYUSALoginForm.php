@@ -284,7 +284,7 @@ class VirtualYUSALoginForm extends FormBase {
       }
     }
     catch (\Exception $e) {
-      $this->loggerFactory->get('virtual_y')->error($e->getMessage());
+      $this->logger('openy_gated_content')->error($e->getMessage());
     }
     return [];
   }
