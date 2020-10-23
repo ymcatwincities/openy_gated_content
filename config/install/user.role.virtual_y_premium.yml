@@ -1,0 +1,12 @@
+langcode: en
+status: true
+dependencies: {  }
+id: virtual_y_premium
+label: 'Virtual YMCA Premium'
+weight: 1
+is_admin: null
+permissions:
+  - 'access content'
+  - 'access popups'
+  - 'restful get alerts_rest_resource'
+  - 'view media'

@@ -36,6 +36,10 @@ source:
       tid: 6
       title: 'Yoga'
       image: 7
+    -
+      tid: 7
+      title: 'Health'
+      image: 2
   ids:
     tid:
       type: integer

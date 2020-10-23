@@ -1,0 +1,14 @@
+interval: 15
+min_time: '04:00am'
+max_time: '11:45pm'
+date_format: 'F jS, Y h:iA'
+time_format: 'h:i A'
+days: 'monday,tuesday,wednesday,thursday,friday,saturday,sunday'
+limit: 10
+excludes: 1
+includes: 1
+enabled_fields: 'consecutive_recurring_date,daily_recurring_date,weekly_recurring_date,monthly_recurring_date,custom'
+threshold_warning: 1
+threshold_count: 200
+threshold_message: 'Saving this series will create up to @total event instances. This could result in memory exhaustion or site instability. Please try again with a smaller date range.'
+threshold_prevent_save: 0

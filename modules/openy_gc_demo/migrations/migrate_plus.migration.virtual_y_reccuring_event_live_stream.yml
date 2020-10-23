@@ -67,6 +67,9 @@ process:
   title: title
   body: description
   field_ls_host_name: instructor
+  field_vy_permission:
+    plugin: default_value
+    default_value: virtual_y,virtual_y_premium
   field_ls_media:
     -
       plugin: migration_lookup

@@ -25,9 +25,7 @@ class Custom extends GCIdentityProviderPluginBase {
   public function defaultConfiguration():array {
     return [
       'enable_recaptcha' => TRUE,
-      'api_endpoint' => '/openy-gc-auth/provider/custom/login',
       'enable_email_verification' => TRUE,
-      'email_verification_api_endpoint' => '/openy-gc-auth/provider/custom/login-by-link',
       'email_verification_link_life_time' => self::DEFAULT_LINK_LIFE_TIME,
       'email_verification_text' => 'Hello! <br> You’re just one step away from accessing your Virtual YMCA. Please open the link below to begin enjoying YMCA content made exclusively for members like you.',
       'verification_message' => 'We have sent a verification link to the email address you provided. Please open this link and activate your account. If you do not receive an email, please try again or contact us at XXX-XXX-XXXX to ensure we have the correct email on file for your membership.',
@@ -49,27 +47,11 @@ class Custom extends GCIdentityProviderPluginBase {
       '#attributes' => ['class' => ['button']],
     ];
 
-    $form['users_list'] = [
-      '#title' => $this->t('Users List'),
-      '#type' => 'link',
-      '#weight' => 0,
-      '#url' => Url::fromUserInput('/admin/openy/virtual-ymca/gc-auth-settings/provider/custom/users'),
-      '#attributes' => ['class' => ['button', 'button--primary']],
-    ];
-
     $form['enable_recaptcha'] = [
       '#title' => $this->t('Enable ReCaptcha'),
       '#description' => $this->t('Set to TRUE if you want ReCaptcha validation on login form.'),
       '#type' => 'checkbox',
       '#default_value' => $config['enable_recaptcha'],
-    ];
-
-    $form['api_endpoint'] = [
-      '#title' => $this->t('Login form API endpoint'),
-      '#description' => $this->t('Change this value only in case you have custom endpoint for this.'),
-      '#type' => 'textfield',
-      '#default_value' => $config['api_endpoint'],
-      '#required' => TRUE,
     ];
 
     $form['verification'] = [
@@ -83,14 +65,6 @@ class Custom extends GCIdentityProviderPluginBase {
       '#description' => $this->t('Set to TRUE if you want enable one-time login link sending to user email for verification.'),
       '#type' => 'checkbox',
       '#default_value' => $config['enable_email_verification'],
-    ];
-
-    $form['verification']['email_verification_api_endpoint'] = [
-      '#title' => $this->t('Email verification API endpoint'),
-      '#description' => $this->t('Change this value only in case you have custom endpoint for this.'),
-      '#type' => 'textfield',
-      '#default_value' => $config['email_verification_api_endpoint'],
-      '#required' => TRUE,
     ];
 
     $form['verification']['email_verification_link_life_time'] = [
@@ -150,18 +124,8 @@ class Custom extends GCIdentityProviderPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function getDataForApp():array {
-    $data = parent::getDataForApp();
-    $data['enableRecaptcha'] = (bool) $this->configuration['enable_recaptcha'];
-    $data['emailVerification'] = (bool) $this->configuration['enable_email_verification'];
-    $data['apiEndpoint'] = $this->configuration['api_endpoint'];
-    $data['emailVerificationApiEndpoint'] = $this->configuration['email_verification_api_endpoint'];
-    $this->configFactory->get('recaptcha.settings')->get('site_key');
-    $data['reCaptchaKey'] = $this->configFactory
-      ->get('recaptcha.settings')
-      ->get('site_key');
-
-    return $data;
+  public function getLoginForm() {
+    return $this->formBuilder->getForm('Drupal\openy_gc_auth_custom\Form\VirtualYCustomLoginForm');
   }
 
 }

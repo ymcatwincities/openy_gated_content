@@ -119,6 +119,21 @@ class SharedContentSource extends ContentEntityBase {
   /**
    * {@inheritdoc}
    */
+  public function getStatus() {
+    return $this->get('status')->value;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setStatus($status) {
+    $this->set('status', $status);
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function preSave(EntityStorageInterface $storage) {
     $token = Crypt::hashBase64($this->getUrl() . Settings::getHashSalt());
     $this->setToken($token);
@@ -197,6 +212,19 @@ class SharedContentSource extends ContentEntityBase {
     $fields['created'] = BaseFieldDefinition::create('created')
       ->setLabel(t('Created'))
       ->setDescription(t('The time that the entity was created.'));
+
+    $fields['status'] = BaseFieldDefinition::create('boolean')
+      ->setLabel(t('Status'))
+      ->setDescription(t('Indicating whether the Shared content source Entity is approved.'))
+      ->setDisplayOptions('form', [
+        'type' => 'boolean_checkbox',
+        'settings' => [
+          'display_label' => TRUE,
+        ],
+        'weight' => 5,
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDefaultValue(FALSE);
 
     return $fields;
   }

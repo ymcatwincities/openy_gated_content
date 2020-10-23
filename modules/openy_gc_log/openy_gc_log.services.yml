@@ -1,4 +1,8 @@
 services:
+  openy_gc_log.logger:
+    class: Drupal\openy_gc_log\Logger
+    arguments: ['@logger.channel.openy_gc_log', '@entity_type.manager']
+
   openy_gc_log.log_archiver:
     class: Drupal\openy_gc_log\LogArchiver
     arguments: ['@entity_type.manager', '@logger.channel.openy_gc_log', '@config.factory', '@file_system', '@settings']
@@ -6,3 +10,9 @@ services:
   logger.channel.openy_gc_log:
     parent: logger.channel_base
     arguments: ['openy_gc_log']
+
+  gated_content_events_user_login:
+    class: '\Drupal\openy_gc_log\EventSubscriber\GCLogUserLoginSubscriber'
+    arguments: ['@openy_gc_log.logger']
+    tags:
+      - { name: 'event_subscriber' }

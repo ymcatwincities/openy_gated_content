@@ -1,0 +1,71 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - openy_gc_demo
+      - openy_gc_auth_custom
+id: virtual_y_gc_auth_custom_user_demo
+migration_tags:
+  - openy_complete_installation
+migration_group: virtual_y
+label: 'GC auth users demo'
+source:
+  plugin: embedded_data
+  constants:
+    status: 0
+    roles:
+      - authenticated
+      - virtual_y
+  data_rows:
+    -
+      id: 1
+      member_id: 123456
+      first_name: 'John'
+      email: 'johndoe@test.com'
+    -
+      id: 2
+      member_id: 678912
+      first_name: 'Adam'
+      email: 'adamk@verizon.net'
+    -
+      id: 3
+      member_id: 345678
+      first_name: 'Nelson'
+      email: 'nelson@gmail.com'
+    -
+      id: 4
+      member_id: 901234
+      first_name: 'Jessica'
+      email: 'twoflower@yahoo.com'
+    -
+      id: 5
+      member_id: 567890
+      first_name: 'Desmond'
+      email: 'pfitza@msn.com'
+    -
+      id: 6
+      member_id: 987654
+      first_name: 'John'
+      email: 'joehall@live.com'
+  ids:
+    id:
+      type: integer
+process:
+  status: 'constants/status'
+  roles: 'constants/roles'
+  name:
+    plugin: concat
+    source:
+      - first_name
+      - member_id
+    delimiter: ' '
+  mail:
+    - plugin: get
+      source: email
+    - plugin: skip_on_empty
+      method: row
+      source: email
+      message: 'Field email is missed'
+destination:
+  plugin: entity:user

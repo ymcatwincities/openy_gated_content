@@ -8,7 +8,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Routing\TrustedRedirectResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Drupal\openy_gc_auth\GCUserAuthorizer;
 
 /**
  * Class DaxkoLinkController.
@@ -30,18 +32,30 @@ class DaxkoLinkController extends ControllerBase {
   protected $daxkoClient;
 
   /**
+   * The Gated Content User Authorizer.
+   *
+   * @var \Drupal\openy_gc_auth\GCUserAuthorizer
+   */
+  protected $gcUserAuthorizer;
+
+  /**
    * DaxkoLinkController constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   Config factory instance.
    * @param \Drupal\daxko_sso\DaxkoSSOClient $daxkoSSOClient
    *   Daxko client instance.
+   * @param \Drupal\openy_gc_auth\GCUserAuthorizer $gcUserAuthorizer
+   *   The Gated User Authorizer.
    */
   public function __construct(
     ConfigFactoryInterface $configFactory,
-    DaxkoSSOClient $daxkoSSOClient) {
+    DaxkoSSOClient $daxkoSSOClient,
+    GCUserAuthorizer $gcUserAuthorizer
+  ) {
     $this->configFactory = $configFactory;
     $this->daxkoClient = $daxkoSSOClient;
+    $this->gcUserAuthorizer = $gcUserAuthorizer;
   }
 
   /**
@@ -50,7 +64,8 @@ class DaxkoLinkController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('config.factory'),
-      $container->get('daxko_sso.client')
+      $container->get('daxko_sso.client'),
+      $container->get('openy_gc_auth.user_authorizer')
     );
   }
 
@@ -93,8 +108,8 @@ class DaxkoLinkController extends ControllerBase {
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   Current request object.
    *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   Json array with user fields or error.
+   * @return mixed
+   *   Returns RedirectResponse or JsonResponse.
    */
   public function backlink(Request $request) {
 
@@ -121,24 +136,18 @@ class DaxkoLinkController extends ControllerBase {
     $userDetails = $this->daxkoClient->getRequest('members/' . $userData->member_id);
     // Check if this user is an active client.
     if ($userDetails->active) {
-      return new JsonResponse(
-        [
-          'error' => 0,
-          'token' => $token,
-          'user' => [
-            'name' => $userDetails->name->first_name,
-            'email' => $userDetails->emails[0]->email,
-          ],
-        ]
-      );
+      // Create drupal user if it doesn't exist and login it.
+      $name = $userDetails->name->first_name . ' ' . $userDetails->name->last_name;
+      $email = $userDetails->emails[0]->email;
+
+      // Authorize user (register, login, log, etc).
+      $this->gcUserAuthorizer->authorizeUser($name, $email);
+
+      return new RedirectResponse($this->configFactory->get('openy_gated_content.settings')->get('virtual_y_url'));
     }
     else {
-      return new JsonResponse(
-        [
-          'error' => 1,
-          'message' => 'User is not active client',
-        ]
-      );
+      // Redirect back to Virual Y login page.
+      return new RedirectResponse($this->configFactory->get('openy_gated_content.settings')->get('virtual_y_login_url'));
     }
   }
 
