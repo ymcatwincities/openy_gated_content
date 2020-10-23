@@ -11,12 +11,5 @@
         "ext-zlib": "*"
     },
     "license": "GPL-2.0+",
-    "minimum-stability": "dev",
-    "extra": {
-        "patches": {
-            "drupal/csv_serialization": {
-                "Option for CSV Encoder to skip preparing and outputting the header": "https://www.drupal.org/files/issues/2018-08-10/csv_serliazation-2854087-skip-headers.patch"
-            }
-        }
-    }
+    "minimum-stability": "dev"
 }

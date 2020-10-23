@@ -311,7 +311,15 @@ class LogArchiver {
       $fileEntity = $this->fileEntities[$fileName];
 
       $csvEncoder = new CsvEncoder();
-      $csvEncoder->setOutputHeader($fileEntity->isNew());
+      $csvEncoder->setSettings([
+        'delimiter' => ",",
+        'enclosure' => '"',
+        'escape_char' => "\\",
+        'encoding' => 'utf8',
+        'strip_tags' => TRUE,
+        'trim' => TRUE,
+        'output_header' => $fileEntity->isNew(),
+      ]);
 
       $fileContents = $csvEncoder->encode($logs, 'csv');
 
