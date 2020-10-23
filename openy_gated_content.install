@@ -201,7 +201,7 @@ function openy_gated_content_update_8010() {
   \Drupal::service('entity_field.manager')->clearCachedFieldDefinitions();
   $key_value_store_definition = \Drupal::keyValue('entity.definitions.installed');
   $storage_definitions = $key_value_store_definition->get('eventinstance.field_storage_definitions');
-  $storage_definitions['field_vy_permission'] = $storage_definition = \Drupal::service('entity_field.manager')
+  $storage_definitions['field_vy_permission'] = \Drupal::service('entity_field.manager')
     ->getFieldStorageDefinitions('eventinstance')['field_vy_permission'];
   $key_value_store_definition->set('eventinstance.field_storage_definitions', $storage_definitions);
 
@@ -223,7 +223,7 @@ function openy_gated_content_update_8011() {
   \Drupal::service('entity_field.manager')->clearCachedFieldDefinitions();
   $key_value_store_definition = \Drupal::keyValue('entity.definitions.installed');
   $storage_definitions = $key_value_store_definition->get('eventseries.field_storage_definitions');
-  $storage_definitions['field_vy_permission'] = $storage_definition = \Drupal::service('entity_field.manager')
+  $storage_definitions['field_vy_permission'] = \Drupal::service('entity_field.manager')
     ->getFieldStorageDefinitions('eventseries')['field_vy_permission'];
   $key_value_store_definition->set('eventseries.field_storage_definitions', $storage_definitions);
 
