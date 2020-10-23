@@ -1,2 +1,4 @@
 stage_url_login: ''
 prod_url_login: ''
+stage_url_logout: ''
+prod_url_logout: ''
