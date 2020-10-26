@@ -65,7 +65,7 @@ function openy_gc_log_file_download($uri) {
     return NULL;
   }
 
-  if (strpos($uri, 'vy_logs/' === FALSE)) {
+  if (strpos($uri, 'vy_logs/') === FALSE) {
     return NULL;
   }
 
