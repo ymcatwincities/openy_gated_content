@@ -60,12 +60,17 @@ function openy_gc_log_help($route_name, RouteMatchInterface $route_match) {
  */
 function openy_gc_log_file_download($uri) {
   $user = \Drupal::currentUser();
-  // Check if the user has administrator role.
-  if (in_array('administrator', $user->getRoles())) {
-    return [
-      'Content-Type' => \Drupal::service('file.mime_type.guesser')->guess($uri),
-      'Content-Disposition' => 'inline',
-    ];
+
+  if (!$user->hasPermission('view log entity entities')) {
+    return NULL;
   }
-  return -1;
+
+  if (strpos($uri, 'vy_logs/' === FALSE)) {
+    return NULL;
+  }
+
+  return [
+    'Content-Type' => \Drupal::service('file.mime_type.guesser')->guess($uri),
+    'Content-Disposition' => 'inline',
+  ];
 }
