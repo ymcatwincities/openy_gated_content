@@ -43,7 +43,7 @@ class SharedContentSourceListBuilder extends EntityListBuilder {
       '#template' => '<span style="color: ' . $color . ';">{{ content }}</span>',
       '#context' => [
         'content' => $text,
-      ]
+      ],
     ];
     $row['name'] = Link::createFromRoute(
       $entity->label(),
