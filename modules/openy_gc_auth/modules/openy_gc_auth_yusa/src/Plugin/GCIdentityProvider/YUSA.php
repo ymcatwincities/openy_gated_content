@@ -235,7 +235,7 @@ class YUSA extends GCIdentityProviderPluginBase {
   public function validateConfigurationForm(array &$form, FormStateInterface $form_state) {
     if ($form_state->getValue('settings')['verification']['enable_email_verification'] == 1 && ($form_state->getValue('settings')['verification_type'] == 'membership_id' || $form_state->getValue('settings')['verification_type'] == 'barcode')) {
       $form_state->setErrorByName('settings][verification_type',
-        $this->t('You must disable "Email verification" when "Verification Type" is set to "Membership ID or Barcode".'
+        $this->t('You must disable "Email verification" when "Verification Type" is set to "Membership ID" or "Barcode". Virtual Y is unable to send a verification email if user email is not used and stored as the "Verification Type" for login.'
       ));
     }
   }
