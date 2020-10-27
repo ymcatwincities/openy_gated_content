@@ -14,7 +14,6 @@ source:
   path: 'private://gc_auth/import/gc_auth_custom_users.csv'
   delimiter: ','
   enclosure: '"'
-  header_offset: 1
   track_changes: true
   ids: [member_id]
   fields:
