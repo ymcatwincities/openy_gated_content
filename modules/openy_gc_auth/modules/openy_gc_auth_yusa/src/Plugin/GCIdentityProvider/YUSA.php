@@ -188,6 +188,13 @@ class YUSA extends GCIdentityProviderPluginBase {
       '#required' => TRUE,
     ];
 
+    $form['user_inactive_message'] = [
+      '#title' => $this->t('Inactive message'),
+      '#description' => $this->t('Appears when user is Inactive but trying to login.'),
+      '#type' => 'textarea',
+      '#default_value' => $config['user_inactive_message'],
+    ];
+
     $form_state->setCached(FALSE);
     return $form;
   }
@@ -249,6 +256,7 @@ class YUSA extends GCIdentityProviderPluginBase {
       $this->configuration['email_verification_link_life_time'] = $form_state->getValue('settings')['verification']['email_verification_link_life_time'];
       $this->configuration['email_verification_text'] = !empty($form_state->getValue('settings')['verification']['email_verification_text']) ? $form_state->getValue('settings')['verification']['email_verification_text']['value'] : '';
       $this->configuration['verification_message'] = !empty($form_state->getValue('settings')['verification']['verification_message']) ? $form_state->getValue('settings')['verification']['verification_message']['value'] : '';
+      $this->configuration['user_inactive_message'] = !empty($form_state->getValue('settings')['user_inactive_message']) ? $form_state->getValue('settings')['user_inactive_message'] : '';
       foreach ($form_state->getValue('settings')['permissions_mapping'] as $mapping) {
         if (!empty($mapping['permissions_mapping_y_usa_role'])) {
           $permissions_mapping[] = $mapping['permissions_mapping_y_usa_role'] . ':' . $mapping['permissions_mapping_role'];
