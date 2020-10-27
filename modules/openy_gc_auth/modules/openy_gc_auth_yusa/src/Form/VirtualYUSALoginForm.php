@@ -226,7 +226,8 @@ class VirtualYUSALoginForm extends FormBase {
             $form_state->setValue('verified', TRUE);
             $form_state->setRebuild(TRUE);
             return;
-          } else {
+          }
+          else {
             // Authorize user (register, login, log, etc).
             $this->gcUserAuthorizer->authorizeUser($name, $email, $result);
           }
