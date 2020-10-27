@@ -178,44 +178,71 @@ class VirtualYUSALoginForm extends FormBase {
     $provider_config = $this->configFactory->get('openy_gc_auth.provider.yusa');
     $id = $form_state->getValue('verification_id');
     $result = $this->getMemberInformation($id);
-
-    if (
-      isset($result['Status']) &&
-      $result['Status'] == 'Active' &&
-      !empty($result['FirstName']) &&
-      !empty($result['LastName']) &&
-      !empty($result['Email'])
-    ) {
-      $name = $result['FirstName'] . ' ' . $result['LastName'];
-      $email = $result['Email'];
-
-      // Check if user already created.
-      $users = $this->entityTypeManager
-        ->getStorage('user')
-        ->loadByProperties(['mail' => $email]);
-      $user = reset($users);
-
-      // Create a new inactive user in DB.
-      if (!$user) {
-        $active = $provider_config->get('enable_email_verification') ? FALSE : TRUE;
-        $user = $this->gcUserAuthorizer->createUser($name, $email, $active);
+    // Proceed only if user is Active.
+    if (isset($result['Status']) && $result['Status'] == 'Active') {
+      // 1. Case when user has no email but First Name and Last Name.
+      if (
+        !empty($result['FirstName']) &&
+        !empty($result['LastName']) &&
+        empty($result['Email'])
+      ) {
+        $name = $result['FirstName'] . ' ' . $result['LastName'];
+        $email = 'y-usa+' . $this->currentRequest->getClientIp() . '+' . rand(0, 10000) . '@virtualy.org';
       }
+      // 2. Case when user has no Email, First Name and Last Name.
+      if (
+        empty($result['FirstName']) &&
+        empty($result['LastName']) &&
+        empty($result['Email'])
+      ) {
+        $name = 'y-usa+' . $this->currentRequest->getClientIp() . '+' . rand(0, 10000);
+        $email = $name . '@virtualy.org';
+      }
+      // 3. Case when user has Email, First Name and Last Name.
+      if (
+        !empty($result['FirstName']) &&
+        !empty($result['LastName']) &&
+        !empty($result['Email'])
+      ) {
+        $name = $result['FirstName'] . ' ' . $result['LastName'];
+        $email = $result['Email'];
+      }
+      if (!empty($name) && !empty($email)) {
+        // Check if user already created.
+        $users = $this->entityTypeManager
+          ->getStorage('user')
+          ->loadByProperties(['mail' => $email]);
+        $user = reset($users);
 
-      if ($user instanceof User) {
-        if (!$user->isActive() && $provider_config->get('enable_email_verification')) {
-          $this->sendEmailVerification($user, $provider_config, $email);
-          $form_state->setValue('verified', TRUE);
-          $form_state->setRebuild(TRUE);
-          return;
+        // Create a new user in DB.
+        if (!$user) {
+          $active = TRUE;
+          $user = $this->gcUserAuthorizer->createUser($name, $email, $active);
         }
-        else {
-          // Authorize user (register, login, log, etc).
-          $this->gcUserAuthorizer->authorizeUser($name, $email, $result);
+
+        if ($user instanceof User) {
+          if ($provider_config->get('enable_email_verification')) {
+            $this->sendEmailVerification($user, $provider_config, $email);
+            $form_state->setValue('verified', TRUE);
+            $form_state->setRebuild(TRUE);
+            return;
+          }
+          else {
+            // Authorize user (register, login, log, etc).
+            $this->gcUserAuthorizer->authorizeUser($name, $email, $result);
+          }
         }
       }
     }
     else {
-      $this->messenger()->addError($this->t('Something went wrong. Please try again.'));
+      if ($result['Status'] == 'Inactive') {
+        $user_inactive_message = $this->configFactory->get('openy_gc_auth.provider.yusa')->get('user_inactive_message');
+        $message = !empty($user_inactive_message) ? $user_inactive_message : $this->t('User is Inactive.');
+        $this->messenger()->addError($message);
+      }
+      else {
+        $this->messenger()->addError($this->t('Something went wrong. Please try again.'));
+      }
     }
 
   }
@@ -284,7 +311,7 @@ class VirtualYUSALoginForm extends FormBase {
       }
     }
     catch (\Exception $e) {
-      $this->loggerFactory->get('virtual_y')->error($e->getMessage());
+      $this->logger('openy_gated_content')->error($e->getMessage());
     }
     return [];
   }

@@ -188,6 +188,13 @@ class YUSA extends GCIdentityProviderPluginBase {
       '#required' => TRUE,
     ];
 
+    $form['user_inactive_message'] = [
+      '#title' => $this->t('Inactive message'),
+      '#description' => $this->t('Appears when user is Inactive but trying to login.'),
+      '#type' => 'textarea',
+      '#default_value' => $config['user_inactive_message'],
+    ];
+
     $form_state->setCached(FALSE);
     return $form;
   }
@@ -225,6 +232,17 @@ class YUSA extends GCIdentityProviderPluginBase {
   /**
    * {@inheritdoc}
    */
+  public function validateConfigurationForm(array &$form, FormStateInterface $form_state) {
+    if ($form_state->getValue('settings')['verification']['enable_email_verification'] == 1 && ($form_state->getValue('settings')['verification_type'] == 'membership_id' || $form_state->getValue('settings')['verification_type'] == 'barcode')) {
+      $form_state->setErrorByName('settings][verification_type',
+        $this->t('You must disable "Email verification" when "Verification Type" is set to "Membership ID" or "Barcode". Virtual Y is unable to send a verification email if user email is not used and stored as the "Verification Type" for login.'
+      ));
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
     if (!$form_state->getErrors()) {
       $this->configuration['enable_recaptcha'] = $form_state->getValue('settings')['enable_recaptcha'];
@@ -238,6 +256,7 @@ class YUSA extends GCIdentityProviderPluginBase {
       $this->configuration['email_verification_link_life_time'] = $form_state->getValue('settings')['verification']['email_verification_link_life_time'];
       $this->configuration['email_verification_text'] = !empty($form_state->getValue('settings')['verification']['email_verification_text']) ? $form_state->getValue('settings')['verification']['email_verification_text']['value'] : '';
       $this->configuration['verification_message'] = !empty($form_state->getValue('settings')['verification']['verification_message']) ? $form_state->getValue('settings')['verification']['verification_message']['value'] : '';
+      $this->configuration['user_inactive_message'] = !empty($form_state->getValue('settings')['user_inactive_message']) ? $form_state->getValue('settings')['user_inactive_message'] : '';
       foreach ($form_state->getValue('settings')['permissions_mapping'] as $mapping) {
         if (!empty($mapping['permissions_mapping_y_usa_role'])) {
           $permissions_mapping[] = $mapping['permissions_mapping_y_usa_role'] . ':' . $mapping['permissions_mapping_role'];

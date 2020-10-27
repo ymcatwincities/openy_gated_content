@@ -16,7 +16,7 @@ function openy_gated_content_install() {
 
   $field_permission = BaseFieldDefinition::create('string')
     ->setLabel(t('Virtual Y Access Group'))
-    ->setSetting('max_length', 240)
+    ->setSetting('max_length', 255)
     ->setDefaultValue('virtual_y,virtual_y_premium')
     ->setRequired(FALSE)
     ->setRevisionable(FALSE)
@@ -114,7 +114,7 @@ function openy_gated_content_update_8006() {
 
   $field_permission = BaseFieldDefinition::create('string')
     ->setLabel(t('Virtual Y Access Group'))
-    ->setSetting('max_length', 240)
+    ->setSetting('max_length', 255)
     ->setDefaultValue('virtual_y,virtual_y_premium')
     ->setRequired(FALSE)
     ->setRevisionable(FALSE)
