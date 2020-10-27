@@ -1,4 +1,3 @@
-
 # Log entity menu items definition
 openy_gated_content.logs:
   title: 'Logs'
@@ -7,12 +6,19 @@ openy_gated_content.logs:
   parent: openy_gated_content.openy
   weight: 100
 
+openy_gc_log.manual_csv_export:
+  title: 'Export log records'
+  route_name: openy_gc_log.manual_csv_export
+  description: 'Allows to create an archive file manually, based on a start and end dates.'
+  parent: openy_gated_content.logs
+  weight: 0
+
 openy_gated_content.logs_archives:
   title: 'Logs Archives'
   route_name: view.files.page_1
   description: 'List Log entity entities'
-  parent: openy_gated_content.openy
-  weight: 101
+  parent: openy_gated_content.logs
+  weight: 1
   options:
     query:
       filename: virtual-y

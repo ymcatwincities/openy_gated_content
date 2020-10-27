@@ -26,7 +26,7 @@ class Logger {
   protected $entityTypeManager;
 
   /**
-   * LogArchiver constructor.
+   * Logger constructor.
    *
    * @param \Drupal\Core\Logger\LoggerChannel $logger
    *   LoggerChannel.
