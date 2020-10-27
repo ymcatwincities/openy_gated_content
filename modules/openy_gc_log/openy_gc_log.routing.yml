@@ -4,7 +4,7 @@ openy_gc_log.manual_csv_export:
     _form: '\Drupal\openy_gc_log\Form\ManualExportForm'
     _title: 'Export log records'
   requirements:
-    _role: administrator
+    _permission: 'view log entity entities'
 
 openy_gc_log.log_controller_index:
   path: '/virtual-y/log'

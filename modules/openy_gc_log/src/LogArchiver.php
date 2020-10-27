@@ -247,6 +247,7 @@ class LogArchiver {
 
       $this->preparedLogs[$fileName][] = [
         'created' => $log->get('created')->value,
+        'user' => $log->get('uid')->target_id ? '/user/' . $log->get('uid')->target_id : '',
         'event_type' => $log->get('event_type')->value,
         'entity_type' => $log->get('entity_type')->value,
         'entity_bundle' => $log->get('entity_bundle')->value,
