@@ -16,7 +16,7 @@
     "extra": {
         "patches": {
             "drupal/migrate_tools": {
-                "Sync option for CSV migration from UI": "https://gist.githubusercontent.com/hamrant/e7e4ca1054be5e850acc598aea0b6a39/raw/cc7dd651d29997fa0cceaf9a22bd22c9ad92047f/sync_option_for_migrate_tools_from_UI.patch"
+                "Sync option for CSV migration from UI": "https://gist.githubusercontent.com/hamrant/e7e4ca1054be5e850acc598aea0b6a39/raw/376ff65aeb8c87de0b1794d1bf0be8501bf49802/sync_option_for_migrate_tools_from_UI.patch"
             }
         }
     }
