@@ -195,14 +195,14 @@ class VirtualYReCliqueLoginForm extends FormBase {
         ->loadByProperties(['mail' => $email]);
       $user = reset($users);
 
-      // Create a new inactive user in DB.
+      // Create a new user in DB.
       if (!$user) {
-        $active = $provider_config->get('enable_email_verification') ? FALSE : TRUE;
+        $active = TRUE;
         $user = $this->gcUserAuthorizer->createUser($name, $email, $active);
       }
 
       if ($user instanceof User) {
-        if (!$user->isActive() && $provider_config->get('enable_email_verification')) {
+        if ($provider_config->get('enable_email_verification')) {
           $this->sendEmailVerification($user, $provider_config, $email);
           $form_state->setValue('verified', TRUE);
           $form_state->setRebuild(TRUE);
