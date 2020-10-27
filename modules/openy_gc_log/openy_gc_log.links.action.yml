@@ -1,0 +1,5 @@
+openy_gc_log.manual_csv_export:
+  route_name: openy_gc_log.manual_csv_export
+  title: 'Export log records'
+  appears_on:
+    - view.virtual_y_logs.page_1

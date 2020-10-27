@@ -112,28 +112,49 @@ class LogArchiver {
   }
 
   /**
-   * Archiving loop, should be run from cron.
+   * Archiving entities functionality.
+   *
+   * @param \DateTime|null $start
+   *   (optional) DateTime value for Start time, defaults to the month start.
+   * @param \DateTime|null $end
+   *   (optional) DateTime value for End time, defaults to the month end.
+   * @param bool $remove_entities
+   *   (optional) Should an entities be removed after creating an export file.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function archive() {
-    $tz = $this->config->get('system.date')->get('timezone')['default'];
-    $end_of_month = (new \DateTime(
-      date('Y-m-d', strtotime('last day of last month')),
-      new \DateTimeZone($tz)
-    ))->setTime(23, 59, 59);
+  public function archive($start = NULL, $end = NULL, $remove_entities = TRUE) {
+    $filename = '';
+    if (!isset($end)) {
+      $tz = $this->config->get('system.date')->get('timezone')['default'];
+      $end = (new \DateTime(
+        date('Y-m-d', strtotime('last day of last month')),
+        new \DateTimeZone($tz)
+      ))->setTime(23, 59, 59);
+    }
+    else {
+      $filename = $end->format('Y_m_d_H_i_s');
+    }
+    $end_time = $end->getTimeStamp();
 
-    $end_time = $end_of_month->getTimeStamp();
+    if (!isset($start)) {
+      $start = clone $end;
+      $start->modify('first day of this month 00:00');
+    }
+    else {
+      $filename = 'virtual-y-logs-' . $start->format('Y_m_d') . '-' . $filename . '.csv.gz';
+    }
+    $start_time = $start->getTimestamp();
 
-    $start_of_month = clone $end_of_month;
-    $start_of_month->modify('first day of this month 00:00');
-
-    $start_time = $start_of_month->getTimestamp();
-
-    $log_ids = $this->entityTypeManager->getStorage('log_entity')
+    $query = $this->entityTypeManager->getStorage('log_entity')
       ->getQuery()
       ->condition('created', [$start_time, $end_time], 'BETWEEN')
-      ->sort('created', 'ASC')
-      ->range(0, self::WORKER_CHUNK_SIZE)
-      ->execute();
+      ->sort('created', 'ASC');
+    if (!isset($start) && !isset($end)) {
+      $query->range(0, self::WORKER_CHUNK_SIZE);
+    }
+    $log_ids = $query->execute();
 
     if (empty($log_ids)) {
       return;
@@ -141,12 +162,15 @@ class LogArchiver {
 
     $this->setLogIds($log_ids)
       ->loadLogEntities()
-      ->prepareLogsForExport()
+      ->prepareLogsForExport($filename)
       ->loadFileEntities()
       ->writeLogsToFiles()
       ->saveFileEntities()
-      ->reportToDbLog()
-      ->removeLogsFromDb();
+      ->reportToDbLog();
+
+    if ($remove_entities) {
+      $this->removeLogsFromDb();
+    }
   }
 
   /**
@@ -209,10 +233,14 @@ class LogArchiver {
 
   /**
    * Prepare logs for export.
+   *
+   * @param string $logFileName
+   *   Filename to put all the records into, default -- to create from record's
+   *   year and month.
    */
-  protected function prepareLogsForExport() {
+  protected function prepareLogsForExport($logFileName = '') {
     foreach ($this->logEntities as $log) {
-      $fileName = $this->makeFilename($log);
+      $fileName = $logFileName ?: $this->makeFilename($log);
       if (!isset($this->preparedLogs[$fileName])) {
         $this->preparedLogs[$fileName] = [];
       }
@@ -283,7 +311,15 @@ class LogArchiver {
       $fileEntity = $this->fileEntities[$fileName];
 
       $csvEncoder = new CsvEncoder();
-      $csvEncoder->setOutputHeader($fileEntity->isNew());
+      $csvEncoder->setSettings([
+        'delimiter' => ",",
+        'enclosure' => '"',
+        'escape_char' => "\\",
+        'encoding' => 'utf8',
+        'strip_tags' => TRUE,
+        'trim' => TRUE,
+        'output_header' => $fileEntity->isNew(),
+      ]);
 
       $fileContents = $csvEncoder->encode($logs, 'csv');
 
