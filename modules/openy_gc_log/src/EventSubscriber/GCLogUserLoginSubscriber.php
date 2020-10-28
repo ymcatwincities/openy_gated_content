@@ -52,6 +52,7 @@ class GCLogUserLoginSubscriber implements EventSubscriberInterface {
     if ($event->account instanceof User) {
       $this->gcLogger->addLog([
         'email' => $event->account->getEmail(),
+        'uid' => $event->account->id(),
         'event_type' => 'userLoggedIn',
       ]);
     }

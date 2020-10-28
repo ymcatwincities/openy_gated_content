@@ -9,7 +9,7 @@ dependencies:
   - drupal:migrate
   - drupal:migrate_source_csv (>=8.x-3.4)
   - drupal:migrate_plus (>=8.x-5.1)
-  - drupal:migrate_tools (>=8.x-5.0)
+  - drupal:migrate_tools (=8.x-5.0)
   - drupal:recaptcha
   - drupal:rest
   - drupal:openy_gc_auth

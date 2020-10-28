@@ -115,7 +115,7 @@ function openy_gc_auth_custom_update_8004() {
 /**
  * Update migration configs according to migrate_source_csv:v3.
  */
-function openy_gc_auth_custom_update_8005() {
+function openy_gc_auth_custom_update_8006() {
   $config_dir = drupal_get_path('module', 'openy_gc_auth_custom');
   $config_dir .= '/config/install/';
   // Import new configuration.
