@@ -3,8 +3,6 @@
 namespace Drupal\openy_gc_auth_daxko_barcode\Plugin\GCIdentityProvider;
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Link;
-use Drupal\Core\Url;
 use Drupal\openy_gc_auth\GCIdentityProviderPluginBase;
 
 /**
@@ -23,7 +21,6 @@ class DaxkoBarcode extends GCIdentityProviderPluginBase {
    */
   public function defaultConfiguration():array {
     return [
-      'enable_recaptcha' => TRUE,
       'secret' => '',
       'action_url' => 'https://operations.daxko.com/online/XXXX/checkin/submit?area_id=YYYY',
       'form_label' => 'Barcode',
@@ -46,13 +43,6 @@ class DaxkoBarcode extends GCIdentityProviderPluginBase {
     $form['intro'] = [
       '#type' => 'item',
       '#description' => $this->t('This provider integrates with the Daxko "Virtual Areas" functionality. Please contact your Daxko support representative for documentation. After you have set up a Virtual Area, follow the instructions for a "Custom Integration".'),
-    ];
-
-    $form['enable_recaptcha'] = [
-      '#title' => $this->t('Enable ReCaptcha'),
-      '#description' => $this->t('Set to TRUE if you want ReCaptcha validation on login form. It is recommended that you leave this on.'),
-      '#type' => 'checkbox',
-      '#default_value' => $config['enable_recaptcha'],
     ];
 
     $form['secret'] = [
@@ -127,30 +117,8 @@ class DaxkoBarcode extends GCIdentityProviderPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function validateConfigurationForm(array &$form, FormStateInterface $form_state) {
-    // Ensure ReCaptcha is set up before requiring it on our form.
-    $enable_recaptcha = $form_state->getValue('enable_recaptcha');
-    $recaptcha_site_key = \Drupal::config('recaptcha.settings')->get('site_key');
-
-    if ($enable_recaptcha && empty($recaptcha_site_key)) {
-      $recaptcha_link = Link::createFromRoute('configure ReCaptcha', 'recaptcha.admin_settings_form')
-        ->toString();
-      $form_state
-        ->setErrorByName('enable_recaptcha', $this
-          ->t('You must @configure_recaptcha before enabling it on this form.', [
-            '@configure_recaptcha' => $recaptcha_link,
-          ]));
-    }
-
-    parent::validateConfigurationForm($form, $form_state);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
     if (!$form_state->getErrors()) {
-      $this->configuration['enable_recaptcha'] = $form_state->getValue('enable_recaptcha');
       $this->configuration['secret'] = $form_state->getValue('secret');
       $this->configuration['action_url'] = $form_state->getValue('action_url');
       $this->configuration['form_label'] = $form_state->getValue('form_label');
@@ -168,17 +136,8 @@ class DaxkoBarcode extends GCIdentityProviderPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function getDataForApp():array {
-    $data = parent::getDataForApp();
-    $data['barcodeValidate'] = Url::fromRoute('openy_gc_auth_daxko_barcode.validate')->toString();
-    $data['enableRecaptcha'] = (bool) $this->configuration['enable_recaptcha'];
-    $data['formLabel'] = $this->configuration['form_label'];
-    $data['formDescription'] = $this->configuration['form_description'];
-    $this->configFactory->get('recaptcha.settings')->get('site_key');
-    $data['reCaptchaKey'] = $this->configFactory
-      ->get('recaptcha.settings')
-      ->get('site_key');
-    return $data;
+  public function getLoginForm() {
+    return \Drupal::formBuilder()->getForm('Drupal\openy_gc_auth_daxko_barcode\Form\VirtualYDaxkoBarcodeLoginForm');
   }
 
 }

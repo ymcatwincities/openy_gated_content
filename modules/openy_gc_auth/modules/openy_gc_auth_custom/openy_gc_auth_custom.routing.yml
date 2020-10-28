@@ -5,3 +5,13 @@ openy_gc_auth_custom.import_csv:
     _title: 'Import CSV'
   requirements:
     _permission: 'administer gated content configuration'
+
+openy_gc_auth_custom.account_verification:
+  path: '/vy-user/verification/{uid}/{timestamp}/{hash}'
+  defaults:
+    _controller: '\Drupal\openy_gc_auth_custom\Controller\UserController::verifyAccount'
+    _title: 'Account verification'
+  requirements:
+    _user_is_logged_in: 'FALSE'
+  options:
+    no_cache: TRUE

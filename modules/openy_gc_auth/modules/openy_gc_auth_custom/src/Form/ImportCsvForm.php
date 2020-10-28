@@ -70,8 +70,8 @@ class ImportCsvForm extends FormBase {
       '#markup' => $this->t('Please verify migration group settings by editing it at @link.', [
         '@link' => Link::createFromRoute(
           $this->t('Migration groups'),
-          'entity.migration_group.list',
-          [],
+          'entity.migration_group.edit_form',
+          ['migration_group' => 'gc_auth'],
           ['attributes' => ['target' => '_blank']])->toString(),
       ]),
     ];

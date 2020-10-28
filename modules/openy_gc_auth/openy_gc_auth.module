@@ -1,0 +1,23 @@
+<?php
+
+/**
+ * @file
+ * Main file for openy_gc_auth module.
+ */
+
+/**
+ * Implements hook_mail_alter().
+ *
+ * Aborts sending of messages fot an account activation for VirtualY roles.
+ */
+function openy_gc_auth_mail_alter(&$message) {
+  if ($message['id'] === 'user_status_activated' &&
+    isset($message['params']['account']) &&
+    count(array_intersect($message['params']['account']->getRoles(), [
+      'virtual_y',
+      'virtual_y_premium',
+      'virtual_y_trial',
+    ]))) {
+    $message['send'] = FALSE;
+  }
+}

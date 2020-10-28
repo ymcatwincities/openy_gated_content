@@ -63,6 +63,9 @@ process:
     default_value: 1
   title: title
   body: description
+  field_vy_permission:
+    plugin: default_value
+    default_value: virtual_y,virtual_y_premium
   field_ls_host_name: instructor
   'field_vm_link/uri': link
   field_ls_image:

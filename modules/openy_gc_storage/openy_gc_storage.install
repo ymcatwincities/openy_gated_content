@@ -12,16 +12,11 @@ use Drupal\user\RoleInterface;
  * Implements hook_install().
  */
 function openy_gc_storage_install() {
-  $role_object = Role::load(RoleInterface::ANONYMOUS_ID);
-  // Allow anonymous view events entities (for JSON API).
+  $role_object = Role::load(RoleInterface::AUTHENTICATED_ID);
+  // Allow authenticated users access Virtual YMCA entities pages.
   $role_object->grantPermission('view eventinstance entity');
   $role_object->grantPermission('view eventseries entity');
   $role_object->save();
-
-  $role2_object = Role::load(RoleInterface::AUTHENTICATED_ID);
-  // Allow authenticated users access Virtual YMCA entities pages.
-  $role2_object->grantPermission('view gated content entities pages');
-  $role2_object->save();
 
   $config_factory = \Drupal::configFactory();
   $config = $config_factory->getEditable('jsonapi_image_styles.settings');
@@ -74,4 +69,82 @@ function openy_gc_storage_update_8003() {
   $config_importer->importConfigs([
     'field.storage.node.field_gc_video_category',
   ]);
+}
+
+/**
+ * Add category field to blog post + Make event category multiple.
+ */
+function openy_gc_storage_update_8004() {
+  $config_dir = drupal_get_path('module', 'openy_gc_storage');
+  $config_dir .= '/config/install/';
+  // Update configuration.
+  $config_importer = \Drupal::service('openy_upgrade_tool.importer');
+  $config_importer->setDirectory($config_dir);
+  $config_importer->importConfigs([
+    'core.entity_form_display.node.vy_blog_post.default',
+    'core.entity_view_display.node.vy_blog_post.default',
+    'core.entity_view_display.node.vy_blog_post.teaser',
+    'field.field.node.vy_blog_post.field_gc_video_category',
+    'field.storage.eventinstance.field_ls_category',
+    'field.storage.eventseries.field_ls_category',
+    'field_inheritance.field_inheritance.eventinstance_live_stream_category',
+    'field_inheritance.field_inheritance.eventinstance_virtual_meeting_category',
+  ]);
+
+  /** @var \Drupal\Core\Field\BaseFieldDefinition $storage_definition */
+  $storage_definition = \Drupal::entityDefinitionUpdateManager()
+    ->getFieldStorageDefinition('field_gc_video_category', 'node');
+  $storage_definition->setCardinality(-1);
+
+  \Drupal::entityDefinitionUpdateManager()
+    ->updateFieldStorageDefinition($storage_definition);
+
+  /** @var \Drupal\Core\Field\BaseFieldDefinition $storage_definition */
+  $storage_definition = \Drupal::entityDefinitionUpdateManager()
+    ->getFieldStorageDefinition('field_ls_category', 'eventseries');
+  $storage_definition->setCardinality(-1);
+
+  \Drupal::entityDefinitionUpdateManager()
+    ->updateFieldStorageDefinition($storage_definition);
+
+  /** @var \Drupal\Core\Field\BaseFieldDefinition $storage_definition */
+  $storage_definition = \Drupal::entityDefinitionUpdateManager()
+    ->getFieldStorageDefinition('field_ls_category', 'eventinstance');
+  $storage_definition->setCardinality(-1);
+
+  \Drupal::entityDefinitionUpdateManager()
+    ->updateFieldStorageDefinition($storage_definition);
+}
+
+/**
+ * Add recurring event series config to set interval and start time.
+ */
+function openy_gc_storage_update_8005() {
+  $config_dir = drupal_get_path('module', 'openy_gc_storage');
+  $config_dir .= '/config/install/';
+  // Update configuration.
+  $config_importer = \Drupal::service('openy_upgrade_tool.importer');
+  $config_importer->setDirectory($config_dir);
+  $config_importer->importConfigs([
+    'recurring_events.eventseries.config',
+  ]);
+}
+
+/**
+ * Fix permissions for Users rebuild.
+ */
+function openy_gc_storage_update_8006() {
+  $role_object = Role::load(RoleInterface::ANONYMOUS_ID);
+  // Disallow anonymous view events entities (for JSON API).
+  $role_object->revokePermission('view eventinstance entity');
+  $role_object->revokePermission('view eventseries entity');
+  $role_object->save();
+
+  $role2_object = Role::load(RoleInterface::AUTHENTICATED_ID);
+  // Disallow authenticated users access Virtual YMCA entities pages.
+  $role2_object->revokePermission('view gated content entities pages');
+  // Allow authenticated view events entities (for JSON API).
+  $role2_object->grantPermission('view eventinstance entity');
+  $role2_object->grantPermission('view eventseries entity');
+  $role2_object->save();
 }
