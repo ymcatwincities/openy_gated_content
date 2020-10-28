@@ -259,7 +259,7 @@ class VirtualYReCliqueLoginForm extends FormBase {
         $provider_config->get('auth_pass'),
       ],
       'query' => [
-        'Email' => 'dee.thias@reclique.com',
+        'Email' => $email,
       ],
     ];
 
