@@ -54,7 +54,6 @@ class Logger {
       if (empty($params['email']) && !empty($params['uid'])) {
         $user = $this->entityTypeManager->getStorage('user')->load($params['uid']);
         $params['email'] = $user->getEmail();
-        unset($params['uid']);
       }
       foreach ($params as $param => $value) {
         $log->set($param, $value);

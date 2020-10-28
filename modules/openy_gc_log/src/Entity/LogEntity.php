@@ -51,6 +51,7 @@ class LogEntity extends ContentEntityBase implements LogEntityInterface {
   public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
     $fields = parent::baseFieldDefinitions($entity_type);
     self::defineEmailField($fields);
+    self::defineUidField($fields);
     self::defineEventTypeField($fields);
     self::defineEntityTypeField($fields);
     self::defineBundleField($fields);
@@ -84,6 +85,23 @@ class LogEntity extends ContentEntityBase implements LogEntityInterface {
         'type' => 'string_textfield',
         'weight' => -4,
       ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE)
+      ->setRequired(TRUE);
+  }
+
+  /**
+   * Define uid field.
+   *
+   * @param array $fields
+   *   Fields.
+   */
+  public static function defineUidField(array &$fields) {
+    $fields['uid'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('User ID'))
+      ->setDescription(t('The User ID of the Log entity.'))
+      ->setDefaultValue('')
+      ->setSetting('target_type', 'user')
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE)
       ->setRequired(TRUE);
