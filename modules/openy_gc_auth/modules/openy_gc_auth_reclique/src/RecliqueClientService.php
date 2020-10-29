@@ -6,7 +6,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use GuzzleHttp\Client;
 
 /**
- * Class RecliqueClientService.
+ * Reclicque client wrapper service.
  *
  * @package Drupal\openy_gc_auth_reclique
  */
