@@ -5,8 +5,9 @@
     "require": {
         "drupal/recurring_events": "*",
         "ymcatwincities/daxko_sso": "*",
-        "drupal/jsonapi_image_styles": "~1.0@beta || ^1",
-        "drupal/csv_serialization": "^1 || ^2",
+        "drupal/jsonapi_image_styles": "^1.0@beta",
+        "drupal/csv_serialization": "^2.0",
+        "drupal/migrate_tools": "5.0",
         "ext-json": "*",
         "ext-zlib": "*"
     },
@@ -14,8 +15,8 @@
     "minimum-stability": "dev",
     "extra": {
         "patches": {
-            "drupal/csv_serialization": {
-                "Option for CSV Encoder to skip preparing and outputting the header": "https://www.drupal.org/files/issues/2018-08-10/csv_serliazation-2854087-skip-headers.patch"
+            "drupal/migrate_tools": {
+                "Sync option for CSV migration from UI": "https://gist.githubusercontent.com/hamrant/e7e4ca1054be5e850acc598aea0b6a39/raw/376ff65aeb8c87de0b1794d1bf0be8501bf49802/sync_option_for_migrate_tools_from_UI.patch"
             }
         }
     }

@@ -6,7 +6,7 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Class LogEntitySettingsForm.
+ * Class LogEntity Settings Form.
  *
  * @ingroup openy_gc_log
  */

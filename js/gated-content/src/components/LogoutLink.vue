@@ -1,5 +1,8 @@
 <template>
   <span class="menu">
-    <a href="/user/logout">Sign out</a>
+    <a href="/vy-user/logout">Sign out</a>
   </span>
 </template>
+
+<script>
+</script>

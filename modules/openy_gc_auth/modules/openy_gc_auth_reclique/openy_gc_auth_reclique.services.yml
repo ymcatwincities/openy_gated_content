@@ -1,0 +1,6 @@
+services:
+  openy_gc_auth_reclique_user_login_subscriber:
+    class: '\Drupal\openy_gc_auth_reclique\EventSubscriber\GCAuthReCliqueUserLoginSubscriber'
+    arguments: ['@config.factory']
+    tags:
+      - { name: 'event_subscriber' }

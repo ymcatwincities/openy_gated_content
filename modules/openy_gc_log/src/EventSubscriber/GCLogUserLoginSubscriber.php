@@ -8,7 +8,7 @@ use Drupal\user\Entity\User;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Class GCLogUserLoginSubscriber.
+ * Class GCLogUserLogin Subscriber.
  *
  * @package Drupal\openy_gc_log\EventSubscriber
  */
@@ -52,6 +52,7 @@ class GCLogUserLoginSubscriber implements EventSubscriberInterface {
     if ($event->account instanceof User) {
       $this->gcLogger->addLog([
         'email' => $event->account->getEmail(),
+        'uid' => $event->account->id(),
         'event_type' => 'userLoggedIn',
       ]);
     }

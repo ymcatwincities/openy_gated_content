@@ -3,6 +3,7 @@
 namespace Drupal\openy_gc_shared_content_server\Plugin\rest\resource;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Mail\MailManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\rest\ModifiedResourceResponse;
@@ -34,6 +35,13 @@ class SharedSourceCreate extends ResourceBase implements ContainerFactoryPluginI
   protected $entityTypeManager;
 
   /**
+   * The mail manager.
+   *
+   * @var \Drupal\Core\Mail\MailManagerInterface
+   */
+  protected $mailManager;
+
+  /**
    * Constructs a Drupal\jwt_pass_reset\Plugin\rest\resource\JwtPassReset.
    *
    * @param array $configuration
@@ -48,10 +56,13 @@ class SharedSourceCreate extends ResourceBase implements ContainerFactoryPluginI
    *   The available serialization formats.
    * @param \Psr\Log\LoggerInterface $logger
    *   A logger instance.
+   * @param \Drupal\Core\Mail\MailManagerInterface $mail_manager
+   *   The mail manager.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, array $serializer_formats, LoggerInterface $logger) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, array $serializer_formats, LoggerInterface $logger, MailManagerInterface $mail_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->entityTypeManager = $entity_type_manager;
+    $this->mailManager = $mail_manager;
   }
 
   /**
@@ -64,7 +75,8 @@ class SharedSourceCreate extends ResourceBase implements ContainerFactoryPluginI
       $plugin_definition,
       $container->get('entity_type.manager'),
       $container->getParameter('serializer.formats'),
-      $container->get('logger.factory')->get('rest')
+      $container->get('logger.factory')->get('rest'),
+      $container->get('plugin.manager.mail')
     );
   }
 
@@ -113,6 +125,27 @@ class SharedSourceCreate extends ResourceBase implements ContainerFactoryPluginI
         'url' => $data['host'],
       ]);
       $content_source->save();
+
+      // Send confirmation email for site admins.
+      $data['apply_url'] = $content_source
+        ->toUrl('edit-form', ['absolute' => TRUE])
+        ->toString();
+      $user_storage = $this->entityTypeManager->getStorage('user');
+      $ids = $user_storage->getQuery()
+        ->condition('status', 1)
+        ->condition('roles', 'administrator')
+        // Limit by 20 users.
+        ->range(0, 20)
+        ->execute();
+      $admins = $user_storage->loadMultiple($ids);
+      if (!empty($admins)) {
+        $admins_emails = [];
+        foreach ($admins as $admin) {
+          $admins_emails[] = $admin->getEmail();
+        }
+        $mail = implode(',', $admins_emails);
+        $this->mailManager->mail('openy_gc_shared_content_server', 'client_confirmation', $mail, 'en', $data);
+      }
     }
 
     return new ModifiedResourceResponse([

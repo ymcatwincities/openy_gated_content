@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\openy_gc_auth\GCUserAuthorizer;
 
 /**
- * Class VirtualYExampleLoginForm.
+ * Class VirtualYExampleLogin Form.
  *
  * @package Drupal\openy_gc_auth_example\Form
  */

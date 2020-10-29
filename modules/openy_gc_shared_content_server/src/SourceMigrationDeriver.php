@@ -10,7 +10,7 @@ use Drupal\openy_gc_shared_content_server\Entity\SharedContentSource;
 use Drupal\Core\Plugin\Discovery\ContainerDeriverInterface;
 
 /**
- * Class SourceMigrationDeriver.
+ * SourceMigration Deriver Class.
  *
  * @package Drupal\openy_gc_shared_content
  */

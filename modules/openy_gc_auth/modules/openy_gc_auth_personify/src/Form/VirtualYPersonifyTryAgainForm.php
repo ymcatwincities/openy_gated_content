@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Class VirtualYPersonifyTryAgainForm.
+ * Class VirtualYPersonifyTryAgain Form.
  *
  * @package Drupal\openy_gc_personify\Form
  */

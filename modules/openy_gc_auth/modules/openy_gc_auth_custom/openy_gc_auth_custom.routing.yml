@@ -1,8 +1,8 @@
-openy_gc_auth_custom.import_csv:
-  path: '/admin/openy/openy-gc-auth/settings/provider/custom/import_csv'
+openy_gc_auth_custom.upload_csv:
+  path: '/admin/openy/openy-gc-auth/settings/provider/custom/upload-csv'
   defaults:
     _form: '\Drupal\openy_gc_auth_custom\Form\ImportCsvForm'
-    _title: 'Import CSV'
+    _title: 'Upload CSV'
   requirements:
     _permission: 'administer gated content configuration'
 
