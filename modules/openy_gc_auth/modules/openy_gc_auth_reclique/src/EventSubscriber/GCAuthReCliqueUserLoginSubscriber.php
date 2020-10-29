@@ -48,27 +48,29 @@ class GCAuthReCliqueUserLoginSubscriber implements EventSubscriberInterface {
    *   Event object.
    */
   public function onUserLogin(GCUserLoginEvent $event) {
-    $permissions_mapping = $this->configFactory->get('openy_gc_auth.provider.reclique')->get('permissions_mapping');
-    if ($event->account instanceof User && !empty($event->extraData)) {
-      $account = $event->account;
-      if (isset($event->extraData['member'])) {
-        $account_roles = $account->getRoles();
-        // Remove all virtual_y roles (in case if any changes in membership).
-        foreach ($account_roles as $account_role) {
-          if (strstr($account_role, 'virtual_y')) {
-            $account->removeRole($account_role);
+    if ($this->configFactory->get('openy_gc_auth.settings')->get('active_provider') == 'reclique') {
+      $permissions_mapping = $this->configFactory->get('openy_gc_auth.provider.reclique')->get('permissions_mapping');
+      if ($event->account instanceof User && !empty($event->extraData)) {
+        $account = $event->account;
+        if (isset($event->extraData['member'])) {
+          $account_roles = $account->getRoles();
+          // Remove all virtual_y roles (in case if any changes in membership).
+          foreach ($account_roles as $account_role) {
+            if (strstr($account_role, 'virtual_y')) {
+              $account->removeRole($account_role);
+            }
           }
-        }
-        $user_membership = $event->extraData['member']['PackageName'];
-        $permissions_mapping = explode(';', $permissions_mapping);
-        foreach ($permissions_mapping as $mapping) {
-          $role = explode(':', $mapping);
-          // Compare mapping roles with user membership.
-          if (isset($role[0]) && $role[0] == $user_membership && isset($role[1])) {
-            $account->addRole($role[1]);
+          $user_membership = $event->extraData['member']['PackageName'];
+          $permissions_mapping = explode(';', $permissions_mapping);
+          foreach ($permissions_mapping as $mapping) {
+            $role = explode(':', $mapping);
+            // Compare mapping roles with user membership.
+            if (isset($role[0]) && $role[0] == $user_membership && isset($role[1])) {
+              $account->addRole($role[1]);
+            }
           }
+          $account->save();
         }
-        $account->save();
       }
     }
   }

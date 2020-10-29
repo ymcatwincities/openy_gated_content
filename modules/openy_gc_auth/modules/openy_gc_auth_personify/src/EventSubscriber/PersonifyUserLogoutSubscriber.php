@@ -88,21 +88,23 @@ class PersonifyUserLogoutSubscriber implements EventSubscriberInterface {
    *   Event object.
    */
   public function onUserLogout(GCUserLogoutEvent $event) {
-    $token = '';
-    if ($this->currentRequest->cookies->has('Drupal_visitor_personify_authorized')) {
-      $token = $this->currentRequest->cookies->get('Drupal_visitor_personify_authorized');
-    }
-    if (empty($token)) {
+    if ($this->configFactory->get('openy_gc_auth.settings')->get('active_provider') == 'personify') {
+      $token = '';
+      if ($this->currentRequest->cookies->has('Drupal_visitor_personify_authorized')) {
+        $token = $this->currentRequest->cookies->get('Drupal_visitor_personify_authorized');
+      }
+      if (empty($token)) {
+        return FALSE;
+      }
+
+      $isUserSuccessfullyLogout = $this->apiLogout($token);
+      if ($isUserSuccessfullyLogout) {
+        user_cookie_delete('personify_authorized');
+        user_cookie_delete('personify_time');
+        return TRUE;
+      }
       return FALSE;
     }
-
-    $isUserSuccessfullyLogout = $this->apiLogout($token);
-    if ($isUserSuccessfullyLogout) {
-      user_cookie_delete('personify_authorized');
-      user_cookie_delete('personify_time');
-      return TRUE;
-    }
-    return FALSE;
   }
 
   /**
