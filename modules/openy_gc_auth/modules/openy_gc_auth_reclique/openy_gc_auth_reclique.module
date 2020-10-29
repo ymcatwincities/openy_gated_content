@@ -13,6 +13,7 @@ function openy_gc_auth_reclique_mail($key, &$message, $params) {
     case 'openy_gc_auth_reclique_email_verification':
       $site_config = \Drupal::config('system.site');
       $message['from'] = $site_config->get('mail');
+      $message['reply-to'] = $site_config->get('mail');
       $message['subject'] = t('@site_name: Virtual Y email verification', [
         '@site_name' => $site_config->get('name'),
       ]);

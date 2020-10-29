@@ -48,8 +48,13 @@ class GCAuthReCliqueUserLoginSubscriber implements EventSubscriberInterface {
    *   Event object.
    */
   public function onUserLogin(GCUserLoginEvent $event) {
+
     if ($this->configFactory->get('openy_gc_auth.settings')->get('active_provider') == 'reclique') {
-      $permissions_mapping = $this->configFactory->get('openy_gc_auth.provider.reclique')->get('permissions_mapping');
+      $permissions_mapping = $this
+        ->configFactory
+        ->get('openy_gc_auth.provider.reclique')
+        ->get('permissions_mapping');
+
       if ($event->account instanceof User && !empty($event->extraData)) {
         $account = $event->account;
         if (isset($event->extraData['member'])) {

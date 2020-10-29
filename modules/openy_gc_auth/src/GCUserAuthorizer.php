@@ -44,9 +44,11 @@ class GCUserAuthorizer {
    * {@inheritdoc}
    */
   public function authorizeUser($name, $email, array $extra_data = []) {
+
     if (empty($name) || empty($email)) {
       return;
     }
+
     // Create drupal user if it doesn't exist and login it.
     $account = user_load_by_mail($email);
     if (!$account) {
