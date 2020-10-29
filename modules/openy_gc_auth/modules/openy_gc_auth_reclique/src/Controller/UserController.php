@@ -74,6 +74,8 @@ class UserController extends ControllerBase {
    *   The time service.
    * @param \Drupal\openy_gc_auth\GCUserAuthorizer $gcUserAuthorizer
    *   The GCUserAuthorizer service.
+   * @param \Drupal\openy_gc_auth_reclique\RecliqueClientService
+   *   Reclique service.
    */
   public function __construct(
     UserStorageInterface $user_storage,

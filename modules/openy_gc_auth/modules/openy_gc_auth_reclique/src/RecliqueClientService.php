@@ -1,6 +1,6 @@
 <?php
 
-namespace  Drupal\openy_gc_auth_reclique;
+namespace Drupal\openy_gc_auth_reclique;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use GuzzleHttp\Client;
@@ -42,10 +42,12 @@ class RecliqueClientService {
   /**
    * Get user data from Reclique.
    *
-   * @param $email
-   *  User email.
+   * @param string $email
+   *   User email.
    *
    * @return array|mixed
+   *   User object array.
+   *
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function getUserData($email) {
