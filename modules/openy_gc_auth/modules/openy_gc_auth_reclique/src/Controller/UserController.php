@@ -6,6 +6,7 @@ use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Flood\FloodInterface;
 use Drupal\openy_gc_auth\GCUserAuthorizer;
+use Drupal\openy_gc_auth_reclique\RecliqueClientService;
 use Drupal\user\UserStorageInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -54,6 +55,13 @@ class UserController extends ControllerBase {
   protected $gcUserAuthorizer;
 
   /**
+   * RecliqueClientService client service.
+   *
+   * @var \Drupal\openy_gc_auth_reclique\RecliqueClientService
+   */
+  protected $recliqueClientService;
+
+  /**
    * Constructs a UserController object.
    *
    * @param \Drupal\user\UserStorageInterface $user_storage
@@ -66,19 +74,23 @@ class UserController extends ControllerBase {
    *   The time service.
    * @param \Drupal\openy_gc_auth\GCUserAuthorizer $gcUserAuthorizer
    *   The GCUserAuthorizer service.
+   * @param \Drupal\openy_gc_auth_reclique\RecliqueClientService $recliqueClientService
+   *   Reclique service.
    */
   public function __construct(
     UserStorageInterface $user_storage,
     LoggerInterface $logger,
     FloodInterface $flood,
     TimeInterface $datetime,
-    GCUserAuthorizer $gcUserAuthorizer
+    GCUserAuthorizer $gcUserAuthorizer,
+    RecliqueClientService $recliqueClientService
   ) {
     $this->userStorage = $user_storage;
     $this->logger = $logger;
     $this->flood = $flood;
     $this->datetime = $datetime;
     $this->gcUserAuthorizer = $gcUserAuthorizer;
+    $this->recliqueClientService = $recliqueClientService;
   }
 
   /**
@@ -90,7 +102,8 @@ class UserController extends ControllerBase {
       $container->get('logger.factory')->get('user'),
       $container->get('flood'),
       $container->get('datetime.time'),
-      $container->get('openy_gc_auth.user_authorizer')
+      $container->get('openy_gc_auth.user_authorizer'),
+      $container->get('openy_gc_auth_reclique_client')
     );
   }
 
@@ -115,9 +128,11 @@ class UserController extends ControllerBase {
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function verifyAccount(Request $request, $uid, $timestamp, $hash) {
+
     if (!$uid || !$hash || !$timestamp) {
       throw new AccessDeniedHttpException();
     }
+
     $vy_settings = $this->config('openy_gated_content.settings');
     $account = $this->currentUser();
     // When processing the one-time login link, we have to make sure that a user
@@ -136,17 +151,26 @@ class UserController extends ControllerBase {
     $current = $this->datetime->getRequestTime();
     $timeout = $this->config('openy_gc_auth.provider.reclique')->get('email_verification_link_life_time');
     if ($user->getLastLoginTime() && $current - $timestamp > $timeout) {
-      $this->messenger()->addError($this->t('You have tried to use a one-time login link that has expired. Please request a new one using the form below.'));
+      $this
+        ->messenger()
+        ->addError($this->t('You have tried to use a one-time login link that has expired. Please request a new one using the form below.'));
       return new RedirectResponse($vy_settings->get('virtual_y_login_url'), 302);
     }
     elseif ($user->isAuthenticated() && ($timestamp >= $user->getLastLoginTime()) && ($timestamp <= $current) && hash_equals($hash, user_pass_rehash($user, $timestamp))) {
-      $this->gcUserAuthorizer->authorizeUser($user->getAccountName(), $user->getEmail());
+      $this
+        ->gcUserAuthorizer
+        ->authorizeUser(
+          $user->getAccountName(),
+          $user->getEmail(),
+          $this->recliqueClientService->getUserData($user->getEmail())
+        );
       // Clear any flood events for this IP.
       $this->flood->clear('openy_gc_auth_reclique.login');
       return new RedirectResponse($vy_settings->get('virtual_y_url'), 302);
     }
-
-    $this->messenger()->addError($this->t('You have tried to use a one-time login link that has either been used or is no longer valid. Please request a new one using the form below.'));
+    $this
+      ->messenger()
+      ->addError($this->t('You have tried to use a one-time login link that has either been used or is no longer valid. Please request a new one using the form below.'));
     return new RedirectResponse($vy_settings->get('virtual_y_login_url'), 302);
   }
 

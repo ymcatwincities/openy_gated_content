@@ -11,6 +11,7 @@ use Drupal\Core\Mail\MailManagerInterface;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\Core\Url;
 use Drupal\openy_gc_auth\GCUserAuthorizer;
+use Drupal\openy_gc_auth_reclique\RecliqueClientService;
 use Drupal\user\Entity\User;
 use GuzzleHttp\Client;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -80,6 +81,13 @@ class VirtualYReCliqueLoginForm extends FormBase {
   protected $gcUserAuthorizer;
 
   /**
+   * RecliqueClientService client service.
+   *
+   * @var \Drupal\openy_gc_auth_reclique\RecliqueClientService
+   */
+  protected $recliqueClientService;
+
+  /**
    * {@inheritdoc}
    */
   public function __construct(
@@ -90,7 +98,8 @@ class VirtualYReCliqueLoginForm extends FormBase {
     FloodInterface $flood,
     PrivateTempStoreFactory $private_temp_store,
     Client $client,
-    GCUserAuthorizer $gcUserAuthorizer
+    GCUserAuthorizer $gcUserAuthorizer,
+    RecliqueClientService $recliqueClientService
   ) {
     $this->currentRequest = $requestStack->getCurrentRequest();
     $this->configFactory = $config_factory;
@@ -100,6 +109,7 @@ class VirtualYReCliqueLoginForm extends FormBase {
     $this->privateTempStore = $private_temp_store->get('openy_gc_auth.provider.reclique');
     $this->client = $client;
     $this->gcUserAuthorizer = $gcUserAuthorizer;
+    $this->recliqueClientService = $recliqueClientService;
   }
 
   /**
@@ -114,7 +124,8 @@ class VirtualYReCliqueLoginForm extends FormBase {
       $container->get('flood'),
       $container->get('tempstore.private'),
       $container->get('http_client'),
-      $container->get('openy_gc_auth.user_authorizer')
+      $container->get('openy_gc_auth.user_authorizer'),
+      $container->get('openy_gc_auth_reclique_client')
     );
   }
 
@@ -175,9 +186,10 @@ class VirtualYReCliqueLoginForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
+
     $provider_config = $this->configFactory->get('openy_gc_auth.provider.reclique');
-    $id = $form_state->getValue('verification_id');
-    $result = $this->getMemberInformation($id);
+    $email = $form_state->getValue('verification_id');
+    $result = $this->recliqueClientService->getUserData($email);
 
     if (
       isset($result['status']) &&
@@ -239,42 +251,6 @@ class VirtualYReCliqueLoginForm extends FormBase {
     $params['message'] .= 'Click to verify your email: ' . $path;
     $this->mailManager->mail('openy_gc_auth_reclique', 'openy_gc_auth_reclique_email_verification', $mail, 'en', $params, NULL, TRUE);
     $this->privateTempStore->set($mail, TRUE);
-  }
-
-  /**
-   * Get information about Y member.
-   *
-   * @param string $email
-   *   Member's email.
-   *
-   * @return array
-   *   Information about Member.
-   */
-  public function getMemberInformation($email) {
-    $provider_config = $this->configFactory->get('openy_gc_auth.provider.reclique');
-
-    $options = [
-      'auth' => [
-        $provider_config->get('auth_login'),
-        $provider_config->get('auth_pass'),
-      ],
-      'query' => [
-        'Email' => $email,
-      ],
-    ];
-
-    try {
-      $response = $this->client->request('POST', $provider_config->get('verification_url'), $options);
-
-      if ($response->getStatusCode() == '200') {
-        $content = $response->getBody()->getContents();
-        return json_decode($content, TRUE);
-      }
-    }
-    catch (\Exception $e) {
-      $this->logger('openy_gated_content')->error($e->getMessage());
-    }
-    return [];
   }
 
 }

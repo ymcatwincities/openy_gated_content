@@ -202,6 +202,7 @@ class SourceMigrationDeriver extends DeriverBase implements DeriverInterface, Co
    */
   private function getKey($url) {
     $url_key = str_replace('http://', '', $url);
+    $url_key = str_replace('https://', '', $url_key);
     $url_key = str_replace('.', '_', $url_key);
     return $url_key;
   }

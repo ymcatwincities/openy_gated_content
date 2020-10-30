@@ -22,9 +22,9 @@ source:
       content:
         -
           content_id: wherever_you_go_y_is_there
-        -
-          content_id: virtual_y_landing_page_login_app
       bottom_content:
+        -
+          bottom_content_id: virtual_y_landing_page_login_app
         -
           bottom_content_id: virtual_y_banner_bottom
     -
@@ -35,9 +35,9 @@ source:
       header_content:
         -
           header_content_id: virtual_y_small_banner
-      content:
+      bottom_content:
         -
-          content_id: virtual_y_landing_page_app
+          bottom_content_id: virtual_y_landing_page_app
   ids:
     id:
       type: string
@@ -87,7 +87,7 @@ process:
     plugin: default_value
     source: layout
   field_header_content:
-    plugin: iterator
+    plugin: sub_process
     source: header_content
     process:
       target_id:
@@ -103,37 +103,37 @@ process:
           - virtual_y_paragraph_small_banner
         source: header_content_id
   field_content:
-    plugin: iterator
+    plugin: sub_process
     source: content
     process:
       target_id:
         plugin: migration_lookup
         migration:
           - virtual_y_paragraph_simple_content
-          - virtual_y_paragraph_gated_content
-          - virtual_y_paragraph_gated_content_login
         source: content_id
       target_revision_id:
         plugin: migration_lookup
         migration:
           - virtual_y_paragraph_simple_content
-          - virtual_y_paragraph_gated_content
-          - virtual_y_paragraph_gated_content_login
         source: content_id
   field_bottom_content:
-    plugin: iterator
+    plugin: sub_process
     source: bottom_content
     process:
       target_id:
         plugin: migration_lookup
         migration:
+          - virtual_y_paragraph_gated_content_login
           - virtual_y_paragraph_banner
+          - virtual_y_paragraph_gated_content
           - virtual_y_paragraph_small_banner
         source: bottom_content_id
       target_revision_id:
         plugin: migration_lookup
         migration:
+          - virtual_y_paragraph_gated_content_login
           - virtual_y_paragraph_banner
+          - virtual_y_paragraph_gated_content
           - virtual_y_paragraph_small_banner
         source: bottom_content_id
 destination:

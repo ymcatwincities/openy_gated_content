@@ -6,6 +6,7 @@ use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Flood\FloodInterface;
 use Drupal\openy_gc_auth\GCUserAuthorizer;
+use Drupal\openy_gc_auth_yusa\YUSAClientService;
 use Drupal\user\UserStorageInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -54,6 +55,13 @@ class UserController extends ControllerBase {
   protected $gcUserAuthorizer;
 
   /**
+   * YUSAClientService instance.
+   *
+   * @var \Drupal\openy_gc_auth_yusa\YUSAClientService
+   */
+  protected $yusaClient;
+
+  /**
    * Constructs a UserController object.
    *
    * @param \Drupal\user\UserStorageInterface $user_storage
@@ -66,19 +74,23 @@ class UserController extends ControllerBase {
    *   The time service.
    * @param \Drupal\openy_gc_auth\GCUserAuthorizer $gcUserAuthorizer
    *   The GCUserAuthorizer service.
+   * @param \Drupal\openy_gc_auth_yusa\YUSAClientService $yusaClientService
+   *   YUSAClientService service instance.
    */
   public function __construct(
     UserStorageInterface $user_storage,
     LoggerInterface $logger,
     FloodInterface $flood,
     TimeInterface $datetime,
-    GCUserAuthorizer $gcUserAuthorizer
+    GCUserAuthorizer $gcUserAuthorizer,
+    YUSAClientService $yusaClientService
   ) {
     $this->userStorage = $user_storage;
     $this->logger = $logger;
     $this->flood = $flood;
     $this->datetime = $datetime;
     $this->gcUserAuthorizer = $gcUserAuthorizer;
+    $this->yusaClient = $yusaClientService;
   }
 
   /**
@@ -90,7 +102,8 @@ class UserController extends ControllerBase {
       $container->get('logger.factory')->get('user'),
       $container->get('flood'),
       $container->get('datetime.time'),
-      $container->get('openy_gc_auth.user_authorizer')
+      $container->get('openy_gc_auth.user_authorizer'),
+      $container->get('openy_gc_auth_yusa_client')
     );
   }
 
@@ -140,7 +153,22 @@ class UserController extends ControllerBase {
       return new RedirectResponse($vy_settings->get('virtual_y_login_url'), 302);
     }
     elseif ($user->isAuthenticated() && ($timestamp >= $user->getLastLoginTime()) && ($timestamp <= $current) && hash_equals($hash, user_pass_rehash($user, $timestamp))) {
-      $this->gcUserAuthorizer->authorizeUser($user->getAccountName(), $user->getEmail());
+
+      $email = $user->getEmail();
+      if (strpos('y-usa+', $email) !== FALSE) {
+        $id_arr = explode('@', $email);
+        $id = str_replace('y-usa+', '', $id_arr[0]);
+      }
+      else {
+        $id = $email;
+      }
+      $this
+        ->gcUserAuthorizer
+        ->authorizeUser(
+          $user->getAccountName(),
+          $email,
+          $this->yusaClient->getUserData($id)
+        );
       // Clear any flood events for this IP.
       $this->flood->clear('openy_gc_auth_yusa.login');
       return new RedirectResponse($vy_settings->get('virtual_y_url'), 302);
