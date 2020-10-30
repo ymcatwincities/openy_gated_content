@@ -4,3 +4,6 @@ services:
     arguments: ['@config.factory']
     tags:
       - { name: 'event_subscriber' }
+  openy_gc_auth_yusa_client:
+    class: '\Drupal\openy_gc_auth_yusa\YUSAClientService'
+    arguments: ['@config.factory', '@http_client']

@@ -11,6 +11,7 @@ use Drupal\Core\Mail\MailManagerInterface;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\Core\Url;
 use Drupal\openy_gc_auth\GCUserAuthorizer;
+use Drupal\openy_gc_auth_yusa\YUSAClientService;
 use Drupal\user\Entity\User;
 use GuzzleHttp\Client;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -80,6 +81,13 @@ class VirtualYUSALoginForm extends FormBase {
   protected $gcUserAuthorizer;
 
   /**
+   * YUSAClientService instance.
+   *
+   * @var \Drupal\openy_gc_auth_yusa\YUSAClientService
+   */
+  protected $yusaClient;
+
+  /**
    * {@inheritdoc}
    */
   public function __construct(
@@ -90,7 +98,8 @@ class VirtualYUSALoginForm extends FormBase {
     FloodInterface $flood,
     PrivateTempStoreFactory $private_temp_store,
     Client $client,
-    GCUserAuthorizer $gcUserAuthorizer
+    GCUserAuthorizer $gcUserAuthorizer,
+    YUSAClientService $yusaClientService
   ) {
     $this->currentRequest = $requestStack->getCurrentRequest();
     $this->configFactory = $config_factory;
@@ -100,6 +109,7 @@ class VirtualYUSALoginForm extends FormBase {
     $this->privateTempStore = $private_temp_store->get('openy_gc_auth.provider.yusa');
     $this->client = $client;
     $this->gcUserAuthorizer = $gcUserAuthorizer;
+    $this->yusaClient = $yusaClientService;
   }
 
   /**
@@ -114,7 +124,8 @@ class VirtualYUSALoginForm extends FormBase {
       $container->get('flood'),
       $container->get('tempstore.private'),
       $container->get('http_client'),
-      $container->get('openy_gc_auth.user_authorizer')
+      $container->get('openy_gc_auth.user_authorizer'),
+      $container->get('openy_gc_auth_yusa_client')
     );
   }
 
@@ -175,9 +186,10 @@ class VirtualYUSALoginForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
+
     $provider_config = $this->configFactory->get('openy_gc_auth.provider.yusa');
     $id = $form_state->getValue('verification_id');
-    $result = $this->getMemberInformation($id);
+    $result = $this->yusaClient->getUserData($id);
     // Proceed only if user is Active.
     if (isset($result['Status']) && $result['Status'] == 'Active') {
       // 1. Case when user has no email but First Name and Last Name.
@@ -186,8 +198,8 @@ class VirtualYUSALoginForm extends FormBase {
         !empty($result['LastName']) &&
         empty($result['Email'])
       ) {
-        $name = $result['FirstName'] . ' ' . $result['LastName'];
-        $email = 'y-usa+' . $this->currentRequest->getClientIp() . '+' . rand(0, 10000) . '@virtualy.org';
+        $name = $result['FirstName'] . ' ' . $result['LastName'] . ' ' . $id;
+        $email = 'y-usa+' . $id . '@virtualy.org';
       }
       // 2. Case when user has no Email, First Name and Last Name.
       if (
@@ -195,7 +207,7 @@ class VirtualYUSALoginForm extends FormBase {
         empty($result['LastName']) &&
         empty($result['Email'])
       ) {
-        $name = 'y-usa+' . $this->currentRequest->getClientIp() . '+' . rand(0, 10000);
+        $name = 'y-usa+' . $id;
         $email = $name . '@virtualy.org';
       }
       // 3. Case when user has Email, First Name and Last Name.
@@ -266,86 +278,6 @@ class VirtualYUSALoginForm extends FormBase {
     $params['message'] .= 'Click to verify your email: ' . $path;
     $this->mailManager->mail('openy_gc_auth_yusa', 'openy_gc_auth_yusa_email_verification', $mail, 'en', $params, NULL, TRUE);
     $this->privateTempStore->set($mail, TRUE);
-  }
-
-  /**
-   * Provides a method for API call.
-   *
-   * @param string $type
-   *   Request's type.
-   * @param array $body
-   *   Request's body.
-   * @param string $body_format
-   *   Format of request's body.
-   *
-   * @return array|mixed
-   *   Return content response or empty.
-   *
-   * @throws \GuzzleHttp\Exception\GuzzleException
-   */
-  public function doApiCall($type = 'GET', array $body = [], $body_format = 'json') {
-    $provider_config = $this->configFactory->get('openy_gc_auth.provider.yusa');
-
-    $body_key = 'body';
-    if ($body_format == 'json') {
-      $body_key = 'json';
-    }
-
-    $options = [
-      $body_key => $body,
-      'headers' => [
-        'Content-Type' => 'application/' . $body_format . ';charset=utf-8',
-      ],
-      'auth' => [
-        $provider_config->get('auth_login'),
-        $provider_config->get('auth_pass'),
-      ],
-    ];
-
-    try {
-      $response = $this->client->request($type, $provider_config->get('verification_url'), $options);
-
-      if ($response->getStatusCode() == '200') {
-        $content = $response->getBody()->getContents();
-        return json_decode($content, TRUE);
-      }
-    }
-    catch (\Exception $e) {
-      $this->logger('openy_gated_content')->error($e->getMessage());
-    }
-    return [];
-  }
-
-  /**
-   * Get information about Y member.
-   *
-   * @param int $id
-   *   Local Member ID.
-   *
-   * @return array
-   *   Information about Member.
-   */
-  public function getMemberInformation($id) {
-    $provider_config = $this->configFactory->get('openy_gc_auth.provider.yusa');
-    if ($provider_config->get('verification_type') == 'membership_id') {
-      $json = [
-        'AssociationNumber' => $provider_config->get('association_number'),
-        'LocalMemberId' => $id,
-      ];
-    }
-    if ($provider_config->get('verification_type') == 'email') {
-      $json = [
-        'AssociationNumber' => $provider_config->get('association_number'),
-        'Email' => $id,
-      ];
-    }
-    if ($provider_config->get('verification_type') == 'barcode') {
-      $json = [
-        'AssociationNumber' => $provider_config->get('association_number'),
-        'Barcode' => $id,
-      ];
-    }
-    return $this->doApiCall('POST', $json);
   }
 
 }
