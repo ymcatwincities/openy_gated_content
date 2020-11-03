@@ -127,7 +127,10 @@ export default {
   },
   computed: {
     firstCategory() {
-      if (!this.video.relationships.field_gc_video_category.data) {
+      if (
+        !this.video.relationships.field_gc_video_category.data
+        || this.video.relationships.field_gc_video_category.data.length === 0
+      ) {
         return null;
       }
       return this.video.relationships.field_gc_video_category.data[0].id;
