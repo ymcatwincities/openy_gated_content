@@ -150,7 +150,18 @@ class DaxkoSSO extends GCIdentityProviderPluginBase {
    * {@inheritdoc}
    */
   public function getLoginForm() {
-    return new RedirectResponse(Url::fromRoute('openy_gc_auth_daxko_sso.daxko_link_controller_hello')->toString());
+
+    // Forcing no-cache at redirect headers.
+    $headers = [
+      'Cache-Control' => 'no-cache',
+    ];
+    
+    $response = new RedirectResponse(
+      Url::fromRoute('openy_gc_auth_daxko_sso.daxko_link_controller_hello')->toString(),
+      302,
+      $headers
+    );
+    $response->send();
   }
 
 }
