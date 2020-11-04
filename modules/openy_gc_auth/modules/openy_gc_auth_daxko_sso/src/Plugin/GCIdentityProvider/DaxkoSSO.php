@@ -155,13 +155,13 @@ class DaxkoSSO extends GCIdentityProviderPluginBase {
     $headers = [
       'Cache-Control' => 'no-cache',
     ];
-    
     $response = new RedirectResponse(
       Url::fromRoute('openy_gc_auth_daxko_sso.daxko_link_controller_hello')->toString(),
       302,
       $headers
     );
     $response->send();
+    
   }
 
 }
