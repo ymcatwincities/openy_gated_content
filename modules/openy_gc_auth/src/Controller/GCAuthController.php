@@ -4,6 +4,7 @@ namespace Drupal\openy_gc_auth\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Routing\TrustedRedirectResponse;
+use Drupal\Core\Url;
 use Drupal\openy_gc_auth\Event\GCUserLogoutEvent;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -68,7 +69,11 @@ class GCAuthController extends ControllerBase {
     $event = new GCUserLogoutEvent();
     // Dispatch the event.
     $this->eventDispatcher->dispatch(GCUserLogoutEvent::EVENT_NAME, $event);
-    $redirect_url = $this->configFactory->get('openy_gated_content.settings')->get('virtual_y_logout_url');
+    // Logout user from Drupal.
+    user_logout();
+    // Optionally redirect user after logout.
+    $virtual_y_logout_url = $this->configFactory->get('openy_gated_content.settings')->get('virtual_y_logout_url');
+    $redirect_url = !empty($virtual_y_logout_url) ? $virtual_y_logout_url : Url::fromRoute('<front>')->toString();
     $redirect = new TrustedRedirectResponse($redirect_url);
     $redirect->send();
     exit();
