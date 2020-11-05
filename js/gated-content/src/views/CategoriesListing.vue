@@ -62,13 +62,13 @@ export default {
     },
   },
   watch: {
-    type: function () {
+    type() {
       this.load();
     },
   },
   methods: {
     listingIsNotEmpty() {
-      if(this.listing !== null && this.listing.length > 0) {
+      if (this.listing !== null && this.listing.length > 0) {
         this.showlisting = true;
       } else {
         this.showlisting = false;
