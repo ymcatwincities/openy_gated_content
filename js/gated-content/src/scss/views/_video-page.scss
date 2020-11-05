@@ -46,16 +46,20 @@
     .video-footer__title {
       font-size: 24px;
       line-height: 20px;
+      padding-bottom: 10px;
+
+      @media all and (min-width: 600px) {
+        padding-bottom: 40px;
+      }
     }
 
     .video-footer__description {
-      padding-top: 10px;
       font-size: 16px;
       line-height: 1.5em;
+    }
 
-      @media all and (min-width: 600px) {
-        padding-top: 40px;
-      }
+    .add-to-calendar {
+      margin-top: 1rem;
     }
 
     .video-footer__block {
@@ -74,8 +78,9 @@
     }
 
     .video-footer__category {
-      span:last-child i {
-        display: none;
+      span+span::before {
+        content: ', ';
+        display: inline;
       }
     }
 
@@ -98,8 +103,10 @@
 
   .video-category-wrapper {
     background-color: $dark-blue;
-    span:last-child i {
-      display: none;
+
+    span+span::before {
+      content: ', ';
+      display: inline;
     }
   }
 

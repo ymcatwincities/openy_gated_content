@@ -224,7 +224,7 @@ class SharedContentSource extends ContentEntityBase {
         'weight' => 5,
       ])
       ->setDisplayConfigurable('form', TRUE)
-      ->setDefaultValue(FALSE);
+      ->setDefaultValue(0);
 
     return $fields;
   }

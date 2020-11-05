@@ -1,0 +1,9 @@
+openy_gc_auth_yusa.account_verification:
+  path: '/yusa-user/verification/{uid}/{timestamp}/{hash}'
+  defaults:
+    _controller: '\Drupal\openy_gc_auth_yusa\Controller\UserController::verifyAccount'
+    _title: 'Account verification'
+  requirements:
+    _user_is_logged_in: 'FALSE'
+  options:
+    no_cache: TRUE

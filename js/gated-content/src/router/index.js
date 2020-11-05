@@ -77,6 +77,14 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
+    path: '/categories',
+    redirect: '/categories/video',
+  },
+  {
+    path: '/blog-post',
+    redirect: '/categories/blog',
+  },
+  {
     path: '*',
     component: NotFound,
   },

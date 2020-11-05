@@ -7,11 +7,9 @@
     <template v-else>
       <div
         class="virtual-meeting-page__image"
-        v-bind:class="{ 'zoom-wrapper': isZoomMeetingLink }"
         v-bind:style="{ backgroundImage: `url(${image})` }"
       >
-        <ZoomIframe :src="meetingLink.uri" v-if="isZoomMeetingLink"></ZoomIframe>
-        <div class="virtual-meeting-page__link" v-else>
+        <div class="virtual-meeting-page__link">
           <a :href="meetingLink.uri" target="_blank" class="btn btn-lg btn-primary">
             {{ meetingLink.title }}
           </a>
@@ -43,12 +41,11 @@
             <div class="video-footer__block" v-if="instructor">
               Instructor: {{ instructor }}
             </div>
-            <div class="video-footer__block" v-if="category && category.length > 0">
-              <span>Category: </span>
+            <div class="video-footer__block video-footer__category"
+                 v-if="category && category.length > 0">
+              Category:
               <span v-for="(category_data, index) in category"
-                    :key="index">
-                {{ category_data.name }}<i v-if="index !== category.length - 1">, </i>
-              </span>
+                    :key="index">{{ category_data.name }}</span>
             </div>
             <div
               v-if="video.attributes.equipment.length > 0"
@@ -80,7 +77,6 @@
 <script>
 import client from '@/client';
 import Spinner from '@/components/Spinner.vue';
-import ZoomIframe from '@/components/ZoomIframe.vue';
 import EventListing from '@/components/event/EventListing.vue';
 import AddToCalendar from '@/components/event/AddToCalendar.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
@@ -93,7 +89,6 @@ export default {
     EventListing,
     AddToCalendar,
     Spinner,
-    ZoomIframe,
   },
   props: {
     id: {
@@ -150,11 +145,6 @@ export default {
         }
       }
       return link;
-    },
-    isZoomMeetingLink() {
-      // Allow regular (zoom.us) or vanity (ymca.zoom.us) URLs.
-      const regex = /https:\/\/([a-zA-Z0-9-]*\.)?zoom\.us/;
-      return this.video && this.meetingLink.uri && regex.test(this.meetingLink.uri);
     },
     descriptionProcessed() {
       return this.description ? this.description.processed : '';

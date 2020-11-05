@@ -15,7 +15,7 @@ use Drupal\Core\Database\Database;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Class VirtualYLoginRedirect.
+ * Class VirtualYLogin Redirect.
  */
 class VirtualYLoginRedirect implements EventSubscriberInterface {
 

@@ -69,7 +69,7 @@ function openy_gc_shared_content_server_update_8001() {
       'weight' => 5,
     ])
     ->setDisplayConfigurable('form', TRUE)
-    ->setDefaultValue(FALSE);
+    ->setDefaultValue(0);
 
   $definition_update_manager->installFieldStorageDefinition('status', 'shared_content_source', 'shared_content_source', $status);
 }

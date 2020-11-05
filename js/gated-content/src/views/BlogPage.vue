@@ -93,7 +93,10 @@ export default {
         .uri.url;
     },
     firstCategory() {
-      if (!this.blog.relationships.field_gc_video_category.data) {
+      if (
+        !this.blog.relationships.field_gc_video_category.data
+        || this.blog.relationships.field_gc_video_category.data.length === 0
+      ) {
         return null;
       }
       return this.blog.relationships.field_gc_video_category.data[0].id;
