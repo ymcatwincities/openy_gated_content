@@ -62,9 +62,9 @@ export default {
     },
   },
   watch: {
-    'type': function() {
+    type: function () {
       this.load();
-    }
+    },
   },
   methods: {
     listingIsNotEmpty() {
