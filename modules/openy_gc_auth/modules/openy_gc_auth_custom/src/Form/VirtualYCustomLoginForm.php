@@ -183,6 +183,7 @@ class VirtualYCustomLoginForm extends FormBase {
         '@mail' => $form_state->getValue('email'),
       ]));
       $this->flood->register('openy_gc_auth_custom.login', $flood_config->get('user_window'));
+      return;
     }
 
     // Restrict access to user 1 and users with roles except virtual_y*.
