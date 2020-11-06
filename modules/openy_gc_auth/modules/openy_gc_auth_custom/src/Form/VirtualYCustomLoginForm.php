@@ -218,10 +218,9 @@ class VirtualYCustomLoginForm extends FormBase {
         $form_state->setRebuild(TRUE);
         return;
       }
-      else {
-        $this->gcUserAuthorizer->authorizeUser($user->getAccountName(), $mail);
-      }
     }
+
+    $this->gcUserAuthorizer->authorizeUser($user->getAccountName(), $mail);
   }
 
   /**
