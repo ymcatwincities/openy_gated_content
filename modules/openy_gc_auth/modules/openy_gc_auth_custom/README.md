@@ -44,13 +44,8 @@ destination fields and processors according to your needs.
 
 ### How to add custom validation logic for frontend app
 
-First of all you need to create new custom rest resource,
-you can extend existing GatedContentCustomAuthentication.php and add your
-custom logic (for example add password checking or use membership id
-instead of email).
-
-The second step - change API endpoint to your rest resource in plugin settings:
-- /admin/openy/openy-gc-auth/settings/provider/custom
+Alter `VirtualYCustomLoginForm` or subscribe on
+`gated_content_events_user_login` event.
 
 ### How to Run migration
 
