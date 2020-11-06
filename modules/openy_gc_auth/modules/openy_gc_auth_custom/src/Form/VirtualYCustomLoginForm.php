@@ -189,12 +189,17 @@ class VirtualYCustomLoginForm extends FormBase {
     $user = reset($users);
     $account_roles = $user->getRoles();
     // Remove all virtual_y roles.
+    $has_virtual_role = FALSE;
     foreach ($account_roles as $id => $account_role) {
-      if (strstr($account_role, 'virtual_y') !== FALSE || $account_role == 'authenticated') {
+      if (strstr($account_role, 'virtual_y') !== FALSE) {
+        unset($account_roles[$id]);
+        $has_virtual_role = TRUE;
+      }
+      elseif ($account_role == 'authenticated') {
         unset($account_roles[$id]);
       }
     }
-    if ($user->id() == 1 || !empty($account_roles)) {
+    if (!$has_virtual_role || $user->id() == 1 || !empty($account_roles)) {
       $form_state->setErrorByName('email', $this->t('This user is not allowed to login from this form.', [
         '@mail' => $form_state->getValue('email'),
       ]));
