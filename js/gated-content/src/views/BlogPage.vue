@@ -5,13 +5,13 @@
     </div>
     <div v-else-if="error">Error loading</div>
     <template v-else>
-      <div v-if="emptyimage"><div class="blog-page__no-image"></div></div>
-      <div v-else>
+      <div v-if="blog.attributes.field_vy_blog_image !== null">
         <div class="blog-page__image" v-bind:style="{
                 backgroundImage: `url(${image})`
         }">
         </div>
       </div>
+      <div v-else><div class="blog-page__no-image"></div></div>
       <div class="blog-header gated-container">
         <h2>{{ blog.attributes.title }}</h2>
         <div
@@ -79,7 +79,6 @@ export default {
       error: false,
       blog: {},
       response: null,
-      emptyimage: false,
       params: [
         'field_vy_blog_image',
         'field_vy_blog_image.field_media_image',
@@ -90,7 +89,6 @@ export default {
   computed: {
     image() {
       if (!this.blog.attributes['field_vy_blog_image.field_media_image']) {
-        this.emptyimage = true;
         return null;
       }
 
