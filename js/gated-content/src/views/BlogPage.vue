@@ -78,6 +78,7 @@ export default {
       error: false,
       blog: {},
       response: null,
+      emptyimage: false,
       params: [
         'field_vy_blog_image',
         'field_vy_blog_image.field_media_image',
@@ -88,6 +89,7 @@ export default {
   computed: {
     image() {
       if (!this.blog.attributes['field_vy_blog_image.field_media_image']) {
+        this.emptyimage = true;
         return null;
       }
 
