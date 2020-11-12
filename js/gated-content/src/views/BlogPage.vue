@@ -5,13 +5,10 @@
     </div>
     <div v-else-if="error">Error loading</div>
     <template v-else>
-      <div v-if="blog.attributes.field_vy_blog_image !== null">
-        <div class="blog-page__image" v-bind:style="{
-                backgroundImage: `url(${image})`
-        }">
-        </div>
+      <div v-if="blog.attributes.field_vy_blog_image !== null" class="blog-page__image" v-bind:style="{
+              backgroundImage: `url(${image})`
+      }">
       </div>
-      <div v-else><div class="blog-page__no-image"></div></div>
       <div class="blog-header gated-container">
         <h2>{{ blog.attributes.title }}</h2>
         <div
