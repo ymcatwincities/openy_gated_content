@@ -111,3 +111,18 @@ function openy_gc_auth_custom_update_8004() {
   $config_factory->getEditable('rest.resource.openy_gc_auth_custom_confirm')->delete();
   $config_factory->getEditable('views.view.virtual_y_users')->delete();
 }
+
+/**
+ * Update migration configs according to migrate_source_csv:v3.
+ */
+function openy_gc_auth_custom_update_8006() {
+  $config_dir = drupal_get_path('module', 'openy_gc_auth_custom');
+  $config_dir .= '/config/install/';
+  // Import new configuration.
+  $config_importer = \Drupal::service('openy_upgrade_tool.importer');
+  $config_importer->setDirectory($config_dir);
+  $config_importer->importConfigs([
+    'migrate_plus.migration.gc_auth_custom_users',
+    'migrate_plus.migration_group.gc_auth',
+  ]);
+}

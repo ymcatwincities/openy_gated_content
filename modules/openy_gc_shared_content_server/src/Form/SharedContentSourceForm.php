@@ -34,7 +34,9 @@ class SharedContentSourceForm extends ContentEntityForm {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    /* @var \Drupal\openy_gc_shared_content_server\Entity\SharedContentSource $entity */
+    /**
+     * @var \Drupal\openy_gc_shared_content_server\Entity\SharedContentSource $entity
+     */
     $form = parent::buildForm($form, $form_state);
 
     return $form;

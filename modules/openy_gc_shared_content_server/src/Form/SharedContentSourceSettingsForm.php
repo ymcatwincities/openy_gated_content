@@ -6,7 +6,7 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Class SharedContentSourceSettingsForm.
+ * SharedContentSource Settings Form Class.
  *
  * @ingroup openy_gc_shared_content_server
  */

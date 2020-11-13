@@ -14,22 +14,27 @@ source:
   path: 'private://gc_auth/import/gc_auth_custom_users.csv'
   delimiter: ','
   enclosure: '"'
-  header_row_count: 1
   track_changes: true
   ids: [member_id]
-  column_names:
+  fields:
     -
-      member_id: 'Member ID'
+      name: member_id
+      label: 'Member ID'
     -
-      first_name: 'Member First Name'
+      name: first_name
+      label: 'Member First Name'
     -
-      primary: 'Primary Member'
+      name: primary
+      label: 'Primary Member'
     -
-      email: 'Member Email'
+      name: email
+      label: 'Member Email'
     -
-      package_name: 'Package Name'
+      name: package_name
+      label: 'Package Name'
     -
-      package_site: 'Package Site'
+      name: package_site
+      label: 'Package Site'
   constants:
     roles:
       - authenticated
