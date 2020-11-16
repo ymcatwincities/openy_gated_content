@@ -68,6 +68,7 @@ class GCUserAuthorizer {
       // Activate user if it's not.
       if (!$account->isActive()) {
         $account->activate();
+        $account->setPassword(user_password());
         $account->save();
       }
     }

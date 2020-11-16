@@ -10,6 +10,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Mail\MailManagerInterface;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\Core\Url;
+use Drupal\openy_gc_auth\GCUserAuthorizer;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -63,15 +64,31 @@ class VirtualYCustomLoginForm extends FormBase {
   protected $privateTempStore;
 
   /**
+   * The Gated Content User Authorizer.
+   *
+   * @var \Drupal\openy_gc_auth\GCUserAuthorizer
+   */
+  protected $gcUserAuthorizer;
+
+  /**
    * {@inheritdoc}
    */
-  public function __construct(RequestStack $requestStack, ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager, MailManagerInterface $mail_manager, FloodInterface $flood, PrivateTempStoreFactory $private_temp_store) {
+  public function __construct(
+    RequestStack $requestStack,
+    ConfigFactoryInterface $config_factory,
+    EntityTypeManagerInterface $entity_type_manager,
+    MailManagerInterface $mail_manager,
+    FloodInterface $flood,
+    PrivateTempStoreFactory $private_temp_store,
+    GCUserAuthorizer $gcUserAuthorizer
+  ) {
     $this->currentRequest = $requestStack->getCurrentRequest();
     $this->configFactory = $config_factory;
     $this->entityTypeManager = $entity_type_manager;
     $this->mailManager = $mail_manager;
     $this->flood = $flood;
     $this->privateTempStore = $private_temp_store->get('openy_gc_auth.provider.custom');
+    $this->gcUserAuthorizer = $gcUserAuthorizer;
   }
 
   /**
@@ -84,7 +101,8 @@ class VirtualYCustomLoginForm extends FormBase {
       $container->get('entity_type.manager'),
       $container->get('plugin.manager.mail'),
       $container->get('flood'),
-      $container->get('tempstore.private')
+      $container->get('tempstore.private'),
+      $container->get('openy_gc_auth.user_authorizer')
     );
   }
 
@@ -165,6 +183,27 @@ class VirtualYCustomLoginForm extends FormBase {
         '@mail' => $form_state->getValue('email'),
       ]));
       $this->flood->register('openy_gc_auth_custom.login', $flood_config->get('user_window'));
+      return;
+    }
+
+    // Restrict access to user 1 and users with roles except virtual_y*.
+    $user = reset($users);
+    $account_roles = $user->getRoles();
+    // Remove all virtual_y roles.
+    $has_virtual_role = FALSE;
+    foreach ($account_roles as $id => $account_role) {
+      if (strstr($account_role, 'virtual_y') !== FALSE) {
+        unset($account_roles[$id]);
+        $has_virtual_role = TRUE;
+      }
+      elseif ($account_role == 'authenticated') {
+        unset($account_roles[$id]);
+      }
+    }
+    if (!$has_virtual_role || $user->id() == 1 || !empty($account_roles)) {
+      $form_state->setErrorByName('email', $this->t('This user is not allowed to login from this form.', [
+        '@mail' => $form_state->getValue('email'),
+      ]));
     }
   }
 
@@ -185,16 +224,9 @@ class VirtualYCustomLoginForm extends FormBase {
         $form_state->setRebuild(TRUE);
         return;
       }
-      else {
-        $user->setPassword(user_password());
-        $user->activate();
-        $user->save();
-      }
     }
 
-    user_login_finalize($user);
-    $path = $this->configFactory->get('openy_gated_content.settings')->get('virtual_y_url');
-    $form_state->setRedirectUrl(Url::fromUserInput($path));
+    $this->gcUserAuthorizer->authorizeUser($user->getAccountName(), $mail);
   }
 
   /**
