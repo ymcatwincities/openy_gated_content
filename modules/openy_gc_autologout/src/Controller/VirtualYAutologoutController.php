@@ -10,6 +10,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class VirtualYAutologoutController extends ControllerBase {
 
+  /**
+   * Logout current user on request.
+   */
   public function logOut() {
     user_logout();
     return new JsonResponse([

@@ -36,7 +36,7 @@ class VirtualYAutologoutSettingsForm extends ConfigFormBase {
       '#type' => 'textfield',
       '#title' => $this->t('Timeout'),
       '#default_value' => $config->get('autologout_timeout'),
-      '#description' => t('Provide timeout in seconds.'),
+      '#description' => $this->t('Provide timeout in seconds.'),
       '#required' => TRUE,
     ];
 
