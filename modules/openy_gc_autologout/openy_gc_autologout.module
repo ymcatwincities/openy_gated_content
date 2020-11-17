@@ -5,12 +5,9 @@
  * Contains openy_gc_autologout.module.
  */
 
-use Drupal\Component\Utility\Crypt;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
-use Drupal\openy_gc_auth\Event\GCUserLogoutEvent;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Implements hook_page_attachments().
