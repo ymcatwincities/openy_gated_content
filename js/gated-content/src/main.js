@@ -4,6 +4,8 @@ import router from './router';
 import store from './store';
 import filters from './filters';
 import Log from './plugins/log';
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
 
 Vue.use(Log);
 
