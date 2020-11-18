@@ -4,9 +4,8 @@
       :player="player"
       :videoId="media.field_media_video_id"
       :options="{responsive: 'true'}"
-      @play="handlePlay('videoPlaybackStarted')"
-      @pause="handlePlay('videoPlaybackPaused')"
-      @ended="handlePlay('videoPlaybackEnded')"
+      @play="handlePlay()"
+      @ended="handlePlayerEvent('videoPlaybackEnded')"
     />
   </div>
 </template>
@@ -16,6 +15,11 @@ import VueVideoWrapper from 'vue-video-wrapper';
 
 export default {
   name: 'MediaPlayer',
+  data() {
+    return {
+      playbackLogged: false,
+    };
+  },
   components: {
     VueVideoWrapper,
   },
@@ -27,7 +31,6 @@ export default {
   },
   watch: {
     media: 'reload',
-    source: 'reload',
   },
   computed: {
     player() {
@@ -38,9 +41,19 @@ export default {
     reload() {
       this.$forceUpdate();
     },
-    handlePlay(eventType) {
+    handlePlayerEvent(eventType) {
       this.$emit('playerEvent', eventType);
     },
+    handlePlay() {
+      if (this.playbackLogged) {
+        return;
+      }
+      this.playbackLogged = true;
+      this.handlePlayerEvent('videoPlaybackStarted');
+    },
+  },
+  updated() {
+    this.playbackLogged = false;
   },
 };
 </script>

@@ -650,10 +650,6 @@ display:
                 operator: contains
                 value: videoPlaybackStarted
               4:
-                title: videoPlaybackPaused
-                operator: contains
-                value: videoPlaybackPaused
-              5:
                 title: videoPlaybackEnded
                 operator: contains
                 value: videoPlaybackEnded

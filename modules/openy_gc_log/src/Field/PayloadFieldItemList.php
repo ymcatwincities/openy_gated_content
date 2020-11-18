@@ -34,7 +34,6 @@ class PayloadFieldItemList extends FieldItemList {
     if (in_array($eventType, [
       LogEntityInterface::EVENT_TYPE_ENTITY_VIEW,
       LogEntityInterface::EVENT_TYPE_VIDEO_PLAYBACK_STARTED,
-      LogEntityInterface::EVENT_TYPE_VIDEO_PLAYBACK_PAUSED,
       LogEntityInterface::EVENT_TYPE_VIDEO_PLAYBACK_ENDED,
     ])) {
       $entityType = $log->get('entity_type')->value;
