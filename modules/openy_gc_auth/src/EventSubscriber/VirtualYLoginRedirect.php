@@ -8,10 +8,8 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\node\NodeInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\EventDispatcher\Event;
-use Drupal\Core\Database\Database;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Drupal\openy_gc_auth\GCAuthManager;
 
