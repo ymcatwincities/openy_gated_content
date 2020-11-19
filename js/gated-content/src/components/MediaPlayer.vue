@@ -1,9 +1,11 @@
 <template>
   <div :class="media.field_media_source">
     <VueVideoWrapper
+      ref="player"
       :player="player"
       :videoId="media.field_media_video_id"
       :options="{responsive: 'true'}"
+      @loaded="$refs.player.pause()"
       @play="handlePlay()"
       @ended="handlePlayerEvent('videoPlaybackEnded')"
     />
