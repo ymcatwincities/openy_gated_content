@@ -36,7 +36,6 @@
 
 <script>
 import client from '@/client';
-import 'vue-lazy-youtube-video/dist/style.css';
 import VideoListing from '@/components/video/VideoListing.vue';
 import BlogListing from '@/components/blog/BlogListing.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
