@@ -5,7 +5,6 @@ namespace Drupal\openy_gc_auth_personify\Form;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class VirtualYPersonifyLoginForm Form.
@@ -13,18 +12,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @package Drupal\openy_gc_auth_personify\Form
  */
 class VirtualYPersonifyLoginForm extends FormBase {
-
-  /**
-   * {@inheritdoc}
-   */
-  public function __construct() {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static();
-  }
 
   /**
    * {@inheritdoc}
