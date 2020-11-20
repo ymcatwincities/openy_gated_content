@@ -21,4 +21,19 @@ new Vue({
   components: {
     App,
   },
+  mounted() {
+    const app = this;
+
+    if ('-ms-scroll-limit' in document.documentElement.style
+      && '-ms-ime-align' in document.documentElement.style) {
+      window.addEventListener('hashchange',
+        () => {
+          const currentPath = window.location.hash.slice(1);
+          if (app.$route.path !== currentPath) {
+            app.$router.replace(currentPath);
+          }
+        },
+        false);
+    }
+  },
 }).$mount('#gated-content');
