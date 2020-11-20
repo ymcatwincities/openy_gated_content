@@ -49,7 +49,7 @@ class VirtualYAutologoutSettingsForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $settings = $this->config('openy_gc_autologout.settings');
     $value = $form_state->getValue('autologout_timeout');
-    $settings->save('autologout_timeout', $value);
+    $settings->set('autologout_timeout', $value);
     $settings->save();
   }
 
