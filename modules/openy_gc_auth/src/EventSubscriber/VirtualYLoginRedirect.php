@@ -8,11 +8,10 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\node\NodeInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\EventDispatcher\Event;
-use Drupal\Core\Database\Database;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Drupal\openy_gc_auth\GCAuthManager;
 
 /**
  * Class VirtualYLogin Redirect.
@@ -50,6 +49,13 @@ class VirtualYLoginRedirect implements EventSubscriberInterface {
   protected $messenger;
 
   /**
+   * Auth manager.
+   *
+   * @var \Drupal\openy_gc_auth\GCAuthManager
+   */
+  protected $authManager;
+
+  /**
    * Constructs a new VirtualYLoginRedirect.
    *
    * @param \Drupal\Core\Routing\RouteMatchInterface $current_route_match
@@ -60,17 +66,21 @@ class VirtualYLoginRedirect implements EventSubscriberInterface {
    *   The config factory.
    * @param \Drupal\Core\Messenger\Messenger $messenger
    *   Messenger service.
+   * @param \Drupal\openy_gc_auth\GCAuthManager $authManager
+   *   Auth manager.
    */
   public function __construct(
     RouteMatchInterface $current_route_match,
     AccountProxyInterface $current_user,
     ConfigFactoryInterface $configFactory,
-    Messenger $messenger
+    Messenger $messenger,
+    GCAuthManager $authManager
   ) {
     $this->currentRouteMatch = $current_route_match;
     $this->currentUser = $current_user;
     $this->configFactory = $configFactory;
     $this->messenger = $messenger;
+    $this->authManager = $authManager;
   }
 
   /**
@@ -102,7 +112,7 @@ class VirtualYLoginRedirect implements EventSubscriberInterface {
 
         if (
           $currentUser->isAnonymous()
-          && $this->checkIfParagraphAtNode($node, 'gated_content')
+          && $this->authManager->checkIfParagraphAtNode($node, 'gated_content')
         ) {
           if (!empty($config->get('virtual_y_login_url'))) {
             $event->setResponse(new RedirectResponse($config->get('virtual_y_login_url')));
@@ -125,7 +135,7 @@ class VirtualYLoginRedirect implements EventSubscriberInterface {
 
         if (
           $currentUser->isAuthenticated()
-          && $this->checkIfParagraphAtNode($node, 'gated_content_login')
+          && $this->authManager->checkIfParagraphAtNode($node, 'gated_content_login')
         ) {
           if (!empty($config->get('virtual_y_login_url'))) {
             $event->setResponse(new RedirectResponse($config->get('virtual_y_url')));
@@ -147,22 +157,6 @@ class VirtualYLoginRedirect implements EventSubscriberInterface {
         }
 
     }
-  }
-
-  /**
-   * Check if provided paragraph exists on the node.
-   */
-  private function checkIfParagraphAtNode(NodeInterface $node, $paragraph_id) {
-    $connection = Database::getConnection();
-
-    $result = $connection->select('paragraphs_item_field_data', 'pd')
-      ->fields('pd', ['id'])
-      ->condition('pd.parent_id', $node->id())
-      ->condition('pd.type', $paragraph_id)
-      ->countQuery()
-      ->execute()
-      ->fetchCol();
-    return reset($result);
   }
 
 }
