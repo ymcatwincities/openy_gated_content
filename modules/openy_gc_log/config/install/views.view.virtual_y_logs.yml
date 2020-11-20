@@ -646,9 +646,13 @@ display:
                 operator: contains
                 value: entityView
               3:
-                title: ''
+                title: videoPlaybackStarted
                 operator: contains
-                value: ''
+                value: videoPlaybackStarted
+              4:
+                title: videoPlaybackEnded
+                operator: contains
+                value: videoPlaybackEnded
           entity_type: log_entity
           entity_field: event_type
           plugin_id: string
