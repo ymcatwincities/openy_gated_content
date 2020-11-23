@@ -120,6 +120,14 @@ class DaxkoSSO extends GCIdentityProviderPluginBase {
       '#required' => TRUE,
     ];
 
+    $form['error_accompanying_message'] = [
+      '#title' => $this->t('Authentication error message'),
+      '#description' => $this->t('Message displayed to user when he failed to log in using personify plugin.'),
+      '#type' => 'textfield',
+      '#default_value' => $config['error_accompanying_message'],
+      '#required' => FALSE,
+    ];
+
     return $form;
   }
 
@@ -129,6 +137,7 @@ class DaxkoSSO extends GCIdentityProviderPluginBase {
   public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
     if (!$form_state->getErrors()) {
       $this->configuration['redirect_url'] = $form_state->getValue('redirect_url');
+      $this->configuration['error_accompanying_message'] = $form_state->getValue('error_accompanying_message');
 
       $baseUrl = $this->request->getSchemeAndHttpHost();
 
@@ -150,6 +159,9 @@ class DaxkoSSO extends GCIdentityProviderPluginBase {
    * {@inheritdoc}
    */
   public function getLoginForm() {
+    if ($this->request->query->has('error')) {
+      return $this->formBuilder->getForm('Drupal\openy_gc_auth_daxko_sso\Form\TryAgainForm');
+    }
     return new RedirectResponse(Url::fromRoute('openy_gc_auth_daxko_sso.daxko_link_controller_hello')->toString());
   }
 

@@ -1,1 +1,2 @@
-redirect_url: '/gated_content'
+redirect_url: '/openy-gc-auth-daxko-sso/back-redirect'
+error_accompanying_message: 'Please contact us if You have any questions.'
