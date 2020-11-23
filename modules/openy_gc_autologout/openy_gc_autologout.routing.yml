@@ -1,0 +1,16 @@
+openy_gc_autologout.settings:
+  path: '/admin/virtual-y/openy-gc-autologout'
+  defaults:
+    _form: '\Drupal\openy_gc_autologout\Form\VirtualYAutologoutSettingsForm'
+    _title: 'Virtual Y Auto Logout'
+  requirements:
+    _permission: 'administer virtualy autologout'
+
+openy_gc_autologout.logout:
+  path: '/openy_gc_autologout'
+  defaults:
+    _controller: '\Drupal\openy_gc_autologout\Controller\VirtualYAutologoutController::logOut'
+  options:
+    _theme: ajax_base_page
+  requirements:
+    _user_is_logged_in: 'TRUE'
