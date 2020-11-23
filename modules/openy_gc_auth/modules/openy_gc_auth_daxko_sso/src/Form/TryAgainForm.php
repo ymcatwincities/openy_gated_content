@@ -9,9 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Class TryAgainForm.
- *
- * @package Drupal\openy_gc_auth_daxko_sso\Form
+ * Form for try again step in case of failed Daxko SSO login.
  */
 class TryAgainForm extends FormBase {
 

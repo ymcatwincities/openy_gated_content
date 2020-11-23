@@ -14,7 +14,7 @@ function openy_gc_auth_daxko_sso_update_8001(&$sandbox) {
   $configs = [
     'openy_gc_auth.provider.daxko_sso' => [
       'redirect_url',
-      'error_accompanying_message'
+      'error_accompanying_message',
     ],
   ];
 

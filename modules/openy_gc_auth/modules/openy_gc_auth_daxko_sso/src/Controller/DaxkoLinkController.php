@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Drupal\openy_gc_auth\GCUserAuthorizer;
 
 /**
- * Class DaxkoLinkController.
+ * Class with controller endpoints, needed for Daxko SSO plugin.
  */
 class DaxkoLinkController extends ControllerBase {
 
