@@ -1,0 +1,62 @@
+<?php
+
+/**
+ * @file
+ * Contains openy_gc_autologout.module.
+ */
+
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_page_attachments().
+ */
+function openy_gc_autologout_page_attachments(array &$attachments) {
+  $currentRouteMatch = \Drupal::service('current_route_match');
+  $route_name = $currentRouteMatch->getRouteName();
+  switch ($route_name) {
+    case 'entity.node.canonical':
+      $node = $currentRouteMatch->getParameter('node');
+      $currentUser = \Drupal::service('current_user');
+      $authManager = \Drupal::service('openy_gc_auth.manager');
+      if ($currentUser->isAuthenticated() && $authManager->checkIfParagraphAtNode($node, 'gated_content')) {
+        $autologout_timeout = \Drupal::configFactory()->get('openy_gc_autologout.settings')->get('autologout_timeout');
+        $virtual_y_logout_url = \Drupal::configFactory()->get('openy_gated_content.settings')->get('virtual_y_logout_url');
+        $redirect_url = !empty($virtual_y_logout_url) ? $virtual_y_logout_url : Url::fromRoute('<front>')->toString();
+        $attachments['#attached']['library'][] = 'openy_gc_autologout/openy_gc_autologout';
+        $attachments['#attached']['drupalSettings']['openy_gc_autologout'] = [
+          'autologout_timeout' => $autologout_timeout,
+          'redirect_url' => $redirect_url,
+        ];
+      }
+      break;
+  }
+}
+
+/**
+ * Implements hook_cron().
+ */
+function openy_gc_autologout_cron() {
+  openy_gc_autologout_users();
+}
+
+/**
+ * Auto logout users.
+ */
+function openy_gc_autologout_users() {
+  $results = \Drupal::database()->select('sessions', 's')
+    ->fields('s', ['uid', 'sid ', 'timestamp'])
+    ->limit(50)
+    ->execute()
+    ->fetchAll();
+
+  $autologout_timeout = \Drupal::configFactory()->get('openy_gc_autologout.settings')->get('autologout_timeout');
+  // Check all users who have active sessions and logout them (except admin).
+  foreach ($results as $info) {
+    if (REQUEST_TIME > ($info->timestamp + $autologout_timeout) && (int) $info->uid !== 1) {
+      // Delete user session.
+      \Drupal::database()->delete('sessions')
+        ->condition('uid', $info->uid)
+        ->execute();
+    }
+  }
+}

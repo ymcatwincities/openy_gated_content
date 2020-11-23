@@ -3,6 +3,7 @@
 namespace Drupal\openy_gc_shared_content;
 
 use Drupal\Component\Plugin\PluginBase;
+use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Messenger\MessengerTrait;
@@ -45,6 +46,13 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
   protected $entityTypeManager;
 
   /**
+   * The entity field manager service.
+   *
+   * @var \Drupal\Core\Entity\EntityFieldManagerInterface
+   */
+  protected $entityFieldManager;
+
+  /**
    * The JSON:API resource type repository.
    *
    * @var \Drupal\jsonapi\ResourceType\ResourceTypeRepositoryInterface
@@ -74,6 +82,7 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
     $plugin_definition,
     Client $client,
     EntityTypeManagerInterface $entity_type_manager,
+    EntityFieldManagerInterface $entity_field_manager,
     ResourceTypeRepositoryInterface $resource_type_repository,
     SerializerInterface $serializer,
     RequestStack $requestStack
@@ -82,6 +91,7 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->client = $client;
     $this->entityTypeManager = $entity_type_manager;
+    $this->entityFieldManager = $entity_field_manager;
     $this->resourceTypeRepository = $resource_type_repository;
     $this->serializer = $serializer;
     $this->requestStack = $requestStack->getCurrentRequest();
@@ -99,6 +109,7 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
       $plugin_definition,
       $container->get('http_client'),
       $container->get('entity_type.manager'),
+      $container->get('entity_field.manager'),
       $container->get('jsonapi.resource_type.repository'),
       $container->get('jsonapi.serializer'),
       $container->get('request_stack')
@@ -341,13 +352,25 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
     foreach ($this->getExcludedRelationships() as $rel_name) {
       unset($data['data']['relationships'][$rel_name]);
     }
+    // Delete all fields that not exists on current site.
+    $fields = $this->entityFieldManager->getFieldDefinitions($this->getEntityType(), $this->getEntityBundle());
+    foreach ($data['data']['attributes'] as $field_name => $field_data) {
+      if (!isset($fields[$field_name])) {
+        unset($data['data']['attributes'][$field_name]);
+      }
+    }
+    foreach ($data['data']['relationships'] as $field_name => $field_data) {
+      if (!isset($fields[$field_name])) {
+        unset($data['data']['relationships'][$field_name]);
+      }
+    }
 
     try {
       $included_relationships = $this->getIncludedRelationships();
       $relationships_data = [];
       foreach ($included_relationships as $rel_name) {
         $rel_data = [];
-        if (!isset($data['data']['relationships'][$rel_name])) {
+        if (!isset($data['data']['relationships'][$rel_name]) || empty($data['data']['relationships'][$rel_name]['data'])) {
           continue;
         }
 
@@ -362,7 +385,7 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
 
         foreach ($rel_data as $seared_item) {
           foreach ($data['included'] as $item) {
-            if ($item['type'] == $seared_item['type'] && $item['id'] == $seared_item['id']) {
+            if (isset($item['type'], $seared_item['type'], $item['id'], $seared_item['id']) && $item['type'] == $seared_item['type'] && $item['id'] == $seared_item['id']) {
               $relationships_data[$rel_name][] = $item;
               // Exit from both foreach when we find item.
               break 2;
@@ -395,8 +418,9 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
 
       $entity = $this->serializer->denormalize($data, JsonApiDocumentTopLevel::class, 'api_json', $context);
       foreach ($included_relationships as $rel_name) {
-
-        $entity->set($rel_name, $relationships_data[$rel_name]);
+        if (isset($relationships_data[$rel_name])) {
+          $entity->set($rel_name, $relationships_data[$rel_name]);
+        }
       }
 
       $entity->set('field_gc_origin', $url);

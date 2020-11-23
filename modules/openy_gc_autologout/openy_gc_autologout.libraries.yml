@@ -1,0 +1,8 @@
+openy_gc_autologout:
+  version: 0.1
+  js:
+    js/idle.min.js: {}
+    js/openy_gc_autologout.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupalSettings
