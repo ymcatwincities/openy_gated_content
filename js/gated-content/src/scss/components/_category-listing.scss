@@ -1,19 +1,31 @@
 .category-listing {
-  padding-top: 30px;
   display: grid;
-  grid-gap: 30px;
-  grid-template-columns: 1fr;
+  grid-column-gap: 30px;
+  grid-template-rows: repeat(10, auto);
+
+  > * {
+    margin-top: 30px;
+  }
 
   @media all and (max-width: 600px) {
-    grid-gap: 10px;
-    padding-top: 10px;
+    grid-column-gap: 10px;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(10, auto);
+
+    > * {
+      margin-top: 10px;
+    }
   }
 
   @media all and (min-width: 600px) {
+    grid-column-gap: 30px;
     grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(10, auto);
   }
 
   @media all and (min-width: 1200px) {
+    grid-column-gap: 30px;
     grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(10, auto);
   }
 }
