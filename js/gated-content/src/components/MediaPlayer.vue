@@ -1,25 +1,29 @@
 <template>
-  <div>
-    <LazyYoutubeVideo ref="youtube-player" v-if="source === 'youtube'" :src="youtubeSrc"/>
-    <vueVimeoPlayer
-      :class="source"
-      ref="vimeo-player"
-      v-if="source === 'vimeo' || source === 'vimeo_event'"
-      v-bind="vimeoOptions"
+  <div :class="media.field_media_source">
+    <VueVideoWrapper
+      ref="player"
+      :player="player"
+      :videoId="media.field_media_video_id"
+      :options="{responsive: 'true'}"
+      @loaded="$refs.player.pause()"
+      @play="handlePlay()"
+      @ended="handlePlayerEvent('videoPlaybackEnded')"
     />
   </div>
 </template>
 
 <script>
-import LazyYoutubeVideo from 'vue-lazy-youtube-video';
-import 'vue-lazy-youtube-video/dist/style.css';
-import { vueVimeoPlayer } from 'vue-vimeo-player';
+import VueVideoWrapper from 'vue-video-wrapper';
 
 export default {
   name: 'MediaPlayer',
+  data() {
+    return {
+      playbackLogged: false,
+    };
+  },
   components: {
-    LazyYoutubeVideo,
-    vueVimeoPlayer,
+    VueVideoWrapper,
   },
   props: {
     media: {
@@ -29,33 +33,29 @@ export default {
   },
   watch: {
     media: 'reload',
-    source: 'reload',
   },
   computed: {
-    source() {
-      return this.media.field_media_source;
-    },
-    youtubeSrc() {
-      return `https://www.youtube.com/embed/${this.media.field_media_video_id}`;
-    },
-    vimeoOptions() {
-      const options = {
-        videoId: this.media.field_media_video_id,
-        'video-url': this.media.field_media_video_embed_field,
-        playerWidth: undefined,
-        playerHeight: undefined,
-        options: {
-          responsive: true,
-        },
-      };
-
-      return options;
+    player() {
+      return this.media.field_media_source === 'youtube' ? 'youtube' : 'vimeo';
     },
   },
   methods: {
     reload() {
       this.$forceUpdate();
     },
+    handlePlayerEvent(eventType) {
+      this.$emit('playerEvent', eventType);
+    },
+    handlePlay() {
+      if (this.playbackLogged) {
+        return;
+      }
+      this.playbackLogged = true;
+      this.handlePlayerEvent('videoPlaybackStarted');
+    },
+  },
+  updated() {
+    this.playbackLogged = false;
   },
 };
 </script>

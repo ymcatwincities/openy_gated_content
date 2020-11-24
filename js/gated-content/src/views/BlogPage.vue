@@ -123,7 +123,7 @@ export default {
           this.blog = this.combine(response.data.data, response.data.included, this.params);
           this.loading = false;
         }).then(() => {
-          this.$log.trackEventEntityView('node', 'vy_blog_post', this.blog.attributes.drupal_internal__nid);
+          this.$log.trackEvent('entityView', 'node', 'vy_blog_post', this.blog.attributes.drupal_internal__nid);
         })
         .catch((error) => {
           this.error = true;

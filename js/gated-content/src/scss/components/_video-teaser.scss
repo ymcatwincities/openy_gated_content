@@ -25,6 +25,36 @@
     padding-bottom: 56.25%;
     background-size: contain;
 
+    .y-video__button {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+      padding: 0;
+      border-width: 0;
+      background-color: transparent;
+      width: 68px;
+      height: 48px;
+
+      .y-video__button-shape {
+        fill: $y-video-button-shape;
+        fill-opacity: .8;
+      }
+
+      .y-video__button-icon {
+        fill: $white;
+      }
+
+      &:focus {
+        outline: 0;
+
+        .y-video__button-shape {
+          fill: $red;
+          fill-opacity: 1;
+        }
+      }
+    }
+
     .duration {
       position: absolute;
       left: 0;
@@ -53,9 +83,13 @@
   }
 
   &:focus, &:hover {
-    .y-video__button-shape {
-      fill: $red;
-      fill-opacity: 1;
+    .preview {
+      .y-video__button {
+        .y-video__button-shape {
+          fill: $red;
+          fill-opacity: 1;
+        }
+      }
     }
   }
 }
