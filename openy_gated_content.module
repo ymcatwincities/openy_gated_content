@@ -72,13 +72,23 @@ function openy_gated_content_preprocess_paragraph(&$variables) {
       $backgroundImage = $image_style->buildUrl($mediaImage->field_media_image->entity->uri->value);
     }
 
-    $variables['headline'] = json_encode([
+    if (empty($backgroundImage)) {
+      $file = 'base://' . drupal_get_path('module', 'openy_gated_content') . '/assets/img/paragraph-headline.png';
+      $backgroundImage = Url::fromUri($file)->setAbsolute()->toString();
+    }
+
+    $headline = [
       'title' => $variables['paragraph']->field_prgf_title->value,
       'description' => $variables['paragraph']->field_prgf_description->value,
-      'linkText' => $variables['paragraph']->field_prgf_link->title,
-      'linkUrl' => Url::fromUri($variables['paragraph']->field_prgf_link->uri)->toString(),
       'backgroundImage' => $backgroundImage,
-    ]);
+    ];
+
+    if ($variables['paragraph']->field_prgf_link->title) {
+      $headline['linkText'] = $variables['paragraph']->field_prgf_link->title;
+      $headline['linkUrl'] = Url::fromUri($variables['paragraph']->field_prgf_link->uri)->toString();
+    }
+
+    $variables['headline'] = json_encode($headline);
   }
 
   $variables['#cache']['tags'][] = 'config:' . $plugin_instance->getConfigName();
