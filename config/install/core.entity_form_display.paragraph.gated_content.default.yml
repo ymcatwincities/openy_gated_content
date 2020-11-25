@@ -1,0 +1,61 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - entity_browser.browser.images_library
+    - field.field.paragraph.gated_content.field_prgf_description
+    - field.field.paragraph.gated_content.field_prgf_image
+    - field.field.paragraph.gated_content.field_prgf_link
+    - field.field.paragraph.gated_content.field_prgf_title
+    - paragraphs.paragraphs_type.gated_content
+  module:
+    - link
+    - openy_focal_point
+    - text
+id: paragraph.gated_content.default
+targetEntityType: paragraph
+bundle: gated_content
+mode: default
+content:
+  field_prgf_description:
+    weight: 1
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+    type: text_textarea
+    region: content
+  field_prgf_image:
+    weight: 3
+    settings:
+      entity_browser: images_library
+      field_widget_display: rendered_entity
+      field_widget_edit: '1'
+      field_widget_remove: '1'
+      selection_mode: selection_append
+      field_widget_display_settings:
+        view_mode: embedded_half
+      field_widget_replace: 0
+      open: 0
+    third_party_settings: {  }
+    type: openy_focal_point_entity_browser_entity_reference
+    region: content
+  field_prgf_link:
+    weight: 2
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+    type: link_default
+    region: content
+  field_prgf_title:
+    weight: 0
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+hidden:
+  created: true
+  status: true
