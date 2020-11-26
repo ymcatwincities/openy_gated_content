@@ -122,7 +122,7 @@ class DaxkoSSO extends GCIdentityProviderPluginBase {
 
     $form['error_accompanying_message'] = [
       '#title' => $this->t('Authentication error message'),
-      '#description' => $this->t('Message displayed to user when he failed to log in using personify plugin.'),
+      '#description' => $this->t('Message displayed to user when he failed to log in using this plugin.'),
       '#type' => 'textfield',
       '#default_value' => $config['error_accompanying_message'],
       '#required' => FALSE,
