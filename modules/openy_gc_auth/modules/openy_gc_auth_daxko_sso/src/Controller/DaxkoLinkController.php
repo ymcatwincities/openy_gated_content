@@ -135,12 +135,12 @@ class DaxkoLinkController extends ControllerBase {
     $userData = $this->daxkoClient->getMyInfo($token);
 
     if ($userData) {
-      $userUnitData = $this->daxkoClient->getRequest('/units/' . $userData->member_unit_id);
+      $userUnitData = $this->daxkoClient->getRequest('units/' . $userData->member_unit_id);
       $userDetails = $this->daxkoClient->getRequest('members/' . $userData->member_id);
       // Check if this user is an active client.
       if ($userUnitData->status == 'Active') {
         // Create drupal user if it doesn't exist and login it.
-        $name = $userDetails->name->first_name . ' ' . $userDetails->name->last_name;
+        $name = $userDetails->name->first_name . ' ' . $userDetails->name->last_name . ' ' . $userDetails->member_id;
         $email = "daxko-{$userData->member_id}@virtualy.openy.org";
 
         // Authorize user (register, login, log, etc).
