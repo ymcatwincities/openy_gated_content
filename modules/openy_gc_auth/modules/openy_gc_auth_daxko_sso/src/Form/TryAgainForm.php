@@ -59,7 +59,10 @@ class TryAgainForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $form['#prefix'] = '<h4 class="text-center">' . $this->t('You were not able to login') . '</h4>';
+
+    $form['error'] = [
+      '#markup' => '<h4 class="text-center">' . $this->t('There may be a problem with your account') . '</h4>'
+    ];
 
     $form['#action'] = $this->configFactory->get('openy_gated_content.settings')->get('virtual_y_login_url');
 
