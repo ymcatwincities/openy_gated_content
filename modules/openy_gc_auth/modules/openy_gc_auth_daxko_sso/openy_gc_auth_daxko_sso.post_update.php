@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * @file
+ * Contains hook_post_update_NAME() implementations.
+ */
+
+/**
  * Delete old Daxko SSO users from system before update.
  */
 function openy_gc_auth_daxko_sso_delete_old_users(&$sandbox) {
@@ -38,7 +43,7 @@ function openy_gc_auth_daxko_sso_delete_old_users(&$sandbox) {
   foreach ($users as $user) {
     $roles = $user->getRoles();
     // Delete only users that have only virtual_y role.
-    if (count($roles)>1) {
+    if (count($roles) > 1) {
       $user->delete();
     }
 

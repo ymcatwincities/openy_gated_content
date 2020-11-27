@@ -173,7 +173,6 @@ class DaxkoSSO extends GCIdentityProviderPluginBase {
       $headers
     );
     $response->send();
-    
   }
 
 }
