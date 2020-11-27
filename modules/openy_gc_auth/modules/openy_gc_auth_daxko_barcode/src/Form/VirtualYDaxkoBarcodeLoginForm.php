@@ -7,9 +7,10 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
- * Class VirtualYDaxkoBarcodeLogin Form.
+ * Class VirtualYDaxkoBarcodeLoginForm.
  *
  * @package Drupal\openy_gc_auth_daxko_barcode\Form
  */
@@ -23,10 +24,18 @@ class VirtualYDaxkoBarcodeLoginForm extends FormBase {
   protected $currentRequest;
 
   /**
+   * Config factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * {@inheritdoc}
    */
-  public function __construct(RequestStack $requestStack) {
+  public function __construct(RequestStack $requestStack, ConfigFactoryInterface $configFactory) {
     $this->currentRequest = $requestStack->getCurrentRequest();
+    $this->configFactory = $configFactory;
   }
 
   /**
@@ -34,7 +43,8 @@ class VirtualYDaxkoBarcodeLoginForm extends FormBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('request_stack')
+      $container->get('request_stack'),
+      $container->get('config.factory')
     );
   }
 
@@ -49,10 +59,11 @@ class VirtualYDaxkoBarcodeLoginForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
+    $config = $this->configFactory->get('openy_gc_auth.provider.daxco_barcode');
 
     $form['barcode'] = [
-      '#title' => $this->t('Barcode'),
-      '#description' => '',
+      '#title' => $this->t('@form_label', array('@form_label' => $config->get('form_label'))),
+      '#description' => $this->t('@form_description', array('@form_description' => $config->get('form_description'))),
       '#type' => 'textfield',
       '#default_value' => '',
       '#required' => TRUE,
