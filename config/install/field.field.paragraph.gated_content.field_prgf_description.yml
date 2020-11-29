@@ -19,7 +19,10 @@ label: 'Headline Description'
 description: ''
 required: false
 translatable: true
-default_value: {  }
+default_value:
+  -
+    value: "<p>Find the newest Y classes and programs</p>\r\n\r\n<p><a class=\"btn btn-primary\" href=\"#/live-stream\"><span class=\"text\">Live Streams</span></a>&nbsp; <a class=\"btn btn-primary\" href=\"#/categories/video\"><span class=\"text\">Videos</span></a></p>\r\n"
+    format: full_html
 default_value_callback: ''
 settings: {  }
 field_type: text_long

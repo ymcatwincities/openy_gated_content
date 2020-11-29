@@ -7,7 +7,7 @@
   background-position: center;
   background-size:     cover;
 
-  @include median(min-height, 480px, 360px);
+  @include median(min-height, 420px, 300px);
   @include median(padding, 90px 10px, 77px 10px, 65px 10px);
 
   .paragraph-headline__content {
@@ -34,6 +34,16 @@
       color:   white;
 
       @include median(font-size, 18px, 16px);
+
+      a.btn {
+        background-color: transparent;
+        border: 2px solid white;
+
+        &:hover {
+          border-color: darken(white, 20%);
+          color:        darken(white, 20%);
+        }
+      }
     }
 
     .paragraph-headline__link {
