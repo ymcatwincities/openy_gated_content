@@ -14,6 +14,10 @@ use Drupal\Core\Config\ConfigFactoryInterface;
  *
  * @package Drupal\openy_gc_auth_daxko_barcode\Form
  */
+
+/**
+ * Form handler for VirtualY Daxko Barcode Login.
+ */
 class VirtualYDaxkoBarcodeLoginForm extends FormBase {
 
   /**
