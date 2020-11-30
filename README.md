@@ -57,6 +57,8 @@ You can add this script to .git/hooks/pre-commit to run phpcs and phpcbf on `git
 ```shell script
 PROJECT=`php -r "echo dirname(dirname(dirname(realpath('$0'))));"`
 cd $PROJECT
+echo "Running phpcs and phpcbf..."
+phpcs .
 if [ $? != 0 ]
 then
     phpcbf .
