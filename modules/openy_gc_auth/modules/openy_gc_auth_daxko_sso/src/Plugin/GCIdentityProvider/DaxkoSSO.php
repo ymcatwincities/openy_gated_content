@@ -68,6 +68,7 @@ class DaxkoSSO extends GCIdentityProviderPluginBase {
   public function defaultConfiguration():array {
     return [
       'redirect_url' => '',
+      'login_mode' => 'present_login_button',
     ];
   }
 
@@ -128,6 +129,17 @@ class DaxkoSSO extends GCIdentityProviderPluginBase {
       '#required' => FALSE,
     ];
 
+    $form['login_mode'] = [
+      '#title' => $this->t('Login mode'),
+      '#type' => 'radios',
+      '#default_value' => $config['login_mode'],
+      '#required' => TRUE,
+      '#options' => [
+        'present_login_button' => $this->t('Present login button'),
+        'redirect_immediately' => $this->t('Redirect immediately'),
+      ],
+    ];
+
     return $form;
   }
 
@@ -138,6 +150,7 @@ class DaxkoSSO extends GCIdentityProviderPluginBase {
     if (!$form_state->getErrors()) {
       $this->configuration['redirect_url'] = $form_state->getValue('redirect_url');
       $this->configuration['error_accompanying_message'] = $form_state->getValue('error_accompanying_message');
+      $this->configuration['login_mode'] = $form_state->getValue('login_mode');
 
       $baseUrl = $this->request->getSchemeAndHttpHost();
 
@@ -159,7 +172,11 @@ class DaxkoSSO extends GCIdentityProviderPluginBase {
    * {@inheritdoc}
    */
   public function getLoginForm() {
+
     if ($this->request->query->has('error')) {
+      return $this->formBuilder->getForm('Drupal\openy_gc_auth_daxko_sso\Form\TryAgainForm');
+    }
+    elseif ($this->configuration['login_mode'] === 'present_login_button') {
       return $this->formBuilder->getForm('Drupal\openy_gc_auth_daxko_sso\Form\TryAgainForm');
     }
 

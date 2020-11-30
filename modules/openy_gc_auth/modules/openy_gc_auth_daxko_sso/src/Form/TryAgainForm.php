@@ -52,7 +52,7 @@ class TryAgainForm extends FormBase {
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'openy_gc_auth_example_login_form';
+    return 'openy_gc_auth_daxko_sso_try_again';
   }
 
   /**
@@ -60,13 +60,16 @@ class TryAgainForm extends FormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
 
-    $form['error'] = [
-      '#markup' => '<h4 class="alert alert-danger text-center">' . $this->t('There may be a problem with your account') . '</h4>',
-    ];
+    if (!empty($this->currentRequest->query->get('error'))) {
+      $form['error'] = [
+        '#markup' => '<h4 class="alert alert-danger text-center">' . $this->t('There may be a problem with your account') . '</h4>',
+      ];
 
-    $form['error_contact_message'] = [
-      '#markup' => '<div class="alert alert-info text-center">' . $this->configFactory->get('openy_gc_auth.provider.daxko_sso')->get('error_accompanying_message') . '</div>',
-    ];
+      $form['error_contact_message'] = [
+        '#markup' => '<div class="alert alert-info text-center">' . $this->configFactory->get('openy_gc_auth.provider.daxko_sso')
+            ->get('error_accompanying_message') . '</div>',
+      ];
+    }
 
     $form['#action'] = $this->configFactory->get('openy_gated_content.settings')->get('virtual_y_login_url');
 
