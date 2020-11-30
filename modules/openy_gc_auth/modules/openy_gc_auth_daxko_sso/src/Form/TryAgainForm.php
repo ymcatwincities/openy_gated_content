@@ -67,7 +67,7 @@ class TryAgainForm extends FormBase {
 
       $form['error_contact_message'] = [
         '#markup' => '<div class="alert alert-info text-center">' . $this->configFactory->get('openy_gc_auth.provider.daxko_sso')
-            ->get('error_accompanying_message') . '</div>',
+          ->get('error_accompanying_message') . '</div>',
       ];
     }
 
