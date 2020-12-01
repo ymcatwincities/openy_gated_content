@@ -177,7 +177,7 @@ class DaxkoSSO extends GCIdentityProviderPluginBase {
       return $this->formBuilder->getForm('Drupal\openy_gc_auth_daxko_sso\Form\TryAgainForm');
     }
     elseif ($this->configuration['login_mode'] === 'present_login_button') {
-      return $this->formBuilder->getForm('Drupal\openy_gc_auth_daxko_sso\Form\TryAgainForm');
+      return $this->formBuilder->getForm('Drupal\openy_gc_auth_daxko_sso\Form\VirtualYDaxkoSSOLoginForm');
     }
 
     // Forcing no-cache at redirect headers.
