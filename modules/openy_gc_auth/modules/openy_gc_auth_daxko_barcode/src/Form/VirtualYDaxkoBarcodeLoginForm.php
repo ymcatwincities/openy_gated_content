@@ -66,12 +66,8 @@ class VirtualYDaxkoBarcodeLoginForm extends FormBase {
     $config = $this->configFactory->get('openy_gc_auth.provider.daxco_barcode');
 
     $form['barcode'] = [
-      '#title' => $this->t('%title', [
-        '%title' => $config->get('form_label'),
-      ]),
-      '#description' => $this->t('%description', [
-        '%description' => $config->get('form_description'),
-      ]),
+      '#title' =>  $config->get('form_label'),
+      '#description' => $config->get('form_description'),
       '#type' => 'textfield',
       '#default_value' => '',
       '#required' => TRUE,
