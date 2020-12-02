@@ -68,20 +68,6 @@
     bottom: 30px;
     background-color: $dark-blue;
   }
-
-  .favorites-link {
-    right: 30px;
-    bottom: 90px;
-    background-color: $indigo;
-
-    a {
-      padding: 10px;
-    }
-
-    @media all and (max-width: 600px) {
-      display: none;
-    }
-  }
 }
 
 .openy_carnation {

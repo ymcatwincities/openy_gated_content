@@ -8,7 +8,6 @@
       <Spinner></Spinner>
     </div>
     <router-view v-else/>
-    <FavoritesLink></FavoritesLink>
     <ScrollToTop></ScrollToTop>
   </div>
 </template>
@@ -17,7 +16,6 @@
 import LogoutLink from '@/components/LogoutLink.vue';
 import Spinner from '@/components/Spinner.vue';
 import ScrollToTop from '@/components/ScrollToTop.vue';
-import FavoritesLink from '@/components/FavoritesLink.vue';
 import { mapGetters } from 'vuex';
 
 export default {
@@ -33,7 +31,6 @@ export default {
     LogoutLink,
     Spinner,
     ScrollToTop,
-    FavoritesLink,
   },
   computed: {
     ...mapGetters([
