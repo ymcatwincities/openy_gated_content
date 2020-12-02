@@ -16,4 +16,7 @@ module.exports = {
       patterns: [path.resolve(__dirname, './src/scss/global.scss')],
     },
   },
+  transpileDependencies: [
+    /\w+/,
+  ],
 };
