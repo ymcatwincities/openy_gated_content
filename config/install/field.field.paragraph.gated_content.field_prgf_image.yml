@@ -16,7 +16,7 @@ field_name: field_prgf_image
 entity_type: paragraph
 bundle: gated_content
 label: 'Headline Background Image'
-description: ''
+description: 'Please, use this field to change the background image for Virtual Y headline section'
 required: false
 translatable: true
 default_value: {  }
