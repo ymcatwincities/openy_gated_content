@@ -138,17 +138,17 @@ export default {
       }
       return this.video.relationships.field_gc_video_category.data[0].id;
     },
-
     videoId() {
-      if(this.video.attributes.field_gc_video_media) {
-        var videoObjField = this.video.attributes.field_gc_video_media.field_media_video_embed_field;
-        if(this.video.attributes.field_gc_video_media.field_media_source === 'youtube_playlist') {
+      let videoObjField = this.video.attributes.field_gc_video_media.field_media_video_embed_field;
+      if (this.video.attributes.field_gc_video_media) {
+        if (this.video.attributes.field_gc_video_media.field_media_source === 'youtube_playlist') {
           this.video.attributes.field_gc_video_media.field_media_source = 'youtube';
-          videoObjField = videoObjField.match(/(\?|&)v=([^&#]+)/).pop()
+          videoObjField = videoObjField.match(/(\?|&)v=([^&#]+)/).pop();
           this.video.attributes.field_gc_video_media.field_media_video_id = videoObjField;
         }
         return this.video.attributes.field_gc_video_media;
       }
+      return ;
     },
   },
   methods: {
