@@ -7,7 +7,10 @@
     <template v-else>
       <div class="video-wrapper">
         <div class="video gated-container">
-          <MediaPlayer :media="media"/>
+          <MediaPlayer
+            :media="media"
+            @playerEvent="logPlaybackEvent($event)"
+          />
         </div>
       </div>
       <div class="video-footer-wrapper">
@@ -166,7 +169,7 @@ export default {
           }
           this.loading = false;
         }).then(() => {
-          this.$log.trackEventEntityView('series', 'live_stream', this.video.attributes.drupal_internal__id);
+          this.logPlaybackEvent('entityView');
         })
         .catch((error) => {
           this.error = true;
@@ -174,6 +177,9 @@ export default {
           console.error(error);
           throw error;
         });
+    },
+    logPlaybackEvent(eventType) {
+      this.$log.trackEvent(eventType, 'series', 'live_stream', this.video.attributes.drupal_internal__id);
     },
   },
 };

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="listingIsNotEmpty" class="gated-container">
+  <div v-if="showlisting" class="gated-container">
     <h2 class="title">{{ title }}</h2>
     <div v-if="loading" class="text-center">
       <Spinner></Spinner>
@@ -51,6 +51,7 @@ export default {
       loading: true,
       error: false,
       listing: null,
+      showlisting: false,
       params: [
         'field_gc_category_media',
         // Sub-relationship should be after parent field.
@@ -66,9 +67,6 @@ export default {
     sort: 'load',
   },
   computed: {
-    listingIsNotEmpty() {
-      return this.listing !== null && this.listing.length > 0;
-    },
     title() {
       switch (this.type) {
         case 'video':
@@ -80,8 +78,21 @@ export default {
       }
     },
   },
+  watch: {
+    type() {
+      this.load();
+    },
+  },
   methods: {
+    listingIsNotEmpty() {
+      if (this.listing !== null && this.listing.length > 0) {
+        this.showlisting = true;
+      } else {
+        this.showlisting = false;
+      }
+    },
     async load() {
+      this.showlisting = false;
       const params = {};
       const bundle = this.type === 'video' ? 'gc_video' : 'vy_blog_post';
       if (this.params) {
@@ -146,6 +157,7 @@ export default {
                   response2.data.included,
                   this.params,
                 );
+                this.showlisting = true;
                 this.loading = false;
               })
               .catch((error) => {
