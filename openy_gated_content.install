@@ -195,6 +195,9 @@ function openy_gated_content_update_8010() {
     'base_table' => 'vy_favorite_item',
     'translatable' => FALSE,
     'admin_permission' => 'administer gated content favorite items',
+    'handlers' => [
+      'storage_schema' => 'Drupal\openy_gated_content\VyFavoriteItemStorageSchema',
+    ],
     'entity_keys' => [
       'id' => 'id',
       'ref_entity_type' => 'ref_entity_type',

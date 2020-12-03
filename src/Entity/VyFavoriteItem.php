@@ -16,6 +16,9 @@ use Drupal\user\EntityOwnerTrait;
  *   id = "vy_favorite_item",
  *   label = @Translation("VY Favorite Item"),
  *   base_table = "vy_favorite_item",
+ *   handlers = {
+ *     "storage_schema" = "Drupal\openy_gated_content\VyFavoriteItemStorageSchema"
+ *   },
  *   entity_keys = {
  *     "id" = "id",
  *     "ref_entity_type" = "ref_entity_type",
