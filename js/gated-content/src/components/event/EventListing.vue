@@ -38,10 +38,11 @@ import client from '@/client';
 import EventTeaser from '@/components/event/EventTeaser.vue';
 import Spinner from '@/components/Spinner.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
+import { FavoritesMixin } from '@/mixins/FavoritesMixin';
 
 export default {
   name: 'EventListing',
-  mixins: [JsonApiCombineMixin],
+  mixins: [JsonApiCombineMixin, FavoritesMixin],
   components: {
     EventTeaser,
     Spinner,
@@ -70,6 +71,16 @@ export default {
     featured: {
       type: Boolean,
       default: false,
+    },
+    favorites: {
+      type: Boolean,
+      default: false,
+    },
+    sort: {
+      type: Object,
+      default() {
+        return { path: 'date.value', direction: 'ASC' };
+      },
     },
     limit: {
       type: Number,
@@ -102,6 +113,8 @@ export default {
     $route: 'load',
     excludedVideoId: 'load',
     date: 'load',
+    eventType: 'load',
+    sort: 'load',
   },
   async mounted() {
     this.featuredLocal = this.featured;
@@ -196,6 +209,20 @@ export default {
         };
       }
 
+      if (this.favorites) {
+        if (this.isFavoritesTypeEmpty('eventinstance', this.eventType)) {
+          this.loading = false;
+          return;
+        }
+        params.filter.includeFavorites = {
+          condition: {
+            path: 'drupal_internal__id',
+            operator: 'IN',
+            value: this.getFavoritesTypeIds('eventinstance', this.eventType),
+          },
+        };
+      }
+
       if (this.limit !== 0) {
         params.page = {
           limit: this.limit,
@@ -208,10 +235,7 @@ export default {
 
       params.filter.status = 1;
       params.sort = {
-        sortByDate: {
-          path: 'date.value',
-          direction: 'ASC',
-        },
+        sortByDate: this.sort,
       };
 
       client

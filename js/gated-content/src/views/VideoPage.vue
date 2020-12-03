@@ -19,6 +19,11 @@
               class="video-footer__description"
                  v-html="video.attributes.field_gc_video_description.processed"
             ></div>
+            <AddToFavorite
+              :id="video.attributes.drupal_internal__nid"
+              :type="'node'"
+              :bundle="'gc_video'"
+            ></AddToFavorite>
           </div>
           <div>
             <div
@@ -85,6 +90,7 @@
 
 <script>
 import client from '@/client';
+import AddToFavorite from '@/components/AddToFavorite.vue';
 import Spinner from '@/components/Spinner.vue';
 import VideoListing from '@/components/video/VideoListing.vue';
 import MediaPlayer from '@/components/MediaPlayer.vue';
@@ -98,6 +104,7 @@ export default {
     MediaPlayer,
     VideoListing,
     Spinner,
+    AddToFavorite,
   },
   props: {
     id: {

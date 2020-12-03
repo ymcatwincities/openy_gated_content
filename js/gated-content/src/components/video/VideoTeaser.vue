@@ -17,15 +17,22 @@
           {{ video.attributes.field_gc_video_level.name | capitalize }}
         </div>
     </router-link>
+    <AddToFavorite
+      :id="video.attributes.drupal_internal__nid"
+      :type="'node'"
+      :bundle="'gc_video'"
+    ></AddToFavorite>
   </div>
 </template>
 
 <script>
+import AddToFavorite from '@/components/AddToFavorite.vue';
 import YoutubePlayButton from '@/components/YoutubePlayButton.vue';
 
 export default {
   name: 'VideoTeaser',
   components: {
+    AddToFavorite,
     YoutubePlayButton,
   },
   props: {

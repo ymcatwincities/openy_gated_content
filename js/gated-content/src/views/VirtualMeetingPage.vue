@@ -24,6 +24,11 @@
               class="video-footer__description"
                  v-html="descriptionProcessed"
             ></div>
+            <AddToFavorite
+              :id="video.attributes.drupal_internal__id"
+              :type="'eventinstance'"
+              :bundle="'virtual_meeting'"
+            ></AddToFavorite>
             <AddToCalendar :event="event" class="mt-3"></AddToCalendar>
           </div>
           <div>
@@ -76,6 +81,7 @@
 
 <script>
 import client from '@/client';
+import AddToFavorite from '@/components/AddToFavorite.vue';
 import Spinner from '@/components/Spinner.vue';
 import EventListing from '@/components/event/EventListing.vue';
 import AddToCalendar from '@/components/event/AddToCalendar.vue';
@@ -86,6 +92,7 @@ export default {
   name: 'VirtualMeetingPage',
   mixins: [JsonApiCombineMixin, EventMixin],
   components: {
+    AddToFavorite,
     EventListing,
     AddToCalendar,
     Spinner,

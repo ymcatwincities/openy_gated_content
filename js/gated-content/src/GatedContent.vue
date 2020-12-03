@@ -34,14 +34,9 @@ export default {
       'getAppSettings',
     ]),
   },
-  created() {
-    this.$store.dispatch('setAppUrl', this.appUrl);
-    if (this.appUrl !== undefined && this.appUrl.length > 0) {
-      window.location = this.appUrl;
-    }
-  },
-  mounted() {
-    this.$store.dispatch('setSettings', JSON.parse(this.settings));
+  async mounted() {
+    await this.$store.dispatch('setSettings', JSON.parse(this.settings));
+    await this.$store.dispatch('loadFavorites');
   },
 };
 </script>

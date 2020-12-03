@@ -10,6 +10,7 @@ import LiveStreamPage from '@/views/LiveStreamPage.vue';
 import LiveStreamListingPage from '@/views/LiveStreamListingPage.vue';
 import VirtualMeetingPage from '@/views/VirtualMeetingPage.vue';
 import VirtualMeetingListingPage from '@/views/VirtualMeetingListingPage.vue';
+import FavoritesPage from '@/views/FavoritesPage.vue';
 
 Vue.use(VueRouter);
 
@@ -73,6 +74,13 @@ const routes = [
     path: '/blog-post/:id',
     name: 'BlogPage',
     component: BlogPage,
+    props: true,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/favorites',
+    name: 'Favorites',
+    component: FavoritesPage,
     props: true,
     meta: { requiresAuth: true },
   },

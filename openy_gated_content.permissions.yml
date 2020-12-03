@@ -8,3 +8,7 @@ administer gated content configuration:
 view gated content entities pages:
   title: 'View gated content entities pages'
   description: 'Users with this permission can access gated content node/eventseries/eventinstance pages.'
+administer gated content favorite items:
+  title: 'Administer gated content favorite items'
+  description: 'Users with this permission can access gated content favorite items configuration.'
+  restrict access: true

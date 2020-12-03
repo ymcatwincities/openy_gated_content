@@ -20,10 +20,11 @@ import client from '@/client';
 import CategoryTeaser from '@/components/video/CategoryTeaser.vue';
 import Spinner from '@/components/Spinner.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
+import { FavoritesMixin } from '@/mixins/FavoritesMixin';
 
 export default {
   name: 'CategoriesListing',
-  mixins: [JsonApiCombineMixin],
+  mixins: [JsonApiCombineMixin, FavoritesMixin],
   components: {
     CategoryTeaser,
     Spinner,
@@ -31,10 +32,16 @@ export default {
   props: {
     type: {
       type: String,
-      required: true,
-      validator(value) {
-        // Can be video or blog.
-        return ['video', 'blog'].indexOf(value) !== -1;
+      default: '',
+    },
+    favorites: {
+      type: Boolean,
+      default: false,
+    },
+    sort: {
+      type: Object,
+      default() {
+        return { path: 'weight', direction: 'ASC' };
       },
     },
     msg: String,
@@ -55,12 +62,22 @@ export default {
   async mounted() {
     await this.load();
   },
+  watch: {
+    sort: 'load',
+  },
   computed: {
     listingIsNotEmpty() {
       return this.listing !== null && this.listing.length > 0;
     },
     title() {
-      return this.type === 'video' ? 'Video categories' : 'Blog categories';
+      switch (this.type) {
+        case 'video':
+          return 'Video categories';
+        case 'blog':
+          return 'Blog categories';
+        default:
+          return 'Categories';
+      }
     },
   },
   methods: {
@@ -69,6 +86,43 @@ export default {
       const bundle = this.type === 'video' ? 'gc_video' : 'vy_blog_post';
       if (this.params) {
         params.include = this.params.join(',');
+      }
+
+      params.sort = {
+        sortBy: this.sort,
+      };
+
+      if (this.favorites) {
+        if (this.isFavoritesTypeEmpty('taxonomy_term', 'gc_category')) {
+          this.loading = false;
+          return;
+        }
+        params.filter = {};
+        params.filter.includeFavorites = {
+          condition: {
+            path: 'drupal_internal__tid',
+            operator: 'IN',
+            value: this.getFavoritesTypeIds('taxonomy_term', 'gc_category'),
+          },
+        };
+
+        client
+          .get('jsonapi/taxonomy_term/gc_category', { params })
+          .then((response) => {
+            this.listing = this.combineMultiple(
+              response.data.data,
+              response.data.included,
+              this.params,
+            );
+            this.loading = false;
+          })
+          .catch((error) => {
+            this.error = true;
+            this.loading = false;
+            console.error(error);
+            throw error;
+          });
+        return;
       }
 
       client

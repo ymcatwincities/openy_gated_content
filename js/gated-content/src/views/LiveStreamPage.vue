@@ -19,6 +19,11 @@
               class="video-footer__description mb-3"
               v-html="descriptionProcessed"
             ></div>
+            <AddToFavorite
+              :id="video.attributes.drupal_internal__id"
+              :type="'eventinstance'"
+              :bundle="'live_stream'"
+            ></AddToFavorite>
             <AddToCalendar :event="event" class="mt-3"></AddToCalendar>
           </div>
           <div>
@@ -70,6 +75,7 @@
 
 <script>
 import client from '@/client';
+import AddToFavorite from '@/components/AddToFavorite.vue';
 import Spinner from '@/components/Spinner.vue';
 import MediaPlayer from '@/components/MediaPlayer.vue';
 import EventListing from '@/components/event/EventListing.vue';
@@ -81,6 +87,7 @@ export default {
   name: 'LiveStreamPage',
   mixins: [JsonApiCombineMixin, EventMixin],
   components: {
+    AddToFavorite,
     MediaPlayer,
     EventListing,
     AddToCalendar,
