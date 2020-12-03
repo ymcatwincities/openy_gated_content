@@ -138,18 +138,6 @@ export default {
       }
       return this.video.relationships.field_gc_video_category.data[0].id;
     },
-    videoId() {
-      let videoObjField = this.video.attributes.field_gc_video_media.field_media_video_embed_field;
-      if (this.video.attributes.field_gc_video_media) {
-        if (this.video.attributes.field_gc_video_media.field_media_source === 'youtube_playlist') {
-          this.video.attributes.field_gc_video_media.field_media_source = 'youtube';
-          videoObjField = videoObjField.match(/(\?|&)v=([^&#]+)/).pop();
-          this.video.attributes.field_gc_video_media.field_media_video_id = videoObjField;
-        }
-        return this.video.attributes.field_gc_video_media;
-      }
-      return ;
-    },
   },
   methods: {
     async load() {
@@ -162,6 +150,14 @@ export default {
         .get(`jsonapi/node/gc_video/${this.id}`, { params })
         .then((response) => {
           this.video = this.combine(response.data.data, response.data.included, this.params);
+          let embedObj = this.video.attributes.field_gc_video_media.field_media_video_embed_field;
+          if (this.video.attributes.field_gc_video_media) {
+            if (this.video.attributes.field_gc_video_media.field_media_source === 'youtube_playlist') {
+              this.video.attributes.field_gc_video_media.field_media_source = 'youtube';
+              embedObj = embedObj.match(/(\?|&)v=([^&#]+)/).pop();
+              this.video.attributes.field_gc_video_media.field_media_video_id = embedObj;
+            }
+          }
           this.loading = false;
         }).then(() => {
           this.logPlaybackEvent('entityView');
