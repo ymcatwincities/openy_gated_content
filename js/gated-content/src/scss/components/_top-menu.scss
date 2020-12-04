@@ -30,17 +30,16 @@
     }
 
     button {
-      @include median(display, none, inline-block);
       outline:          none;
       border:           none;
       background-color: transparent;
+      padding-right:    10px;
       text-align:       right;
 
-      &:before {
-        display:     inline-block;
-        font-family: 'Font Awesome 5 Free';
-        font-weight: 900;
-        content:     '\f00a';
+      @include median(display, none, inline-block);
+
+      svg {
+        width: 25px;
       }
     }
   }
@@ -54,12 +53,6 @@
     height:           100vh;
 
     @include median(padding, initial, 11px 34px, 11px 10px);
-
-    button {
-      &:before {
-        content: '\f00d';
-      }
-    }
 
     a:first-child, button {
       margin-bottom: 30px;

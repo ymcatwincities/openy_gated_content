@@ -5,8 +5,18 @@
         :to="{ name: 'Home' }"
         :style="fontStyleObject"
         @click.native="menuOpen=false"
-      >Virtual YMCA</router-link>
-      <button @click="menuOpen = !menuOpen" :style="fontStyleObject"></button>
+      >Virtual YMCA
+      </router-link>
+      <button @click="menuOpen = !menuOpen" :style="fontStyleObject">
+        <MenuIcon
+          v-if="!menuOpen"
+          :color="fontColor"
+        ></MenuIcon>
+        <CloseIcon
+          v-else
+          :color="fontColor"
+        ></CloseIcon>
+      </button>
       <router-link
         :to="{ name: 'Home' }"
         :style="fontStyleObject"
@@ -49,10 +59,14 @@ import FavoritesIcon from '@/components/svg/FavoritesIcon.vue';
 import CategoriesIcon from '@/components/svg/CategoriesIcon.vue';
 import LogoutIcon from '@/components/svg/LogoutIcon.vue';
 import { mapGetters, mapState } from 'vuex';
+import MenuIcon from '@/components/svg/MenuIcon';
+import CloseIcon from '@/components/svg/CloseIcon';
 
 export default {
   name: 'TopMenu',
   components: {
+    CloseIcon,
+    MenuIcon,
     LogoutIcon,
     CategoriesIcon,
     FavoritesIcon,
