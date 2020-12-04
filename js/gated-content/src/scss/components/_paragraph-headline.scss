@@ -36,12 +36,13 @@
       @include median(font-size, 18px, 16px);
 
       a.btn {
+        border:           2px solid white;
         background-color: transparent;
-        border: 2px solid white;
 
         &:hover {
-          border-color: darken(white, 20%);
-          color:        darken(white, 20%);
+          border-color:     darken(white, 20%);
+          background-color: white;
+          color:            black;
         }
       }
     }
@@ -56,8 +57,9 @@
       @include median(padding, 12px 40px, 10px 30px);
 
       &:hover {
-        border-color: darken(white, 20%);
-        color:        darken(white, 20%);
+        border-color:     darken(white, 20%);
+        background-color: white;
+        color:            black;
       }
     }
   }
