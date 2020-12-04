@@ -178,7 +178,7 @@ class GCSettingsForm extends ConfigFormBase {
         '#default_value' => $config->get('top_menu.background_color_dark'),
         '#description' => $this->t('Provide color for top menu background (dark)'),
         '#required' => TRUE,
-      ]
+      ],
     ];
 
     $form['actions']['#type'] = 'actions';
