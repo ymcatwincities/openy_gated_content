@@ -1,0 +1,72 @@
+.openy_carnation-based.openy-gated-content,
+.openy_lily-based.openy-gated-content,
+.openy_rose-based.openy-gated-content {
+  #gated-content {
+    @include median(padding-top, 90px, 45px);
+
+    .top-menu {
+      background-color: black;
+      position: fixed;
+      width: 100%;
+      z-index: 1200;
+
+      &.menuOpen {
+        @include median(top, 0);
+      }
+    }
+  }
+}
+
+.openy_carnation-based.openy-gated-content {
+  #gated-content {
+    .top-menu {
+      @include median(top, 138px, 78px);
+    }
+  }
+
+  &.toolbar-fixed #gated-content .top-menu {
+    @include median(top, calc(138px + 39px), calc(78px + 39px));
+  }
+
+  &.toolbar-tray-open #gated-content .top-menu {
+    @include median(top, calc(138px + 79px), calc(78px + 39px));
+  }
+}
+
+.openy_lily-based.openy-gated-content {
+  .breadcrumb-container {
+    display: none;
+  }
+
+  #gated-content {
+    .top-menu {
+      @include median(top, 162px, 80px);
+    }
+  }
+
+  &.toolbar-tray-open #gated-content .top-menu {
+    top: calc(162px + 27px);
+  }
+}
+
+.openy_rose-based.openy-gated-content {
+  #block-openy-rose-breadcrumbs {
+    display: none;
+  }
+
+  #gated-content {
+    .top-menu {
+      @include median(top, 165px, 70px);
+    }
+  }
+
+  &.primary-menu-minimize {
+    #gated-content .top-menu {
+      top: 42px;
+    }
+  }
+}
+
+.toolbar-icon-openy-gated-content-openy:before {
+  background-image: url(/profiles/contrib/openy/modules/custom/openy_system/assets/images/icon-gear-inactive.png);
+}
