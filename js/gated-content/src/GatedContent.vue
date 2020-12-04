@@ -1,9 +1,6 @@
 <template>
   <div>
-    <nav class="text-right gated-container">
-      <router-link :to="{ name: 'Home' }">Home</router-link> |
-      <LogoutLink />
-    </nav>
+    <TopMenu></TopMenu>
     <div v-if="!getAppSettings" class="text-center">
       <Spinner></Spinner>
     </div>
@@ -12,8 +9,8 @@
 </template>
 
 <script>
-import LogoutLink from '@/components/LogoutLink.vue';
 import Spinner from '@/components/Spinner.vue';
+import TopMenu from '@/components/TopMenu.vue';
 import { mapGetters } from 'vuex';
 
 export default {
@@ -26,7 +23,7 @@ export default {
     },
   },
   components: {
-    LogoutLink,
+    TopMenu,
     Spinner,
   },
   computed: {

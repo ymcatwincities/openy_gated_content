@@ -3,9 +3,11 @@
 @import "../../node_modules/bootstrap/scss/variables";
 @import "../../node_modules/bootstrap/scss/mixins";
 
+@import "mixins";
 @import "variables";
 @import "widgets/video-level";
 @import "widgets/button";
+@import "components/top-menu";
 @import "components/video-listing";
 @import "components/video-teaser";
 @import "components/event-teaser";
