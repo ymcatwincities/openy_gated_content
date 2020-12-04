@@ -8,7 +8,7 @@
       <div class="video-wrapper">
         <div class="video gated-container">
           <MediaPlayer
-            :media="videoId"
+            :media="video.attributes.field_gc_video_media"
             @playerEvent="logPlaybackEvent($event)"
           />
         </div>
