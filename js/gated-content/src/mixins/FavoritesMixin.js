@@ -1,4 +1,10 @@
 export const FavoritesMixin = {
+  props: {
+    favorites: {
+      type: Boolean,
+      default: false,
+    },
+  },
   computed: {
     favoritesList() {
       return this.$store.getters.getFavoritesList;

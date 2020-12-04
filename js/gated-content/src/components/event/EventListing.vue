@@ -72,10 +72,6 @@ export default {
       type: Boolean,
       default: false,
     },
-    favorites: {
-      type: Boolean,
-      default: false,
-    },
     sort: {
       type: Object,
       default() {
@@ -235,7 +231,7 @@ export default {
 
       params.filter.status = 1;
       params.sort = {
-        sortByDate: this.sort,
+        sortBy: this.sort,
       };
 
       client

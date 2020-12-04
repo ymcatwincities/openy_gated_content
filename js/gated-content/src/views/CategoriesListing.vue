@@ -34,10 +34,6 @@ export default {
       type: String,
       default: '',
     },
-    favorites: {
-      type: Boolean,
-      default: false,
-    },
     sort: {
       type: Object,
       default() {

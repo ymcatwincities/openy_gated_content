@@ -68,10 +68,6 @@ export default {
       type: Boolean,
       default: false,
     },
-    favorites: {
-      type: Boolean,
-      default: false,
-    },
     sort: {
       type: Object,
       default() {
