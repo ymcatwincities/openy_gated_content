@@ -19,3 +19,7 @@ at the Virtual YMCA settings: /admin/openy/openy-gc-auth/settings
 ## I need help.
 In case, if you need help, please write your question
 at the #developers channel at Open Y slack.
+
+### Forgot Password/Sign Up links are not working as expected
+
+If these links on the Daxko SSO login page are not going to Daxko and are going back to Drupal with an error like `{"error":1,"message":"Wrong cross site check"}` you may need to re-save your GC auth settings. Visit `/admin/openy/virtual-ymca/gc-auth-settings/provider/daxkosso` and just click `Save`.

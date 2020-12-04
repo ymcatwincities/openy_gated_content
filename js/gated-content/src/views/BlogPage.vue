@@ -5,9 +5,11 @@
     </div>
     <div v-else-if="error">Error loading</div>
     <template v-else>
-      <div class="blog-page__image" v-bind:style="{
-              backgroundImage: `url(${image})`
-      }">
+      <div
+        v-if="blog.attributes.field_vy_blog_image !== null"
+        class="blog-page__image"
+        v-bind:style="{backgroundImage: `url(${image})`}"
+      >
       </div>
       <div class="blog-header gated-container">
         <h2>{{ blog.attributes.title }}</h2>
@@ -121,7 +123,7 @@ export default {
           this.blog = this.combine(response.data.data, response.data.included, this.params);
           this.loading = false;
         }).then(() => {
-          this.$log.trackEventEntityView('node', 'vy_blog_post', this.blog.attributes.drupal_internal__nid);
+          this.$log.trackEvent('entityView', 'node', 'vy_blog_post', this.blog.attributes.drupal_internal__nid);
         })
         .catch((error) => {
           this.error = true;
