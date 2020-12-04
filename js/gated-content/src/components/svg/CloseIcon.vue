@@ -1,5 +1,6 @@
 <template>
-  <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times" class="svg-inline--fa fa-times fa-w-11"
+  <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times"
+       class="svg-inline--fa fa-times fa-w-11"
        role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512">
     <path :fill="color"
           d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19
