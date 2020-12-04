@@ -4,8 +4,8 @@
     align-items:     center;
     justify-content: flex-end;
 
-    @include median(padding, 30px 15px, 10px);
-    @include median(max-width, 1170px, 750px, initial);
+    @include median(padding, 30px 15px, 10px 15px);
+    @include median(max-width, 1170px, initial);
     @include median(margin-left, auto, auto, initial);
     @include median(margin-right, auto, auto, initial);
 
@@ -37,6 +37,7 @@
       text-align:       right;
 
       @include median(display, none, inline-block);
+      @include median(padding-right, initial, 13px);
 
       svg {
         width: 25px;
