@@ -63,9 +63,6 @@ export default {
   async mounted() {
     await this.load();
   },
-  watch: {
-    sort: 'load',
-  },
   computed: {
     title() {
       switch (this.type) {
@@ -79,6 +76,7 @@ export default {
     },
   },
   watch: {
+    sort: 'load',
     type() {
       this.load();
     },
