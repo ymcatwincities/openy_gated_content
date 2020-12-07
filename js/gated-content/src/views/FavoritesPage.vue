@@ -14,6 +14,7 @@
               :value="option.value"
               autocomplete="off"
               v-model="preSelectedComponent"
+              :disabled="option.type && isFavoritesTypeEmpty(option.type, option.value)"
             >
             <label :for="option.value">{{ option.label }}</label>
           </div>
@@ -39,50 +40,109 @@
         <button type="button" class="btn btn-primary" @click="applyFilters">Apply</button>
       </template>
     </Modal>
+
     <div v-if="!favoritesListInitialized" class="text-center">
       <Spinner></Spinner>
     </div>
+
     <div class="components-wrapper" v-else>
       <div class="gated-container text-right">
         <button type="button" class="btn btn-light" @click="showModal = true">Adjust</button>
       </div>
-<!--      TODO: show message if no liked items for selected type else - show components-->
-      <VideoListing
-        v-if="selectedComponent === 'gc_video' || selectedComponent === 'all'"
-        :title="config.components.gc_video.title"
-        :favorites="true"
-        :pagination="true"
-        :sort="sortData('node')"
-      />
-      <EventListing
-        v-if="selectedComponent === 'live_stream' || selectedComponent === 'all'"
-        :title="config.components.live_stream.title"
-        :msg="'Live streams not found.'"
-        :favorites="true"
-        :pagination="true"
-        :sort="sortData('eventinstance')"
-      />
-      <EventListing
-        v-if="selectedComponent === 'virtual_meeting' || selectedComponent === 'all'"
-        :title="config.components.virtual_meeting.title"
-        :eventType="'virtual_meeting'"
-        :msg="'Virtual Meetings not found.'"
-        :favorites="true"
-        :pagination="true"
-        :sort="sortData('eventinstance')"
-      />
-      <BlogListing
-        v-if="selectedComponent === 'vy_blog_post' || selectedComponent === 'all'"
-        :title="config.components.vy_blog_post.title"
-        :favorites="true"
-        :pagination="true"
-        :sort="sortData('node')"
-      />
-      <CategoriesListing
-        v-if="selectedComponent === 'gc_category' || selectedComponent === 'all'"
-        :favorites="true"
-        :sort="sortData('taxonomy_term')"
-      />
+
+      <div v-if="!isFavoritesTypeEmpty('node', 'gc_video')
+        && (selectedComponent === 'gc_video' || selectedComponent === 'all')">
+        <VideoListing
+          :title="config.components.gc_video.title"
+          :favorites="true"
+          :pagination="viewAllContentMode"
+          :sort="sortData('node')"
+          :limit="viewAllContentMode ? 0 : itemsLimit"
+        />
+        <div class="text-center" v-if="selectedComponent === 'all'">
+          <button
+            type="button"
+            class="btn btn-light"
+            @click="preSelectedComponent = 'gc_video'; applyFilters()">
+            View all
+          </button>
+        </div>
+      </div>
+
+      <div v-if="!isFavoritesTypeEmpty('eventinstance', 'live_stream')
+        && (selectedComponent === 'live_stream' || selectedComponent === 'all')">
+        <EventListing
+          :title="config.components.live_stream.title"
+          :msg="'Live streams not found.'"
+          :favorites="true"
+          :sort="sortData('eventinstance')"
+          :limit="viewAllContentMode ? 50 : itemsLimit"
+        />
+        <div class="text-center" v-if="selectedComponent === 'all'">
+          <button
+            type="button"
+            class="btn btn-light"
+            @click="preSelectedComponent = 'live_stream'; applyFilters()">
+            View all
+          </button>
+        </div>
+      </div>
+
+      <div v-if="!isFavoritesTypeEmpty('eventinstance', 'virtual_meeting')
+        && (selectedComponent === 'virtual_meeting' || selectedComponent === 'all')">
+        <EventListing
+          :title="config.components.virtual_meeting.title"
+          :eventType="'virtual_meeting'"
+          :msg="'Virtual Meetings not found.'"
+          :favorites="true"
+          :sort="sortData('eventinstance')"
+          :limit="viewAllContentMode ? 50 : itemsLimit"
+        />
+        <div class="text-center" v-if="selectedComponent === 'all'">
+          <button
+            type="button"
+            class="btn btn-light"
+            @click="preSelectedComponent = 'virtual_meeting'; applyFilters()">
+            View all
+          </button>
+        </div>
+      </div>
+
+      <div v-if="!isFavoritesTypeEmpty('node', 'vy_blog_post')
+        && (selectedComponent === 'vy_blog_post' || selectedComponent === 'all')">
+        <BlogListing
+          :title="config.components.vy_blog_post.title"
+          :favorites="true"
+          :pagination="viewAllContentMode"
+          :sort="sortData('node')"
+          :limit="viewAllContentMode ? 0 : itemsLimit"
+        />
+        <div class="text-center" v-if="selectedComponent === 'all'">
+          <button
+            type="button"
+            class="btn btn-light"
+            @click="preSelectedComponent = 'vy_blog_post'; applyFilters()">
+            View all
+          </button>
+        </div>
+      </div>
+
+      <div v-if="!isFavoritesTypeEmpty('taxonomy_term', 'gc_category')
+        && (selectedComponent === 'gc_category' || selectedComponent === 'all')">
+        <CategoriesListing
+          :favorites="true"
+          :sort="sortData('taxonomy_term')"
+          :limit="viewAllContentMode ? 50 : itemsLimit"
+        />
+        <div class="text-center" v-if="selectedComponent === 'all'">
+          <button
+            type="button"
+            class="btn btn-light"
+            @click="preSelectedComponent = 'gc_category'; applyFilters()">
+            View all
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -95,10 +155,11 @@ import VideoListing from '@/components/video/VideoListing.vue';
 import EventListing from '@/components/event/EventListing.vue';
 import CategoriesListing from '@/views/CategoriesListing.vue';
 import { SettingsMixin } from '@/mixins/SettingsMixin';
+import { FavoritesMixin } from '@/mixins/FavoritesMixin';
 
 export default {
   name: 'FavoritesPage',
-  mixins: [SettingsMixin],
+  mixins: [SettingsMixin, FavoritesMixin],
   components: {
     Spinner,
     Modal,
@@ -110,17 +171,18 @@ export default {
   data() {
     return {
       showModal: false,
+      itemsLimit: 3,
       selectedComponent: 'all',
       preSelectedComponent: 'all',
       selectedSort: 'date_desc',
       preSelectedSort: 'date_desc',
       contentTypeOptions: [
         { value: 'all', label: 'Show All' },
-        { value: 'gc_video', label: 'Video' },
-        { value: 'live_stream', label: 'Live stream' },
-        { value: 'virtual_meeting', label: 'Virtual meeting' },
-        { value: 'vy_blog_post', label: 'Blog' },
-        { value: 'gc_category', label: 'Categories' },
+        { value: 'gc_video', type: 'node', label: 'Video' },
+        { value: 'live_stream', type: 'eventinstance', label: 'Live stream' },
+        { value: 'virtual_meeting', type: 'eventinstance', label: 'Virtual meeting' },
+        { value: 'vy_blog_post', type: 'node', label: 'Blog' },
+        { value: 'gc_category', type: 'taxonomy_term', label: 'Categories' },
       ],
       filterOptions: [
         { value: 'date_desc', label: 'By date (New-Old)' },
@@ -164,6 +226,20 @@ export default {
       });
       return init;
     },
+    viewAllContentMode() {
+      // Enable viewAllContentMode only when we filter by content.
+      return this.selectedComponent !== 'all';
+    },
+  },
+  mounted() {
+    if (this.$route.query.type) {
+      this.selectedComponent = this.$route.query.type;
+      this.preSelectedComponent = this.$route.query.type;
+    }
+    if (this.$route.query.sort) {
+      this.selectedSort = this.$route.query.sort;
+      this.preSelectedSort = this.$route.query.sort;
+    }
   },
   watch: {
     favoritesList: {
@@ -177,6 +253,13 @@ export default {
     applyFilters() {
       this.selectedComponent = this.preSelectedComponent;
       this.selectedSort = this.preSelectedSort;
+      this.$router.push({
+        query: {
+          ...this.$route.query,
+          type: this.selectedComponent,
+          sort: this.selectedSort,
+        },
+      });
       this.showModal = false;
     },
     sortData(type) {
