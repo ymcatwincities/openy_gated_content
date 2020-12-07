@@ -49,8 +49,6 @@ class YUSA extends GCIdentityProviderPluginBase {
       '#suffix' => '</div>',
     ];
 
-
-
     $permissions_mapping = explode(';', $config['permissions_mapping']);
     if (!$form_state->has('permissions_mapping_items_count')) {
       $form_state->set('permissions_mapping_items_count', count($permissions_mapping));
@@ -106,7 +104,7 @@ class YUSA extends GCIdentityProviderPluginBase {
     $form['association_number'] = [
       '#title' => $this->t('Association number'),
       '#type' => 'textfield',
-      '#description' => 'This is usually 4 digits.',
+      '#description' => $this->t('This is usually 4 digits.'),
       '#default_value' => $config['association_number'],
       '#required' => TRUE,
     ];
