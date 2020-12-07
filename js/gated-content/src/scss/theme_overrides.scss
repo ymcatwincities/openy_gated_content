@@ -2,7 +2,7 @@
 .openy_lily-based.openy-gated-content,
 .openy_rose-based.openy-gated-content {
   #gated-content {
-    @include median(padding-top, 90px, 45px);
+    @include median(padding-top, 88px, 45px);
 
     .top-menu {
       background-color: black;
