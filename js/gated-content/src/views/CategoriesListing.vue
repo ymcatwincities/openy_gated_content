@@ -40,6 +40,10 @@ export default {
         return { path: 'weight', direction: 'ASC' };
       },
     },
+    limit: {
+      type: Number,
+      default: 0,
+    },
     msg: String,
   },
   data() {
@@ -73,6 +77,7 @@ export default {
   },
   watch: {
     sort: 'load',
+    limit: 'load',
     type() {
       this.load();
     },
@@ -96,6 +101,12 @@ export default {
       params.sort = {
         sortBy: this.sort,
       };
+
+      if (this.limit !== 0) {
+        params.page = {
+          limit: this.limit,
+        };
+      }
 
       if (this.favorites) {
         if (this.isFavoritesTypeEmpty('taxonomy_term', 'gc_category')) {
