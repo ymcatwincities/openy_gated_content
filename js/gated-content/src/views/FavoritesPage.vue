@@ -50,6 +50,10 @@
         <button type="button" class="btn btn-light" @click="showModal = true">Adjust</button>
       </div>
 
+      <div v-if="isNoFavoriteItems" class="gated-container text-center">
+        <span>There no favorite content.</span>
+      </div>
+
       <div v-if="!isFavoritesTypeEmpty('node', 'gc_video')
         && (selectedComponent === 'gc_video' || selectedComponent === 'all')">
         <VideoListing
@@ -229,6 +233,17 @@ export default {
     viewAllContentMode() {
       // Enable viewAllContentMode only when we filter by content.
       return this.selectedComponent !== 'all';
+    },
+    isNoFavoriteItems() {
+      const { favoritesList } = this;
+      const filtered = this.contentTypeOptions.filter((item) => {
+        if (item.value === 'all') {
+          return false;
+        }
+        return favoritesList[item.type][item.value].length !== 0;
+      });
+
+      return filtered.length === 0;
     },
   },
   mounted() {
