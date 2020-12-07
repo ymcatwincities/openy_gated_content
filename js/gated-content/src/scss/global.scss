@@ -3,6 +3,7 @@
 @import "../../node_modules/bootstrap/scss/variables";
 @import "../../node_modules/bootstrap/scss/mixins";
 
+@import "mixins";
 @import "variables";
 @import "widgets/video-level";
 @import "widgets/button";
@@ -14,6 +15,7 @@
 @import "components/blog-listing";
 @import "components/add-to-calendar";
 @import "components/spinner";
+@import "components/paragraph-headline";
 @import "views/video-page";
 @import "views/category-page";
 @import "views/blog-page";
@@ -68,11 +70,5 @@
     bottom: 30px;
     background-color: $dark-blue;
     z-index: 1;
-  }
-}
-
-.openy_carnation {
-  #gated-content {
-    padding-top: 30px;
   }
 }

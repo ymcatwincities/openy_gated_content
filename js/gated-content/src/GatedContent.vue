@@ -22,6 +22,7 @@ export default {
   name: 'GatedContent',
   props: {
     settings: String,
+    headline: String,
     appUrl: {
       type: String,
       default: '',
@@ -44,6 +45,7 @@ export default {
     }
   },
   mounted() {
+    this.$store.dispatch('setHeadline', JSON.parse(this.headline));
     this.$store.dispatch('setSettings', JSON.parse(this.settings));
   },
 };
