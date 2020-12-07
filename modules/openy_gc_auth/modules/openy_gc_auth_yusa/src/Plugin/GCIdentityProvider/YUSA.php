@@ -74,16 +74,18 @@ class YUSA extends GCIdentityProviderPluginBase {
       ];
     }
 
+    $attributes = [
+      'attributes' => [
+        'target' => '_blank',
+      ],
+    ];
+
     $form['permissions_mapping']['help'] = [
       '#type' => 'link',
       '#title' => 'How does this work?',
       '#url' => Url::fromUri(
         'https://community.openymca.org/t/setting-up-user-segmentation-virtual-ymca-user-docs/864',
-        [
-          'attributes' => [
-            'target' => '_blank',
-          ],
-        ]
+        $attributes
       )
     ];
 
