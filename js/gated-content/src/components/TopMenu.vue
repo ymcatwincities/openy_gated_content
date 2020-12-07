@@ -22,32 +22,28 @@
         :style="fontStyleObject"
         @click.native="menuOpen=false"
       >
-        <ScheduleIcon :color="fontColor"></ScheduleIcon>
-        Schedule
+        <ScheduleIcon :color="fontColor"></ScheduleIcon>Schedule
       </router-link>
       <router-link
         :to="{ name: 'Home' }"
         :style="fontStyleObject"
         @click.native="menuOpen=false"
       >
-        <FavoritesIcon :color="fontColor"></FavoritesIcon>
-        Favorites
+        <FavoritesIcon :color="fontColor"></FavoritesIcon>Favorites
       </router-link>
       <router-link
         :to="{ name: 'Category', params: { type: 'video' } }"
         :style="fontStyleObject"
         @click.native="menuOpen=false"
       >
-        <CategoriesIcon :color="fontColor"></CategoriesIcon>
-        Categories
+        <CategoriesIcon :color="fontColor"></CategoriesIcon>Categories
       </router-link>
       <a
         href="/vy-user/logout"
         :style="fontStyleObject"
         @click.native="menuOpen=false"
       >
-        <LogoutIcon :color="fontColor"></LogoutIcon>
-        Sign out
+        <LogoutIcon :color="fontColor"></LogoutIcon>Sign out
       </a>
     </div>
   </div>

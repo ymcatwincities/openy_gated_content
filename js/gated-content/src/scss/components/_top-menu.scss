@@ -9,6 +9,10 @@
     @include median(margin-left, auto, auto, initial);
     @include median(margin-right, auto, auto, initial);
 
+    a:hover {
+      text-decoration: underline;
+    }
+
     a:first-child {
       margin-right: auto;
 
