@@ -20,6 +20,7 @@ export default {
   name: 'GatedContent',
   props: {
     settings: String,
+    headline: String,
     appUrl: {
       type: String,
       default: '',
@@ -36,6 +37,7 @@ export default {
   },
   async mounted() {
     await this.$store.dispatch('setSettings', JSON.parse(this.settings));
+    await this.$store.dispatch('setHeadline', JSON.parse(this.headline));
     await this.$store.dispatch('loadFavorites');
   },
 };

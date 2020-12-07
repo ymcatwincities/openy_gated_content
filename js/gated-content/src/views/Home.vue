@@ -1,5 +1,8 @@
 <template>
   <div class="home">
+    <ParagraphHeadline
+      v-if="isHeadlineEnabled"
+    ></ParagraphHeadline>
     <VideoListing
       :featured="true"
       :viewAll="true"
@@ -38,7 +41,9 @@
 import BlogListing from '@/components/blog/BlogListing.vue';
 import VideoListing from '@/components/video/VideoListing.vue';
 import EventListing from '@/components/event/EventListing.vue';
+import ParagraphHeadline from '@/components/ParagraphHeadline.vue';
 import { SettingsMixin } from '@/mixins/SettingsMixin';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'Home',
@@ -47,6 +52,12 @@ export default {
     BlogListing,
     VideoListing,
     EventListing,
+    ParagraphHeadline,
+  },
+  computed: {
+    ...mapGetters([
+      'isHeadlineEnabled',
+    ]),
   },
   methods: {
     isActive(component) {

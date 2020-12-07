@@ -3,6 +3,7 @@
 @import "../../node_modules/bootstrap/scss/variables";
 @import "../../node_modules/bootstrap/scss/mixins";
 
+@import "mixins";
 @import "variables";
 @import "widgets/video-level";
 @import "widgets/button";
@@ -16,6 +17,7 @@
 @import "components/favorites";
 @import "components/modal";
 @import "components/spinner";
+@import "components/paragraph-headline";
 @import "views/favorites_page";
 @import "views/video-page";
 @import "views/category-page";
@@ -43,11 +45,5 @@
     @media (min-width: 1200px) {
       max-width: 1170px;
     }
-  }
-}
-
-.openy_carnation {
-  #gated-content {
-    padding-top: 30px;
   }
 }

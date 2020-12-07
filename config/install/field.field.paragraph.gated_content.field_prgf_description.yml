@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_prgf_description
+    - paragraphs.paragraphs_type.gated_content
+  module:
+    - datalayer
+    - text
+third_party_settings:
+  datalayer:
+    expose: 0
+    label: field_prgf_description
+id: paragraph.gated_content.field_prgf_description
+field_name: field_prgf_description
+entity_type: paragraph
+bundle: gated_content
+label: 'Headline Description'
+description: 'Please, use this field to control description for Virtual Y headline section'
+required: false
+translatable: true
+default_value:
+  -
+    value: "<p>Find the newest Y classes and programs</p>\r\n\r\n<p><a class=\"btn btn-primary\" href=\"#/live-stream\"><span class=\"text\">Live Streams</span></a>&nbsp; <a class=\"btn btn-primary\" href=\"#/categories/video\"><span class=\"text\">Videos</span></a></p>\r\n"
+    format: full_html
+default_value_callback: ''
+settings: {  }
+field_type: text_long

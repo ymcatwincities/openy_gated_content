@@ -186,9 +186,28 @@ function openy_gated_content_update_8009() {
 }
 
 /**
- * Install VyFavoriteItem Entity Type.
+ * Install new fields for gated_content paragraph.
  */
 function openy_gated_content_update_8010() {
+  $config_dir = drupal_get_path('module', 'openy_gated_content');
+  $config_dir .= '/config/install/';
+  $config_importer = \Drupal::service('openy_upgrade_tool.importer');
+  $config_importer->setDirectory($config_dir);
+  $config_importer->importConfigs([
+    'core.entity_form_display.paragraph.gated_content.default',
+    'core.entity_view_display.paragraph.gated_content.default',
+    'field.field.paragraph.gated_content.field_prgf_description',
+    'field.field.paragraph.gated_content.field_prgf_image',
+    'field.field.paragraph.gated_content.field_prgf_link',
+    'field.field.paragraph.gated_content.field_prgf_title',
+    'image.style.virtual_y_paragraph_headline',
+  ]);
+}
+
+/**
+ * Install VyFavoriteItem Entity Type.
+ */
+function openy_gated_content_update_8011() {
   \Drupal::entityDefinitionUpdateManager()->installEntityType(new ContentEntityType([
     'id' => 'vy_favorite_item',
     'label' => new TranslatableMarkup('VY Favorite Item'),
