@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
  */
 class SegmentContentAccessCheck implements ContainerInjectionInterface {
 
-  const EDITOR_ROLE = 'virtual_ymca_editor';
+  use VirtualYAccessTrait;
 
   /**
    * Module config.
@@ -128,7 +128,7 @@ class SegmentContentAccessCheck implements ContainerInjectionInterface {
 
         // Use Drupal permissions for administrators and editors.
         if (
-          in_array(self::EDITOR_ROLE, $account_roles)
+          in_array(self::$virtualYAccessEditorRole, $account_roles)
           || in_array('administrator', $account_roles)
         ) {
           return AccessResult::neutral();
