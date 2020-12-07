@@ -18,14 +18,37 @@
 }
 
 .openy_carnation-based.openy-gated-content {
+  main > div > div {
+    > .banner {
+      display: none;
+    }
+
+    > .breadcrumbs-wrapper {
+      display: none !important;
+    }
+  }
+
   #gated-content {
+    @include median(padding-top, 85px, 45px);
+
     .top-menu {
       @include median(top, 130px, 78px);
     }
   }
 
-  &.toolbar-fixed #gated-content .top-menu {
-    @include median(top, calc(130px + 39px), calc(78px + 39px));
+  &.toolbar-fixed {
+    #gated-content {
+      @include median(padding-top, 0);
+
+      .top-menu {
+        @include median(top, calc(130px + 47px), calc(78px + 39px));
+      }
+
+    }
+
+    .openy-page-tabs {
+      margin-top: 100px !important;
+    }
   }
 
   &.toolbar-tray-open #gated-content .top-menu {
