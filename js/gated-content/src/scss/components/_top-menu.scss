@@ -73,7 +73,7 @@
       display:               grid;
       max-width:             initial;
       grid-template-columns: 1fr 1fr;
-      gap:                   10px;
+
       @include median(gap, initial, 10px 20px, 10px);
     }
   }
