@@ -3,24 +3,25 @@
 @import '../../node_modules/bootstrap/scss/variables';
 @import '../../node_modules/bootstrap/scss/mixins';
 
-@import 'mixins';
-@import 'variables';
-@import 'widgets/video-level';
-@import 'widgets/button';
+@import "mixins";
+@import "variables";
+@import "widgets/video-level";
+@import "widgets/button";
 @import 'components/top-menu';
-@import 'components/video-listing';
-@import 'components/video-teaser';
-@import 'components/event-teaser';
-@import 'components/category-listing';
-@import 'components/category-teaser';
-@import 'components/blog-listing';
-@import 'components/add-to-calendar';
-@import 'components/spinner';
-@import 'views/video-page';
-@import 'views/category-page';
-@import 'views/blog-page';
-@import 'views/virtual-meeting-page';
-@import 'views/login';
+@import "components/video-listing";
+@import "components/video-teaser";
+@import "components/event-teaser";
+@import "components/category-listing";
+@import "components/category-teaser";
+@import "components/blog-listing";
+@import "components/add-to-calendar";
+@import "components/spinner";
+@import "components/paragraph-headline";
+@import "views/video-page";
+@import "views/category-page";
+@import "views/blog-page";
+@import "views/virtual-meeting-page";
+@import "views/login";
 @import 'theme_overrides';
 
 #gated-content {
@@ -43,5 +44,11 @@
     @media (min-width: 1200px) {
       max-width: 1170px;
     }
+  }
+}
+
+.openy_carnation {
+  #gated-content {
+    padding-top: 30px;
   }
 }

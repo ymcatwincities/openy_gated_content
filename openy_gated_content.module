@@ -5,10 +5,12 @@
  * The openy_gated_content module routines.
  */
 
+use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Drupal\openy_gated_content\SegmentContentAccessCheck;
 use Drupal\Core\Entity\EntityInterface;
@@ -23,6 +25,7 @@ function openy_gated_content_theme() {
       'base hook' => 'paragraph',
       'variables' => [
         'app_settings' => '',
+        'headline' => '',
       ],
     ],
     'paragraph__gated_content_login' => [
@@ -58,6 +61,36 @@ function openy_gated_content_preprocess_paragraph(&$variables) {
   $plugin_instance = $identityProviderManager->createInstance($active_provider);
   $app_config = \Drupal::config('openy_gated_content.settings')->getOriginal();
   $variables['app_settings'] = json_encode($app_config);
+
+  if ($variables['paragraph']->getType() === 'gated_content') {
+    $backgroundImage = '';
+    if ($mediaImage = $variables['paragraph']->field_prgf_image->entity) {
+      $display_options = EntityViewDisplay::collectRenderDisplay($variables['paragraph'], 'default')
+        ->getComponent('field_prgf_image');
+      $image_style = \Drupal::service('entity_type.manager')->getStorage('image_style')
+        ->load($display_options['settings']['image_style']);
+      $backgroundImage = $image_style->buildUrl($mediaImage->field_media_image->entity->uri->value);
+    }
+
+    if (empty($backgroundImage)) {
+      $file = 'base://' . drupal_get_path('module', 'openy_gated_content') . '/assets/img/paragraph-headline.png';
+      $backgroundImage = Url::fromUri($file)->setAbsolute()->toString();
+    }
+
+    $headline = [
+      'title' => $variables['paragraph']->field_prgf_title->value,
+      'description' => $variables['paragraph']->field_prgf_description->value,
+      'backgroundImage' => $backgroundImage,
+    ];
+
+    if ($variables['paragraph']->field_prgf_link->title) {
+      $headline['linkText'] = $variables['paragraph']->field_prgf_link->title;
+      $headline['linkUrl'] = Url::fromUri($variables['paragraph']->field_prgf_link->uri)->toString();
+    }
+
+    $variables['headline'] = json_encode($headline);
+  }
+
   $variables['#cache']['tags'][] = 'config:' . $plugin_instance->getConfigName();
 }
 
