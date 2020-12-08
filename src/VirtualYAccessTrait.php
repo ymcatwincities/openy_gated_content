@@ -15,6 +15,5 @@ trait VirtualYAccessTrait {
    * @var string
    */
   public static $virtualYAccessEditorRole = 'virtual_ymca_editor';
-
-
+  
 }
