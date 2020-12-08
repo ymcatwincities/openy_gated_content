@@ -36,10 +36,10 @@ export default {
       return google(this.event);
     },
     outlookLink() {
-      return outlook(this.event).replace("&rru=addevent", "");
+      return outlook(this.event).replace('&rru=addevent', '');
     },
     office365Link() {
-      return office365(this.event).replace("&rru=addevent", "");
+      return office365(this.event).replace('&rru=addevent', '');
     },
     yahooLink() {
       return yahoo(this.event);
