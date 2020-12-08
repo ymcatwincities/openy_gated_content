@@ -2,7 +2,8 @@
   background-color: black;
   position: fixed;
   width: 100%;
-  z-index: 1030;
+
+  @include median(z-index, 1030, 39);
 
   > div {
     display:         flex;
