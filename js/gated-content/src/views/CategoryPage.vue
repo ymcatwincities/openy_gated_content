@@ -1,6 +1,8 @@
 <template>
   <div class="gated-content-category-page">
-    <div v-if="loading">Loading</div>
+    <div v-if="loading" class="text-center">
+      <Spinner></Spinner>
+    </div>
     <div v-else-if="error">Error loading</div>
     <template v-else>
       <div class="category-details">
@@ -41,6 +43,7 @@ import VideoListing from '@/components/video/VideoListing.vue';
 import BlogListing from '@/components/blog/BlogListing.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
 import { SettingsMixin } from '@/mixins/SettingsMixin';
+import Spinner from '@/components/Spinner.vue';
 
 export default {
   name: 'CategoryPage',
@@ -48,6 +51,7 @@ export default {
   components: {
     VideoListing,
     BlogListing,
+    Spinner,
   },
   props: {
     type: {
