@@ -1,25 +1,39 @@
 .top-menu {
+  background-color: black;
+  position: fixed;
+  width: 100%;
+  z-index: 1030;
+
   > div {
     display:         flex;
     align-items:     center;
     justify-content: flex-end;
 
-    @include median(padding, 30px 15px, 10px 15px);
+    @include median(padding, 30px 15px 15px 18px, 10px 15px);
     @include median(max-width, 1170px, initial);
     @include median(margin-left, auto, auto, initial);
     @include median(margin-right, auto, auto, initial);
 
-    a:hover {
-      text-decoration: underline;
+    a {
+      text-decoration: none;
     }
 
     a:first-child {
-      margin-right: auto;
+      margin-right:   auto;
 
+      @include median(padding-bottom, 12px, initial);
       @include median(font-size, 20px, 18px);
     }
 
     a:not(:first-child) {
+
+      padding-bottom: 12px;
+
+      &.router-link-active {
+        border-bottom:  2px solid;
+        padding-bottom: 10px;
+      }
+
       &:not(:last-child) {
         padding-right: 20px;
       }
@@ -39,24 +53,32 @@
       background-color: transparent;
       padding-right:    10px;
       text-align:       right;
+      justify-content: flex-end;
 
-      @include median(display, none, inline-block);
+      @include median(display, none, flex);
       @include median(padding-right, initial, 13px);
 
       svg {
         width: 27px;
+      }
+
+      &.opened {
+        svg {
+          width: 14px;
+        }
       }
     }
   }
 
   &.menuOpen {
     position:         fixed;
-    top:              0;
+    top:              0 !important;
     z-index:          2000;
     background-color: $concrete;
     width:            100vw;
     height:           100vh;
 
+    @include median(top, 0);
     @include median(padding, initial, 11px 34px, 11px 10px);
 
     a:first-child, button {

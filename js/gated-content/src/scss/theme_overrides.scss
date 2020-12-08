@@ -1,22 +1,3 @@
-.openy_carnation-based.openy-gated-content,
-.openy_lily-based.openy-gated-content,
-.openy_rose-based.openy-gated-content {
-  #gated-content {
-    @include median(padding-top, 88px, 45px);
-
-    .top-menu {
-      background-color: black;
-      position: fixed;
-      width: 100%;
-      z-index: 1200;
-
-      &.menuOpen {
-        @include median(top, 0);
-      }
-    }
-  }
-}
-
 .openy_carnation-based.openy-gated-content {
   main > div > div {
     > .banner {
@@ -29,7 +10,7 @@
   }
 
   #gated-content {
-    @include median(padding-top, 85px, 45px);
+    @include median(padding-top, 80px, 45px);
 
     .top-menu {
       @include median(top, 130px, 78px);
@@ -79,6 +60,7 @@
 
   #gated-content {
     .top-menu {
+      @include median(z-index, 500, 1030);
       @include median(top, 165px, 70px);
 
       > div button {
@@ -90,6 +72,28 @@
   &.primary-menu-minimize {
     #gated-content .top-menu {
       top: 42px;
+    }
+
+    &.toolbar-fixed {
+      #gated-content {
+        .top-menu {
+          top: calc(42px + 39px);
+        }
+      }
+    }
+  }
+
+  &.toolbar-fixed {
+    #gated-content {
+      @include median(padding-top, 0);
+
+      .top-menu {
+        top: calc(165px + 37px);
+      }
+    }
+
+    .openy-page-tabs {
+      margin-top: 100px !important;
     }
   }
 }

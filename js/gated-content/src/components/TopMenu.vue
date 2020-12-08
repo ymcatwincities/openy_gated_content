@@ -5,9 +5,14 @@
         :to="{ name: 'Home' }"
         :style="fontStyleObject"
         @click.native="menuOpen=false"
+        exact
       >Virtual YMCA
       </router-link>
-      <button @click="menuOpen = !menuOpen" :style="fontStyleObject">
+      <button
+        @click="menuOpen = !menuOpen"
+        :style="fontStyleObject"
+        :class="{ opened: menuOpen  }"
+      >
         <MenuIcon
           v-if="!menuOpen"
           :color="fontColor"
@@ -18,23 +23,26 @@
         ></CloseIcon>
       </button>
       <router-link
-        :to="{ name: 'Home' }"
+        :to="{ name: 'Schedule' }"
         :style="fontStyleObject"
         @click.native="menuOpen=false"
+        exact
       >
         <ScheduleIcon :color="fontColor"></ScheduleIcon>Schedule
       </router-link>
       <router-link
-        :to="{ name: 'Home' }"
+        :to="{ name: 'Favorites' }"
         :style="fontStyleObject"
         @click.native="menuOpen=false"
+        exact
       >
         <FavoritesIcon :color="fontColor"></FavoritesIcon>Favorites
       </router-link>
       <router-link
-        :to="{ name: 'Category', params: { type: 'video' } }"
+        :to="{ name: 'CategoryListing', params: { type: 'video' } }"
         :style="fontStyleObject"
         @click.native="menuOpen=false"
+        exact
       >
         <CategoriesIcon :color="fontColor"></CategoriesIcon>Categories
       </router-link>
@@ -92,6 +100,7 @@ export default {
     fontStyleObject() {
       return {
         color: this.fontColor,
+        'border-color': this.fontColor,
       };
     },
     backgroundStyleObject() {
@@ -105,8 +114,6 @@ export default {
           : this.getAppSettings.top_menu.background_color_light,
       };
     },
-  },
-  mounted() {
   },
 };
 </script>

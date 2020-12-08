@@ -27,6 +27,8 @@
 #gated-content {
   padding-bottom: 30px;
 
+  @include median(padding-top, 80px, 45px);
+
   .gated-container {
     padding: 10px;
 

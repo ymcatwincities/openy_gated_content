@@ -1,4 +1,4 @@
-styles:
+openy-rose-menu:
   version: 0.1
   js:
     assets/js/openy_rose.behaviors.js: { minified: false }
