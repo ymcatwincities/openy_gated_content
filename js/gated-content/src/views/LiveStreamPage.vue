@@ -148,6 +148,14 @@ export default {
           // We need here small hack for equipment.
           // In included we have all referenced items, but in relationship only one.
           // So we need manually pass this items to this.video.attributes.equipment.
+          let embedObj = this.video.attributes.media.field_media_video_embed_field;
+          if (this.video.attributes.media) {
+            if (this.video.attributes.media.field_media_source === 'youtube_playlist') {
+              this.video.attributes.media.field_media_source = 'youtube';
+              embedObj = embedObj.match(/(\?|&)v=([^&#]+)/).pop();
+              this.video.attributes.media.field_media_video_id = embedObj;
+            }
+          }
           this.video.attributes.equipment = [];
           this.video.attributes.category = [];
           if (response.data.included.length > 0) {
