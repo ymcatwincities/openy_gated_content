@@ -3,7 +3,7 @@
 namespace Drupal\openy_gated_content;
 
 /**
- * Trait Virtual Y Access Trait
+ * Trait Virtual Y Access Trait.
  *
  * @package Drupal\openy_gated_content
  */
@@ -15,5 +15,6 @@ trait VirtualYAccessTrait {
    * @var string
    */
   public static $virtualYAccessEditorRole = 'virtual_ymca_editor';
+
 
 }
