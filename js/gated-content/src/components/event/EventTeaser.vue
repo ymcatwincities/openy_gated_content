@@ -11,7 +11,7 @@
               backgroundImage: `url(${image})`
             }">
         <div class="month">
-          <p>{{ video.attributes.date.value | month }}</p>
+          <p>{{ video.attributes.date.value | month_short }}</p>
           <p>{{ video.attributes.date.value | day }}</p>
         </div>
       </div>

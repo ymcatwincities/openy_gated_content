@@ -6,6 +6,7 @@ import VideoPage from '@/views/VideoPage.vue';
 import BlogPage from '@/views/BlogPage.vue';
 import CategoryPage from '@/views/CategoryPage.vue';
 import CategoriesListing from '@/views/CategoriesListing.vue';
+import SchedulePage from '@/views/SchedulePage.vue';
 import LiveStreamPage from '@/views/LiveStreamPage.vue';
 import LiveStreamListingPage from '@/views/LiveStreamListingPage.vue';
 import VirtualMeetingPage from '@/views/VirtualMeetingPage.vue';
@@ -87,6 +88,8 @@ const routes = [
   {
     path: '/schedule',
     name: 'Schedule',
+    component: SchedulePage,
+    props: true,
     meta: { requiresAuth: true },
   },
   {

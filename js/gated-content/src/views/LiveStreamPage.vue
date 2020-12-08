@@ -32,7 +32,7 @@
           <div>
             <div class="video-footer__block">
               <i class="fa fa-clock-o fa-clock" aria-hidden="true"></i>
-              {{ video.attributes.date.value | month }}
+              {{ video.attributes.date.value | month_short }}
               {{ video.attributes.date.value | day }},
               {{ video.attributes.date | schedule }}
             </div>
