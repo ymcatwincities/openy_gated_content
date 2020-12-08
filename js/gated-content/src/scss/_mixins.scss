@@ -1,7 +1,7 @@
 @mixin median($property, $desktop, $tablet:$desktop, $mobile:$tablet) {
   #{$property}: $desktop;
 
-  @media (max-width: 900px) {
+  @media (max-width: 1060px) {
     #{$property}: $tablet;
   }
 
