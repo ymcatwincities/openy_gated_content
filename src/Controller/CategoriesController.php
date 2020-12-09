@@ -69,7 +69,7 @@ class CategoriesController extends ControllerBase implements ContainerInjectionI
     $query->condition('t.vid', 'gc_category');
     $query->condition('tf.status', 1);
 
-    if (!empty($y_roles) && !in_array(self::$virtualYAccessEditorRole, $y_roles)) {
+    if (!empty($y_roles) && !in_array(self::getVirtualYEditorRoles(), $y_roles)) {
       $query->leftJoin('node_field_data', 'nd', 'n.entity_id = nd.nid');
       $or_group = $query->orConditionGroup();
       foreach ($y_roles as $role) {

@@ -16,4 +16,14 @@ trait VirtualYAccessTrait {
    */
   public static $virtualYAccessEditorRole = 'virtual_ymca_editor';
 
+  /**
+   * Get list of roles that could administer virtual y content.
+   *
+   * @return array
+   *   List of Virtual Y Editor roles.
+   */
+  public function getVirtualYEditorRoles() {
+    return [self::$virtualYAccessEditorRole];
+  }
+
 }

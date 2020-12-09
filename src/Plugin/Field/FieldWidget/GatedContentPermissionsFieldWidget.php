@@ -93,7 +93,7 @@ class GatedContentPermissionsFieldWidget extends WidgetBase implements Container
     $select_options = [];
     foreach ($roles as $role_key => $role) {
       if ((strpos($role_key, 'virtual_y') !== FALSE)
-        && ($role_key !== self::$virtualYAccessEditorRole)) {
+        && (!in_array($role_key, self::getVirtualYEditorRoles()))) {
         $select_options[$role_key] = $role->label();
       }
     }
