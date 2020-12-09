@@ -34,13 +34,22 @@
         </div>
       </div>
     </router-link>
+    <AddToFavorite
+      :id="video.attributes.drupal_internal__id"
+      :type="'eventinstance'"
+      :bundle="type"
+    ></AddToFavorite>
   </div>
 </template>
 
 <script>
+import AddToFavorite from '@/components/AddToFavorite.vue';
 
 export default {
   name: 'EventTeaser',
+  components: {
+    AddToFavorite,
+  },
   props: {
     video: {
       type: Object,
@@ -79,6 +88,9 @@ export default {
         default:
           return 'LiveStream';
       }
+    },
+    type() {
+      return this.video.type.replace('eventinstance--', '');
     },
   },
 };
