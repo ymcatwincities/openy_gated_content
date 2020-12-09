@@ -7,15 +7,23 @@
     }"
   >
     <router-link :to="{ name: route, params: { id: video.id } }">
-      <div class="preview" v-bind:style="{
-              backgroundImage: `url(${image})`
-            }">
-        <div class="month">
-          <p>{{ video.attributes.date.value | month }}</p>
-          <p>{{ video.attributes.date.value | day }}</p>
-        </div>
-      </div>
       <div class="title">{{ video.attributes.title }}</div>
+      <div>
+        Date
+      </div>
+      <div>
+        Time
+      </div>
+      <div>
+        instructor
+      </div>
+      <div>
+        live / starts in
+      </div>
+      <div>
+        calendar
+      </div>
+
       <div class="meta">
         <div class="schedule">
           <i class="fa fa-clock-o fa-clock" aria-hidden="true"></i>
