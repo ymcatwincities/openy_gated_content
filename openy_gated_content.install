@@ -205,9 +205,24 @@ function openy_gated_content_update_8010() {
 }
 
 /**
- * Install VyFavoriteItem Entity Type.
+ * Add top menu settings to openy_gated_content.settings.
  */
 function openy_gated_content_update_8011() {
+  $config_importer = \Drupal::service('openy_upgrade_tool.param_updater');
+  $config = drupal_get_path('module', 'openy_gated_content');
+  $config .= '/config/install/';
+  $config .= 'openy_gated_content.settings.yml';
+  $config_importer->update(
+    $config,
+    'openy_gated_content.settings',
+    'top_menu'
+  );
+}
+
+/**
+ * Install VyFavoriteItem Entity Type.
+ */
+function openy_gated_content_update_8012() {
   \Drupal::entityDefinitionUpdateManager()->installEntityType(new ContentEntityType([
     'id' => 'vy_favorite_item',
     'label' => new TranslatableMarkup('VY Favorite Item'),

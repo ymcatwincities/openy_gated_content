@@ -19,7 +19,7 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home,
-    meta: { requiresAuth: true },
+    meta: { requiresAuth: true, darkMenu: true },
   },
   {
     path: '/categories/:type',
@@ -40,7 +40,7 @@ const routes = [
     name: 'Video',
     component: VideoPage,
     props: true,
-    meta: { requiresAuth: true },
+    meta: { requiresAuth: true, darkMenu: true },
   },
   {
     path: '/live-stream',
@@ -82,6 +82,11 @@ const routes = [
     name: 'Favorites',
     component: FavoritesPage,
     props: true,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/schedule',
+    name: 'Schedule',
     meta: { requiresAuth: true },
   },
   {

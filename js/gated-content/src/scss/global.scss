@@ -7,6 +7,7 @@
 @import "variables";
 @import "widgets/video-level";
 @import "widgets/button";
+@import "components/top-menu";
 @import "components/video-listing";
 @import "components/video-teaser";
 @import "components/event-teaser";
@@ -24,9 +25,12 @@
 @import "views/blog-page";
 @import "views/virtual-meeting-page";
 @import "views/login";
+@import "theme_overrides";
 
 #gated-content {
   padding-bottom: 30px;
+
+  @include median(padding-top, 80px, 45px);
 
   .gated-container {
     padding: 10px;

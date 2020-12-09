@@ -107,6 +107,10 @@ function openy_gated_content_preprocess_html(&$variables) {
         if ($field_item->entity->bundle() === 'gated_content') {
           $variables['attributes']['class'][] = openy_gated_content_get_base_theme() . '-based';
           $variables['attributes']['class'][] = 'openy-gated-content';
+
+          if (openy_gated_content_get_base_theme() === 'openy_rose') {
+            $variables['#attached']['library'][] = 'openy_gated_content/openy-rose-menu';
+          }
         }
       }
     }
@@ -116,6 +120,10 @@ function openy_gated_content_preprocess_html(&$variables) {
         if ($field_item->entity->bundle() === 'gated_content') {
           $variables['attributes']['class'][] = openy_gated_content_get_base_theme() . '-based';
           $variables['attributes']['class'][] = 'openy-gated-content';
+
+          if (openy_gated_content_get_base_theme() === 'openy_rose') {
+            $variables['#attached']['library'][] = 'openy_gated_content/openy-rose-menu';
+          }
         }
       }
     }

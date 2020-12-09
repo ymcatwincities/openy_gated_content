@@ -1,0 +1,103 @@
+.openy_carnation-based.openy-gated-content {
+  main > div > div {
+    > .banner {
+      display: none;
+    }
+
+    > .breadcrumbs-wrapper {
+      display: none !important;
+    }
+  }
+
+  #gated-content {
+    @include median(padding-top, 80px, 45px);
+
+    .top-menu {
+      @include median(top, 130px, 78px);
+    }
+  }
+
+  &.toolbar-fixed {
+    #gated-content {
+      @include median(padding-top, 0);
+
+      .top-menu {
+        @include median(top, calc(130px + 47px), calc(78px + 39px));
+      }
+
+    }
+
+    .openy-page-tabs {
+      margin-top: 100px !important;
+    }
+  }
+
+  &.toolbar-tray-open #gated-content .top-menu {
+    @include median(top, calc(130px + 79px), calc(78px + 39px));
+  }
+}
+
+.openy_lily-based.openy-gated-content {
+  .breadcrumb-container {
+    display: none;
+  }
+
+  #gated-content {
+    .top-menu {
+      @include median(top, 162px, 80px);
+    }
+  }
+
+  &.toolbar-tray-open #gated-content .top-menu {
+    top: calc(162px + 27px);
+  }
+}
+
+.openy_rose-based.openy-gated-content {
+  #block-openy-rose-breadcrumbs {
+    display: none;
+  }
+
+  #gated-content {
+    .top-menu {
+      @include median(z-index, 500, 1030);
+      @include median(top, 165px, 70px);
+
+      > div button {
+        @include median(padding-right, initial, 8px);
+      }
+    }
+  }
+
+  &.primary-menu-minimize {
+    #gated-content .top-menu {
+      top: 42px;
+    }
+
+    &.toolbar-fixed {
+      #gated-content {
+        .top-menu {
+          top: calc(42px + 39px);
+        }
+      }
+    }
+  }
+
+  &.toolbar-fixed {
+    #gated-content {
+      @include median(padding-top, 0);
+
+      .top-menu {
+        top: calc(165px + 37px);
+      }
+    }
+
+    .openy-page-tabs {
+      margin-top: 100px !important;
+    }
+  }
+}
+
+.toolbar-icon-openy-gated-content-openy:before {
+  background-image: url(/profiles/contrib/openy/modules/custom/openy_system/assets/images/icon-gear-inactive.png);
+}

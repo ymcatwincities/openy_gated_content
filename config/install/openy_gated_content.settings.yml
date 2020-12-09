@@ -30,3 +30,8 @@ permissions_entities:
   eventseries:
     - live_stream
     - virtual_meeting
+top_menu:
+  links_color_light: '#636466'
+  background_color_light: '#F2F2F2'
+  links_color_dark: '#ffffff'
+  background_color_dark: 'black'
