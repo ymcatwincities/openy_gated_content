@@ -85,6 +85,11 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
+    path: '/schedule',
+    name: 'Schedule',
+    meta: { requiresAuth: true },
+  },
+  {
     path: '/categories',
     redirect: '/categories/video',
   },
