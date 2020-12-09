@@ -27,6 +27,7 @@ class SegmentContentAccessCheck implements ContainerInjectionInterface {
    *
    * @var \Drupal\Core\Config\ImmutableConfig
    */
+
   protected $config;
 
   /**
@@ -128,7 +129,7 @@ class SegmentContentAccessCheck implements ContainerInjectionInterface {
 
         // Use Drupal permissions for administrators and editors.
         if (
-          in_array(self::getVirtualYEditorRoles(), $account_roles)
+          in_array(self::getVirtualyEditorRoles(), $account_roles)
           || in_array('administrator', $account_roles)
         ) {
           return AccessResult::neutral();

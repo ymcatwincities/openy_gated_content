@@ -22,7 +22,7 @@ trait VirtualYAccessTrait {
    * @return array
    *   List of Virtual Y Editor roles.
    */
-  public function getVirtualYEditorRoles() {
+  public function getVirtualyEditorRoles() {
     return [self::$virtualYAccessEditorRole];
   }
 
