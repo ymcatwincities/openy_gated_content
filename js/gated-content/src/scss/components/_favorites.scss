@@ -1,0 +1,23 @@
+.add-to-favorite {
+  cursor: pointer;
+  display: inline-block;
+  margin: 0 20px;
+  font-size: 2em;
+
+  .spinner {
+    width: 25px;
+    height: 25px;
+  }
+
+  &.active .favorite-icon {
+    color: $red;
+  }
+
+  .favorite-icon {
+    color: $gray;
+
+    &:hover {
+      color: $red;
+    }
+  }
+}
