@@ -1,7 +1,7 @@
 .top-menu {
+  position:         fixed;
   background-color: black;
-  position: fixed;
-  width: 100%;
+  width:            100%;
 
   @include median(z-index, 1030, 39);
 
@@ -20,7 +20,7 @@
     }
 
     a:first-child {
-      margin-right:   auto;
+      margin-right: auto;
 
       @include median(padding-bottom, 12px, initial);
       @include median(font-size, 20px, 18px);
@@ -31,12 +31,13 @@
       padding-bottom: 12px;
 
       &.router-link-active {
-        border-bottom:  2px solid;
-        padding-bottom: 10px;
+        @include median(border-bottom, 2px solid, 1px solid);
+        @include median(padding-bottom, 10px, 12px);
       }
 
       &:not(:last-child) {
-        padding-right: 20px;
+        padding-right: 10px;
+        padding-left:  10px;
       }
 
       @include median(display, block, none);
@@ -48,13 +49,17 @@
       }
     }
 
+    a:last-child {
+      padding-left: 10px;
+    }
+
     button {
+      justify-content:  flex-end;
       outline:          none;
       border:           none;
       background-color: transparent;
       padding-right:    10px;
       text-align:       right;
-      justify-content: flex-end;
 
       @include median(display, none, flex);
       @include median(padding-right, initial, 13px);
@@ -92,6 +97,7 @@
       border:        1px solid $gray;
       border-radius: 5px;
       padding:       15px;
+      min-height:    53px;
       text-align:    center;
       color:         $gray;
     }

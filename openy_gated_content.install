@@ -243,3 +243,27 @@ function openy_gated_content_update_8012() {
     'top_menu'
   );
 }
+
+/**
+ * Install VyFavoriteItem Entity Type.
+ */
+function openy_gated_content_update_8013() {
+  \Drupal::entityDefinitionUpdateManager()->installEntityType(new ContentEntityType([
+    'id' => 'vy_favorite_item',
+    'label' => new TranslatableMarkup('VY Favorite Item'),
+    'base_table' => 'vy_favorite_item',
+    'translatable' => FALSE,
+    'admin_permission' => 'administer gated content favorite items',
+    'handlers' => [
+      'storage_schema' => 'Drupal\openy_gated_content\VyFavoriteItemStorageSchema',
+    ],
+    'entity_keys' => [
+      'id' => 'id',
+      'ref_entity_type' => 'ref_entity_type',
+      'ref_entity_bundle' => 'ref_entity_bundle',
+      'ref_entity_id' => 'ref_entity_id',
+      'owner' => 'uid',
+      'created' => 'created',
+    ],
+  ]));
+}
