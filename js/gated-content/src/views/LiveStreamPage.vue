@@ -125,7 +125,7 @@ export default {
     },
     descriptionTruncated() {
       return `${this.descriptionProcessed.length > 1000}`
-        ? `${this.descriptionProcessed.substring(0, 997)}` + '...'
+        ? `${this.descriptionProcessed.substring(0, 997)}`
         : `${this.descriptionProcessed}`;
     },
     event() {
