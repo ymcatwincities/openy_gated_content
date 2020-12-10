@@ -73,3 +73,25 @@ function openy_gc_shared_content_server_update_8001() {
 
   $definition_update_manager->installFieldStorageDefinition('status', 'shared_content_source', 'shared_content_source', $status);
 }
+
+/**
+ * Add `sync_enabled` field to 'shared_content_source' entity type.
+ */
+function openy_gc_shared_content_server_update_8002() {
+  $definition_update_manager = \Drupal::entityDefinitionUpdateManager();
+
+  $status = BaseFieldDefinition::create('boolean')
+    ->setLabel(t('Sync Enabled'))
+    ->setDescription(t('Indicating whether the Shared content source enabled for sync.'))
+    ->setDisplayOptions('form', [
+      'type' => 'boolean_checkbox',
+      'settings' => [
+        'display_label' => TRUE,
+      ],
+      'weight' => 5,
+    ])
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDefaultValue(0);
+
+  $definition_update_manager->installFieldStorageDefinition('sync_enabled', 'shared_content_source', 'shared_content_source', $status);
+}
