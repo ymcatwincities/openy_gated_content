@@ -1,11 +1,38 @@
 .event-teaser {
-  cursor: initial;
+  border-top: 5px solid $indigo;
+  cursor:     pointer;
 
-  &.virtual-meeting {
-    border-top: solid 5px $blue-hover;
+  @include median(padding, 10px, 5px);
+
+  .title, .date, .time, .instructor {
+    @include median(padding-bottom, 10px, 5px);
   }
 
+  .title {
+    font-weight: bold;
 
+    @include median(font-size, 16px, 14px);
+  }
 
+  .date, .time, .instructor {
+    display:     flex;
+    align-items: center;
 
+    @include median(font-size, 12px, 10px);
+
+    .svg-container {
+      margin-right: 12px;
+      font-size:    20px;
+      fill:         $gray;
+    }
+  }
+
+  .timer {
+    display:       inline-block;
+    margin-top:    11px;
+    border:        1px solid $gray;
+    border-radius: 12px;
+    padding:       5px 10px;
+    font-size:     10px;
+  }
 }

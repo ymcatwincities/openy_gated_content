@@ -1,61 +1,55 @@
 <template>
-  <div
-    class="video-teaser event-teaser"
+  <router-link
+    :to="{ name: route, params: { id: video.id } }"
+    class="event-teaser"
     v-bind:class="{
       'live-stream': route === 'LiveStream',
       'virtual-meeting': route === 'VirtualMeeting'
     }"
   >
-    <router-link :to="{ name: route, params: { id: video.id } }">
-      <div class="title">{{ video.attributes.title }}</div>
-      <div>
-        Date
-      </div>
-      <div>
-        Time
-      </div>
-      <div>
-        instructor
-      </div>
-      <div>
-        live / starts in
-      </div>
-      <div>
-        calendar
-      </div>
-
-      <div class="meta">
-        <div class="schedule">
-          <i class="fa fa-clock-o fa-clock" aria-hidden="true"></i>
-          {{ this.video.attributes.date | schedule }}
-        </div>
-      </div>
-      <div v-if="isOnAir" class="controls join">
-        <router-link
-          :to="{ name: route, params: { id: video.id } }">
-          Join live stream
-        </router-link>
-      </div>
-      <div v-else class="controls subscribe">
-        <div>
-          <div class="video-level">{{ level | first_letter }}</div>{{ level | capitalize }}
-        </div>
-      </div>
-    </router-link>
+    <div class="title">{{ video.attributes.title }}</div>
+    <div class="date">
+      <SvgIcon icon="Date Icon"></SvgIcon>
+      {{ date }}
+    </div>
+    <div class="time">
+      <SvgIcon icon="clock-regular"></SvgIcon>
+      {{ time }} ({{ duration }})
+    </div>
+    <div class="instructor">
+      <SvgIcon icon="Instructor Icon"></SvgIcon>
+      {{ this.video.attributes.instructor }}
+    </div>
+    <div class="timer" :class="{live: isOnAir}">
+      <template v-if="isOnAir">
+        LIVE!
+      </template>
+      <template v-else>
+        Starts in {{ startsIn }}
+      </template>
+    </div>
+    <div class="favorite">
+      calendar
+    </div>
     <AddToFavorite
       :id="video.attributes.drupal_internal__id"
       :type="'eventinstance'"
       :bundle="type"
     ></AddToFavorite>
-  </div>
+  </router-link>
 </template>
 
 <script>
 import AddToFavorite from '@/components/AddToFavorite.vue';
+import SvgIcon from '@/components/SvgIcon.vue';
+import moment from 'moment';
+// eslint-disable-next-line no-unused-vars
+import momentDurationFormatSetup from 'moment-duration-format';
 
 export default {
   name: 'EventTeaser',
   components: {
+    SvgIcon,
     AddToFavorite,
   },
   props: {
@@ -65,6 +59,20 @@ export default {
     },
   },
   computed: {
+    date() {
+      return moment(this.video.attributes.date.value).format('YYYY-MM-DD');
+    },
+    time() {
+      return moment(this.video.attributes.date.value).format('HH:MM:SS');
+    },
+    duration() {
+      return moment.duration(moment(this.video.attributes.date.value)
+        .diff(moment(this.video.attributes.date.end_value))).humanize();
+    },
+    startsIn() {
+      return moment.duration(moment(this.video.attributes.date.value)
+        .diff(moment())).format();
+    },
     image() {
       if (this.video.attributes['field_ls_image.field_media_image']) {
         return this.video.attributes['field_ls_image.field_media_image']
@@ -100,6 +108,9 @@ export default {
     type() {
       return this.video.type.replace('eventinstance--', '');
     },
+  },
+  mounted() {
+    console.log(this.video);
   },
 };
 </script>
