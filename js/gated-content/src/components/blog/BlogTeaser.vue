@@ -1,19 +1,15 @@
 <template>
-  <div class="blog-teaser category-teaser">
-    <router-link :to="{ name: 'BlogPage', params: { id: blog.id } }">
-        <div class="preview" v-bind:style="{
-              backgroundImage: `url(${image})`
-            }"
-        v-if="image">
-        </div>
-        <div class="title">{{ blog.attributes.title }}</div>
-    </router-link>
+  <router-link
+    class="teaser blog-teaser"
+    :to="{ name: 'BlogPage', params: { id: blog.id } }">
+    <div class="title">{{ blog.attributes.title }}</div>
     <AddToFavorite
       :id="blog.attributes.drupal_internal__nid"
       :type="'node'"
       :bundle="'vy_blog_post'"
+      icon="Favorites Icon Outlined"
     ></AddToFavorite>
-  </div>
+  </router-link>
 </template>
 
 <script>

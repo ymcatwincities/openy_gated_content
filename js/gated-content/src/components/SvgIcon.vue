@@ -1,5 +1,5 @@
 <template>
-  <div v-html="require(`!html-loader!../assets/svg/${icon}.svg`)" class="svg-container"></div>
+  <span v-html="require(`!html-loader!../assets/svg/${icon}.svg`)" class="svg-container"></span>
 </template>
 
 <script>

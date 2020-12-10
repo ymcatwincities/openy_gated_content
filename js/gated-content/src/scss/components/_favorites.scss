@@ -10,14 +10,14 @@
   }
 
   &.active .favorite-icon {
-    color: $red;
+    fill: $red;
   }
 
   .favorite-icon {
-    color: $gray;
+    fill: $gray;
 
     &:hover {
-      color: $red;
+      fill: $red;
     }
   }
 }

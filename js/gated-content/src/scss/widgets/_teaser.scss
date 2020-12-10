@@ -1,0 +1,25 @@
+.teaser {
+  display:          flex;
+  flex-wrap:        wrap;
+  transform:        scale(1);
+
+  border:           solid 1px $gray;
+  border-top:       solid 5px $indigo;
+
+  box-shadow:       0 1px 1px rgba(0, 0, 0, .5);
+
+  cursor:           pointer;
+
+  &:hover {
+    transform:  scale(1.01);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, .25);
+  }
+
+  .title {
+    width: 100%;
+    font-weight: bold;
+    color: $dark-blue;
+
+    @include median(font-size, 16px, 14px);
+  }
+}

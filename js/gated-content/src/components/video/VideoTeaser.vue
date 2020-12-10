@@ -1,39 +1,41 @@
 <template>
-  <div class="video-teaser">
-    <router-link :to="{ name: 'Video', params: { id: video.id } }">
-        <div class="preview" v-bind:style="{
+  <router-link
+    class="teaser video-teaser"
+    :to="{ name: 'Video', params: { id: video.id } }">
+    <div class="preview" v-bind:style="{
               backgroundImage: `url(${image})`
             }">
-          <YoutubePlayButton></YoutubePlayButton>
-          <div v-if="duration" class="duration">{{duration}}</div>
-        </div>
-        <div class="title">{{ video.attributes.title }}</div>
-        <div
-          v-if="video.attributes.field_gc_video_level"
-          class="meta">
-          <div class="video-level">
-            {{ video.attributes.field_gc_video_level.name | first_letter }}
-          </div>
-          {{ video.attributes.field_gc_video_level.name | capitalize }}
-        </div>
-    </router-link>
+      <div class="play-button"></div>
+    </div>
+    <div class="title">{{ video.attributes.title }}</div>
+    <div class="instructor">
+      <SvgIcon icon="Instructor Icon"></SvgIcon>
+      {{ this.video.attributes.field_gc_video_instructor }}
+    </div>
+    <div class="timer">
+      {{ duration }}
+    </div>
     <AddToFavorite
       :id="video.attributes.drupal_internal__nid"
+      icon="Favorites Icon Outlined"
       :type="'node'"
       :bundle="'gc_video'"
     ></AddToFavorite>
-  </div>
+  </router-link>
 </template>
 
 <script>
 import AddToFavorite from '@/components/AddToFavorite.vue';
-import YoutubePlayButton from '@/components/YoutubePlayButton.vue';
+import SvgIcon from '@/components/SvgIcon.vue';
+import moment from 'moment';
+// eslint-disable-next-line no-unused-vars
+import momentDurationFormatSetup from 'moment-duration-format';
 
 export default {
   name: 'VideoTeaser',
   components: {
+    SvgIcon,
     AddToFavorite,
-    YoutubePlayButton,
   },
   props: {
     video: {
@@ -55,17 +57,11 @@ export default {
       return this.video.attributes['field_gc_video_media.thumbnail'].image_style_uri[0].gated_content_teaser;
     },
     duration() {
-      const sec = this.video.attributes.field_gc_video_duration;
-      if (sec === null) {
-        return '';
-      }
-
-      function appendZero(n) {
-        return (n < 10) ? `0${n}` : n;
-      }
-
-      return `${appendZero(Math.floor(sec / 60))}:${appendZero(sec % 60)}`;
+      return moment.duration(this.video.attributes.field_gc_video_duration, 'seconds').format('m [minute]');
     },
+  },
+  mounted() {
+    console.log(this.video);
   },
 };
 </script>

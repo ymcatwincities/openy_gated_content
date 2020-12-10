@@ -1,7 +1,7 @@
 <template>
   <router-link
     :to="{ name: route, params: { id: video.id } }"
-    class="event-teaser"
+    class="teaser event-teaser"
     v-bind:class="{
       'live-stream': route === 'LiveStream',
       'virtual-meeting': route === 'VirtualMeeting'
@@ -18,7 +18,7 @@
     </div>
     <div class="instructor">
       <SvgIcon icon="Instructor Icon"></SvgIcon>
-      {{ this.video.attributes.instructor }}
+      {{ this.video.attributes.host_name }}
     </div>
     <div class="timer" :class="{live: isOnAir}">
       <template v-if="isOnAir">
@@ -27,9 +27,6 @@
       <template v-else>
         Starts in {{ startsIn }}
       </template>
-    </div>
-    <div class="favorite">
-      calendar
     </div>
     <AddToFavorite
       :id="video.attributes.drupal_internal__id"

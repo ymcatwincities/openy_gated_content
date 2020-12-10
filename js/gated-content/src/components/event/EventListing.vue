@@ -1,9 +1,9 @@
 <template>
-  <div class="videos gated-container">
-    <div class="videos__header" :class="{'with-date-filter': withDateFilter}">
+  <div class="gated-container">
+    <div class="listing-header" :class="{'with-date-filter': withDateFilter}">
       <h2 class="title">{{ title }}</h2>
       <h2 class="videos__date-filter"
-        v-if="withDateFilter"
+          v-if="withDateFilter"
       >
         <button v-on:click.stop="backOneDay" class="left" role="button"
                 :style="[hidePrevDateButton ? {'visibility':'hidden'}:'']"
@@ -21,12 +21,12 @@
     </div>
     <template v-else-if="listingIsNotEmpty">
       <div v-if="error">Error loading</div>
-      <div v-else class="video-listing live-stream-listing">
-          <EventTeaser
-            v-for="video in listing"
-            :key="video.id"
-            :video="video"
-          />
+      <div v-else class="four-columns">
+        <EventTeaser
+          v-for="video in listing"
+          :key="video.id"
+          :video="video"
+        />
       </div>
     </template>
     <div v-else class="empty-listing">{{ msg }}</div>

@@ -1,22 +1,14 @@
 .event-teaser {
-  border-top: 5px solid $indigo;
-  cursor:     pointer;
-
   @include median(padding, 10px, 5px);
 
   .title, .date, .time, .instructor {
     @include median(padding-bottom, 10px, 5px);
   }
 
-  .title {
-    font-weight: bold;
-
-    @include median(font-size, 16px, 14px);
-  }
-
   .date, .time, .instructor {
     display:     flex;
     align-items: center;
+    width:       100%;
 
     @include median(font-size, 12px, 10px);
 
@@ -34,5 +26,23 @@
     border-radius: 12px;
     padding:       5px 10px;
     font-size:     10px;
+
+    &.live {
+      background-color: $indigo;
+      color:            $white;
+    }
+  }
+
+  .add-to-favorite {
+    flex-grow:   1;
+    margin-top:  13px;
+    line-height: 20px;
+    font-size:   20px;
+
+    @include median(margin-right, 5px, 10px);
+
+    .favorite-icon {
+      float: right;
+    }
   }
 }
