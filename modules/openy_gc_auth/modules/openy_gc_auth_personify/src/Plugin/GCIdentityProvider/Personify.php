@@ -226,7 +226,7 @@ class Personify extends GCIdentityProviderPluginBase {
     if ($this->currentRequest->query->has('personify-error')) {
       return $this->formBuilder->getForm('Drupal\openy_gc_auth_personify\Form\VirtualYPersonifyTryAgainForm');
     }
-    elseif ($this->configFactory->get('openy_gc_auth.provider.personify')->get('login_mode') == 'present_login_button') {
+    elseif ($this->configFactory->get('openy_gc_auth.provider.personify')->get('login_mode') === 'present_login_button') {
       return $this->formBuilder->getForm('Drupal\openy_gc_auth_personify\Form\VirtualYPersonifyLoginForm');
     }
     return new RedirectResponse(Url::fromRoute('openy_gc_auth_personify.personify_check')->toString());
