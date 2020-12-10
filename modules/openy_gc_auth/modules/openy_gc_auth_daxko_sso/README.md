@@ -10,11 +10,12 @@ requre's https://github.com/ymcatwincities/daxko_sso.
 2. Setup your Daxko SSO credentials
 here: /admin/openy/integrations/daxko/daxko-sso
 3. Setup link to the page, where Virtual Y
-app is installed: /admin/openy/openy-gc-auth/settings/provider/daxkosso
+app is installed: /admin/openy/virtual-ymca/gc-auth-settings/provider/daxkosso
+
 4. Save your settings and verify that Daxko was
 able to register Virtual Y link from your website at it's settings.
 5. Set Daxko SSO as your main authorization plugin
-at the Virtual YMCA settings: /admin/openy/openy-gc-auth/settings
+at the Virtual YMCA settings: /admin/openy/virtual-ymca/gc-auth-settings
 
 ## I need help.
 In case, if you need help, please write your question
