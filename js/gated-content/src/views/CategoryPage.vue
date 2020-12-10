@@ -19,13 +19,11 @@
         </div>
       </div>
       <VideoListing
-        v-if="type === 'video'"
         :title="config.components.gc_video.title"
         :category="category.id"
         :pagination="true"
       />
       <BlogListing
-        v-if="type === 'blog'"
         :title="config.components.vy_blog_post.title"
         :category="category.id"
         :pagination="true"
@@ -49,14 +47,6 @@ export default {
     BlogListing,
   },
   props: {
-    type: {
-      type: String,
-      required: true,
-      validator(value) {
-        // Can be video or blog.
-        return ['video', 'blog'].indexOf(value) !== -1;
-      },
-    },
     cid: {
       type: String,
       required: true,

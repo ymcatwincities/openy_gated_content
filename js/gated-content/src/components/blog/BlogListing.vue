@@ -3,7 +3,7 @@
     <div class="blogs__header videos__header">
       <h2 class="title">{{ title }}</h2>
       <router-link
-        :to="{ name: 'CategoryListing', params: { type: 'blog' }}"
+        :to="{ name: 'CategoryListing', query: { type: 'vy_blog_post' }}"
         v-if="viewAll && listingIsNotEmpty"
         class="view-all"
       >

@@ -157,7 +157,7 @@ import Modal from '@/components/Modal.vue';
 import BlogListing from '@/components/blog/BlogListing.vue';
 import VideoListing from '@/components/video/VideoListing.vue';
 import EventListing from '@/components/event/EventListing.vue';
-import CategoriesListing from '@/views/CategoriesListing.vue';
+import CategoriesListing from '@/components/category/CategoriesListing.vue';
 import { SettingsMixin } from '@/mixins/SettingsMixin';
 import { FavoritesMixin } from '@/mixins/FavoritesMixin';
 

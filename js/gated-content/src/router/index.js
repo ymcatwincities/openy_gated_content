@@ -5,7 +5,7 @@ import NotFound from '@/views/NotFound.vue';
 import VideoPage from '@/views/VideoPage.vue';
 import BlogPage from '@/views/BlogPage.vue';
 import CategoryPage from '@/views/CategoryPage.vue';
-import CategoriesListing from '@/views/CategoriesListing.vue';
+import CategoriesListingPage from '@/views/CategoriesListingPage.vue';
 import LiveStreamPage from '@/views/LiveStreamPage.vue';
 import LiveStreamListingPage from '@/views/LiveStreamListingPage.vue';
 import VirtualMeetingPage from '@/views/VirtualMeetingPage.vue';
@@ -22,14 +22,14 @@ const routes = [
     meta: { requiresAuth: true, darkMenu: true },
   },
   {
-    path: '/categories/:type',
+    path: '/categories',
     name: 'CategoryListing',
-    component: CategoriesListing,
+    component: CategoriesListingPage,
     props: true,
     meta: { requiresAuth: true },
   },
   {
-    path: '/category/:type/:cid',
+    path: '/category/:cid',
     name: 'Category',
     component: CategoryPage,
     props: true,
@@ -90,12 +90,24 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
-    path: '/categories',
-    redirect: '/categories/video',
+    path: '/blog-post',
+    redirect: { name: 'CategoryListing', query: { type: 'vy_blog_post' } },
   },
   {
-    path: '/blog-post',
-    redirect: '/categories/blog',
+    path: '/categories/blog',
+    redirect: { name: 'CategoryListing', query: { type: 'vy_blog_post' } },
+  },
+  {
+    path: '/categories/video',
+    redirect: { name: 'CategoryListing', query: { type: 'gc_video' } },
+  },
+  {
+    path: '/category/blog/:cid',
+    redirect: '/category/:cid',
+  },
+  {
+    path: '/category/video/:cid',
+    redirect: '/category/:cid',
   },
   {
     path: '*',
