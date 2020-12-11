@@ -120,18 +120,11 @@ export default {
     };
   },
   watch: {
-    $route: 'load',
+    $route: 'initStartDate',
     startDate: 'load',
   },
   async mounted() {
-    const sunday = new Date();
-    if (this.$route.query.startDate && this.$route.query.startDate > sunday.getTime()) {
-      sunday.setTime(this.$route.query.startDate);
-    }
-    sunday.setHours(0, 0, 0, 0);
-    sunday.setDate(sunday.getDate() - sunday.getDay());
-    this.startDate = sunday;
-    this.updateRoute();
+    this.initStartDate();
   },
   computed: {
     listingIsEmpty() {
@@ -280,6 +273,16 @@ export default {
       this.collapses[index] = !this.collapses[index];
       this.$forceUpdate();
     },
+    initStartDate() {
+      const sunday = new Date();
+      if (this.$route.query.startDate && this.$route.query.startDate > sunday.getTime()) {
+        sunday.setTime(this.$route.query.startDate);
+      }
+      sunday.setHours(0, 0, 0, 0);
+      sunday.setDate(sunday.getDate() - sunday.getDay());
+      this.startDate = sunday;
+      this.updateRoute();
+    },
     updateRoute() {
       const query = {
         ...this.$route.query,
@@ -288,7 +291,9 @@ export default {
       if ((new Date()).getTime() >= this.startDate.getTime()) {
         delete query.startDate;
       }
-      this.$router.push({ query });
+      if (Object.entries(this.$route.query).toString() !== Object.entries(query).toString()) {
+        this.$router.push({ query });
+      }
     },
   },
 };

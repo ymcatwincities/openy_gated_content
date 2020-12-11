@@ -268,13 +268,14 @@ export default {
     applyFilters() {
       this.selectedComponent = this.preSelectedComponent;
       this.selectedSort = this.preSelectedSort;
-      this.$router.push({
-        query: {
-          ...this.$route.query,
-          type: this.selectedComponent,
-          sort: this.selectedSort,
-        },
-      });
+      const query = {
+        ...this.$route.query,
+        type: this.selectedComponent,
+        sort: this.selectedSort,
+      };
+      if (Object.entries(this.$route.query).toString() !== Object.entries(query).toString()) {
+        this.$router.push({ query });
+      }
       this.showModal = false;
     },
     sortData(type) {
