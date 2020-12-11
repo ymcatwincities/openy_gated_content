@@ -56,31 +56,20 @@
 </template>
 
 <script>
-import Modal from '@/components/Modal.vue';
 import CategoriesListing from '@/components/category/CategoriesListing.vue';
 import { SettingsMixin } from '@/mixins/SettingsMixin';
+import { FilterAndSortMixin } from '@/mixins/FilterAndSortMixin';
 
 export default {
   name: 'CategoriesListingPage',
-  mixins: [SettingsMixin],
+  mixins: [SettingsMixin, FilterAndSortMixin],
   components: {
     CategoriesListing,
-    Modal,
   },
   data() {
     return {
-      showModal: false,
-      selectedComponent: 'all',
-      preSelectedComponent: 'all',
       selectedSort: 'weight_asc',
       preSelectedSort: 'weight_asc',
-      contentTypeOptions: [
-        { value: 'all', label: 'Show All' },
-        { value: 'gc_video', label: 'Video' },
-        { value: 'live_stream', label: 'Live stream' },
-        { value: 'virtual_meeting', label: 'Virtual meeting' },
-        { value: 'vy_blog_post', label: 'Blog' },
-      ],
       filterOptions: [
         { value: 'weight_asc', label: 'ASC' },
         { value: 'weight_desc', label: 'DESC' },
@@ -128,30 +117,6 @@ export default {
         this.preSelectedSort = newQuery.sort ? newQuery.sort : 'weight_asc';
         this.$forceUpdate();
       }
-    },
-  },
-  created() {
-    if (this.$route.query.type) {
-      this.selectedComponent = this.$route.query.type;
-      this.preSelectedComponent = this.$route.query.type;
-    }
-    if (this.$route.query.sort) {
-      this.selectedSort = this.$route.query.sort;
-      this.preSelectedSort = this.$route.query.sort;
-    }
-  },
-  methods: {
-    applyFilters() {
-      this.selectedComponent = this.preSelectedComponent;
-      this.selectedSort = this.preSelectedSort;
-      this.$router.push({
-        query: {
-          ...this.$route.query,
-          type: this.selectedComponent,
-          sort: this.selectedSort,
-        },
-      });
-      this.showModal = false;
     },
   },
 };

@@ -5,7 +5,7 @@
   <div v-else-if="error" class="text-center">Error loading</div>
   <div v-else-if="showlisting" class="gated-container">
     <h2 class="title" v-if="title !== 'none'">{{ title }}</h2>
-    <div v-else class="video-listing category-listing">
+    <div class="video-listing category-listing">
       <CategoryTeaser
         v-for="category in listing"
         :key="category.id"
@@ -83,13 +83,6 @@ export default {
     },
   },
   methods: {
-    listingIsNotEmpty() {
-      if (this.listing !== null && this.listing.length > 0) {
-        this.showlisting = true;
-      } else {
-        this.showlisting = false;
-      }
-    },
     async load() {
       this.showlisting = false;
       this.listing = [];
