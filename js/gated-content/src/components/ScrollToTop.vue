@@ -1,6 +1,6 @@
 <template>
   <div class="fixed-button scroll-to-top" v-show="visible">
-    <a @click.prevent="scrollTop">
+    <a @click.stop="scrollTop">
       <svg width="100%" height="100%" viewBox="0 0 16 16" fill="currentColor">
         <path
           fill-rule="evenodd"
@@ -20,20 +20,17 @@ export default {
     };
   },
   methods: {
-    scrollPosition() {
-      return window.pageYOffset - document.getElementById('gated-content').offsetTop;
-    },
     scrollTop() {
       this.intervalId = setInterval(() => {
-        if (this.scrollPosition() <= -100) {
+        if (window.pageYOffset <= 100) {
           clearInterval(this.intervalId);
-          window.scroll(0, document.getElementById('gated-content').offsetTop);
+          window.scroll(0, 0);
         }
         window.scroll(0, window.pageYOffset - 100);
       }, 20);
     },
     scrollListener() {
-      this.visible = this.scrollPosition() > 250;
+      this.visible = window.pageYOffset > 250;
     },
   },
   mounted() {
