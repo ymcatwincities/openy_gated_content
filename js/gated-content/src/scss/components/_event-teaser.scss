@@ -1,38 +1,38 @@
 .event-teaser {
   > a {
     @include median(padding, 10px, 5px 5px 10px);
-  }
 
-  .title, .date, .time, .instructor {
-    @include median(padding-bottom, 10px, 5px);
-  }
-
-  .date, .time, .instructor {
-    display:     flex;
-    align-items: center;
-    width:       100%;
-    color:       $black;
-
-    @include median(font-size, 12px, 10px);
-
-    .svg-container {
-      margin-right: 12px;
-      font-size:    20px;
-      fill:         $gray;
+    .title, .date, .time, .instructor {
+      @include median(padding-bottom, 10px, 5px);
     }
-  }
 
-  .timer {
-    display:       inline-block;
-    margin-top:    11px;
-    border:        1px solid $gray;
-    border-radius: 12px;
-    padding:       5px 10px;
-    font-size:     10px;
+    .date, .time, .instructor {
+      display:     flex;
+      align-items: center;
+      width:       100%;
+      color:       $black;
 
-    &.live {
-      background-color: $indigo;
-      color:            $white;
+      @include median(font-size, 12px, 10px);
+
+      .svg-container {
+        margin-right: 12px;
+        font-size:    20px;
+        fill:         $gray;
+      }
+    }
+
+    .timer {
+      display:       inline-block;
+      margin-top:    11px;
+      border:        1px solid $gray;
+      border-radius: 12px;
+      padding:       5px 10px;
+      font-size:     10px;
+
+      &.live {
+        background-color: $indigo;
+        color:            $white;
+      }
     }
   }
 }

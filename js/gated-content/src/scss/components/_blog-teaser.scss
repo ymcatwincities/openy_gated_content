@@ -3,9 +3,9 @@
 
   > a {
     @include median(padding, 10px, 5px 5px 10px);
-  }
 
-  .title {
-    @include median(padding-bottom, 10px, 5px);
+    .title {
+      @include median(padding-bottom, 10px, 5px);
+    }
   }
 }
