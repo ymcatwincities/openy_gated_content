@@ -10,7 +10,7 @@
       </div>
       <div class="title">{{ video.attributes.title }}</div>
       <div class="instructor">
-        <SvgIcon icon="Instructor Icon"></SvgIcon>
+        <SvgIcon icon="instructor-icon"></SvgIcon>
         {{ this.video.attributes.field_gc_video_instructor }}
       </div>
       <div class="timer">
@@ -19,7 +19,7 @@
     </router-link>
     <AddToFavorite
       :id="video.attributes.drupal_internal__nid"
-      icon="Favorites Icon Outlined"
+      icon="favorites-outlined"
       :type="'node'"
       :bundle="'gc_video'"
     ></AddToFavorite>

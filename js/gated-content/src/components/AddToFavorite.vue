@@ -32,7 +32,7 @@ export default {
     },
     icon: {
       type: String,
-      default: 'Favorites Icon Solid',
+      default: 'favorites-solid',
     },
     type: {
       type: String,

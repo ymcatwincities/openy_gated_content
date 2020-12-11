@@ -9,7 +9,7 @@
     >
       <div class="title">{{ video.attributes.title }}</div>
       <div class="date">
-        <SvgIcon icon="Date Icon"></SvgIcon>
+        <SvgIcon icon="date-icon"></SvgIcon>
         {{ date }}
       </div>
       <div class="time">
@@ -17,7 +17,7 @@
         {{ time }} ({{ duration }})
       </div>
       <div class="instructor">
-        <SvgIcon icon="Instructor Icon"></SvgIcon>
+        <SvgIcon icon="instructor-icon"></SvgIcon>
         {{ this.video.attributes.host_name }}
       </div>
       <div class="timer" :class="{live: isOnAir}">

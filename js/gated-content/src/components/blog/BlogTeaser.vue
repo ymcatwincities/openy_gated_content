@@ -8,7 +8,7 @@
       :id="blog.attributes.drupal_internal__nid"
       :type="'node'"
       :bundle="'vy_blog_post'"
-      icon="Favorites Icon Outlined"
+      icon="favorites-outlined"
     ></AddToFavorite>
   </div>
 </template>
