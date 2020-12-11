@@ -149,12 +149,17 @@ export default {
     descriptionProcessed() {
       return this.description ? this.description.processed : '';
     },
+    descriptionTruncated() {
+      return `${this.descriptionProcessed.length > 1000}`
+        ? `${this.descriptionProcessed.substring(0, 997)}`
+        : `${this.descriptionProcessed}`;
+    },
     event() {
       return {
         start: this.formatDate(this.video.attributes.date.value),
         duration: [this.getDuration(this.video.attributes.date), 'hour'],
         title: this.video.attributes.title,
-        description: `${this.descriptionProcessed}<br>${this.meetingLink.title}: ${this.meetingLink.uri} <br> Virtual meeting page: ${this.pageUrl}`,
+        description: `${this.descriptionTruncated}<br>${this.meetingLink.title}: ${this.meetingLink.uri} <br> Virtual meeting page: ${this.pageUrl}`,
         busy: true,
         guests: [],
       };
