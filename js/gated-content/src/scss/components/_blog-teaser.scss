@@ -1,22 +1,11 @@
 .blog-teaser {
-  @include median(padding, 10px, 5px);
+  min-height: 70px;
+
+  > a {
+    @include median(padding, 10px, 5px 5px 10px);
+  }
 
   .title {
     @include median(padding-bottom, 10px, 5px);
-  }
-
-  .add-to-favorite {
-    flex-grow:   1;
-    align-self:  flex-end;
-    margin-top:  15px;
-    line-height: 20px;
-    font-size:   20px;
-
-    @include median(margin-right, 5px, 10px);
-    @include median(margin-bottom, 5px, 10px);
-
-    .favorite-icon {
-      float: right;
-    }
   }
 }

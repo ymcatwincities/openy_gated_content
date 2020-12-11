@@ -1,39 +1,40 @@
 <template>
-  <router-link
-    :to="{ name: route, params: { id: video.id } }"
-    class="teaser event-teaser"
-    v-bind:class="{
+  <div class="teaser event-teaser">
+    <router-link
+      :to="{ name: route, params: { id: video.id } }"
+      v-bind:class="{
       'live-stream': route === 'LiveStream',
       'virtual-meeting': route === 'VirtualMeeting'
     }"
-  >
-    <div class="title">{{ video.attributes.title }}</div>
-    <div class="date">
-      <SvgIcon icon="Date Icon"></SvgIcon>
-      {{ date }}
-    </div>
-    <div class="time">
-      <SvgIcon icon="clock-regular"></SvgIcon>
-      {{ time }} ({{ duration }})
-    </div>
-    <div class="instructor">
-      <SvgIcon icon="Instructor Icon"></SvgIcon>
-      {{ this.video.attributes.host_name }}
-    </div>
-    <div class="timer" :class="{live: isOnAir}">
-      <template v-if="isOnAir">
-        LIVE!
-      </template>
-      <template v-else>
-        Starts in {{ startsIn }}
-      </template>
-    </div>
+    >
+      <div class="title">{{ video.attributes.title }}</div>
+      <div class="date">
+        <SvgIcon icon="Date Icon"></SvgIcon>
+        {{ date }}
+      </div>
+      <div class="time">
+        <SvgIcon icon="clock-regular"></SvgIcon>
+        {{ time }} ({{ duration }})
+      </div>
+      <div class="instructor">
+        <SvgIcon icon="Instructor Icon"></SvgIcon>
+        {{ this.video.attributes.host_name }}
+      </div>
+      <div class="timer" :class="{live: isOnAir}">
+        <template v-if="isOnAir">
+          LIVE!
+        </template>
+        <template v-else>
+          Starts in {{ startsIn }}
+        </template>
+      </div>
+    </router-link>
     <AddToFavorite
       :id="video.attributes.drupal_internal__id"
       :type="'eventinstance'"
       :bundle="type"
     ></AddToFavorite>
-  </router-link>
+  </div>
 </template>
 
 <script>
@@ -105,9 +106,6 @@ export default {
     type() {
       return this.video.type.replace('eventinstance--', '');
     },
-  },
-  mounted() {
-    console.log(this.video);
   },
 };
 </script>

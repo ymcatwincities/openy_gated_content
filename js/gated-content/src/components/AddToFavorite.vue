@@ -2,11 +2,11 @@
   <div
     :class="{ active: isActive }"
     class="add-to-favorite"
+    @click="onClick"
   >
     <Spinner v-if="loading"></Spinner>
     <template v-else>
       <SvgIcon
-        @click.prevent="onClick"
         title="Add to favorite"
         class="favorite-icon"
         :icon="icon"

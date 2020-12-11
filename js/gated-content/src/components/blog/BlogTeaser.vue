@@ -1,15 +1,16 @@
 <template>
-  <router-link
-    class="teaser blog-teaser"
-    :to="{ name: 'BlogPage', params: { id: blog.id } }">
-    <div class="title">{{ blog.attributes.title }}</div>
+  <div class="teaser blog-teaser">
+    <router-link
+      :to="{ name: 'BlogPage', params: { id: blog.id } }">
+      <div class="title">{{ blog.attributes.title }}</div>
+    </router-link>
     <AddToFavorite
       :id="blog.attributes.drupal_internal__nid"
       :type="'node'"
       :bundle="'vy_blog_post'"
       icon="Favorites Icon Outlined"
     ></AddToFavorite>
-  </router-link>
+  </div>
 </template>
 
 <script>

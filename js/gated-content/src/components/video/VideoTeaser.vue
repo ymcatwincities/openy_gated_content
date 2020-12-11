@@ -1,27 +1,29 @@
 <template>
-  <router-link
-    class="teaser video-teaser"
-    :to="{ name: 'Video', params: { id: video.id } }">
-    <div class="preview" v-bind:style="{
+  <div class="teaser video-teaser">
+    <router-link
+
+      :to="{ name: 'Video', params: { id: video.id } }">
+      <div class="preview" v-bind:style="{
               backgroundImage: `url(${image})`
             }">
-      <div class="play-button"></div>
-    </div>
-    <div class="title">{{ video.attributes.title }}</div>
-    <div class="instructor">
-      <SvgIcon icon="Instructor Icon"></SvgIcon>
-      {{ this.video.attributes.field_gc_video_instructor }}
-    </div>
-    <div class="timer">
-      {{ duration }}
-    </div>
+        <div class="play-button"></div>
+      </div>
+      <div class="title">{{ video.attributes.title }}</div>
+      <div class="instructor">
+        <SvgIcon icon="Instructor Icon"></SvgIcon>
+        {{ this.video.attributes.field_gc_video_instructor }}
+      </div>
+      <div class="timer">
+        {{ duration }}
+      </div>
+    </router-link>
     <AddToFavorite
       :id="video.attributes.drupal_internal__nid"
       icon="Favorites Icon Outlined"
       :type="'node'"
       :bundle="'gc_video'"
     ></AddToFavorite>
-  </router-link>
+  </div>
 </template>
 
 <script>
@@ -59,9 +61,6 @@ export default {
     duration() {
       return moment.duration(this.video.attributes.field_gc_video_duration, 'seconds').format('m [minute]');
     },
-  },
-  mounted() {
-    console.log(this.video);
   },
 };
 </script>

@@ -1,5 +1,7 @@
 .event-teaser {
-  @include median(padding, 10px, 5px);
+  > a {
+    @include median(padding, 10px, 5px 5px 10px);
+  }
 
   .title, .date, .time, .instructor {
     @include median(padding-bottom, 10px, 5px);
@@ -9,6 +11,7 @@
     display:     flex;
     align-items: center;
     width:       100%;
+    color:       $black;
 
     @include median(font-size, 12px, 10px);
 
@@ -30,19 +33,6 @@
     &.live {
       background-color: $indigo;
       color:            $white;
-    }
-  }
-
-  .add-to-favorite {
-    flex-grow:   1;
-    margin-top:  13px;
-    line-height: 20px;
-    font-size:   20px;
-
-    @include median(margin-right, 5px, 10px);
-
-    .favorite-icon {
-      float: right;
     }
   }
 }
