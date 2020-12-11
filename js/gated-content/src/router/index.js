@@ -10,6 +10,7 @@ import LiveStreamPage from '@/views/LiveStreamPage.vue';
 import LiveStreamListingPage from '@/views/LiveStreamListingPage.vue';
 import VirtualMeetingPage from '@/views/VirtualMeetingPage.vue';
 import VirtualMeetingListingPage from '@/views/VirtualMeetingListingPage.vue';
+import VideosListingPage from '@/views/VideosListingPage.vue';
 import FavoritesPage from '@/views/FavoritesPage.vue';
 
 Vue.use(VueRouter);
@@ -34,6 +35,12 @@ const routes = [
     component: CategoryPage,
     props: true,
     meta: { requiresAuth: true },
+  },
+  {
+    path: '/videos',
+    name: 'VideoListing',
+    component: VideosListingPage,
+    meta: { requiresAuth: true, darkMenu: true },
   },
   {
     path: '/video/:id',
@@ -99,7 +106,7 @@ const routes = [
   },
   {
     path: '/categories/video',
-    redirect: { name: 'CategoryListing', query: { type: 'gc_video' } },
+    redirect: { name: 'VideoListing' },
   },
   {
     path: '/category/blog/:cid',

@@ -1,4 +1,4 @@
-import Modal from '@/components/Modal.vue';
+import Modal from '@/components/modal/Modal.vue';
 
 export const FilterAndSortMixin = {
   components: {
@@ -48,7 +48,6 @@ export const FilterAndSortMixin = {
       this.selectedSort = this.preSelectedSort;
       this.$router.push({
         query: {
-          ...this.$route.query,
           type: this.selectedComponent,
           sort: this.selectedSort,
         },

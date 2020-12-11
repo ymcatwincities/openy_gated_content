@@ -1,9 +1,9 @@
 <template>
   <div class="videos gated-container">
     <div class="videos__header">
-      <h2 class="title">{{ title }}</h2>
+      <h2 class="title" v-if="title !== 'none'">{{ title }}</h2>
       <router-link
-        :to="{ name: 'CategoryListing', query: { type: 'gc_video' }}"
+        :to="{ name: 'VideoListing' }"
         v-if="viewAll && listingIsNotEmpty"
         class="view-all"
       >
