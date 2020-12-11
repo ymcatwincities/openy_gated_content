@@ -149,6 +149,7 @@ export default {
       client
         .get(`jsonapi/node/gc_video/${this.id}`, { params })
         .then((response) => {
+          this.video = this.combine(response.data.data, response.data.included, this.params);
           this.loading = false;
         }).then(() => {
           this.logPlaybackEvent('entityView');
