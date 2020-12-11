@@ -1,9 +1,6 @@
 <template>
   <div>
-    <nav class="text-right gated-container">
-      <router-link :to="{ name: 'Home' }">Home</router-link> |
-      <LogoutLink />
-    </nav>
+    <TopMenu></TopMenu>
     <div v-if="!getAppSettings" class="text-center">
       <Spinner></Spinner>
     </div>
@@ -13,8 +10,8 @@
 </template>
 
 <script>
-import LogoutLink from '@/components/LogoutLink.vue';
 import Spinner from '@/components/Spinner.vue';
+import TopMenu from '@/components/TopMenu.vue';
 import ScrollToTop from '@/components/ScrollToTop.vue';
 import { mapGetters } from 'vuex';
 
@@ -29,7 +26,7 @@ export default {
     },
   },
   components: {
-    LogoutLink,
+    TopMenu,
     Spinner,
     ScrollToTop,
   },
@@ -38,15 +35,10 @@ export default {
       'getAppSettings',
     ]),
   },
-  created() {
-    this.$store.dispatch('setAppUrl', this.appUrl);
-    if (this.appUrl !== undefined && this.appUrl.length > 0) {
-      window.location = this.appUrl;
-    }
-  },
-  mounted() {
-    this.$store.dispatch('setHeadline', JSON.parse(this.headline));
-    this.$store.dispatch('setSettings', JSON.parse(this.settings));
+  async mounted() {
+    await this.$store.dispatch('setSettings', JSON.parse(this.settings));
+    await this.$store.dispatch('setHeadline', JSON.parse(this.headline));
+    await this.$store.dispatch('loadFavorites');
   },
 };
 </script>
