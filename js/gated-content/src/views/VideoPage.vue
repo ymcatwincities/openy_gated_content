@@ -149,15 +149,6 @@ export default {
       client
         .get(`jsonapi/node/gc_video/${this.id}`, { params })
         .then((response) => {
-          this.video = this.combine(response.data.data, response.data.included, this.params);
-          let embedObj = this.video.attributes.field_gc_video_media.field_media_video_embed_field;
-          if (this.video.attributes.field_gc_video_media) {
-            if (this.video.attributes.field_gc_video_media.field_media_source === 'youtube_playlist') {
-              this.video.attributes.field_gc_video_media.field_media_source = 'youtube';
-              embedObj = embedObj.match(/(\?|&)v=([^&#]+)/).pop();
-              this.video.attributes.field_gc_video_media.field_media_video_id = embedObj;
-            }
-          }
           this.loading = false;
         }).then(() => {
           this.logPlaybackEvent('entityView');
