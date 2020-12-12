@@ -1,0 +1,51 @@
+.adjust-modal {
+  .modal-container {
+    width: max-content;
+
+    .modal-header {
+
+      @include median(padding, 12px 10px, 14px 10px 13px);
+
+      h3 {
+        margin: 0;
+
+        @include median(font-size, 16px, 14px);
+      }
+    }
+
+    .modal-body {
+      display: flex;
+      margin:  0;
+
+      @include median(flex-direction, row, column);
+      @include median(padding, 20px, 10px);
+
+      > div {
+        min-width: 310px;
+
+        @include median(font-size, 14px, 12px);
+
+        > h4 {
+          margin-bottom: 28px;
+          font-weight:   bold;
+        }
+
+        .form-check {
+          display: flex;
+          align-items: center;
+          padding-left: 8px;
+
+          @include median(padding-bottom, 21px, 24px);
+
+          input {
+            margin-right: 8px;
+          }
+
+          label {
+            margin-bottom: 0;
+          }
+        }
+      }
+    }
+  }
+}

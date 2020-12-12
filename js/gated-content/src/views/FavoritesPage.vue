@@ -1,22 +1,24 @@
 <template>
   <div class="gated-content-favorites-page">
-    <Modal v-if="showModal" @close="showModal = false">
+    <Modal v-if="showModal" @close="showModal = false" class="adjust-modal">
       <template v-slot:header>
-        <h3>Adjust</h3>
+        <h3>ADJUST</h3>
       </template>
       <template v-slot:body>
         <div class="filter">
           <h4>Content types</h4>
           <div class="form-check" v-for="option in contentTypeOptions" v-bind:key="option.value">
-            <input
-              type="radio"
-              :id="option.value"
-              :value="option.value"
-              autocomplete="off"
-              v-model="preSelectedComponent"
-              :disabled="option.type && isFavoritesTypeEmpty(option.type, option.value)"
-            >
-            <label :for="option.value">{{ option.label }}</label>
+            <label :for="option.value">
+              <input
+                type="radio"
+                :id="option.value"
+                :value="option.value"
+                autocomplete="off"
+                v-model="preSelectedComponent"
+                :disabled="option.type && isFavoritesTypeEmpty(option.type, option.value)"
+              >
+              {{ option.label }}
+            </label>
           </div>
         </div>
         <div class="sort">
@@ -174,7 +176,7 @@ export default {
   },
   data() {
     return {
-      showModal: false,
+      showModal: true,
       itemsLimit: 3,
       selectedComponent: 'all',
       preSelectedComponent: 'all',
