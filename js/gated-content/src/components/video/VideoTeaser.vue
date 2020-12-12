@@ -19,7 +19,6 @@
     </router-link>
     <AddToFavorite
       :id="video.attributes.drupal_internal__nid"
-      icon="favorites-outlined"
       :type="'node'"
       :bundle="'gc_video'"
     ></AddToFavorite>

@@ -68,8 +68,12 @@ export default {
         .diff(moment(this.video.attributes.date.end_value))).humanize();
     },
     startsIn() {
-      return moment.duration(moment(this.video.attributes.date.value)
-        .diff(moment())).format();
+      const duration = moment.duration(moment(this.video.attributes.date.value)
+        .diff(moment()));
+      if (duration.asHours() > 48) {
+        return duration.format();
+      }
+      return duration.format('hh:mm:ss');
     },
     image() {
       if (this.video.attributes['field_ls_image.field_media_image']) {
