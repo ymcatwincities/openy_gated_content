@@ -11,6 +11,11 @@
 
         @include median(font-size, 16px, 14px);
       }
+
+      button {
+        border: none;
+        background-color: initial;
+      }
     }
 
     .modal-body {
@@ -28,11 +33,13 @@
         > h4 {
           margin-bottom: 28px;
           font-weight:   bold;
+
+          @include median(font-size, 14px, 12px);
         }
 
         .form-check {
-          display: flex;
-          align-items: center;
+          display:      flex;
+          align-items:  center;
           padding-left: 8px;
 
           @include median(padding-bottom, 21px, 24px);

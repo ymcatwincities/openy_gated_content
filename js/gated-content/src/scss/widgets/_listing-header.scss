@@ -1,0 +1,15 @@
+.listing-header {
+  display:         flex;
+  align-items:     center;
+  justify-content: space-between;
+
+  .title {
+    margin: 0;
+
+    @include median(font-size, 24px, 20px);
+  }
+
+  .view-all {
+    @include median(font-size, 14px, 12px);
+  }
+}

@@ -1,13 +1,14 @@
 <template>
   <div class="top-menu" :class="{menuOpen: menuOpen}" :style="backgroundStyleObject">
     <div>
-      <router-link
-        :to="{ name: 'Home' }"
-        :style="fontStyleObject"
-        @click.native="menuOpen=false"
-        exact
-      >Virtual YMCA
-      </router-link>
+      <div @click="menuOpen=false">
+        <router-link
+          :to="{ name: 'Home' }"
+          :style="fontStyleObject"
+          exact
+        >Virtual YMCA
+        </router-link>
+      </div>
       <button
         @click="menuOpen = !menuOpen"
         :style="fontStyleObject"
@@ -22,37 +23,44 @@
           :color="fontColor"
         ></CloseIcon>
       </button>
-      <router-link
-        :to="{ name: 'Schedule' }"
-        :style="fontStyleObject"
-        @click.native="menuOpen=false"
-        exact
-      >
-        <ScheduleIcon :color="fontColor"></ScheduleIcon>Schedule
-      </router-link>
-      <router-link
-        :to="{ name: 'Favorites' }"
-        :style="fontStyleObject"
-        @click.native="menuOpen=false"
-        exact
-      >
-        <FavoritesIcon :color="fontColor"></FavoritesIcon>Favorites
-      </router-link>
-      <router-link
-        :to="{ name: 'CategoryListing', params: { type: 'video' } }"
-        :style="fontStyleObject"
-        @click.native="menuOpen=false"
-        exact
-      >
-        <CategoriesIcon :color="fontColor"></CategoriesIcon>Categories
-      </router-link>
-      <a
-        href="/vy-user/logout"
-        :style="fontStyleObject"
-        @click.native="menuOpen=false"
-      >
-        <LogoutIcon :color="fontColor"></LogoutIcon>Sign out
-      </a>
+      <div @click="menuOpen=false">
+        <router-link
+          :to="{ name: 'Schedule' }"
+          :style="fontStyleObject"
+          exact
+        >
+          <ScheduleIcon :color="fontColor"></ScheduleIcon>Schedule
+        </router-link>
+      </div>
+      <div @click="menuOpen=false">
+        <router-link
+          :to="{ name: 'Favorites' }"
+          :style="fontStyleObject"
+          @click.native="menuOpen=false"
+          exact
+        >
+          <FavoritesIcon :color="fontColor"></FavoritesIcon>Favorites
+        </router-link>
+      </div>
+      <div @click="menuOpen=false">
+        <router-link
+          :to="{ name: 'CategoryListing', params: { type: 'video' } }"
+          :style="fontStyleObject"
+          @click.native="menuOpen=false"
+          exact
+        >
+          <CategoriesIcon :color="fontColor"></CategoriesIcon>Categories
+        </router-link>
+      </div>
+      <div @click="menuOpen=false">
+        <a
+          href="/vy-user/logout"
+          :style="fontStyleObject"
+          @click.native="menuOpen=false"
+        >
+          <LogoutIcon :color="fontColor"></LogoutIcon>Sign out
+        </a>
+      </div>
     </div>
   </div>
 </template>

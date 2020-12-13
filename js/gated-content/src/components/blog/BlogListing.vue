@@ -1,6 +1,6 @@
 <template>
-  <div class="blogs videos gated-container">
-    <div class="blogs__header videos__header">
+  <div class="gated-container">
+    <div class="listing-header">
       <h2 class="title">{{ title }}</h2>
       <router-link
         :to="{ name: 'CategoryListing', params: { type: 'blog' }}"
@@ -15,7 +15,7 @@
     </div>
     <template v-else-if="listingIsNotEmpty">
       <div v-if="error">Error loading</div>
-      <div v-else class="blog-listing">
+      <div v-else class="four-columns">
         <BlogTeaser
           v-for="blog in listing"
           :key="blog.id"
