@@ -17,21 +17,25 @@
                 v-model="preSelectedComponent"
                 :disabled="option.type && isFavoritesTypeEmpty(option.type, option.value)"
               >
-              {{ option.label }}
+              <span class="checkmark"></span>
+              <span class="caption">{{ option.label }}</span>
             </label>
           </div>
         </div>
         <div class="sort">
           <h4>Sort order</h4>
           <div class="form-check" v-for="option in filterOptions" v-bind:key="option.value">
-            <input
-              type="radio"
-              :id="option.value"
-              :value="option.value"
-              autocomplete="off"
-              v-model="preSelectedSort"
-            >
-            <label :for="option.value">{{ option.label }}</label>
+            <label :for="option.value">
+              <input
+                type="radio"
+                :id="option.value"
+                :value="option.value"
+                autocomplete="off"
+                v-model="preSelectedSort"
+              >
+              <span class="checkmark"></span>
+              <span class="caption">{{ option.label }}</span>
+            </label>
           </div>
         </div>
       </template>
@@ -176,7 +180,7 @@ export default {
   },
   data() {
     return {
-      showModal: true,
+      showModal: false,
       itemsLimit: 3,
       selectedComponent: 'all',
       preSelectedComponent: 'all',

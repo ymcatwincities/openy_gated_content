@@ -3,18 +3,22 @@
     width: max-content;
 
     .modal-header {
+      align-items: center;
+      height:      48px;
 
       @include median(padding, 12px 10px, 14px 10px 13px);
 
       h3 {
         margin: 0;
+        color:  $gray;
 
         @include median(font-size, 16px, 14px);
       }
 
       button {
-        border: none;
+        border:           none;
         background-color: initial;
+        font-size:        24px;
       }
     }
 
@@ -32,6 +36,7 @@
 
         > h4 {
           margin-bottom: 28px;
+          color:         black;
           font-weight:   bold;
 
           @include median(font-size, 14px, 12px);
@@ -44,15 +49,78 @@
 
           @include median(padding-bottom, 21px, 24px);
 
-          input {
-            margin-right: 8px;
-          }
-
           label {
+            position:      relative;
             margin-bottom: 0;
+            cursor:        pointer;
+            padding-left:  28px;
+
+            input {
+              position: absolute;
+              opacity:  0;
+              cursor:   pointer;
+              width:    0;
+              height:   0;
+            }
+
+            .checkmark {
+              position:         absolute;
+              top:              0;
+              left:             0;
+              background-image: url('assets/svg/rb-off.svg');
+              background-size:  20px;
+              width:            20px;
+              height:           20px;
+            }
+
+            input:checked ~ .checkmark {
+              background-image: url('assets/svg/rb-on.svg');
+            }
+
+            input[disabled='disabled'] ~ .caption {
+              color: $silver-chalice;
+            }
+
+            input[disabled='disabled'] ~ .checkmark {
+              background-image: url('assets/svg/rb-off-gray.svg');
+            }
           }
         }
       }
+    }
+
+    .modal-footer {
+      justify-content:  space-between;
+      background-color: $concrete;
+      padding:          10px;
+
+      button {
+        margin:      0;
+        padding:     10px 20px;
+        line-height: 26px;
+        font-size:   20px;
+      }
+
+      .btn.btn-outline-primary {
+        border-width:     2px;
+        background-color: white;
+        color:            $dark-blue;
+
+        &:hover {
+          background-color: $dark-blue;
+          color:            white;
+        }
+      }
+
+      .btn-primary {
+        border-width: 2px;
+
+        &:hover {
+          background-color: white;
+          color:            $dark-blue;
+        }
+      }
+
     }
   }
 }
