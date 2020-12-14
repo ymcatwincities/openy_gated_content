@@ -13,7 +13,7 @@
                 role="button" aria-label="next date"><i class="fa fa-angle-right"></i></button>
       </h2>
       <router-link :to="{ name: viewAllRoute }" v-if="viewAll" class="view-all">
-        View All
+        More
       </router-link>
     </div>
     <div v-if="loading" class="text-center">
