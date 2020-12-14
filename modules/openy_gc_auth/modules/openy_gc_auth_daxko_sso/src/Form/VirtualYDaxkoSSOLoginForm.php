@@ -26,8 +26,15 @@ class VirtualYDaxkoSSOLoginForm extends FormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
 
     $form['submit'] = [
-      '#type' => 'submit',
-      '#value' => $this->t('Enter Virtual Y'),
+      '#type' => 'link',
+      '#url' => Url::fromRoute('openy_gc_auth_daxko_sso.daxko_link_controller_hello'),
+      '#title' => t('Enter Virtual Y'),
+      '#attributes' => [
+        'class' => [
+          'button',
+          'form-submit'
+        ]
+      ],
     ];
 
     return $form;
