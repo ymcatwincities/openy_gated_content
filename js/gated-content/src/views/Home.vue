@@ -47,7 +47,7 @@ import EventListing from '@/components/event/EventListing.vue';
 import ParagraphHeadline from '@/components/ParagraphHeadline.vue';
 import { SettingsMixin } from '@/mixins/SettingsMixin';
 import { mapGetters } from 'vuex';
-import PageHeader from '@/components/PageHeader';
+import PageHeader from '@/components/PageHeader.vue';
 
 export default {
   name: 'Home',
