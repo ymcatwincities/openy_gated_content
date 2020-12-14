@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file
+ * Main file for openy_gc_daxko_sso module.
+ */
+
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 
