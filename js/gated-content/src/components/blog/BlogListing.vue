@@ -1,9 +1,9 @@
 <template>
   <div class="blogs videos gated-container">
     <div class="blogs__header videos__header">
-      <h2 class="title">{{ title }}</h2>
+      <h2 class="title" v-if="title !== 'none'">{{ title }}</h2>
       <router-link
-        :to="{ name: 'CategoryListing', query: { type: 'vy_blog_post' }}"
+        :to="{ name: 'BlogsListing' }"
         v-if="viewAll && listingIsNotEmpty"
         class="view-all"
       >

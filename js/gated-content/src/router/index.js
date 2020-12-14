@@ -10,6 +10,7 @@ import LiveStreamPage from '@/views/LiveStreamPage.vue';
 import LiveStreamListingPage from '@/views/LiveStreamListingPage.vue';
 import VirtualMeetingPage from '@/views/VirtualMeetingPage.vue';
 import VirtualMeetingListingPage from '@/views/VirtualMeetingListingPage.vue';
+import BlogsListingPage from '@/views/BlogsListingPage.vue';
 import VideosListingPage from '@/views/VideosListingPage.vue';
 import FavoritesPage from '@/views/FavoritesPage.vue';
 
@@ -76,6 +77,12 @@ const routes = [
     component: VirtualMeetingPage,
     props: true,
     meta: { requiresAuth: true },
+  },
+  {
+    path: '/blogs',
+    name: 'BlogsListing',
+    component: BlogsListingPage,
+    meta: { requiresAuth: true, darkMenu: true },
   },
   {
     path: '/blog-post/:id',
