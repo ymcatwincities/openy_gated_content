@@ -1,0 +1,12 @@
+.page-header {
+  margin-right: auto;
+  margin-left:  auto;
+
+  font-family: $cachet-book;
+  font-weight: 400;
+
+  @include median(font-size, 32px, 28px);
+  @include median(padding, 40px 15px 10px, 23px 15px 0, 23px 10px 13px);
+  @include median(max-width, 1170px, 750px);
+  @include median(margin-bottom, initial, -7px, initial);
+}

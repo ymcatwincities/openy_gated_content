@@ -3,6 +3,9 @@
     <ParagraphHeadline
       v-if="isHeadlineEnabled"
     ></ParagraphHeadline>
+
+    <PageHeader title="Dashboard"></PageHeader>
+
     <VideoListing
       :featured="true"
       :viewAll="true"
@@ -44,11 +47,13 @@ import EventListing from '@/components/event/EventListing.vue';
 import ParagraphHeadline from '@/components/ParagraphHeadline.vue';
 import { SettingsMixin } from '@/mixins/SettingsMixin';
 import { mapGetters } from 'vuex';
+import PageHeader from '@/components/PageHeader';
 
 export default {
   name: 'Home',
   mixins: [SettingsMixin],
   components: {
+    PageHeader,
     BlogListing,
     VideoListing,
     EventListing,
