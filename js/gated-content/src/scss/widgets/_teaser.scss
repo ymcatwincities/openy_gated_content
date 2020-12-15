@@ -7,7 +7,6 @@
   &:hover {
     transform:       scale(1.01);
     box-shadow:      0 4px 6px rgba(0, 0, 0, .25);
-    text-decoration: none;
   }
 
   > a {
@@ -18,6 +17,10 @@
     border-left:   solid 1px $gallery;
     cursor:        pointer;
     height:        100%;
+
+    &:hover {
+      text-decoration: none;
+    }
 
     .title {
       width:       100%;
