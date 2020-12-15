@@ -1,68 +1,43 @@
 .event-teaser {
-  cursor: initial;
+  > a {
+    @include median(padding, 10px, 5px 5px 10px);
 
-  &.virtual-meeting {
-    border-top: solid 5px $blue-hover;
-  }
-
-  .preview {
-    .month {
-      position: absolute;
-      left: 10px;
-      bottom: 10px;
-      border: 2px solid $white;
-      border-radius: 4px;
-      padding: 10px 20px;
-      text-align: center;
-      color: $white;
-      background: linear-gradient(180deg, #2664ac, #48a9e5 100%);
-
-      p:first-child {
-        text-transform: uppercase;
-        font-size: 14px;
-        margin: 0;
-      }
-
-      p:last-child {
-        font-size: 24px;
-        margin: 0;
-      }
+    .title, .date, .time, .instructor {
+      @include median(padding-bottom, 10px, 5px);
     }
-  }
 
-  .meta {
-    flex-direction: column;
-    align-items: flex-start;
-
-    .schedule {
-      display: flex;
+    .date, .time, .instructor {
+      display:     flex;
       align-items: center;
+      width:       100%;
+      color:       $black;
 
-      .fa {
-        font-size: 24px;
-        padding-right: 10px;
+      @include median(font-size, 12px, 10px);
+
+      .svg-container {
+        margin-right: 12px;
+        font-size:    20px;
+        fill:         $gray;
       }
     }
-  }
 
-  .controls {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 40px;
-
-    a {
-      display: block;
-      text-transform: uppercase;
-      background-color: $dark-blue;
-      color: $white;
-      text-align: center;
-      padding: 10px;
-      width: 100%;
+    .instructor {
+      color: black;
     }
 
-    &.subscribe {
-      padding: 0 5px;
+    .timer {
+      display:       inline-block;
+      margin-top:    11px;
+      border:        1px solid $gray;
+      border-radius: 12px;
+      padding:       5px 10px;
+      color:         black;
+      font-size:     10px;
+
+      &.live {
+        background-color: $indigo;
+        color:            $white;
+      }
     }
   }
 }

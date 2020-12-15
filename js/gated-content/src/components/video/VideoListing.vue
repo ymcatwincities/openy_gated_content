@@ -1,13 +1,13 @@
 <template>
-  <div class="videos gated-container">
-    <div class="videos__header">
+  <div class="gated-container">
+    <div class="listing-header">
       <h2 class="title">{{ title }}</h2>
       <router-link
         :to="{ name: 'CategoryListing', params: { type: 'video' }}"
         v-if="viewAll && listingIsNotEmpty"
         class="view-all"
       >
-        View All
+        More
       </router-link>
     </div>
     <div v-if="loading" class="text-center">
@@ -15,7 +15,7 @@
     </div>
     <template v-else-if="listingIsNotEmpty">
       <div v-if="error">Error loading</div>
-      <div v-else class="video-listing">
+      <div v-else class="four-columns">
         <VideoTeaser
           v-for="video in listing"
           :key="video.id"
