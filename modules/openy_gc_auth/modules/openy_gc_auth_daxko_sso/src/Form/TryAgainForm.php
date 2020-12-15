@@ -91,7 +91,7 @@ class TryAgainForm extends FormBase {
     ];
 
     $form['#attributes'] = [
-      'class' => 'text-center'
+      'class' => 'text-center',
     ];
 
     return $form;
