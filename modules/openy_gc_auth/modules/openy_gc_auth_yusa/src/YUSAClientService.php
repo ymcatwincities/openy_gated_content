@@ -91,7 +91,7 @@ class YUSAClientService {
       }
     }
     catch (\Exception $e) {
-      $this->logger('openy_gc_auth_yusa')->error($e->getMessage());
+      \Drupal::logger('openy_gc_auth_yusa')->error($e->getMessage());
     }
 
     return [];
