@@ -1,5 +1,5 @@
 <template>
-  <div class="page-header">
+  <div class="v-page-header">
     {{ title }}
   </div>
 </template>
