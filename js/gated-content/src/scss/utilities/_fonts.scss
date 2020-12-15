@@ -1,0 +1,12 @@
+.cachet-book-32-28 {
+  font-family: $cachet-book;
+  font-weight:  400;
+
+  @include median(font-size, 32px, 28px);
+}
+
+.verdana-16-14 {
+  font-family: Verdana, sans-serif;
+
+  @include median(font-size, 16px, 14px);
+}

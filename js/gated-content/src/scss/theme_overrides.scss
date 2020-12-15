@@ -42,6 +42,10 @@
     display: none;
   }
 
+  .return-to-top {
+    display: none;
+  }
+
   #gated-content {
     .top-menu {
       @include median(top, 162px, 80px);

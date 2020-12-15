@@ -6,7 +6,7 @@
     <div v-else-if="error">Error loading</div>
     <template v-else>
       <div class="video-wrapper">
-        <div class="video gated-container">
+        <div class="video gated-containerV2 pt-40-20">
           <MediaPlayer
             :media="video.attributes.field_gc_video_media"
             @playerEvent="logPlaybackEvent($event)"
@@ -14,9 +14,9 @@
         </div>
       </div>
       <div class="video-footer-wrapper">
-        <div class="video-footer gated-containerV2">
+        <div class="video-footer gated-containerV2 py-40-20">
           <div>
-            <div class="video-footer__title">{{ video.attributes.title }}</div>
+            <div class="video-footer__title cachet-book-32-28">{{ video.attributes.title }}</div>
             <div class="video-footer__fav">
               <AddToFavorite
                 :id="video.attributes.drupal_internal__nid"
@@ -61,8 +61,7 @@
             <div
               v-if="video.attributes.field_gc_video_equipment.length > 0"
               class="video-footer__equipment">
-              <i class="fa fa-cubes"></i>
-              Equipment:
+              <i class="fa fa-cubes"></i>Equipment:
               <ul>
                 <li v-for="equip in video.attributes.field_gc_video_equipment"
                     :key="equip.drupal_internal__tid">

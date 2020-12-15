@@ -1,5 +1,5 @@
 <template>
-  <div class="page-header">
+  <div class="gated-containerV2 my-40-20 cachet-book-32-28">
     {{ title }}
   </div>
 </template>
