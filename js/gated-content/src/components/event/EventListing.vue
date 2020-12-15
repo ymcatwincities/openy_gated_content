@@ -72,6 +72,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    category: {
+      type: String,
+      default: '',
+    },
     sort: {
       type: Object,
       default() {
@@ -111,6 +115,10 @@ export default {
     date: 'load',
     eventType: 'load',
     sort: 'load',
+    listingIsNotEmpty() {
+      // Emit this information to the parents component
+      this.$emit('listing-not-empty', this.listingIsNotEmpty);
+    },
   },
   async mounted() {
     this.featuredLocal = this.featured;
@@ -227,6 +235,10 @@ export default {
 
       if (this.featuredLocal) {
         params.filter.field_ls_featured = 1;
+      }
+
+      if (this.category) {
+        params.filter['eventseries_id.field_ls_category.id'] = this.category;
       }
 
       params.filter.status = 1;

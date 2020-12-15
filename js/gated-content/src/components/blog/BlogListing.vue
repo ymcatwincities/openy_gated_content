@@ -3,7 +3,7 @@
     <div class="blogs__header videos__header">
       <h2 class="title" v-if="title !== 'none'">{{ title }}</h2>
       <router-link
-        :to="{ name: 'BlogsListing' }"
+        :to="{ name: 'BlogsListing', query: { type: category } }"
         v-if="viewAll && listingIsNotEmpty"
         class="view-all"
       >
