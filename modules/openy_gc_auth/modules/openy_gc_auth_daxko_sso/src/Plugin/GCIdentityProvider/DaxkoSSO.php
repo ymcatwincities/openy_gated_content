@@ -68,6 +68,7 @@ class DaxkoSSO extends GCIdentityProviderPluginBase {
   public function defaultConfiguration():array {
     return [
       'redirect_url' => '',
+      'login_mode' => 'present_login_button',
     ];
   }
 
@@ -120,6 +121,25 @@ class DaxkoSSO extends GCIdentityProviderPluginBase {
       '#required' => TRUE,
     ];
 
+    $form['error_accompanying_message'] = [
+      '#title' => $this->t('Authentication error message'),
+      '#description' => $this->t('Message displayed to user when he failed to log in using this plugin.'),
+      '#type' => 'textfield',
+      '#default_value' => $config['error_accompanying_message'],
+      '#required' => FALSE,
+    ];
+
+    $form['login_mode'] = [
+      '#title' => $this->t('Login mode'),
+      '#type' => 'radios',
+      '#default_value' => $config['login_mode'],
+      '#required' => TRUE,
+      '#options' => [
+        'present_login_button' => $this->t('Present login button'),
+        'redirect_immediately' => $this->t('Redirect immediately'),
+      ],
+    ];
+
     return $form;
   }
 
@@ -129,6 +149,8 @@ class DaxkoSSO extends GCIdentityProviderPluginBase {
   public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
     if (!$form_state->getErrors()) {
       $this->configuration['redirect_url'] = $form_state->getValue('redirect_url');
+      $this->configuration['error_accompanying_message'] = $form_state->getValue('error_accompanying_message');
+      $this->configuration['login_mode'] = $form_state->getValue('login_mode');
 
       $baseUrl = $this->request->getSchemeAndHttpHost();
 
@@ -150,7 +172,24 @@ class DaxkoSSO extends GCIdentityProviderPluginBase {
    * {@inheritdoc}
    */
   public function getLoginForm() {
-    return new RedirectResponse(Url::fromRoute('openy_gc_auth_daxko_sso.daxko_link_controller_hello')->toString());
+
+    if ($this->request->query->has('error')) {
+      return $this->formBuilder->getForm('Drupal\openy_gc_auth_daxko_sso\Form\TryAgainForm');
+    }
+    elseif ($this->configuration['login_mode'] === 'present_login_button') {
+      return $this->formBuilder->getForm('Drupal\openy_gc_auth_daxko_sso\Form\VirtualYDaxkoSSOLoginForm');
+    }
+
+    // Forcing no-cache at redirect headers.
+    $headers = [
+      'Cache-Control' => 'no-cache',
+    ];
+    $response = new RedirectResponse(
+      Url::fromRoute('openy_gc_auth_daxko_sso.daxko_link_controller_hello')->toString(),
+      302,
+      $headers
+    );
+    $response->send();
   }
 
 }

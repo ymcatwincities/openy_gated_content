@@ -7,3 +7,7 @@ services:
   openy_gated_content.user_service:
     class: '\Drupal\openy_gated_content\GCUserService'
     arguments: ['@entity_type.manager']
+  openy_gated_content.route_subscriber:
+    class: '\Drupal\openy_gated_content\EventSubscriber\RouteSubscriber'
+    tags:
+      - { name: event_subscriber }

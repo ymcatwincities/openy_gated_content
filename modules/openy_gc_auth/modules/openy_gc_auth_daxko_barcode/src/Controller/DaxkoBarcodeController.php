@@ -148,7 +148,7 @@ class DaxkoBarcodeController extends ControllerBase {
           case 'duplicate_barcode':
           case 'invalid':
 
-            $this->messenger->addError($config->get("message_{$status}") . '. ' . $config->get('message_help'));
+            $this->messenger->addError($config->get("message_{$status}") . ' ' . $config->get('message_help'));
             return new RedirectResponse($this->configFactory->get('openy_gated_content.settings')->get('virtual_y_login_url'));
         }
 

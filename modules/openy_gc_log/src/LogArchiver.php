@@ -4,11 +4,13 @@ namespace Drupal\openy_gc_log;
 
 use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Entity\EntityTypeManager;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\File\FileSystem;
 use Drupal\Core\Logger\LoggerChannel;
 use Drupal\Core\Site\Settings;
 use Drupal\csv_serialization\Encoder\CsvEncoder;
 use Drupal\file\Entity\File;
+use Drupal\openy_gc_log\Entity\LogEntityInterface;
 
 /**
  * Log Archiver service.
@@ -84,6 +86,13 @@ class LogArchiver {
   protected $settings;
 
   /**
+   * The module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * LogArchiver constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManager $entityTypeManager
@@ -96,19 +105,23 @@ class LogArchiver {
    *   FileSystem.
    * @param \Drupal\Core\Site\Settings $settings
    *   Settings.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler.
    */
   public function __construct(
     EntityTypeManager $entityTypeManager,
     LoggerChannel $logger,
     ConfigFactory $configFactory,
     FileSystem $fileSystem,
-    Settings $settings
+    Settings $settings,
+    ModuleHandlerInterface $module_handler
   ) {
     $this->entityTypeManager = $entityTypeManager;
     $this->logger = $logger;
     $this->config = $configFactory;
     $this->fileSystem = $fileSystem;
     $this->settings = $settings;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -242,17 +255,51 @@ class LogArchiver {
     foreach ($this->logEntities as $log) {
       $fileName = $logFileName ?: $this->makeFilename($log);
       if (!isset($this->preparedLogs[$fileName])) {
-        $this->preparedLogs[$fileName] = [];
+        $this->preparedLogs[$fileName] = [
+          'Y' => date('Y', $log->get('created')->value),
+        ];
       }
 
-      $this->preparedLogs[$fileName][] = [
-        'created' => $log->get('created')->value,
-        'user' => $log->get('uid')->target_id ? '/user/' . $log->get('uid')->target_id : '',
-        'event_type' => $log->get('event_type')->value,
-        'entity_type' => $log->get('entity_type')->value,
-        'entity_bundle' => $log->get('entity_bundle')->value,
-        'entity_id' => $log->get('entity_id')->value,
+      $event_type = $log->get('event_type')->value;
+      $entity_type = $log->get('entity_type')->value;
+      $entity_bundle = $log->get('entity_bundle')->value;
+      $entity_id = $log->get('entity_id')->value;
+      $export_row = [
+        'created' => date('m/d/Y - H:i:s', $log->get('created')->value),
+        'user' => $log->get('uid')->target_id ? $log->get('uid')->entity->getEmail() : '',
+        'event_type' => $event_type,
+        'entity_type' => $entity_type,
+        'entity_bundle' => $entity_bundle,
+        'entity_id' => $entity_id,
+        'entity_title' => '',
+        'entity_instructor_name' => '',
+        'entity_created' => '',
       ];
+
+      if (in_array($event_type, [
+        LogEntityInterface::EVENT_TYPE_ENTITY_VIEW,
+        LogEntityInterface::EVENT_TYPE_VIDEO_PLAYBACK_STARTED,
+        LogEntityInterface::EVENT_TYPE_VIDEO_PLAYBACK_ENDED,
+      ])) {
+        $entity_type_id = $entity_type === 'node' ? 'node' : 'eventinstance';
+        $entity = $this->entityTypeManager->getStorage($entity_type_id)
+          ->load($entity_id);
+        $export_row['entity_title'] = $entity_type === 'node' ?
+          $entity->label() :
+          ($entity->get('field_ls_title')->value ? $entity->get('field_ls_title')->value : $entity->get('title')->value);
+        $export_row['entity_instructor_name'] = $entity_type === 'node' ?
+          ($entity_bundle === 'gc_video' ? $entity->get('field_gc_video_instructor')->value : '') :
+          ($entity->get('field_ls_host_name')->value ? $entity->get('field_ls_host_name')->value : $entity->get('host_name')->value);
+        $export_row['entity_created'] = date('m/d/Y - H:i:s', $entity->getCreatedTime());
+      }
+
+      $this->moduleHandler->alter(
+        'openy_gc_log_export_row',
+        $export_row,
+        $log
+      );
+
+      $this->preparedLogs[$fileName][] = $export_row;
     }
 
     return $this;
@@ -262,7 +309,7 @@ class LogArchiver {
    * Create new file entity.
    */
   protected function createNewFileEntity($fileName) {
-    $fileYear = date('Y', (int) $this->preparedLogs[$fileName][0]['created']);
+    $fileYear = $this->preparedLogs[$fileName]['Y'];
     $yearDir = $this->prepareYearDirectory($fileYear);
     $file = File::create();
     $file->setFilename($fileName);
@@ -299,6 +346,7 @@ class LogArchiver {
       if (!array_key_exists($fileName, $this->fileEntities)) {
         $this->fileEntities[$fileName] = $this->createNewFileEntity($fileName);
       }
+      unset($this->preparedLogs[$fileName]['Y']);
     }
 
     return $this;

@@ -77,3 +77,31 @@ function openy_gc_log_update_8003() {
     'views.view.virtual_y_logs',
   ]);
 }
+
+/**
+ * Update logs view.
+ */
+function openy_gc_log_update_8004() {
+  // Update the logs view.
+  $config_dir = drupal_get_path('module', 'openy_gc_log');
+  $config_dir .= '/config/install/';
+  $config_importer = \Drupal::service('openy_upgrade_tool.importer');
+  $config_importer->setDirectory($config_dir);
+  $config_importer->importConfigs([
+    'views.view.virtual_y_logs',
+  ]);
+}
+
+/**
+ * Update logs view.
+ */
+function openy_gc_log_update_8005() {
+  // Update the logs view.
+  $config_dir = drupal_get_path('module', 'openy_gc_log');
+  $config_dir .= '/config/install/';
+  $config_importer = \Drupal::service('openy_upgrade_tool.importer');
+  $config_importer->setDirectory($config_dir);
+  $config_importer->importConfigs([
+    'views.view.virtual_y_logs',
+  ]);
+}
