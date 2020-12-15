@@ -109,7 +109,7 @@ const routes = [
   },
   {
     path: '/categories/blog',
-    redirect: { name: 'CategoryListing', query: { type: 'vy_blog_post' } },
+    redirect: { name: 'BlogsListing' },
   },
   {
     path: '/categories/video',
