@@ -104,7 +104,7 @@
         :category="category.id"
         :viewAll="true"
         :sort="sortData('node')"
-        :limit="6"
+        :limit="itemsLimit"
       />
       <BlogListing
         v-if="selectedComponent === 'vy_blog_post' || selectedComponent === 'all'"
@@ -112,7 +112,7 @@
         :category="category.id"
         :viewAll="true"
         :sort="sortData('node')"
-        :limit="6"
+        :limit="itemsLimit"
       />
     </template>
   </div>
@@ -150,7 +150,7 @@ export default {
       loading: true,
       error: false,
       category: null,
-      itemsLimit: 6,
+      itemsLimit: 8,
       showLiveStreamViewAll: false,
       showVirtualMeetingViewAll: false,
       filterQueryByTypes: {
@@ -195,13 +195,9 @@ export default {
       return this.filterQueryByTypes[type][this.selectedSort];
     },
     liveStreamListingIsNotEmpty(params) {
-      console.log('liveStreamListingIsNotEmpty');
-      console.log(params);
       this.showLiveStreamViewAll = params;
     },
     virtualMeetingListingIsNotEmpty(params) {
-      console.log('virtualMeetingListingIsNotEmpty');
-      console.log(params);
       this.showVirtualMeetingViewAll = params;
     },
   },
