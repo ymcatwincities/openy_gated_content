@@ -14,38 +14,49 @@
         </div>
       </div>
       <div class="video-footer-wrapper">
-        <div class="video-footer gated-container">
+        <div class="video-footer gated-containerV2">
           <div>
             <div class="video-footer__title">{{ video.attributes.title }}</div>
+            <div class="video-footer__fav">
+              <AddToFavorite
+                :id="video.attributes.drupal_internal__nid"
+                :type="'node'"
+                :bundle="'gc_video'"
+              ></AddToFavorite>
+              <div class="duration">
+                {{ duration }}
+              </div>
+            </div>
             <div
               v-if="video.attributes.field_gc_video_description"
               class="video-footer__description"
-                 v-html="video.attributes.field_gc_video_description.processed"
+              v-html="video.attributes.field_gc_video_description.processed"
             ></div>
-            <AddToFavorite
-              :id="video.attributes.drupal_internal__nid"
-              :type="'node'"
-              :bundle="'gc_video'"
-            ></AddToFavorite>
           </div>
           <div>
             <div
-              v-if="video.attributes.field_gc_video_level"
-              class="video-footer__block">
-              Level: {{ video.attributes.field_gc_video_level.name | capitalize }}
-            </div>
-            <div
               v-if="video.attributes.field_gc_video_instructor"
               class="video-footer__block">
-              Instructor: {{ video.attributes.field_gc_video_instructor }}
+              <SvgIcon icon="instructor-icon" grow-by-height="false"></SvgIcon>
+              {{ video.attributes.field_gc_video_instructor }}
             </div>
             <div
               v-if="video.attributes.field_gc_video_category &&
               video.attributes.field_gc_video_category.length > 0"
               class="video-footer__block video-footer__category">
-              Category:
-              <span v-for="category in video.attributes.field_gc_video_category"
-                    :key="category.drupal_internal__tid">{{ category.name }}</span>
+              <SvgIcon icon="categories" :growByHeight=false></SvgIcon>
+              <span v-for="(category, index) in video.attributes.field_gc_video_category"
+                    :key="category.drupal_internal__tid">
+                <router-link :to="{
+                  name: 'Category',
+                  params: {
+                    cid: video.relationships.field_gc_video_category.data[index].id,
+                    type: 'video'
+                  }
+                }">
+                  {{ category.name }}
+                </router-link>
+              </span>
             </div>
             <div
               v-if="video.attributes.field_gc_video_equipment.length > 0"
@@ -60,23 +71,6 @@
               </ul>
             </div>
           </div>
-        </div>
-      </div>
-      <div
-        v-if="video.attributes.field_gc_video_category &&
-        video.attributes.field_gc_video_category.length > 0"
-        class="video-category-wrapper">
-        <div class="gated-container video-category">
-          <span v-for="(category_data, index) in video.relationships.field_gc_video_category.data"
-                :key="index">
-            <router-link :to="{
-              name: 'Category',
-              params: {
-                cid: category_data.id,
-                type: 'video'
-              }
-            }">{{ video.attributes.field_gc_video_category[index].name }}</router-link>
-          </span>
         </div>
       </div>
       <VideoListing
@@ -99,11 +93,14 @@ import VideoListing from '@/components/video/VideoListing.vue';
 import MediaPlayer from '@/components/MediaPlayer.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
 import { SettingsMixin } from '@/mixins/SettingsMixin';
+import SvgIcon from '@/components/SvgIcon.vue';
+import moment from 'moment';
 
 export default {
   name: 'VideoPage',
   mixins: [JsonApiCombineMixin, SettingsMixin],
   components: {
+    SvgIcon,
     MediaPlayer,
     VideoListing,
     Spinner,
@@ -145,6 +142,9 @@ export default {
       }
       return this.video.relationships.field_gc_video_category.data[0].id;
     },
+    duration() {
+      return moment.duration(this.video.attributes.field_gc_video_duration, 'seconds').format('m [minute]');
+    },
   },
   methods: {
     async load() {
@@ -158,6 +158,7 @@ export default {
         .then((response) => {
           this.video = this.combine(response.data.data, response.data.included, this.params);
           this.loading = false;
+          console.log(this.video);
         }).then(() => {
           this.logPlaybackEvent('entityView');
         })

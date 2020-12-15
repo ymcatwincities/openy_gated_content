@@ -2,126 +2,137 @@
   padding-bottom: 30px;
 
   .video {
-    padding-top: 0;
+    padding-top:    0;
     padding-bottom: 0;
 
     @media all and (max-width: 768px) {
       padding: 0;
-      width: 100%;
+      width:   100%;
     }
 
     .youtube {
-      padding: 56.25% 0 0 0;
       position: relative;
+      padding:  56.25% 0 0 0;
 
       > iframe {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
+        position:     absolute;
+        top:          0;
+        left:         0;
         border-width: 0;
+        width:        100%;
+        height:       100%;
       }
     }
   }
 
   .video-wrapper {
-    background-color: $black;
+    background-color: black;
   }
 
   .video-footer-wrapper {
-    background-color: $mine-shaft;
+    background-color: black;
   }
 
   .video-footer {
-    display: grid;
-    grid-gap: 10px;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto;
-    color: $gallery;
+    display: flex;
+    color:   white;
 
-    @media all and (min-width: 600px) {
-      grid-template-columns: 3fr 1.2fr;
-      grid-template-rows: auto;
-      grid-gap: 30px;
+    @include median(padding, 40px 0, 20px 0);
+    @include median(flex-direction, row, row, column);
+
+    > div:first-child {
+      @include median(width, 65%, 65%, initial);
+      @include median(padding-right, 20px, 10px, initial);
+    }
+
+    > div:last-child {
+      @include median(padding-left, 20px, 10px, initial);
     }
 
     .video-footer__title {
-      font-size: 24px;
-      line-height: 20px;
-      padding-bottom: 10px;
+      font-family: $cachet-book;
 
-      @media all and (min-width: 600px) {
-        padding-bottom: 40px;
+      @include median(font-size, 32px, 28px);
+      @include median(padding-bottom, 20px, 10px);
+    }
+
+    .video-footer__fav {
+      display:     flex;
+      align-items: center;
+      @include median(padding-bottom, 40px, 20px);
+
+      .add-to-favorite {
+        position:      initial;
+        margin-right:  10px;
+        border:        2px solid $thunder;
+        border-radius: 50%;
+        padding:       14px;
+        font-size:     18px;
       }
     }
 
     .video-footer__description {
-      font-size: 16px;
-      line-height: 1.5em;
+      @include median(font-size, 16px, 14px);
     }
+
 
     .add-to-calendar {
       margin-top: 1rem;
     }
 
     .video-footer__block {
-      padding: 4px 0;
-      font-size: 14px;
-      line-height: 16px;
+      display:     flex;
+      align-items: center;
+
+      padding:     4px 0;
+
+      @include median(font-size, 14px, 12px);
 
       &:first-child {
         padding-top: 0;
       }
 
-      .fa {
-        font-size: 20px;
-        margin-right: 10px;
+      .svg-container {
+        font-size: 18px;
+        fill:      white;
+
+        @include median(margin-right, 14px, 14px, 10px);
       }
     }
 
     .video-footer__category {
-      span+span::before {
-        content: ', ';
+      span:not(:first-child) + span::before {
         display: inline;
+        content: ', ';
+      }
+
+      a {
+        color: white;
+
+        &:hover {
+          color: darken(white, 20);
+        }
       }
     }
 
     .video-footer__equipment {
-      padding: 5px 0;
+      padding:     5px 0;
 
-      font-size: 12px;
       line-height: 1.5em;
+      font-size:   12px;
+
+      i {
+        font-size: 18px;
+      }
 
       ul {
-        padding-top: 5px;
+        padding-top:     5px;
         list-style-type: none;
 
         li:before {
           content: '+';
         }
       }
-    }
-  }
-
-  .video-category-wrapper {
-    background-color: $dark-blue;
-
-    span+span::before {
-      content: ', ';
-      display: inline;
-    }
-  }
-
-  .video-category {
-    padding-top: 20px;
-    padding-bottom: 20px;
-    color: $white;
-    font-size: 14px;
-    line-height: 14px;
-
-    a {
-      color: $white;
     }
   }
 }
@@ -136,8 +147,8 @@
       }
 
       .videos {
-        padding-left: 0;
         padding-right: 0;
+        padding-left:  0;
       }
     }
   }

@@ -12,6 +12,7 @@
 @import "widgets/teaser";
 @import "widgets/video-level";
 @import "widgets/button";
+@import "widgets/duration";
 @import "components/svg-icon";
 @import "components/page-header";
 @import "components/top-menu";
@@ -56,5 +57,12 @@
     @media (min-width: 1200px) {
       max-width: 1170px;
     }
+  }
+
+  .gated-containerV2 {
+    margin-left: auto;
+    margin-right: auto;
+
+    @include median(max-width, 1140px, 940px, initial);
   }
 }

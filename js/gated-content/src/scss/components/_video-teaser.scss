@@ -1,5 +1,5 @@
 .video-teaser {
-  background-color: $black;
+  background-color: $thunder;
 
   > a {
     .title {
@@ -35,7 +35,7 @@
       background-color: $white;
       padding:          5px 10px;
       text-transform:   capitalize;
-      color:            $black;
+      color:            $thunder;
       font-size:        10px;
 
       @include median(margin, 12px 10px, 12px 5px);
