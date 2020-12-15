@@ -1,20 +1,23 @@
 .teaser {
   position: relative;
+  border-top:    solid 5px $indigo;
+
+  transform:     scale(1);
+
+  &:hover {
+    transform:       scale(1.01);
+    box-shadow:      0 4px 6px rgba(0, 0, 0, .25);
+    text-decoration: none;
+  }
 
   > a {
-    display:    flex;
-    flex-wrap:  wrap;
-    transform:  scale(1);
-    border:     solid 1px $gallery;
-    border-top: solid 5px $indigo;
-    cursor:     pointer;
-    height:     100%;
-
-    &:hover {
-      transform:       scale(1.01);
-      box-shadow:      0 4px 6px rgba(0, 0, 0, .25);
-      text-decoration: none;
-    }
+    display:       flex;
+    flex-wrap:     wrap;
+    border-right:  solid 1px $gallery;
+    border-bottom: solid 1px $gallery;
+    border-left:   solid 1px $gallery;
+    cursor:        pointer;
+    height:        100%;
 
     .title {
       width:       100%;
