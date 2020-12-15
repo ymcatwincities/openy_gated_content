@@ -90,6 +90,10 @@ class TryAgainForm extends FormBase {
       ],
     ];
 
+    $form['#attributes'] = [
+      'class' => 'text-center'
+    ];
+
     return $form;
   }
 
