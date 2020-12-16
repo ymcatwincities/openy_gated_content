@@ -41,7 +41,8 @@ export default {
     videoId() {
       let embedObj = this.media.field_media_video_embed_field;
       if (this.media.field_media_source === 'youtube_playlist') {
-        return embedObj.match(/(\?|&)v=([^&#]+)/).pop();
+        embedObj = embedObj.match(/(\?|&)v=([^&#]+)/).pop();
+        return embedObj;
       }
       return this.media.field_media_video_id;
     },
