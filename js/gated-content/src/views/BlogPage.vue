@@ -35,7 +35,7 @@
           :id="blog.attributes.drupal_internal__nid"
           :type="'node'"
           :bundle="'vy_blog_post'"
-          class="rounded-border mt-20-10"
+          class="rounded-border border-concrete mt-20-10"
         ></AddToFavorite>
       </div>
       <div class="gated-containerV2 my-40-20 px--20-10">

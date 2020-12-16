@@ -1,7 +1,15 @@
 .text-thunder {
-  color: $thunder;
+  color: $thunder !important;
 }
 
 .fill-white {
   fill: $white !important;
+}
+
+.border-thunder {
+  border-color: $thunder !important;
+}
+
+.border-concrete {
+  border-color: $concrete !important;
 }

@@ -23,7 +23,7 @@
                 :type="'node'"
                 :bundle="'gc_video'"
                 iconClass="fill-white"
-                class="rounded-border"
+                class="rounded-border border-thunder"
               ></AddToFavorite>
               <div class="timer">
                 {{ video_length }}
