@@ -7,7 +7,7 @@
         v-if="viewAll && listingIsNotEmpty"
         class="view-all"
       >
-        View All
+        More
       </router-link>
     </div>
     <div v-if="loading" class="text-center">

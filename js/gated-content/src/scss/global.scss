@@ -5,6 +5,7 @@
 
 @import "mixins";
 @import "variables";
+@import "fonts";
 @import "layout/four-columns";
 @import "widgets/listing-header";
 @import "widgets/empty-listing";
@@ -12,6 +13,7 @@
 @import "widgets/video-level";
 @import "widgets/button";
 @import "components/svg-icon";
+@import "components/page-header";
 @import "components/top-menu";
 @import "components/video-listing";
 @import "components/video-teaser";
@@ -55,5 +57,33 @@
     @media (min-width: 1200px) {
       max-width: 1170px;
     }
+  }
+
+  .fixed-button {
+    position: fixed;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px solid $white;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: all .2s ease-in-out;
+
+    a {
+      display: block;
+      color: $white;
+    }
+
+    &:hover {
+      opacity: 1;
+      box-shadow: 0 0 10px rgba(0,0,0,.25);
+    }
+  }
+
+  .scroll-to-top {
+    right: 30px;
+    bottom: 30px;
+    background-color: $dark-blue;
+    z-index: 1;
   }
 }

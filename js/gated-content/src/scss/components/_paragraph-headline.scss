@@ -26,6 +26,9 @@
     .paragraph-headline__title {
       color: white;
 
+      font-family: $cachet-book;
+      font-weight: 400;
+
       @include median(font-size, 42px, 32px);
     }
 
@@ -39,6 +42,9 @@
         border:           2px solid white;
         border-radius:    5px;
         background-color: transparent;
+
+        font-family: $cachet-medium;
+        font-weight: 500;
 
         &:hover {
           border-color:     darken(white, 20%);
@@ -54,6 +60,9 @@
       border:        2px solid white;
       border-radius: 5px;
       color:         white;
+
+      font-family: $cachet-medium;
+      font-weight: 500;
 
       @include median(font-size, 24px, 20px);
       @include median(padding, 12px 40px, 10px 30px);
