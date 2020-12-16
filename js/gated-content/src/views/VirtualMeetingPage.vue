@@ -17,7 +17,7 @@
       </div>
       <div class="video-footer-wrapper bg-white px--20-10">
         <div class="video-footer gated-containerV2 py-40-20">
-          <div>
+          <div class="text-black">
             <div class="pb-20-10 cachet-book-32-28">{{ video.attributes.title }}</div>
             <div class="video-footer__fav pb-40-20">
               <AddToFavorite
