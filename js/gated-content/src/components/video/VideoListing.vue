@@ -1,9 +1,9 @@
 <template>
   <div class="gated-containerV2 my-40-20 px--20-10">
     <div class="listing-header">
-      <h2 class="title">{{ title }}</h2>
+      <h2 class="title" v-if="title !== 'none'">{{ title }}</h2>
       <router-link
-        :to="{ name: 'CategoryListing', params: { type: 'video' }}"
+        :to="{ name: 'VideoListing', query: { type: category } }"
         v-if="viewAll && listingIsNotEmpty"
         class="view-all"
       >
@@ -110,6 +110,8 @@ export default {
     sort: 'load',
   },
   async mounted() {
+    // By default emit that listing not empty to the parent component.
+    this.$emit('listing-not-empty', true);
     this.featuredLocal = this.featured;
     await this.load();
   },
@@ -188,6 +190,10 @@ export default {
             // Load one more time without featured filter.
             this.featuredLocal = false;
             this.load();
+          }
+          if (this.listing === null || this.listing.length === 0) {
+            // Emit that listing empty to the parent component.
+            this.$emit('listing-not-empty', false);
           }
           this.loading = false;
         })

@@ -5,11 +5,13 @@ import NotFound from '@/views/NotFound.vue';
 import VideoPage from '@/views/VideoPage.vue';
 import BlogPage from '@/views/BlogPage.vue';
 import CategoryPage from '@/views/CategoryPage.vue';
-import CategoriesListing from '@/views/CategoriesListing.vue';
+import CategoriesListingPage from '@/views/CategoriesListingPage.vue';
 import LiveStreamPage from '@/views/LiveStreamPage.vue';
 import LiveStreamListingPage from '@/views/LiveStreamListingPage.vue';
 import VirtualMeetingPage from '@/views/VirtualMeetingPage.vue';
 import VirtualMeetingListingPage from '@/views/VirtualMeetingListingPage.vue';
+import BlogsListingPage from '@/views/BlogsListingPage.vue';
+import VideosListingPage from '@/views/VideosListingPage.vue';
 import FavoritesPage from '@/views/FavoritesPage.vue';
 
 Vue.use(VueRouter);
@@ -22,18 +24,24 @@ const routes = [
     meta: { requiresAuth: true, darkMenu: true },
   },
   {
-    path: '/categories/:type',
+    path: '/categories',
     name: 'CategoryListing',
-    component: CategoriesListing,
+    component: CategoriesListingPage,
     props: true,
     meta: { requiresAuth: true },
   },
   {
-    path: '/category/:type/:cid',
+    path: '/category/:cid',
     name: 'Category',
     component: CategoryPage,
     props: true,
     meta: { requiresAuth: true },
+  },
+  {
+    path: '/videos',
+    name: 'VideoListing',
+    component: VideosListingPage,
+    meta: { requiresAuth: true, darkMenu: true },
   },
   {
     path: '/video/:id',
@@ -71,6 +79,12 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
+    path: '/blogs',
+    name: 'BlogsListing',
+    component: BlogsListingPage,
+    meta: { requiresAuth: true, darkMenu: true },
+  },
+  {
     path: '/blog-post/:id',
     name: 'BlogPage',
     component: BlogPage,
@@ -90,12 +104,24 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
-    path: '/categories',
-    redirect: '/categories/video',
+    path: '/blog-post',
+    redirect: { name: 'BlogsListing' },
   },
   {
-    path: '/blog-post',
-    redirect: '/categories/blog',
+    path: '/categories/blog',
+    redirect: { name: 'BlogsListing' },
+  },
+  {
+    path: '/categories/video',
+    redirect: { name: 'VideoListing' },
+  },
+  {
+    path: '/category/blog/:cid',
+    redirect: '/category/:cid',
+  },
+  {
+    path: '/category/video/:cid',
+    redirect: '/category/:cid',
   },
   {
     path: '*',

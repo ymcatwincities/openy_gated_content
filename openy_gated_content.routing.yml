@@ -22,14 +22,16 @@ openy_gated_content.settings:
   requirements:
     _permission: 'administer gated content configuration'
 
-openy_gated_content.categories:
-  path: '/api/video-categories-list/{type}'
+openy_gated_content.categories.list:
+  path: '/api/categories-list'
   defaults:
     _controller: '\Drupal\openy_gated_content\Controller\CategoriesController::list'
-    _title: 'Virtual Y categories'
+    _title: 'Virtual Y all categories'
   requirements:
     _permission: 'access content'
     _role: 'authenticated'
+  options:
+    no_cache: TRUE
 
 openy_gated_content.favorites.list:
   path: '/api/favorites'
