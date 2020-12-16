@@ -13,7 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class GCUserService implements ContainerInjectionInterface {
 
-  const EDITOR_ROLE = 'virtual_ymca_editor';
+  use VirtualYAccessTrait;
 
   /**
    * The entity type manager.
@@ -47,7 +47,7 @@ class GCUserService implements ContainerInjectionInterface {
   public function getRoles() {
     $roles = [];
     foreach ($this->entityTypeManager->getStorage('user_role')->loadMultiple() as $role_name => $role) {
-      if (strstr($role_name, 'virtual_y') && ($role_name !== self::EDITOR_ROLE)) {
+      if (strstr($role_name, 'virtual_y') && (!in_array($role_name, self::getVirtualyEditorRoles()))) {
         $roles[$role_name] = $role->label();
       }
     }

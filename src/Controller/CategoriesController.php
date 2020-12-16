@@ -5,6 +5,7 @@ namespace Drupal\openy_gated_content\Controller;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+use Drupal\openy_gated_content\VirtualYAccessTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -12,6 +13,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  * Class CategoriesResource Controller.
  */
 class CategoriesController extends ControllerBase implements ContainerInjectionInterface {
+
+  use VirtualYAccessTrait;
 
   /**
    * The current active database's master connection.
@@ -66,7 +69,7 @@ class CategoriesController extends ControllerBase implements ContainerInjectionI
     $query->condition('t.vid', 'gc_category');
     $query->condition('tf.status', 1);
 
-    if (!empty($y_roles)) {
+    if (!empty($y_roles) && !in_array(self::getVirtualyEditorRoles(), $y_roles)) {
       $query->leftJoin('node_field_data', 'nd', 'n.entity_id = nd.nid');
       $or_group = $query->orConditionGroup();
       foreach ($y_roles as $role) {
