@@ -31,7 +31,7 @@
             </div>
             <div
               v-if="video.attributes.field_gc_video_description"
-              class="verdana-16-14 pb-40-20"
+              class="verdana-16-14"
               v-html="video.attributes.field_gc_video_description.processed"
             ></div>
           </div>
