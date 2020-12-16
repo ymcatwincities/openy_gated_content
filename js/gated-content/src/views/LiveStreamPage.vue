@@ -40,29 +40,29 @@
               v-html="descriptionProcessed"
             ></div>
           </div>
-          <div class="verdana-14-12 text-black">
+          <div class="verdana-14-12 text-thunder">
             <div class="video-footer__block">
-              <SvgIcon icon="date-icon" :growByHeight=false></SvgIcon>
+              <SvgIcon icon="date-icon" class="fill-gray" :growByHeight=false></SvgIcon>
               {{ date }}
             </div>
             <div class="video-footer__block">
-              <SvgIcon icon="clock-regular" :growByHeight=false></SvgIcon>
+              <SvgIcon icon="clock-regular" class="fill-gray" :growByHeight=false></SvgIcon>
               {{ time }} ({{ duration }})
             </div>
             <div class="video-footer__block" v-if="instructor">
-              <SvgIcon icon="instructor-icon" grow-by-height="false"></SvgIcon>
+              <SvgIcon icon="instructor-icon" class="fill-gray" grow-by-height="false"></SvgIcon>
               {{ instructor }}
             </div>
             <div class="video-footer__block video-footer__category"
                  v-if="category && category.length > 0">
-              <SvgIcon icon="categories" :growByHeight=false></SvgIcon>
+              <SvgIcon icon="categories" class="fill-gray" :growByHeight=false></SvgIcon>
               <span v-for="(category_data, index) in category"
                     :key="index">{{ category_data.name }}</span>
             </div>
             <div
               v-if="video.attributes.equipment.length > 0"
               class="video-footer__block">
-              <SvgIcon icon="cubes-solid" :growByHeight=false></SvgIcon>
+              <SvgIcon icon="cubes-solid" class="fill-gray" :growByHeight=false></SvgIcon>
               Equipment:
             </div>
             <ul class="video-footer__equipment">
