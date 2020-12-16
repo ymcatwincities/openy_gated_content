@@ -16,6 +16,7 @@
       <div class="instructor" v-if="instructor">{{ instructor }}</div>
     </div>
     <AddToFavorite
+      v-if="isUpcoming"
       :id="event.attributes.drupal_internal__id"
       :type="'eventinstance'"
       :bundle="type"

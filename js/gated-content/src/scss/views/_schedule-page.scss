@@ -1,5 +1,6 @@
 .gated-content-schedule-page {
   width: 100%;
+  color: black;
 }
 
 .date-filter {
@@ -13,13 +14,14 @@
 
   > button {
     border: none;
+    color: $gray;
     background-color: $light-gray;
     height: 48px;
     width: 48px;
     padding: 0;
 
-    &:not([disabled]) {
-      color: $gray;
+    &[disabled] {
+      opacity: 0.5;
     }
 
     &:focus {
@@ -55,6 +57,7 @@
         .caption {
           font-weight: bold;
           flex-grow: 1;
+          color: $gray;
         }
 
         .count {
