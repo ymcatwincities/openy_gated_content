@@ -1,9 +1,9 @@
 <template>
-  <div class="videos gated-container">
-    <div class="videos__header" :class="{'with-date-filter': withDateFilter}">
+  <div class="gated-container">
+    <div class="listing-header" :class="{'with-date-filter': withDateFilter}">
       <h2 class="title">{{ title }}</h2>
       <h2 class="videos__date-filter"
-        v-if="withDateFilter"
+          v-if="withDateFilter"
       >
         <button v-on:click.stop="backOneDay" class="left" role="button"
                 :style="[hidePrevDateButton ? {'visibility':'hidden'}:'']"
@@ -13,7 +13,7 @@
                 role="button" aria-label="next date"><i class="fa fa-angle-right"></i></button>
       </h2>
       <router-link :to="{ name: viewAllRoute }" v-if="viewAll" class="view-all">
-        View All
+        More
       </router-link>
     </div>
     <div v-if="loading" class="text-center">
@@ -21,12 +21,12 @@
     </div>
     <template v-else-if="listingIsNotEmpty">
       <div v-if="error">Error loading</div>
-      <div v-else class="video-listing live-stream-listing">
-          <EventTeaser
-            v-for="video in listing"
-            :key="video.id"
-            :video="video"
-          />
+      <div v-else class="four-columns">
+        <EventTeaser
+          v-for="video in listing"
+          :key="video.id"
+          :video="video"
+        />
       </div>
     </template>
     <div v-else class="empty-listing">{{ msg }}</div>
@@ -72,6 +72,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    category: {
+      type: String,
+      default: '',
+    },
     sort: {
       type: Object,
       default() {
@@ -113,6 +117,8 @@ export default {
     sort: 'load',
   },
   async mounted() {
+    // By default emit that listing not empty to the parent component.
+    this.$emit('listing-not-empty', true);
     this.featuredLocal = this.featured;
     await this.load();
   },
@@ -229,6 +235,10 @@ export default {
         params.filter.field_ls_featured = 1;
       }
 
+      if (this.category) {
+        params.filter['eventseries_id.field_ls_category.id'] = this.category;
+      }
+
       params.filter.status = 1;
       params.sort = {
         sortBy: this.sort,
@@ -246,6 +256,10 @@ export default {
             // Load one more time without featured filter.
             this.featuredLocal = false;
             this.load();
+          }
+          if (this.listing === null || this.listing.length === 0) {
+            // Emit that listing empty to the parent component.
+            this.$emit('listing-not-empty', false);
           }
           this.loading = false;
         })

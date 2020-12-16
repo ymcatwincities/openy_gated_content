@@ -1,11 +1,11 @@
 <template>
-  <div v-if="showlisting" class="gated-container">
-    <h2 class="title">{{ title }}</h2>
-    <div v-if="loading" class="text-center">
-      <Spinner></Spinner>
-    </div>
-    <div v-else-if="error">Error loading</div>
-    <div v-else class="video-listing category-listing">
+  <div v-if="loading" class="text-center">
+    <Spinner></Spinner>
+  </div>
+  <div v-else-if="error" class="text-center">Error loading</div>
+  <div v-else-if="showlisting" class="gated-container">
+    <h2 class="title" v-if="title !== 'none'">{{ title }}</h2>
+    <div class="video-listing category-listing">
       <CategoryTeaser
         v-for="category in listing"
         :key="category.id"
@@ -17,7 +17,7 @@
 
 <script>
 import client from '@/client';
-import CategoryTeaser from '@/components/video/CategoryTeaser.vue';
+import CategoryTeaser from '@/components/category/CategoryTeaser.vue';
 import Spinner from '@/components/Spinner.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
 import { FavoritesMixin } from '@/mixins/FavoritesMixin';
@@ -30,7 +30,15 @@ export default {
     Spinner,
   },
   props: {
+    title: {
+      type: String,
+      default: 'Categories',
+    },
     type: {
+      type: String,
+      default: 'all',
+    },
+    bundle: {
       type: String,
       default: '',
     },
@@ -63,37 +71,23 @@ export default {
   async mounted() {
     await this.load();
   },
-  computed: {
-    title() {
-      switch (this.type) {
-        case 'video':
-          return 'Video categories';
-        case 'blog':
-          return 'Blog categories';
-        default:
-          return 'Categories';
-      }
-    },
-  },
   watch: {
     sort: 'load',
     limit: 'load',
-    type() {
-      this.load();
+    type: 'load',
+    bundle: 'load',
+    '$route.query': function $routeQuery(newQuery, oldQuery) {
+      if (newQuery !== oldQuery) {
+        this.load();
+      }
     },
   },
   methods: {
-    listingIsNotEmpty() {
-      if (this.listing !== null && this.listing.length > 0) {
-        this.showlisting = true;
-      } else {
-        this.showlisting = false;
-      }
-    },
     async load() {
       this.showlisting = false;
+      this.listing = [];
+      this.loading = true;
       const params = {};
-      const bundle = this.type === 'video' ? 'gc_video' : 'vy_blog_post';
       if (this.params) {
         params.include = this.params.join(',');
       }
@@ -142,8 +136,14 @@ export default {
         return;
       }
 
-      client
-        .get(`api/video-categories-list/${bundle}`, { params })
+      client({
+        url: '/api/categories-list',
+        method: 'get',
+        params: {
+          type: this.type,
+          bundle: this.bundle,
+        },
+      })
         .then((response) => {
           params.filter = {};
           if (response.data.length > 0) {

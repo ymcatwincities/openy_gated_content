@@ -135,6 +135,7 @@
         && (selectedComponent === 'gc_category' || selectedComponent === 'all')">
         <CategoriesListing
           :favorites="true"
+          :type="'all'"
           :sort="sortData('taxonomy_term')"
           :limit="viewAllContentMode ? 50 : itemsLimit"
         />
@@ -153,20 +154,19 @@
 
 <script>
 import Spinner from '@/components/Spinner.vue';
-import Modal from '@/components/Modal.vue';
 import BlogListing from '@/components/blog/BlogListing.vue';
 import VideoListing from '@/components/video/VideoListing.vue';
 import EventListing from '@/components/event/EventListing.vue';
-import CategoriesListing from '@/views/CategoriesListing.vue';
+import CategoriesListing from '@/components/category/CategoriesListing.vue';
 import { SettingsMixin } from '@/mixins/SettingsMixin';
 import { FavoritesMixin } from '@/mixins/FavoritesMixin';
+import { FilterAndSortMixin } from '@/mixins/FilterAndSortMixin';
 
 export default {
   name: 'FavoritesPage',
-  mixins: [SettingsMixin, FavoritesMixin],
+  mixins: [SettingsMixin, FavoritesMixin, FilterAndSortMixin],
   components: {
     Spinner,
-    Modal,
     BlogListing,
     VideoListing,
     EventListing,
@@ -174,12 +174,7 @@ export default {
   },
   data() {
     return {
-      showModal: false,
       itemsLimit: 3,
-      selectedComponent: 'all',
-      preSelectedComponent: 'all',
-      selectedSort: 'date_desc',
-      preSelectedSort: 'date_desc',
       contentTypeOptions: [
         { value: 'all', label: 'Show All' },
         { value: 'gc_video', type: 'node', label: 'Video' },
@@ -187,12 +182,6 @@ export default {
         { value: 'virtual_meeting', type: 'eventinstance', label: 'Virtual meeting' },
         { value: 'vy_blog_post', type: 'node', label: 'Blog' },
         { value: 'gc_category', type: 'taxonomy_term', label: 'Categories' },
-      ],
-      filterOptions: [
-        { value: 'date_desc', label: 'By date (New-Old)' },
-        { value: 'date_asc', label: 'By date (Old-New)' },
-        { value: 'title_asc', label: 'By title (A-Z)' },
-        { value: 'title_desc', label: 'By title (Z-A)' },
       ],
       filterQueryByTypes: {
         node: {
@@ -208,8 +197,8 @@ export default {
           title_desc: { path: 'eventseries_id.title', direction: 'DESC' },
         },
         taxonomy_term: {
-          date_desc: { path: 'changed', direction: 'DESC' },
-          date_asc: { path: 'changed', direction: 'ASC' },
+          date_desc: { path: 'weight', direction: 'DESC' },
+          date_asc: { path: 'weight', direction: 'ASC' },
           title_asc: { path: 'name', direction: 'ASC' },
           title_desc: { path: 'name', direction: 'DESC' },
         },
@@ -246,16 +235,6 @@ export default {
       return filtered.length === 0;
     },
   },
-  mounted() {
-    if (this.$route.query.type) {
-      this.selectedComponent = this.$route.query.type;
-      this.preSelectedComponent = this.$route.query.type;
-    }
-    if (this.$route.query.sort) {
-      this.selectedSort = this.$route.query.sort;
-      this.preSelectedSort = this.$route.query.sort;
-    }
-  },
   watch: {
     favoritesList: {
       handler() {
@@ -265,19 +244,6 @@ export default {
     },
   },
   methods: {
-    applyFilters() {
-      this.selectedComponent = this.preSelectedComponent;
-      this.selectedSort = this.preSelectedSort;
-      const query = {
-        ...this.$route.query,
-        type: this.selectedComponent,
-        sort: this.selectedSort,
-      };
-      if (Object.entries(this.$route.query).toString() !== Object.entries(query).toString()) {
-        this.$router.push({ query });
-      }
-      this.showModal = false;
-    },
     sortData(type) {
       return this.filterQueryByTypes[type][this.selectedSort];
     },

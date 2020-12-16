@@ -2,7 +2,19 @@ import client from '@/client';
 
 export default {
   state: {
-    data: {},
+    data: {
+      node: {
+        vy_blog_post: [],
+        gc_video: [],
+      },
+      eventinstance: {
+        live_stream: [],
+        virtual_meeting: [],
+      },
+      taxonomy_term: {
+        gc_category: [],
+      },
+    },
   },
   actions: {
     async loadFavorites(context) {

@@ -1,13 +1,13 @@
 <template>
-  <div class="blogs videos gated-container">
-    <div class="blogs__header videos__header">
-      <h2 class="title">{{ title }}</h2>
+  <div class="gated-container">
+    <div class="listing-header">
+      <h2 class="title" v-if="title !== 'none'">{{ title }}</h2>
       <router-link
-        :to="{ name: 'CategoryListing', params: { type: 'blog' }}"
+        :to="{ name: 'BlogsListing', query: { type: category } }"
         v-if="viewAll && listingIsNotEmpty"
         class="view-all"
       >
-        View All
+        More
       </router-link>
     </div>
     <div v-if="loading" class="text-center">
@@ -15,7 +15,7 @@
     </div>
     <template v-else-if="listingIsNotEmpty">
       <div v-if="error">Error loading</div>
-      <div v-else class="blog-listing">
+      <div v-else class="four-columns">
         <BlogTeaser
           v-for="blog in listing"
           :key="blog.id"
@@ -106,6 +106,8 @@ export default {
     sort: 'load',
   },
   async mounted() {
+    // By default emit that listing not empty to the parent component.
+    this.$emit('listing-not-empty', true);
     this.featuredLocal = this.featured;
     await this.load();
   },
@@ -183,6 +185,10 @@ export default {
             // Load one more time without featured filter.
             this.featuredLocal = false;
             this.load();
+          }
+          if (this.listing === null || this.listing.length === 0) {
+            // Emit that listing empty to the parent component.
+            this.$emit('listing-not-empty', false);
           }
           this.loading = false;
         })

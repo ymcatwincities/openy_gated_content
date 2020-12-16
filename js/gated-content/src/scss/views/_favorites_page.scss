@@ -1,11 +1,9 @@
-.gated-content-favorites-page {
-  .modal-body {
-    .filter {
-      input:disabled {
+.modal-body {
+  .filter {
+    input:disabled {
+      opacity: 0.5;
+      & + label {
         opacity: 0.5;
-        & + label {
-          opacity: 0.5;
-        }
       }
     }
   }
