@@ -37,7 +37,7 @@ class YUSAClientService {
   /**
    * RecliqueClientService constructor.
    *
-   * @param LoggerChannelFactory $loggerFactory
+   * @param \Drupal\Core\Logger\LoggerChannelFactory $loggerFactory
    *   LoggerChannelFactory instance.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   ConfigFactoryInterface instance.
