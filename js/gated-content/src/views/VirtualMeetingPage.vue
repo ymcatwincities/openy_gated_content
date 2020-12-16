@@ -38,7 +38,7 @@
             </div>
             <div
               v-if="description"
-              class="verdana-16-14 pb-40-20"
+              class="verdana-16-14"
                  v-html="descriptionProcessed"
             ></div>
           </div>
