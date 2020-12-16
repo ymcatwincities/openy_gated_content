@@ -22,6 +22,7 @@
                 :id="video.attributes.drupal_internal__id"
                 :type="'eventinstance'"
                 :bundle="'live_stream'"
+                class="rounded-border"
               ></AddToFavorite>
               <AddToCalendar :event="event"></AddToCalendar>
               <div class="timer" :class="{live: isOnAir}">

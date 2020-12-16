@@ -24,6 +24,7 @@
                 :id="video.attributes.drupal_internal__id"
                 :type="'eventinstance'"
                 :bundle="'virtual_meeting'"
+                class="rounded-border"
               ></AddToFavorite>
               <AddToCalendar :event="event"></AddToCalendar>
               <div class="timer" :class="{live: isOnAir}">

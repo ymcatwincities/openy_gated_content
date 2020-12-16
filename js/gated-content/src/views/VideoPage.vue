@@ -23,6 +23,7 @@
                 :type="'node'"
                 :bundle="'gc_video'"
                 iconClass="fill-white"
+                class="rounded-border"
               ></AddToFavorite>
               <div class="timer">
                 {{ video_length }}
@@ -163,7 +164,6 @@ export default {
         .then((response) => {
           this.video = this.combine(response.data.data, response.data.included, this.params);
           this.loading = false;
-          console.log(this.video);
         }).then(() => {
           this.logPlaybackEvent('entityView');
         })

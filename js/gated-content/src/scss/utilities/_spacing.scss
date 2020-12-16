@@ -1,5 +1,14 @@
+.pt-20-10 {
+  @include median(padding-top, 20px, 10px);
+}
+
 .pb-20-10 {
   @include median(padding-bottom, 20px, 10px);
+}
+
+.py-20-10 {
+  @extend .pt-20-10;
+  @extend .pb-20-10;
 }
 
 .pt-40-20 {
@@ -13,6 +22,19 @@
 .py-40-20 {
   @extend .pt-40-20;
   @extend .pb-40-20;
+}
+
+.mt-20-10 {
+  @include median(margin-top, 20px, 10px);
+}
+
+.mb-20-10 {
+  @include median(margin-bottom, 20px, 10px);
+}
+
+.my-20-10 {
+  @extend .mt-20-10;
+  @extend .mb-20-10;
 }
 
 .mt-40-20 {
