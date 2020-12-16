@@ -149,11 +149,6 @@ export default {
     descriptionProcessed() {
       return this.description ? this.description.processed : '';
     },
-    descriptionTruncated() {
-      return `${this.descriptionProcessed.length > 1000}`
-        ? `${this.descriptionProcessed.substring(0, 997)}`
-        : `${this.descriptionProcessed}`;
-    },
     event() {
       return {
         start: this.formatDate(this.video.attributes.date.value),

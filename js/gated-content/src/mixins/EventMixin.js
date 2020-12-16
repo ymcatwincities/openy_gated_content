@@ -24,6 +24,11 @@ export const EventMixin = {
         ? this.video.attributes.field_ls_category
         : this.video.attributes.category;
     },
+    descriptionTruncated() {
+      return `${this.descriptionProcessed.length > 1000}`
+        ? `${this.descriptionProcessed.substring(0, 997)}`
+        : `${this.descriptionProcessed}`;
+    },
     instructor() {
       return this.video.attributes.field_ls_host_name ? this.video.attributes.field_ls_host_name
         : this.video.attributes.host_name;
