@@ -36,7 +36,6 @@
         <router-link
           :to="{ name: 'Favorites' }"
           :style="fontStyleObject"
-          @click.native="menuOpen=false"
           exact
         >
           <FavoritesIcon :color="fontColor"></FavoritesIcon>Favorites
@@ -46,7 +45,6 @@
         <router-link
           :to="{ name: 'CategoryListing', params: { type: 'video' } }"
           :style="fontStyleObject"
-          @click.native="menuOpen=false"
           exact
         >
           <CategoriesIcon :color="fontColor"></CategoriesIcon>Categories
@@ -56,7 +54,6 @@
         <a
           href="/vy-user/logout"
           :style="fontStyleObject"
-          @click.native="menuOpen=false"
         >
           <LogoutIcon :color="fontColor"></LogoutIcon>Sign out
         </a>
