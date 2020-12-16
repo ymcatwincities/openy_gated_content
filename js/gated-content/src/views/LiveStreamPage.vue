@@ -5,7 +5,7 @@
     </div>
     <div v-else-if="error">Error loading</div>
     <template v-else>
-      <div class="video-wrapper bg-white">
+      <div class="video-wrapper bg-white px--20-10">
         <div class="video gated-containerV2 pt-40-20">
           <MediaPlayer
             :media="media"
@@ -13,7 +13,7 @@
           />
         </div>
       </div>
-      <div class="video-footer-wrapper bg-white">
+      <div class="video-footer-wrapper bg-white px--20-10">
         <div class="video-footer gated-containerV2 py-40-20">
           <div>
             <div class="pb-20-10 cachet-book-32-28">{{ video.attributes.title }}</div>
@@ -36,7 +36,7 @@
             </div>
             <div
               v-if="description"
-              class="pb-40-20 verdana-16-14"
+              class="verdana-16-14"
               v-html="descriptionProcessed"
             ></div>
           </div>

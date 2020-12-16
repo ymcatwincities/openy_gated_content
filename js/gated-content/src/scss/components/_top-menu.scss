@@ -10,10 +10,8 @@
     align-items:     center;
     justify-content: flex-end;
 
-    @include median(padding, 30px 15px 15px 18px, 10px 15px);
-    @include median(max-width, 1170px, initial);
-    @include median(margin-left, auto, auto, initial);
-    @include median(margin-right, auto, auto, initial);
+    @include median(padding-top, 30px, 10px);
+    @include median(padding-bottom, 15px, 10px);
 
     > div:not(:first-child) {
       @include median(display, block, none);
@@ -71,7 +69,7 @@
       text-align:       right;
 
       @include median(display, none, flex);
-      @include median(padding-right, initial, 13px);
+      @include median(padding-right, 10px, 19px);
 
       svg {
         width: 27px;
@@ -121,7 +119,7 @@
         color:         $gray;
 
         a {
-          border: none;
+          border:  none;
           padding: 0;
         }
       }

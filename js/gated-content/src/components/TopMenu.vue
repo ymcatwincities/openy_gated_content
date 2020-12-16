@@ -1,6 +1,6 @@
 <template>
   <div class="top-menu" :class="{menuOpen: menuOpen}" :style="backgroundStyleObject">
-    <div>
+    <div class="gated-containerV2 px--20-10">
       <div @click="menuOpen=false">
         <router-link
           :to="{ name: 'Home' }"

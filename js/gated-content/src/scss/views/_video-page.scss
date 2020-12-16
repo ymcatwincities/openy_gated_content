@@ -36,6 +36,7 @@
       > div:first-child {
         @include median(width, 65%, 65%, initial);
         @include median(padding-right, 20px, 10px, initial);
+        @include median(padding-bottom, null, null, 16px);
 
         .video-footer__fav {
           display:     flex;
@@ -79,6 +80,7 @@
         }
 
         .video-footer__equipment {
+          margin-bottom:   0;
           padding-top:     5px;
           font-size:       12px;
           list-style-type: none;
