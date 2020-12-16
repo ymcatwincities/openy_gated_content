@@ -1,7 +1,7 @@
 <template>
   <div class="gated-containerV2 my-40-20 px--20-10">
     <div class="listing-header">
-      <h2 class="title" v-if="title !== 'none'">{{ title }}</h2>
+      <h2 class="title text-gray" v-if="title !== 'none'">{{ title }}</h2>
       <router-link
         :to="{ name: 'VideoListing', query: { type: category } }"
         v-if="viewAll && listingIsNotEmpty"
