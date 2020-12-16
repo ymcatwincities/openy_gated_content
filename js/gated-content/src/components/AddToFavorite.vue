@@ -5,13 +5,12 @@
     @click="onClick"
   >
     <Spinner v-if="loading"></Spinner>
-    <template v-else>
-      <SvgIcon
-        title="Add to favorite"
-        class="favorite-icon"
-        :icon="icon"
-      ></SvgIcon>
-    </template>
+    <SvgIcon v-else
+      title="Add to favorite"
+      class="favorite-icon"
+      :icon="icon"
+      :class="iconClass"
+    ></SvgIcon>
   </div>
 </template>
 
@@ -33,6 +32,9 @@ export default {
     icon: {
       type: String,
       default: 'favorites-solid',
+    },
+    iconClass: {
+      type: String,
     },
     type: {
       type: String,

@@ -1,5 +1,5 @@
 <template>
-  <div class="gated-containerV2 my-40-20 cachet-book-32-28">
+  <div class="gated-containerV2 cachet-book-32-28 my-40-20 px--20-10">
     {{ title }}
   </div>
 </template>

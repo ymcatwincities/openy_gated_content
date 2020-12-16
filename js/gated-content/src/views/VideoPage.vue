@@ -13,38 +13,43 @@
           />
         </div>
       </div>
-      <div class="video-footer-wrapper">
-        <div class="video-footer gated-containerV2 py-40-20">
+      <div class="video-footer-wrapper bg-black">
+        <div class="video-footer gated-containerV2 py-40-20 px--20-10 text-white">
           <div>
-            <div class="video-footer__title cachet-book-32-28">{{ video.attributes.title }}</div>
-            <div class="video-footer__fav">
+            <div class="pb-20-10 cachet-book-32-28">{{ video.attributes.title }}</div>
+            <div class="video-footer__fav pb-40-20">
               <AddToFavorite
                 :id="video.attributes.drupal_internal__nid"
                 :type="'node'"
                 :bundle="'gc_video'"
+                iconClass="fill-white"
               ></AddToFavorite>
-              <div class="duration">
-                {{ duration }}
+              <div class="timer">
+                {{ video_length }}
               </div>
             </div>
             <div
               v-if="video.attributes.field_gc_video_description"
-              class="video-footer__description"
+              class="verdana-16-14 pb-40-20"
               v-html="video.attributes.field_gc_video_description.processed"
             ></div>
           </div>
-          <div>
+          <div class="verdana-14-12">
             <div
               v-if="video.attributes.field_gc_video_instructor"
               class="video-footer__block">
-              <SvgIcon icon="instructor-icon" grow-by-height="false"></SvgIcon>
+              <SvgIcon icon="instructor-icon"
+                       class="fill-white"
+                       grow-by-height="false"></SvgIcon>
               {{ video.attributes.field_gc_video_instructor }}
             </div>
             <div
               v-if="video.attributes.field_gc_video_category &&
               video.attributes.field_gc_video_category.length > 0"
               class="video-footer__block video-footer__category">
-              <SvgIcon icon="categories" :growByHeight=false></SvgIcon>
+              <SvgIcon icon="categories"
+                       class="fill-white"
+                       :growByHeight=false></SvgIcon>
               <span v-for="(category, index) in video.attributes.field_gc_video_category"
                     :key="category.drupal_internal__tid">
                 <router-link :to="{
@@ -60,15 +65,16 @@
             </div>
             <div
               v-if="video.attributes.field_gc_video_equipment.length > 0"
-              class="video-footer__equipment">
-              <i class="fa fa-cubes"></i>Equipment:
-              <ul>
-                <li v-for="equip in video.attributes.field_gc_video_equipment"
-                    :key="equip.drupal_internal__tid">
-                  {{ equip.name }}
-                </li>
-              </ul>
+              class="video-footer__block">
+              <SvgIcon icon="cubes-solid" class="fill-white" :growByHeight=false></SvgIcon>
+              Equipment:
             </div>
+            <ul class="video-footer__equipment">
+              <li v-for="equip in video.attributes.field_gc_video_equipment"
+                  :key="equip.drupal_internal__tid">
+                {{ equip.name }}
+              </li>
+            </ul>
           </div>
         </div>
       </div>
@@ -78,7 +84,7 @@
         :excluded-video-id="video.id"
         :category="firstCategory"
         :viewAll="true"
-        :limit="6"
+        :limit="8"
       />
     </template>
   </div>
@@ -141,7 +147,7 @@ export default {
       }
       return this.video.relationships.field_gc_video_category.data[0].id;
     },
-    duration() {
+    video_length() {
       return moment.duration(this.video.attributes.field_gc_video_duration, 'seconds').format('m [minute]');
     },
   },

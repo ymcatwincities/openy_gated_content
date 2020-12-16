@@ -1,5 +1,5 @@
 <template>
-  <div class="gated-containerV2 my-40-20">
+  <div class="gated-containerV2 my-40-20 px--20-10">
     <div class="listing-header" :class="{'with-date-filter': withDateFilter}">
       <h2 class="title">{{ title }}</h2>
       <h2 class="videos__date-filter"

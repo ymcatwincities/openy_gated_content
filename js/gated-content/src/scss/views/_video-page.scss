@@ -7,7 +7,7 @@
     .video {
 
       @media all and (max-width: 768px) {
-        width:   100%;
+        width: 100%;
       }
 
       .youtube {
@@ -27,11 +27,9 @@
   }
 
   .video-footer-wrapper {
-    background-color: black;
 
     .video-footer {
       display: flex;
-      color:   white;
 
       @include median(flex-direction, row, row, column);
 
@@ -39,49 +37,46 @@
         @include median(width, 65%, 65%, initial);
         @include median(padding-right, 20px, 10px, initial);
 
-        .video-footer__title {
-          @include median(padding-bottom, 20px, 10px);
-        }
-
         .video-footer__fav {
           display:     flex;
           align-items: center;
-          @include median(padding-bottom, 40px, 20px);
 
           .add-to-favorite {
             position:      initial;
             margin-right:  10px;
             border:        2px solid $thunder;
             border-radius: 50%;
-            padding:       14px;
+            padding:       15px 13px;
+            width:         50px;
+            height:        50px;
+            line-height:   10px;
             font-size:     18px;
-          }
-        }
 
-        .video-footer__description {
-          @include median(font-size, 16px, 14px);
+            > svg {
+              width:  18px;
+              height: 18px;
+            }
+          }
         }
       }
 
       > div:last-child {
         @include median(padding-left, 20px, 10px, initial);
 
+        .svg-container {
+          font-size: 18px;
+
+          @include median(margin-right, 14px, 14px, 10px);
+        }
+
         .video-footer__block {
           display:     flex;
           align-items: center;
 
-          @include median(font-size, 14px, 12px);
           @include median(padding, 10px 0, 8px 0);
 
           &:first-child {
             padding-top: 0;
-          }
-
-          .svg-container {
-            font-size: 18px;
-            fill:      white;
-
-            @include median(margin-right, 14px, 14px, 10px);
           }
         }
 
@@ -101,29 +96,14 @@
         }
 
         .video-footer__equipment {
-          font-size: 14px;
+          padding-top:     5px;
+          font-size:       12px;
+          list-style-type: none;
 
-          @include median(padding, 10px 0, 8px 0);
-
-          i {
-            margin-right: 14px;
-            font-size:    18px;
-          }
-
-          ul {
-            padding-top:     5px;
-            font-size:       12px;
-            list-style-type: none;
-
-            li:before {
-              content: '+';
-            }
+          li:before {
+            content: '+';
           }
         }
-      }
-
-      .add-to-calendar {
-        margin-top: 1rem;
       }
     }
   }

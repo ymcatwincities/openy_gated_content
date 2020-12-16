@@ -10,3 +10,9 @@
 
   @include median(font-size, 16px, 14px);
 }
+
+.verdana-14-12 {
+  font-family: Verdana, sans-serif;
+
+  @include median(font-size, 14px, 12px);
+}

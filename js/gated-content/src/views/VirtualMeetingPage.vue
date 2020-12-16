@@ -15,55 +15,63 @@
           </a>
         </div>
       </div>
-      <div class="video-footer-wrapper">
-        <div class="video-footer gated-container">
+      <div class="video-footer-wrapper bg-white px--20-10">
+        <div class="video-footer gated-containerV2 py-40-20">
           <div>
-            <div class="video-footer__title">{{ video.attributes.title }}</div>
+            <div class="pb-20-10 cachet-book-32-28">{{ video.attributes.title }}</div>
+            <div class="video-footer__fav pb-40-20">
+              <AddToFavorite
+                :id="video.attributes.drupal_internal__id"
+                :type="'eventinstance'"
+                :bundle="'virtual_meeting'"
+              ></AddToFavorite>
+              <AddToCalendar :event="event"></AddToCalendar>
+              <div class="timer" :class="{live: isOnAir}">
+                <template v-if="isOnAir">
+                  LIVE!
+                </template>
+                <template v-else>
+                  Starts in {{ startsIn }}
+                </template>
+              </div>
+            </div>
             <div
               v-if="description"
-              class="video-footer__description"
+              class="verdana-16-14 pb-40-20"
                  v-html="descriptionProcessed"
             ></div>
-            <AddToFavorite
-              :id="video.attributes.drupal_internal__id"
-              :type="'eventinstance'"
-              :bundle="'virtual_meeting'"
-            ></AddToFavorite>
-            <AddToCalendar :event="event" class="mt-3"></AddToCalendar>
           </div>
-          <div>
+          <div class="verdana-14-12 text-black">
             <div class="video-footer__block">
-              <i class="fa fa-clock-o fa-clock" aria-hidden="true"></i>
-              {{ video.attributes.date.value | month }}
-              {{ video.attributes.date.value | day }},
-              {{ video.attributes.date | schedule }}
+              <SvgIcon icon="date-icon" :growByHeight=false></SvgIcon>
+              {{ date }}
             </div>
-            <div class="video-footer__block"
-              v-if="level"
-            >
-              Level: {{ level | capitalize }}
+            <div class="video-footer__block">
+              <SvgIcon icon="clock-regular" :growByHeight=false></SvgIcon>
+              {{ time }} ({{ duration }})
             </div>
             <div class="video-footer__block" v-if="instructor">
-              Instructor: {{ instructor }}
+              <SvgIcon icon="instructor-icon" grow-by-height="false"></SvgIcon>
+              {{ instructor }}
             </div>
             <div class="video-footer__block video-footer__category"
                  v-if="category && category.length > 0">
-              Category:
+              <SvgIcon icon="categories" :growByHeight=false></SvgIcon>
               <span v-for="(category_data, index) in category"
                     :key="index">{{ category_data.name }}</span>
             </div>
             <div
               v-if="video.attributes.equipment.length > 0"
-              class="video-footer__equipment">
-              <i class="fa fa-cubes"></i>
+              class="video-footer__block">
+              <SvgIcon icon="cubes-solid" :growByHeight=false></SvgIcon>
               Equipment:
-              <ul>
-                <li v-for="equip in video.attributes.equipment"
-                    :key="equip.drupal_internal__tid">
-                  {{ equip.name }}
-                </li>
-              </ul>
             </div>
+            <ul class="video-footer__equipment">
+              <li v-for="equip in video.attributes.equipment"
+                  :key="equip.drupal_internal__tid">
+                {{ equip.name }}
+              </li>
+            </ul>
           </div>
         </div>
       </div>
@@ -87,11 +95,13 @@ import EventListing from '@/components/event/EventListing.vue';
 import AddToCalendar from '@/components/event/AddToCalendar.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
 import { EventMixin } from '@/mixins/EventMixin';
+import SvgIcon from '@/components/SvgIcon.vue';
 
 export default {
   name: 'VirtualMeetingPage',
   mixins: [JsonApiCombineMixin, EventMixin],
   components: {
+    SvgIcon,
     AddToFavorite,
     EventListing,
     AddToCalendar,
