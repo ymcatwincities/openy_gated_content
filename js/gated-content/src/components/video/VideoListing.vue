@@ -110,6 +110,8 @@ export default {
     sort: 'load',
   },
   async mounted() {
+    // By default emit that listing not empty to the parent component.
+    this.$emit('listing-not-empty', true);
     this.featuredLocal = this.featured;
     await this.load();
   },
@@ -188,6 +190,10 @@ export default {
             // Load one more time without featured filter.
             this.featuredLocal = false;
             this.load();
+          }
+          if (this.listing === null || this.listing.length === 0) {
+            // Emit that listing empty to the parent component.
+            this.$emit('listing-not-empty', false);
           }
           this.loading = false;
         })

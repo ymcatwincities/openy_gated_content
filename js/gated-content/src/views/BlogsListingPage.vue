@@ -6,8 +6,8 @@
       </template>
       <template v-slot:body>
         <div class="filter">
-          <h4>Content types</h4>
-          <div class="form-check" v-for="option in contentTypeOptions" v-bind:key="option.value">
+          <h4>Categories</h4>
+          <div class="form-check" v-for="option in contentTypeOptions" :key="option.value">
             <input
               type="radio"
               :id="option.value"
@@ -20,7 +20,7 @@
         </div>
         <div class="sort">
           <h4>Sort order</h4>
-          <div class="form-check" v-for="option in filterOptions" v-bind:key="option.value">
+          <div class="form-check" v-for="option in filterOptions" :key="option.value">
             <input
               type="radio"
               :id="option.value"

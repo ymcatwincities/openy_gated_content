@@ -6,7 +6,7 @@
       </template>
       <template v-slot:body>
         <div class="filter">
-          <h4>Content types</h4>
+          <h4>Categories</h4>
           <div class="form-check" v-for="option in contentTypeOptions" v-bind:key="option.value">
             <input
               type="radio"

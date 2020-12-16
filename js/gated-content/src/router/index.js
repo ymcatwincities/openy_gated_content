@@ -105,7 +105,7 @@ const routes = [
   },
   {
     path: '/blog-post',
-    redirect: { name: 'CategoryListing', query: { type: 'vy_blog_post' } },
+    redirect: { name: 'BlogsListing' },
   },
   {
     path: '/categories/blog',

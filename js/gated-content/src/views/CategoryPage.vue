@@ -17,6 +17,7 @@
                 type="radio"
                 :id="option.value"
                 :value="option.value"
+                :disabled="option.value !== 'all' && !showComponent[option.value]"
                 autocomplete="off"
                 v-model="preSelectedComponent"
               >
@@ -57,7 +58,7 @@
         <button type="button" class="btn btn-light" @click="showModal = true">Adjust</button>
       </div>
 
-      <div class="live-stream-wrapper">
+      <div class="live-stream-wrapper" v-if="showComponent.live_stream">
         <EventListing
           v-if="selectedComponent === 'live_stream' || selectedComponent === 'all'"
           :title="config.components.live_stream.title"
@@ -65,9 +66,9 @@
           :msg="'Live streams not found.'"
           :sort="sortData('eventinstance')"
           :limit="viewAllContentMode ? 50 : itemsLimit"
-          @listing-not-empty="liveStreamListingIsNotEmpty"
+          @listing-not-empty="listingIsNotEmpty('live_stream', ...arguments)"
         />
-        <div class="text-center" v-if="selectedComponent === 'all' && showLiveStreamViewAll">
+        <div class="text-center" v-if="selectedComponent === 'all'">
           <button
             type="button"
             class="btn btn-light"
@@ -77,7 +78,7 @@
         </div>
       </div>
 
-      <div class="virtual-meeting-wrapper">
+      <div class="virtual-meeting-wrapper" v-if="showComponent.virtual_meeting">
         <EventListing
           v-if="selectedComponent === 'virtual_meeting' || selectedComponent === 'all'"
           :title="config.components.virtual_meeting.title"
@@ -86,9 +87,9 @@
           :msg="'Virtual Meetings not found.'"
           :sort="sortData('eventinstance')"
           :limit="viewAllContentMode ? 50 : itemsLimit"
-          @listing-not-empty="virtualMeetingListingIsNotEmpty"
+          @listing-not-empty="listingIsNotEmpty('virtual_meeting', ...arguments)"
         />
-        <div class="text-center" v-if="selectedComponent === 'all' && showVirtualMeetingViewAll">
+        <div class="text-center" v-if="selectedComponent === 'all'">
           <button
             type="button"
             class="btn btn-light"
@@ -98,22 +99,29 @@
         </div>
       </div>
 
-      <VideoListing
-        v-if="selectedComponent === 'gc_video' || selectedComponent === 'all'"
-        :title="config.components.gc_video.title"
-        :category="category.id"
-        :viewAll="true"
-        :sort="sortData('node')"
-        :limit="itemsLimit"
-      />
-      <BlogListing
-        v-if="selectedComponent === 'vy_blog_post' || selectedComponent === 'all'"
-        :title="config.components.vy_blog_post.title"
-        :category="category.id"
-        :viewAll="true"
-        :sort="sortData('node')"
-        :limit="itemsLimit"
-      />
+      <div class="blogs-wrapper" v-if="showComponent.gc_video">
+        <VideoListing
+          v-if="selectedComponent === 'gc_video' || selectedComponent === 'all'"
+          :title="config.components.gc_video.title"
+          :category="category.id"
+          :viewAll="true"
+          :sort="sortData('node')"
+          :limit="itemsLimit"
+          @listing-not-empty="listingIsNotEmpty('gc_video', ...arguments)"
+        />
+      </div>
+
+      <div class="blogs-wrapper" v-if="showComponent.vy_blog_post">
+        <BlogListing
+          v-if="selectedComponent === 'vy_blog_post' || selectedComponent === 'all'"
+          :title="config.components.vy_blog_post.title"
+          :category="category.id"
+          :viewAll="true"
+          :sort="sortData('node')"
+          :limit="itemsLimit"
+          @listing-not-empty="listingIsNotEmpty('vy_blog_post', ...arguments)"
+        />
+      </div>
     </template>
   </div>
 </template>
@@ -151,6 +159,12 @@ export default {
       error: false,
       category: null,
       itemsLimit: 8,
+      showComponent: {
+        gc_video: true,
+        vy_blog_post: true,
+        live_stream: true,
+        virtual_meeting: true,
+      },
       showLiveStreamViewAll: false,
       showVirtualMeetingViewAll: false,
       filterQueryByTypes: {
@@ -194,11 +208,8 @@ export default {
     sortData(type) {
       return this.filterQueryByTypes[type][this.selectedSort];
     },
-    liveStreamListingIsNotEmpty(params) {
-      this.showLiveStreamViewAll = params;
-    },
-    virtualMeetingListingIsNotEmpty(params) {
-      this.showVirtualMeetingViewAll = params;
+    listingIsNotEmpty(component, notEmpty) {
+      this.showComponent[component] = notEmpty;
     },
   },
   computed: {
