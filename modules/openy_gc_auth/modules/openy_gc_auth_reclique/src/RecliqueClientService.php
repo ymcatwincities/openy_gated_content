@@ -18,7 +18,7 @@ class RecliqueClientService {
    *
    * @var \Drupal\Core\Logger\LoggerChannelFactory
    */
-  protected $loggerFactory;
+  protected $logger;
 
   /**
    * The config factory.
