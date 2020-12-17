@@ -4,6 +4,7 @@ namespace Drupal\openy_gc_auth_yusa\Plugin\GCIdentityProvider;
 
 use Drupal\Core\DependencyInjection\DependencySerializationTrait;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
 use Drupal\openy_gc_auth\GCIdentityProviderPluginBase;
 
 /**
@@ -47,6 +48,7 @@ class YUSA extends GCIdentityProviderPluginBase {
       '#prefix' => '<div id="permissions-mapping-fieldset-wrapper">',
       '#suffix' => '</div>',
     ];
+
     $permissions_mapping = explode(';', $config['permissions_mapping']);
     if (!$form_state->has('permissions_mapping_items_count')) {
       $form_state->set('permissions_mapping_items_count', count($permissions_mapping));
@@ -72,6 +74,21 @@ class YUSA extends GCIdentityProviderPluginBase {
       ];
     }
 
+    $attributes = [
+      'attributes' => [
+        'target' => '_blank',
+      ],
+    ];
+
+    $form['permissions_mapping']['help'] = [
+      '#type' => 'link',
+      '#title' => 'How does this work?',
+      '#url' => Url::fromUri(
+        'https://community.openymca.org/t/setting-up-user-segmentation-virtual-ymca-user-docs/864',
+        $attributes
+      ),
+    ];
+
     $form['permissions_mapping']['actions'] = [
       '#type' => 'actions',
     ];
@@ -89,6 +106,7 @@ class YUSA extends GCIdentityProviderPluginBase {
     $form['association_number'] = [
       '#title' => $this->t('Association number'),
       '#type' => 'textfield',
+      '#description' => $this->t('This is usually 4 digits.'),
       '#default_value' => $config['association_number'],
       '#required' => TRUE,
     ];

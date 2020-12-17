@@ -19,6 +19,7 @@ class SharedContentSourceListBuilder extends EntityListBuilder {
   public function buildHeader() {
     $header['id'] = $this->t('Shared content source ID');
     $header['status'] = $this->t('Status');
+    $header['sync_enabled'] = $this->t('Sync Enabled');
     $header['name'] = $this->t('Name');
     $header['url'] = $this->t('Url');
     return $header + parent::buildHeader();
@@ -45,6 +46,22 @@ class SharedContentSourceListBuilder extends EntityListBuilder {
         'content' => $text,
       ],
     ];
+
+    $color = '#ff0000';
+    $text = $this->t('Disabled');
+    if ($entity->sync_enabled->value == 1) {
+      $color = '#008000';
+      $text = $this->t('Enabled');
+    }
+
+    $row['sync_enabled']['data'] = [
+      '#type' => 'inline_template',
+      '#template' => '<span style="color: ' . $color . ';">{{ content }}</span>',
+      '#context' => [
+        'content' => $text,
+      ],
+    ];
+
     $row['name'] = Link::createFromRoute(
       $entity->label(),
       'entity.shared_content_source.edit_form',
