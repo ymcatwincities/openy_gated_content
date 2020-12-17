@@ -26,6 +26,7 @@
       margin-right: auto;
 
       a {
+        font-family: $cachet-book;
         @include median(padding-bottom, 12px, initial);
         @include median(font-size, 20px, 18px);
       }
@@ -41,6 +42,7 @@
 
       a {
         padding-bottom: 12px;
+        font-family:    $cachet-book;
 
         &.router-link-active {
           @include median(border-bottom, 2px solid, 1px solid);
@@ -69,7 +71,7 @@
       text-align:       right;
 
       @include median(display, none, flex);
-      @include median(padding-right, 10px, 19px);
+      @include median(padding-right, 10px, 10px, 19px);
 
       svg {
         width: 27px;
@@ -106,19 +108,20 @@
       }
 
       div:first-child, button {
-        margin-bottom: 30px;
+        margin-bottom: 20px;
         color:         $gray;
       }
 
       div:not(:first-child) {
         border:        1px solid $gray;
         border-radius: 5px;
-        padding:       15px 10px 12px;
+        padding:       15px 10px;
         min-height:    53px;
         text-align:    center;
         color:         $gray;
 
         a {
+          font-family: Verdana, sans-serif;
           border:  none;
           padding: 0;
         }
