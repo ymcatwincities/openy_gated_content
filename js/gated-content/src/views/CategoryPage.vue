@@ -5,7 +5,7 @@
     </div>
     <div v-else-if="error">Error loading</div>
     <template v-else>
-      <Modal v-if="showModal" @close="showModal = false">
+      <Modal v-if="showModal" @close="showModal = false" class="adjust-modal">
         <template v-slot:header>
           <h3>Adjust</h3>
         </template>
@@ -13,28 +13,34 @@
           <div class="filter">
             <h4>Content types</h4>
             <div class="form-check" v-for="option in contentTypeOptions" v-bind:key="option.value">
-              <input
-                type="radio"
-                :id="option.value"
-                :value="option.value"
-                :disabled="option.value !== 'all' && !showComponent[option.value]"
-                autocomplete="off"
-                v-model="preSelectedComponent"
-              >
-              <label :for="option.value">{{ option.label }}</label>
+              <label :for="option.value">
+                <input
+                  type="radio"
+                  :id="option.value"
+                  :value="option.value"
+                  :disabled="option.value !== 'all' && !showComponent[option.value]"
+                  autocomplete="off"
+                  v-model="preSelectedComponent"
+                >
+                <span class="checkmark"></span>
+                <span class="caption">{{ option.label }}</span>
+              </label>
             </div>
           </div>
           <div class="sort">
             <h4>Sort order</h4>
             <div class="form-check" v-for="option in filterOptions" v-bind:key="option.value">
-              <input
-                type="radio"
-                :id="option.value"
-                :value="option.value"
-                autocomplete="off"
-                v-model="preSelectedSort"
-              >
-              <label :for="option.value">{{ option.label }}</label>
+              <label :for="option.value">
+                <input
+                  type="radio"
+                  :id="option.value"
+                  :value="option.value"
+                  autocomplete="off"
+                  v-model="preSelectedSort"
+                >
+                <span class="checkmark"></span>
+                <span class="caption">{{ option.label }}</span>
+              </label>
             </div>
           </div>
         </template>

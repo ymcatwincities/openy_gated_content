@@ -9,8 +9,9 @@
       @include median(padding, 12px 10px, 14px 10px 13px);
 
       h3 {
-        margin: 0;
-        color:  $gray;
+        margin:         0;
+        text-transform: uppercase;
+        color:          $gray;
 
         @include median(font-size, 16px, 14px);
       }

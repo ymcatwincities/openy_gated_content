@@ -1,6 +1,6 @@
 <template>
   <div class="gated-content-videos-page">
-    <Modal v-if="showModal" @close="showModal = false">
+    <Modal v-if="showModal" @close="showModal = false" class="adjust-modal">
       <template v-slot:header>
         <h3>Adjust</h3>
       </template>
@@ -8,14 +8,17 @@
         <div class="filter">
           <h4>Categories</h4>
           <div class="form-check" v-for="option in contentTypeOptions" :key="option.value">
-            <input
-              type="radio"
-              :id="option.value"
-              :value="option.value"
-              autocomplete="off"
-              v-model="preSelectedComponent"
-            >
-            <label :for="option.value">{{ option.label }}</label>
+            <label :for="option.value">
+              <input
+                type="radio"
+                :id="option.value"
+                :value="option.value"
+                autocomplete="off"
+                v-model="preSelectedComponent"
+              >
+              <span class="checkmark"></span>
+              <span class="caption">{{ option.label }}</span>
+            </label>
           </div>
         </div>
         <div class="sort">
@@ -28,7 +31,10 @@
               autocomplete="off"
               v-model="preSelectedSort"
             >
-            <label :for="option.value">{{ option.label }}</label>
+            <label :for="option.value">
+              <span class="checkmark"></span>
+              <span class="caption">{{ option.label }}</span>
+            </label>
           </div>
         </div>
       </template>
