@@ -210,5 +210,12 @@
         font-size: 12px;
       }
     }
+
+    .add-to-favorite {
+      position:  initial;
+      display: flex;
+      align-items: center;
+      padding: 12px;
+    }
   }
 }
