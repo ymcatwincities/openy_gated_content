@@ -1,3 +1,7 @@
+.p-10-5 {
+  @include median(padding, 10px, 5px);
+}
+
 .pt-20-10 {
   @include median(padding-top, 20px, 10px);
 }
