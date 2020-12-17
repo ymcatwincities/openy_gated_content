@@ -126,6 +126,7 @@ class PersonifyAuthController extends ControllerBase {
 
       $decrypted_token = $this->personifySSO->decryptCustomerToken($query['ct']);
       if ($token = $this->personifySSO->validateCustomerToken($decrypted_token)) {
+        $userInfo = $this->personifySSO->getCustomerInfo($token);
         $errorMessage = NULL;
         user_cookie_save([
           'personify_authorized' => $token,
@@ -142,6 +143,14 @@ class PersonifyAuthController extends ControllerBase {
     $redirect_url = $this->configFactory->get('openy_gated_content.settings')->get('virtual_y_url');
     if (isset($query['dest'])) {
       $redirect_url = urldecode($query['dest']);
+    }
+
+    if (!empty($userInfo) && !empty($userInfo['UserExists']) && empty($userInfo['DisableAccountFlag'])) {
+      $name = !empty($userInfo['UserName']) ? $userInfo['UserName'] : '';
+      $email = !empty($userInfo['Email']) ? $userInfo['Email'] : '';
+
+      // Authorize user (register, login, log, etc).
+      $this->gcUserAuthorizer->authorizeUser($name, $email);
     }
 
     $redirect = new TrustedRedirectResponse($redirect_url);
