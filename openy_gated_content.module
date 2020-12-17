@@ -152,9 +152,25 @@ function openy_gated_content_get_base_theme() {
  */
 function openy_gated_content_jsonapi_eventinstance_filter_access(EntityTypeInterface $entity_type, AccountInterface $account) {
   return ([
-    JSONAPI_FILTER_AMONG_ALL => AccessResult::allowed(),
-    JSONAPI_FILTER_AMONG_PUBLISHED => AccessResult::allowed(),
-    JSONAPI_FILTER_AMONG_OWN => AccessResult::allowed(),
+    JSONAPI_FILTER_AMONG_ALL => AccessResult::allowedIfHasPermission($account, 'view eventinstance entity'),
+    JSONAPI_FILTER_AMONG_PUBLISHED => AccessResult::allowedIfHasPermission($account, 'view eventinstance entity'),
+    JSONAPI_FILTER_AMONG_OWN => AccessResult::allowedIfHasPermission($account, 'view eventinstance entity'),
+  ]);
+}
+
+/**
+ * Implements hook_jsonapi_ENTITY_TYPE_filter_access().
+ *
+ * Without this hook there no access to filter by parent category in
+ * JSON API for eventinstance.
+ *
+ * @see https://www.drupal.org/project/jsonapi/issues/3037519
+ */
+function openy_gated_content_jsonapi_eventseries_filter_access(EntityTypeInterface $entity_type, AccountInterface $account) {
+  return ([
+    JSONAPI_FILTER_AMONG_ALL => AccessResult::allowedIfHasPermission($account, 'view eventseries entity'),
+    JSONAPI_FILTER_AMONG_PUBLISHED => AccessResult::allowedIfHasPermission($account, 'view eventseries entity'),
+    JSONAPI_FILTER_AMONG_OWN => AccessResult::allowedIfHasPermission($account, 'view eventseries entity'),
   ]);
 }
 
