@@ -37,8 +37,8 @@ class RecliqueClientService {
   /**
    * RecliqueClientService constructor.
    *
-   * @param LoggerChannelFactory $loggerFactory
-   *   \Drupal\Core\Logger\LoggerChannelFactory instance.
+   * @param \Drupal\Core\Logger\LoggerChannelFactory $loggerFactory
+   *   LoggerChannelFactory instance.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   ConfigFactoryInterface instance.
    * @param \GuzzleHttp\Client $client
