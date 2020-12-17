@@ -5,7 +5,7 @@ services:
 
   openy_gc_log.log_archiver:
     class: Drupal\openy_gc_log\LogArchiver
-    arguments: ['@entity_type.manager', '@logger.channel.openy_gc_log', '@config.factory', '@file_system', '@settings']
+    arguments: ['@entity_type.manager', '@logger.channel.openy_gc_log', '@config.factory', '@file_system', '@settings', '@module_handler']
 
   logger.channel.openy_gc_log:
     parent: logger.channel_base
