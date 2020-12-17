@@ -52,16 +52,19 @@
         </template>
       </Modal>
 
-      <div class="gated-container title-wrapper">
+      <div class="gated-containerV2 my-40-20 px--20-10 title-wrapper">
         <div>
-          <h2 class="title title-inline">{{ category.attributes.name }}</h2>
+          <div class="title title-inline cachet-book-32-28 text-gray">
+            {{ category.attributes.name }}
+          </div>
           <AddToFavorite
             :id="category.attributes.drupal_internal__tid"
             :type="'taxonomy_term'"
             :bundle="'gc_category'"
           ></AddToFavorite>
         </div>
-        <button type="button" class="btn btn-light" @click="showModal = true">Adjust</button>
+        <button type="button"
+                class="btn btn-light adjust-button" @click="showModal = true">Adjust</button>
       </div>
 
       <div class="live-stream-wrapper" v-if="showComponent.live_stream">
@@ -126,6 +129,7 @@
           :sort="sortData('node')"
           :limit="itemsLimit"
           @listing-not-empty="listingIsNotEmpty('vy_blog_post', ...arguments)"
+          class="my-40-20"
         />
       </div>
     </template>

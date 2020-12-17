@@ -46,9 +46,10 @@
       </template>
     </Modal>
 
-    <div class="gated-container title-wrapper">
-      <h2 class="title">Videos</h2>
-      <button type="button" class="btn btn-light" @click="showModal = true">Adjust</button>
+    <div class="gated-containerV2 my-40-20 px--20-10 title-wrapper">
+      <div class="title cachet-book-32-28 text-gray">Videos</div>
+      <button type="button"
+              class="btn btn-light adjust-button" @click="showModal = true">Adjust</button>
     </div>
 
     <VideoListing

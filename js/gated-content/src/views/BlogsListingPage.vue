@@ -24,14 +24,14 @@
         <div class="sort">
           <h4>Sort order</h4>
           <div class="form-check" v-for="option in filterOptions" :key="option.value">
-            <input
-              type="radio"
-              :id="option.value"
-              :value="option.value"
-              autocomplete="off"
-              v-model="preSelectedSort"
-            >
             <label :for="option.value">
+              <input
+                type="radio"
+                :id="option.value"
+                :value="option.value"
+                autocomplete="off"
+                v-model="preSelectedSort"
+              >
               <span class="checkmark"></span>
               <span class="caption">{{ option.label }}</span>
             </label>
@@ -46,9 +46,10 @@
       </template>
     </Modal>
 
-    <div class="gated-container title-wrapper">
-      <h2 class="title">Blogs</h2>
-      <button type="button" class="btn btn-light" @click="showModal = true">Adjust</button>
+    <div class="gated-containerV2 mt-40-20 pb-20-10 px--20-10 title-wrapper">
+      <div class="title cachet-book-32-28">Blogs</div>
+      <button type="button"
+              class="btn btn-light adjust-button" @click="showModal = true">Adjust</button>
     </div>
 
     <BlogListing
@@ -56,6 +57,7 @@
       :pagination="true"
       :category="selectedComponent === 'all' ? '' : selectedComponent"
       :sort="filterQuery[selectedSort]"
+      class="mb-40-20"
     />
   </div>
 </template>
