@@ -45,7 +45,7 @@ class RecliqueClientService {
    *   Guzzle client.
    */
   public function __construct(LoggerChannelFactory $loggerFactory, ConfigFactoryInterface $configFactory, Client $client) {
-    $this->loggerFactory = $loggerFactory->get('openy_gc_auth_reclique');
+    $this->logger = $loggerFactory->get('openy_gc_auth_reclique');
     $this->configFactory = $configFactory;
     $this->client = $client;
   }
