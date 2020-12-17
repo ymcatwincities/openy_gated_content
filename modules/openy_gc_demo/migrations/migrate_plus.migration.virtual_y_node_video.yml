@@ -14,7 +14,7 @@ source:
   data_rows:
     -
       id: 1
-      title: '25-Minute Strength Training Exercise Workout with Jennifer at the Y!'
+      title: 'Strength Training Exercise Workout with Jennifer at the Y!'
       description: |
         <p>Try a quick, full-body strength-training exercise at home with
         Jennifer and Robin from the YMCA of the Greater Twin Cities!
@@ -39,7 +39,7 @@ source:
       image: 0
     -
       id: 2
-      title: 'Senior Fitness 20-Minute Workout from Home!'
+      title: 'Senior Fitness Workout from Home!'
       description: |
         <p>Exercise from home after Thanksgiving with this low-impact 20-minute
         strength and cardio workout with Amy from the YMCA of the North!</p>
@@ -62,7 +62,7 @@ source:
       image: 0
     -
       id: 3
-      title: 'Bodyweight Bootcamp with Jen - Four by Five, it’s Good to be Alive! (30 Minute Workout No Equipment)'
+      title: 'Bodyweight Bootcamp with Jen - Four by Five, it’s Good to be Alive!'
       description: |
         <p>Join Jen from the YMCA for a combination of Strength and Cardio
         exercises! The class will be high-intensity, 4 sets of 5 exercises and
@@ -74,12 +74,13 @@ source:
       featured: 1
       video: 3
       category: 2
-      equipment: 0
+      equipment:
+        - 0
       level: 3
-      image: 10
+      image: 0
     -
       id: 4
-      title: 'Strength Turkey Burner with Sarah at the Y! (25 minutes)'
+      title: 'Strength Turkey Burner with Sarah at the Y!'
       description: |
         <p>You need muscle on your body to increase your metabolism. We lose
         muscle as we get older. The only way to keep it is through strength
@@ -104,10 +105,10 @@ source:
         - 8
         - 7
       level: 3
-      image: 10
+      image: 0
     -
       id: 5
-      title: 'Bodyweight Bootcamp Workout after (Just 20 Minutes to Burn off the Holiday Weight!)'
+      title: 'Bodyweight Bootcamp Workout to Burn off the Holiday Weight!'
       description: |
         <p>Join us for an intense Bodyweight Bootcamp Workout to burn off that
         Thanksgiving/Holiday weight! We feel you GIRL. Those sweet potatoes
@@ -127,7 +128,7 @@ source:
       image: 0
     -
       id: 6
-      title: '20-Minute Barre Fusion Class with Jennifer!'
+      title: 'Barre Fusion Class with Jennifer!'
       description: |
         <p>Follow this free online workout class with Jennifer and Sally!</p>
       instructor: 'Jennifer'
@@ -143,7 +144,7 @@ source:
       image: 0
     -
       id: 7
-      title: 'Senior Fitness! A 25-Minute ForeverWell Combo Workout with Jennifer!'
+      title: 'Senior Fitness! A ForeverWell Combo Workout with Jennifer!'
       description: |
         <p>Workout with Jennifer this morning for a cardio workout that will
         get your muscles moving! Use a chair if available, a set of dumbbells,
@@ -153,7 +154,7 @@ source:
         your heartbeat going!</p>
       instructor: 'Jennifer'
       duration: 1528
-      featured: 0
+      featured: 1
       video: 7
       category: 10
       equipment:
@@ -164,7 +165,7 @@ source:
       image: 0
     -
       id: 8
-      title: '20-Minute Cardio Workout with Jennifer'
+      title: 'Cardio Workout with Jennifer'
       description: |
         <p>Get ready to get your heart pumping! Get your heart rate up without
         taking it to the mat. This workout is going to burn a ton of calories.
@@ -175,7 +176,8 @@ source:
       featured: 0
       video: 8
       category: 5
-      equipment: 0
+      equipment:
+        - 0
       level: 3
       image: 0
     -
@@ -204,7 +206,8 @@ source:
       featured: 0
       video: 9
       category: 6
-      equipment: 8
+      equipment:
+        - 8
       level: 3
       image: 0
     -
@@ -229,7 +232,8 @@ source:
       featured: 0
       video: 10
       category: 11
-      equipment: 0
+      equipment:
+        - 0
       level: 3
       image: 0
     -
@@ -257,7 +261,8 @@ source:
       featured: 0
       video: 11
       category: 11
-      equipment: 0
+      equipment:
+        - 0
       level: 3
       image: 0
     -
@@ -281,12 +286,13 @@ source:
       featured: 0
       video: 12
       category: 11
-      equipment: 0
+      equipment:
+        - 0
       level: 2
       image: 0
     -
       id: 13
-      title: '35-Minute Yoga with Jen - "Creating Space for What You Need!"'
+      title: 'Yoga with Jen - "Creating Space for What You Need!"'
       description: |
         <p>Yoga:  Creating Space.  For what you need.  Breath, courage,
         compassion, or just to be.  Mindful movements to cultivate space.<\p>
@@ -301,7 +307,8 @@ source:
       featured: 0
       video: 13
       category: 6
-      equipment: 8
+      equipment:
+        - 8
       level: 3
       image: 0
     -
@@ -326,7 +333,7 @@ source:
            7. Enjoy your smoothie!</p>
       instructor: 'Sally'
       duration: 382
-      featured: 0
+      featured: 1
       video: 14
       category: 8
       equipment:
@@ -352,7 +359,8 @@ source:
       featured: 0
       video: 15
       category: 11
-      equipment: 0
+      equipment:
+        - 0
       level: 2
       image: 0
   ids:
@@ -416,6 +424,7 @@ process:
       plugin: migration_lookup
       migration: virtual_y_gc_equipment
       source: equipment
+      no_stub: true
   field_gc_video_level:
     -
       plugin: migration_lookup
