@@ -6,6 +6,7 @@ use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+use Drupal\openy_gated_content\VirtualYAccessTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,6 +15,8 @@ use Symfony\Component\HttpFoundation\Request;
  * Class CategoriesResource Controller.
  */
 class CategoriesController extends ControllerBase implements ContainerInjectionInterface {
+
+  use VirtualYAccessTrait;
 
   /**
    * The current active database's master connection.
@@ -102,8 +105,7 @@ class CategoriesController extends ControllerBase implements ContainerInjectionI
     $query->condition('t.vid', 'gc_category');
     $query->condition('tf.status', 1);
 
-    // TODO: add ignore for admin and vy editor.
-    if (!empty($y_roles)) {
+    if (!empty($y_roles) && !in_array(self::getVirtualyEditorRoles(), $y_roles)) {
       $query->leftJoin('node_field_data', 'nd', 'n.entity_id = nd.nid');
       $or_group = $query->orConditionGroup();
       foreach ($y_roles as $role) {
@@ -144,8 +146,7 @@ class CategoriesController extends ControllerBase implements ContainerInjectionI
       $query->condition('t.vid', 'gc_category');
       $query->condition('tf.status', 1);
 
-      // TODO: add ignore for admin and vy editor.
-      if (!empty($y_roles)) {
+      if (!empty($y_roles) && !in_array(self::getVirtualyEditorRoles(), $y_roles)) {
         $query->leftJoin($field_data_table, 'esfd', 'es.entity_id = esfd.id');
         $or_group = $query->orConditionGroup();
         foreach ($y_roles as $role) {
