@@ -1,35 +1,41 @@
 <template>
   <div class="gated-content-favorites-page">
-    <Modal v-if="showModal" @close="showModal = false">
+    <Modal v-if="showModal" @close="showModal = false" class="adjust-modal">
       <template v-slot:header>
-        <h3>Adjust</h3>
+        <h3>ADJUST</h3>
       </template>
       <template v-slot:body>
         <div class="filter">
           <h4>Content types</h4>
           <div class="form-check" v-for="option in contentTypeOptions" v-bind:key="option.value">
-            <input
-              type="radio"
-              :id="option.value"
-              :value="option.value"
-              autocomplete="off"
-              v-model="preSelectedComponent"
-              :disabled="option.type && isFavoritesTypeEmpty(option.type, option.value)"
-            >
-            <label :for="option.value">{{ option.label }}</label>
+            <label :for="option.value">
+              <input
+                type="radio"
+                :id="option.value"
+                :value="option.value"
+                autocomplete="off"
+                v-model="preSelectedComponent"
+                :disabled="option.type && isFavoritesTypeEmpty(option.type, option.value)"
+              >
+              <span class="checkmark"></span>
+              <span class="caption">{{ option.label }}</span>
+            </label>
           </div>
         </div>
         <div class="sort">
           <h4>Sort order</h4>
           <div class="form-check" v-for="option in filterOptions" v-bind:key="option.value">
-            <input
-              type="radio"
-              :id="option.value"
-              :value="option.value"
-              autocomplete="off"
-              v-model="preSelectedSort"
-            >
-            <label :for="option.value">{{ option.label }}</label>
+            <label :for="option.value">
+              <input
+                type="radio"
+                :id="option.value"
+                :value="option.value"
+                autocomplete="off"
+                v-model="preSelectedSort"
+              >
+              <span class="checkmark"></span>
+              <span class="caption">{{ option.label }}</span>
+            </label>
           </div>
         </div>
       </template>
