@@ -1,7 +1,6 @@
 <template>
   <div class="teaser video-teaser">
     <router-link
-
       :to="{ name: 'Video', params: { id: video.id } }">
       <div class="preview" v-bind:style="{
               backgroundImage: `url(${image})`

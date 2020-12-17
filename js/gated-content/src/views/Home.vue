@@ -36,6 +36,7 @@
       :limit="8"
       :title="config.components.vy_blog_post.title"
       v-if="isActive('vy_blog_post')"
+      class="my-40-20"
     />
   </div>
 </template>

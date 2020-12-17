@@ -53,6 +53,7 @@
         :category="firstCategory"
         :viewAll="true"
         :limit="8"
+        class="my-40-20"
       />
     </template>
   </div>

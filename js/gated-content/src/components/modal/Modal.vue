@@ -6,7 +6,7 @@
           <div class="modal-header">
             <slot name="header"></slot>
             <button class="modal-default-button" @click="$emit('close')">
-              Close
+              &times;
             </button>
           </div>
           <div class="modal-body">
