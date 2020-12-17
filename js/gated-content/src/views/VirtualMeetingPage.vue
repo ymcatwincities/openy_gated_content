@@ -15,32 +15,25 @@
           </a>
         </div>
       </div>
-      <div class="video-footer-wrapper bg-white px--20-10">
-        <div class="video-footer gated-containerV2 py-40-20">
-          <div class="text-black">
-            <div class="pb-20-10 cachet-book-32-28">{{ video.attributes.title }}</div>
-            <div class="video-footer__fav pb-40-20">
-              <AddToFavorite
-                :id="video.attributes.drupal_internal__id"
-                :type="'eventinstance'"
-                :bundle="'virtual_meeting'"
-                class="rounded-border border-concrete"
-              ></AddToFavorite>
-              <AddToCalendar :event="event"></AddToCalendar>
-              <div class="timer" :class="{live: isOnAir}">
-                <template v-if="isOnAir">
-                  LIVE!
-                </template>
-                <template v-else>
-                  Starts in {{ startsIn }}
-                </template>
-              </div>
+      <div class="video-footer-wrapper bg-white">
+        <div class="video-footer gated-containerV2 py-40-20 px--20-10 text-black">
+          <div class="pb-20-10 cachet-book-32-28">{{ video.attributes.title }}</div>
+          <div class="video-footer__fav pb-40-20">
+            <AddToFavorite
+              :id="video.attributes.drupal_internal__id"
+              :type="'eventinstance'"
+              :bundle="'virtual_meeting'"
+              class="rounded-border border-concrete"
+            ></AddToFavorite>
+            <AddToCalendar :event="event"></AddToCalendar>
+            <div class="timer" :class="{live: isOnAir}">
+              <template v-if="isOnAir">
+                LIVE!
+              </template>
+              <template v-else>
+                Starts in {{ startsIn }}
+              </template>
             </div>
-            <div
-              v-if="description"
-              class="verdana-16-14"
-                 v-html="descriptionProcessed"
-            ></div>
           </div>
           <div class="verdana-14-12 text-thunder">
             <div class="video-footer__block">
@@ -74,6 +67,11 @@
               </li>
             </ul>
           </div>
+          <div
+            v-if="description"
+            class="verdana-16-14"
+            v-html="descriptionProcessed"
+          ></div>
         </div>
       </div>
       <EventListing

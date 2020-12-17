@@ -1,12 +1,12 @@
 .teaser {
-  position: relative;
-  border-top:    solid 5px $indigo;
+  position:   relative;
+  transform:  scale(1);
 
-  transform:     scale(1);
+  border-top: solid 5px $indigo;
 
   &:hover {
-    transform:       scale(1.01);
-    box-shadow:      0 4px 6px rgba(0, 0, 0, .25);
+    transform:  scale(1.01);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, .25);
   }
 
   > a {
@@ -29,5 +29,11 @@
 
       @include median(font-size, 16px, 14px);
     }
+  }
+
+  .add-to-favorite {
+    position: absolute;
+    right:    15px;
+    bottom:   15px;
   }
 }

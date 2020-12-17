@@ -5,35 +5,28 @@
     </div>
     <div v-else-if="error">Error loading</div>
     <template v-else>
-      <div class="video-wrapper px--20-10">
-        <div class="video gated-containerV2 pt-40-20">
+      <div class="video-wrapper">
+        <div class="video gated-containerV2 px--20-10 pt-40-20">
           <MediaPlayer
             :media="video.attributes.field_gc_video_media"
             @playerEvent="logPlaybackEvent($event)"
           />
         </div>
       </div>
-      <div class="video-footer-wrapper bg-black px--20-10">
-        <div class="video-footer gated-containerV2 py-40-20 text-white">
-          <div>
-            <div class="pb-20-10 cachet-book-32-28">{{ video.attributes.title }}</div>
-            <div class="video-footer__fav pb-40-20">
-              <AddToFavorite
-                :id="video.attributes.drupal_internal__nid"
-                :type="'node'"
-                :bundle="'gc_video'"
-                iconClass="fill-white"
-                class="rounded-border border-thunder"
-              ></AddToFavorite>
-              <div class="timer">
-                {{ video_length }}
-              </div>
+      <div class="video-footer-wrapper bg-black">
+        <div class="video-footer gated-containerV2 text-white px--20-10 py-40-20">
+          <div class="pb-20-10 cachet-book-32-28">{{ video.attributes.title }}</div>
+          <div class="video-footer__fav pb-40-20">
+            <AddToFavorite
+              :id="video.attributes.drupal_internal__nid"
+              :type="'node'"
+              :bundle="'gc_video'"
+              icon-class="fill-white"
+              class="rounded-border border-thunder"
+            ></AddToFavorite>
+            <div class="timer">
+              {{ video_length }}
             </div>
-            <div
-              v-if="video.attributes.field_gc_video_description"
-              class="verdana-16-14"
-              v-html="video.attributes.field_gc_video_description.processed"
-            ></div>
           </div>
           <div class="verdana-14-12">
             <div
@@ -77,6 +70,11 @@
               </li>
             </ul>
           </div>
+          <div
+            v-if="video.attributes.field_gc_video_description"
+            class="verdana-16-14"
+            v-html="video.attributes.field_gc_video_description.processed"
+          ></div>
         </div>
       </div>
       <VideoListing

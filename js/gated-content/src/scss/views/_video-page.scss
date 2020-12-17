@@ -29,65 +29,76 @@
   .video-footer-wrapper {
 
     .video-footer {
-      display: flex;
+      display: grid;
+      grid-template-rows: repeat(10, auto);
 
-      @include median(flex-direction, row, row, column);
+      @include median(grid-template-columns, 65% 35%, 65% 35%, 1fr);
 
-      > div:first-child {
-        @include median(width, 65%, 65%, initial);
-        @include median(padding-right, 20px, 10px, initial);
-        @include median(padding-bottom, null, null, 16px);
+      > div:nth-child(1), > div:nth-child(2), > div:nth-child(4) {
+        grid-column: 1;
 
-        .video-footer__fav {
-          display:     flex;
-          align-items: center;
+        @include median(padding-right, 40px, 20px, initial);
+      }
+
+      .video-footer__fav {
+        display:     flex;
+        align-items: center;
+
+        .add-to-favorite {
+          &.active .favorite-icon, &:hover .favorite-icon {
+            fill: $red !important;
+          }
         }
       }
 
-      > div:last-child {
-        @include median(padding-left, 20px, 10px, initial);
+      > div:nth-child(3) {
+        @include median(grid-column, 2, 2, 1);
+        @include median(grid-row-start, 1, 1, initial);
+        @include median(grid-row-end, -1, -1, initial);
+        @include median(padding-bottom, null, null, 20px);
 
         .svg-container {
           font-size: 18px;
 
           @include median(margin-right, 14px, 14px, 10px);
         }
+      }
 
-        .video-footer__block {
-          display:     flex;
-          align-items: center;
 
-          @include median(padding, 10px 0, 8px 0);
+      .video-footer__block {
+        display:     flex;
+        align-items: center;
 
-          &:first-child {
-            padding-top: 0;
-          }
+        @include median(padding, 10px 0, 8px 0);
+
+        &:first-child {
+          padding-top: 0;
+        }
+      }
+
+      .video-footer__category {
+        span:not(:first-child) + span::before {
+          display: inline;
+          content: ', ';
         }
 
-        .video-footer__category {
-          span:not(:first-child) + span::before {
-            display: inline;
-            content: ', ';
-          }
+        a {
+          color: $white;
 
-          a {
-            color: $white;
-
-            &:hover {
-              color: darken(white, 20);
-            }
+          &:hover {
+            color: darken(white, 20);
           }
         }
+      }
 
-        .video-footer__equipment {
-          margin-bottom:   0;
-          padding-top:     5px;
-          font-size:       12px;
-          list-style-type: none;
+      .video-footer__equipment {
+        margin-bottom:   0;
+        padding-top:     5px;
+        font-size:       12px;
+        list-style-type: none;
 
-          li:before {
-            content: '+';
-          }
+        li:before {
+          content: '+';
         }
       }
     }

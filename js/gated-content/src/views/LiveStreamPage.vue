@@ -5,40 +5,33 @@
     </div>
     <div v-else-if="error">Error loading</div>
     <template v-else>
-      <div class="video-wrapper bg-white px--20-10">
-        <div class="video gated-containerV2 pt-40-20">
+      <div class="video-wrapper bg-white">
+        <div class="video gated-containerV2 px--20-10 pt-40-20">
           <MediaPlayer
             :media="media"
             @playerEvent="logPlaybackEvent($event)"
           />
         </div>
       </div>
-      <div class="video-footer-wrapper bg-white px--20-10">
-        <div class="video-footer gated-containerV2 py-40-20">
-          <div class="text-black">
-            <div class="pb-20-10 cachet-book-32-28">{{ video.attributes.title }}</div>
-            <div class="video-footer__fav pb-40-20">
-              <AddToFavorite
-                :id="video.attributes.drupal_internal__id"
-                :type="'eventinstance'"
-                :bundle="'live_stream'"
-                class="rounded-border border-concrete"
-              ></AddToFavorite>
-              <AddToCalendar :event="event"></AddToCalendar>
-              <div class="timer" :class="{live: isOnAir}">
-                <template v-if="isOnAir">
-                  LIVE!
-                </template>
-                <template v-else>
-                  Starts in {{ startsIn }}
-                </template>
-              </div>
+      <div class="video-footer-wrapper bg-white">
+        <div class="video-footer gated-containerV2 px--20-10 py-40-20 text-black">
+          <div class="pb-20-10 cachet-book-32-28">{{ video.attributes.title }}</div>
+          <div class="video-footer__fav pb-40-20">
+            <AddToFavorite
+              :id="video.attributes.drupal_internal__id"
+              :type="'eventinstance'"
+              :bundle="'live_stream'"
+              class="rounded-border border-concrete"
+            ></AddToFavorite>
+            <AddToCalendar :event="event"></AddToCalendar>
+            <div class="timer" :class="{live: isOnAir}">
+              <template v-if="isOnAir">
+                LIVE!
+              </template>
+              <template v-else>
+                Starts in {{ startsIn }}
+              </template>
             </div>
-            <div
-              v-if="description"
-              class="verdana-16-14"
-              v-html="descriptionProcessed"
-            ></div>
           </div>
           <div class="verdana-14-12 text-thunder">
             <div class="video-footer__block">
@@ -72,6 +65,12 @@
               </li>
             </ul>
           </div>
+          <div
+            v-if="description"
+            class="verdana-16-14"
+            v-html="descriptionProcessed"
+          ></div>
+
         </div>
       </div>
       <EventListing

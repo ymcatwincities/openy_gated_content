@@ -1,15 +1,8 @@
 .add-to-favorite {
   display:     inline-block;
-  position:    absolute;
-  right:       15px;
-  bottom:      15px;
   cursor:      pointer;
   line-height: 20px;
   font-size:   20px;
-
-  .favorite-icon {
-    float: right;
-  }
 
   .spinner {
     width:  25px;
@@ -48,6 +41,6 @@
 
 .title-wrapper {
   .add-to-favorite {
-    position:  initial;
+    position: initial;
   }
 }
