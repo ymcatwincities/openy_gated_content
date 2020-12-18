@@ -40,3 +40,15 @@
     height:   50px;
   }
 }
+
+.one-columns .teaser  {
+  .date, .time, .instructor {
+    @include median(width, 33%, 100%, 100%);
+  }
+}
+
+.two-columns .teaser {
+  .date, .time {
+    @include median(width, 50%, 100%, 100%);
+  }
+}

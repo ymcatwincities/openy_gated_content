@@ -42,10 +42,11 @@ import Pagination from '@/components/Pagination.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
 import { SettingsMixin } from '@/mixins/SettingsMixin';
 import { FavoritesMixin } from '@/mixins/FavoritesMixin';
+import { ListingMixin } from '@/mixins/ListingMixin';
 
 export default {
   name: 'BlogListing',
-  mixins: [JsonApiCombineMixin, SettingsMixin, FavoritesMixin],
+  mixins: [JsonApiCombineMixin, SettingsMixin, FavoritesMixin, ListingMixin],
   components: {
     BlogTeaser,
     Spinner,
