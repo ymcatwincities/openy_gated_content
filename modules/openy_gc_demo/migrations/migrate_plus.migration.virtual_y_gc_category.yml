@@ -30,8 +30,8 @@ source:
       image: 6
     -
       tid: 5
-      title: 'Weightlifting'
-      image: 8
+      title: 'Cardio'
+      image: 14
     -
       tid: 6
       title: 'Yoga'
@@ -40,6 +40,22 @@ source:
       tid: 7
       title: 'Health'
       image: 2
+    -
+      tid: 8
+      title: 'Healthy Eating'
+      image: 12
+    -
+      tid: 9
+      title: 'Strength'
+      image: 13
+    -
+      tid: 10
+      title: 'Forever Well'
+      image: 15
+    -
+      tid: 11
+      title: 'Mindfulness'
+      image: 11
   ids:
     tid:
       type: integer

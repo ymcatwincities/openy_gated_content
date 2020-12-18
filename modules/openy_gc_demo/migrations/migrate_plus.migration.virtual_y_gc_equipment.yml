@@ -17,25 +17,34 @@ source:
       title: 'Bench'
     -
       tid: 2
-      title: 'Big Box'
+      title: 'Resistance Band'
     -
       tid: 3
       title: 'Chair'
     -
       tid: 4
-      title: 'Cycle Bike'
+      title: 'Knife'
     -
       tid: 5
-      title: 'Light Weight Bar'
+      title: 'Blender'
     -
       tid: 6
-      title: 'Pilates ball'
+      title: 'Cutting Board'
     -
       tid: 7
       title: 'Weights'
     -
       tid: 8
       title: 'Yoga Mat'
+    -
+      tid: 9
+      title: 'Spatula'
+    -
+      tid: 10
+      title: 'Smoothie Cup'
+    -
+      tid: 11
+      title: 'Straw'
   ids:
     tid:
       type: integer
