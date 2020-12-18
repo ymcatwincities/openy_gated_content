@@ -1,0 +1,236 @@
+.openy_carnation-based.openy-gated-content {
+  main > div > div {
+    > .banner {
+      display: none;
+    }
+
+    > .breadcrumbs-wrapper {
+      display: none !important;
+    }
+  }
+
+  #gated-content {
+    @include median(padding-top, 80px, 45px);
+
+    .top-menu {
+      @include median(top, 130px, 78px);
+    }
+
+    .gated-content-schedule-page {
+      @include median(padding-top, 112px, 56px);
+    }
+
+    .date-filter {
+      @include median(top, 217px, 127px);
+    }
+
+    .calendar .desktop .slot.dates {
+      top: 263px;
+    }
+  }
+
+  &.toolbar-fixed {
+    #gated-content {
+      @include median(padding-top, 0);
+
+      .top-menu {
+        @include median(top, calc(130px + 40px), calc(78px + 39px));
+      }
+
+      .gated-content-schedule-page {
+        @include median(padding-top, 0, 56px);
+      }
+
+      .date-filter {
+        @include median(top, 257px, 166px);
+      }
+
+      .calendar .desktop .slot.dates {
+        top: 305px;
+      }
+    }
+
+    .openy-page-tabs {
+      margin-top: 100px !important;
+    }
+  }
+
+  &.toolbar-tray-open #gated-content {
+    .top-menu {
+      @include median(top, calc(130px + 79px), calc(78px + 39px));
+    }
+
+    .date-filter {
+      top: 296px;
+    }
+
+    .calendar .desktop .slot.dates {
+      top: 344px;
+    }
+  }
+}
+
+.openy_lily-based.openy-gated-content {
+  .breadcrumb-container {
+    display: none;
+  }
+
+  .return-to-top {
+    display: none;
+  }
+
+  #gated-content {
+    .top-menu {
+      @include median(top, 162px, 80px);
+    }
+
+    .gated-content-schedule-page {
+      @include median(padding-top, 112px, 56px);
+    }
+
+    .date-filter {
+      @include median(top, 247px, 129px);
+    }
+
+    .calendar .desktop .slot.dates {
+      top: 292px;
+    }
+  }
+
+  &.toolbar-fixed  #gated-content {
+    .gated-content-schedule-page {
+      padding-top: 48px;
+    }
+  }
+
+  &.toolbar-tray-open #gated-content {
+    .top-menu {
+      top: calc(162px + 27px);
+    }
+
+    .gated-content-schedule-page {
+      padding-top: 45px;
+    }
+
+    .date-filter {
+      top: calc(247px + 27px);
+    }
+
+    .calendar .desktop .slot.dates {
+      top: calc(292px + 27px);
+    }
+  }
+}
+
+.openy_rose-based.openy-gated-content {
+  #block-openy-rose-breadcrumbs {
+    display: none;
+  }
+
+  #gated-content {
+    .top-menu {
+      @include median(z-index, 500, 1030);
+      @include median(top, 165px, 70px);
+
+      > div button {
+        @include median(padding-right, initial, 8px);
+      }
+    }
+
+    .gated-content-schedule-page {
+      @include median(padding-top, 115px, 52px);
+    }
+
+    .date-filter {
+      @include median(top, 250px, 119px);
+    }
+
+    .calendar .desktop .slot.dates {
+      top: 298px;
+    }
+  }
+
+  &.toolbar-fixed {
+    #gated-content {
+      @include median(padding-top, 0);
+
+      .top-menu {
+        top: calc(165px + 37px);
+      }
+
+      .gated-content-schedule-page {
+        padding-top: 46px;
+      }
+
+      .date-filter {
+        top: 287px;
+      }
+
+      .calendar .desktop .slot.dates {
+        top: 335px;
+      }
+    }
+
+    .openy-page-tabs {
+      margin-top: 100px !important;
+    }
+  }
+
+  &.toolbar-tray-open #gated-content {
+    .top-menu {
+      top: calc(165px + 79px);
+    }
+
+    .gated-content-schedule-page {
+      padding-top: 48px;
+    }
+
+    .date-filter {
+      top: 329px;
+    }
+
+    .calendar .desktop .slot.dates {
+      top: 377px;
+    }
+  }
+
+  &.primary-menu-minimize {
+    #gated-content {
+      .top-menu {
+        top: 42px;
+      }
+
+      .gated-content-schedule-page {
+        padding-top: 0;
+      }
+
+      .date-filter {
+        top: 127px;
+      }
+
+      .calendar .desktop .slot.dates {
+        top: 175px;
+      }
+    }
+
+    &.toolbar-fixed {
+      #gated-content {
+        .top-menu {
+          top: calc(42px + 39px);
+        }
+
+        .date-filter {
+          top: 166px;
+        }
+
+        .calendar .desktop .slot.dates {
+          top: calc(175px + 39px);
+        }
+      }
+    }
+  }
+}
+
+.toolbar-icon-openy-gated-content-openy:before {
+  background-image: url(/profiles/contrib/openy/modules/custom/openy_system/assets/images/icon-gear-inactive.png);
+}

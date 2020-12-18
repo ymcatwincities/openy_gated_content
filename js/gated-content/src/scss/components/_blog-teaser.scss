@@ -1,0 +1,11 @@
+.blog-teaser {
+  min-height: 70px;
+
+  > a {
+    @include median(padding, 10px 10px 48px, 5px 5px 48px);
+
+    .title {
+      @include median(padding-bottom, 10px, 5px);
+    }
+  }
+}

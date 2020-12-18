@@ -1,0 +1,221 @@
+.gated-content-schedule-page {
+  width: 100%;
+  color: black;
+}
+
+.date-filter {
+  width: 100%;
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  background-color: $light-gray;
+
+  @include median(font-size, 16px, 14px);
+
+  > button {
+    border: none;
+    color: $gray;
+    background-color: $light-gray;
+    height: 48px;
+    width: 48px;
+    padding: 0;
+
+    &[disabled] {
+      opacity: 0.5;
+    }
+
+    &:focus {
+      outline: 0;
+    }
+  }
+
+  .date {
+    @include median(min-width, 244px, 124px);
+    text-align: center;
+    line-height: 48px;
+  }
+}
+
+.calendar {
+  font-size: 14px;
+
+  .mobile {
+    @include median(display, none, block);
+
+    margin-top: 20px;
+    padding: 0 15px;
+
+    .day {
+      width: 100%;
+
+      .header {
+        display: flex;
+        align-items: center;
+        padding: 0 10px;
+        border-top: 1px solid $gray;
+
+        .caption {
+          font-weight: bold;
+          flex-grow: 1;
+          color: $gray;
+        }
+
+        .count {
+          font-size: 10px;
+        }
+
+        > button {
+          height: 48px;
+          width: 48px;
+          border: none;
+          background-color: $white;
+          color: $gray;
+          padding: 0;
+
+          &:focus {
+            outline: 0;
+          }
+        }
+
+        .day-expand {
+          display: none;
+        }
+      }
+
+      .items {
+        height: auto;
+        transition: all 0.5s ease;
+      }
+
+      &.collapsed {
+        .header {
+
+          .day-expand {
+            display: block;
+          }
+
+          .day-collapse {
+            display: none;
+          }
+        }
+
+        .items {
+          height: 0;
+          display: none;
+        }
+      }
+    }
+  }
+
+  .desktop {
+    @include median(display, block, none);
+
+    .slot {
+      &.dates {
+        width: 100%;
+        position: fixed;
+        background-color: $light-gray;
+      }
+
+      > div {
+        max-width: 1170px;
+        margin: 0 auto;
+      }
+
+      .caption {
+        display: flex;
+        flex-wrap: wrap;
+
+        .hour-card {
+          flex-basis: 0;
+          flex-grow: 1;
+          max-width: 100%;
+          padding: 8px 10px;
+          background-color: $light-gray;
+          font-weight: bold;
+          text-align: center;
+
+          &.active {
+            color: $white;
+            background-color: $indigo;
+          }
+        }
+      }
+
+      .hour-row {
+        display: flex;
+        flex-wrap: wrap;
+
+        .event-cell {
+          flex-basis: 0;
+          flex-grow: 1;
+          max-width: 100%;
+          background-color: $white;
+          border: 1px solid $light-gray;
+
+          &.date{
+            padding: 10px;
+            text-align: center;
+
+            .weekday {
+              font-weight: bold;
+              text-transform: uppercase;
+            }
+
+            &.active {
+              color: $white;
+              background-color: $indigo;
+              border-color: $indigo;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .empty-listing {
+    margin: 0 auto;
+    max-width: 1170px;
+    @include median(padding, 10px, 0 15px);
+    @include median(border, 1px solid $light-gray, none);
+  }
+
+  .schedule-event-card {
+    height: 100%;
+    display: flex;
+
+    @include median(flex-direction, column, row);
+    @include median(border-top, none, 1px solid $light-gray);
+
+    &.past {
+      @include median(display, block, none);
+    }
+
+    .info {
+      padding: 10px;
+      flex-grow: 1;
+
+      .time {
+        font-size: 12px;
+        font-weight: bold;
+      }
+
+      .title {
+        a {
+          font-weight: bold;
+        }
+      }
+
+      .instructor {
+        font-size: 12px;
+      }
+    }
+
+    .add-to-favorite {
+      position:  initial;
+      display: flex;
+      align-items: center;
+      padding: 12px;
+    }
+  }
+}
