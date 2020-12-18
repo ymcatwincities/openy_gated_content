@@ -12,7 +12,7 @@
         <button v-on:click.stop="forwardOneDay" class="right"
                 role="button" aria-label="next date"><i class="fa fa-angle-right"></i></button>
       </h2>
-      <router-link :to="{ name: viewAllRoute }" v-if="viewAll" class="view-all">
+      <router-link :to="{ name: 'Schedule' }" v-if="viewAll" class="view-all">
         More
       </router-link>
     </div>
@@ -140,16 +140,6 @@ export default {
       };
 
       return isToday(this.date);
-    },
-    viewAllRoute() {
-      switch (this.eventType) {
-        case 'live_stream':
-          return 'LiveStreamListing';
-        case 'virtual_meeting':
-          return 'VirtualMeetingListing';
-        default:
-          return 'LiveStreamListing';
-      }
     },
   },
   methods: {

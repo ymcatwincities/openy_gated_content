@@ -7,7 +7,7 @@
     <template v-else>
       <Modal v-if="showModal" @close="showModal = false" class="adjust-modal">
         <template v-slot:header>
-          <h3>Adjust</h3>
+          <h3>Filter</h3>
         </template>
         <template v-slot:body>
           <div class="filter">
@@ -64,7 +64,7 @@
           ></AddToFavorite>
         </div>
         <button type="button"
-                class="adjust-button" @click="showModal = true">Adjust</button>
+                class="adjust-button" @click="showModal = true">Filter</button>
       </div>
 
       <div class="live-stream-wrapper" v-if="showComponent.live_stream">

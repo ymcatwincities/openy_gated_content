@@ -53,10 +53,8 @@ const routes = [
   },
   {
     path: '/live-stream',
+    redirect: { name: 'Schedule' },
     name: 'LiveStreamListing',
-    component: LiveStreamListingPage,
-    props: true,
-    meta: { requiresAuth: true },
   },
   {
     path: '/live-stream/:id',
@@ -68,9 +66,7 @@ const routes = [
   {
     path: '/virtual-meeting',
     name: 'VirtualMeetingListing',
-    component: VirtualMeetingListingPage,
-    props: true,
-    meta: { requiresAuth: true },
+    redirect: { name: 'Schedule' },
   },
   {
     path: '/virtual-meeting/:id',

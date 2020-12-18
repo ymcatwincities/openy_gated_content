@@ -2,7 +2,7 @@
   <div class="gated-content-favorites-page">
     <Modal v-if="showModal" @close="showModal = false" class="adjust-modal">
       <template v-slot:header>
-        <h3>ADJUST</h3>
+        <h3>Filter</h3>
       </template>
       <template v-slot:body>
         <div class="filter">
@@ -55,7 +55,7 @@
       <div class="gated-containerV2 my-40-20 px--20-10 title-wrapper">
         <div class="title cachet-book-32-28 text-gray">Favorites</div>
         <button type="button"
-                class="adjust-button" @click="showModal = true">Adjust</button>
+                class="adjust-button" @click="showModal = true">Filter</button>
       </div>
 
       <div v-if="isNoFavoriteItems" class="gated-container text-center">

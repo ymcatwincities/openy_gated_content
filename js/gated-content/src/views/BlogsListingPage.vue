@@ -2,7 +2,7 @@
   <div class="gated-content-videos-page">
     <Modal v-if="showModal" @close="showModal = false" class="adjust-modal">
       <template v-slot:header>
-        <h3>Adjust</h3>
+        <h3>Filter</h3>
       </template>
       <template v-slot:body>
         <div class="filter">
@@ -49,7 +49,7 @@
     <div class="gated-containerV2 mt-40-20 pb-20-10 px--20-10 title-wrapper">
       <div class="title cachet-book-32-28">Blogs</div>
       <button type="button"
-              class="adjust-button" @click="showModal = true">Adjust</button>
+              class="adjust-button" @click="showModal = true">Filter</button>
     </div>
 
     <BlogListing
