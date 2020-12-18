@@ -51,6 +51,26 @@ source:
       id: 10
       name: 'Virtual Y Bootcamp Challenge'
       file: 10
+    -
+      id: 11
+      name: 'Mindfulness'
+      file: 11
+    -
+      id: 12
+      name: 'Healthy Eating'
+      file: 12
+    -
+      id: 13
+      name: 'Strength training'
+      file: 13
+    -
+      id: 14
+      name: 'Cardio training'
+      file: 14
+    -
+      id: 15
+      name: 'Forewer well'
+      file: 15
   ids:
     id:
       type: integer
