@@ -33,6 +33,11 @@
     }
 
     div:not(:first-child) {
+      a:hover {
+        @include median(border-bottom, 2px solid, 1px solid);
+        @include median(padding-bottom, 10px, 12px);
+      }
+
       &:not(:last-child) {
         a {
           padding-right: 10px;
