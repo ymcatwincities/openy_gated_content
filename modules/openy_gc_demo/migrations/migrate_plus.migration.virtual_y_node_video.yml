@@ -100,7 +100,9 @@ source:
       duration: 1926
       featured: 1
       video: 4
-      category: 2
+      category:
+        - 9
+        - 10
       equipment:
         - 8
         - 7
@@ -342,6 +344,7 @@ source:
         - 6
         - 9
         - 10
+        - 11
       level: 1
       image: 0
     -
