@@ -76,15 +76,17 @@
           :sort="sortData('eventinstance')"
           :limit="viewAllContentMode ? 50 : itemsLimit"
           @listing-not-empty="listingIsNotEmpty('live_stream', ...arguments)"
-        />
-        <div class="text-center" v-if="selectedComponent === 'all'">
-          <button
-            type="button"
-            class="btn btn-light"
-            @click="preSelectedComponent = 'live_stream'; applyFilters()">
-            View all
-          </button>
-        </div>
+        >
+          <template #filterButton>
+            <button
+              v-if="selectedComponent === 'all'"
+              type="button"
+              class="view-all"
+              @click="preSelectedComponent = 'live_stream'; applyFilters()">
+              More
+            </button>
+          </template>
+        </EventListing>
       </div>
 
       <div class="virtual-meeting-wrapper" v-if="showComponent.virtual_meeting">
@@ -97,27 +99,39 @@
           :sort="sortData('eventinstance')"
           :limit="viewAllContentMode ? 50 : itemsLimit"
           @listing-not-empty="listingIsNotEmpty('virtual_meeting', ...arguments)"
-        />
-        <div class="text-center" v-if="selectedComponent === 'all'">
-          <button
-            type="button"
-            class="btn btn-light"
-            @click="preSelectedComponent = 'virtual_meeting'; applyFilters()">
-            View all
-          </button>
-        </div>
+        >
+          <template #filterButton>
+            <button
+              v-if="selectedComponent === 'all'"
+              type="button"
+              class="view-all"
+              @click="preSelectedComponent = 'virtual_meeting'; applyFilters()">
+              More
+            </button>
+          </template>
+        </EventListing>
       </div>
 
-      <div class="blogs-wrapper" v-if="showComponent.gc_video">
+      <div class="videos-wrapper" v-if="showComponent.gc_video">
         <VideoListing
           v-if="selectedComponent === 'gc_video' || selectedComponent === 'all'"
           :title="config.components.gc_video.title"
           :category="category.id"
-          :viewAll="true"
+          :viewAll="false"
           :sort="sortData('node')"
           :limit="itemsLimit"
           @listing-not-empty="listingIsNotEmpty('gc_video', ...arguments)"
-        />
+        >
+          <template #filterButton>
+            <button
+              v-if="selectedComponent === 'all'"
+              type="button"
+              class="view-all"
+              @click="preSelectedComponent = 'gc_video'; applyFilters()">
+              More
+            </button>
+          </template>
+        </VideoListing>
       </div>
 
       <div class="blogs-wrapper" v-if="showComponent.vy_blog_post">
@@ -125,12 +139,22 @@
           v-if="selectedComponent === 'vy_blog_post' || selectedComponent === 'all'"
           :title="config.components.vy_blog_post.title"
           :category="category.id"
-          :viewAll="true"
+          :viewAll="false"
           :sort="sortData('node')"
           :limit="itemsLimit"
           @listing-not-empty="listingIsNotEmpty('vy_blog_post', ...arguments)"
           class="my-40-20"
-        />
+        >
+          <template #filterButton>
+            <button
+              v-if="selectedComponent === 'all'"
+              type="button"
+              class="view-all"
+              @click="preSelectedComponent = 'vy_blog_post'; applyFilters()">
+              More
+            </button>
+          </template>
+        </BlogListing>
       </div>
     </template>
   </div>

@@ -15,6 +15,7 @@
       <router-link :to="{ name: 'Schedule' }" v-if="viewAll" class="view-all">
         More
       </router-link>
+      <slot name="filterButton"></slot>
     </div>
     <div v-if="loading" class="text-center">
       <Spinner></Spinner>

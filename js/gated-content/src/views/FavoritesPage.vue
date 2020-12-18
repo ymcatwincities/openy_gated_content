@@ -70,15 +70,17 @@
           :pagination="viewAllContentMode"
           :sort="sortData('node')"
           :limit="viewAllContentMode ? 0 : itemsLimit"
-        />
-        <div class="text-center" v-if="selectedComponent === 'all'">
-          <button
-            type="button"
-            class="btn btn-light"
-            @click="preSelectedComponent = 'gc_video'; applyFilters()">
-            View all
-          </button>
-        </div>
+        >
+          <template #filterButton>
+            <button
+              v-if="selectedComponent === 'all'"
+              type="button"
+              class="view-all"
+              @click="preSelectedComponent = 'gc_video'; applyFilters()">
+              More
+            </button>
+          </template>
+        </VideoListing>
       </div>
 
       <div v-if="!isFavoritesTypeEmpty('eventinstance', 'live_stream')
@@ -89,15 +91,17 @@
           :favorites="true"
           :sort="sortData('eventinstance')"
           :limit="viewAllContentMode ? 50 : itemsLimit"
-        />
-        <div class="text-center" v-if="selectedComponent === 'all'">
-          <button
-            type="button"
-            class="btn btn-light"
-            @click="preSelectedComponent = 'live_stream'; applyFilters()">
-            View all
-          </button>
-        </div>
+        >
+          <template #filterButton>
+            <button
+              v-if="selectedComponent === 'all'"
+              type="button"
+              class="view-all"
+              @click="preSelectedComponent = 'live_stream'; applyFilters()">
+              More
+            </button>
+          </template>
+        </EventListing>
       </div>
 
       <div v-if="!isFavoritesTypeEmpty('eventinstance', 'virtual_meeting')
@@ -109,15 +113,17 @@
           :favorites="true"
           :sort="sortData('eventinstance')"
           :limit="viewAllContentMode ? 50 : itemsLimit"
-        />
-        <div class="text-center" v-if="selectedComponent === 'all'">
-          <button
-            type="button"
-            class="btn btn-light"
-            @click="preSelectedComponent = 'virtual_meeting'; applyFilters()">
-            View all
-          </button>
-        </div>
+        >
+          <template #filterButton>
+            <button
+              v-if="selectedComponent === 'all'"
+              type="button"
+              class="view-all"
+              @click="preSelectedComponent = 'virtual_meeting'; applyFilters()">
+              More
+            </button>
+          </template>
+        </EventListing>
       </div>
 
       <div v-if="!isFavoritesTypeEmpty('node', 'vy_blog_post')
@@ -129,15 +135,17 @@
           :sort="sortData('node')"
           :limit="viewAllContentMode ? 0 : itemsLimit"
           class="my-40-20"
-        />
-        <div class="text-center" v-if="selectedComponent === 'all'">
-          <button
-            type="button"
-            class="btn btn-light"
-            @click="preSelectedComponent = 'vy_blog_post'; applyFilters()">
-            View all
-          </button>
-        </div>
+        >
+          <template #filterButton>
+            <button
+              v-if="selectedComponent === 'all'"
+              type="button"
+              class="view-all"
+              @click="preSelectedComponent = 'vy_blog_post'; applyFilters()">
+              More
+            </button>
+          </template>
+        </BlogListing>
       </div>
 
       <div v-if="!isFavoritesTypeEmpty('taxonomy_term', 'gc_category')
@@ -147,15 +155,17 @@
           :type="'all'"
           :sort="sortData('taxonomy_term')"
           :limit="viewAllContentMode ? 50 : itemsLimit"
-        />
-        <div class="text-center" v-if="selectedComponent === 'all'">
-          <button
-            type="button"
-            class="btn btn-light"
-            @click="preSelectedComponent = 'gc_category'; applyFilters()">
-            View all
-          </button>
-        </div>
+        >
+          <template #filterButton>
+            <button
+              v-if="selectedComponent === 'all'"
+              type="button"
+              class="view-all"
+              @click="preSelectedComponent = 'gc_category'; applyFilters()">
+              More
+            </button>
+          </template>
+        </CategoriesListing>
       </div>
     </div>
   </div>
