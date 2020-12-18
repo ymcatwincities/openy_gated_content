@@ -55,7 +55,7 @@
       <div class="gated-containerV2 my-40-20 px--20-10 title-wrapper">
         <div class="title cachet-book-32-28 text-gray">Favorites</div>
         <button type="button"
-                class="btn btn-light adjust-button" @click="showModal = true">Adjust</button>
+                class="adjust-button" @click="showModal = true">Adjust</button>
       </div>
 
       <div v-if="isNoFavoriteItems" class="gated-container text-center">

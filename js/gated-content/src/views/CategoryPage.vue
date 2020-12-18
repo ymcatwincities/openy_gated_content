@@ -64,7 +64,7 @@
           ></AddToFavorite>
         </div>
         <button type="button"
-                class="btn btn-light adjust-button" @click="showModal = true">Adjust</button>
+                class="adjust-button" @click="showModal = true">Adjust</button>
       </div>
 
       <div class="live-stream-wrapper" v-if="showComponent.live_stream">

@@ -49,7 +49,7 @@
     <div class="gated-containerV2 mt-40-20 pb-20-10 px--20-10 title-wrapper">
       <div class="title cachet-book-32-28">Blogs</div>
       <button type="button"
-              class="btn btn-light adjust-button" @click="showModal = true">Adjust</button>
+              class="adjust-button" @click="showModal = true">Adjust</button>
     </div>
 
     <BlogListing
