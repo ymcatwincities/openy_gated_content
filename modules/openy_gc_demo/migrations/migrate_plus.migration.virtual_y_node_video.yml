@@ -175,7 +175,7 @@ source:
         muscle worked!</p>
       instructor: 'Jennifer'
       duration: 1330
-      featured: 0
+      featured: 1
       video: 8
       category: 5
       equipment:
@@ -359,7 +359,7 @@ source:
         of life in you, and in all things.</p>
       instructor: 'Sally'
       duration: 1881
-      featured: 0
+      featured: 1
       video: 15
       category: 11
       equipment:
