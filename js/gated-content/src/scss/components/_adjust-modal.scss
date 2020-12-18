@@ -3,15 +3,22 @@
     width: max-content;
 
     .modal-header {
-      align-items: center;
-      height:      48px;
+      display:         flex;
+      align-items:     center;
+      justify-content: space-between;
+      height:          48px;
 
       @include median(padding, 12px 10px, 14px 10px 13px);
+
+      &:before, &:after {
+        display: none;
+      }
 
       h3 {
         margin:         0;
         text-transform: uppercase;
         color:          $gray;
+        font-family:    $cachet-medium;
 
         @include median(font-size, 16px, 14px);
       }
@@ -27,16 +34,17 @@
       display: flex;
       margin:  0;
 
-      @include median(flex-direction, row, column);
+      @include median(flex-direction, row, row, column);
       @include median(padding, 20px, 10px);
 
       > div {
-        min-width: 310px;
+        min-width:   310px;
+        font-family: Verdana, sans-serif;
 
         @include median(font-size, 14px, 12px);
 
         > h4 {
-          margin-bottom: 28px;
+          margin-bottom: 14px;
           color:         black;
           font-weight:   bold;
 
@@ -48,7 +56,7 @@
           align-items:  center;
           padding-left: 8px;
 
-          @include median(padding-bottom, 21px, 24px);
+          @include median(padding-bottom, 21px, 14px);
 
           label {
             position:      relative;
@@ -91,15 +99,22 @@
     }
 
     .modal-footer {
+      display:          flex;
       justify-content:  space-between;
       background-color: $concrete;
       padding:          10px;
 
+      &:before, &:after {
+        display: none;
+      }
+
       button {
-        margin:      0;
-        padding:     10px 20px;
-        line-height: 26px;
-        font-size:   20px;
+        margin:        0;
+        border-radius: 5px;
+        padding:       10px 20px;
+        line-height:   26px;
+        font-family:   $cachet-medium;
+        font-size:     20px;
       }
 
       .btn.btn-outline-primary {
