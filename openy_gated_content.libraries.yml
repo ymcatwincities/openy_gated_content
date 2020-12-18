@@ -1,8 +1,7 @@
-styles:
+openy-rose-menu:
   version: 0.1
-  css:
-    theme:
-      css/styles.css: {}
+  js:
+    assets/js/openy_rose.behaviors.js: { minified: false }
 
 gated-content-vue:
   version: 0.2

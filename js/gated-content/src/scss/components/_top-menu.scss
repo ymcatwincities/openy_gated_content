@@ -1,0 +1,130 @@
+.top-menu {
+  position:         fixed;
+  background-color: black;
+  width:            100%;
+
+  @include median(z-index, 1030, 39);
+
+  > div {
+    display:         flex;
+    align-items:     center;
+    justify-content: flex-end;
+
+    @include median(padding, 30px 15px 15px 18px, 10px 15px);
+    @include median(max-width, 1170px, initial);
+    @include median(margin-left, auto, auto, initial);
+    @include median(margin-right, auto, auto, initial);
+
+    > div:not(:first-child) {
+      @include median(display, block, none);
+    }
+
+    a {
+      display:         inline-block;
+      text-decoration: none;
+    }
+
+    div:first-child {
+      margin-right: auto;
+
+      a {
+        @include median(padding-bottom, 12px, initial);
+        @include median(font-size, 20px, 18px);
+      }
+    }
+
+    div:not(:first-child) {
+      &:not(:last-child) {
+        a {
+          padding-right: 10px;
+          padding-left:  10px;
+        }
+      }
+
+      a {
+        padding-bottom: 12px;
+
+        &.router-link-active {
+          @include median(border-bottom, 2px solid, 1px solid);
+          @include median(padding-bottom, 10px, 12px);
+        }
+
+        @include median(font-size, 16px, 12px);
+
+        svg {
+          margin-right:   10px;
+          vertical-align: text-top;
+        }
+      }
+    }
+
+    div:last-child {
+      padding-left: 10px;
+    }
+
+    button {
+      justify-content:  flex-end;
+      outline:          none;
+      border:           none;
+      background-color: transparent;
+      padding-right:    10px;
+      text-align:       right;
+
+      @include median(display, none, flex);
+      @include median(padding-right, initial, 13px);
+
+      svg {
+        width: 27px;
+      }
+
+      &.opened {
+        svg {
+          width: 14px;
+        }
+      }
+    }
+  }
+
+  &.menuOpen {
+    position:         fixed;
+    top:              0 !important;
+    z-index:          2000;
+    background-color: $concrete;
+    width:            100vw;
+    height:           100vh;
+
+    @include median(top, 0);
+    @include median(padding, initial, 11px 34px, 11px 10px);
+
+    > div {
+      display:               grid;
+      max-width:             initial;
+      grid-template-columns: 1fr 1fr;
+
+      @include median(gap, initial, 10px 20px, 10px);
+
+      div {
+        @include median(display, block);
+      }
+
+      div:first-child, button {
+        margin-bottom: 30px;
+        color:         $gray;
+      }
+
+      div:not(:first-child) {
+        border:        1px solid $gray;
+        border-radius: 5px;
+        padding:       15px 10px 12px;
+        min-height:    53px;
+        text-align:    center;
+        color:         $gray;
+
+        a {
+          border: none;
+          padding: 0;
+        }
+      }
+    }
+  }
+}

@@ -9,7 +9,7 @@ Active development is currently happening at [fivejars/openy_gated_content](http
 3. [Storage](https://github.com/ymcatwincities/openy_gated_content/tree/master/modules/openy_gc_storage) - set of entities, needed for Virtual Y
 4. [Log](https://github.com/ymcatwincities/openy_gated_content/tree/master/modules/openy_gc_log) Features for tracking activities of your Virtual Y users.
 5. [Shared content](https://github.com/ymcatwincities/openy_gated_content/tree/master/modules/openy_gc_shared_content) - module that give's you ability to download content from shared network.
-6. [Shared content server](https://github.com/ymcatwincities/openy_gated_content/tree/master/modules/openy_gc_shared_content_server) - module for shared.openy.org server.  
+6. [Shared content server](https://github.com/ymcatwincities/openy_gated_content/tree/master/modules/openy_gc_shared_content_server) - module for shared.openy.org server.
 
 ## Installation
 
@@ -52,6 +52,19 @@ enables this modules, and all its dependencies.
 Please find the PHPCS configuration in `.phpcs.xml`.
 
 In order to use the configuration just run `phpcs` within the module directory.
+
+You can add this script to .git/hooks/pre-commit to run phpcs and phpcbf on `git commit`
+```shell script
+PROJECT=`php -r "echo dirname(dirname(dirname(realpath('$0'))));"`
+cd $PROJECT
+echo "Running phpcs and phpcbf..."
+phpcs .
+if [ $? != 0 ]
+then
+    phpcbf .
+    exit 1
+fi
+```
 
 #### eslint
 
