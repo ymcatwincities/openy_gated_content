@@ -7,11 +7,18 @@
     @mouseleave="hover = false"
   >
     <Spinner v-if="loading"></Spinner>
+    <SvgIcon v-else-if="hover || isActive"
+      title="Add to favorite"
+      class="favorite-icon"
+      :css-fill=false
+      :icon="iconActive"
+      :class="iconClass"
+    ></SvgIcon>
     <SvgIcon v-else
       title="Add to favorite"
       class="favorite-icon"
       :css-fill=false
-      :icon="currentIcon"
+      :icon="icon"
       :class="iconClass"
     ></SvgIcon>
   </div>
@@ -68,17 +75,6 @@ export default {
         type: this.type,
         bundle: this.bundle,
       });
-    },
-    currentIcon() {
-      if (this.isActive) {
-        return this.iconActive;
-      }
-
-      if (this.hover === true) {
-        return this.iconActive;
-      }
-
-      return this.icon;
     },
   },
   methods: {
