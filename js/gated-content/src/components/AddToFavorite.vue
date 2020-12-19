@@ -9,7 +9,7 @@
     <Spinner v-if="loading"></Spinner>
     <SvgIcon v-else-if="hover || isActive"
       title="Add to favorite"
-      class="favorite-icon"
+      class="favorite-icon ac"
       :css-fill=false
       :icon="iconActive"
       :class="iconClass"
