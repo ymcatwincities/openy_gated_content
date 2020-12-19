@@ -70,11 +70,13 @@ export default {
   },
   computed: {
     isActive() {
-      return this.$store.getters.isFavorite({
+      const v = this.$store.getters.isFavorite({
         id: this.id,
         type: this.type,
         bundle: this.bundle,
       });
+      console.log('is active', this.id, v);
+      return v;
     },
   },
   methods: {
