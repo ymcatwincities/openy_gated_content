@@ -3,12 +3,15 @@
     :class="{ active: isActive }"
     class="add-to-favorite"
     @click="onClick"
+    @mouseover="hover = true"
+    @mouseleave="hover = false"
   >
     <Spinner v-if="loading"></Spinner>
     <SvgIcon v-else
       title="Add to favorite"
       class="favorite-icon"
-      :icon="icon"
+      :css-fill=false
+      :icon="currentIcon"
       :class="iconClass"
     ></SvgIcon>
   </div>
@@ -33,6 +36,10 @@ export default {
       type: String,
       default: 'favorites-solid',
     },
+    iconActive: {
+      type: String,
+      default: 'favorites-solid-red',
+    },
     iconClass: {
       type: String,
     },
@@ -51,6 +58,7 @@ export default {
       shareModal: {
         visible: false,
       },
+      hover: false,
     };
   },
   computed: {
@@ -60,6 +68,17 @@ export default {
         type: this.type,
         bundle: this.bundle,
       });
+    },
+    currentIcon() {
+      if (this.isActive) {
+        return this.iconActive;
+      }
+
+      if (this.hover === true) {
+        return this.iconActive;
+      }
+
+      return this.icon;
     },
   },
   methods: {

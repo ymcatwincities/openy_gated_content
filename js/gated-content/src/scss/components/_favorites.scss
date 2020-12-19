@@ -9,18 +9,6 @@
     height: 25px;
   }
 
-  &.active .favorite-icon {
-    fill: $red;
-  }
-
-  .favorite-icon {
-    fill: $gray;
-
-    &:hover {
-      fill: $red;
-    }
-  }
-
   &.rounded-border {
     position:      initial;
     margin-right:  10px;

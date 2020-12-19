@@ -19,6 +19,7 @@
     <AddToFavorite
       :id="video.attributes.drupal_internal__nid"
       :type="'node'"
+      icon="favorites-solid-white"
       :bundle="'gc_video'"
     ></AddToFavorite>
   </div>
