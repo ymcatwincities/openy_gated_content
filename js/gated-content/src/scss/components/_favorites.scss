@@ -20,7 +20,7 @@
     background-image: url('assets/svg/favorites-solid-white.svg');
   }
 
-  &:hover, &.active {
+  &.active {
     background-image: url('assets/svg/favorites-solid-red.svg');
   }
 
@@ -44,5 +44,13 @@
   .add-to-favorite {
     position:    initial;
     margin-left: 15px;
+  }
+}
+
+@media (hover) , (min-width:0\0) , (min--moz-device-pixel-ratio:0){
+  .add-to-favorite {
+    &:hover {
+      background-image: url('assets/svg/favorites-solid-red.svg');
+    }
   }
 }
