@@ -1,29 +1,42 @@
 .add-to-favorite {
-  display:     inline-block;
-  cursor:      pointer;
-  line-height: 20px;
-  font-size:   20px;
+  display:             inline-block;
+
+  background-image:    url('assets/svg/favorites-solid.svg');
+  background-repeat:   no-repeat;
+  background-position: center;
+  background-size:     20px 20px;
+
+  cursor:              pointer;
+
+  width:               20px;
+  height:              20px;
 
   .spinner {
     width:  25px;
     height: 25px;
   }
 
-  &.rounded-border {
-    position:      initial;
-    margin-right:  10px;
-    border:        2px solid $thunder;
-    border-radius: 50%;
-    padding:       15px 13px;
-    width:         50px;
-    height:        50px;
-    line-height:   10px;
-    font-size:     18px;
+  &.white {
+    background-image: url('assets/svg/favorites-solid-white.svg');
+  }
 
-    > svg {
-      width:  18px;
-      height: 18px;
-    }
+  &:hover, &.active {
+    background-image: url('assets/svg/favorites-solid-red.svg');
+  }
+
+  &.loading {
+    background-image: none;
+  }
+
+  &.rounded-border {
+    position:        initial;
+    margin-right:    10px;
+    border:          2px solid $thunder;
+    border-radius:   50%;
+    background-size: 20px 21px;
+    padding:         11px 10px;
+    width:           50px;
+    height:          50px;
   }
 }
 

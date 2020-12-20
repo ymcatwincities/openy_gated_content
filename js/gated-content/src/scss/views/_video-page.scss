@@ -43,12 +43,6 @@
       .video-footer__fav {
         display:     flex;
         align-items: center;
-
-        .add-to-favorite {
-          &.active .favorite-icon, &:hover .favorite-icon {
-            fill: $red !important;
-          }
-        }
       }
 
       > div:nth-child(3) {
