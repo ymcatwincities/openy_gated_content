@@ -3,25 +3,42 @@
 @import "../../node_modules/bootstrap/scss/variables";
 @import "../../node_modules/bootstrap/scss/mixins";
 
+@import "mixins";
 @import "variables";
+@import "fonts";
+@import "layout/four-columns";
+@import "widgets/listing-header";
+@import "widgets/empty-listing";
+@import "widgets/teaser";
 @import "widgets/video-level";
 @import "widgets/button";
+@import "components/svg-icon";
+@import "components/page-header";
+@import "components/top-menu";
 @import "components/video-listing";
 @import "components/video-teaser";
 @import "components/event-teaser";
 @import "components/category-listing";
 @import "components/category-teaser";
-@import "components/blog-listing";
+@import "components/blog-teaser";
 @import "components/add-to-calendar";
+@import "components/favorites";
+@import "components/modal";
 @import "components/spinner";
+@import "components/paragraph-headline";
+@import "views/favorites_page";
 @import "views/video-page";
 @import "views/category-page";
 @import "views/blog-page";
+@import "views/schedule-page";
 @import "views/virtual-meeting-page";
 @import "views/login";
+@import "theme_overrides";
 
 #gated-content {
   padding-bottom: 30px;
+
+  @include median(padding-top, 80px, 45px);
 
   .gated-container {
     padding: 10px;
@@ -41,10 +58,41 @@
       max-width: 1170px;
     }
   }
-}
 
-.openy_carnation {
-  #gated-content {
-    padding-top: 30px;
+  .fixed-button {
+    position: fixed;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px solid $white;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: all .2s ease-in-out;
+
+    a {
+      display: block;
+      color: $white;
+    }
+
+    &:hover {
+      opacity: 1;
+      box-shadow: 0 0 10px rgba(0,0,0,.25);
+    }
+  }
+
+  .scroll-to-top {
+    right: 30px;
+    bottom: 30px;
+    background-color: $dark-blue;
+    z-index: 1;
+  }
+
+  .title-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .title-inline {
+    display: inline-block;
   }
 }

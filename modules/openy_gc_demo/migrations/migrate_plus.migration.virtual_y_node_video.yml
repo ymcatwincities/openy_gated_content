@@ -14,43 +14,358 @@ source:
   data_rows:
     -
       id: 1
-      title: 'YOGA WITH LINDA  - POWER YOGA'
+      title: 'Strength Training Exercise Workout with Jennifer at the Y!'
       description: |
-        <p>A more advanced yoga flow designed toward strength building</p>
-      instructor: 'Linda Myers'
-      duration: 300
+        <p>Try a quick, full-body strength-training exercise at home with
+        Jennifer and Robin from the YMCA of the Greater Twin Cities!
+        Modifications provided to help everyone perform the workout safely. Wake
+        up those leg muscles, engage your core, and work out those shoulders!
+        This workout will definitely push you! Grab a pair of 5-15 lbs weights,
+        depending on where you are in your fitness journey, and let's do this!
+        We know you can! Take part in...<br>
+        -Lunges<br>
+        -Dumbell Rows<br>
+        -Squats and Plies<br>
+        ...and SO much more!</p>
+      instructor: 'Jennifer, Robin'
+      duration: 1512
       featured: 1
       video: 1
-      category: 6
-      equipment: 8
+      category: 9
+      equipment:
+        - 7
+        - 8
       level: 4
       image: 0
     -
       id: 2
-      title: 'Yoga Atlanta'
+      title: 'Senior Fitness Workout from Home!'
       description: |
-        <p>New yoga video</p>
-      instructor: 'Linda Myers'
-      duration: 200
+        <p>Exercise from home after Thanksgiving with this low-impact 20-minute
+        strength and cardio workout with Amy from the YMCA of the North!</p>
+        <p>Let's get that heart rate going! We'll start with a warm-up and move
+        into some low-impact movements.</p>
+        <p>Roll your shoulders back, check-in with your body, and relax as we
+        get our bodies moving after eating some Turkey and sharing time with
+        friends and family, whether in-person or online.</p>
+        <p>Watch our trainers to modify any movements.</p>
+      instructor: 'Amy'
+      duration: 1336
       featured: 1
-      video: 3
-      category: 6
-      equipment: 8
+      video: 2
+      category: 10
+      equipment:
+        - 3
+        - 8
+        - 7
       level: 2
       image: 0
     -
       id: 3
-      title: 'Youth Bootcamp Challenge'
+      title: 'Bodyweight Bootcamp with Jen - Four by Five, it’s Good to be Alive!'
       description: |
-        <p>YMCA Youth Bootcamp Challenge</p>
-      instructor: 'Naya Cardoza'
-      duration: 500
+        <p>Join Jen from the YMCA for a combination of Strength and Cardio
+        exercises! The class will be high-intensity, 4 sets of 5 exercises and
+        then a challenge at the end! With no equipment needed, you can do this
+        workout anywhere. We will warm you up, work you out, cool you down and
+        motivate you throughout this sweat session!</p>
+      instructor: 'Jen'
+      duration: 1926
       featured: 1
-      video: 2
+      video: 3
       category: 2
-      equipment: 3
+      equipment:
+        - 0
       level: 3
-      image: 10
+      image: 0
+    -
+      id: 4
+      title: 'Strength Turkey Burner with Sarah at the Y!'
+      description: |
+        <p>You need muscle on your body to increase your metabolism. We lose
+        muscle as we get older. The only way to keep it is through strength
+        training.<\p>
+        <p>Welcome to your Thanksgiving Turkey Burner!<\p>
+        <p>Love or hate it, YOU NEED IT. This is four blocks. Each exercise is
+        done for 30 seconds. Each block has three exercises, and we're going to
+        do it two times through. Focus on the 30 seconds only and don't think
+        about what's ahead or what's behind. Focus on the moment.<\p>
+        <p>Diane on the left will be showing modifications. Own your exercises
+        and choose wisely.<\p>
+        <p>Jennifer on the right will be doing all of the advanced options,
+        making them a little bit higher. If you want that extra push, stick with
+        Jennifer.<\p>
+        <p>We even have a DJ today!</p>
+      instructor: 'Sarah'
+      duration: 1926
+      featured: 1
+      video: 4
+      category:
+        - 9
+        - 10
+      equipment:
+        - 8
+        - 7
+      level: 3
+      image: 0
+    -
+      id: 5
+      title: 'Bodyweight Bootcamp Workout to Burn off the Holiday Weight!'
+      description: |
+        <p>Join us for an intense Bodyweight Bootcamp Workout to burn off that
+        Thanksgiving/Holiday weight! We feel you GIRL. Those sweet potatoes
+        couldn't be ignored. Who were we to not get seconds and thirds? Also --
+        the creme brulee.<\p>
+        <p>Enough about the food. Join us for this intense workout as we burn
+        off some calories and move our bodies to some upbeat music.</p>
+      instructor: 'Amy'
+      duration: 1321
+      featured: 0
+      video: 5
+      category: 2
+      equipment:
+        - 7
+        - 8
+      level: 3
+      image: 0
+    -
+      id: 6
+      title: 'Barre Fusion Class with Jennifer!'
+      description: |
+        <p>Follow this free online workout class with Jennifer and Sally!</p>
+      instructor: 'Jennifer'
+      duration: 1298
+      featured: 0
+      video: 6
+      category: 1
+      equipment:
+        - 7
+        - 8
+        - 3
+      level: 3
+      image: 0
+    -
+      id: 7
+      title: 'Senior Fitness! A ForeverWell Combo Workout with Jennifer!'
+      description: |
+        <p>Workout with Jennifer this morning for a cardio workout that will
+        get your muscles moving! Use a chair if available, a set of dumbbells,
+        as well as a resistance band (not required, other options provided).
+        Don't forget your bottle of water!</p>
+        <p>Use basic movements to engage your core, lift your heart, and get
+        your heartbeat going!</p>
+      instructor: 'Jennifer'
+      duration: 1528
+      featured: 1
+      video: 7
+      category: 10
+      equipment:
+        - 8
+        - 7
+        - 2
+      level: 3
+      image: 0
+    -
+      id: 8
+      title: 'Cardio Workout with Jennifer'
+      description: |
+        <p>Get ready to get your heart pumping! Get your heart rate up without
+        taking it to the mat. This workout is going to burn a ton of calories.
+        This cardio exercise will jump-start your endurance and leave every
+        muscle worked!</p>
+      instructor: 'Jennifer'
+      duration: 1330
+      featured: 0
+      video: 8
+      category: 5
+      equipment:
+        - 0
+      level: 3
+      image: 0
+    -
+      id: 9
+      title: 'Yoga Flow on Gratitude'
+      description: |
+        <p>Jen from the YMCA of the North takes you on a Flow class. Grab your
+        yoga mat and begin with your feet hip-width apart.<\p>
+        <p>As we flow today, we encourage you to listen to your bodies.
+        Modifications are shown by Amy and Diane to meet your needs. You can
+        follow along at any level that serves you best.<\p>
+        <p>Blink your eyes closed, and begin to notice how you feel. Bring
+        awareness to this moment with a softness to your face and jaw. Today
+        let's bring our attention and our focus to gratitude. Feeling grateful
+        for our bodies and how they move and bend and lift us. Feeling grateful
+        for our minds--how they dream and think and wonder. And feeling grateful
+        for our spirits and how they connect us to one another and our hope and
+        joy and peace.<\p>
+        <p>Start to imagine your heart. The heart chakra is the color green. Can
+        you imagine a shiny green emerald glowing from your heart? Now we wrap
+        our breath around our body, mind, and spirit...and the spirit of
+        gratitude around our heart center as we notice our breath and take you
+        on a journey through gratitude.</p>
+      instructor: 'Jennifer'
+      duration: 1610
+      featured: 0
+      video: 9
+      category: 6
+      equipment:
+        - 8
+      level: 3
+      image: 0
+    -
+      id: 10
+      title: 'Daily Meditation: Discomfort and the Necessity to Grow'
+      description: |
+        <p>What is the relationship between your physical reality and mental
+        reality? Teachers describe a difference between your emotions and your
+        feelings. Emotions are a reaction to your outer world, while feelings
+        are how you take those emotions and let them manifest. This practice of
+        self-discipline and self-knowledge. Today we are discussing the feeling
+        and emotion of discomfort.<\p>
+        <p>No one wants to be uncomfortable, but what is beyond that
+        conditioning? More and more science is showing us that a small amount of
+        discomfort is necessary. That's what today's practice is about: getting
+        to know ourselves and that temporary emotion of discomfort and finding a
+        new way to visualize what that means for our body and mind.<\p>
+        <p>Breathe deeply today and let's grow together as we adapt to the
+        feelings of discomfort.</p>
+      instructor: 'Chance'
+      duration: 755
+      featured: 0
+      video: 10
+      category: 11
+      equipment:
+        - 0
+      level: 3
+      image: 0
+    -
+      id: 11
+      title: 'Daily Meditation with Chance - Show up with your "A" Game!'
+      description: |
+        <p>How do you be your best self in any situation you have in your
+        life?<\p>
+        <p>We all live very different lives and within our lives, we all play a
+        variety of roles.<\p>
+        <p>We relate to people around us<\p>
+        <p>in completely different ways<\p>
+        <p>we have bosses, or kids, or significant others,<\p>
+        <p>or parents,<\p>
+        <p>or whatever!<\p>
+        <p>And all of these people benefit when we show up as our best
+        selves.<\p>
+        <p>So determining what that is... takes a little... meditation.<\p>
+        <p>Center yourself and visualize yourself at your very best. Bring a
+        positive attitude to any situation.<\p>
+        <p>"The world is not coming at you, as much as it's coming from
+        you."</p>
+      instructor: 'Chance'
+      duration: 788
+      featured: 0
+      video: 11
+      category: 11
+      equipment:
+        - 0
+      level: 3
+      image: 0
+    -
+      id: 12
+      title: 'Meditation with Chance York "You are Light"'
+      description: |
+        <p>Good morning!<\p>
+        <p>Today, we are going to focus on the power of light. When people think
+        of meditation they think of words like enlightenment. Enlightenment can
+        be a profound topic. You may have a rough definition in your mind and
+        everyone probably has a different personal experience of what they
+        believe it means. Chance views it as a functional term. To make yourself
+        lighter. With that terminology, imagine what emotions like resentment.
+        Scarcity. Fear. Defensiveness. Judgment. Imagine what those things feel
+        like in your body? Those feelings rest in your body as heaviness and
+        weigh you down. They grip. They block. Those thoughts don't feel good,
+        even though they may feel comfortable.<\p>
+        <p>Journey with me today as we experience lightness.</p>
+      instructor: 'Chance'
+      duration: 676
+      featured: 0
+      video: 12
+      category: 11
+      equipment:
+        - 0
+      level: 2
+      image: 0
+    -
+      id: 13
+      title: 'Yoga with Jen - "Creating Space for What You Need!"'
+      description: |
+        <p>Yoga:  Creating Space.  For what you need.  Breath, courage,
+        compassion, or just to be.  Mindful movements to cultivate space.<\p>
+        <p>Today's practice is centered around creating space for what you need
+        today. That might be something physical. That might be something
+        abstract like courage or curiosity. You might be looking just to breathe
+        and to be. Just take a moment with your eyes closed and think about what
+        you might want to create space for in our practice today.<\p>
+        <p>We'll start with our mat in a comfortable cross-legged position.</p>
+      instructor: 'Jennifer'
+      duration: 2127
+      featured: 0
+      video: 13
+      category: 6
+      equipment:
+        - 8
+      level: 3
+      image: 0
+    -
+      id: 14
+      title: 'THE BEST Blueberry Banana Smoothie for a Healthy Day'
+      description: |
+        <p>Make the best blueberry banana smoothie on the BLOCK!<\p>
+        <p>INGREDIENTS:<br>
+           -Dark leafy greens (a large handful or 4 cups)<br>
+           -Coconut milk (or any milk of your choosing—or water or juice)<br>
+           -Blueberries<br>
+           -Frozen Banana<br>
+           -1/3 cup of Peanut Butter (any nut butter of your choice)<\p>
+        <p>RECIPE:<br>
+           1. Add your greens to the blender<br>
+           2. Add in frozen blueberries<br>
+           3. Add in frozen banana after breaking into small pieces<br>
+           4. Add in your 1/3 cups of nut butter<br>
+           5. Pour in your coconut milk. 1 cup at first. Add more liquid if the
+        smoothie is too thick.<br>
+           6. Trick your kids with leafy greens!<br>
+           7. Enjoy your smoothie!</p>
+      instructor: 'Sally'
+      duration: 382
+      featured: 1
+      video: 14
+      category: 8
+      equipment:
+        - 4
+        - 5
+        - 6
+        - 9
+        - 10
+        - 11
+      level: 1
+      image: 0
+    -
+      id: 15
+      title: 'Joy Guided Meditation'
+      description: |
+        <p>Sometimes we just need to take a step back and contemplate to
+        experience the joy we have in our lives.<\p>
+        <p>There is great joy in life. There is deep, profound joy in simply
+        being.<\p>
+        <p>This peaceful guided meditation will remind you of the radiant energy
+        of life in you, and in all things.</p>
+      instructor: 'Sally'
+      duration: 1881
+      featured: 0
+      video: 15
+      category: 11
+      equipment:
+        - 0
+      level: 2
+      image: 0
   ids:
     id:
       type: integer
@@ -112,6 +427,7 @@ process:
       plugin: migration_lookup
       migration: virtual_y_gc_equipment
       source: equipment
+      no_stub: true
   field_gc_video_level:
     -
       plugin: migration_lookup

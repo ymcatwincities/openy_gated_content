@@ -6,4 +6,4 @@ services:
       - { name: 'event_subscriber' }
   openy_gc_auth_reclique_client:
     class: '\Drupal\openy_gc_auth_reclique\RecliqueClientService'
-    arguments: ['@config.factory', '@http_client']
+    arguments: ['@logger.factory', '@config.factory', '@http_client']

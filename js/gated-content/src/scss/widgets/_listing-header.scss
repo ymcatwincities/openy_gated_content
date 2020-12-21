@@ -1,0 +1,18 @@
+.listing-header {
+  display:         flex;
+  align-items:     center;
+  justify-content: space-between;
+
+  .title {
+    margin: 0;
+
+    font-family: $cachet-book;
+    font-weight: 400;
+
+    @include median(font-size, 24px, 20px);
+  }
+
+  .view-all {
+    @include median(font-size, 14px, 12px);
+  }
+}

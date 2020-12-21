@@ -1,0 +1,33 @@
+.teaser {
+  position: relative;
+  border-top:    solid 5px $indigo;
+
+  transform:     scale(1);
+
+  &:hover {
+    transform:       scale(1.01);
+    box-shadow:      0 4px 6px rgba(0, 0, 0, .25);
+  }
+
+  > a {
+    display:       flex;
+    flex-wrap:     wrap;
+    border-right:  solid 1px $gallery;
+    border-bottom: solid 1px $gallery;
+    border-left:   solid 1px $gallery;
+    cursor:        pointer;
+    height:        100%;
+
+    &:hover {
+      text-decoration: none;
+    }
+
+    .title {
+      width:       100%;
+      color:       $dark-blue;
+      font-weight: bold;
+
+      @include median(font-size, 16px, 14px);
+    }
+  }
+}
