@@ -84,8 +84,7 @@ class TryAgainForm extends FormBase {
       '#title' => $this->t('Try again'),
       '#attributes' => [
         'class' => [
-          'button',
-          'form-submit',
+          'gc-button',
         ],
       ],
     ];

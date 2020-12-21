@@ -34,8 +34,7 @@ class VirtualYDaxkoSSOLoginForm extends FormBase {
       '#title' => $this->t('Enter Virtual Y'),
       '#attributes' => [
         'class' => [
-          'button',
-          'form-submit',
+          'gc-button',
         ],
       ],
     ];
