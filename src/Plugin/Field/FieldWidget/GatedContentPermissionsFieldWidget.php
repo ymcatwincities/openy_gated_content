@@ -7,6 +7,7 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\openy_gated_content\VirtualYAccessTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -24,7 +25,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
  */
 class GatedContentPermissionsFieldWidget extends WidgetBase implements ContainerFactoryPluginInterface {
 
-  use StringTranslationTrait;
+  use StringTranslationTrait, VirtualYAccessTrait;
 
   /**
    * Entity type manager service.
@@ -92,7 +93,7 @@ class GatedContentPermissionsFieldWidget extends WidgetBase implements Container
     $select_options = [];
     foreach ($roles as $role_key => $role) {
       if ((strpos($role_key, 'virtual_y') !== FALSE)
-        && ($role_key !== 'virtual_ymca_editor')) {
+        && (!in_array($role_key, self::getVirtualyEditorRoles()))) {
         $select_options[$role_key] = $role->label();
       }
     }
