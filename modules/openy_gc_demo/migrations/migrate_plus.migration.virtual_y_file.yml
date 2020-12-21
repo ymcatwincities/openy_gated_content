@@ -12,14 +12,12 @@ label: 'Import demo Virtual YMCA files'
 source:
   plugin: embedded_data
   data_rows:
-    # Images, needed for Landing pages.
     -
       id: 1
       name: marjanblan-6bXvYyAYVrE-unsplash.jpg
     -
       id: 2
       name: jonathan-borba-lrQPTQs7nQQ-unsplash.jpg
-    # Images, needed for Virtual Y blog posts
     -
       id: 3
       name: baylee-gramling-R5eoT-c-jkY-unsplash.jpg
@@ -41,10 +39,24 @@ source:
     -
       id: 9
       name: dance2.jpg
-    # Images, needed for Virtual Y videos
     -
       id: 10
       name: bootcamp-challenge.png
+    -
+      id: 11
+      name: man-yoga-meditation.jpg
+    -
+      id: 12
+      name: healthy-eating.png
+    -
+      id: 13
+      name: strength-training-classes.jpg
+    -
+      id: 14
+      name: cardio-workout-main.jpg
+    -
+      id: 15
+      name: forever-well-category.jpg
   ids:
     id:
       type: integer

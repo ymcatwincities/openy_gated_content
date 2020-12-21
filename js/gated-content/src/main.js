@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import { sync } from 'vuex-router-sync';
 import App from './GatedContent.vue';
 import router from './router';
 import store from './store';
@@ -10,6 +11,8 @@ import 'regenerator-runtime/runtime';
 Vue.use(Log);
 
 Vue.config.productionTip = false;
+
+sync(store, router);
 
 filters.forEach((f) => {
   Vue.filter(f.name, f.execute);
