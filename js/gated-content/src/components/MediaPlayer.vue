@@ -36,7 +36,7 @@ export default {
   },
   computed: {
     player() {
-      return this.media.field_media_source === 'youtube' ? 'youtube' : 'vimeo';
+      return this.media.field_media_source.startsWith('youtube') ? 'youtube' : 'vimeo';
     },
     videoId() {
       let embedObj = this.media.field_media_video_embed_field;
