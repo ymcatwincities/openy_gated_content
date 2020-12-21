@@ -33,6 +33,7 @@
     .modal-body {
       display: flex;
       margin:  0;
+      color:   $black;
 
       @include median(flex-direction, row, row, column);
       @include median(padding, 20px, 10px);
@@ -46,6 +47,7 @@
         > h4 {
           margin-bottom: 14px;
           color:         black;
+          font-family:   Verdana, sans-serif;
           font-weight:   bold;
 
           @include median(font-size, 14px, 12px);
@@ -63,6 +65,8 @@
             margin-bottom: 0;
             cursor:        pointer;
             padding-left:  28px;
+            font-family:   Verdana, sans-serif;
+            font-weight:   normal;
 
             input {
               position: absolute;
@@ -119,6 +123,8 @@
 
       .btn.btn-outline-primary {
         border-width:     2px;
+        border-style:     solid;
+        border-color:     $dark-blue;
         background-color: white;
         color:            $dark-blue;
 
@@ -129,7 +135,9 @@
       }
 
       .btn-primary {
-        border-width: 2px;
+        border-width:     2px;
+        background-color: $dark-blue;
+        color:            white;
 
         &:hover {
           background-color: white;
