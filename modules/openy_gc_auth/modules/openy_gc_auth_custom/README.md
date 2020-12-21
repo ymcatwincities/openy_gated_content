@@ -14,46 +14,38 @@ Member ID,Member First Name,Primary Member,Member Email,Package Name,Package Sit
 ```
 
 If you have different structure or set of fields, you need to:
-- Override base fields for gc_auth_custom_user entity
-- Modify migration
-- Modify validation logic for frontend application
-
-### How to override base fields
-If your users data have different fields, you can use
-hook_entity_base_field_info_alter to add them to AuthCustomUser entity.
-
-Example:
-
-```php
-function hook_entity_base_field_info_alter(&$fields, $entity_type) {
-
-  // Alter the mymodule_text field to use a custom class.
-  if ($entity_type->id() == 'gc_auth_custom_user') {
-    $fields['password'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('Password'))
-      ->setDescription(t('User password.'));
-  }
-}
-
-```
+- Add fields to user entity (`/admin/config/people/accounts/fields`)
+- Modify migration `migrate_plus.migration.gc_auth_custom_users.yml`
+- Modify validation logic by altering `VirtualYCustomLoginForm.php`
 
 ### How to Modify migration
 For this you can change content of config
-migrate_plus.migration.gc_auth_custom_users.yml. You can modify
+`migrate_plus.migration.gc_auth_custom_users.yml`. You can modify
 destination fields and processors according to your needs.
-
-### How to add custom validation logic for frontend app
-
-Alter `VirtualYCustomLoginForm` or subscribe on
-`gated_content_events_user_login` event.
 
 ### How to Run migration
 
+You can find all links on
+`/admin/openy/virtual-ymca/gc-auth-settings/provider/custom`
+page in `Migration settings` section.
+
 From UI:
 - Login as admin
-- Go to /admin/openy/openy-gc-auth/settings/provider/custom/import_csv
-- Select migration group to run
-- Run batch
+- For SCV file upload:
+  - Go to `/admin/openy/openy-gc-auth/settings/provider/custom/upload-csv`
+  - Upload file
+  - Press submit button.
+  - After this file will be uploaded to
+    `'private://gc_auth/import/gc_auth_custom_users.csv'`
+- Run migration:
+  - Go to
+`/admin/structure/migrate/manage/gc_auth/migrations/gc_auth_custom_users/execute`
+  - Select `Operation` group to run (by default - ` Import`)
+  - In `Additional execution options` you can set `Sync` option if you want to
+    delete users from the site that not exist in CSV file (This related
+    only to users that was imported previous time).
+  - Press `Execute`
+  - Wait until batch finish
 
 From drush:
 ```shell script
@@ -74,11 +66,13 @@ drush mim gc_auth_custom_users --sync=TRUE
 
 ### How to upload source file
 
-You can upload source file directly to `private://gc_auth/import/gc_auth_custom_users.csv`.
+You can upload source file directly to
+`private://gc_auth/import/gc_auth_custom_users.csv`.
 
 OR
 
-You can upload file from the Drupal UI in Migration Group settings at `/admin/structure/migrate/manage/gc_auth`. If you upload a file from the UI it must be entitled `gc_auth_custom_users.csv` exactly.
+You can upload file from the Drupal UI at
+`/admin/openy/openy-gc-auth/settings/provider/custom/upload-csv`.
 
 ## Notes:
 
@@ -100,3 +94,9 @@ See https://www.drupal.org/project/migrate_tools/issues/2809433#comment-13362844
 
 To fix this - apply a patch for migrate_tools
 patches/migrate_tools_sync_option_for_drush8.patch
+
+
+### Migrate tools 5.0 and sync option from UI
+
+For the ability to use sync option from UI in Migrate tools 5.0 we need to apply
+a custom patch, see `composer.json` of this module.
