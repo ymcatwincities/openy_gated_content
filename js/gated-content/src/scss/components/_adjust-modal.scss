@@ -140,6 +140,9 @@
         color:            white;
 
         &:hover {
+          border-width:     2px;
+          border-style:     solid;
+          border-color:     $dark-blue;
           background-color: white;
           color:            $dark-blue;
         }
