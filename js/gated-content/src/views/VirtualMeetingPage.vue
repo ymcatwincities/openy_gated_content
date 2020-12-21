@@ -79,7 +79,7 @@
         :excluded-video-id="video.id"
         :eventType="'virtual_meeting'"
         :viewAll="true"
-        :limit="6"
+        :limit="8"
         :msg="'Virtual Meetings not found.'"
       />
     </template>
