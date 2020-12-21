@@ -2,6 +2,10 @@
   .modal-container {
     width: max-content;
 
+    button {
+      outline: none !important;
+    }
+
     .modal-header {
       display:         flex;
       align-items:     center;
