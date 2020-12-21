@@ -126,3 +126,13 @@ function openy_gc_auth_custom_update_8006() {
     'migrate_plus.migration_group.gc_auth',
   ]);
 }
+
+/**
+ * Add value for require_email_verification setting.
+ */
+function openy_gc_auth_custom_update_8007(&$sandbox) {
+  \Drupal::configFactory()
+    ->getEditable('openy_gc_auth.provider.custom')
+    ->set('require_email_verification', 0)
+    ->save();
+}
