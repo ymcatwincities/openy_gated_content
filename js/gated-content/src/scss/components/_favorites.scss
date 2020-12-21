@@ -1,0 +1,36 @@
+.add-to-favorite {
+  display:     inline-block;
+  position:    absolute;
+  right:       15px;
+  bottom:      15px;
+  cursor:      pointer;
+  line-height: 20px;
+  font-size:   20px;
+
+  .favorite-icon {
+    float: right;
+  }
+
+  .spinner {
+    width:  25px;
+    height: 25px;
+  }
+
+  &.active .favorite-icon {
+    fill: $red;
+  }
+
+  .favorite-icon {
+    fill: $gray;
+
+    &:hover {
+      fill: $red;
+    }
+  }
+}
+
+.title-wrapper {
+  .add-to-favorite {
+    position:  initial;
+  }
+}

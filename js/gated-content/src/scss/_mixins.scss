@@ -1,0 +1,13 @@
+@mixin median($property, $desktop, $tablet:$desktop, $mobile:$tablet) {
+  #{$property}: $desktop;
+
+  @media (max-width: 1060px) {
+    #{$property}: $tablet;
+  }
+
+  @if $mobile != $tablet {
+    @media (max-width: 600px) {
+      #{$property}: $mobile;
+    }
+  }
+}

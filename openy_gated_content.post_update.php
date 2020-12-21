@@ -126,3 +126,45 @@ function openy_gated_content_post_update_eventseries_livestream(&$sandbox) {
 function openy_gated_content_post_update_eventseries_meeting(&$sandbox) {
   _openy_gated_content_permissions($sandbox, 'eventseries', 'virtual_meeting', 'id');
 }
+
+/**
+ * Set gated_content paragraphs title and description if it was empty.
+ */
+function openy_gated_content_post_update_paragraph_headline(&$sandbox) {
+  $prgf_storage = \Drupal::entityTypeManager()->getStorage('paragraph');
+  $gated_content_prgf = $prgf_storage->loadByProperties(['type' => 'gated_content']);
+  $gated_content_prgf = end($gated_content_prgf);
+  if ($gated_content_prgf) {
+    $page_id = $gated_content_prgf->parent_id->value;
+
+    $header_prgf = $prgf_storage->loadByProperties([
+      'type' => ['small_banner', 'banner'],
+      'parent_id' => $page_id,
+    ]
+    );
+
+    $header_prgf = end($header_prgf);
+
+    $title = 'Virtual YMCA';
+    $description = '<p>Find the newest Y classes and programs</p><p><a class="btn btn-primary" href="#/live-stream"><span class="text">Live Streams</span></a>&nbsp; <a class="btn btn-primary" href="#/categories/video"><span class="text">Videos</span></a></p>';
+    if ($header_prgf) {
+      if (!empty($header_prgf->field_prgf_headline->value)) {
+        $title = $header_prgf->field_prgf_headline->value;
+      }
+
+      if (!empty($header_prgf->field_prgf_description->value)) {
+        $description = $header_prgf->field_prgf_description->value;
+      }
+      $header_prgf->delete();
+    }
+
+    if (empty($gated_content_prgf->field_prgf_title->value)) {
+      $gated_content_prgf->field_prgf_title->value = $title;
+    }
+    if (empty($gated_content_prgf->field_prgf_description->value)) {
+      $gated_content_prgf->field_prgf_description->value = $description;
+      $gated_content_prgf->field_prgf_description->format = 'full_html';
+    }
+    $gated_content_prgf->save();
+  }
+}

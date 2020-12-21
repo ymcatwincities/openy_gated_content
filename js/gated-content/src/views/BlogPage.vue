@@ -30,6 +30,11 @@
             }">{{ blog.attributes.field_gc_video_category[index].name }}</router-link>
             <i v-if="index !== blog.attributes.field_gc_video_category.length - 1"> | </i>
           </span>
+          <AddToFavorite
+            :id="blog.attributes.drupal_internal__nid"
+            :type="'node'"
+            :bundle="'vy_blog_post'"
+          ></AddToFavorite>
         </div>
       </div>
       <div class="blog-content gated-container">
@@ -54,6 +59,7 @@
 
 <script>
 import client from '@/client';
+import AddToFavorite from '@/components/AddToFavorite.vue';
 import Spinner from '@/components/Spinner.vue';
 import BlogListing from '@/components/blog/BlogListing.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
@@ -63,6 +69,7 @@ export default {
   name: 'BlogPage',
   mixins: [JsonApiCombineMixin, SettingsMixin],
   components: {
+    AddToFavorite,
     BlogListing,
     Spinner,
   },

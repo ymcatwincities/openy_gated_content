@@ -5,6 +5,8 @@
  * Installation file for Open Y Virtual YMCA.
  */
 
+use Drupal\Core\Entity\ContentEntityType;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\Core\Field\BaseFieldDefinition;
@@ -13,7 +15,6 @@ use Drupal\Core\Field\BaseFieldDefinition;
  * Virtual Y install.
  */
 function openy_gated_content_install() {
-
   $field_permission = BaseFieldDefinition::create('string')
     ->setLabel(t('Virtual Y Access Group'))
     ->setSetting('max_length', 255)
@@ -34,7 +35,6 @@ function openy_gated_content_install() {
   $definition_manager->installFieldStorageDefinition('field_vy_permission', 'node', 'openy_gated_content', $field_permission);
   $definition_manager->installFieldStorageDefinition('field_vy_permission', 'eventseries', 'openy_gated_content', $field_permission);
   $definition_manager->installFieldStorageDefinition('field_vy_permission', 'eventinstance', 'openy_gated_content', $field_permission);
-
 }
 
 /**
@@ -111,7 +111,6 @@ function openy_gated_content_update_8005() {
  * Install permissions field.
  */
 function openy_gated_content_update_8006() {
-
   $field_permission = BaseFieldDefinition::create('string')
     ->setLabel(t('Virtual Y Access Group'))
     ->setSetting('max_length', 255)
@@ -132,7 +131,6 @@ function openy_gated_content_update_8006() {
   $definition_manager->installFieldStorageDefinition('field_vy_permission', 'node', 'openy_gated_content', $field_permission);
   $definition_manager->installFieldStorageDefinition('field_vy_permission', 'eventseries', 'openy_gated_content', $field_permission);
   $definition_manager->installFieldStorageDefinition('field_vy_permission', 'eventinstance', 'openy_gated_content', $field_permission);
-
 }
 
 /**
@@ -185,4 +183,63 @@ function openy_gated_content_update_8009() {
       $config_updater->update($config, $config_name, $param);
     }
   }
+}
+
+/**
+ * Install new fields for gated_content paragraph.
+ */
+function openy_gated_content_update_8010() {
+  $config_dir = drupal_get_path('module', 'openy_gated_content');
+  $config_dir .= '/config/install/';
+  $config_importer = \Drupal::service('openy_upgrade_tool.importer');
+  $config_importer->setDirectory($config_dir);
+  $config_importer->importConfigs([
+    'core.entity_form_display.paragraph.gated_content.default',
+    'core.entity_view_display.paragraph.gated_content.default',
+    'field.field.paragraph.gated_content.field_prgf_description',
+    'field.field.paragraph.gated_content.field_prgf_image',
+    'field.field.paragraph.gated_content.field_prgf_link',
+    'field.field.paragraph.gated_content.field_prgf_title',
+    'image.style.virtual_y_paragraph_headline',
+  ]);
+}
+
+/**
+ * Add top menu settings to openy_gated_content.settings.
+ */
+function openy_gated_content_update_8011() {
+  $config_importer = \Drupal::service('openy_upgrade_tool.param_updater');
+  $config = drupal_get_path('module', 'openy_gated_content');
+  $config .= '/config/install/';
+  $config .= 'openy_gated_content.settings.yml';
+  $config_importer->update(
+    $config,
+    'openy_gated_content.settings',
+    'top_menu'
+  );
+}
+
+/**
+ * Install VyFavoriteItem Entity Type.
+ */
+function openy_gated_content_update_8012() {
+  \Drupal::entityDefinitionUpdateManager()
+    ->installEntityType(new ContentEntityType([
+      'id' => 'vy_favorite_item',
+      'label' => new TranslatableMarkup('VY Favorite Item'),
+      'base_table' => 'vy_favorite_item',
+      'translatable' => FALSE,
+      'admin_permission' => 'administer gated content favorite items',
+      'handlers' => [
+        'storage_schema' => 'Drupal\openy_gated_content\VyFavoriteItemStorageSchema',
+      ],
+      'entity_keys' => [
+        'id' => 'id',
+        'ref_entity_type' => 'ref_entity_type',
+        'ref_entity_bundle' => 'ref_entity_bundle',
+        'ref_entity_id' => 'ref_entity_id',
+        'owner' => 'uid',
+        'created' => 'created',
+      ],
+    ]));
 }
