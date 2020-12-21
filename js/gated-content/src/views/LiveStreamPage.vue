@@ -145,7 +145,7 @@ export default {
         start: this.formatDate(this.video.attributes.date.value),
         duration: [this.getDuration(this.video.attributes.date), 'hour'],
         title: this.video.attributes.title,
-        description: `${this.descriptionProcessed}<br> Live stream page: ${this.pageUrl}`,
+        description: `Live stream page: ${this.pageUrl}`,
         busy: true,
         guests: [],
       };

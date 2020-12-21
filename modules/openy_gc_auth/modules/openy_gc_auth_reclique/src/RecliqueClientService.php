@@ -3,6 +3,7 @@
 namespace Drupal\openy_gc_auth_reclique;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Logger\LoggerChannelFactory;
 use GuzzleHttp\Client;
 
 /**
@@ -11,6 +12,13 @@ use GuzzleHttp\Client;
  * @package Drupal\openy_gc_auth_reclique
  */
 class RecliqueClientService {
+
+  /**
+   * Logger Factory.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelFactory
+   */
+  protected $logger;
 
   /**
    * The config factory.
@@ -29,12 +37,15 @@ class RecliqueClientService {
   /**
    * RecliqueClientService constructor.
    *
+   * @param \Drupal\Core\Logger\LoggerChannelFactory $loggerFactory
+   *   LoggerChannelFactory instance.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   ConfigFactoryInterface instance.
    * @param \GuzzleHttp\Client $client
    *   Guzzle client.
    */
-  public function __construct(ConfigFactoryInterface $configFactory, Client $client) {
+  public function __construct(LoggerChannelFactory $loggerFactory, ConfigFactoryInterface $configFactory, Client $client) {
+    $this->logger = $loggerFactory->get('openy_gc_auth_reclique');
     $this->configFactory = $configFactory;
     $this->client = $client;
   }
@@ -72,7 +83,7 @@ class RecliqueClientService {
       }
     }
     catch (\Exception $e) {
-      $this->logger('openy_gated_content')->error($e->getMessage());
+      $this->logger->error($e->getMessage());
     }
     return [];
   }
