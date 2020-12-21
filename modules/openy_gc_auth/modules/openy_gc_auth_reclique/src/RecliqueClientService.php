@@ -83,7 +83,7 @@ class RecliqueClientService {
       }
     }
     catch (\Exception $e) {
-      $this->loggerFactory->error($e->getMessage());
+      $this->logger->error($e->getMessage());
     }
     return [];
   }
