@@ -3,7 +3,7 @@
     <VueVideoWrapper
       ref="player"
       :player="player"
-      :videoId="media.field_media_video_id"
+      :videoId="videoId"
       :options="{responsive: 'true'}"
       @loaded="$refs.player.pause()"
       @play="handlePlay()"
@@ -36,7 +36,15 @@ export default {
   },
   computed: {
     player() {
-      return this.media.field_media_source === 'youtube' ? 'youtube' : 'vimeo';
+      return this.media.field_media_source.startsWith('youtube') ? 'youtube' : 'vimeo';
+    },
+    videoId() {
+      let embedObj = this.media.field_media_video_embed_field;
+      if (this.media.field_media_source === 'youtube_playlist') {
+        embedObj = embedObj.match(/(\?|&)v=([^&#]+)/).pop();
+        return embedObj;
+      }
+      return this.media.field_media_video_id;
     },
   },
   methods: {
