@@ -78,8 +78,6 @@ export default {
       selectedSort: 'weight_asc',
       preSelectedSort: 'weight_asc',
       filterOptions: [
-        { value: 'weight_asc', label: 'ASC' },
-        { value: 'weight_desc', label: 'DESC' },
         { value: 'title_asc', label: 'By title (A-Z)' },
         { value: 'title_desc', label: 'By title (Z-A)' },
       ],

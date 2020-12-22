@@ -193,6 +193,8 @@ export default {
       error: false,
       category: null,
       itemsLimit: 8,
+      selectedSort: 'date_asc',
+      preSelectedSort: 'date_asc',
       showComponent: {
         gc_video: true,
         vy_blog_post: true,
