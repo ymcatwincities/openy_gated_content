@@ -247,7 +247,7 @@ class VirtualYUSALoginForm extends FormBase {
       }
     }
     else {
-      if ($result['Status'] == 'Inactive') {
+      if (isset($result['Status']) && $result['Status'] == 'Inactive') {
         $user_inactive_message = $this->configFactory->get('openy_gc_auth.provider.yusa')->get('user_inactive_message');
         $message = !empty($user_inactive_message) ? $user_inactive_message : $this->t('User is Inactive.');
         $this->messenger()->addError($message);
