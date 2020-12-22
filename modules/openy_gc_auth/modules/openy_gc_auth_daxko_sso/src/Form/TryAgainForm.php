@@ -5,6 +5,8 @@ namespace Drupal\openy_gc_auth_daxko_sso\Form;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -12,6 +14,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
  * Form for try again step in case of failed Daxko SSO login.
  */
 class TryAgainForm extends FormBase {
+
+  use StringTranslationTrait;
 
   /**
    * The current request.
@@ -71,11 +75,22 @@ class TryAgainForm extends FormBase {
       ];
     }
 
-    $form['#action'] = $this->configFactory->get('openy_gated_content.settings')->get('virtual_y_login_url');
+    $form['#action'] = $this->configFactory->get('openy_gated_content.settings')
+      ->get('virtual_y_login_url');
 
     $form['submit'] = [
-      '#type' => 'submit',
-      '#value' => $this->t('Try Again'),
+      '#type' => 'link',
+      '#url' => Url::fromRoute('openy_gc_auth_daxko_sso.daxko_link_controller_hello'),
+      '#title' => $this->t('Try again'),
+      '#attributes' => [
+        'class' => [
+          'gc-button',
+        ],
+      ],
+    ];
+
+    $form['#attributes'] = [
+      'class' => 'text-center',
     ];
 
     return $form;
@@ -85,8 +100,7 @@ class TryAgainForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $this->currentRequest->query->remove('error');
-    $this->currentRequest->overrideGlobals();
+    $form_state->setRedirectUrl(Url::fromRoute('openy_gc_auth_daxko_sso.daxko_link_controller_hello'));
   }
 
 }

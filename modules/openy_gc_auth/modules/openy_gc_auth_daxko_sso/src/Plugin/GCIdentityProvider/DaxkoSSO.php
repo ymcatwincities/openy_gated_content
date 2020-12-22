@@ -103,7 +103,7 @@ class DaxkoSSO extends GCIdentityProviderPluginBase {
       $container->get('daxko_sso.client'),
       $container->get('request_stack'),
       $container->get('form_builder')
-      );
+    );
   }
 
   /**

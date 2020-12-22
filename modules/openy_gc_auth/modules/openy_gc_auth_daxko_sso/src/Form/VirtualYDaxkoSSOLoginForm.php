@@ -4,6 +4,7 @@ namespace Drupal\openy_gc_auth_daxko_sso\Form;
 
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 
 /**
@@ -12,6 +13,8 @@ use Drupal\Core\Url;
  * @package Drupal\openy_gc_auth_daxko_sso\Form
  */
 class VirtualYDaxkoSSOLoginForm extends FormBase {
+
+  use StringTranslationTrait;
 
   /**
    * {@inheritdoc}
@@ -26,8 +29,18 @@ class VirtualYDaxkoSSOLoginForm extends FormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
 
     $form['submit'] = [
-      '#type' => 'submit',
-      '#value' => $this->t('Enter Virtual Y'),
+      '#type' => 'link',
+      '#url' => Url::fromRoute('openy_gc_auth_daxko_sso.daxko_link_controller_hello'),
+      '#title' => $this->t('Enter Virtual Y'),
+      '#attributes' => [
+        'class' => [
+          'gc-button',
+        ],
+      ],
+    ];
+
+    $form['#attributes'] = [
+      'class' => 'text-center',
     ];
 
     return $form;
