@@ -5,11 +5,10 @@
   background-repeat:   no-repeat;
   background-position: center;
   background-size:     20px 20px;
-
   cursor:              pointer;
-
   width:               20px;
   height:              20px;
+  overflow:            hidden;
 
   .spinner {
     width:  25px;
@@ -47,7 +46,8 @@
   }
 }
 
-@media (hover) , (min-width:0\0) , (min--moz-device-pixel-ratio:0){
+@media (hover), (min-width: 0 \0
+), (min--moz-device-pixel-ratio: 0) {
   .add-to-favorite:not(.loading) {
     &:hover {
       background-image: url('assets/svg/favorites-solid-red.svg');
