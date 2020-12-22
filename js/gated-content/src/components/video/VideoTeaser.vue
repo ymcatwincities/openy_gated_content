@@ -1,7 +1,6 @@
 <template>
   <div class="teaser video-teaser">
     <router-link
-
       :to="{ name: 'Video', params: { id: video.id } }">
       <div class="preview" v-bind:style="{
               backgroundImage: `url(${image})`
@@ -21,6 +20,7 @@
       :id="video.attributes.drupal_internal__nid"
       :type="'node'"
       :bundle="'gc_video'"
+      class="white"
     ></AddToFavorite>
   </div>
 </template>

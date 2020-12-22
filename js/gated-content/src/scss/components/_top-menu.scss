@@ -10,10 +10,8 @@
     align-items:     center;
     justify-content: flex-end;
 
-    @include median(padding, 30px 15px 15px 18px, 10px 15px);
-    @include median(max-width, 1170px, initial);
-    @include median(margin-left, auto, auto, initial);
-    @include median(margin-right, auto, auto, initial);
+    @include median(padding-top, 30px, 10px);
+    @include median(padding-bottom, 15px, 10px);
 
     > div:not(:first-child) {
       @include median(display, block, none);
@@ -28,12 +26,18 @@
       margin-right: auto;
 
       a {
+        font-family: $cachet-book;
         @include median(padding-bottom, 12px, initial);
         @include median(font-size, 20px, 18px);
       }
     }
 
     div:not(:first-child) {
+      a:hover {
+        @include median(border-bottom, 2px solid, 1px solid);
+        @include median(padding-bottom, 10px, 12px);
+      }
+
       &:not(:last-child) {
         a {
           padding-right: 10px;
@@ -43,6 +47,7 @@
 
       a {
         padding-bottom: 12px;
+        font-family:    $cachet-book;
 
         &.router-link-active {
           @include median(border-bottom, 2px solid, 1px solid);
@@ -71,7 +76,7 @@
       text-align:       right;
 
       @include median(display, none, flex);
-      @include median(padding-right, initial, 13px);
+      @include median(padding-right, 10px, 10px, 19px);
 
       svg {
         width: 27px;
@@ -108,21 +113,22 @@
       }
 
       div:first-child, button {
-        margin-bottom: 30px;
+        margin-bottom: 20px;
         color:         $gray;
       }
 
       div:not(:first-child) {
         border:        1px solid $gray;
         border-radius: 5px;
-        padding:       15px 10px 12px;
-        min-height:    53px;
+        padding:       0;
         text-align:    center;
         color:         $gray;
 
         a {
-          border: none;
-          padding: 0;
+          border:      none;
+          padding:     15px 10px;
+          width:       100%;
+          font-family: Verdana, sans-serif;
         }
       }
     }

@@ -33,10 +33,13 @@
     }
 
     .paragraph-headline__description {
-      opacity: .8;
       color:   white;
 
       @include median(font-size, 18px, 16px);
+
+      p:not(:last-child) {
+        opacity: .8;
+      }
 
       a.btn {
         border:           2px solid white;

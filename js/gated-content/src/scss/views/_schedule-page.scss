@@ -215,7 +215,9 @@
       position:  initial;
       display: flex;
       align-items: center;
-      padding: 12px;
+      margin-left: 12px;
+      height: auto;
+      min-height: 44px;
     }
   }
 }

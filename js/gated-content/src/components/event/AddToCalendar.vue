@@ -1,13 +1,11 @@
 <template>
   <div class="dropdown add-to-calendar" v-if="allowToShow">
     <button
-      class="btn btn-primary dropdown-toggle"
-      type="button"
       id="dropdownMenuButton"
       data-toggle="dropdown"
       aria-haspopup="true"
       aria-expanded="false">
-      Add to calendar
+      <SvgIcon icon="calendar-plus" grow-by-height="false"></SvgIcon>
     </button>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
       <a :href="googleLink" target="_blank" class="dropdown-item btn-link">Google</a>
@@ -23,9 +21,11 @@
 import {
   google, outlook, office365, yahoo, ics,
 } from 'calendar-link';
+import SvgIcon from '@/components/SvgIcon.vue';
 
 export default {
   name: 'AddToCalendar',
+  components: { SvgIcon },
   props: {
     event: {
       type: Object,

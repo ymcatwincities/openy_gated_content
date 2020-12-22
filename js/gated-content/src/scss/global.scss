@@ -6,24 +6,29 @@
 @import "mixins";
 @import "variables";
 @import "fonts";
+@import "utilities/fonts";
+@import "utilities/colors";
+@import "utilities/spacing";
 @import "layout/four-columns";
 @import "widgets/listing-header";
 @import "widgets/empty-listing";
 @import "widgets/teaser";
 @import "widgets/video-level";
 @import "widgets/button";
+@import "widgets/timer";
+@import "widgets/adjust-button";
+@import "components/pagination";
 @import "components/svg-icon";
-@import "components/page-header";
 @import "components/top-menu";
 @import "components/video-listing";
 @import "components/video-teaser";
 @import "components/event-teaser";
-@import "components/category-listing";
 @import "components/category-teaser";
 @import "components/blog-teaser";
 @import "components/add-to-calendar";
 @import "components/favorites";
 @import "components/modal";
+@import "components/adjust-modal";
 @import "components/spinner";
 @import "components/paragraph-headline";
 @import "views/favorites_page";
@@ -57,6 +62,13 @@
     @media (min-width: 1200px) {
       max-width: 1170px;
     }
+  }
+
+  .gated-containerV2 {
+    margin-left: auto;
+    margin-right: auto;
+
+    @include median(max-width, 1140px, 940px, initial);
   }
 
   .fixed-button {

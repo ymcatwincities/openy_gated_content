@@ -3,9 +3,12 @@
     <Spinner></Spinner>
   </div>
   <div v-else-if="error" class="text-center">Error loading</div>
-  <div v-else-if="showlisting" class="gated-container">
-    <h2 class="title" v-if="title !== 'none'">{{ title }}</h2>
-    <div class="video-listing category-listing">
+  <div v-else-if="showlisting" class="gated-containerV2 my-40-20 px--20-10">
+    <div class="listing-header">
+      <h2 class="title text-gray cachet-book-24-20" v-if="title !== 'none'">{{ title }}</h2>
+      <slot name="filterButton"></slot>
+    </div>
+    <div class="four-columns">
       <CategoryTeaser
         v-for="category in listing"
         :key="category.id"
