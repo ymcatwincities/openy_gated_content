@@ -8,9 +8,7 @@ import CategoryPage from '@/views/CategoryPage.vue';
 import CategoriesListingPage from '@/views/CategoriesListingPage.vue';
 import SchedulePage from '@/views/SchedulePage.vue';
 import LiveStreamPage from '@/views/LiveStreamPage.vue';
-import LiveStreamListingPage from '@/views/LiveStreamListingPage.vue';
 import VirtualMeetingPage from '@/views/VirtualMeetingPage.vue';
-import VirtualMeetingListingPage from '@/views/VirtualMeetingListingPage.vue';
 import BlogsListingPage from '@/views/BlogsListingPage.vue';
 import VideosListingPage from '@/views/VideosListingPage.vue';
 import FavoritesPage from '@/views/FavoritesPage.vue';
@@ -53,10 +51,8 @@ const routes = [
   },
   {
     path: '/live-stream',
+    redirect: { name: 'Schedule' },
     name: 'LiveStreamListing',
-    component: LiveStreamListingPage,
-    props: true,
-    meta: { requiresAuth: true },
   },
   {
     path: '/live-stream/:id',
@@ -68,9 +64,7 @@ const routes = [
   {
     path: '/virtual-meeting',
     name: 'VirtualMeetingListing',
-    component: VirtualMeetingListingPage,
-    props: true,
-    meta: { requiresAuth: true },
+    redirect: { name: 'Schedule' },
   },
   {
     path: '/virtual-meeting/:id',

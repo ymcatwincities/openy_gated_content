@@ -1,35 +1,41 @@
 <template>
   <div class="gated-content-favorites-page">
-    <Modal v-if="showModal" @close="showModal = false">
+    <Modal v-if="showModal" @close="showModal = false" class="adjust-modal">
       <template v-slot:header>
-        <h3>Adjust</h3>
+        <h3>Filter</h3>
       </template>
       <template v-slot:body>
         <div class="filter">
           <h4>Content types</h4>
           <div class="form-check" v-for="option in contentTypeOptions" v-bind:key="option.value">
-            <input
-              type="radio"
-              :id="option.value"
-              :value="option.value"
-              autocomplete="off"
-              v-model="preSelectedComponent"
-              :disabled="option.type && isFavoritesTypeEmpty(option.type, option.value)"
-            >
-            <label :for="option.value">{{ option.label }}</label>
+            <label :for="option.value">
+              <input
+                type="radio"
+                :id="option.value"
+                :value="option.value"
+                autocomplete="off"
+                v-model="preSelectedComponent"
+                :disabled="option.type && isFavoritesTypeEmpty(option.type, option.value)"
+              >
+              <span class="checkmark"></span>
+              <span class="caption">{{ option.label }}</span>
+            </label>
           </div>
         </div>
         <div class="sort">
           <h4>Sort order</h4>
           <div class="form-check" v-for="option in filterOptions" v-bind:key="option.value">
-            <input
-              type="radio"
-              :id="option.value"
-              :value="option.value"
-              autocomplete="off"
-              v-model="preSelectedSort"
-            >
-            <label :for="option.value">{{ option.label }}</label>
+            <label :for="option.value">
+              <input
+                type="radio"
+                :id="option.value"
+                :value="option.value"
+                autocomplete="off"
+                v-model="preSelectedSort"
+              >
+              <span class="checkmark"></span>
+              <span class="caption">{{ option.label }}</span>
+            </label>
           </div>
         </div>
       </template>
@@ -46,8 +52,10 @@
     </div>
 
     <div class="components-wrapper" v-else>
-      <div class="gated-container text-right">
-        <button type="button" class="btn btn-light" @click="showModal = true">Adjust</button>
+      <div class="gated-containerV2 my-40-20 px--20-10 title-wrapper">
+        <div class="title cachet-book-32-28 text-gray">Favorites</div>
+        <button type="button"
+                class="adjust-button" @click="showModal = true">Filter</button>
       </div>
 
       <div v-if="isNoFavoriteItems" class="gated-container text-center">
@@ -62,15 +70,17 @@
           :pagination="viewAllContentMode"
           :sort="sortData('node')"
           :limit="viewAllContentMode ? 0 : itemsLimit"
-        />
-        <div class="text-center" v-if="selectedComponent === 'all'">
-          <button
-            type="button"
-            class="btn btn-light"
-            @click="preSelectedComponent = 'gc_video'; applyFilters()">
-            View all
-          </button>
-        </div>
+        >
+          <template #filterButton>
+            <button
+              v-if="selectedComponent === 'all'"
+              type="button"
+              class="view-all"
+              @click="preSelectedComponent = 'gc_video'; applyFilters()">
+              More
+            </button>
+          </template>
+        </VideoListing>
       </div>
 
       <div v-if="!isFavoritesTypeEmpty('eventinstance', 'live_stream')
@@ -81,15 +91,17 @@
           :favorites="true"
           :sort="sortData('eventinstance')"
           :limit="viewAllContentMode ? 50 : itemsLimit"
-        />
-        <div class="text-center" v-if="selectedComponent === 'all'">
-          <button
-            type="button"
-            class="btn btn-light"
-            @click="preSelectedComponent = 'live_stream'; applyFilters()">
-            View all
-          </button>
-        </div>
+        >
+          <template #filterButton>
+            <button
+              v-if="selectedComponent === 'all'"
+              type="button"
+              class="view-all"
+              @click="preSelectedComponent = 'live_stream'; applyFilters()">
+              More
+            </button>
+          </template>
+        </EventListing>
       </div>
 
       <div v-if="!isFavoritesTypeEmpty('eventinstance', 'virtual_meeting')
@@ -101,15 +113,17 @@
           :favorites="true"
           :sort="sortData('eventinstance')"
           :limit="viewAllContentMode ? 50 : itemsLimit"
-        />
-        <div class="text-center" v-if="selectedComponent === 'all'">
-          <button
-            type="button"
-            class="btn btn-light"
-            @click="preSelectedComponent = 'virtual_meeting'; applyFilters()">
-            View all
-          </button>
-        </div>
+        >
+          <template #filterButton>
+            <button
+              v-if="selectedComponent === 'all'"
+              type="button"
+              class="view-all"
+              @click="preSelectedComponent = 'virtual_meeting'; applyFilters()">
+              More
+            </button>
+          </template>
+        </EventListing>
       </div>
 
       <div v-if="!isFavoritesTypeEmpty('node', 'vy_blog_post')
@@ -120,15 +134,18 @@
           :pagination="viewAllContentMode"
           :sort="sortData('node')"
           :limit="viewAllContentMode ? 0 : itemsLimit"
-        />
-        <div class="text-center" v-if="selectedComponent === 'all'">
-          <button
-            type="button"
-            class="btn btn-light"
-            @click="preSelectedComponent = 'vy_blog_post'; applyFilters()">
-            View all
-          </button>
-        </div>
+          class="my-40-20"
+        >
+          <template #filterButton>
+            <button
+              v-if="selectedComponent === 'all'"
+              type="button"
+              class="view-all"
+              @click="preSelectedComponent = 'vy_blog_post'; applyFilters()">
+              More
+            </button>
+          </template>
+        </BlogListing>
       </div>
 
       <div v-if="!isFavoritesTypeEmpty('taxonomy_term', 'gc_category')
@@ -138,15 +155,17 @@
           :type="'all'"
           :sort="sortData('taxonomy_term')"
           :limit="viewAllContentMode ? 50 : itemsLimit"
-        />
-        <div class="text-center" v-if="selectedComponent === 'all'">
-          <button
-            type="button"
-            class="btn btn-light"
-            @click="preSelectedComponent = 'gc_category'; applyFilters()">
-            View all
-          </button>
-        </div>
+        >
+          <template #filterButton>
+            <button
+              v-if="selectedComponent === 'all'"
+              type="button"
+              class="view-all"
+              @click="preSelectedComponent = 'gc_category'; applyFilters()">
+              More
+            </button>
+          </template>
+        </CategoriesListing>
       </div>
     </div>
   </div>
@@ -174,7 +193,9 @@ export default {
   },
   data() {
     return {
-      itemsLimit: 3,
+      itemsLimit: 8,
+      selectedSort: 'date_asc',
+      preSelectedSort: 'date_asc',
       contentTypeOptions: [
         { value: 'all', label: 'Show All' },
         { value: 'gc_video', type: 'node', label: 'Video' },

@@ -1,0 +1,60 @@
+.p-10-5 {
+  @include median(padding, 10px, 5px);
+}
+
+.pt-20-10 {
+  @include median(padding-top, 20px, 10px);
+}
+
+.pb-20-10 {
+  @include median(padding-bottom, 20px, 10px);
+}
+// padding y axis, 20 for desktop, 10 for mobile and tablet
+.py-20-10 {
+  @extend .pt-20-10;
+  @extend .pb-20-10;
+}
+
+.pt-40-20 {
+  @include median(padding-top, 40px, 20px);
+}
+
+.pb-40-20 {
+  @include median(padding-bottom, 40px, 20px);
+}
+
+.py-40-20 {
+  @extend .pt-40-20;
+  @extend .pb-40-20;
+}
+
+.mt-20-10 {
+  @include median(margin-top, 20px, 10px);
+}
+
+.mb-20-10 {
+  @include median(margin-bottom, 20px, 10px);
+}
+
+.my-20-10 {
+  @extend .mt-20-10;
+  @extend .mb-20-10;
+}
+
+.mt-40-20 {
+  @include median(margin-top, 40px, 20px);
+}
+
+.mb-40-20 {
+  @include median(margin-bottom, 40px, 20px);
+}
+
+.my-40-20 {
+  @extend .mt-40-20;
+  @extend .mb-40-20;
+}
+
+.px--20-10 {
+  @include median(padding-left, null, 20px, 10px);
+  @include median(padding-right, null, 20px, 10px);
+}

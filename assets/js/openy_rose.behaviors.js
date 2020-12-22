@@ -6,6 +6,7 @@
 
   /**
    * Set css class 'primary-menu-minimize' for body element after primary menu affix activated on scroll
+   * This function is needed for Virtual Y top menu to follow primary menu height change
    */
   Drupal.behaviors.OpenyRoseAffixClassForPrimaryMenu = {
     attach: function (context, settings) {

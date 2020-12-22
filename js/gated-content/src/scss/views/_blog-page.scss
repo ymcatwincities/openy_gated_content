@@ -1,8 +1,13 @@
 .gated-content-blog-page {
   .blog-page__image {
-    padding: 30% 0 0 0;
-    position: relative;
-    background-size: cover;
+    position:            relative;
     background-position: center;
+    background-size:     cover;
+    padding:             30% 0 0 0;
+  }
+
+  .add-to-favorite {
+    overflow: hidden;
+    background-size: 20px 20px;
   }
 }

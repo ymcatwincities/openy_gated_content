@@ -14,5 +14,16 @@
 
   .view-all {
     @include median(font-size, 14px, 12px);
+
+  }
+
+  button.view-all {
+    color: $dark-blue;
+    border: none;
+    background-color: initial;
+
+    &:hover {
+      color: $blue-hover;
+    }
   }
 }

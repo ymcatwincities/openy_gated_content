@@ -11,8 +11,8 @@
         v-bind:style="{backgroundImage: `url(${image})`}"
       >
       </div>
-      <div class="blog-header gated-container">
-        <h2>{{ blog.attributes.title }}</h2>
+      <div class="gated-containerV2 my-40-20 px--20-10 text-black">
+        <h2 class="cachet-book-32-28">{{ blog.attributes.title }}</h2>
         <div
           v-if="blog.attributes.field_gc_video_category &&
             blog.attributes.field_gc_video_category.length > 0"
@@ -30,17 +30,18 @@
             }">{{ blog.attributes.field_gc_video_category[index].name }}</router-link>
             <i v-if="index !== blog.attributes.field_gc_video_category.length - 1"> | </i>
           </span>
-          <AddToFavorite
-            :id="blog.attributes.drupal_internal__nid"
-            :type="'node'"
-            :bundle="'vy_blog_post'"
-          ></AddToFavorite>
         </div>
+        <AddToFavorite
+          :id="blog.attributes.drupal_internal__nid"
+          :type="'node'"
+          :bundle="'vy_blog_post'"
+          class="rounded-border border-concrete mt-20-10"
+        ></AddToFavorite>
       </div>
-      <div class="blog-content gated-container">
+      <div class="gated-containerV2 my-40-20 px--20-10 text-black">
         <div
           v-if="blog.attributes.field_vy_blog_description"
-          class="blog-content__description"
+          class="blog-content__description verdana-16-14"
           v-html="blog.attributes.field_vy_blog_description.processed"
         ></div>
       </div>
@@ -51,7 +52,8 @@
         :excluded-id="blog.id"
         :category="firstCategory"
         :viewAll="true"
-        :limit="6"
+        :limit="8"
+        class="my-40-20"
       />
     </template>
   </div>

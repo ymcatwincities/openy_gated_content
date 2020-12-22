@@ -1,5 +1,5 @@
 .video-teaser {
-  background-color: $black;
+  background-color: $thunder;
 
   > a {
     border: none;
@@ -37,17 +37,18 @@
       background-color: $white;
       padding:          5px 10px;
       text-transform:   capitalize;
-      color:            $black;
+      color:            $thunder;
       font-size:        10px;
 
       @include median(margin, 12px 10px, 12px 5px);
     }
 
     .preview {
-      position:        relative;
-      background-size: contain;
-      padding-bottom:  56.25%;
-      width:           100%;
+      position:          relative;
+      background-repeat: no-repeat;
+      background-size:   contain;
+      padding-bottom:    56.25%;
+      width:             100%;
 
       .play-button {
         position:         absolute;
@@ -83,12 +84,6 @@
           background-color: darken($indigo, 5);
         }
       }
-    }
-  }
-
-  .add-to-favorite {
-    .favorite-icon {
-      fill:  $white;
     }
   }
 }
