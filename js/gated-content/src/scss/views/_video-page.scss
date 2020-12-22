@@ -10,7 +10,7 @@
         width: 100%;
       }
 
-      .youtube {
+      .youtube, .youtube_playlist {
         position: relative;
         padding:  56.25% 0 0 0;
 
@@ -29,7 +29,7 @@
   .video-footer-wrapper {
 
     .video-footer {
-      display: grid;
+      display:            grid;
       grid-template-rows: repeat(10, auto);
 
       @include median(grid-template-columns, 65% 35%, 65% 35%, 1fr);

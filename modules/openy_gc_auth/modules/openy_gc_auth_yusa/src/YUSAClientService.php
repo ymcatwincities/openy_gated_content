@@ -3,6 +3,7 @@
 namespace Drupal\openy_gc_auth_yusa;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Logger\LoggerChannelFactory;
 use GuzzleHttp\Client;
 
 /**
@@ -11,6 +12,13 @@ use GuzzleHttp\Client;
  * @package Drupal\openy_gc_auth_yusa
  */
 class YUSAClientService {
+
+  /**
+   * Logger Factory.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelFactory
+   */
+  protected $loggerFactory;
 
   /**
    * The config factory.
@@ -29,12 +37,15 @@ class YUSAClientService {
   /**
    * RecliqueClientService constructor.
    *
+   * @param \Drupal\Core\Logger\LoggerChannelFactory $loggerFactory
+   *   LoggerChannelFactory instance.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   ConfigFactoryInterface instance.
    * @param \GuzzleHttp\Client $client
    *   Guzzle client.
    */
-  public function __construct(ConfigFactoryInterface $configFactory, Client $client) {
+  public function __construct(LoggerChannelFactory $loggerFactory, ConfigFactoryInterface $configFactory, Client $client) {
+    $this->loggerFactory = $loggerFactory->get('openy_gc_auth_yusa');
     $this->configFactory = $configFactory;
     $this->client = $client;
   }
@@ -91,7 +102,7 @@ class YUSAClientService {
       }
     }
     catch (\Exception $e) {
-      $this->logger('openy_gc_auth_yusa')->error($e->getMessage());
+      $this->loggerFactory->error($e->getMessage());
     }
 
     return [];
