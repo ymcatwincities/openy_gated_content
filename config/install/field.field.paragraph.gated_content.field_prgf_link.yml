@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_prgf_link
+    - paragraphs.paragraphs_type.gated_content
+  module:
+    - datalayer
+    - link
+third_party_settings:
+  datalayer:
+    expose: 0
+    label: field_prgf_link
+id: paragraph.gated_content.field_prgf_link
+field_name: field_prgf_link
+entity_type: paragraph
+bundle: gated_content
+label: 'Headline Link'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  link_type: 17
+  title: 2
+field_type: link

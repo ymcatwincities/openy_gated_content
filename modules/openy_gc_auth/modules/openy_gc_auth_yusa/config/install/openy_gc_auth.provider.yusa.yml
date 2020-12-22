@@ -1,5 +1,5 @@
 enable_recaptcha: 0
-verification_url: 'https://api-azure-stage.ymca.net/v1/Association/MemberCheckIn'
+verification_url: 'https://api.ymca.net/v1/Association/MemberCheckIn'
 association_number: ''
 auth_login: ''
 auth_pass: ''

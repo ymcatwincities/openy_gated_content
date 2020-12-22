@@ -1,0 +1,16 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+name: virtual_y_paragraph_headline
+label: 'Virtual Y Paragraph Headline'
+effects:
+  e3e4696b-3963-4259-9042-48fac1fa7676:
+    uuid: e3e4696b-3963-4259-9042-48fac1fa7676
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 2400
+      height: 960
+      crop_type: focal_point

@@ -5,7 +5,7 @@ It works very similar to [custom](https://github.com/ymcatwincities/openy_gated_
 
 You can verify your members by asking them to enter `email` or `barcode id` or `membership id`.
 
-You can enable recapthca and email verification as additional checks for your user.
+You can enable recaptcha and email verification as additional checks for your user.
 
 You have to get next data for successful configuration of this auth plugin:
 
@@ -14,7 +14,7 @@ You have to get next data for successful configuration of this auth plugin:
 - api login;
 - api password;
 
-Y-USA authentication plugin give's you an ability to configure user segmentation logic from admin interface.
+Y-USA authentication plugin gives you an ability to configure user segmentation logic from admin interface.
 You have to connect titles of your user memberships from Y-USA database to the Virtual Y roles.
 For example:
 
@@ -29,5 +29,4 @@ FAMILY: Virtual Y Premium
 System will automatically set proper role (user segment) for entered user based on his membership package value from Y-USA database.
 Permissions mapping field is multiple. You can add as many pairs as you wish.
 
-
-
+For support in connecting your Virtual Y site to the Nationwide Membership database, please contact [ycloud@ymca.net](mailto:ycloud@ymca.net)

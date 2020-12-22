@@ -8,12 +8,22 @@
         </div>
         <div class="title">{{ category.attributes.name }}</div>
     </router-link>
+    <AddToFavorite
+      :id="category.attributes.drupal_internal__tid"
+      :type="'taxonomy_term'"
+      :bundle="'gc_category'"
+    ></AddToFavorite>
   </div>
 </template>
 
 <script>
+import AddToFavorite from '@/components/AddToFavorite.vue';
+
 export default {
   name: 'CategoryTeaser',
+  components: {
+    AddToFavorite,
+  },
   props: {
     category: {
       type: Object,
