@@ -71,6 +71,12 @@ source:
       id: 15
       name: 'Joy Guided Meditation'
       url: 'https://www.youtube.com/watch?v=UoWeDclxm7k'
+    - id: 16
+      name: 'Power Flow'
+      url: 'https://youtu.be/B2bW0DIs0hA'
+    - id: 17
+      name: 'Vimeo test video'
+      url: 'https://vimeo.com/397814121'
   ids:
     id:
       type: integer
