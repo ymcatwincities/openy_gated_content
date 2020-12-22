@@ -44,10 +44,11 @@
     }
 
     .preview {
-      position:        relative;
-      background-size: contain;
-      padding-bottom:  56.25%;
-      width:           100%;
+      position:          relative;
+      background-repeat: no-repeat;
+      background-size:   contain;
+      padding-bottom:    56.25%;
+      width:             100%;
 
       .play-button {
         position:         absolute;
