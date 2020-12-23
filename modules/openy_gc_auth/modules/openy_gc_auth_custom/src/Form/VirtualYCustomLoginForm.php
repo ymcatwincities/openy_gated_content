@@ -217,8 +217,11 @@ class VirtualYCustomLoginForm extends FormBase {
       ->getStorage('user')
       ->loadByProperties(['mail' => $mail]);
     $user = reset($users);
-    if (!$user->isActive()) {
-      if ($provider_config->get('enable_email_verification')) {
+
+    if ($provider_config->get('enable_email_verification')) {
+      if ($provider_config->get('require_email_verification') || !$user->isActive()) {
+        // Send email verification if user is blocked or if enabled required
+        // email verification.
         $this->sendEmailVerification($user, $provider_config, $mail);
         $form_state->setValue('verified', TRUE);
         $form_state->setRebuild(TRUE);
