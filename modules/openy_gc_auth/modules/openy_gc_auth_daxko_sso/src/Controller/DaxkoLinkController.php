@@ -3,6 +3,7 @@
 namespace Drupal\openy_gc_auth_daxko_sso\Controller;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Url;
 use Drupal\daxko_sso\DaxkoSSOClient;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Controller\ControllerBase;
@@ -13,7 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Drupal\openy_gc_auth\GCUserAuthorizer;
 
 /**
- * Class DaxkoLink Controller.
+ * Class with controller endpoints, needed for Daxko SSO plugin.
  */
 class DaxkoLinkController extends ControllerBase {
 
@@ -86,7 +87,13 @@ class DaxkoLinkController extends ControllerBase {
       $plugin_config = $this->configFactory->get('openy_gc_auth.provider.daxko_sso');
       $backlinkUrl = $request->getSchemeAndHttpHost() . $plugin_config->get('redirect_url');
 
-      $daxkoSSORedirectLink = 'https://operations.daxko.com/online/auth'
+      $operationsUrl = 'https://operations.daxko.com/online/auth';
+      // Check if we have train api.
+      if (strpos($config->get('base_uri'), 'train') !== FALSE) {
+        $operationsUrl = 'https://operations-train.daxko.com/online/auth';
+      }
+
+      $daxkoSSORedirectLink = $operationsUrl
         . '?response_type=code&scope=client:'
         . $config->get('client_id') . '+member:basic_info&state='
         . md5($request->getSchemeAndHttpHost())
@@ -133,22 +140,30 @@ class DaxkoLinkController extends ControllerBase {
     // Based on user token, get logged user data.
     $userData = $this->daxkoClient->getMyInfo($token);
 
-    $userDetails = $this->daxkoClient->getRequest('members/' . $userData->member_id);
-    // Check if this user is an active client.
-    if ($userDetails->active) {
-      // Create drupal user if it doesn't exist and login it.
-      $name = $userDetails->name->first_name . ' ' . $userDetails->name->last_name;
-      $email = $userDetails->emails[0]->email;
+    if ($userData) {
+      $userUnitData = $this->daxkoClient->getRequest('units/' . $userData->member_unit_id);
+      $userDetails = $this->daxkoClient->getRequest('members/' . $userData->member_id);
+      // Check if this user is an active client.
+      if ($userUnitData->status == 'Active') {
+        // Create drupal user if it doesn't exist and login it.
+        $name = $userDetails->name->first_name . ' ' . $userDetails->name->last_name . ' ' . $userDetails->member_id;
+        $email = "daxko-{$userData->member_id}@virtualy.openy.org";
 
-      // Authorize user (register, login, log, etc).
-      $this->gcUserAuthorizer->authorizeUser($name, $email);
+        // Authorize user (register, login, log, etc).
+        $this->gcUserAuthorizer->authorizeUser($name, $email);
 
-      return new RedirectResponse($this->configFactory->get('openy_gated_content.settings')->get('virtual_y_url'));
+        return new RedirectResponse($this->configFactory->get('openy_gated_content.settings')
+          ->get('virtual_y_url'));
+      }
     }
-    else {
-      // Redirect back to Virual Y login page.
-      return new RedirectResponse($this->configFactory->get('openy_gated_content.settings')->get('virtual_y_login_url'));
-    }
+
+    // Redirect back to Virual Y login page.
+    return new RedirectResponse(
+      URL::fromUserInput(
+        $this->configFactory->get('openy_gated_content.settings')->get('virtual_y_login_url'),
+        ['query' => ['error' => '1']]
+      )->toString()
+    );
   }
 
 }

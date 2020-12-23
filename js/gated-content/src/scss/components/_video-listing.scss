@@ -1,104 +1,50 @@
-.videos {
-  .videos__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    &.with-date-filter {
-      @media (max-width: 600px) {
-        flex-direction: column;
-
-        .videos__date-filter {
-          .date {
-            min-width: auto;
-          }
-        }
-      }
-    }
-
-    @media all and (max-width: 600px) {
-      align-items: flex-start;
-
-      .view-all {
-        font-size: 18px;
-      }
-    }
-
-    .title {
-      font-size: 24px;
-      line-height: 24px;
-      margin: 0;
-    }
+.with-date-filter {
+  @media (max-width: 600px) {
+    flex-direction: column;
 
     .videos__date-filter {
-      margin: 0;
-      font-size: 24px;
-      line-height: 24px;
-
-      @media all and (max-width: 600px) {
-        align-self: center;
-        padding-top: 20px;
-        display: flex;
-        justify-content: space-between;
-        width: 100%;
-      }
-
-      > button {
-        border: none;
-        background-color: white;
-        color: $gray;
-
-        &:focus {
-          outline: 0;
-        }
-
-        &.left {
-          padding-left: 0;
-        }
-
-        &.right {
-          padding-right: 0;
-        }
-      }
-
       .date {
-        padding: 0 20px;
-        min-width: 310px;
-        display: inline-block;
-        text-align: center;
+        min-width: auto;
       }
     }
-  }
-
-  .video-listing {
-    display: grid;
-    grid-column-gap: 30px;
-    grid-template-columns: 1fr;
-    grid-template-rows: repeat(10, auto);
-
-    > * {
-      margin-top: 30px;
-    }
-
-    @media all and (min-width: 600px) {
-      grid-column-gap: 30px;
-      grid-template-columns: repeat(2, 1fr);
-      grid-template-rows: repeat(10, auto);
-    }
-
-    @media all and (min-width: 1200px) {
-      grid-column-gap: 30px;
-      grid-template-columns: repeat(3, 1fr);
-      grid-template-rows: repeat(10, auto);
-    }
-  }
-
-  .empty-listing {
-    text-align: center;
-    padding: 30px;
   }
 }
 
-div.videos:last-of-type {
-  padding-bottom: 30px;
+.videos__date-filter {
+  margin:      0;
+  line-height: 24px;
+  font-size:   24px;
+
+  @media all and (max-width: 600px) {
+    display:         flex;
+    align-self:      center;
+    justify-content: space-between;
+    padding-top:     20px;
+    width:           100%;
+  }
+
+  > button {
+    border:           none;
+    background-color: white;
+    color:            $gray;
+
+    &:focus {
+      outline: 0;
+    }
+
+    &.left {
+      padding-left: 0;
+    }
+
+    &.right {
+      padding-right: 0;
+    }
+  }
+
+  .date {
+    display:    inline-block;
+    padding:    0 20px;
+    min-width:  310px;
+    text-align: center;
+  }
 }

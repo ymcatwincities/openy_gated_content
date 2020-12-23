@@ -61,15 +61,22 @@ class GCAuthYUSAUserLoginSubscriber implements EventSubscriberInterface {
             }
           }
           $user_memberships = $event->extraData['Memberships'];
+          $active_roles = [];
           $permissions_mapping = explode(';', $permissions_mapping);
           foreach ($permissions_mapping as $mapping) {
             $role = explode(':', $mapping);
             // Compare mapping roles with user membership.
             foreach ($user_memberships as $user_membership) {
               if (isset($role[0]) && $role[0] == $user_membership && isset($role[1])) {
-                $account->addRole($role[1]);
+                $active_roles[] = $role[1];
               }
             }
+          }
+          if (empty($active_roles)) {
+            $active_roles = ['virtual_y'];
+          }
+          foreach ($active_roles as $role) {
+            $account->addRole($role);
           }
           $account->save();
         }

@@ -1,127 +1,100 @@
 #gated-content .gated-content-video-page {
   padding-bottom: 30px;
 
-  .video {
-    padding-top: 0;
-    padding-bottom: 0;
-
-    @media all and (max-width: 768px) {
-      padding: 0;
-      width: 100%;
-    }
-
-    .youtube {
-      padding: 56.25% 0 0 0;
-      position: relative;
-
-      > iframe {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        border-width: 0;
-      }
-    }
-  }
-
   .video-wrapper {
     background-color: $black;
+
+    .video {
+
+      @media all and (max-width: 768px) {
+        width: 100%;
+      }
+
+      .youtube, .youtube_playlist {
+        position: relative;
+        padding:  56.25% 0 0 0;
+
+        > iframe {
+          position:     absolute;
+          top:          0;
+          left:         0;
+          border-width: 0;
+          width:        100%;
+          height:       100%;
+        }
+      }
+    }
   }
 
   .video-footer-wrapper {
-    background-color: $mine-shaft;
-  }
 
-  .video-footer {
-    display: grid;
-    grid-gap: 10px;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto;
-    color: $gallery;
+    .video-footer {
+      display:            grid;
+      grid-template-rows: repeat(10, auto);
 
-    @media all and (min-width: 600px) {
-      grid-template-columns: 3fr 1.2fr;
-      grid-template-rows: auto;
-      grid-gap: 30px;
-    }
+      @include median(grid-template-columns, 65% 35%, 65% 35%, 1fr);
 
-    .video-footer__title {
-      font-size: 24px;
-      line-height: 20px;
-      padding-bottom: 10px;
+      > div:nth-child(1), > div:nth-child(2), > div:nth-child(4) {
+        grid-column: 1;
 
-      @media all and (min-width: 600px) {
-        padding-bottom: 40px;
-      }
-    }
-
-    .video-footer__description {
-      font-size: 16px;
-      line-height: 1.5em;
-    }
-
-    .add-to-calendar {
-      margin-top: 1rem;
-    }
-
-    .video-footer__block {
-      padding: 4px 0;
-      font-size: 14px;
-      line-height: 16px;
-
-      &:first-child {
-        padding-top: 0;
+        @include median(padding-right, 40px, 20px, initial);
       }
 
-      .fa {
-        font-size: 20px;
-        margin-right: 10px;
+      .video-footer__fav {
+        display:     flex;
+        align-items: center;
       }
-    }
 
-    .video-footer__category {
-      span+span::before {
-        content: ', ';
-        display: inline;
+      > div:nth-child(3) {
+        @include median(grid-column, 2, 2, 1);
+        @include median(grid-row-start, 1, 1, initial);
+        @include median(grid-row-end, -1, -1, initial);
+        @include median(padding-bottom, null, null, 20px);
+
+        .svg-container {
+          font-size: 18px;
+
+          @include median(margin-right, 14px, 14px, 10px);
+        }
       }
-    }
 
-    .video-footer__equipment {
-      padding: 5px 0;
 
-      font-size: 12px;
-      line-height: 1.5em;
+      .video-footer__block {
+        display:     flex;
+        align-items: center;
 
-      ul {
-        padding-top: 5px;
+        @include median(padding, 10px 0, 8px 0);
+
+        &:first-child {
+          padding-top: 0;
+        }
+      }
+
+      .video-footer__category {
+        span:not(:first-child) + span::before {
+          display: inline;
+          content: ', ';
+        }
+
+        a {
+          color: $white;
+
+          &:hover {
+            color: darken(white, 20);
+          }
+        }
+      }
+
+      .video-footer__equipment {
+        margin-bottom:   0;
+        padding-top:     5px;
+        font-size:       12px;
         list-style-type: none;
 
         li:before {
           content: '+';
         }
       }
-    }
-  }
-
-  .video-category-wrapper {
-    background-color: $dark-blue;
-
-    span+span::before {
-      content: ', ';
-      display: inline;
-    }
-  }
-
-  .video-category {
-    padding-top: 20px;
-    padding-bottom: 20px;
-    color: $white;
-    font-size: 14px;
-    line-height: 14px;
-
-    a {
-      color: $white;
     }
   }
 }
@@ -136,8 +109,8 @@
       }
 
       .videos {
-        padding-left: 0;
         padding-right: 0;
+        padding-left:  0;
       }
     }
   }
