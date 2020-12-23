@@ -58,6 +58,9 @@ class Custom extends GCIdentityProviderPluginBase {
       '#description' => $this->t('Set to TRUE if you want enable one-time login link sending to user email for verification.'),
       '#type' => 'checkbox',
       '#default_value' => $config['enable_email_verification'],
+      '#attributes' => [
+        'name' => 'enable_email_verification',
+      ],
     ];
 
     $form['verification']['require_email_verification'] = [
@@ -65,6 +68,11 @@ class Custom extends GCIdentityProviderPluginBase {
       '#description' => $this->t('Set to TRUE if you want to use email verification on each user login. If FALSE - email verification will be used only on first login for account activation.'),
       '#type' => 'checkbox',
       '#default_value' => $config['require_email_verification'],
+      '#states' => [
+        'visible' => [
+          ':input[name="enable_email_verification"]' => ['checked' => TRUE],
+        ],
+      ],
     ];
 
     $form['verification']['email_verification_link_life_time'] = [
