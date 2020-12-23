@@ -1,11 +1,14 @@
 services:
+  openy_gc_auth.manager:
+    class: Drupal\openy_gc_auth\GCAuthManager
+
   plugin.manager.gc_identity_provider:
     class: Drupal\openy_gc_auth\GCIdentityProviderManager
     parent: default_plugin_manager
 
   openy_gc_auth.check_for_redirect:
     class: Drupal\openy_gc_auth\EventSubscriber\VirtualYLoginRedirect
-    arguments: ['@current_route_match', '@current_user', '@config.factory', '@messenger']
+    arguments: ['@current_route_match', '@current_user', '@config.factory', '@messenger', '@openy_gc_auth.manager']
     tags:
       - { name: event_subscriber }
 

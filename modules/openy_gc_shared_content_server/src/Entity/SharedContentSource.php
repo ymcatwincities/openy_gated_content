@@ -224,7 +224,20 @@ class SharedContentSource extends ContentEntityBase {
         'weight' => 5,
       ])
       ->setDisplayConfigurable('form', TRUE)
-      ->setDefaultValue(FALSE);
+      ->setDefaultValue(0);
+
+    $fields['sync_enabled'] = BaseFieldDefinition::create('boolean')
+      ->setLabel(t('Sync Enabled'))
+      ->setDescription(t('Indicating whether the Shared content source enabled for sync.'))
+      ->setDisplayOptions('form', [
+        'type' => 'boolean_checkbox',
+        'settings' => [
+          'display_label' => TRUE,
+        ],
+        'weight' => 5,
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDefaultValue(0);
 
     return $fields;
   }

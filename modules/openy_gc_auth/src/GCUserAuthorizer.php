@@ -7,7 +7,7 @@ use Drupal\openy_gc_auth\Event\GCUserLoginEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * GCUserAuthorizer class.
+ * User Authorizer class.
  */
 class GCUserAuthorizer {
 
@@ -43,13 +43,14 @@ class GCUserAuthorizer {
   /**
    * {@inheritdoc}
    */
-  public function authorizeUser($name, $email) {
+  public function authorizeUser($name, $email, array $extra_data = []) {
+
     if (empty($name) || empty($email)) {
       return;
     }
+
     // Create drupal user if it doesn't exist and login it.
     $account = user_load_by_mail($email);
-
     if (!$account) {
       $user = $this->userStorage->create();
       $user->setPassword(user_password());
@@ -63,12 +64,50 @@ class GCUserAuthorizer {
         $account = user_load_by_mail($email);
       }
     }
+    else {
+      // Activate user if it's not.
+      if (!$account->isActive()) {
+        $account->activate();
+        $account->setPassword(user_password());
+        $account->save();
+      }
+    }
     // Instantiate GC login user event.
-    $event = new GCUserLoginEvent($account);
+    $event = new GCUserLoginEvent($account, $extra_data);
     // Dispatch the event.
     $this->eventDispatcher->dispatch(GCUserLoginEvent::EVENT_NAME, $event);
 
     user_login_finalize($account);
+
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function createUser($name, $email, $active) {
+    if (empty($name) || empty($email)) {
+      return;
+    }
+    // Create drupal user if it doesn't exist and login it.
+    $account = user_load_by_mail($email);
+
+    if (!$account) {
+      $user = $this->userStorage->create();
+      $user->setPassword(user_password());
+      $user->enforceIsNew();
+      $user->setEmail($email);
+      $user->setUsername($name);
+      $user->addRole(self::VIRTUAL_Y_DEFAULT_ROLE);
+      if ($active) {
+        $user->activate();
+      }
+      $result = $account = $user->save();
+      if ($result) {
+        $account = user_load_by_mail($email);
+      }
+    }
+
+    return $account;
 
   }
 

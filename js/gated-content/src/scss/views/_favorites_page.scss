@@ -1,0 +1,10 @@
+.modal-body {
+  .filter {
+    input:disabled {
+      opacity: 0.5;
+      & + label {
+        opacity: 0.5;
+      }
+    }
+  }
+}

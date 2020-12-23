@@ -22,10 +22,43 @@ openy_gated_content.settings:
   requirements:
     _permission: 'administer gated content configuration'
 
-openy_gated_content.categories:
-  path: '/api/video-categories-list/{type}'
+openy_gated_content.categories.list:
+  path: '/api/categories-list'
   defaults:
     _controller: '\Drupal\openy_gated_content\Controller\CategoriesController::list'
-    _title: 'Virtual Y categories'
+    _title: 'Virtual Y all categories'
   requirements:
     _permission: 'access content'
+    _role: 'authenticated'
+  options:
+    no_cache: TRUE
+
+openy_gated_content.favorites.list:
+  path: '/api/favorites'
+  defaults:
+    _controller: '\Drupal\openy_gated_content\Controller\FavoritesController::list'
+    _title: 'User favorites'
+  methods: ['GET']
+  requirements:
+    _permission: 'access content'
+    _role: 'authenticated'
+
+openy_gated_content.favorites.add:
+  path: '/api/favorites/add'
+  defaults:
+    _controller: '\Drupal\openy_gated_content\Controller\FavoritesController::add'
+    _title: 'User favorites'
+  methods: ['POST']
+  requirements:
+    _permission: 'access content'
+    _role: 'authenticated'
+
+openy_gated_content.favorites.delete:
+  path: '/api/favorites/delete'
+  defaults:
+    _controller: '\Drupal\openy_gated_content\Controller\FavoritesController::delete'
+    _title: 'User favorites'
+  methods: ['DELETE']
+  requirements:
+    _permission: 'access content'
+    _role: 'authenticated'

@@ -1,5 +1,6 @@
 enable_recaptcha: 1
 enable_email_verification: 1
+require_email_verification: 0
 email_verification_link_life_time: '14400'
 email_verification_text: 'Hello! <br> You’re just one step away from accessing your Virtual YMCA. Please open the link below to begin enjoying YMCA content made exclusively for members like you.'
 verification_message: 'We have sent a verification link to the email address you provided. Please open this link and activate your account. If you do not receive an email, please try again or contact us at XXX-XXX-XXXX to ensure we have the correct email on file for your membership.'

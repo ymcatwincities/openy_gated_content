@@ -106,7 +106,9 @@ class Personify extends GCIdentityProviderPluginBase {
    * {@inheritdoc}
    */
   public function defaultConfiguration():array {
-    return [];
+    return [
+      'login_mode' => 'present_login_button',
+    ];
   }
 
   /**
@@ -153,6 +155,17 @@ class Personify extends GCIdentityProviderPluginBase {
       '#required' => FALSE,
     ];
 
+    $form['login_mode'] = [
+      '#title' => $this->t('Login mode'),
+      '#type' => 'radios',
+      '#default_value' => $config['login_mode'],
+      '#required' => TRUE,
+      '#options' => [
+        'present_login_button' => $this->t('Present login button'),
+        'redirect_immediately' => $this->t('Redirect immediately'),
+      ],
+    ];
+
     return $form;
   }
 
@@ -162,6 +175,7 @@ class Personify extends GCIdentityProviderPluginBase {
   public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
     if (!$form_state->getErrors()) {
       $this->configuration['error_accompanying_message'] = $form_state->getValue('error_accompanying_message');
+      $this->configuration['login_mode'] = $form_state->getValue('login_mode');
       parent::submitConfigurationForm($form, $form_state);
     }
   }
@@ -211,6 +225,9 @@ class Personify extends GCIdentityProviderPluginBase {
   public function getLoginForm() {
     if ($this->currentRequest->query->has('personify-error')) {
       return $this->formBuilder->getForm('Drupal\openy_gc_auth_personify\Form\VirtualYPersonifyTryAgainForm');
+    }
+    elseif ($this->configFactory->get('openy_gc_auth.provider.personify')->get('login_mode') === 'present_login_button') {
+      return $this->formBuilder->getForm('Drupal\openy_gc_auth_personify\Form\VirtualYPersonifyLoginForm');
     }
     return new RedirectResponse(Url::fromRoute('openy_gc_auth_personify.personify_check')->toString());
   }

@@ -4,14 +4,16 @@ namespace Drupal\openy_gc_log;
 
 use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Entity\EntityTypeManager;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\File\FileSystem;
 use Drupal\Core\Logger\LoggerChannel;
 use Drupal\Core\Site\Settings;
 use Drupal\csv_serialization\Encoder\CsvEncoder;
 use Drupal\file\Entity\File;
+use Drupal\openy_gc_log\Entity\LogEntityInterface;
 
 /**
- * LogArchiver service.
+ * Log Archiver service.
  */
 class LogArchiver {
 
@@ -84,6 +86,13 @@ class LogArchiver {
   protected $settings;
 
   /**
+   * The module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * LogArchiver constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManager $entityTypeManager
@@ -96,44 +105,69 @@ class LogArchiver {
    *   FileSystem.
    * @param \Drupal\Core\Site\Settings $settings
    *   Settings.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler.
    */
   public function __construct(
     EntityTypeManager $entityTypeManager,
     LoggerChannel $logger,
     ConfigFactory $configFactory,
     FileSystem $fileSystem,
-    Settings $settings
+    Settings $settings,
+    ModuleHandlerInterface $module_handler
   ) {
     $this->entityTypeManager = $entityTypeManager;
     $this->logger = $logger;
     $this->config = $configFactory;
     $this->fileSystem = $fileSystem;
     $this->settings = $settings;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
-   * Archiving loop, should be run from cron.
+   * Archiving entities functionality.
+   *
+   * @param \DateTime|null $start
+   *   (optional) DateTime value for Start time, defaults to the month start.
+   * @param \DateTime|null $end
+   *   (optional) DateTime value for End time, defaults to the month end.
+   * @param bool $remove_entities
+   *   (optional) Should an entities be removed after creating an export file.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function archive() {
-    $tz = $this->config->get('system.date')->get('timezone')['default'];
-    $end_of_month = (new \DateTime(
-      date('Y-m-d', strtotime('last day of last month')),
-      new \DateTimeZone($tz)
-    ))->setTime(23, 59, 59);
+  public function archive($start = NULL, $end = NULL, $remove_entities = TRUE) {
+    $filename = '';
+    if (!isset($end)) {
+      $tz = $this->config->get('system.date')->get('timezone')['default'];
+      $end = (new \DateTime(
+        date('Y-m-d', strtotime('last day of last month')),
+        new \DateTimeZone($tz)
+      ))->setTime(23, 59, 59);
+    }
+    else {
+      $filename = $end->format('Y_m_d_H_i_s');
+    }
+    $end_time = $end->getTimeStamp();
 
-    $end_time = $end_of_month->getTimeStamp();
+    if (!isset($start)) {
+      $start = clone $end;
+      $start->modify('first day of this month 00:00');
+    }
+    else {
+      $filename = 'virtual-y-logs-' . $start->format('Y_m_d') . '-' . $filename . '.csv.gz';
+    }
+    $start_time = $start->getTimestamp();
 
-    $start_of_month = clone $end_of_month;
-    $start_of_month->modify('first day of this month 00:00');
-
-    $start_time = $start_of_month->getTimestamp();
-
-    $log_ids = $this->entityTypeManager->getStorage('log_entity')
+    $query = $this->entityTypeManager->getStorage('log_entity')
       ->getQuery()
       ->condition('created', [$start_time, $end_time], 'BETWEEN')
-      ->sort('created', 'ASC')
-      ->range(0, self::WORKER_CHUNK_SIZE)
-      ->execute();
+      ->sort('created', 'ASC');
+    if (!isset($start) && !isset($end)) {
+      $query->range(0, self::WORKER_CHUNK_SIZE);
+    }
+    $log_ids = $query->execute();
 
     if (empty($log_ids)) {
       return;
@@ -141,12 +175,15 @@ class LogArchiver {
 
     $this->setLogIds($log_ids)
       ->loadLogEntities()
-      ->prepareLogsForExport()
+      ->prepareLogsForExport($filename)
       ->loadFileEntities()
       ->writeLogsToFiles()
       ->saveFileEntities()
-      ->reportToDbLog()
-      ->removeLogsFromDb();
+      ->reportToDbLog();
+
+    if ($remove_entities) {
+      $this->removeLogsFromDb();
+    }
   }
 
   /**
@@ -209,21 +246,60 @@ class LogArchiver {
 
   /**
    * Prepare logs for export.
+   *
+   * @param string $logFileName
+   *   Filename to put all the records into, default -- to create from record's
+   *   year and month.
    */
-  protected function prepareLogsForExport() {
+  protected function prepareLogsForExport($logFileName = '') {
     foreach ($this->logEntities as $log) {
-      $fileName = $this->makeFilename($log);
+      $fileName = $logFileName ?: $this->makeFilename($log);
       if (!isset($this->preparedLogs[$fileName])) {
-        $this->preparedLogs[$fileName] = [];
+        $this->preparedLogs[$fileName] = [
+          'Y' => date('Y', $log->get('created')->value),
+        ];
       }
 
-      $this->preparedLogs[$fileName][] = [
-        'created' => $log->get('created')->value,
-        'event_type' => $log->get('event_type')->value,
-        'entity_type' => $log->get('entity_type')->value,
-        'entity_bundle' => $log->get('entity_bundle')->value,
-        'entity_id' => $log->get('entity_id')->value,
+      $event_type = $log->get('event_type')->value;
+      $entity_type = $log->get('entity_type')->value;
+      $entity_bundle = $log->get('entity_bundle')->value;
+      $entity_id = $log->get('entity_id')->value;
+      $export_row = [
+        'created' => date('m/d/Y - H:i:s', $log->get('created')->value),
+        'user' => $log->get('uid')->target_id ? $log->get('uid')->entity->getEmail() : '',
+        'event_type' => $event_type,
+        'entity_type' => $entity_type,
+        'entity_bundle' => $entity_bundle,
+        'entity_id' => $entity_id,
+        'entity_title' => '',
+        'entity_instructor_name' => '',
+        'entity_created' => '',
       ];
+
+      if (in_array($event_type, [
+        LogEntityInterface::EVENT_TYPE_ENTITY_VIEW,
+        LogEntityInterface::EVENT_TYPE_VIDEO_PLAYBACK_STARTED,
+        LogEntityInterface::EVENT_TYPE_VIDEO_PLAYBACK_ENDED,
+      ])) {
+        $entity_type_id = $entity_type === 'node' ? 'node' : 'eventinstance';
+        $entity = $this->entityTypeManager->getStorage($entity_type_id)
+          ->load($entity_id);
+        $export_row['entity_title'] = $entity_type === 'node' ?
+          $entity->label() :
+          ($entity->get('field_ls_title')->value ? $entity->get('field_ls_title')->value : $entity->get('title')->value);
+        $export_row['entity_instructor_name'] = $entity_type === 'node' ?
+          ($entity_bundle === 'gc_video' ? $entity->get('field_gc_video_instructor')->value : '') :
+          ($entity->get('field_ls_host_name')->value ? $entity->get('field_ls_host_name')->value : $entity->get('host_name')->value);
+        $export_row['entity_created'] = date('m/d/Y - H:i:s', $entity->getCreatedTime());
+      }
+
+      $this->moduleHandler->alter(
+        'openy_gc_log_export_row',
+        $export_row,
+        $log
+      );
+
+      $this->preparedLogs[$fileName][] = $export_row;
     }
 
     return $this;
@@ -233,7 +309,7 @@ class LogArchiver {
    * Create new file entity.
    */
   protected function createNewFileEntity($fileName) {
-    $fileYear = date('Y', (int) $this->preparedLogs[$fileName][0]['created']);
+    $fileYear = $this->preparedLogs[$fileName]['Y'];
     $yearDir = $this->prepareYearDirectory($fileYear);
     $file = File::create();
     $file->setFilename($fileName);
@@ -270,6 +346,7 @@ class LogArchiver {
       if (!array_key_exists($fileName, $this->fileEntities)) {
         $this->fileEntities[$fileName] = $this->createNewFileEntity($fileName);
       }
+      unset($this->preparedLogs[$fileName]['Y']);
     }
 
     return $this;
@@ -283,7 +360,15 @@ class LogArchiver {
       $fileEntity = $this->fileEntities[$fileName];
 
       $csvEncoder = new CsvEncoder();
-      $csvEncoder->setOutputHeader($fileEntity->isNew());
+      $csvEncoder->setSettings([
+        'delimiter' => ",",
+        'enclosure' => '"',
+        'escape_char' => "\\",
+        'encoding' => 'utf8',
+        'strip_tags' => TRUE,
+        'trim' => TRUE,
+        'output_header' => $fileEntity->isNew(),
+      ]);
 
       $fileContents = $csvEncoder->encode($logs, 'csv');
 

@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class DownloadsIncrementController.
+ * Class DownloadsIncrement Controller.
  *
  * @package Drupal\openy_gc_shared_content_server\Controller
  */

@@ -9,4 +9,15 @@
   margin-left: auto;
   margin-right: auto;
   margin-top: 20px;
+  outline: none !important;
+  &:hover {
+    color: $white;
+  }
+  &:visited {
+    color: $white;
+  }
+  &:focus {
+    color: $white;
+  }
 }
+

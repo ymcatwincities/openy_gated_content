@@ -11,6 +11,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\openy_gated_content\GCUserService;
 
 /**
  * Defines the base plugin for GCIdentityProvider classes.
@@ -46,9 +47,16 @@ abstract class GCIdentityProviderPluginBase extends PluginBase implements GCIden
   protected $formBuilder;
 
   /**
+   * The Gated Content User Service.
+   *
+   * @var \Drupal\openy_gated_content\GCUserService
+   */
+  protected $gcUserService;
+
+  /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config, EntityTypeManagerInterface $entity_type_manager, FormBuilderInterface $form_builder) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config, EntityTypeManagerInterface $entity_type_manager, FormBuilderInterface $form_builder, GCUserService $gc_user_service = NULL) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->configFactory = $config;
     // We use pre-saved configuration here.
@@ -56,6 +64,7 @@ abstract class GCIdentityProviderPluginBase extends PluginBase implements GCIden
     $this->setConfiguration($configuration);
     $this->entityTypeManager = $entity_type_manager;
     $this->formBuilder = $form_builder;
+    $this->gcUserService = $gc_user_service;
   }
 
   /**
@@ -68,7 +77,8 @@ abstract class GCIdentityProviderPluginBase extends PluginBase implements GCIden
       $plugin_definition,
       $container->get('config.factory'),
       $container->get('entity_type.manager'),
-      $container->get('form_builder')
+      $container->get('form_builder'),
+      $container->get('openy_gated_content.user_service')
     );
   }
 

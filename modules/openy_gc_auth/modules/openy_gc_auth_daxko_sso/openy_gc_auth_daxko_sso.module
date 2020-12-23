@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * @file
+ * Main file for openy_gc_daxko_sso module.
+ */
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+
+/**
+ * Implements hook_entity_view().
+ */
+function openy_gc_auth_daxko_sso_entity_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  $bundle = $entity->bundle();
+  if ($bundle === 'gated_content_login') {
+    $build['#cache']['max-age'] = 0;
+  }
+}

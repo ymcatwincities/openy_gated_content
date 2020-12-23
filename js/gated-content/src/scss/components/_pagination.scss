@@ -1,0 +1,14 @@
+.pagination {
+  .page-item {
+    .page-link {
+      border: none;
+    }
+
+    &.active {
+      .page-link {
+        margin-left: 10px;
+        margin-right: 10px;
+      }
+    }
+  }
+}
