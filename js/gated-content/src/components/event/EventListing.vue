@@ -22,7 +22,7 @@
     </div>
     <template v-else-if="listingIsNotEmpty">
       <div v-if="error">Error loading</div>
-      <div v-else class="four-columns">
+      <div v-else :class="layoutClass">
         <EventTeaser
           v-for="video in listing"
           :key="video.id"
@@ -40,10 +40,11 @@ import EventTeaser from '@/components/event/EventTeaser.vue';
 import Spinner from '@/components/Spinner.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
 import { FavoritesMixin } from '@/mixins/FavoritesMixin';
+import { ListingMixin } from '@/mixins/ListingMixin';
 
 export default {
   name: 'EventListing',
-  mixins: [JsonApiCombineMixin, FavoritesMixin],
+  mixins: [JsonApiCombineMixin, FavoritesMixin, ListingMixin],
   components: {
     EventTeaser,
     Spinner,
