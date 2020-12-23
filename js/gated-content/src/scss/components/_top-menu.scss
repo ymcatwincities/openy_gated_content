@@ -72,7 +72,7 @@
       outline:          none;
       border:           none;
       background-color: transparent;
-      padding-right:    10px;
+      padding:          0;
       text-align:       right;
 
       @include median(display, none, flex);
