@@ -5,66 +5,79 @@
     </div>
     <div v-else-if="error">Error loading</div>
     <template v-else>
-      <div class="video-wrapper">
-        <div class="video gated-container">
+      <div class="video-wrapper bg-white">
+        <div class="video gated-containerV2 px--20-10 pt-40-20">
           <MediaPlayer
             :media="media"
             @playerEvent="logPlaybackEvent($event)"
           />
         </div>
       </div>
-      <div class="video-footer-wrapper">
-        <div class="video-footer gated-container">
-          <div>
-            <div class="video-footer__title">{{ video.attributes.title }}</div>
-            <div
-              v-if="description"
-              class="video-footer__description mb-3"
-              v-html="descriptionProcessed"
-            ></div>
-            <AddToCalendar :event="event" class="mt-3"></AddToCalendar>
-          </div>
-          <div>
-            <div class="video-footer__block">
-              <i class="fa fa-clock-o fa-clock" aria-hidden="true"></i>
-              {{ video.attributes.date.value | month }}
-              {{ video.attributes.date.value | day }},
-              {{ video.attributes.date | schedule }}
+      <div class="video-footer-wrapper bg-white">
+        <div class="video-footer gated-containerV2 px--20-10 py-40-20 text-black">
+          <div class="pb-20-10 cachet-book-32-28">{{ video.attributes.title }}</div>
+          <div class="video-footer__fav pb-40-20">
+            <AddToFavorite
+              :id="video.attributes.drupal_internal__id"
+              :type="'eventinstance'"
+              :bundle="'live_stream'"
+              class="rounded-border border-concrete"
+            ></AddToFavorite>
+            <AddToCalendar :event="event"></AddToCalendar>
+            <div class="timer" :class="{live: isOnAir}">
+              <template v-if="isOnAir">
+                LIVE!
+              </template>
+              <template v-else>
+                Starts in {{ startsIn }}
+              </template>
             </div>
-            <div class="video-footer__block"
-              v-if="level"
-            >
-              Level: {{ level | capitalize }}
+          </div>
+          <div class="verdana-14-12 text-thunder">
+            <div class="video-footer__block">
+              <SvgIcon icon="date-icon" class="fill-gray" :growByHeight=false></SvgIcon>
+              {{ date }}
+            </div>
+            <div class="video-footer__block">
+              <SvgIcon icon="clock-regular" class="fill-gray" :growByHeight=false></SvgIcon>
+              {{ time }} ({{ duration }})
             </div>
             <div class="video-footer__block" v-if="instructor">
-              Instructor: {{ instructor }}
+              <SvgIcon icon="instructor-icon" class="fill-gray" grow-by-height="false"></SvgIcon>
+              {{ instructor }}
             </div>
             <div class="video-footer__block video-footer__category"
                  v-if="category && category.length > 0">
-              Category:
+              <SvgIcon icon="categories" class="fill-gray" :growByHeight=false></SvgIcon>
               <span v-for="(category_data, index) in category"
                     :key="index">{{ category_data.name }}</span>
             </div>
             <div
               v-if="video.attributes.equipment.length > 0"
-              class="video-footer__equipment">
-              <i class="fa fa-cubes"></i>
+              class="video-footer__block">
+              <SvgIcon icon="cubes-solid" class="fill-gray" :growByHeight=false></SvgIcon>
               Equipment:
-              <ul>
-                <li v-for="equip in video.attributes.equipment"
-                    :key="equip.drupal_internal__tid">
-                  {{ equip.name }}
-                </li>
-              </ul>
             </div>
+            <ul class="video-footer__equipment">
+              <li v-for="equip in video.attributes.equipment"
+                  :key="equip.drupal_internal__tid">
+                {{ equip.name }}
+              </li>
+            </ul>
           </div>
+          <div
+            v-if="description"
+            class="verdana-16-14"
+            v-html="descriptionProcessed"
+          ></div>
+
         </div>
       </div>
       <EventListing
         :title="config.components.live_stream.up_next_title"
         :excluded-video-id="video.id"
         :viewAll="true"
-        :limit="6"
+        :limit="8"
         :msg="'Live streams not found.'"
       />
     </template>
@@ -73,17 +86,21 @@
 
 <script>
 import client from '@/client';
+import AddToFavorite from '@/components/AddToFavorite.vue';
 import Spinner from '@/components/Spinner.vue';
 import MediaPlayer from '@/components/MediaPlayer.vue';
 import EventListing from '@/components/event/EventListing.vue';
 import AddToCalendar from '@/components/event/AddToCalendar.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
 import { EventMixin } from '@/mixins/EventMixin';
+import SvgIcon from '@/components/SvgIcon.vue';
 
 export default {
   name: 'LiveStreamPage',
   mixins: [JsonApiCombineMixin, EventMixin],
   components: {
+    SvgIcon,
+    AddToFavorite,
     MediaPlayer,
     EventListing,
     AddToCalendar,
@@ -128,7 +145,7 @@ export default {
         start: this.formatDate(this.video.attributes.date.value),
         duration: [this.getDuration(this.video.attributes.date), 'hour'],
         title: this.video.attributes.title,
-        description: `${this.descriptionProcessed}<br> Live stream page: ${this.pageUrl}`,
+        description: `Live stream page: ${this.pageUrl}`,
         busy: true,
         guests: [],
       };

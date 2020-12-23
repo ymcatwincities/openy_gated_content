@@ -20,4 +20,5 @@ Please check these boxes to confirm this PR covers the following cases:
   - [ ] Tested against Lily
   - [ ] Tested against Rose
   - [ ] This change does not contain front-end fixes.
-- [ ] I have flagged this PR "Needs Review" or pinged the VY devs/QA team in Slack
+- [ ] I have flagged this PR "Needs Review" or pinged the VY devs/QA
+  team in Slack

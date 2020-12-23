@@ -87,7 +87,13 @@ class DaxkoLinkController extends ControllerBase {
       $plugin_config = $this->configFactory->get('openy_gc_auth.provider.daxko_sso');
       $backlinkUrl = $request->getSchemeAndHttpHost() . $plugin_config->get('redirect_url');
 
-      $daxkoSSORedirectLink = 'https://operations.daxko.com/online/auth'
+      $operationsUrl = 'https://operations.daxko.com/online/auth';
+      // Check if we have train api.
+      if (strpos($config->get('base_uri'), 'train') !== FALSE) {
+        $operationsUrl = 'https://operations-train.daxko.com/online/auth';
+      }
+
+      $daxkoSSORedirectLink = $operationsUrl
         . '?response_type=code&scope=client:'
         . $config->get('client_id') . '+member:basic_info&state='
         . md5($request->getSchemeAndHttpHost())

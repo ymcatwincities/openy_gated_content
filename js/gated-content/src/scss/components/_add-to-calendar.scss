@@ -1,4 +1,17 @@
 .add-to-calendar {
+  button {
+    margin-right:     10px;
+    outline:          none;
+    border:           2px solid $concrete;
+    border-radius:    50%;
+    background-color: $white;
+    padding:          14px;
+    width:            50px;
+    height:           50px;
+    line-height:      1px;
+    font-size:        18px;
+  }
+
   .dropdown-menu {
     .btn-link {
       display: block;

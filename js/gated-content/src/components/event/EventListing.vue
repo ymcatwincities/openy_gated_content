@@ -1,9 +1,9 @@
 <template>
-  <div class="videos gated-container">
-    <div class="videos__header" :class="{'with-date-filter': withDateFilter}">
-      <h2 class="title">{{ title }}</h2>
+  <div class="gated-containerV2 my-40-20 px--20-10">
+    <div class="listing-header" :class="{'with-date-filter': withDateFilter}">
+      <h2 class="title text-gray">{{ title }}</h2>
       <h2 class="videos__date-filter"
-        v-if="withDateFilter"
+          v-if="withDateFilter"
       >
         <button v-on:click.stop="backOneDay" class="left" role="button"
                 :style="[hidePrevDateButton ? {'visibility':'hidden'}:'']"
@@ -12,21 +12,22 @@
         <button v-on:click.stop="forwardOneDay" class="right"
                 role="button" aria-label="next date"><i class="fa fa-angle-right"></i></button>
       </h2>
-      <router-link :to="{ name: viewAllRoute }" v-if="viewAll" class="view-all">
-        View All
+      <router-link :to="{ name: 'Schedule' }" v-if="viewAll" class="view-all">
+        More
       </router-link>
+      <slot name="filterButton"></slot>
     </div>
     <div v-if="loading" class="text-center">
       <Spinner></Spinner>
     </div>
     <template v-else-if="listingIsNotEmpty">
       <div v-if="error">Error loading</div>
-      <div v-else class="video-listing live-stream-listing">
-          <EventTeaser
-            v-for="video in listing"
-            :key="video.id"
-            :video="video"
-          />
+      <div v-else :class="layoutClass">
+        <EventTeaser
+          v-for="video in listing"
+          :key="video.id"
+          :video="video"
+        />
       </div>
     </template>
     <div v-else class="empty-listing">{{ msg }}</div>
@@ -38,10 +39,12 @@ import client from '@/client';
 import EventTeaser from '@/components/event/EventTeaser.vue';
 import Spinner from '@/components/Spinner.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
+import { FavoritesMixin } from '@/mixins/FavoritesMixin';
+import { ListingMixin } from '@/mixins/ListingMixin';
 
 export default {
   name: 'EventListing',
-  mixins: [JsonApiCombineMixin],
+  mixins: [JsonApiCombineMixin, FavoritesMixin, ListingMixin],
   components: {
     EventTeaser,
     Spinner,
@@ -70,6 +73,16 @@ export default {
     featured: {
       type: Boolean,
       default: false,
+    },
+    category: {
+      type: String,
+      default: '',
+    },
+    sort: {
+      type: Object,
+      default() {
+        return { path: 'date.value', direction: 'ASC' };
+      },
     },
     limit: {
       type: Number,
@@ -102,8 +115,12 @@ export default {
     $route: 'load',
     excludedVideoId: 'load',
     date: 'load',
+    eventType: 'load',
+    sort: 'load',
   },
   async mounted() {
+    // By default emit that listing not empty to the parent component.
+    this.$emit('listing-not-empty', true);
     this.featuredLocal = this.featured;
     await this.load();
   },
@@ -125,16 +142,6 @@ export default {
       };
 
       return isToday(this.date);
-    },
-    viewAllRoute() {
-      switch (this.eventType) {
-        case 'live_stream':
-          return 'LiveStreamListing';
-        case 'virtual_meeting':
-          return 'VirtualMeetingListing';
-        default:
-          return 'LiveStreamListing';
-      }
     },
   },
   methods: {
@@ -196,6 +203,20 @@ export default {
         };
       }
 
+      if (this.favorites) {
+        if (this.isFavoritesTypeEmpty('eventinstance', this.eventType)) {
+          this.loading = false;
+          return;
+        }
+        params.filter.includeFavorites = {
+          condition: {
+            path: 'drupal_internal__id',
+            operator: 'IN',
+            value: this.getFavoritesTypeIds('eventinstance', this.eventType),
+          },
+        };
+      }
+
       if (this.limit !== 0) {
         params.page = {
           limit: this.limit,
@@ -206,12 +227,13 @@ export default {
         params.filter.field_ls_featured = 1;
       }
 
+      if (this.category) {
+        params.filter['eventseries_id.field_ls_category.id'] = this.category;
+      }
+
       params.filter.status = 1;
       params.sort = {
-        sortByDate: {
-          path: 'date.value',
-          direction: 'ASC',
-        },
+        sortBy: this.sort,
       };
 
       client
@@ -226,6 +248,10 @@ export default {
             // Load one more time without featured filter.
             this.featuredLocal = false;
             this.load();
+          }
+          if (this.listing === null || this.listing.length === 0) {
+            // Emit that listing empty to the parent component.
+            this.$emit('listing-not-empty', false);
           }
           this.loading = false;
         })
