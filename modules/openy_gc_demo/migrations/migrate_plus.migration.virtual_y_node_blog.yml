@@ -23,7 +23,7 @@ source:
            Strengthen your bones<br>
            Lift your mood<br>
            Improve balance and coordination</p>
-#      image: 3
+      image: 3
 
     -
       id: 2
@@ -36,7 +36,7 @@ source:
            Boost confidence
            Get better sleep
            Strengthen leadership skills</p>
-#      image: 4
+      image: 4
 
     -
       id: 3
@@ -47,7 +47,7 @@ source:
            Buy a new workout outfit
            Pamper yourself with a massage or other body treatment
            Carve out some time for a favorite hobby</p>
-#      image: 5
+      image: 5
 
   ids:
     id:
