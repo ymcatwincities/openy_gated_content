@@ -49,7 +49,7 @@ export const EventMixin = {
       const duration = moment.duration(moment(this.video.attributes.date.value)
         .diff(moment()));
       if (duration.asHours() > 48) {
-        return duration.format();
+        return duration.format('d [day]');
       }
       return duration.format('hh:mm:ss');
     },
