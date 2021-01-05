@@ -233,9 +233,7 @@ export default {
     favoritesListInitialized() {
       const list = this.favoritesList;
       // Store initialized when at least one of the keys not undefined.
-      return Object.keys(list).some((key) => {
-        return typeof list[key] !== 'undefined';
-      });
+      return Object.keys(list).some((key) => typeof list[key] !== 'undefined');
     },
     viewAllContentMode() {
       // Enable viewAllContentMode only when we filter by content.

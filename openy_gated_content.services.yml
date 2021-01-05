@@ -11,3 +11,10 @@ services:
     class: '\Drupal\openy_gated_content\EventSubscriber\RouteSubscriber'
     tags:
       - { name: event_subscriber }
+  # Custom cache bin for favorites controller.
+  cache.vy_favorites:
+    class: Drupal\Core\Cache\CacheBackendInterface
+    tags:
+      - { name: cache.bin }
+    factory: cache_factory:get
+    arguments: ['vy_favorites']
