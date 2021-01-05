@@ -1,0 +1,63 @@
+<?php
+
+/**
+ * @file
+ * Installation file for Open Y Virtual YMCA Search.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function openy_gc_search_install() {
+  /** @var \Drupal\search_api\Entity\Index $search_api_index */
+  $search_api_index = \Drupal::entityTypeManager()->getStorage('search_api_index')
+    ->load('search_content');
+
+  // Modify the Content datasource configuration.
+  $ds_config = $search_api_index->getDatasource('entity:node')->getConfiguration();
+  $node_gc_bundles = ['gc_video', 'vy_blog_post'];
+  if (!$ds_config['bundles']['default']) {
+    $ds_config['bundles']['selected'] = array_unique(array_merge($ds_config['bundles']['selected'], $node_gc_bundles));
+  }
+  else {
+    $ds_config['bundles']['selected'] = array_diff($ds_config['bundles']['selected'], $node_gc_bundles);
+  }
+  $search_api_index->getDatasource('entity:node')->setConfiguration($ds_config);
+
+  // Add the Event instance entity datasource.
+  $datasource = \Drupal::getContainer()
+    ->get('search_api.plugin_helper')
+    ->createDatasourcePlugin($search_api_index, 'entity:eventinstance', [
+      'bundles' => [
+        'default' => FALSE,
+        'selected' => ['live_stream', 'virtual_meeting'],
+      ],
+    ]);
+  $search_api_index->addDatasource($datasource);
+
+  // Modify rendered_entity field configuration.
+  $f_config = $search_api_index->getField('rendered_item')->getConfiguration();
+  $f_config['view_mode']['entity:node']['gc_video'] = 'default';
+  $f_config['view_mode']['entity:node']['vy_blog_post'] = 'default';
+  $f_config['view_mode']['entity:eventinstance'] = [
+    'live_stream' => 'default',
+    'virtual_meeting' => 'default',
+  ];
+  $search_api_index->getField('rendered_item')->setConfiguration($f_config);
+
+  // Modify type_boost processor configuration.
+  $p_config = $search_api_index->getProcessor('type_boost')->getConfiguration();
+  $default_boost = $p_config['boosts']['entity:node']['datasource_boost'];
+  $p_config['boosts']['entity:node']['bundle_boosts']['gc_video'] = $default_boost;
+  $p_config['boosts']['entity:node']['bundle_boosts']['vy_blog_post'] = $default_boost;
+  $p_config['boosts']['entity:eventinstance'] = [
+    'datasource_boost' => $default_boost,
+    'bundle_boosts' => [
+      'live_stream' => $default_boost,
+      'virtual_meeting' => $default_boost,
+    ],
+  ];
+  $search_api_index->getProcessor('type_boost')->setConfiguration($p_config);
+
+  $search_api_index->save();
+}

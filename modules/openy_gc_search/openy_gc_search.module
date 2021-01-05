@@ -1,0 +1,55 @@
+<?php
+
+/**
+ * @file
+ * The openy_gc_search module routines.
+ */
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Render\Markup;
+
+/**
+ * Implements hook_preprocess_HOOK() for views_view_field template.
+ */
+function openy_gc_search_preprocess_views_view_field(&$variables) {
+  if ($variables['view']->id() !== 'search_content'
+    || $variables['field']->field !== 'title'
+    || empty($variables['row']->_object)) {
+    return;
+  }
+
+  $entity = $variables['row']->_object->getEntity();
+
+  if (empty($entity) || !($entity instanceof EntityInterface)) {
+    return;
+  }
+
+  $app_routes = [
+    'node' => [
+      'gc_video' => '/video/',
+      'vy_blog_post' => '/blog-post/',
+    ],
+    'eventinstance' => [
+      'live_stream' => '/live-stream/',
+      'virtual_meeting' => '/virtual-meeting/',
+    ],
+  ];
+
+  $entity_type_id = $entity->getEntityTypeId();
+  $entity_bundle = $entity->bundle();
+  if (!array_key_exists($entity_type_id, $app_routes)
+    || !array_key_exists($entity_bundle, $app_routes[$entity_type_id])) {
+    return;
+  }
+  $app_route = $app_routes[$entity_type_id][$entity_bundle];
+
+  $virtual_y_url = \Drupal::configFactory()->get('openy_gated_content.settings')->get('virtual_y_url');
+  if (empty($virtual_y_url)) {
+    return;
+  }
+
+  $title = $entity_type_id === 'node' ? $entity->label() :
+    ($entity->get('field_ls_title')->value ?: $entity->get('title')->value);
+  $link = '<a href="' . $virtual_y_url . '#' . $app_route . $entity->uuid() . '">' . $title . '</a>';
+  $variables['output'] = Markup::create($link);
+}
