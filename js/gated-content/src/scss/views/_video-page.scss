@@ -23,6 +23,19 @@
           height:       100%;
         }
       }
+
+      .vimeo_event {
+        padding: 65.91% 0 0 0;
+        position: relative;
+
+        iframe {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100% !important;
+          height: 100% !important;
+        }
+      }
     }
   }
 

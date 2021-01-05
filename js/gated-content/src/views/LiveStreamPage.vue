@@ -43,7 +43,7 @@
               {{ time }} ({{ duration }})
             </div>
             <div class="video-footer__block" v-if="instructor">
-              <SvgIcon icon="instructor-icon" class="fill-gray" grow-by-height="false"></SvgIcon>
+              <SvgIcon icon="instructor-icon" class="fill-gray" :growByHeight=false></SvgIcon>
               {{ instructor }}
             </div>
             <div class="video-footer__block video-footer__category"
