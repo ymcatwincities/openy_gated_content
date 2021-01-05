@@ -105,7 +105,10 @@ class YUSA extends GCIdentityProviderPluginBase {
 
     $form['association_number'] = [
       '#title' => $this->t('Association number'),
-      '#type' => 'textfield',
+      '#type' => 'number',
+      '#min' => 0,
+      '#max' => 9999,
+      '#size' => 4,
       '#description' => $this->t('This is usually 4 digits.'),
       '#default_value' => $config['association_number'],
       '#required' => TRUE,
