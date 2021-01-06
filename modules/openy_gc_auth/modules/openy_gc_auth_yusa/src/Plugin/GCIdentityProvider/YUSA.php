@@ -110,7 +110,7 @@ class YUSA extends GCIdentityProviderPluginBase {
       '#default_value' => $config['association_number'],
       '#attributes' => [
         'inputmode' => 'numeric',
-        'pattern' => '[0-9]*',
+        'pattern' => '[0-9]{4}',
       ],
       '#maxlength' => 4,
       '#required' => TRUE,
