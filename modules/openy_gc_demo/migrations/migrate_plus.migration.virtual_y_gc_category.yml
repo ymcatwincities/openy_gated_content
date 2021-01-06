@@ -56,6 +56,22 @@ source:
       tid: 11
       title: 'Mindfulness'
       image: 11
+    -
+      tid: 12
+      title: 'Wellbeing'
+      image: 15
+    -
+      tid: 13
+      title: 'Family'
+      image: 15
+    -
+      tid: 14
+      title: 'Active Older Adults'
+      image: 15
+    -
+      tid: 15
+      title: 'Zumba'
+      image: 15
   ids:
     tid:
       type: integer
