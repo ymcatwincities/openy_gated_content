@@ -142,7 +142,7 @@ class FavoritesController extends ControllerBase {
     if ($data instanceof JsonResponse) {
       return $data;
     }
-
+    $data['uid'] = $this->currentUser()->id();
     $favorite_item = $this->entityTypeManager()
       ->getStorage('vy_favorite_item')
       ->create($data);
