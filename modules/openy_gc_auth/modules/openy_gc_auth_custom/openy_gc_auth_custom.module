@@ -5,6 +5,11 @@
  * Main file for openy_gc_auth_custom module.
  */
 
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\migrate\MigrateMessage;
+use Drupal\migrate\Plugin\MigrationInterface;
+use Drupal\openy_gc_auth_custom\MigrateBatchExecutable;
+
 /**
  * Implements hook_mail().
  */
@@ -18,5 +23,73 @@ function openy_gc_auth_custom_mail($key, &$message, $params) {
       ]);
       $message['body'][] = $params['message'];
       break;
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function openy_gc_auth_custom_form_migration_execute_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $migration = \Drupal::routeMatch()->getParameter('migration');
+  if ($migration->id() !== 'gc_auth_custom_users') {
+    return;
+  }
+
+  $form['options']['sync'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Sync'),
+    '#description' => t('Check this box to sync (delete missed in source) all previously-imported content in addition to importing new content. Leave unchecked to only import new content'),
+  ];
+
+  // Modify submit to run custom MigrateBatchExecutable.
+  $form['#submit'] = ['_openy_gc_auth_custom_form_migration_execute_form_submit'];
+}
+
+/**
+ * Custom submit handler for migration_execute form.
+ */
+function _openy_gc_auth_custom_form_migration_execute_form_submit(array &$form, FormStateInterface $form_state) {
+  $operation = $form_state->getValue('operation');
+  $limit = $form_state->getValue('limit') ?? 0;
+  $update = $form_state->getValue('update') ?? 0;
+  $force = $form_state->getValue('force') ?? 0;
+  $sync = $form_state->getValue('sync') ?? 0;
+
+  $migration = \Drupal::routeMatch()->getParameter('migration');
+  if ($migration) {
+    $migration_plugin = \Drupal::service('plugin.manager.migration')
+      ->createInstance($migration->id(), $migration->toArray());
+    $migrateMessage = new MigrateMessage();
+
+    switch ($operation) {
+      case 'import':
+        $options = [
+          'limit' => $limit,
+          'update' => $update,
+          'force' => $force,
+          'sync' => $sync,
+        ];
+        $executable = new MigrateBatchExecutable($migration_plugin, $migrateMessage, $options);
+        $executable->batchImport();
+        break;
+
+      case 'rollback':
+        $options = [
+          'limit' => $limit,
+          'update' => $update,
+          'force' => $force,
+        ];
+        $executable = new MigrateBatchExecutable($migration_plugin, $migrateMessage, $options);
+        $executable->rollback();
+        break;
+
+      case 'stop':
+        $migration_plugin->interruptMigration(MigrationInterface::RESULT_STOPPED);
+        break;
+
+      case 'reset':
+        $migration_plugin->setStatus(MigrationInterface::STATUS_IDLE);
+        break;
+    }
   }
 }
