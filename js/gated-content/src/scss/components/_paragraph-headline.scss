@@ -55,6 +55,10 @@
           text-decoration:  none;
           color:            black;
         }
+
+        &.btn-lg {
+          @extend .cachet-medium-20-18;
+        }
       }
     }
 
