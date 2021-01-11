@@ -244,7 +244,6 @@ export default {
           this.error = true;
           this.loading = false;
           console.error(error);
-          throw error;
         });
     },
     currentDay(date) {

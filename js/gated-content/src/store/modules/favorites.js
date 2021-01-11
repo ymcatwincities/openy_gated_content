@@ -36,13 +36,13 @@ export default {
           _format: 'json',
         },
         data: {
-          entity_type: payload.type,
-          entity_bundle: payload.bundle,
-          entity_id: payload.id,
+          ref_entity_type: payload.type,
+          ref_entity_bundle: payload.bundle,
+          ref_entity_id: payload.id,
         },
       })
         .then((response) => {
-          context.commit('add', response.data);
+          context.commit('addItem', response.data);
         })
         .catch((error) => {
           console.error(error);
@@ -57,13 +57,13 @@ export default {
           _format: 'json',
         },
         data: {
-          entity_type: payload.type,
-          entity_bundle: payload.bundle,
-          entity_id: payload.id,
+          ref_entity_type: payload.type,
+          ref_entity_bundle: payload.bundle,
+          ref_entity_id: payload.id,
         },
       })
         .then((response) => {
-          context.commit('add', response.data);
+          context.commit('removeItem', response.data);
         })
         .catch((error) => {
           console.error(error);
@@ -74,6 +74,17 @@ export default {
   mutations: {
     add(state, payload) {
       state.data = payload;
+    },
+    addItem(state, payload) {
+      state.data[payload.ref_entity_type][payload.ref_entity_bundle].push({
+        entity_id: payload.ref_entity_id.toString(),
+        id: payload.id.toString(),
+      });
+    },
+    removeItem(state, payload) {
+      const bundleData = state.data[payload.ref_entity_type][payload.ref_entity_bundle];
+      state.data[payload.ref_entity_type][payload.ref_entity_bundle] = bundleData
+        .filter((value) => value.entity_id !== payload.ref_entity_id.toString());
     },
   },
   getters: {
