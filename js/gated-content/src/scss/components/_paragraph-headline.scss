@@ -24,7 +24,7 @@
     }
 
     .paragraph-headline__title {
-      color: white;
+      color:       white;
 
       font-family: $cachet-book;
       font-weight: 400;
@@ -33,7 +33,7 @@
     }
 
     .paragraph-headline__description {
-      color:   white;
+      color: white;
 
       @include median(font-size, 18px, 16px);
 
@@ -42,12 +42,12 @@
       }
 
       a.btn {
+        @extend .cachet-medium-16-14;
+
         border:           2px solid white;
         border-radius:    5px;
         background-color: transparent;
-
-        font-family: $cachet-medium;
-        font-weight: 500;
+        text-transform:   uppercase;
 
         &:hover {
           border-color:     darken(white, 20%);
@@ -55,19 +55,22 @@
           text-decoration:  none;
           color:            black;
         }
+
+        &.btn-lg {
+          @extend .cachet-medium-20-18;
+        }
       }
     }
 
     .paragraph-headline__link {
-      display:       inline-block;
-      border:        2px solid white;
-      border-radius: 5px;
-      color:         white;
+      @extend .cachet-medium-24-20;
 
-      font-family: $cachet-medium;
-      font-weight: 500;
+      display:        inline-block;
+      border:         2px solid white;
+      border-radius:  5px;
+      text-transform: uppercase;
+      color:          white;
 
-      @include median(font-size, 24px, 20px);
       @include median(padding, 12px 40px, 10px 30px);
 
       &:hover {
