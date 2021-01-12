@@ -206,8 +206,8 @@ export default {
       ],
       filterQueryByTypes: {
         node: {
-          date_desc: { path: 'created', direction: 'DESC' },
-          date_asc: { path: 'created', direction: 'ASC' },
+          // date_desc: { path: 'created', direction: 'DESC' },
+          // date_asc: { path: 'created', direction: 'ASC' },
           title_asc: { path: 'title', direction: 'ASC' },
           title_desc: { path: 'title', direction: 'DESC' },
         },
