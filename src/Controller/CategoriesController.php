@@ -83,7 +83,7 @@ class CategoriesController extends ControllerBase implements ContainerInjectionI
         break;
     }
 
-    return new JsonResponse($result);
+    return new JsonResponse(array_values($result));
   }
 
   /**
@@ -105,7 +105,7 @@ class CategoriesController extends ControllerBase implements ContainerInjectionI
     $query->condition('t.vid', 'gc_category');
     $query->condition('tf.status', 1);
 
-    if (!empty($y_roles) && !in_array(self::getVirtualyEditorRoles(), $y_roles)) {
+    if (!empty($y_roles) && empty(array_intersect($this->getVirtualyEditorRoles(), $y_roles))) {
       $query->leftJoin('node_field_data', 'nd', 'n.entity_id = nd.nid');
       $or_group = $query->orConditionGroup();
       foreach ($y_roles as $role) {
@@ -146,7 +146,7 @@ class CategoriesController extends ControllerBase implements ContainerInjectionI
       $query->condition('t.vid', 'gc_category');
       $query->condition('tf.status', 1);
 
-      if (!empty($y_roles) && !in_array(self::getVirtualyEditorRoles(), $y_roles)) {
+      if (!empty($y_roles) && empty(array_intersect($this->getVirtualyEditorRoles(), $y_roles))) {
         $query->leftJoin($field_data_table, 'esfd', 'es.entity_id = esfd.id');
         $or_group = $query->orConditionGroup();
         foreach ($y_roles as $role) {
