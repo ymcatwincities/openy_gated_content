@@ -16,7 +16,10 @@
         <SvgIcon icon="clock-regular"></SvgIcon>
         {{ time }} ({{ duration }})
       </div>
-      <div class="instructor">
+      <div
+        class="instructor"
+        v-if="this.video.attributes.host_name"
+      >
         <SvgIcon icon="instructor-icon"></SvgIcon>
         {{ this.video.attributes.host_name }}
       </div>
