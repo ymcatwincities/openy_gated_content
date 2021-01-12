@@ -21,7 +21,7 @@
     }
 
     .date-filter {
-      @include median(top, 217px, 127px);
+      @include median(top, 217px, 125px);
     }
 
     .calendar .desktop .slot.dates {
@@ -42,7 +42,7 @@
       }
 
       .date-filter {
-        @include median(top, 257px, 166px);
+        @include median(top, 257px, 164px);
       }
 
       .calendar .desktop .slot.dates {
@@ -89,7 +89,7 @@
     }
 
     .date-filter {
-      @include median(top, 247px, 129px);
+      @include median(top, 247px, 127px);
     }
 
     .calendar .desktop .slot.dates {
@@ -142,7 +142,7 @@
     }
 
     .date-filter {
-      @include median(top, 250px, 119px);
+      @include median(top, 250px, 117px);
     }
 
     .calendar .desktop .slot.dates {

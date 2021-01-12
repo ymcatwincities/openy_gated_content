@@ -16,7 +16,7 @@ field_name: field_ls_media
 entity_type: eventseries
 bundle: live_stream
 label: Media
-description: ''
+description: 'Note: YouTube playlist URLs use the thumbnail image of the first video in the playlist. You can edit this by uploading a custom thumbnail image.'
 required: true
 translatable: false
 default_value: {  }

@@ -18,7 +18,7 @@ class YUSAClientService {
    *
    * @var \Drupal\Core\Logger\LoggerChannelFactory
    */
-  protected $loggerFactory;
+  protected $logger;
 
   /**
    * The config factory.
@@ -45,7 +45,7 @@ class YUSAClientService {
    *   Guzzle client.
    */
   public function __construct(LoggerChannelFactory $loggerFactory, ConfigFactoryInterface $configFactory, Client $client) {
-    $this->loggerFactory = $loggerFactory->get('openy_gc_auth_yusa');
+    $this->logger = $loggerFactory->get('openy_gc_auth_yusa');
     $this->configFactory = $configFactory;
     $this->client = $client;
   }
@@ -102,7 +102,7 @@ class YUSAClientService {
       }
     }
     catch (\Exception $e) {
-      $this->loggerFactory->error($e->getMessage());
+      $this->logger->error($e->getMessage());
     }
 
     return [];

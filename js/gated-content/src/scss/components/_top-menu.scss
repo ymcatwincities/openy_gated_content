@@ -72,7 +72,7 @@
       outline:          none;
       border:           none;
       background-color: transparent;
-      padding-right:    10px;
+      padding:          0;
       text-align:       right;
 
       @include median(display, none, flex);
@@ -118,17 +118,16 @@
       }
 
       div:not(:first-child) {
-        border:        1px solid $gray;
-        border-radius: 5px;
-        padding:       0;
-        text-align:    center;
-        color:         $gray;
+        padding:    0;
+        text-align: center;
+        color:      $gray;
 
         a {
-          border:      none;
-          padding:     15px 10px;
-          width:       100%;
-          font-family: Verdana, sans-serif;
+          border:        1px solid $gray;
+          border-radius: 5px;
+          padding:       15px 10px;
+          width:         100%;
+          font-family:   Verdana, sans-serif;
         }
       }
     }

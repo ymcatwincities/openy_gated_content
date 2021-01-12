@@ -2,6 +2,9 @@
 
 namespace Drupal\openy_gated_content\Controller;
 
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Database\Connection;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -30,14 +33,34 @@ class FavoritesController extends ControllerBase {
   protected $serializer;
 
   /**
+   * The cache object associated with the specified bin.
+   *
+   * @var \Drupal\Core\Cache\CacheBackendInterface
+   */
+  protected $cache;
+
+  /**
+   * The cache tags invalidator.
+   *
+   * @var \Drupal\Core\Cache\CacheTagsInvalidatorInterface
+   */
+  protected $cacheTagsInvalidator;
+
+  /**
    * Constructs a CustomFormattersController object.
    *
    * @param \Drupal\Core\Database\Connection $database
    *   The current active database's master connection.
+   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
+   *   The cache object.
+   * @param \Drupal\Core\Cache\CacheTagsInvalidatorInterface $cache_tags_invalidator
+   *   The cache tags invalidator.
    */
-  public function __construct(Connection $database) {
+  public function __construct(Connection $database, CacheBackendInterface $cache, CacheTagsInvalidatorInterface $cache_tags_invalidator) {
     $this->database = $database;
     $this->serializer = new Serializer([], [new JsonEncoder()]);
+    $this->cache = $cache;
+    $this->cacheTagsInvalidator = $cache_tags_invalidator;
   }
 
   /**
@@ -45,7 +68,9 @@ class FavoritesController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('database')
+      $container->get('database'),
+      $container->get('cache.vy_favorites'),
+      $container->get('cache_tags.invalidator')
     );
   }
 
@@ -71,6 +96,13 @@ class FavoritesController extends ControllerBase {
     ];
 
     $uid = $this->currentUser()->id();
+    $cid = 'openy_gated_content:favorites:' . $uid;
+    $cache_tags = ['favorites:' . $uid];
+    if ($cache = $this->cache->get($cid)) {
+      // Return result from cache if exist.
+      return new JsonResponse($cache->data);
+    }
+
     $query = $this->database->select('vy_favorite_item', 'f');
     $query->condition('f.uid', $uid);
     $query->fields('f', [
@@ -80,9 +112,6 @@ class FavoritesController extends ControllerBase {
       'ref_entity_id',
     ]);
     $result = $query->execute()->fetchAll();
-    if (empty($result)) {
-      return new JsonResponse($data);
-    }
 
     foreach ($result as $item) {
       $data[$item->ref_entity_type][$item->ref_entity_bundle][] = [
@@ -91,6 +120,7 @@ class FavoritesController extends ControllerBase {
       ];
     }
 
+    $this->cache->set($cid, $data, Cache::PERMANENT, $cache_tags);
     return new JsonResponse($data);
   }
 
@@ -112,17 +142,17 @@ class FavoritesController extends ControllerBase {
     if ($data instanceof JsonResponse) {
       return $data;
     }
-
+    $data['uid'] = $this->currentUser()->id();
     $favorite_item = $this->entityTypeManager()
       ->getStorage('vy_favorite_item')
-      ->create([
-        'ref_entity_type' => $data['entity_type'],
-        'ref_entity_bundle' => $data['entity_bundle'],
-        'ref_entity_id' => $data['entity_id'],
-      ]);
+      ->create($data);
     $favorite_item->save();
-    // Return full list of favorites.
-    return $this->list();
+
+    $uid = $this->currentUser()->id();
+    $this->cacheTagsInvalidator->invalidateTags(['favorites:' . $uid]);
+    $data['id'] = $favorite_item->id();
+
+    return new JsonResponse($data);
   }
 
   /**
@@ -143,23 +173,21 @@ class FavoritesController extends ControllerBase {
     if ($data instanceof JsonResponse) {
       return $data;
     }
+    $data['uid'] = $this->currentUser()->id();
     $favorite_items = $this->entityTypeManager()
       ->getStorage('vy_favorite_item')
-      ->loadByProperties([
-        'uid' => $this->currentUser()->id(),
-        'ref_entity_type' => $data['entity_type'],
-        'ref_entity_bundle' => $data['entity_bundle'],
-        'ref_entity_id' => $data['entity_id'],
-      ]);
+      ->loadByProperties($data);
+
     if (empty($favorite_items)) {
       return new JsonResponse(['message' => 'Item not exists']);
     }
     foreach ($favorite_items as $item) {
       $item->delete();
     }
+    $uid = $this->currentUser()->id();
+    $this->cacheTagsInvalidator->invalidateTags(['favorites:' . $uid]);
 
-    // Return full list of favorites.
-    return $this->list();
+    return new JsonResponse($data);
   }
 
   /**
@@ -176,7 +204,7 @@ class FavoritesController extends ControllerBase {
     if (!$data) {
       return new JsonResponse(['message' => 'Missed request content.'], 400);
     }
-    $required_data = ['entity_bundle', 'entity_id', 'entity_type'];
+    $required_data = ['ref_entity_bundle', 'ref_entity_id', 'ref_entity_type'];
     foreach ($required_data as $property) {
       if (!isset($data[$property]) || !$data[$property]) {
         return new JsonResponse(['message' => "Missed required property '$property'."], 400);

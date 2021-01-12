@@ -108,6 +108,11 @@ class YUSA extends GCIdentityProviderPluginBase {
       '#type' => 'textfield',
       '#description' => $this->t('This is usually 4 digits.'),
       '#default_value' => $config['association_number'],
+      '#attributes' => [
+        'inputmode' => 'numeric',
+        'pattern' => '[0-9]{4}',
+      ],
+      '#maxlength' => 4,
       '#required' => TRUE,
     ];
 
