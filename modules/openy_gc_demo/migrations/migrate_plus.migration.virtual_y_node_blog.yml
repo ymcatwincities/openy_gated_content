@@ -12,8 +12,42 @@ label: 'Create demo blog posts for Virtual Y'
 source:
   plugin: embedded_data
   data_rows:
+    - id: 1
+      title: 'WHY YOU SHOULD GIVE WALKING A TRY'
+      category: 7
+      description: |
+        <p>Learn about the very real benefits that walking can bring. According to Harvard Medical School, “Walking doesn’t get the respect it deserves, either for its health benefits, its value for transportation, or its role in recreation.” Harvard explains the primary difference between walking and running—and it’s not simply pace. At any speed, walkers have one foot on the ground at all times—runners spend time in each stride being airborne, which makes it a more high-impact activity (meaning it’s more stressful on joints and can bring a higher risk for injury). If you’re not convinced that walking can be a good workout, you can always kick things up a notch by walking with weights, taking your walk to the stairs or walking in the pool. Health benefits The Mayo Clinic says that regular brisk walking can help you:
+           Maintain a healthy weight <br>
+           Prevent or manage conditions like heart disease, high blood pressure and type 2 diabetes<br>
+           Strengthen your bones<br>
+           Lift your mood<br>
+           Improve balance and coordination</p>
+      image: 3
+
+    - id: 2
+      title: 'GROWN-UP FUN IN ADULT SPORTS LEAGUES'
+      category: 7
+      description: |
+        <p>At the Y, kids don’t have all the fun—adults can participate in sports leagues, too. In addition to having a great time, sports can help you: Automatically build physical exercise into your week Through practice and play you’ll get a great workout. Adding a sport to your regular routine of running, walking or cycling can help you cross-train your body. Not only do you get the body benefits of working out regularly, you have built-in accountability to your team to show up each week, which can help you build fitness into your regular routine. Work on your mental health The benefits aren’t all physical. Participating in sports can be a great way to:
+           Improve your mood
+           Manage stress
+           Boost confidence
+           Get better sleep
+           Strengthen leadership skills</p>
+      image: 4
+
+    - id: 3
+      title: 'LIFESTYLE CHANGES BEYOND THE FIRST TWO WEEKS'
+      category: 7
+      description: |
+        <p>Tip: Staying motivated once the novelty of making changes wears off can be challenging – reinforce your successes, revise your plan to fit your changing needs and fill the gaps left by discarding old habits to keep moving forward toward a lifetime of feeling your best. By the Chef Marshall O’Brien Group After a couple weeks following your Personal Wellness Plan, you are falling into a rhythm and you have had some success. But when the novelty of making lifestyle change wears off, it is easy to slip back into apathy and old habits. This week, we discuss ways to stay motivated and what to do when you feel yourself slipping. Look over your completed 2-Week Personal Plan Towards Wellness before addressing the items below. Keep moving forward so your first two weeks become a permanent new reality of healthier living and feeling your best! Reinforce Your Successes First and foremost, recognize the goals you have met over the past couple weeks and examine what enabled you to succeed. Making permanent changes is challenging, and you should feel proud when you successfully take a step to improve your life. The longer these changes are part of your routine, the easier and more natural they are to maintain. Reinforce your successes by rewarding yourself. Steer clear of food rewards; choose something that supports your wellness and motivates you to keep working towards change:
+           Buy a new workout outfit
+           Pamper yourself with a massage or other body treatment
+           Carve out some time for a favorite hobby</p>
+      image: 5
+
     -
-      id: 1
+      id: 4
       title: 'HOW TO HAVE AN ACTIVE, SAFE WINTER'
       category: 12
       description: |
@@ -43,10 +77,10 @@ source:
         </ul>
         <p><strong>Not sure where to start?</strong></p>
         <p>The Y&rsquo;s Activity Finder makes it easy to find options that are a fit for you this winter-based on age, day, location and interests.</p>
-      image: 15
+      image: 16
 
     -
-      id: 2
+      id: 5
       title: '10 MINDFULNESS TIPS AND TECHNIQUES'
       category: 11
       description: |
@@ -70,10 +104,10 @@ source:
           <li>Take a mindful walk in nature and pay attention to the sights, sounds and smells of being in the great outdoors in fresh air.</li>
           <li>Participate in a yoga class where you will focus on breathing.</li>
         </ol>
-      image: 4
+      image: 17
 
     -
-      id: 3
+      id: 6
       title: 'PARENTS: IT IS POSSIBLE TO RELAX AND REJUVENATE AMID YEAR-END CRAZINESS'
       category: 13
       description: |
@@ -129,10 +163,10 @@ source:
                 with field trips, games and camps at the Y.
             </li>
         </ul>
-      image: 5
+      image: 18
 
     -
-      id: 4
+      id: 7
       title: 'YOU’VE RETIRED. NOW WHAT?'
       category: 14
       description: |
@@ -170,10 +204,10 @@ source:
             volunteer-whether it&rsquo;s an ongoing commitment or a one-time opportunity at a special event or organized project.</p>
         <p>Regardless of the activities you might choose at the Y, Amy suggests that you &quot;Don&rsquo;t overdo it. Start small. Sample
             things. And listen to your body!&quot;</p>
-      image: 5
+      image: 19
 
     -
-      id: 5
+      id: 8
       title: 'TIPS FOR WORKDAY MEDITATION'
       category: 12
       description: |
@@ -219,10 +253,10 @@ source:
         <p><strong>Give it a try</strong></p>
         <p>If you&rsquo;re not sure meditation is for you, why not give it a try and find out? Start with just a few minutes,
             and pay attention to what you&rsquo;re feeling-and that&rsquo;s it, you&rsquo;re meditating!</p>
-      image: 5
+      image: 20
 
     -
-      id: 6
+      id: 9
       title: 'CLASS SPOTLIGHT: ZUMBA AND ZUMBA GOLD'
       category: 15
       description: |
@@ -252,10 +286,10 @@ source:
             to head near the front of the room where you can clearly see your instructor.</p>
         <p>Zumba and Zumba Gold are Group Exercise classes, which means they&rsquo;re free for Y members. Drop in to give it a
             try at any time-no registration required.</p>
-      image: 5
+      image: 21
 
     -
-      id: 7
+      id: 10
       title: 'HIIT: BOOST ENDURANCE WITH BURSTS OF INTENSITY'
       category: 9
       description: |
@@ -285,10 +319,10 @@ source:
             steady-state running sessions 5 times a week.</p>
         <p>HIIT is a Group Exercise class, which means it&rsquo;s free for Y members. Drop in to give it a try at any
             time-no registration required.</p>
-      image: 5
+      image: 22
 
     -
-      id: 8
+      id: 11
       title: 'CLASS SPOTLIGHT: YOGA FLOW'
       category: 6
       description: |
@@ -334,10 +368,10 @@ source:
             go-so be sure to give yoga classes a few chances before you call it quits.</p>
         <p>She recommends incorporating flexibility training into your fitness program at least once a week-and Yoga Flow is a
             great way to do it.</p>
-      image: 5
+      image: 17
 
     -
-      id: 9
+      id: 12
       title: 'LEARN ABOUT BODYPUMP, ONE OF THE Y’S MOST POPULAR CLASSES'
       category: 9
       description: |
@@ -372,10 +406,10 @@ source:
         <p>Classes are open to all fitness levels. BodyPump is a Group Exercise class, which means it&rsquo;s free for Y
             members. Teens ages 15+ are welcome to attend with a parent or guardian. Drop in to give it a try at any time-no
             registration required.</p>
-      image: 5
+      image: 23
 
     -
-      id: 10
+      id: 13
       title: 'BALANCE YOUR BODY AND MIND WITH MAT PILATES'
       category: 4
       description: |
@@ -454,7 +488,7 @@ source:
             over 15 can attend on their own.</p>
         <p>Mat Pilates is a Group Exercise class, which means it&rsquo;s free for Y members. Drop in to give it a try at any
             time-no registration required. Check out a Mat Pilates class today.</p>
-      image: 5
+      image: 24
 
   ids:
     id:

@@ -71,6 +71,42 @@ source:
       id: 15
       name: 'Forewer well'
       file: 15
+    -
+      id: 16
+      name: 'Family Group Outdoor father son sledding'
+      file: 16
+    -
+      id: 17
+      name: 'Dayton Y Harmony Yoga Group Exercise'
+      file: 17
+    -
+      id: 18
+      name: 'Child Winter'
+      file: 18
+    -
+      id: 19
+      name: 'Foreverwell Group'
+      file: 19
+    -
+      id: 20
+      name: 'George Wellness Center Meditation'
+      file: 20
+    -
+      id: 21
+      name: 'Lino Lakes Group Fitness Zumba'
+      file: 21
+    -
+      id: 22
+      name: 'Blaisdell Group Fitness Bosu'
+      file: 22
+    -
+      id: 23
+      name: 'Blaisdell Group Fitness barbells'
+      file: 23
+    -
+      id: 24
+      name: 'Lino Lakes Group Fitness Mat Pilates'
+      file: 24
   ids:
     id:
       type: integer
