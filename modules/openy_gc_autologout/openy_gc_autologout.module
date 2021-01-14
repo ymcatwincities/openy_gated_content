@@ -45,7 +45,7 @@ function openy_gc_autologout_cron() {
 function openy_gc_autologout_users() {
   $results = \Drupal::database()->select('sessions', 's')
     ->fields('s', ['uid', 'sid ', 'timestamp'])
-    ->limit(50)
+    ->range(0, 50)
     ->execute()
     ->fetchAll();
 
