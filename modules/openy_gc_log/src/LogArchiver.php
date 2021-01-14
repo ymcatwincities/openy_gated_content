@@ -285,7 +285,7 @@ class LogArchiver {
         $entity = $this->entityTypeManager->getStorage($entity_type_id)
           ->load($entity_id);
         $export_row['entity_title'] = is_null($entity) ? $entity_id :
-          ($entity_type === 'node' ?  $entity->label() :
+          ($entity_type === 'node' ? $entity->label() :
           ($entity->get('field_ls_title')->value ? $entity->get('field_ls_title')->value : $entity->get('title')->value));
         $export_row['entity_instructor_name'] = is_null($entity) ? '' :
           ($entity_type === 'node' ?
