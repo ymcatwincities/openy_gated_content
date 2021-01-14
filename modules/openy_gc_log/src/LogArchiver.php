@@ -284,7 +284,7 @@ class LogArchiver {
         $entity_type_id = $entity_type === 'node' ? 'node' : 'eventinstance';
         $entity = $this->entityTypeManager->getStorage($entity_type_id)
           ->load($entity_id);
-        if ($entity) {
+        if ($entity is not instanceof EntityInterface) {
           continue;
         }
         $export_row['entity_title'] = $entity_type === 'node' ?
