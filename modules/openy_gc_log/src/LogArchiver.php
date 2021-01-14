@@ -32,7 +32,7 @@ class LogArchiver {
   /**
    * Log Entities.
    *
-   * @var \Drupal\Core\Entity\EntityInterface[]
+   * @var EntityInterface[]
    */
   protected $logEntities;
 
@@ -46,7 +46,7 @@ class LogArchiver {
   /**
    * File Entities.
    *
-   * @var \Drupal\Core\Entity\EntityInterface[]
+   * @var EntityInterface[]
    */
   protected $fileEntities;
 
