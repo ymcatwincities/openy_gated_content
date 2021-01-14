@@ -284,14 +284,16 @@ class LogArchiver {
         $entity_type_id = $entity_type === 'node' ? 'node' : 'eventinstance';
         $entity = $this->entityTypeManager->getStorage($entity_type_id)
           ->load($entity_id);
-        $export_row['entity_title'] = is_null($entity) ? $entity_id :
-          ($entity_type === 'node' ? $entity->label() :
-          ($entity->get('field_ls_title')->value ? $entity->get('field_ls_title')->value : $entity->get('title')->value));
-        $export_row['entity_instructor_name'] = is_null($entity) ? '' :
-          ($entity_type === 'node' ?
+        if ($entity) {
+          continue;
+        }
+        $export_row['entity_title'] = $entity_type === 'node' ?
+          $entity->label() :
+          ($entity->get('field_ls_title')->value ? $entity->get('field_ls_title')->value : $entity->get('title')->value);
+        $export_row['entity_instructor_name'] = $entity_type === 'node' ?
           ($entity_bundle === 'gc_video' ? $entity->get('field_gc_video_instructor')->value : '') :
-          ($entity->get('field_ls_host_name')->value ? $entity->get('field_ls_host_name')->value : $entity->get('host_name')->value));
-        $export_row['entity_created'] = is_null($entity) ? '' : date('m/d/Y - H:i:s', $entity->getCreatedTime());
+          ($entity->get('field_ls_host_name')->value ? $entity->get('field_ls_host_name')->value : $entity->get('host_name')->value);
+        $export_row['entity_created'] = date('m/d/Y - H:i:s', $entity->getCreatedTime());
       }
 
       $this->moduleHandler->alter(
