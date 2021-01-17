@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Drupal\openy_gc_log\Logger;
 
 /**
- * Class LogController.
+ * Log Controller class.
  */
 class LogController extends ControllerBase {
 

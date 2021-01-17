@@ -1,0 +1,30 @@
+.three-columns {
+  display:            grid;
+  grid-template-rows: repeat(10, auto);
+
+  @include median(grid-template-columns,
+    repeat(3, 1fr),
+    repeat(2, 1fr),
+    1fr
+  );
+  @include median(grid-column-gap, 40px, 20px);
+  @include median(margin-top, 20px, 10px);
+
+  @media (min-width: 1061px) {
+    > div:nth-child(n+4) {
+      margin-top: 40px;
+    }
+  }
+
+  @media (max-width: 1060px) {
+    > div:nth-child(n+3) {
+      margin-top: 20px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    > div:nth-child(n+2) {
+      margin-top: 10px;
+    }
+  }
+}

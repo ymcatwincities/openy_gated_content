@@ -14,19 +14,20 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Class SegmentContentAccessCheck.
+ * Class Segment Content Access Check.
  *
  * @package Drupal\openy_gated_content
  */
 class SegmentContentAccessCheck implements ContainerInjectionInterface {
 
-  const EDITOR_ROLE = 'virtual_ymca_editor';
+  use VirtualYAccessTrait;
 
   /**
    * Module config.
    *
    * @var \Drupal\Core\Config\ImmutableConfig
    */
+
   protected $config;
 
   /**
@@ -106,66 +107,57 @@ class SegmentContentAccessCheck implements ContainerInjectionInterface {
     $type = $entity->getEntityTypeId();
 
     // Skip other entities.
-    if (!in_array($type, array_keys($permissions_config))) {
+    if (!array_key_exists($type, $permissions_config)) {
       return AccessResult::neutral();
     }
 
-    if (array_key_exists($type, $permissions_config)) {
-      $bundle = $entity->bundle();
+    $bundle = $entity->bundle();
 
-      if (in_array($bundle, $permissions_config[$type])) {
+    if (!in_array($bundle, $permissions_config[$type])) {
+      return AccessResult::neutral();
+    }
 
-        // Check if this request from shared content client server.
-        if ($this->request->headers->get('x-shared-content')) {
-          // For performance reason first check by x-shared-content.
-          if ($this->isValidSharedClient()) {
-            // Bypass permissions for shared content client servers.
-            return AccessResult::allowed();
-          }
-        }
-
-        $account_roles = $account->getRoles();
-
-        // Use Drupal permissions for administrators and editors.
-        if (
-          in_array(self::EDITOR_ROLE, $account_roles)
-          || in_array('administrator', $account_roles)
-        ) {
-          return AccessResult::neutral();
-        }
-
-        $content_access_mask = $entity->get('field_vy_permission')->getValue();
-
-        // For Eventinstance we have to check parent as well.
-        if (($entity instanceof EventInstance) && empty($content_access_mask)) {
-          $eventSeriesEntity = $entity->getEventSeries();
-          $content_access_mask = $eventSeriesEntity->get('field_vy_permission')
-            ->getValue();
-        }
-
-        // Deny access if editor didnt set up permission field value.
-        if (empty($content_access_mask)) {
-          return AccessResult::forbidden();
-        }
-
-        // Get roles, available for this user.
-        $available_roles = explode(',', $content_access_mask[0]['value']);
-
-        foreach ($account_roles as $account_role) {
-          if (in_array($account_role, $available_roles)) {
-            return AccessResult::allowed();
-          }
-        }
-
-        return AccessResult::forbidden();
-
+    // Check if this request from shared content client server.
+    if ($this->request->headers->get('x-shared-content')) {
+      // For performance reason first check by x-shared-content.
+      if ($this->isValidSharedClient()) {
+        // Bypass permissions for shared content client servers.
+        return AccessResult::allowed();
       }
-
     }
-    else {
+
+    $account_roles = $account->getRoles();
+
+    // Use Drupal permissions for administrators and editors.
+    $privileged_roles = array_merge($this->getVirtualyEditorRoles(), ['administrator']);
+    if (!empty(array_intersect($privileged_roles, $account_roles))) {
       return AccessResult::neutral();
     }
 
+    $content_access_mask = $entity->get('field_vy_permission')->getValue();
+
+    // For Eventinstance we have to check parent as well.
+    if (($entity instanceof EventInstance) && empty($content_access_mask)) {
+      $eventSeriesEntity = $entity->getEventSeries();
+      $content_access_mask = $eventSeriesEntity->get('field_vy_permission')
+        ->getValue();
+    }
+
+    // Deny access if editor didnt set up permission field value.
+    if (empty($content_access_mask)) {
+      return AccessResult::forbidden();
+    }
+
+    // Get roles, available for this user.
+    $available_roles = explode(',', $content_access_mask[0]['value']);
+
+    foreach ($account_roles as $account_role) {
+      if (in_array($account_role, $available_roles)) {
+        return AccessResult::allowed();
+      }
+    }
+
+    return AccessResult::forbidden();
   }
 
   /**

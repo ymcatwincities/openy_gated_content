@@ -12,14 +12,12 @@ label: 'Import demo Virtual YMCA files'
 source:
   plugin: embedded_data
   data_rows:
-    # Images, needed for Landing pages.
     -
       id: 1
       name: marjanblan-6bXvYyAYVrE-unsplash.jpg
     -
       id: 2
       name: jonathan-borba-lrQPTQs7nQQ-unsplash.jpg
-    # Images, needed for Virtual Y blog posts
     -
       id: 3
       name: baylee-gramling-R5eoT-c-jkY-unsplash.jpg
@@ -41,10 +39,51 @@ source:
     -
       id: 9
       name: dance2.jpg
-    # Images, needed for Virtual Y videos
     -
       id: 10
       name: bootcamp-challenge.png
+    -
+      id: 11
+      name: man-yoga-meditation.jpg
+    -
+      id: 12
+      name: healthy-eating.png
+    -
+      id: 13
+      name: strength-training-classes.jpg
+    -
+      id: 14
+      name: cardio-workout-main.jpg
+    -
+      id: 15
+      name: forever-well-category.jpg
+    -
+      id: 16
+      name: Family-Group-Outdoor-father-son-sledding.jpg
+    -
+      id: 17
+      name: Dayton-Y-Harmony-Yoga-Group-Exercise-7971.jpg
+    -
+      id: 18
+      name: child-winter-153490472.jpg
+    -
+      id: 19
+      name: foreverwell-group-0005.jpg
+    -
+      id: 20
+      name: George-Wellness-Center-Meditation-1109.jpg
+    -
+      id: 21
+      name: Lino-Lakes-Group-Fitness-Zumba0155.jpg
+    -
+      id: 22
+      name: Blaisdell-Group-Fitness-bosu-0062.jpg
+    -
+      id: 23
+      name: Blaisdell-Group-Fitness-barbells-0057.jpg
+    -
+      id: 24
+      name: Lino-Lakes-Group-Fitness-Mat-Pilates0147.jpg
   ids:
     id:
       type: integer

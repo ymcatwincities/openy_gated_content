@@ -1,0 +1,158 @@
+.adjust-modal {
+  .modal-container {
+    width: max-content;
+
+    button {
+      outline: none !important;
+    }
+
+    .modal-header {
+      display:         flex;
+      align-items:     center;
+      justify-content: space-between;
+      height:          48px;
+
+      @include median(padding, 12px 10px, 14px 10px 13px);
+
+      &:before, &:after {
+        display: none;
+      }
+
+      h3 {
+        margin:         0;
+        text-transform: uppercase;
+        color:          $gray;
+        font-family:    $cachet-medium;
+
+        @include median(font-size, 16px, 14px);
+      }
+
+      button {
+        border:           none;
+        background-color: initial;
+        font-size:        24px;
+      }
+    }
+
+    .modal-body {
+      display: flex;
+      margin:  0;
+      color:   $black;
+
+      @include median(flex-direction, row, row, column);
+      @include median(padding, 20px, 10px);
+
+      > div {
+        min-width:   310px;
+        font-family: Verdana, sans-serif;
+
+        @include median(font-size, 14px, 12px);
+
+        > h4 {
+          margin-bottom: 14px;
+          color:         black;
+          font-family:   Verdana, sans-serif;
+          font-weight:   bold;
+
+          @include median(font-size, 14px, 12px);
+        }
+
+        .form-check {
+          display:      flex;
+          align-items:  center;
+          padding-left: 8px;
+
+          @include median(padding-bottom, 21px, 14px);
+
+          label {
+            position:      relative;
+            margin-bottom: 0;
+            cursor:        pointer;
+            padding-left:  28px;
+            font-family:   Verdana, sans-serif;
+            font-weight:   normal;
+
+            input {
+              position: absolute;
+              opacity:  0;
+              cursor:   pointer;
+              width:    0;
+              height:   0;
+            }
+
+            .checkmark {
+              position:         absolute;
+              top:              0;
+              left:             0;
+              background-image: url('assets/svg/rb-off.svg');
+              background-size:  20px;
+              width:            20px;
+              height:           20px;
+            }
+
+            input:checked ~ .checkmark {
+              background-image: url('assets/svg/rb-on.svg');
+            }
+
+            input[disabled='disabled'] ~ .caption {
+              color: $silver-chalice;
+            }
+
+            input[disabled='disabled'] ~ .checkmark {
+              background-image: url('assets/svg/rb-off-gray.svg');
+            }
+          }
+        }
+      }
+    }
+
+    .modal-footer {
+      display:          flex;
+      justify-content:  space-between;
+      background-color: $concrete;
+      padding:          10px;
+
+      &:before, &:after {
+        display: none;
+      }
+
+      button {
+        margin:         0;
+        border-radius:  5px;
+        padding:        10px 20px;
+        text-transform: uppercase;
+        line-height:    26px;
+        font-family:    $cachet-medium;
+        font-size:      20px;
+      }
+
+      .btn.btn-outline-primary {
+        border-width:     2px;
+        border-style:     solid;
+        border-color:     $dark-blue;
+        background-color: white;
+        color:            $dark-blue;
+
+        &:hover {
+          background-color: $dark-blue;
+          color:            white;
+        }
+      }
+
+      .btn-primary {
+        border-width:     2px;
+        background-color: $dark-blue;
+        color:            white;
+
+        &:hover {
+          border-width:     2px;
+          border-style:     solid;
+          border-color:     $dark-blue;
+          background-color: white;
+          color:            $dark-blue;
+        }
+      }
+
+    }
+  }
+}

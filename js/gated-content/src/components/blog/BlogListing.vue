@@ -1,21 +1,22 @@
 <template>
-  <div class="blogs videos gated-container">
-    <div class="blogs__header videos__header">
-      <h2 class="title">{{ title }}</h2>
+  <div class="gated-containerV2 px--20-10">
+    <div class="listing-header">
+      <h2 class="title text-gray" v-if="title !== 'none'">{{ title }}</h2>
       <router-link
-        :to="{ name: 'CategoryListing', params: { type: 'blog' }}"
+        :to="{ name: 'BlogsListing', query: { type: category } }"
         v-if="viewAll && listingIsNotEmpty"
         class="view-all"
       >
-        View All
+        More
       </router-link>
+      <slot name="filterButton"></slot>
     </div>
     <div v-if="loading" class="text-center">
       <Spinner></Spinner>
     </div>
     <template v-else-if="listingIsNotEmpty">
       <div v-if="error">Error loading</div>
-      <div v-else class="blog-listing">
+      <div v-else class="four-columns">
         <BlogTeaser
           v-for="blog in listing"
           :key="blog.id"
@@ -40,10 +41,11 @@ import Spinner from '@/components/Spinner.vue';
 import Pagination from '@/components/Pagination.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
 import { SettingsMixin } from '@/mixins/SettingsMixin';
+import { FavoritesMixin } from '@/mixins/FavoritesMixin';
 
 export default {
   name: 'BlogListing',
-  mixins: [JsonApiCombineMixin, SettingsMixin],
+  mixins: [JsonApiCombineMixin, SettingsMixin, FavoritesMixin],
   components: {
     BlogTeaser,
     Spinner,
@@ -66,6 +68,12 @@ export default {
     featured: {
       type: Boolean,
       default: false,
+    },
+    sort: {
+      type: Object,
+      default() {
+        return { path: 'created', direction: 'DESC' };
+      },
     },
     pagination: {
       type: Boolean,
@@ -96,8 +104,11 @@ export default {
   watch: {
     $route: 'load',
     excludedVideoId: 'load',
+    sort: 'load',
   },
   async mounted() {
+    // By default emit that listing not empty to the parent component.
+    this.$emit('listing-not-empty', true);
     this.featuredLocal = this.featured;
     await this.load();
   },
@@ -115,10 +126,7 @@ export default {
       }
 
       params.sort = {
-        sortByDate: {
-          path: 'created',
-          direction: 'DESC',
-        },
+        sortBy: this.sort,
       };
 
       params.filter = {};
@@ -128,6 +136,20 @@ export default {
             path: 'id',
             operator: '<>',
             value: this.excludedId,
+          },
+        };
+      }
+
+      if (this.favorites) {
+        if (this.isFavoritesTypeEmpty('node', 'vy_blog_post')) {
+          this.loading = false;
+          return;
+        }
+        params.filter.includeFavorites = {
+          condition: {
+            path: 'drupal_internal__nid',
+            operator: 'IN',
+            value: this.getFavoritesTypeIds('node', 'vy_blog_post'),
           },
         };
       }
@@ -164,6 +186,10 @@ export default {
             // Load one more time without featured filter.
             this.featuredLocal = false;
             this.load();
+          }
+          if (this.listing === null || this.listing.length === 0) {
+            // Emit that listing empty to the parent component.
+            this.$emit('listing-not-empty', false);
           }
           this.loading = false;
         })

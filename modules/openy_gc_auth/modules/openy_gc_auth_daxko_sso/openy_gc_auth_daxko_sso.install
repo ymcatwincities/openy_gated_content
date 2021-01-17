@@ -1,0 +1,49 @@
+<?php
+
+/**
+ * @file
+ * Install file for openy_gc_auth_daxko_sso module.
+ */
+
+/**
+ * Update configuration.
+ */
+function openy_gc_auth_daxko_sso_update_8001(&$sandbox) {
+  $config_dir = drupal_get_path('module', 'openy_gc_auth_daxko_sso') . '/config/';
+  // Update multiple configurations.
+  $configs = [
+    'openy_gc_auth.provider.daxko_sso' => [
+      'redirect_url',
+      'error_accompanying_message',
+    ],
+  ];
+
+  $config_updater = \Drupal::service('openy_upgrade_tool.param_updater');
+  foreach ($configs as $config_name => $params) {
+    $config = $config_dir . $config_name . '.yml';
+    foreach ($params as $param) {
+      $config_updater->update($config, $config_name, $param);
+    }
+  }
+}
+
+/**
+ * Add value for login_mode variable.
+ */
+function openy_gc_auth_daxko_sso_update_8002(&$sandbox) {
+  $config_dir = drupal_get_path('module', 'openy_gc_auth_daxko_sso') . '/config/';
+  // Update multiple configurations.
+  $configs = [
+    'openy_gc_auth.provider.daxko_sso' => [
+      'login_mode',
+    ],
+  ];
+
+  $config_updater = \Drupal::service('openy_upgrade_tool.param_updater');
+  foreach ($configs as $config_name => $params) {
+    $config = $config_dir . $config_name . '.yml';
+    foreach ($params as $param) {
+      $config_updater->update($config, $config_name, $param);
+    }
+  }
+}

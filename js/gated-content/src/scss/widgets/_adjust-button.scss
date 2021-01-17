@@ -1,0 +1,22 @@
+.adjust-button {
+  display:          flex;
+  align-items:      center;
+  outline:          none !important;
+  border:           1px solid $concrete;
+  border-radius:    5px;
+  background-color: $white;
+  padding:          15px;
+  text-transform:   capitalize;
+  font-family:      Verdana, sans-serif;
+
+  @include median(font-size, 14px, 0);
+
+  &:before {
+    background-image: url('assets/svg/sliders-h-solid.svg');
+    width:            18px;
+    height:           18px;
+    content:          ' ';
+
+    @include median(margin-right, 15px, initial);
+  }
+}

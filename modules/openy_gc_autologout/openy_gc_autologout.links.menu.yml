@@ -1,0 +1,6 @@
+openy_gc_autologout.settings:
+  title: 'Auto Logout'
+  parent: openy_gated_content.settings
+  description: 'Configure default Virtual Y automated logout settings.'
+  weight: -10
+  route_name: openy_gc_autologout.settings

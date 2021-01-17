@@ -10,7 +10,7 @@ use Drupal\openy_gc_shared_content_server\Entity\SharedContentSource;
 use Drupal\Core\Plugin\Discovery\ContainerDeriverInterface;
 
 /**
- * Class SourceMigrationDeriver.
+ * SourceMigration Deriver Class.
  *
  * @package Drupal\openy_gc_shared_content
  */
@@ -36,7 +36,7 @@ class SourceMigrationDeriver extends DeriverBase implements DeriverInterface, Co
     $this->sharedContentStorage = $entityTypeManager
       ->getStorage('shared_content_source')
       ->getQuery()
-      ->condition('status', 1);
+      ->condition('sync_enabled', 1);
   }
 
   /**
@@ -202,6 +202,7 @@ class SourceMigrationDeriver extends DeriverBase implements DeriverInterface, Co
    */
   private function getKey($url) {
     $url_key = str_replace('http://', '', $url);
+    $url_key = str_replace('https://', '', $url_key);
     $url_key = str_replace('.', '_', $url_key);
     return $url_key;
   }

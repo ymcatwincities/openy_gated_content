@@ -136,6 +136,51 @@ class GCSettingsForm extends ConfigFormBase {
       '#required' => TRUE,
     ];
 
+    $form['app_settings']['virtual_y_logout_url'] = [
+      '#type' => 'textfield',
+      '#title' => 'Virtual Y Logout url',
+      '#default_value' => $config->get('virtual_y_logout_url'),
+      '#description' => $this->t('Optionally provide URL for redirecting a user after logout. Redirect to the front page is default action.'),
+      '#placeholder' => '/path/to/page',
+    ];
+
+    $form['app_settings']['top_menu'] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('Top menu settings'),
+
+      'links_color_light' => [
+        '#type' => 'textfield',
+        '#title' => 'Top menu links color (light)',
+        '#default_value' => $config->get('top_menu.links_color_light'),
+        '#description' => $this->t('Provide color for top menu links (light)'),
+        '#required' => TRUE,
+      ],
+
+      'background_color_light' => [
+        '#type' => 'textfield',
+        '#title' => 'Top menu background color (light)',
+        '#default_value' => $config->get('top_menu.background_color_light'),
+        '#description' => $this->t('Provide color for top menu background (light)'),
+        '#required' => TRUE,
+      ],
+
+      'links_color_dark' => [
+        '#type' => 'textfield',
+        '#title' => 'Top menu links color (dark)',
+        '#default_value' => $config->get('top_menu.links_color_dark'),
+        '#description' => $this->t('Provide color for top menu links (dark)'),
+        '#required' => TRUE,
+      ],
+
+      'background_color_dark' => [
+        '#type' => 'textfield',
+        '#title' => 'Top menu background color (dark)',
+        '#default_value' => $config->get('top_menu.background_color_dark'),
+        '#description' => $this->t('Provide color for top menu background (dark)'),
+        '#required' => TRUE,
+      ],
+    ];
+
     $form['actions']['#type'] = 'actions';
     $form['actions']['submit'] = [
       '#type' => 'submit',

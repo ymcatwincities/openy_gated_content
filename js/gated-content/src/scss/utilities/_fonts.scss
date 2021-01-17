@@ -1,0 +1,46 @@
+.cachet-book-32-28 {
+  font-family: $cachet-book;
+  font-weight:  400;
+
+  @include median(font-size, 32px, 28px);
+}
+
+.cachet-book-24-20 {
+  font-family: $cachet-book;
+  font-weight:  400;
+
+  @include median(font-size, 24px, 20px);
+}
+
+.cachet-medium-24-20 {
+  font-family: $cachet-medium;
+  font-weight:  500;
+
+  @include median(font-size, 24px, 20px);
+}
+
+.cachet-medium-16-14 {
+  font-family: $cachet-medium;
+  font-weight:  500;
+
+  @include median(font-size, 16px, 14px);
+}
+
+.cachet-medium-20-18 {
+  font-family: $cachet-medium;
+  font-weight:  500;
+
+  @include median(font-size, 20px, 18px);
+}
+
+.verdana-16-14 {
+  font-family: Verdana, sans-serif;
+
+  @include median(font-size, 16px, 14px);
+}
+
+.verdana-14-12 {
+  font-family: Verdana, sans-serif;
+
+  @include median(font-size, 14px, 12px);
+}

@@ -1,3 +1,7 @@
+import moment from 'moment';
+// eslint-disable-next-line no-unused-vars
+import momentDurationFormatSetup from 'moment-duration-format';
+
 export const EventMixin = {
   watch: {
     $route: 'load',
@@ -30,6 +34,30 @@ export const EventMixin = {
     },
     config() {
       return this.$store.getters.getAppSettings;
+    },
+    date() {
+      return moment(this.video.attributes.date.value).format('dddd, MMMM Do, YYYY');
+    },
+    time() {
+      return moment(this.video.attributes.date.value).format('HH:MM:SS');
+    },
+    duration() {
+      return moment.duration(moment(this.video.attributes.date.value)
+        .diff(moment(this.video.attributes.date.end_value))).humanize();
+    },
+    startsIn() {
+      const duration = moment.duration(moment(this.video.attributes.date.value)
+        .diff(moment()));
+      if (duration.asHours() > 48) {
+        return duration.format('d [day]');
+      }
+      return duration.format('hh:mm:ss');
+    },
+    isOnAir() {
+      const dateStart = new Date(this.video.attributes.date.value);
+      const dateEnd = new Date(this.video.attributes.date.end_value);
+      const now = new Date();
+      return dateStart < now && now < dateEnd;
     },
   },
   methods: {

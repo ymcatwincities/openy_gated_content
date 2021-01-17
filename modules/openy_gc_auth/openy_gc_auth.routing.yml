@@ -13,3 +13,13 @@ openy_gc_auth.provider.edit:
     _title: 'Identity Provider'
   requirements:
     _permission: 'administer gated content configuration'
+
+openy_gc_auth.user_logout:
+  path: /vy-user/logout
+  defaults:
+    _controller: \Drupal\openy_gc_auth\Controller\GCAuthController::logoutUser
+    _title: Logout user
+  requirements:
+    _permission: 'access content'
+  options:
+    no_cache: TRUE

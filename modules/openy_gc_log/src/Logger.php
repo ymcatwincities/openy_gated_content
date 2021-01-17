@@ -7,7 +7,7 @@ use Drupal\Core\Logger\LoggerChannel;
 use Drupal\openy_gc_log\Entity\LogEntity;
 
 /**
- * Logger service.
+ * Service logger.
  */
 class Logger {
 
@@ -26,7 +26,7 @@ class Logger {
   protected $entityTypeManager;
 
   /**
-   * LogArchiver constructor.
+   * Logger constructor.
    *
    * @param \Drupal\Core\Logger\LoggerChannel $logger
    *   LoggerChannel.
@@ -54,7 +54,6 @@ class Logger {
       if (empty($params['email']) && !empty($params['uid'])) {
         $user = $this->entityTypeManager->getStorage('user')->load($params['uid']);
         $params['email'] = $user->getEmail();
-        unset($params['uid']);
       }
       foreach ($params as $param => $value) {
         $log->set($param, $value);

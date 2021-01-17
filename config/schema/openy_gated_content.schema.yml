@@ -28,6 +28,9 @@ openy_gated_content.settings:
     virtual_y_login_url:
       type: string
       label: 'Virtual Y Login Landing Page url'
+    virtual_y_logout_url:
+      type: string
+      label: 'Virtual Y Log Out url'
     components:
       type: mapping
       label: 'Components settings'

@@ -1,0 +1,26 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_prgf_title
+    - paragraphs.paragraphs_type.gated_content
+  module:
+    - datalayer
+third_party_settings:
+  datalayer:
+    expose: 0
+    label: field_prgf_title
+id: paragraph.gated_content.field_prgf_title
+field_name: field_prgf_title
+entity_type: paragraph
+bundle: gated_content
+label: 'Headline Title'
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 'Virtual YMCA'
+default_value_callback: ''
+settings: {  }
+field_type: string

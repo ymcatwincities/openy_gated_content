@@ -12,7 +12,6 @@ use Drupal\Core\Field\BaseFieldDefinition;
  * Implements hook_entity_base_field_info().
  */
 function openy_gc_shared_content_server_entity_base_field_info(EntityTypeInterface $entity_type) {
-
   $allowed_entity_types = [];
   $shared_content_manager = \Drupal::service('plugin.manager.shared_content_source_type');
   foreach ($shared_content_manager->getDefinitions() as $plugin_id => $plugin) {
@@ -37,5 +36,24 @@ function openy_gc_shared_content_server_entity_base_field_info(EntityTypeInterfa
 
     return $fields;
   }
+}
 
+/**
+ * Implements hook_mail().
+ */
+function openy_gc_shared_content_server_mail($key, &$message, $params) {
+  switch ($key) {
+    case 'client_confirmation':
+      $site_config = \Drupal::config('system.site');
+      $message['from'] = $site_config->get('mail');
+      $message['subject'] = t('@site_name: Virtual Y shared server client confirmation', [
+        '@site_name' => $params['name'],
+      ]);
+      $message['body'][] = t('Site "@site_name" with url "@site_url" requested token and access to shared server. Open "@apply_url" and change status to allow access.', [
+        '@site_name' => $params['name'],
+        '@site_url' => $params['host'],
+        '@apply_url' => $params['apply_url'],
+      ]);
+      break;
+  }
 }
