@@ -1,1 +1,10 @@
-{{ drupal_block('virtual_y_personal_training') }}
+{{ attach_library('openy_gc_personal_training/pt_simple_peer') }}
+<video id="localVideo" autoplay playsinline></video>
+<video id="remoteVideo" autoplay playsinline></video>
+
+
+<div>
+    <button id="startButton">Start</button>
+    <button id="callButton">Call</button>
+    <button id="hangupButton">Hang Up</button>
+</div>
