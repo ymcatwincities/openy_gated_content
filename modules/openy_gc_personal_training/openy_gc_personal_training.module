@@ -1,0 +1,16 @@
+<?php
+
+/**
+ * Implements hook_theme().
+ */
+function openy_gc_personal_training_theme() {
+  return [
+    'paragraph__personal_training' => [
+      'base hook' => 'paragraph',
+      'variables' => [
+        'app_settings' => '',
+        'headline' => '',
+      ],
+    ],
+  ];
+}
