@@ -12,8 +12,7 @@ label: 'Create demo blog posts for Virtual Y'
 source:
   plugin: embedded_data
   data_rows:
-    -
-      id: 1
+    - id: 1
       title: 'WHY YOU SHOULD GIVE WALKING A TRY'
       category: 7
       description: |
@@ -25,8 +24,7 @@ source:
            Improve balance and coordination</p>
       image: 3
 
-    -
-      id: 2
+    - id: 2
       title: 'GROWN-UP FUN IN ADULT SPORTS LEAGUES'
       category: 7
       description: |
@@ -38,8 +36,7 @@ source:
            Strengthen leadership skills</p>
       image: 4
 
-    -
-      id: 3
+    - id: 3
       title: 'LIFESTYLE CHANGES BEYOND THE FIRST TWO WEEKS'
       category: 7
       description: |
@@ -48,6 +45,450 @@ source:
            Pamper yourself with a massage or other body treatment
            Carve out some time for a favorite hobby</p>
       image: 5
+
+    -
+      id: 4
+      title: 'HOW TO HAVE AN ACTIVE, SAFE WINTER'
+      category: 12
+      description: |
+        <p><h3>Adults of all ages can enjoy a mix of outdoor and indoor options to keep moving this season.</h3>
+        <p><strong>Outdoor adventures</strong></p>
+        <p>Getting outside for some fresh air is a great (and free!) way to stay active-no matter the season.</p>
+        <ul>
+          <li>Whether you walk your neighborhood sidewalks, around one of our many lakes, or on a local trail, heading out for a walk can boost your health in several ways. A study by the National Institutes of Health published in JAMA shows that the more steps you take-even low intensity walks-lower mortality risks.</li>
+          <li>The Twin Cities are home to miles and miles of groomed cross-country ski trails. If you&rsquo;re new to cross-country skiing, sign up for lessons and rent equipment at the Wirth Winter Recreation Area, the Como Park Ski Center, and at several Three Rivers Parks. In Rochester, cross-country ski equipment is available for rent to use on trails at some local parks and golf courses.</li>
+          <li>Lace up for ice skating. More than 60 outdoor ice rinks managed by the Minneapolis, St. Paul and Rochester park and recreation boards-most have warming houses and some have free skate rental on a first-come, first-served basis.</li>
+          <li>Exercising with a partner provides extra motivation, helps keep you accountable to your fitness plans, and is more fun! Ask a friend or family member to join you on an outdoor adventure.</li>
+        </ul>
+        <p><strong>Gear up for outdoor activities</strong></p>
+        <p>Layering is the only way to ensure you&rsquo;re comfortable before, during and after an outdoor activity. Consider:</p>
+        <ul>
+          <li><strong>Base layer (including socks)</strong>- Worn closest to your body, a base layer should include fitted clothes that wick moisture away from your skin. Choose items made from polyester or wool, which help keep you dry and warm. Avoid wearing cotton clothing in your base layer-cotton will trap your sweat and you&rsquo;
+              ll feel wet.</li>
+          <li><strong>Mid layer</strong>-Over your base layer, you&rsquo;ll want to focus on lightweight pieces that keep you warm and allow you to move well-like a fleece or a down vest.</li>
+          <li><strong>Outer layer</strong>-Depending on your activity and the weather, you might also consider outerwear that is wind and/or water proof.</li>
+          <li><strong>Warm accessories</strong>-Hats, headbands, gloves, mittens, neck gaiters and balaclavas can keep your head, neck and hands warm.</li>
+        </ul>
+        <p><strong>Indoor ideas</strong></p>
+        <p>When the weather is especially nasty outside, you can still stay active indoors including virtual workouts and visits to your local Y.</p>
+        <ul>
+          <li>Try a workout in the water at your local Y</li>
+          <li>Visit a local attraction like an indoor garden or shopping mall to take a stroll</li>
+        </ul>
+        <p><strong>Not sure where to start?</strong></p>
+        <p>The Y&rsquo;s Activity Finder makes it easy to find options that are a fit for you this winter-based on age, day, location and interests.</p>
+      image: 16
+
+    -
+      id: 5
+      title: '10 MINDFULNESS TIPS AND TECHNIQUES'
+      category: 11
+      description: |
+        <p>There are many ways to bring mindfulness into a person&rsquo;s life and these tips help provide some ideas:</p>
+        <ol>
+          <li>Create a Mindful Corner for home, work or school that can include:&nbsp;Mindful Glitter Jar,&nbsp;Chime,&nbsp;Coloring,&nbsp;Hoberman Sphere,&nbsp;music (rain sticks and drums), heavy blankets (for weight), eye masks, essential oils, etc.</li>
+          <li>Download a mindfulness app such as Insight Timer, Headspace, Calm</li>
+          <li>Create a bed-time routine
+        	<ol style="list-style-type: lower-alpha;">
+              <li>Turn off screens one hour before bed</li>
+              <li>Use a hot water bottle or weighted blanket to calm the nervous system</li>
+              <li>Align day with the circadian rhythms</li>
+              <li>Use an essential oil diffuser to hydrate the air</li>
+        	</ol>
+          </li>
+          <li>Take 1-minute brain-breaks throughout the day</li>
+          <li>Manage energy, not time.</li>
+          <li>Enjoy restorative practices at George Wellbeing such as massage/bodywork, singing bowl meditation, acupuncture, hydromassage&nbsp;and more</li>
+          <li>Attend a Y Wellness Retreat and experience the splendor of the natural environment of camp through holistic wellbeing programming and individualized exploration.</li>
+          <li>Eat mindfully at meal time by sitting down, chewing the food slowly and enjoying the sight, smell, texture and taste of the food.</li>
+          <li>Take a mindful walk in nature and pay attention to the sights, sounds and smells of being in the great outdoors in fresh air.</li>
+          <li>Participate in a yoga class where you will focus on breathing.</li>
+        </ol>
+      image: 17
+
+    -
+      id: 6
+      title: 'PARENTS: IT IS POSSIBLE TO RELAX AND REJUVENATE AMID YEAR-END CRAZINESS'
+      category: 13
+      description: |
+        <h3>Try these 4 tips to recharge and be your best self during this busy time of year.</h3>
+        <p>The end of the year is almost here. In tandem with plentiful celebrations and gatherings, stress levels and feelings
+            of being stretched thin can also be in excess as you manage it all for your family.</p>
+        <p>To help keep your wellbeing and self-care practices in check this season, try these tips:</p>
+        <p><strong>#1 Exercise</strong></p>
+        <p>Jennifer Menk, Senior Director of Health and Wellbeing for the YMCA of the North says, &quot;Exercise increases
+            endorphins-chemicals in your body that make you feel better. Maintaining fitness when overwhelmed helps you think
+            clearly, prioritize and have the endurance to get through times of hustle.&quot;</p>
+        <p>Exercise can help improve your quality of sleep and improve energy levels-both of which can help to manage stress.
+            Jennifer considers working out to be a way to &quot;burn off stress in a healthy way, which benefits your physical and
+            emotional wellbeing.&quot;</p>
+        <p>Here are a few easy ideas to enjoy exercise as a way to relax and rejuvenate...</p>
+        <p><strong><em>Just for you</em></strong></p>
+        <ul>
+            <li>The Y offers free child care while you work out. Kiddos are cared for while you cross your sweat session off your to-do list.</li>
+            <li>Try a class that can help you relax-like Tai Chi, Gentle Yoga and H2O Flow.</li>
+        </ul><p><strong><em>Together time</em></strong></p>
+        <ul>
+            <li>Plan an at-home workout with youth and family fitness cards</li>
+            <li>Check out a Group Exercise class at the Y designed just for kids and families</li>
+        </ul>
+        <p><strong>#2 Be mindful</strong><br>
+            Sally St. John, Director at the George Wellbeing
+            Center says, &quot;Self-care practices, such as meditation, allow our
+            getting-it-done practices to be done more productively. Mindfulness research has demonstrated that when we take just
+            a handful of minutes a day to tune-in to our self with a body scan or
+            breath work, we improve our cognitive ability to make faster and more meaningful decisions.&quot;</p>
+        <p>Kids can get in on mindfulness, too. Sally suggests creating a glitter jar as a fun activity.</p>
+        <p>At the George Wellbeing Center, you can find a variety of aids for relaxation, including...</p>
+        <p><strong><em>Restorative services</em></strong></p>
+        <ul>
+            <li>Acupuncture</li>
+            <li>Massage</li>
+            <li>Soundbath meditation</li>
+        </ul>
+        <p><strong><em>Wellbeing shopping</em></strong></p>
+        <p>Stop in to browse goods like essential oils, massage roller balls, bath salts blue-light blocking eyeglasses and much more.</p>
+        <p><strong>#3 Pay attention to your diet</strong><br>
+            Some foods have the power to lower or raise levels of stress and anxiety. Learn which foods to
+            build into your meal planning to reduce stress. For a more holistic look at how nutrition can impact the way
+            you feel, schedule a free 60-minute Nutrition Foundation
+            Session at the George Wellbeing Center.</p>
+        <p><strong>#4 Plan ahead for fun activities</strong></p>
+        <ul>
+            <li>Whether you want to tackle holiday prep or take a break from it all, drop kids off at Parents Night
+                Out at the Y on December 14.
+            </li>
+            <li>Visit your local Y as a family for a variety of holiday events.</li>
+            <li>Keep kids entertained during winter break
+                with field trips, games and camps at the Y.
+            </li>
+        </ul>
+      image: 18
+
+    -
+      id: 7
+      title: 'YOU’VE RETIRED. NOW WHAT?'
+      category: 14
+      description: |
+        <h3>From fitness to fun, the Y can be a part of your new routines</h3>
+        <p>Upon retirement, perhaps your goal is to spend more time working on your wellbeing. Maybe your goal is to move to a
+            new city in order to be closer to your grandkids. Or possibly you seek to meet new people as you transition out of a
+            workday routine. Common themes for many retirees include looking for new opportunities to provide structure
+            throughout the day, and to socialize.</p>
+        <p>Amy McGarness, ForeverWell Specialist at the River Valley YMCA says, &quot;Retirement is a time to spend time on yourself
+            intentionally.&quot;</p>
+        <p>The Y is a great place to build new routines for retired life, including:</p>
+        <p><strong>Fitness</strong></p>
+        <p>The YMCA offers several ForeverWell Group Exercise classes-designed especially for those who are looking for moderate
+            impact/intensity exercise, and to have fun while working out. If you are already an exercise regular or a former
+            teacher and are looking for a new role, many Ys are often looking for instructors to teach ForeverWell classes,
+            too!</p>
+        <p>&quot;It&rsquo;s never too late to exercise! Newer retirees are often young enough to make a big difference in their health by
+            finding things that work to take good care of their body,&quot; says Amy.</p>
+        <p>If you are new to exercise, meeting with a Personal Trainer can be a great way to learn about things like how to use
+            equipment, how to use proper form and what workouts might be best for you. It&rsquo;s also a nice way to maintain fitness
+            if you have an injury or are rehabilitating because your trainer can customize a program that will support
+            healing.</p>
+        <p>Through a combination of classes, working out on your own, or meeting with a Personal Trainer, the Y is a place where
+            you can feel good and enjoy the benefits of regular exercise.</p>
+        <p><strong>Connecting with people</strong></p>
+        <p>There&rsquo;s a wide variety of ways to have fun with friends old and new at the Y, including:</p>
+        <ul>
+            <li>Coffee talks on educational topics</li>
+            <li>Clubs for shared interests like walking, cards or playing games</li>
+            <li>Day trips to events and attractions</li>
+            <li>Breakfast or lunch gatherings</li>
+        </ul><p>Check the newsletter or schedule for your local Y.</p>
+        <p><strong>Volunteering</strong></p>
+        <p>Giving your time and talents is a sure way to positively impact your own wellbeing. There are a range of ways to
+            volunteer-whether it&rsquo;s an ongoing commitment or a one-time opportunity at a special event or organized project.</p>
+        <p>Regardless of the activities you might choose at the Y, Amy suggests that you &quot;Don&rsquo;t overdo it. Start small. Sample
+            things. And listen to your body!&quot;</p>
+      image: 19
+
+    -
+      id: 8
+      title: 'TIPS FOR WORKDAY MEDITATION'
+      category: 12
+      description: |
+        <h3>All you need is a few minutes and a comfortable space</h3>
+        <p>For many people, a hectic schedule makes overall wellness seem like a daunting task. Making time to work on physical
+            fitness and mental health-on top of commitments for work, school, family and friends can feel overwhelming. But it
+            <em>is</em> doable.</p>
+        <p>For example, you can squeeze in additional physical activity during the workweek by slightly altering your daily
+            routines on commute and even at the office.</p>
+        <p>When it comes to meditation, all you need is a few minutes-and similarly, you can integrate it into your commute or
+            on a break during the day.</p>
+        <p><strong>Meditation and mindfulness</strong></p>
+        <p>It might be easier to start with what it isn&rsquo;t-meditation isn&rsquo;t escape. Rather, it&rsquo;s about tuning
+            in to focus on what you&rsquo;re feeling, emotionally or physically-and not judging these feelings.</p>
+        <p>Paul Jeannotte, a Wellbeing Instructor at the George Wellbeing Center at the Dayton YMCA says mindfulness is, &quot;
+            Being aware in the present moment and accepting what&rsquo;s really happening.&quot;</p>
+        <p>Meditation and mindfulness go hand in hand. Meditation is a practice that can help you be more mindful.</p>
+        <p><strong>Why give meditation a try?</strong></p>
+        <p>There are several benefits of integrating a meditation practice into your life. It can help with:</p>
+        <ul>
+            <li>Stress reduction</li>
+            <li>Increased gratitude</li>
+            <li>Self-reflection</li>
+            <li>Emotional intelligence</li>
+            <li>Preparedness to handle whatever life throws your way</li>
+        </ul>
+        <p><strong>Meditation basics</strong></p>
+        <p>To meditate, Paul suggests that you find a space where you can be alone and can focus. He says it&rsquo;s better to
+            do just a few minutes of meditation on a daily basis, rather than a longer duration twice a week. Here are some
+            ideas to integrate meditation into your work life:</p>
+        <p>In terms of position, you can sit or walk-whatever is most comfortable to you. For example-you might find a quiet
+            room where you can sit down, uninterrupted and spend five minutes focusing on the sensations of your body breathing.
+            How do you feel while you inhale and exhale? You might close your eyes, or keep your eyes open and allow your gaze
+            to fall about three feet in front of you. This same thing can be done by spending five extra minutes in your car
+            before or after work.</p>
+        <p>Or, you might head out for a solo walk during lunch to feel the sensations of your body walking. How your legs feel,
+            what you see, what sounds you hear, etc.</p>
+        <p><strong>A wandering mind is OK</strong></p>
+        <p>Paul says it&rsquo;s normal for your mind to wander during meditation-especially if you are new in your meditation
+            practice. When that happens, come back to the sensations of the breath you were feeling before you wandered, and don&rsquo;t
+            judge yourself for wandering. This will help you to go back to focusing on the present moment and what you&rsquo;re
+            experiencing with each inhale and exhale.</p>
+        <p><strong>Give it a try</strong></p>
+        <p>If you&rsquo;re not sure meditation is for you, why not give it a try and find out? Start with just a few minutes,
+            and pay attention to what you&rsquo;re feeling-and that&rsquo;s it, you&rsquo;re meditating!</p>
+      image: 20
+
+    -
+      id: 9
+      title: 'CLASS SPOTLIGHT: ZUMBA AND ZUMBA GOLD'
+      category: 15
+      description: |
+        <h3>World music, dance and cardio come together in these fun Group Exercise classes</h3>
+        <p>Zumba is a cardio class that features music and dance moves from all over the world. In addition to aerobics
+            steps-think grapevine and v-step-class incorporates a variety of dance styles such as salsa, merengue, cumbia,
+            reggaeton, bhangra and more.</p>
+        <p>Zumba Gold is the same class, but is lower impact with fewer jumps. If you have an injury or are new to dance, Zumba
+            Gold is a great option.</p>
+        <p><strong>Why give Zumba a try?</strong></p>
+        <p>According to Laura Lindeman, a Group Fitness Instructor at the Elk River YMCA, the goal in Zumba and Zumba Gold
+            classes is to get you moving, having fun listening to world music, and enjoying dancing a variety of styles.</p>
+        <p>Laura says that in class you burn calories, get your daily steps in and time flies by. &quot;It&rsquo;s also a great
+            way to add some variety to your weekly workouts,&quot; she says.</p>
+        <p><strong>No dance experience required</strong></p>
+        <p>&quot;People who are considering class will tell me they aren&rsquo;t coordinated enough to try Zumba or Zumba
+            Gold-but the patterns are basic, easy to follow and it&rsquo;s truly for all ages and abilities,&quot; says
+            Laura.</p>
+        <p>She suggests coming to class at least three times to give it a fair shot. &quot;You might not get every step and that&rsquo;s
+            OK! You will still get the benefits of a great cardio workout.&quot;</p>
+        <p><strong>Preparing for your first class</strong></p>
+        <p>Although the name might sound exotic, you can wear your typical workout clothes to class. For footwear, wear
+            supportive shoes that aren&rsquo;t too &quot;grippy,&quot; or dance socks are an option, too.</p>
+        <p>Throughout class, dance moves will progress and offer options for higher or lower intensity. Plan on bringing a water
+            bottle to stay hydrated.</p>
+        <p>The temptation is always to find a spot in the back of the room when you&rsquo;re new-but it&rsquo;s more beneficial
+            to head near the front of the room where you can clearly see your instructor.</p>
+        <p>Zumba and Zumba Gold are Group Exercise classes, which means they&rsquo;re free for Y members. Drop in to give it a
+            try at any time-no registration required.</p>
+      image: 21
+
+    -
+      id: 10
+      title: 'HIIT: BOOST ENDURANCE WITH BURSTS OF INTENSITY'
+      category: 9
+      description: |
+        <h3>Get lasting results with this go-at-your-own-pace interval training class.</h3>
+        <p>A class called HIIT (High Intensity Interval Training) might sound &quot;intense,&quot; but Jennifer Proper, Group
+            Exercise Instructor at the Shoreview Y says it&rsquo;s easy to pick up.</p>
+        <p>&quot;We do reps of exercises, such as jumping jacks and lunges,&quot; says Jennifer. &quot;And, although the word
+            &lsquo;intensity&rsquo; is in the name, you get to define what intense means to you. Truly, all ages and fitness
+            levels are welcome.&quot;</p>
+        <p><strong>How does a HIIT class work?</strong></p>
+        <p>The class-a mix of cardio and strength training-alternates between timed intervals of intense exercise and lower
+            intensity recovery activities, such as walking or core exercises. During the intense work, each participant can
+            choose how many reps to do or whether to modify the exercise.</p>
+        <p>According to Jennifer, this format makes it easy for her to help each participant get the most out of the
+            workout.</p>
+        <p>&quot;Because there is no complex choreography to lead, I can meet each member where they are. For example, if
+            someone is having a hard time doing push-ups on their toes, I can suggest they try it from their knees.&quot;</p>
+        <p><strong>A short class, with lasting benefits</strong></p>
+        <p>Although HIIT classes are typically only 30 minutes, the benefits of the class can last for days. The short, intense
+            workouts provide improved athletic capacity and condition, improved glucose metabolism, and improved fat
+            burning.</p>
+        <p>Jennifer says, &quot;As you go through the workout, you deplete the stored oxygen reserves in your body. As a result,
+            after you finish the workout, your body continues to burn calories at a higher metabolic rate as it replenishes
+            stored oxygen levels. This is called excess post-exercise oxygen consumption or EPOC.&quot; She says this &quot;afterburn&quot;
+            can last for up to 48 hours after you leave class.</p>
+        <p>In fact, studies show that 30-minute HIIT classes just 3 times a week achieve the same results of 60-minute
+            steady-state running sessions 5 times a week.</p>
+        <p>HIIT is a Group Exercise class, which means it&rsquo;s free for Y members. Drop in to give it a try at any
+            time-no registration required.</p>
+      image: 22
+
+    -
+      id: 11
+      title: 'CLASS SPOTLIGHT: YOGA FLOW'
+      category: 6
+      description: |
+        <h3>Embrace your power and lift your mood with this dynamic yoga class.</h3>
+        <p>If you&rsquo;re new to yoga, you might wonder what a &quot;flow&quot; class involves. At the Y, Yoga Flow uses a
+            sequence of movements in a continuous flow. This style of yoga is also known as Vinyasa yoga.</p>
+        <p>Yoga Flow classes are a great way to:</p>
+        <ul>
+            <li>Build strength</li>
+            <li>Improve balance</li>
+            <li>Increase flexibility</li>
+            <li>Contribute to heart health</li>
+            <li>Alleviate stress and anxiety</li>
+        </ul>
+        <p><strong>What to expect</strong></p>
+        <p>Minda Orina is a Group Exercise Instructor with the Y and teaches Yoga Flow classes at the Dayton, Eagan, Ridgedale
+            and West St. Paul locations. Minda notes that each
+            class instructor will have a difference pace and style to their Yoga Flow class.</p>
+        <p>For example, she strives for her classes to be fun and joyous, with music playing an important role. &quot;I love
+            teaching this class because it offers an opportunity to spend time in our bodies and move to music with a group of
+            others. It&rsquo;s a real mood lift!&quot;</p>
+        <p>During Yoga Flow class:</p>
+        <ul>
+            <li>You will get a workout that builds strength</li>
+            <li>Your instructor will provide cues to help you get into each pose</li>
+            <li>Your instructor will offer options for various poses that accommodate all types of abilities</li>
+            <li>There might be a brief time for meditation at the end of class</li>
+        </ul>
+        <p><strong>Your first class</strong></p>
+        <p>There really isn&rsquo;t any prep work you need to do prior to trying your first Yoga Flow class at the Y. If you
+            have a yoga mat, you can bring it to class, or use a mat provided by the Y.</p>
+        <p>Minda suggests that you come a little early to class and let your instructor know that you&rsquo;re new. She also
+            encourages you to choose a spot near the center of the room, where it&rsquo;s easy to see the instructor. Although
+            this might feel intimidating, Minda encourages you to remember that during class everyone is engaged in their own
+            practice-and not looking at you.</p>
+        <p><strong>Starting your yoga practice</strong></p>
+        <p>Regardless of your body shape, age, or past yoga experience, Yoga Flow classes are waiting for you to try them at the
+            Y-check the schedule. In addition to Yoga Flow, there are
+            many other styles of yoga. It&rsquo;s worth trying a few to see what you like. For example, Gentle
+            Yoga or Balance and Flex Together.</p>
+        <p>Minda says that some people might think everyone who takes yoga classes already know all the moves or look a certain
+            way, but she stresses, &quot;It&rsquo;s for EVERY body!&quot; And it might feel overwhelming the first few times you
+            go-so be sure to give yoga classes a few chances before you call it quits.</p>
+        <p>She recommends incorporating flexibility training into your fitness program at least once a week-and Yoga Flow is a
+            great way to do it.</p>
+      image: 17
+
+    -
+      id: 12
+      title: 'LEARN ABOUT BODYPUMP, ONE OF THE Y’S MOST POPULAR CLASSES'
+      category: 9
+      description: |
+        <h3>Find out why people get so &quot;pumped up&quot; about a barbell class.</h3>
+        <p>BodyPump is a 60-minute barbell workout that gets rave reviews from participants. To find out what all the buzz is
+            about, we talked to Courtney Raney, BodyPump Group Fitness Instructor at the Y&rsquo;s Maplewood, Eastside and West
+            St. Paul locations.</p>
+        <p><strong>Why is BodyPump so popular?</strong></p>
+        <p>According to Courtney, people like BodyPump for several reasons. &quot;First of all, you work all your muscle groups
+            safely and effectively in one session,&quot; she explains. &quot;Over time, people transform their bodies and
+            confidence levels. The results are incredible.&quot;</p>
+        <p>Additionally, BodyPump ups the fun factor by choreographing weight training exercises to popular music. Each
+            60-minute workout has 10 songs or &quot;tracks&quot;. Each set of tracks and exercises (called a &quot;release&quot;)
+            is used for a few months-allowing participants to master the routine and get the most out the workout. There are
+            four new releases a year.</p>
+        <p>&quot;There&rsquo;s so much energy at BodyPump, after a few times people get hooked,&quot; Courtney says. &quot;People
+            try to do the same type workout when they&rsquo;re gone on vacation, but they can&rsquo;t wait to get back to class.&quot;</p>
+        <p><strong>What can you expect in your first few classes?</strong></p>
+        <p>&quot;The people in the class are very welcoming&quot; she adds, &quot;We often assign a mentor-someone who has been
+            doing the class for years-to help a new person get comfortable with the equipment and movements.&quot;</p>
+        <p>Because BodyPump is an endurance-style class, some people need to work up to completing the whole workout.</p>
+        <p>According to Courtney, &quot;Many people do what we call a &lsquo;smart-start&rsquo;. The first day, you just do the
+            first 5 tracks, which is about half of the class. Then, at each subsequent class you add a track until you can do
+            all 10.&quot;</p>
+        <p><strong>Who is BodyPump for?</strong></p>
+        <p>&quot;I wish everyone would try this class!&quot; Courtney says. BodyPump instructors are trained to help a wide
+            variety of participants find the right weights and safe techniques for their needs.</p>
+        <p>And, the class isn&rsquo;t just for people who want to bulk up. &quot;Sometimes people are worried about taking the
+            class because they don&rsquo;t want to get too big,&quot; says Courtney. &quot;But we work on creating long, lean,
+            healthy muscles.&quot;</p>
+        <p><strong>Take BodyPump at the Y</strong></p>
+        <p>Classes are open to all fitness levels. BodyPump is a Group Exercise class, which means it&rsquo;s free for Y
+            members. Teens ages 15+ are welcome to attend with a parent or guardian. Drop in to give it a try at any time-no
+            registration required.</p>
+      image: 23
+
+    -
+      id: 13
+      title: 'BALANCE YOUR BODY AND MIND WITH MAT PILATES'
+      category: 4
+      description: |
+        <h3>Build strength, gain flexibility and practice mindful breathing.</h3>
+        <p>Seek complete coordination of mind, body and spirit with Mat Pilates, a conditioning fitness class that focuses on
+            total body alignment and intentional breathing. The exercises zero-in on core powerhouse muscles: abdominals, lower
+            back, shoulders, thighs and glutes.</p>
+        <p>We talked to Teresa Hoppe, Group Fitness Instructor at Emma B. Howe in Coon Rapids, to learn more.</p>
+        <p><strong>What is Pilates?</strong></p>
+        <p>German-born Joseph Pilates developed a method he called &quot;Contrology&quot; in the early 20th century. He sought
+            to develop the body uniformly, correct posture, improve physical vitality, stimulate the mind and lift the spirit.
+            His unique exercises began a fitness movement that we now call the Pilates Method.</p>
+        <p>&quot;Joseph Pilates is known to have said: &lsquo;You will feel better in 10 sessions, look better in 20 sessions,
+            and have a completely new body in 30 sessions.&rsquo;&quot; Teresa recalls. &quot;Which is to say: with patience and
+            persistence, change will take place.&quot;</p>
+        <p><strong>What to expect in Mat Pilates classes</strong></p>
+        <p>Mat Pilates is one of several ways in which Pilates can be practiced. Literally, on a mat. You can bring your own
+            yoga mat or borrow one from the Y. Sometimes, instructors may bring additional tools like a Pilates circle, ball or
+            band for the class. Mat Pilates Classes focus on the six primary principles of the classic Pilates method, which
+            are:</p>
+        <ul>
+            <li>Control</li>
+            <li>Center</li>
+            <li>Concentration</li>
+            <li>Precision</li>
+            <li>Breathing</li>
+            <li>Flow</li>
+        </ul>
+        <p>Classes emphasize core strength and total body conditioning for balanced muscle development. You can expect
+            three key phases in each Mat Pilates class at the Y:</p>
+        <ol>
+            <li>Warm-up exercises</li>
+            <li>Movements while seated, standing or laying down</li>
+            <li>Relaxing, restorative movements</li>
+        </ol>
+        <p><strong>Why give Mat Pilates a try?</strong></p>
+        <p>&quot;The benefits of Mat Pilates are so many; it's a big package!&quot; expressed Teresa. She cites some of the
+            specific benefits as follows:</p>
+        <ul>
+            <li>Improved posture and balance</li>
+            <li>Increased lung capacity</li>
+            <li>Improved flexibility and leaner muscles</li>
+            <li>Improved bone density and joint health</li>
+            <li>Positive body awareness</li>
+            <li>Increased vitality and a sense of wellbeing</li>
+            <li>Better overall strength, endurance and coordination</li>
+            <li>Enhanced sports performance and daily activities</li>
+        </ul><p>Then there are the additional physical and psychological benefits that stem from Pilates&rsquo; focus on
+            breathing.</p>
+        <p><strong>Who would like Mat Pilates classes?</strong></p>
+        <p>&quot;Mat Pilates is great for people who are looking for cross training options or who want to improve their balance
+            and flexibility,&quot; she said. &quot;People with back issues might find Mat Pilates beneficial, too.&quot;</p>
+        <p>Instructors can provide modifications to accommodate participants with special needs or health limitations, but you
+            should work with your doctor to ensure a safe Mat Pilates practice.</p>
+        <p>&quot;I frequently remind my class participants that each of us are at a different place with strength or
+            flexibility,&quot; Teresa said. &quot;As we practice together, we will look slightly different. That's ok! All
+            participants are welcome whether they&rsquo;re an accomplished athlete or someone just returning to
+            exercise.&quot;</p>
+        <p><strong>If you&rsquo;ve never tried Mat Pilates before...</strong></p>
+        <p>For your first class, come a little early to talk to the instructor. They will help you get your equipment together
+            and discuss any injuries or physical limitations you may have.</p>
+        <p>What to bring and wear:</p>
+        <ul>
+            <li>Your yoga mat. (If you forget or don&rsquo;t have one, you can check one out from Member Services or pick one up
+                in the studio where class is scheduled.)
+            </li>
+            <li>Fitted-yet-flexible exercise clothes made of breathable material.</li>
+            <li>A warmer layer for the relaxation portion, if desired.</li>
+            <li>A water bottle.</li>
+        </ul><p>Come to class dressed and ready to move your body. Don't be afraid to ask questions. Take breaks as you need
+            to.</p>
+        <p>You can do Mat Pilates every day. Teresa recommends at least a few times (2-3) per week. &quot;Change happens with
+            regular practice!&quot; she says.</p>
+        <p><strong>Take Mat Pilates at the Y</strong></p>
+        <p>Classes are open to all fitness levels. Kids ages 10-14 are welcome to attend with a parent or guardian and teens
+            over 15 can attend on their own.</p>
+        <p>Mat Pilates is a Group Exercise class, which means it&rsquo;s free for Y members. Drop in to give it a try at any
+            time-no registration required. Check out a Mat Pilates class today.</p>
+      image: 24
 
   ids:
     id:

@@ -4,7 +4,7 @@
       ref="player"
       :player="player"
       :videoId="videoId"
-      :options="{responsive: 'true'}"
+      :options="{responsive: 'true', url: media.field_media_video_embed_field}"
       @loaded="$refs.player.pause()"
       @play="handlePlay()"
       @ended="handlePlayerEvent('videoPlaybackEnded')"

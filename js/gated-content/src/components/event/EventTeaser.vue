@@ -16,7 +16,10 @@
         <SvgIcon icon="clock-regular"></SvgIcon>
         {{ time }} ({{ duration }})
       </div>
-      <div class="instructor">
+      <div
+        class="instructor"
+        v-if="this.video.attributes.host_name"
+      >
         <SvgIcon icon="instructor-icon"></SvgIcon>
         {{ this.video.attributes.host_name }}
       </div>
@@ -71,7 +74,7 @@ export default {
       const duration = moment.duration(moment(this.video.attributes.date.value)
         .diff(moment()));
       if (duration.asHours() > 48) {
-        return duration.format();
+        return duration.format('d [day]');
       }
       return duration.format('hh:mm:ss');
     },

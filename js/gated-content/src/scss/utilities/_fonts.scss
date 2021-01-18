@@ -12,6 +12,27 @@
   @include median(font-size, 24px, 20px);
 }
 
+.cachet-medium-24-20 {
+  font-family: $cachet-medium;
+  font-weight:  500;
+
+  @include median(font-size, 24px, 20px);
+}
+
+.cachet-medium-16-14 {
+  font-family: $cachet-medium;
+  font-weight:  500;
+
+  @include median(font-size, 16px, 14px);
+}
+
+.cachet-medium-20-18 {
+  font-family: $cachet-medium;
+  font-weight:  500;
+
+  @include median(font-size, 20px, 18px);
+}
+
 .verdana-16-14 {
   font-family: Verdana, sans-serif;
 

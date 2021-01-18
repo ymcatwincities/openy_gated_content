@@ -33,7 +33,7 @@
               class="video-footer__block">
               <SvgIcon icon="instructor-icon"
                        class="fill-white"
-                       grow-by-height="false"></SvgIcon>
+                       :growByHeight=false></SvgIcon>
               {{ video.attributes.field_gc_video_instructor }}
             </div>
             <div

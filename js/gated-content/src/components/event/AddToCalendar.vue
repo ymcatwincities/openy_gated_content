@@ -5,7 +5,7 @@
       data-toggle="dropdown"
       aria-haspopup="true"
       aria-expanded="false">
-      <SvgIcon icon="calendar-plus" grow-by-height="false"></SvgIcon>
+      <SvgIcon icon="calendar-plus" :growByHeight=false></SvgIcon>
     </button>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
       <a :href="googleLink" target="_blank" class="dropdown-item btn-link">Google</a>
