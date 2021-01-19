@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * @file
+ * Contains openy_gc_personal_training.module.
+ */
+
+/**
  * Implements hook_theme().
  */
 function openy_gc_personal_training_theme() {
