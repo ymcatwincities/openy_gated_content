@@ -4,296 +4,225 @@
 (function ($) {
   "use strict";
 
-  /**
-   * Set css class 'primary-menu-minimize' for body element after primary menu
-   * affix activated on scroll This function is needed for Virtual Y top menu
-   * to follow primary menu height change
-   */
+  function requestLocalVideo(callbacks) {
+    // Monkeypatch for crossbrowser geusermedia
+    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+
+    // Request audio an video
+    navigator.getUserMedia({ audio: true, video: true }, callbacks.success , callbacks.error);
+  }
+
   Drupal.behaviors.VirtualYPT = {
     attach: function (context, settings) {
-      // Set up media stream constant and parameters.
+      var peer_id;
+      var username;
+      var conn;
 
-// In this codelab, you will be streaming video only: "video: true".
-// Audio will not be streamed because it is set to "audio: false" by default.
-      const mediaStreamConstraints = {
-        video: true,
-      };
-
-// Set up to exchange only video.
-      const offerOptions = {
-        offerToReceiveVideo: 1,
-      };
-
-// Define initial start time of the call (defined as connection between peers).
-      let startTime = null;
-
-// Define peer connections, streams and video elements.
-      const localVideo = document.getElementById('localVideo');
-      const remoteVideo = document.getElementById('remoteVideo');
-
-      let localStream;
-      let remoteStream;
-
-      let localPeerConnection;
-      let remotePeerConnection;
-
-
-// Define MediaStreams callbacks.
-
-// Sets the MediaStream as the video element src.
-      function gotLocalMediaStream(mediaStream) {
-        localVideo.srcObject = mediaStream;
-        localStream = mediaStream;
-        trace('Received local stream.');
-        callButton.disabled = false;  // Enable call button.
-      }
-
-// Handles error by logging a message to the console.
-      function handleLocalMediaStreamError(error) {
-        trace(`navigator.getUserMedia error: ${error.toString()}.`);
-      }
-
-// Handles remote MediaStream success by adding it as the remoteVideo src.
-      function gotRemoteMediaStream(event) {
-        const mediaStream = event.stream;
-        remoteVideo.srcObject = mediaStream;
-        remoteStream = mediaStream;
-        trace('Remote peer connection received remote stream.');
-      }
-
-
-// Add behavior for video streams.
-
-// Logs a message with the id and size of a video element.
-      function logVideoLoaded(event) {
-        const video = event.target;
-        trace(`${video.id} videoWidth: ${video.videoWidth}px, ` +
-            `videoHeight: ${video.videoHeight}px.`);
-      }
-
-// Logs a message with the id and size of a video element.
-// This event is fired when video begins streaming.
-      function logResizedVideo(event) {
-        logVideoLoaded(event);
-
-        if (startTime) {
-          const elapsedTime = window.performance.now() - startTime;
-          startTime = null;
-          trace(`Setup time: ${elapsedTime.toFixed(3)}ms.`);
+      /**
+       * Important: the host needs to be changed according to your requirements.
+       * e.g if you want to access the Peer server from another device, the
+       * host would be the IP of your host namely 192.xxx.xxx.xx instead
+       * of localhost.
+       *
+       * The iceServers on this example are public and can be used for your project.
+       */
+      var peer = new Peer({
+        debug: 3,
+        config: {
+          'iceServers': [
+            { url: 'stun:stun1.l.google.com:19302' },
+            {
+              url: 'turn:numb.viagenie.ca',
+              credential: 'muazkh',
+              username: 'webrtc@live.com'
+            }
+          ]
         }
-      }
+      });
 
-      localVideo.addEventListener('loadedmetadata', logVideoLoaded);
-      remoteVideo.addEventListener('loadedmetadata', logVideoLoaded);
-      remoteVideo.addEventListener('onresize', logResizedVideo);
+      // Once the initialization succeeds:
+      // Show the ID that allows other user to connect to your session.
+      peer.on('open', function () {
+        document.getElementById("peer-id-label").innerHTML = peer.id;
+      });
 
+      // When someone connects to your session:
+      //
+      // 1. Hide the peer_id field of the connection form and set automatically its value
+      // as the peer of the user that requested the connection.
+      // 2.
+      peer.on('connection', function (connection) {
+        conn = connection;
+        peer_id = connection.peer;
 
-// Define RTC peer connection behavior.
+        // Use the handleMessage to callback when a message comes in
+        conn.on('data', handleMessage);
 
-// Connects with new peer candidate.
-      function handleConnection(event) {
-        const peerConnection = event.target;
-        const iceCandidate = event.candidate;
+        // Hide peer_id field and set the incoming peer id as value
+        document.getElementById("peer_id").className += " hidden";
+        document.getElementById("peer_id").value = peer_id;
+        document.getElementById("connected_peer").innerHTML = connection.metadata.username;
+      });
 
-        if (iceCandidate) {
-          const newIceCandidate = new RTCIceCandidate(iceCandidate);
-          const otherPeer = getOtherPeer(peerConnection);
+      peer.on('error', function(err){
+        alert("An error ocurred with peer: " + err);
+        console.error(err);
+      });
 
-          otherPeer.addIceCandidate(newIceCandidate)
-              .then(() => {
-                handleConnectionSuccess(peerConnection);
-              }).catch((error) => {
-            handleConnectionFailure(peerConnection, error);
+      /**
+       * Handle the on receive call event
+       */
+      peer.on('call', function (call) {
+        var acceptsCall = confirm("Videocall incoming, do you want to accept it ?");
+
+        if(acceptsCall){
+          // Answer the call with your own video/audio stream
+          call.answer(window.localStream);
+
+          // Receive data
+          call.on('stream', function (stream) {
+            // Store a global reference of the other user stream
+            window.peer_stream = stream;
+            // Display the stream of the other user in the peer-camera video element !
+            onReceiveStream(stream, 'peer-camera');
           });
 
-          trace(`${getPeerName(peerConnection)} ICE candidate:\n` +
-              `${event.candidate.candidate}.`);
+          // Handle when the call finishes
+          call.on('close', function(){
+            alert("The videocall has finished");
+          });
+
+          // use call.close() to finish a call
+        }else{
+          console.log("Call denied !");
         }
+      });
+
+      /**
+       * Starts the request of the camera and microphone
+       *
+       * @param {Object} callbacks
+       */
+      function requestLocalVideo(callbacks) {
+        // Monkeypatch for crossbrowser geusermedia
+        navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+
+        // Request audio an video
+        navigator.getUserMedia({ audio: true, video: true }, callbacks.success , callbacks.error);
       }
 
-// Logs that the connection succeeded.
-      function handleConnectionSuccess(peerConnection) {
-        trace(`${getPeerName(peerConnection)} addIceCandidate success.`);
-      };
+      /**
+       * Handle the providen stream (video and audio) to the desired video element
+       *
+       * @param {*} stream
+       * @param {*} element_id
+       */
+      function onReceiveStream(stream, element_id) {
+        // Retrieve the video element according to the desired
+        var video = document.getElementById(element_id);
+        // Set the given stream as the video source
+        video.srcObject = stream;
 
-// Logs that the connection failed.
-      function handleConnectionFailure(peerConnection, error) {
-        trace(`${getPeerName(peerConnection)} failed to add ICE Candidate:\n` +
-            `${error.toString()}.`);
+        // Store a global reference of the stream
+        window.peer_stream = stream;
       }
 
-// Logs changes to the connection state.
-      function handleConnectionChange(event) {
-        const peerConnection = event.target;
-        console.log('ICE state change event: ', event);
-        trace(`${getPeerName(peerConnection)} ICE state: ` +
-            `${peerConnection.iceConnectionState}.`);
-      }
+      /**
+       * Appends the received and sent message to the listview
+       *
+       * @param {Object} data
+       */
+      function handleMessage(data) {
+        var orientation = "text-left";
 
-// Logs error when setting session description fails.
-      function setSessionDescriptionError(error) {
-        trace(`Failed to create session description: ${error.toString()}.`);
-      }
-
-// Logs success when setting session description.
-      function setDescriptionSuccess(peerConnection, functionName) {
-        const peerName = getPeerName(peerConnection);
-        trace(`${peerName} ${functionName} complete.`);
-      }
-
-// Logs success when localDescription is set.
-      function setLocalDescriptionSuccess(peerConnection) {
-        setDescriptionSuccess(peerConnection, 'setLocalDescription');
-      }
-
-// Logs success when remoteDescription is set.
-      function setRemoteDescriptionSuccess(peerConnection) {
-        setDescriptionSuccess(peerConnection, 'setRemoteDescription');
-      }
-
-// Logs offer creation and sets peer connection session descriptions.
-      function createdOffer(description) {
-        trace(`Offer from localPeerConnection:\n${description.sdp}`);
-
-        trace('localPeerConnection setLocalDescription start.');
-        localPeerConnection.setLocalDescription(description)
-            .then(() => {
-              setLocalDescriptionSuccess(localPeerConnection);
-            }).catch(setSessionDescriptionError);
-
-        trace('remotePeerConnection setRemoteDescription start.');
-        remotePeerConnection.setRemoteDescription(description)
-            .then(() => {
-              setRemoteDescriptionSuccess(remotePeerConnection);
-            }).catch(setSessionDescriptionError);
-
-        trace('remotePeerConnection createAnswer start.');
-        remotePeerConnection.createAnswer()
-            .then(createdAnswer)
-            .catch(setSessionDescriptionError);
-      }
-
-// Logs answer to offer creation and sets peer connection session descriptions.
-      function createdAnswer(description) {
-        trace(`Answer from remotePeerConnection:\n${description.sdp}.`);
-
-        trace('remotePeerConnection setLocalDescription start.');
-        remotePeerConnection.setLocalDescription(description)
-            .then(() => {
-              setLocalDescriptionSuccess(remotePeerConnection);
-            }).catch(setSessionDescriptionError);
-
-        trace('localPeerConnection setRemoteDescription start.');
-        localPeerConnection.setRemoteDescription(description)
-            .then(() => {
-              setRemoteDescriptionSuccess(localPeerConnection);
-            }).catch(setSessionDescriptionError);
-      }
-
-
-// Define and add behavior to buttons.
-
-// Define action buttons.
-      const startButton = document.getElementById('startButton');
-      const callButton = document.getElementById('callButton');
-      const hangupButton = document.getElementById('hangupButton');
-
-// Set up initial action buttons status: disable call and hangup.
-      callButton.disabled = true;
-      hangupButton.disabled = true;
-
-
-// Handles start button action: creates local MediaStream.
-      function startAction() {
-        startButton.disabled = true;
-        navigator.mediaDevices.getUserMedia(mediaStreamConstraints)
-            .then(gotLocalMediaStream).catch(handleLocalMediaStreamError);
-        trace('Requesting local stream.');
-      }
-
-// Handles call button action: creates peer connection.
-      function callAction() {
-        callButton.disabled = true;
-        hangupButton.disabled = false;
-
-        trace('Starting call.');
-        startTime = window.performance.now();
-
-        // Get local media stream tracks.
-        const videoTracks = localStream.getVideoTracks();
-        const audioTracks = localStream.getAudioTracks();
-        if (videoTracks.length > 0) {
-          trace(`Using video device: ${videoTracks[0].label}.`);
-        }
-        if (audioTracks.length > 0) {
-          trace(`Using audio device: ${audioTracks[0].label}.`);
+        // If the message is yours, set text to right !
+        if(data.from == username){
+          orientation = "text-right"
         }
 
-        const servers = null;  // Allows for RTC server configuration.
+        var messageHTML =  '<a href="javascript:void(0);" class="list-group-item' + orientation + '">';
+        messageHTML += '<h4 class="list-group-item-heading">'+ data.from +'</h4>';
+        messageHTML += '<p class="list-group-item-text">'+ data.text +'</p>';
+        messageHTML += '</a>';
 
-        // Create peer connections and add behavior.
-        localPeerConnection = new RTCPeerConnection(servers);
-        trace('Created local peer connection object localPeerConnection.');
-
-        localPeerConnection.addEventListener('icecandidate', handleConnection);
-        localPeerConnection.addEventListener(
-            'iceconnectionstatechange', handleConnectionChange);
-
-        remotePeerConnection = new RTCPeerConnection(servers);
-        trace('Created remote peer connection object remotePeerConnection.');
-
-        remotePeerConnection.addEventListener('icecandidate', handleConnection);
-        remotePeerConnection.addEventListener(
-            'iceconnectionstatechange', handleConnectionChange);
-        remotePeerConnection.addEventListener('addstream', gotRemoteMediaStream);
-
-        // Add local stream to connection and create offer to connect.
-        localPeerConnection.addStream(localStream);
-        trace('Added local stream to localPeerConnection.');
-
-        trace('localPeerConnection createOffer start.');
-        localPeerConnection.createOffer(offerOptions)
-            .then(createdOffer).catch(setSessionDescriptionError);
+        document.getElementById("messages").innerHTML += messageHTML;
       }
 
-// Handles hangup action: ends up call, closes connections and resets peers.
-      function hangupAction() {
-        localPeerConnection.close();
-        remotePeerConnection.close();
-        localPeerConnection = null;
-        remotePeerConnection = null;
-        hangupButton.disabled = true;
-        callButton.disabled = false;
-        trace('Ending call.');
-      }
+      /**
+       * Handle the send message button
+       */
+      document.getElementById("send-message").addEventListener("click", function(){
+        // Get the text to send
+        var text = document.getElementById("message").value;
 
-// Add click event handlers for buttons.
-      startButton.addEventListener('click', startAction);
-      callButton.addEventListener('click', callAction);
-      hangupButton.addEventListener('click', hangupAction);
+        // Prepare the data to send
+        var data = {
+          from: username,
+          text: text
+        };
 
+        // Send the message with Peer
+        conn.send(data);
 
-// Define helper functions.
+        // Handle the message on the UI
+        handleMessage(data);
 
-// Gets the "other" peer connection.
-      function getOtherPeer(peerConnection) {
-        return (peerConnection === localPeerConnection) ?
-            remotePeerConnection : localPeerConnection;
-      }
+        document.getElementById("message").value = "";
+      }, false);
 
-// Gets the name of a certain peer connection.
-      function getPeerName(peerConnection) {
-        return (peerConnection === localPeerConnection) ?
-            'localPeerConnection' : 'remotePeerConnection';
-      }
+      /**
+       *  Request a videocall the other user
+       */
+      document.getElementById("call").addEventListener("click", function(){
+        console.log('Calling to ' + peer_id);
+        console.log(peer);
 
-// Logs an action (text) and the time when it happened on the console.
-      function trace(text) {
-        text = text.trim();
-        const now = (window.performance.now() / 1000).toFixed(3);
+        var call = peer.call(peer_id, window.localStream);
 
-        console.log(now, text);
-      }
+        call.on('stream', function (stream) {
+          window.peer_stream = stream;
+
+          onReceiveStream(stream, 'peer-camera');
+        });
+      }, false);
+
+      /**
+       * On click the connect button, initialize connection with peer
+       */
+      document.getElementById("connect-to-peer-btn").addEventListener("click", function(){
+        username = document.getElementById("name").value;
+        peer_id = document.getElementById("peer_id").value;
+
+        if (peer_id) {
+          conn = peer.connect(peer_id, {
+            metadata: {
+              'username': username
+            }
+          });
+
+          conn.on('data', handleMessage);
+        }else{
+          alert("You need to provide a peer to connect with !");
+          return false;
+        }
+
+        document.getElementById("chat").className = "";
+        document.getElementById("connection-form").className += " hidden";
+      }, false);
+
+      /**
+       * Initialize application by requesting your own video to test !
+       */
+      requestLocalVideo({
+        success: function(stream){
+          window.localStream = stream;
+          onReceiveStream(stream, 'my-camera');
+        },
+        error: function(err){
+          alert("Cannot get access to your camera and video !");
+          console.error(err);
+        }
+      });
     },
   }
 })(jQuery);

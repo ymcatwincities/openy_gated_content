@@ -5,7 +5,6 @@ namespace Drupal\openy_gc_personal_training\Plugin\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\openy_gc_auth\GCIdentityProviderManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 
@@ -77,15 +76,9 @@ class VirtualYPersonalTrainingBlock extends BlockBase {
    */
   public function build() {
 
-    $virtual_y_config = $this->configFactory->get('openy_gc_auth.settings');
-    $active_provider = $virtual_y_config->get('active_provider');
-    $plugin_definition = $this->identityProviderManager->getDefinition($virtual_y_config->get('active_provider'), FALSE);
-    if (!$plugin_definition) {
-      return [
-        '#markup' => 'Error: Auth plugin is not found',
-      ];
-    }
-
-    return ['#markup' => 'test'];
+    return [
+      '#markup' => 'test'
+    ];
   }
+
 }
