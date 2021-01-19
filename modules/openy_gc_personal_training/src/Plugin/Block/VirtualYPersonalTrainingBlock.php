@@ -77,7 +77,7 @@ class VirtualYPersonalTrainingBlock extends BlockBase {
   public function build() {
 
     return [
-      '#markup' => 'test'
+      '#markup' => 'test',
     ];
   }
 
