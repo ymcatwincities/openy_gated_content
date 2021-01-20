@@ -23,7 +23,7 @@ display:
         options:
           perm: 'view log entity entities'
       cache:
-        type: tag
+        type: none
         options: {  }
       query:
         type: views_query
@@ -471,7 +471,7 @@ display:
           exclude: false
           alter:
             alter_text: true
-            text: '<a href="/{{ entity_type == ''node'' ? ''node'' : ''events'' }}/{{ entity_id }}">{{ payload }}</a>'
+            text: "{% if entity_id != false %}\r\n<a href=\"/{{ entity_type == 'node' ? 'node' : 'events' }}/{{ entity_id }}\">{{ payload }}</a>\r\n{% else %}\r\n{{ payload }}\r\n{% endif %}\r\n"
             make_link: false
             path: ''
             absolute: false
@@ -786,6 +786,10 @@ display:
                 title: videoPlaybackEnded
                 operator: contains
                 value: videoPlaybackEnded
+              5:
+                title: userActivity
+                operator: contains
+                value: userActivity
           entity_type: log_entity
           entity_field: event_type
           plugin_id: string

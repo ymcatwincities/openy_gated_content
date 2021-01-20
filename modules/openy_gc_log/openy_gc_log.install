@@ -107,7 +107,7 @@ function openy_gc_log_update_8005() {
 }
 
 /**
- * Import config and update entity.
+ * Import configs and update entity.
  */
 function openy_gc_log_update_8006() {
   $config_dir = drupal_get_path('module', 'openy_gc_log');
@@ -116,6 +116,7 @@ function openy_gc_log_update_8006() {
   $config_importer->setDirectory($config_dir);
   $config_importer->importConfigs([
     'openy_gc_log.settings',
+    'views.view.virtual_y_logs',
   ]);
 
   // Update entity to add the changed field.
