@@ -1,5 +1,5 @@
 openy_gc_log.settings:
-  path: '/admin/virtual-y-logs'
+  path: '/admin/virtual-y-logs/settings'
   defaults:
     _form: '\Drupal\openy_gc_log\Form\LogSettingsForm'
     _title: 'Virtual Y Log settings'

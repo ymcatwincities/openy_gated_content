@@ -29,6 +29,7 @@ class LogSettingsForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state): array {
     $config = $this->config('openy_gc_log.settings');
+    $form['#tree'] = TRUE;
 
     $form['app_settings'] = [
       '#type' => 'details',
@@ -40,7 +41,7 @@ class LogSettingsForm extends ConfigFormBase {
       '#type' => 'select',
       '#title' => $this->t('Activity granularity interval'),
       '#description' => $this->t('Select the time period after which the new activity tracking session will be started for user.'),
-      '#default_value' => $config['activity_granularity_interval'],
+      '#default_value' => $config->get('activity_granularity_interval'),
       '#required' => TRUE,
       '#options' => [
         300 => $this->t('5 minutes'),
