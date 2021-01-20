@@ -3,6 +3,7 @@
 namespace Drupal\openy_gc_log;
 
 use Drupal\Core\Config\ConfigFactory;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManager;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\File\FileSystem;
@@ -284,6 +285,9 @@ class LogArchiver {
         $entity_type_id = $entity_type === 'node' ? 'node' : 'eventinstance';
         $entity = $this->entityTypeManager->getStorage($entity_type_id)
           ->load($entity_id);
+        if (!$entity instanceof EntityInterface) {
+          continue;
+        }
         $export_row['entity_title'] = $entity_type === 'node' ?
           $entity->label() :
           ($entity->get('field_ls_title')->value ? $entity->get('field_ls_title')->value : $entity->get('title')->value);
