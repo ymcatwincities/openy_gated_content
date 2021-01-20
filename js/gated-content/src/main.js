@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import { sync } from 'vuex-router-sync';
+import moment from 'moment';
 import App from './GatedContent.vue';
 import router from './router';
 import store from './store';
@@ -7,7 +8,6 @@ import filters from './filters';
 import Log from './plugins/log';
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
-import moment from 'moment';
 
 Vue.use(Log);
 
@@ -20,7 +20,7 @@ filters.forEach((f) => {
 });
 
 moment.updateLocale('en', {
-  meridiem(hours, minutes, isLower) {
+  meridiem(hours) {
     return hours < 12 ? 'a.m.' : 'p.m.';
   },
 });
