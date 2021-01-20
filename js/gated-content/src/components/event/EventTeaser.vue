@@ -64,7 +64,7 @@ export default {
       return moment(this.video.attributes.date.value).format('YYYY-MM-DD');
     },
     time() {
-      return moment(this.video.attributes.date.value).format('HH:MM:SS');
+      return moment(this.video.attributes.date.value).format('h:mm a');
     },
     duration() {
       return moment.duration(moment(this.video.attributes.date.value)

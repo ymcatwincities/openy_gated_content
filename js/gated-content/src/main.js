@@ -7,6 +7,7 @@ import filters from './filters';
 import Log from './plugins/log';
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
+import moment from 'moment';
 
 Vue.use(Log);
 
@@ -16,6 +17,12 @@ sync(store, router);
 
 filters.forEach((f) => {
   Vue.filter(f.name, f.execute);
+});
+
+moment.updateLocale('en', {
+  meridiem(hours, minutes, isLower) {
+    return hours < 12 ? 'a.m.' : 'p.m.';
+  },
 });
 
 new Vue({
