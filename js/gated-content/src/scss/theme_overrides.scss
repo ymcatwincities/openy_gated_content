@@ -68,6 +68,22 @@
       top: 344px;
     }
   }
+
+  &.alerts {
+    #openy_alerts_header_placeholder {
+      @include median(margin-top, 217px, 125px);
+    }
+
+    #gated-content {
+      padding-top: 0;
+    }
+
+    &.toolbar-fixed {
+      #openy_alerts_header_placeholder {
+        @include median(margin-top, null, 125px);
+      }
+    }
+  }
 }
 
 .openy_lily-based.openy-gated-content {
@@ -106,6 +122,7 @@
   &.toolbar-tray-open #gated-content {
     .top-menu {
       top: calc(162px + 27px);
+      z-index: 500;
     }
 
     .gated-content-schedule-page {
@@ -118,6 +135,32 @@
 
     .calendar .desktop .slot.dates {
       top: calc(292px + 27px);
+    }
+  }
+
+  &.alerts {
+    #openy_alerts_app_header {
+      @include median(margin-top, 85px, 47px);
+    }
+
+    #gated-content {
+      padding-top: 0;
+    }
+
+    &.toolbar-fixed {
+      #openy_alerts_app_header {
+        @include median(margin-top, 63px, 0);
+      }
+
+      .viewport {
+        @include median(margin-top, null, 0);
+      }
+    }
+
+    &.toolbar-tray-open {
+      #openy_alerts_app_header {
+        @include median(margin-top, 60px, 0);
+      }
     }
   }
 }
@@ -150,7 +193,7 @@
     }
   }
 
-  &.toolbar-fixed {
+  &.toolbar-vertical, &.toolbar-horizontal {
     #gated-content {
       @include median(padding-top, 0);
 
@@ -173,6 +216,22 @@
 
     .openy-page-tabs {
       margin-top: 100px !important;
+    }
+
+    @media (max-width: 991px) {
+      #gated-content .top-menu {
+        top: 109px;
+      }
+
+      .viewport {
+        margin-top: 86px;
+      }
+    }
+
+    @media (max-width: 609px) {
+      #gated-content .top-menu {
+        top: 109px;
+      }
     }
   }
 
@@ -227,6 +286,32 @@
           top: calc(175px + 39px);
         }
       }
+    }
+  }
+
+  &.alerts {
+    #openy_alerts_app_header {
+      @include median(margin-top, 85px, 0);
+    }
+
+    #gated-content {
+      padding-top: 0;
+    }
+
+    &.toolbar-fixed {
+      #openy_alerts_app_header {
+        @include median(margin-top, 83px, 0);
+      }
+    }
+
+    &.toolbar-tray-open {
+      #openy_alerts_app_header {
+        @include median(margin-top, 85px, 0);
+      }
+    }
+
+    .openy-page-tabs {
+      margin-top: 10px !important;
     }
   }
 }
