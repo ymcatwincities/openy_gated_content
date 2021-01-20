@@ -7,7 +7,8 @@
       :options="{responsive: 'true', url: media.field_media_video_embed_field}"
       @loaded="$refs.player.pause()"
       @play="handlePlay()"
-      @ended="handlePlayerEvent('videoPlaybackEnded')"
+      @pause="handlePause()"
+      @ended="handleEnded()"
     />
   </div>
 </template>
@@ -20,6 +21,7 @@ export default {
   data() {
     return {
       playbackLogged: false,
+      intervalId: 0,
     };
   },
   components: {
@@ -55,11 +57,22 @@ export default {
       this.$emit('playerEvent', eventType);
     },
     handlePlay() {
+      this.intervalId = setInterval(() => {
+        this.$log.trackActivity({ path: this.$route.fullPath });
+      }, 60 * 1000);
+
       if (this.playbackLogged) {
         return;
       }
       this.playbackLogged = true;
       this.handlePlayerEvent('videoPlaybackStarted');
+    },
+    handlePause() {
+      clearInterval(this.intervalId);
+    },
+    handleEnded() {
+      clearInterval(this.intervalId);
+      this.handlePlayerEvent('videoPlaybackEnded');
     },
   },
   updated() {

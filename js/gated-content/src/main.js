@@ -24,6 +24,11 @@ new Vue({
   components: {
     App,
   },
+  watch: {
+    $route(to) {
+      this.$log.trackActivity({ path: to.fullPath });
+    },
+  },
   mounted() {
     const app = this;
 

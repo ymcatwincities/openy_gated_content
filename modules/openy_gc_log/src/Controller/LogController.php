@@ -70,11 +70,29 @@ class LogController extends ControllerBase {
         'status' => 'ok',
       ]);
     }
-    else {
+
+    return new AjaxResponse([
+      'status' => 'error',
+    ], AjaxResponse::HTTP_INTERNAL_SERVER_ERROR);
+  }
+
+  /**
+   * Track activity.
+   *
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   *   Return status
+   */
+  public function trackActivity(Request $request) {
+    $status = $this->gcLogger->trackActivity($this->currentUser()->id());
+    if ($status instanceof LogEntity) {
       return new AjaxResponse([
-        'status' => 'error',
-      ], AjaxResponse::HTTP_INTERNAL_SERVER_ERROR);
+        'status' => 'ok',
+      ]);
     }
+
+    return new AjaxResponse([
+      'status' => 'error',
+    ], AjaxResponse::HTTP_INTERNAL_SERVER_ERROR);
   }
 
 }
