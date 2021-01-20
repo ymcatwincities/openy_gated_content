@@ -78,5 +78,8 @@ export default {
   updated() {
     this.playbackLogged = false;
   },
+  beforeDestroy() {
+    clearInterval(this.intervalId);
+  },
 };
 </script>
