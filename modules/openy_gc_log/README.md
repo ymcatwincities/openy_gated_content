@@ -6,6 +6,7 @@ It tracks next items:
 - entityView
 - videoPlaybackStarted
 - videoPlaybackEnded
+- sessionTime
 
 # Known issues
 
