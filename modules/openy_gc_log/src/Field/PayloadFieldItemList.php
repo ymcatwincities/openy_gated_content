@@ -41,7 +41,7 @@ class PayloadFieldItemList extends FieldItemList {
    */
   public function __construct(DataDefinitionInterface $definition, $name, TypedDataInterface $parent) {
     parent::__construct($definition, $name, $parent);
-    $this->dateFormatter = \Drupal::service('date.formatter');
+    $this->dateFormatter = \Drupal::getContainer()->get('date.formatter');
   }
 
   /**
