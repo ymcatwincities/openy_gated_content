@@ -23,6 +23,13 @@
         <SvgIcon icon="instructor-icon"></SvgIcon>
         {{ this.video.attributes.host_name }}
       </div>
+      <div
+        class="level"
+        v-if="level"
+      >
+        <SvgIcon icon="difficulty-icon-grey" :css-fill="false"></SvgIcon>
+        {{ level | capitalize }}
+      </div>
       <div class="timer" :class="{live: isOnAir}">
         <template v-if="isOnAir">
           LIVE!
