@@ -8,6 +8,11 @@ gated-content-hash-fix:
   js:
     assets/js/hash.behaviors.js: { minified: false }
 
+alerts:
+  version: 0.1
+  js:
+    assets/js/alerts.behaviors.js: { minified: false }
+
 gated-content-vue:
   version: 0.2
   js:
@@ -24,6 +29,7 @@ gated-content-vue:
     - openy_gated_content/gated-content-styles
     - openy_system/openy_system.ajax_spinner
     - openy_gated_content/gated-content-hash-fix
+    - openy_gated_content/alerts
 
 gated-content-styles:
   version: 0.2
