@@ -28,10 +28,8 @@
         for (var i=0; i<mutationsList.length; i++) {
           if (mutationsList[i].target.classList.contains('slick-track')) {
             if ($('#openy_alerts_app_header .slick-slide').length > 0) {
-              console.log('add alerts class to body');
               $('body').addClass('alerts');
             } else {
-              console.log('remove alerts class from body');
               $('body').removeClass('alerts');
             }
           }
