@@ -37,6 +37,13 @@
               {{ video.attributes.field_gc_video_instructor }}
             </div>
             <div
+              class="video-footer__block"
+              v-if="video.attributes.field_gc_video_level"
+            >
+              <SvgIcon icon="difficulty-icon-white" :css-fill="false"></SvgIcon>
+              {{ video.attributes.field_gc_video_level.name | capitalize }}
+            </div>
+            <div
               v-if="video.attributes.field_gc_video_category &&
               video.attributes.field_gc_video_category.length > 0"
               class="video-footer__block video-footer__category">
