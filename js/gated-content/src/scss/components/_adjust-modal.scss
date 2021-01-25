@@ -117,12 +117,13 @@
       }
 
       button {
-        margin:        0;
-        border-radius: 5px;
-        padding:       10px 20px;
-        line-height:   26px;
-        font-family:   $cachet-medium;
-        font-size:     20px;
+        margin:         0;
+        border-radius:  5px;
+        padding:        10px 20px;
+        text-transform: uppercase;
+        line-height:    26px;
+        font-family:    $cachet-medium;
+        font-size:      20px;
       }
 
       .btn.btn-outline-primary {

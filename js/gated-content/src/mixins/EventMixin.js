@@ -39,7 +39,7 @@ export const EventMixin = {
       return moment(this.video.attributes.date.value).format('dddd, MMMM Do, YYYY');
     },
     time() {
-      return moment(this.video.attributes.date.value).format('HH:MM:SS');
+      return moment(this.video.attributes.date.value).format('h:mm a');
     },
     duration() {
       return moment.duration(moment(this.video.attributes.date.value)
@@ -49,7 +49,7 @@ export const EventMixin = {
       const duration = moment.duration(moment(this.video.attributes.date.value)
         .diff(moment()));
       if (duration.asHours() > 48) {
-        return duration.format();
+        return duration.format('d [day]');
       }
       return duration.format('hh:mm:ss');
     },

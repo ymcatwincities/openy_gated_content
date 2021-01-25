@@ -21,7 +21,7 @@
     }
 
     .date-filter {
-      @include median(top, 217px, 127px);
+      @include median(top, 217px, 125px);
     }
 
     .calendar .desktop .slot.dates {
@@ -42,7 +42,7 @@
       }
 
       .date-filter {
-        @include median(top, 257px, 166px);
+        @include median(top, 257px, 164px);
       }
 
       .calendar .desktop .slot.dates {
@@ -68,9 +68,96 @@
       top: 344px;
     }
   }
+
+  &.alerts {
+    #openy_alerts_header_placeholder {
+      @include median(margin-top, 217px, 125px);
+    }
+
+    #gated-content {
+      padding-top: 0;
+    }
+
+    &.toolbar-fixed {
+      #openy_alerts_header_placeholder {
+        @include median(margin-top, null, 125px);
+      }
+    }
+
+    &.vy-route-Schedule {
+      .layout-container {
+        overflow: initial;
+        .viewport {
+          overflow: initial;
+        }
+      }
+
+      #gated-content {
+        .gated-content-schedule-page {
+          padding-top: 0 !important;
+
+          .date-filter {
+            position: initial;
+            position: sticky;
+            @include median(top, 217px, 116px);
+          }
+
+          .calendar .desktop .slot.dates {
+            position: initial;
+            position: sticky;
+            top:      265px;
+          }
+        }
+      }
+
+      &.toolbar-vertical {
+        #toolbar-bar {
+          @include median(position, null, fixed);
+        }
+      }
+
+      &.toolbar-fixed {
+        #openy_alerts_app_header {
+          @include median(margin-top, 122px, 0);
+        }
+
+        #gated-content {
+          .gated-content-schedule-page {
+            .date-filter {
+              top: 256px;
+            }
+
+            .calendar .desktop .slot.dates {
+              top: 304px;
+            }
+          }
+        }
+
+        &.toolbar-tray-open {
+          #openy_alerts_app_header {
+            margin-top: 164px;
+          }
+
+          #gated-content {
+            .gated-content-schedule-page {
+              .date-filter {
+                top: 295px;
+              }
+
+              .calendar .desktop .slot.dates {
+                top: 343px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 .openy_lily-based.openy-gated-content {
+
+
   .breadcrumb-container {
     display: none;
   }
@@ -89,7 +176,7 @@
     }
 
     .date-filter {
-      @include median(top, 247px, 129px);
+      @include median(top, 247px, 127px);
     }
 
     .calendar .desktop .slot.dates {
@@ -97,7 +184,13 @@
     }
   }
 
-  &.toolbar-fixed  #gated-content {
+  &.toolbar-fixed {
+    header#page-head .top-navs .nav-wrapper .main-nav.affix {
+      top: 120px !important;
+    }
+  }
+
+  &.toolbar-fixed #gated-content {
     .gated-content-schedule-page {
       padding-top: 48px;
     }
@@ -105,7 +198,8 @@
 
   &.toolbar-tray-open #gated-content {
     .top-menu {
-      top: calc(162px + 27px);
+      top:     calc(162px + 27px);
+      z-index: 500;
     }
 
     .gated-content-schedule-page {
@@ -118,6 +212,101 @@
 
     .calendar .desktop .slot.dates {
       top: calc(292px + 27px);
+    }
+  }
+
+  &.alerts {
+    #openy_alerts_app_header {
+      @include median(margin-top, 85px, 47px);
+    }
+
+    #gated-content {
+      padding-top: 0;
+    }
+
+    &.toolbar-fixed {
+      #openy_alerts_app_header {
+        @include median(margin-top, 63px, 0);
+      }
+
+      .viewport {
+        @include median(margin-top, null, 0);
+      }
+    }
+
+    &.toolbar-tray-open {
+      #openy_alerts_app_header {
+        @include median(margin-top, 60px, 0);
+      }
+    }
+
+    &.vy-route-Schedule {
+      .layout-container {
+        overflow: initial;
+        .viewport {
+          overflow: initial;
+        }
+      }
+
+      #gated-content {
+        .gated-content-schedule-page {
+          padding-top: 0 !important;
+
+          .date-filter {
+            position: initial;
+            position: sticky;
+            @include median(top, 247px, 126px);
+          }
+
+          .calendar .desktop .slot.dates {
+            position: initial;
+            position: sticky;
+            top:      295px;
+          }
+        }
+      }
+
+      &.toolbar-vertical {
+        #toolbar-bar {
+          @include median(position, null, fixed);
+        }
+      }
+
+      &.toolbar-fixed {
+        #openy_alerts_app_header {
+          @include median(margin-top, 122px, 0);
+        }
+
+        #gated-content {
+          .gated-content-schedule-page {
+            .date-filter {
+              top: 246px;
+            }
+
+            .calendar .desktop .slot.dates {
+              top: 294px;
+            }
+          }
+        }
+
+        &.toolbar-tray-open {
+          #openy_alerts_app_header {
+            margin-top: 164px;
+          }
+
+          #gated-content {
+            .gated-content-schedule-page {
+              .date-filter {
+                top: 273px;
+              }
+
+              .calendar .desktop .slot.dates {
+                top: 321px;
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
@@ -142,7 +331,7 @@
     }
 
     .date-filter {
-      @include median(top, 250px, 119px);
+      @include median(top, 250px, 117px);
     }
 
     .calendar .desktop .slot.dates {
@@ -150,7 +339,7 @@
     }
   }
 
-  &.toolbar-fixed {
+  &.toolbar-vertical, &.toolbar-horizontal {
     #gated-content {
       @include median(padding-top, 0);
 
@@ -173,6 +362,22 @@
 
     .openy-page-tabs {
       margin-top: 100px !important;
+    }
+
+    @media (max-width: 991px) {
+      #gated-content .top-menu {
+        top: 109px;
+      }
+
+      .viewport {
+        margin-top: 86px;
+      }
+    }
+
+    @media (max-width: 609px) {
+      #gated-content .top-menu {
+        top: 109px;
+      }
     }
   }
 
@@ -197,7 +402,7 @@
   &.primary-menu-minimize {
     #gated-content {
       .top-menu {
-        top: 42px;
+        @include median(top, 42px, 109px);
       }
 
       .gated-content-schedule-page {
@@ -225,6 +430,146 @@
 
         .calendar .desktop .slot.dates {
           top: calc(175px + 39px);
+        }
+      }
+    }
+  }
+
+  &.alerts {
+    #openy_alerts_app_header {
+      @include median(margin-top, 85px, 47px);
+    }
+
+    #gated-content {
+      padding-top: 0;
+    }
+
+    &.toolbar-fixed {
+      #openy_alerts_app_header {
+        @include median(margin-top, 83px, 0);
+      }
+    }
+
+    &.toolbar-tray-open {
+      #openy_alerts_app_header {
+        @include median(margin-top, 85px, 0);
+      }
+    }
+
+    .openy-page-tabs {
+      margin-top: 10px !important;
+    }
+
+    &.vy-route-Schedule {
+      .viewport {
+        overflow: initial;
+      }
+
+      #gated-content {
+        .gated-content-schedule-page {
+          padding-top: 0 !important;
+
+          .date-filter {
+            position: initial;
+            position: sticky;
+            @include median(top, 250px, 116px);
+          }
+
+          .calendar .desktop .slot.dates {
+            position: initial;
+            position: sticky;
+            top:      298px;
+          }
+        }
+      }
+
+      &.primary-menu-minimize {
+        #gated-content {
+          .gated-content-schedule-page {
+            padding-top: 0 !important;
+
+            .date-filter {
+              position: initial;
+              position: sticky;
+              top:      126px;
+            }
+
+            .calendar .desktop .slot.dates {
+              position: initial;
+              position: sticky;
+              top:      174px;
+            }
+          }
+        }
+      }
+
+      &.toolbar-vertical {
+        #toolbar-bar {
+          @include median(position, null, fixed);
+        }
+      }
+
+      &.toolbar-fixed {
+        #openy_alerts_app_header {
+          @include median(margin-top, 122px, 0);
+        }
+
+        #gated-content {
+          .gated-content-schedule-page {
+            .date-filter {
+              top: 287px;
+            }
+
+            .calendar .desktop .slot.dates {
+              top: 335px;
+            }
+          }
+        }
+
+        &.primary-menu-minimize {
+          #gated-content {
+            .gated-content-schedule-page {
+              .date-filter {
+                top: 165px;
+              }
+
+              .calendar .desktop .slot.dates {
+                top: 213px;
+              }
+            }
+          }
+        }
+
+        &.toolbar-tray-open {
+          #openy_alerts_app_header {
+            margin-top: 164px;
+          }
+
+          #gated-content {
+            .gated-content-schedule-page {
+              .date-filter {
+                top: 326px;
+              }
+
+              .calendar .desktop .slot.dates {
+                top: 374px;
+              }
+            }
+          }
+
+          &.primary-menu-minimize {
+            #gated-content {
+              .gated-content-schedule-page {
+                .date-filter {
+                  top: 166px;
+                }
+
+                .calendar .desktop .slot.dates {
+                  top: 214px;
+                }
+              }
+            }
+          }
         }
       }
     }

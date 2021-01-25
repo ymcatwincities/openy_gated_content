@@ -59,7 +59,7 @@
       </div>
 
       <div v-if="isNoFavoriteItems" class="gated-container text-center">
-        <span>There no favorite content.</span>
+        <span>There is no favorite content.</span>
       </div>
 
       <div v-if="!isFavoritesTypeEmpty('node', 'gc_video')
@@ -206,8 +206,8 @@ export default {
       ],
       filterQueryByTypes: {
         node: {
-          date_desc: { path: 'created', direction: 'DESC' },
-          date_asc: { path: 'created', direction: 'ASC' },
+          // date_desc: { path: 'created', direction: 'DESC' },
+          // date_asc: { path: 'created', direction: 'ASC' },
           title_asc: { path: 'title', direction: 'ASC' },
           title_desc: { path: 'title', direction: 'DESC' },
         },
@@ -231,14 +231,9 @@ export default {
       return this.$store.getters.getFavoritesList;
     },
     favoritesListInitialized() {
-      let init = false;
       const list = this.favoritesList;
-      Object.keys(list).forEach((key) => {
-        if (typeof list[key] !== 'undefined') {
-          init = true;
-        }
-      });
-      return init;
+      // Store initialized when at least one of the keys not undefined.
+      return Object.keys(list).some((key) => typeof list[key] !== 'undefined');
     },
     viewAllContentMode() {
       // Enable viewAllContentMode only when we filter by content.

@@ -57,6 +57,33 @@ source:
     -
       id: 15
       name: forever-well-category.jpg
+    -
+      id: 16
+      name: Family-Group-Outdoor-father-son-sledding.jpg
+    -
+      id: 17
+      name: Dayton-Y-Harmony-Yoga-Group-Exercise-7971.jpg
+    -
+      id: 18
+      name: child-winter-153490472.jpg
+    -
+      id: 19
+      name: foreverwell-group-0005.jpg
+    -
+      id: 20
+      name: George-Wellness-Center-Meditation-1109.jpg
+    -
+      id: 21
+      name: Lino-Lakes-Group-Fitness-Zumba0155.jpg
+    -
+      id: 22
+      name: Blaisdell-Group-Fitness-bosu-0062.jpg
+    -
+      id: 23
+      name: Blaisdell-Group-Fitness-barbells-0057.jpg
+    -
+      id: 24
+      name: Lino-Lakes-Group-Fitness-Mat-Pilates0147.jpg
   ids:
     id:
       type: integer
