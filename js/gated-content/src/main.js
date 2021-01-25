@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import { sync } from 'vuex-router-sync';
+import moment from 'moment';
 import App from './GatedContent.vue';
 import router from './router';
 import store from './store';
@@ -16,6 +17,12 @@ sync(store, router);
 
 filters.forEach((f) => {
   Vue.filter(f.name, f.execute);
+});
+
+moment.updateLocale('en', {
+  meridiem(hours) {
+    return hours < 12 ? 'a.m.' : 'p.m.';
+  },
 });
 
 new Vue({
