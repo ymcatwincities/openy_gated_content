@@ -267,7 +267,7 @@ class LogArchiver {
       $entity_id = $log->get('entity_id')->value;
       $export_row = [
         'created' => date('m/d/Y - H:i:s', $log->get('created')->value),
-        'user' => $log->get('uid')->target_id ? $log->get('uid')->entity->getEmail() : '',
+        'user' => ($log->get('uid')->target_id && !is_null($log->get('uid')->entity)) ? $log->get('uid')->entity->getEmail() : '',
         'event_type' => $event_type,
         'entity_type' => $entity_type,
         'entity_bundle' => $entity_bundle,
