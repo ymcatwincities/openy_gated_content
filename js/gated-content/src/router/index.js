@@ -134,4 +134,19 @@ const router = new VueRouter({
   },
 });
 
+/**
+ * Add current route name to body class as "vy-route-{name}".
+ */
+router.beforeEach((to, from, next) => {
+  document.body.classList.forEach((value) => {
+    if (value.indexOf('vy-route-') !== -1) {
+      document.body.classList.remove(value);
+    }
+  });
+
+  document.body.classList.add(`vy-route-${to.name}`);
+
+  next();
+});
+
 export default router;

@@ -1,7 +1,7 @@
 <template>
   <div class="fixed-button scroll-to-top" v-show="visible">
     <a @click.stop="scrollTop">
-      <svg width="100%" height="100%" viewBox="0 0 16 16" fill="currentColor">
+      <svg width="44" height="44" viewBox="0 0 16 16" fill="currentColor">
         <path
           fill-rule="evenodd"
           d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0

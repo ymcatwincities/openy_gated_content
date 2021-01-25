@@ -7,10 +7,12 @@ export const FilterAndSortMixin = {
   data() {
     return {
       showModal: false,
-      selectedComponent: 'all',
-      preSelectedComponent: 'all',
-      selectedSort: 'date_desc',
-      preSelectedSort: 'date_desc',
+      DEFAULT_SELECT: 'all',
+      DEFAULT_SORT: 'date_desc',
+      selectedComponent: this.DEFAULT_SELECT,
+      preSelectedComponent: this.DEFAULT_SELECT,
+      selectedSort: this.DEFAULT_SORT,
+      preSelectedSort: this.DEFAULT_SORT,
       contentTypeOptions: [
         { value: 'all', label: 'Show All' },
         { value: 'gc_video', label: 'Video' },
@@ -32,17 +34,21 @@ export const FilterAndSortMixin = {
       },
     };
   },
+  watch: {
+    $route: 'initSelectedFilters',
+  },
   created() {
-    if (this.$route.query.type) {
-      this.selectedComponent = this.$route.query.type;
-      this.preSelectedComponent = this.$route.query.type;
-    }
-    if (this.$route.query.sort) {
-      this.selectedSort = this.$route.query.sort;
-      this.preSelectedSort = this.$route.query.sort;
-    }
+    this.initSelectedFilters();
   },
   methods: {
+    initSelectedFilters() {
+      this.selectedComponent = this.$route.query.type
+        ? this.$route.query.type : this.DEFAULT_SELECT;
+      this.preSelectedComponent = this.$route.query.type
+        ? this.$route.query.type : this.DEFAULT_SELECT;
+      this.selectedSort = this.$route.query.sort ? this.$route.query.sort : this.DEFAULT_SORT;
+      this.preSelectedSort = this.$route.query.sort ? this.$route.query.sort : this.DEFAULT_SORT;
+    },
     applyFilters() {
       this.selectedComponent = this.preSelectedComponent;
       this.selectedSort = this.preSelectedSort;

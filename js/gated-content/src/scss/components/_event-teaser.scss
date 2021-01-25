@@ -6,7 +6,7 @@
       @include median(padding-bottom, 10px, 5px);
     }
 
-    .date, .time, .instructor {
+    .date, .time, .instructor, .level {
       display:     flex;
       align-items: center;
       width:       100%;
