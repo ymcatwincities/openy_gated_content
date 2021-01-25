@@ -1,0 +1,19 @@
+add personal training entities:
+  title: 'Create new Personal training entities'
+
+administer personal training entities:
+  title: 'Administer Personal training entities'
+  description: 'Allow to access the administration form to configure Personal training entities.'
+  restrict access: true
+
+delete personal training entities:
+  title: 'Delete Personal training entities'
+
+edit personal training entities:
+  title: 'Edit Personal training entities'
+
+view published personal training entities:
+  title: 'View published Personal training entities'
+
+view unpublished personal training entities:
+  title: 'View unpublished Personal training entities'
