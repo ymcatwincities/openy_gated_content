@@ -23,6 +23,7 @@ source:
            Lift your mood<br>
            Improve balance and coordination</p>
       image: 3
+      created: '-1 day'
 
     - id: 2
       title: 'GROWN-UP FUN IN ADULT SPORTS LEAGUES'
@@ -35,6 +36,7 @@ source:
            Get better sleep
            Strengthen leadership skills</p>
       image: 4
+      created: '-2 days'
 
     - id: 3
       title: 'LIFESTYLE CHANGES BEYOND THE FIRST TWO WEEKS'
@@ -45,6 +47,7 @@ source:
            Pamper yourself with a massage or other body treatment
            Carve out some time for a favorite hobby</p>
       image: 5
+      created: '-3 days'
 
     -
       id: 4
@@ -78,6 +81,7 @@ source:
         <p><strong>Not sure where to start?</strong></p>
         <p>The Y&rsquo;s Activity Finder makes it easy to find options that are a fit for you this winter-based on age, day, location and interests.</p>
       image: 16
+      created: '-4 days'
 
     -
       id: 5
@@ -105,6 +109,7 @@ source:
           <li>Participate in a yoga class where you will focus on breathing.</li>
         </ol>
       image: 17
+      created: '-5 days'
 
     -
       id: 6
@@ -164,6 +169,7 @@ source:
             </li>
         </ul>
       image: 18
+      created: '-6 days'
 
     -
       id: 7
@@ -205,6 +211,7 @@ source:
         <p>Regardless of the activities you might choose at the Y, Amy suggests that you &quot;Don&rsquo;t overdo it. Start small. Sample
             things. And listen to your body!&quot;</p>
       image: 19
+      created: '-7 days'
 
     -
       id: 8
@@ -254,6 +261,7 @@ source:
         <p>If you&rsquo;re not sure meditation is for you, why not give it a try and find out? Start with just a few minutes,
             and pay attention to what you&rsquo;re feeling-and that&rsquo;s it, you&rsquo;re meditating!</p>
       image: 20
+      created: '-8 days'
 
     -
       id: 9
@@ -287,6 +295,7 @@ source:
         <p>Zumba and Zumba Gold are Group Exercise classes, which means they&rsquo;re free for Y members. Drop in to give it a
             try at any time-no registration required.</p>
       image: 21
+      created: '-9 days'
 
     -
       id: 10
@@ -320,6 +329,7 @@ source:
         <p>HIIT is a Group Exercise class, which means it&rsquo;s free for Y members. Drop in to give it a try at any
             time-no registration required.</p>
       image: 22
+      created: '-10 days'
 
     -
       id: 11
@@ -369,6 +379,7 @@ source:
         <p>She recommends incorporating flexibility training into your fitness program at least once a week-and Yoga Flow is a
             great way to do it.</p>
       image: 17
+      created: '-11 days'
 
     -
       id: 12
@@ -407,6 +418,7 @@ source:
             members. Teens ages 15+ are welcome to attend with a parent or guardian. Drop in to give it a try at any time-no
             registration required.</p>
       image: 23
+      created: '-12 days'
 
     -
       id: 13
@@ -489,6 +501,7 @@ source:
         <p>Mat Pilates is a Group Exercise class, which means it&rsquo;s free for Y members. Drop in to give it a try at any
             time-no registration required. Check out a Mat Pilates class today.</p>
       image: 24
+      created: '-13 days'
 
   ids:
     id:
@@ -545,6 +558,11 @@ process:
   field_vy_permission:
     plugin: default_value
     default_value: virtual_y,virtual_y_premium
+  created:
+    -
+      plugin: callback
+      callable: strtotime
+      source: created
 
 destination:
   plugin: 'entity:node'
