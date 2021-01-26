@@ -21,6 +21,7 @@ export default {
   data() {
     return {
       playbackLogged: false,
+      playbackInProgress: false,
       intervalId: 0,
     };
   },
@@ -57,10 +58,7 @@ export default {
       this.$emit('playerEvent', eventType);
     },
     handlePlay() {
-      this.intervalId = setInterval(() => {
-        this.$log.trackActivity({ path: this.$route.fullPath });
-      }, 60 * 1000);
-
+      this.playbackInProgress = true;
       if (this.playbackLogged) {
         return;
       }
@@ -68,15 +66,23 @@ export default {
       this.handlePlayerEvent('videoPlaybackStarted');
     },
     handlePause() {
-      clearInterval(this.intervalId);
+      this.playbackInProgress = false;
     },
     handleEnded() {
-      clearInterval(this.intervalId);
+      this.playbackInProgress = false;
       this.handlePlayerEvent('videoPlaybackEnded');
     },
   },
+  mounted() {
+    this.intervalId = setInterval(() => {
+      if (this.playbackInProgress) {
+        this.$log.trackActivity({ path: this.$route.fullPath });
+      }
+    }, 60 * 1000);
+  },
   updated() {
     this.playbackLogged = false;
+    this.playbackInProgress = false;
   },
   beforeDestroy() {
     clearInterval(this.intervalId);
