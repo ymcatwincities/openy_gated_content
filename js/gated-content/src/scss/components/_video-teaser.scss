@@ -13,7 +13,7 @@
       @include median(padding, 10px, 5px);
     }
 
-    .instructor {
+    .instructor, .level {
       display:     flex;
       align-items: center;
       align-self:  flex-end;

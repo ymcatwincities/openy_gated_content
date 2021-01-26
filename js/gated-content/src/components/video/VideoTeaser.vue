@@ -15,6 +15,13 @@
         <SvgIcon icon="instructor-icon"></SvgIcon>
         {{ this.video.attributes.field_gc_video_instructor }}
       </div>
+      <div
+        class="level"
+        v-if="video.attributes.field_gc_video_level"
+      >
+        <SvgIcon icon="difficulty-icon-white" :css-fill="false"></SvgIcon>
+        {{ video.attributes.field_gc_video_level.name | capitalize }}
+      </div>
       <div class="timer">
         {{ duration }}
       </div>
