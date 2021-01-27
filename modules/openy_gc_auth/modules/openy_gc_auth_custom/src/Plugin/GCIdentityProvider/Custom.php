@@ -110,6 +110,14 @@ class Custom extends GCIdentityProviderPluginBase {
       '#required' => TRUE,
     ];
 
+    $form['verification']['one_time_link_no_valid_message'] = [
+      '#title' => $this->t('Message for One Time Link no valid'),
+      '#description' => $this->t('This text will be displayed as error message when user was used a no valid  One time link.'),
+      '#type' => 'textarea',
+      '#default_value' => $config['one_time_link_no_valid_message'],
+      '#required' => TRUE,
+    ];
+
     $form['migrate'] = [
       '#type' => 'details',
       '#title' => $this->t('Migration settings'),
@@ -155,6 +163,7 @@ class Custom extends GCIdentityProviderPluginBase {
       $this->configuration['email_verification_link_life_time'] = $form_state->getValue('email_verification_link_life_time');
       $this->configuration['email_verification_text'] = !empty($form_state->getValue('email_verification_text')) ? $form_state->getValue('email_verification_text')['value'] : '';
       $this->configuration['verification_message'] = !empty($form_state->getValue('verification_message')) ? $form_state->getValue('verification_message')['value'] : '';
+      $this->configuration['one_time_link_no_valid_message'] = !empty($form_state->getValue('one_time_link_no_valid_message')) ? $form_state->getValue('one_time_link_no_valid_message'): '';
       parent::submitConfigurationForm($form, $form_state);
     }
   }
