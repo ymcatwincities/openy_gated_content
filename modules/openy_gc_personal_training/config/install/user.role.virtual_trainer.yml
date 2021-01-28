@@ -1,0 +1,15 @@
+langcode: en
+status: true
+dependencies: {  }
+id: virtual_trainer
+label: 'Virtual trainer'
+weight: 5
+is_admin: null
+permissions:
+  - 'access content'
+  - 'access popups'
+  - 'add personal training entities'
+  - 'delete personal training entities'
+  - 'edit personal training entities'
+  - 'restful get alerts_rest_resource'
+  - 'view media'

@@ -111,10 +111,9 @@ class PersonalTraining extends ContentEntityBase implements PersonalTrainingInte
       ->setDescription(t('The user ID of instructor of the Personal training entity.'))
       ->setRequired(TRUE)
       ->setSetting('target_type', 'user')
-      // TODO: add handler to limit by users only with instructor role.
       ->setSetting('handler', 'default')
       ->setDisplayOptions('view', [
-        'label' => 'hidden',
+        'label' => 'visible',
         'type' => 'author',
       ])
       ->setDisplayOptions('form', [

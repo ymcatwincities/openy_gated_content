@@ -12,8 +12,5 @@ delete personal training entities:
 edit personal training entities:
   title: 'Edit Personal training entities'
 
-view published personal training entities:
-  title: 'View published Personal training entities'
-
-view unpublished personal training entities:
-  title: 'View unpublished Personal training entities'
+view personal training entities:
+  title: 'View Personal training entities'

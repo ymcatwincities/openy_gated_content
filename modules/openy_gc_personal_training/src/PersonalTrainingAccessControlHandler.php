@@ -20,8 +20,10 @@ class PersonalTrainingAccessControlHandler extends EntityAccessControlHandler {
   protected function checkAccess(EntityInterface $entity, $operation, AccountInterface $account) {
     switch ($operation) {
       case 'view':
-        // TODO: add plugin manager checkPersonalTrainingAccess [PRODDEV-180].
-        return AccessResult::allowedIfHasPermission($account, 'view published personal training entities');
+        $active_provider = \Drupal::config('openy_gc_personal_training.settings')->get('active_provider');
+        $plugin_instance = \Drupal::service('plugin.manager.personal_training_provider')->createInstance($active_provider);
+        $have_access = $plugin_instance->checkPersonalTrainingAccess($account, $entity);
+        return AccessResult::allowedIf($have_access)->cachePerUser();
 
       case 'update':
         return AccessResult::allowedIfHasPermission($account, 'edit personal training entities');
