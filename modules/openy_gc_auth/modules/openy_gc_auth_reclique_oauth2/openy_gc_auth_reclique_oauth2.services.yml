@@ -1,0 +1,6 @@
+services:
+  openy_gc_auth.reclique_oauth2_client:
+    class: Drupal\openy_gc_auth_reclique_oauth2\Client
+    arguments: ['@logger.factory', '@config.factory',
+                '@http_client', '@csrf_token',
+                '@session_manager']
