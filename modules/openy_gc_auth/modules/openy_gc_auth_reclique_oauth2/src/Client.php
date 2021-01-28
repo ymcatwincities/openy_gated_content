@@ -97,44 +97,6 @@ class Client {
   }
 
   /**
-   * Get user data from Reclique.
-   *
-   * @param string $email
-   *   User email.
-   *
-   * @return array|mixed
-   *   User object array.
-   *
-   * @throws \GuzzleHttp\Exception\GuzzleException
-   */
-  public function getUserData($email) {
-    $provider_config = $this->configFactory->get('openy_gc_auth.provider.reclique_oauth2');
-
-    $options = [
-      'auth' => [
-        $provider_config->get('auth_login'),
-        $provider_config->get('auth_pass'),
-      ],
-      'query' => [
-        'Email' => $email,
-      ],
-    ];
-
-    try {
-      $response = $this->httpClient->request('POST', $provider_config->get('verification_url'), $options);
-
-      if ($response->getStatusCode() === '200') {
-        $content = $response->getBody()->getContents();
-        return json_decode($content, TRUE);
-      }
-    }
-    catch (\Exception $e) {
-      $this->logger->error($e->getMessage());
-    }
-    return [];
-  }
-
-  /**
    * Build authentication url.
    *
    * @param \Symfony\Component\HttpFoundation\Request $request
