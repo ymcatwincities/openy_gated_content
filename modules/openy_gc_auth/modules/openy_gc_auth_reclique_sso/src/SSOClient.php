@@ -11,11 +11,11 @@ use GuzzleHttp\Client as GuzzleHttpClient;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Reclique Oauth2 client wrapper service.
+ * Reclique SSO OAuth2 client service.
  *
  * @package Drupal\openy_gc_auth_reclique_sso
  */
-class OAuth2Client {
+class SSOClient {
 
   const CSRF_TOKEN_VALUE = 'openy_gc_auth_reclique_sso';
 
@@ -46,7 +46,7 @@ class OAuth2Client {
    *
    * @var \Drupal\Core\Config\Config|\Drupal\Core\Config\ImmutableConfig
    */
-  protected $configRecliqueOauth2;
+  protected $configRecliqueSSO;
 
   /**
    * Http client.
@@ -92,7 +92,7 @@ class OAuth2Client {
   ) {
     $this->logger = $loggerFactory->get('openy_gc_auth_reclique_sso');
     $this->configFactory = $configFactory;
-    $this->configRecliqueOauth2 = $configFactory->get('openy_gc_auth.provider.reclique_oauth2');
+    $this->configRecliqueSSO = $configFactory->get('openy_gc_auth.provider.reclique_sso');
     $this->httpClient = $client;
     $this->csrfToken = $csrfToken;
     $this->tempStore = $temp_store_factory->get('openy_gc_auth_reclique_sso');
@@ -123,7 +123,7 @@ class OAuth2Client {
         'query' => [
           'response_type' => 'code',
           'scope' => 'basic',
-          'client_id' => $this->configRecliqueOauth2->get('client_id'),
+          'client_id' => $this->configRecliqueSSO->get('client_id'),
           'redirect_uri' => $callbackUrl,
           'state' => $this->csrfToken->get(self::CSRF_TOKEN_VALUE),
         ],
@@ -132,7 +132,7 @@ class OAuth2Client {
     $this->tempStore->set('save-csrf', TRUE);
 
     return Url::fromUri(
-      $this->configRecliqueOauth2->get('authorization_server') . self::ENDPOINT_LOGIN, [
+      $this->configRecliqueSSO->get('authorization_server') . self::ENDPOINT_LOGIN, [
         'https' => TRUE,
         'absolute' => TRUE,
         'query' => [
@@ -179,7 +179,7 @@ class OAuth2Client {
    */
   public function prepareUserNameAndEmail($userData) {
     $name = "{$userData->member->FirstName} {$userData->member->LastName} {$userData->member->ID}";
-    $email = "reclique_oauth2-{$userData->member->ID}@virtualy.openy.org";
+    $email = "reclique_sso-{$userData->member->ID}@virtualy.openy.org";
     return [$name, $email];
   }
 
@@ -196,12 +196,12 @@ class OAuth2Client {
     try {
       $response = $this->httpClient->request(
         'POST',
-        $this->configRecliqueOauth2->get('authorization_server') . self::ENDPOINT_ACCESS_TOKEN,
+        $this->configRecliqueSSO->get('authorization_server') . self::ENDPOINT_ACCESS_TOKEN,
         [
           'form_params' => [
             'grant_type' => 'authorization_code',
-            'client_id' => $this->configRecliqueOauth2->get('client_id'),
-            'client_secret' => $this->configRecliqueOauth2->get('client_secret'),
+            'client_id' => $this->configRecliqueSSO->get('client_id'),
+            'client_secret' => $this->configRecliqueSSO->get('client_secret'),
             'code' => urldecode($code),
             'redirect_uri' => Url::fromRoute('openy_gc_auth_reclique_sso.authenticate_callback', [], [
               'absolute' => TRUE,
@@ -229,7 +229,7 @@ class OAuth2Client {
     try {
       $response = $this->httpClient->request(
         'GET',
-        $this->configRecliqueOauth2->get('authorization_server') . self::ENDPOINT_USER_DATA,
+        $this->configRecliqueSSO->get('authorization_server') . self::ENDPOINT_USER_DATA,
         [
           'headers' => [
             'Authorization' => "Bearer " . $access_token,

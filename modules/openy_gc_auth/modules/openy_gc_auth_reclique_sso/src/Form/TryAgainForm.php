@@ -69,7 +69,7 @@ class TryAgainForm extends FormBase {
       ];
 
       $form['error_contact_message'] = [
-        '#markup' => '<div class="alert alert-info text-center">' . $this->configFactory->get('openy_gc_auth.provider.reclique_oauth2')
+        '#markup' => '<div class="alert alert-info text-center">' . $this->configFactory->get('openy_gc_auth.provider.reclique_sso')
           ->get('error_accompanying_message') . '</div>',
       ];
     }

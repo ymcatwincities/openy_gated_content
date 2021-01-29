@@ -1,8 +1,8 @@
 openy_gc_auth_reclique_sso.authenticate_redirect:
   path: '/openy-gc-auth-reclique-sso/authenticate-redirect'
   defaults:
-    _controller: '\Drupal\openy_gc_auth_reclique_sso\Controller\OAuth2Controller::authenticateRedirect'
-    _title: 'Reclique OAuth2 authenticate redirect'
+    _controller: '\Drupal\openy_gc_auth_reclique_sso\Controller\SSOController::authenticateRedirect'
+    _title: 'Reclique SSO OAuth2 authenticate redirect'
   requirements:
     _permission: 'access content'
   options:
@@ -11,8 +11,8 @@ openy_gc_auth_reclique_sso.authenticate_redirect:
 openy_gc_auth_reclique_sso.authenticate_callback:
   path: '/openy-gc-auth-reclique-sso/authenticate-callback'
   defaults:
-    _controller: '\Drupal\openy_gc_auth_reclique_sso\Controller\OAuth2Controller::authenticateCallback'
-    _title: 'Reclique OAuth2 authenticate callback'
+    _controller: '\Drupal\openy_gc_auth_reclique_sso\Controller\SSOController::authenticateCallback'
+    _title: 'Reclique SSO OAuth2 authenticate callback'
   requirements:
     _permission: 'access content'
   options:

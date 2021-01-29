@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
  * @GCIdentityProvider(
  *   id="reclique_sso",
  *   label = @Translation("Reclique SSO OAuth2 provider"),
- *   config="openy_gc_auth.provider.reclique_oauth2"
+ *   config="openy_gc_auth.provider.reclique_sso"
  * )
  */
 class RecliqueSSO extends GCIdentityProviderPluginBase {
