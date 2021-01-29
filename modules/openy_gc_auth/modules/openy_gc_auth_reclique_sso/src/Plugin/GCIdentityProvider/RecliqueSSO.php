@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\openy_gc_auth_reclique_oauth2\Plugin\GCIdentityProvider;
+namespace Drupal\openy_gc_auth_reclique_sso\Plugin\GCIdentityProvider;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -17,12 +17,12 @@ use Symfony\Component\HttpFoundation\RequestStack;
  * Identity provider plugin.
  *
  * @GCIdentityProvider(
- *   id="reclique_oauth2",
- *   label = @Translation("Reclique OAuth2 provider"),
+ *   id="reclique_sso",
+ *   label = @Translation("Reclique SSO OAuth2 provider"),
  *   config="openy_gc_auth.provider.reclique_oauth2"
  * )
  */
-class RecliqueOAuth2 extends GCIdentityProviderPluginBase {
+class RecliqueSSO extends GCIdentityProviderPluginBase {
 
   use MessengerTrait;
 
@@ -90,6 +90,7 @@ class RecliqueOAuth2 extends GCIdentityProviderPluginBase {
    */
   public function defaultConfiguration(): array {
     return [
+      'authorization_server' => 'https://[association_slug].recliquecore.com',
       'login_mode' => 'present_login_button',
     ];
   }
@@ -112,7 +113,7 @@ class RecliqueOAuth2 extends GCIdentityProviderPluginBase {
       '#type' => 'textfield',
       '#title' => $this->t('Client Id'),
       '#default_value' => $config['client_id'],
-      '#description' => $this->t('Your Reclique client id. Like 4032.'),
+      '#description' => $this->t('Your Reclique client id.'),
     ];
 
     $form['client_secret'] = [
@@ -164,11 +165,11 @@ class RecliqueOAuth2 extends GCIdentityProviderPluginBase {
    */
   public function getLoginForm() {
     if ($this->request->query->has('error')) {
-      return $this->formBuilder->getForm('Drupal\openy_gc_auth_reclique_oauth2\Form\TryAgainForm');
+      return $this->formBuilder->getForm('Drupal\openy_gc_auth_reclique_sso\Form\TryAgainForm');
     }
 
     if ($this->configuration['login_mode'] === 'present_login_button') {
-      return $this->formBuilder->getForm('Drupal\openy_gc_auth_reclique_oauth2\Form\ContinueWithRecliqueLoginForm');
+      return $this->formBuilder->getForm('Drupal\openy_gc_auth_reclique_sso\Form\ContinueWithRecliqueLoginForm');
     }
 
     // Forcing no-cache at redirect headers.
@@ -176,7 +177,7 @@ class RecliqueOAuth2 extends GCIdentityProviderPluginBase {
       'Cache-Control' => 'no-cache',
     ];
     $response = new RedirectResponse(
-      Url::fromRoute('openy_gc_auth_reclique_oauth2.authenticate_redirect')
+      Url::fromRoute('openy_gc_auth_reclique_sso.authenticate_redirect')
         ->toString(),
       302,
       $headers

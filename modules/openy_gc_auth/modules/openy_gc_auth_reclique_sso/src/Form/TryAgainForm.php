@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\openy_gc_auth_reclique_oauth2\Form;
+namespace Drupal\openy_gc_auth_reclique_sso\Form;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormBase;
@@ -56,7 +56,7 @@ class TryAgainForm extends FormBase {
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'openy_gc_auth_reclique_oauth2_try_again';
+    return 'openy_gc_auth_reclique_sso_try_again';
   }
 
   /**
@@ -79,7 +79,7 @@ class TryAgainForm extends FormBase {
 
     $form['submit'] = [
       '#type' => 'link',
-      '#url' => Url::fromRoute('openy_gc_auth_reclique_oauth2.authenticate_redirect'),
+      '#url' => Url::fromRoute('openy_gc_auth_reclique_sso.authenticate_redirect'),
       '#title' => $this->t('Try again'),
       '#attributes' => [
         'class' => [
@@ -99,7 +99,7 @@ class TryAgainForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $form_state->setRedirectUrl(Url::fromRoute('openy_gc_auth_reclique_oauth2.authenticate_redirect'));
+    $form_state->setRedirectUrl(Url::fromRoute('openy_gc_auth_reclique_sso.authenticate_redirect'));
   }
 
 }

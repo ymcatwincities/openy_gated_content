@@ -1,4 +1,4 @@
-authorization_server: ''
+authorization_server: 'https://[association_slug].recliquecore.com'
 client_id: ''
 client_secret: ''
 error_accompanying_message: 'Please contact us if you have any questions.'

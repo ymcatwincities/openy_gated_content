@@ -1,11 +1,11 @@
 <?php
 
-namespace Drupal\openy_gc_auth_reclique_oauth2\Controller;
+namespace Drupal\openy_gc_auth_reclique_sso\Controller;
 
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Url;
-use Drupal\openy_gc_auth_reclique_oauth2\Client;
+use Drupal\openy_gc_auth_reclique_sso\OAuth2Client;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Routing\TrustedRedirectResponse;
@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Drupal\openy_gc_auth\GCUserAuthorizer;
 
 /**
- * Class with controller endpoints, needed for reclique_oauth2 plugin.
+ * Class with controller endpoints, needed for reclique_sso plugin.
  */
 class OAuth2Controller extends ControllerBase {
 
@@ -42,7 +42,7 @@ class OAuth2Controller extends ControllerBase {
   /**
    * Reclique OAuth2 client.
    *
-   * @var \Drupal\openy_gc_auth_reclique_oauth2\Client
+   * @var \Drupal\openy_gc_auth_reclique_sso\OAuth2Client
    */
   protected $recliqueOauth2Client;
 
@@ -53,13 +53,13 @@ class OAuth2Controller extends ControllerBase {
    *   Config factory instance.
    * @param \Drupal\openy_gc_auth\GCUserAuthorizer $gcUserAuthorizer
    *   The Gated User Authorizer.
-   * @param \Drupal\openy_gc_auth_reclique_oauth2\Client $recliqueOauth2Client
+   * @param \Drupal\openy_gc_auth_reclique_sso\OAuth2Client $recliqueOauth2Client
    *   Reclique OAuth2 Client.
    */
   public function __construct(
     ConfigFactoryInterface $configFactory,
     GCUserAuthorizer $gcUserAuthorizer,
-    Client $recliqueOauth2Client
+    OAuth2Client $recliqueOauth2Client
   ) {
     $this->configFactory = $configFactory;
     $this->configOpenyGatedContent = $configFactory->get('openy_gated_content.settings');

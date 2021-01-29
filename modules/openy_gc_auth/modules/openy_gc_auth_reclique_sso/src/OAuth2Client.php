@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\openy_gc_auth_reclique_oauth2;
+namespace Drupal\openy_gc_auth_reclique_sso;
 
 use Drupal\Core\Access\CsrfTokenGenerator;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -13,11 +13,11 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Reclique Oauth2 client wrapper service.
  *
- * @package Drupal\openy_gc_auth_reclique_oauth2
+ * @package Drupal\openy_gc_auth_reclique_sso
  */
-class Client {
+class OAuth2Client {
 
-  const CSRF_TOKEN_VALUE = 'openy_gc_auth_reclique_oauth2';
+  const CSRF_TOKEN_VALUE = 'openy_gc_auth_reclique_sso';
 
   const ENDPOINT_LOGIN = '/login';
 
@@ -42,7 +42,7 @@ class Client {
   protected $configFactory;
 
   /**
-   * Config for openy_gc_auth_reclique_oauth2 module.
+   * Config for openy_gc_auth_reclique_sso module.
    *
    * @var \Drupal\Core\Config\Config|\Drupal\Core\Config\ImmutableConfig
    */
@@ -90,12 +90,12 @@ class Client {
     CsrfTokenGenerator $csrfToken,
     PrivateTempStoreFactory $temp_store_factory
   ) {
-    $this->logger = $loggerFactory->get('openy_gc_auth_reclique_oauth2');
+    $this->logger = $loggerFactory->get('openy_gc_auth_reclique_sso');
     $this->configFactory = $configFactory;
     $this->configRecliqueOauth2 = $configFactory->get('openy_gc_auth.provider.reclique_oauth2');
     $this->httpClient = $client;
     $this->csrfToken = $csrfToken;
-    $this->tempStore = $temp_store_factory->get('openy_gc_auth_reclique_oauth2');
+    $this->tempStore = $temp_store_factory->get('openy_gc_auth_reclique_sso');
   }
 
   /**
@@ -112,7 +112,7 @@ class Client {
    *   Authentication Url.
    */
   public function buildAuthenticationUrl(Request $request) {
-    $callbackUrl = Url::fromRoute('openy_gc_auth_reclique_oauth2.authenticate_callback', [], [
+    $callbackUrl = Url::fromRoute('openy_gc_auth_reclique_sso.authenticate_callback', [], [
       'absolute' => TRUE,
     ])->toString(TRUE)->getGeneratedUrl();
 
@@ -163,8 +163,6 @@ class Client {
    *
    * @return bool
    *   Returns TRUE if user has active subscription.
-   *
-   * @TODO fix
    */
   public function validateUserSubscription($userData) {
     return $userData->member->Status === 'Active';
@@ -205,7 +203,7 @@ class Client {
             'client_id' => $this->configRecliqueOauth2->get('client_id'),
             'client_secret' => $this->configRecliqueOauth2->get('client_secret'),
             'code' => urldecode($code),
-            'redirect_uri' => Url::fromRoute('openy_gc_auth_reclique_oauth2.authenticate_callback', [], [
+            'redirect_uri' => Url::fromRoute('openy_gc_auth_reclique_sso.authenticate_callback', [], [
               'absolute' => TRUE,
             ])->toString(TRUE)->getGeneratedUrl(),
           ],

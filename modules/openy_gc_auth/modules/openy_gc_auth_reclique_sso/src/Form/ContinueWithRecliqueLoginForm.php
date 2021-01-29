@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\openy_gc_auth_reclique_oauth2\Form;
+namespace Drupal\openy_gc_auth_reclique_sso\Form;
 
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -10,7 +10,7 @@ use Drupal\Core\Url;
 /**
  * Build button which provides authentication through Reclique CRM.
  *
- * @package Drupal\openy_gc_auth_reclique_oauth2\Form
+ * @package Drupal\openy_gc_auth_reclique_sso\Form
  */
 class ContinueWithRecliqueLoginForm extends FormBase {
 
@@ -20,7 +20,7 @@ class ContinueWithRecliqueLoginForm extends FormBase {
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'openy_gc_auth_reclique_oauth2_login_form';
+    return 'openy_gc_auth_reclique_sso_login_form';
   }
 
   /**
@@ -29,7 +29,7 @@ class ContinueWithRecliqueLoginForm extends FormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form['submit'] = [
       '#type' => 'link',
-      '#url' => Url::fromRoute('openy_gc_auth_reclique_oauth2.authenticate_redirect'),
+      '#url' => Url::fromRoute('openy_gc_auth_reclique_sso.authenticate_redirect'),
       '#title' => $this->t('Enter Virtual Y'),
       '#attributes' => [
         'class' => [
@@ -49,7 +49,7 @@ class ContinueWithRecliqueLoginForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $form_state->setRedirectUrl(Url::fromRoute('openy_gc_auth_reclique_oauth2.authenticate_redirect'));
+    $form_state->setRedirectUrl(Url::fromRoute('openy_gc_auth_reclique_sso.authenticate_redirect'));
   }
 
 }
