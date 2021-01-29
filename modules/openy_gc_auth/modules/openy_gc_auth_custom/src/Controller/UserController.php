@@ -141,7 +141,7 @@ class UserController extends ControllerBase {
     }
 
     $provider_config = $this->config('openy_gc_auth.provider.custom');
-    $this->messenger()->addError($provider_config->get('one_time_link_no_valid_message'));
+    $this->messenger()->addError($provider_config->get('one_time_link_invalid_message'));
     return new RedirectResponse($vy_settings->get('virtual_y_login_url'), 302);
   }
 
