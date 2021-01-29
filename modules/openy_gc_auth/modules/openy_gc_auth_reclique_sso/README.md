@@ -5,9 +5,9 @@ to log into Vitrual Y using OAuth2 protocol, in case if your CRM is Reclique.
 ## How to use this integration.
 
 1. Enable this module.
-2. Setup your Reclique OAuth2 credentials
-here: /admin/openy/virtual-ymca/gc-auth-settings/provider/reclique_oauth2
-3. Set Reclique OAuth2 as your main authorization plugin
+2. Setup your Reclique SSO OAuth2 credentials
+here: /admin/openy/virtual-ymca/gc-auth-settings/provider/reclique_sso
+3. Set Reclique SSO OAuth2 as your main authorization plugin
 at the Virtual YMCA settings: /admin/openy/openy-gc-auth/settings
 
 ## I need help.
