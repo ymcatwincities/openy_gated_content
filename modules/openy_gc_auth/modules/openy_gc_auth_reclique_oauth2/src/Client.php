@@ -5,7 +5,7 @@ namespace Drupal\openy_gc_auth_reclique_oauth2;
 use Drupal\Core\Access\CsrfTokenGenerator;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
-use Drupal\Core\Session\SessionManager;
+use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\Core\Url;
 use GuzzleHttp\Client as GuzzleHttpClient;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,6 +18,8 @@ use Symfony\Component\HttpFoundation\Request;
 class Client {
 
   const CSRF_TOKEN_VALUE = 'openy_gc_auth_reclique_oauth2';
+
+  const ENDPOINT_LOGIN = '/login';
 
   const ENDPOINT_AUTHORIZE = '/api/oauth2/authorize';
 
@@ -61,11 +63,11 @@ class Client {
   protected $csrfToken;
 
   /**
-   * Session manager service.
+   * Tempstore.
    *
-   * @var \Drupal\Core\Session\SessionManager
+   * @var \Drupal\Core\TempStore\PrivateTempStore
    */
-  protected $sessionManager;
+  private $tempStore;
 
   /**
    * RecliqueClientService constructor.
@@ -78,26 +80,30 @@ class Client {
    *   Guzzle client.
    * @param \Drupal\Core\Access\CsrfTokenGenerator $csrfToken
    *   CsrfToken service.
-   * @param \Drupal\Core\Session\SessionManager $sessionManager
-   *   SessionManager service.
+   * @param \Drupal\Core\TempStore\PrivateTempStoreFactory $temp_store_factory
+   *   TempStore service.
    */
   public function __construct(
     LoggerChannelFactory $loggerFactory,
     ConfigFactoryInterface $configFactory,
     GuzzleHttpClient $client,
     CsrfTokenGenerator $csrfToken,
-    SessionManager $sessionManager
+    PrivateTempStoreFactory $temp_store_factory
   ) {
     $this->logger = $loggerFactory->get('openy_gc_auth_reclique_oauth2');
     $this->configFactory = $configFactory;
     $this->configRecliqueOauth2 = $configFactory->get('openy_gc_auth.provider.reclique_oauth2');
     $this->httpClient = $client;
     $this->csrfToken = $csrfToken;
-    $this->sessionManager = $sessionManager;
+    $this->tempStore = $temp_store_factory->get('openy_gc_auth_reclique_oauth2');
   }
 
   /**
    * Build authentication url.
+   *
+   * This method also generates scrf token and starts a session
+   * for anonymous user to be able to verify csrf token after
+   * user return from authorization server.
    *
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   Request.
@@ -106,17 +112,13 @@ class Client {
    *   Authentication Url.
    */
   public function buildAuthenticationUrl(Request $request) {
-    if (!$request->hasPreviousSession()) {
-      $this->sessionManager->regenerate();
-    }
-
     $callbackUrl = Url::fromRoute('openy_gc_auth_reclique_oauth2.authenticate_callback', [], [
       'absolute' => TRUE,
     ])->toString(TRUE)->getGeneratedUrl();
 
-    return Url::fromUri(
-      $this->configRecliqueOauth2->get('authorization_server') . self::ENDPOINT_AUTHORIZE, [
-        'absolute' => TRUE,
+    $authUrl = Url::fromUserInput(
+      self::ENDPOINT_AUTHORIZE, [
+        'absolute' => FALSE,
         'https' => TRUE,
         'query' => [
           'response_type' => 'code',
@@ -126,19 +128,31 @@ class Client {
           'state' => $this->csrfToken->get(self::CSRF_TOKEN_VALUE),
         ],
       ])->toString(TRUE)->getGeneratedUrl();
+
+    $this->tempStore->set('save-csrf', TRUE);
+
+    return Url::fromUri(
+      $this->configRecliqueOauth2->get('authorization_server') . self::ENDPOINT_LOGIN, [
+        'https' => TRUE,
+        'absolute' => TRUE,
+        'query' => [
+          'redirect' => $authUrl,
+        ],
+      ]
+    )->toString(TRUE)->getGeneratedUrl();
   }
 
   /**
    * Validate csrf token.
    *
-   * @param string $csrf_token
-   *   Csrf token.
+   * @param string $state
+   *   CSRF State.
    *
    * @return bool
    *   Returns TRUE if scrf token is valid.
    */
-  public function validateCsrfToken($csrf_token) {
-    return $this->csrfToken->validate($csrf_token, self::CSRF_TOKEN_VALUE);
+  public function validateCsrfToken($state) {
+    return $this->csrfToken->validate($state, self::CSRF_TOKEN_VALUE);
   }
 
   /**
@@ -153,7 +167,22 @@ class Client {
    * @TODO fix
    */
   public function validateUserSubscription($userData) {
-    return FALSE;
+    return $userData->member->Status === 'Active';
+  }
+
+  /**
+   * Prepare user name and email.
+   *
+   * @param object $userData
+   *   User data.
+   *
+   * @return array
+   *   Returns name and email.
+   */
+  public function prepareUserNameAndEmail($userData) {
+    $name = "{$userData->member->FirstName} {$userData->member->LastName} {$userData->member->ID}";
+    $email = "reclique_oauth2-{$userData->member->ID}@virtualy.openy.org";
+    return [$name, $email];
   }
 
   /**
@@ -175,9 +204,10 @@ class Client {
             'grant_type' => 'authorization_code',
             'client_id' => $this->configRecliqueOauth2->get('client_id'),
             'client_secret' => $this->configRecliqueOauth2->get('client_secret'),
-            'code' => $code,
-            'redirect_uri' => Url::fromRoute('openy_gc_auth_reclique_oauth2.authenticate_redirect')
-              ->toString(),
+            'code' => urldecode($code),
+            'redirect_uri' => Url::fromRoute('openy_gc_auth_reclique_oauth2.authenticate_callback', [], [
+              'absolute' => TRUE,
+            ])->toString(TRUE)->getGeneratedUrl(),
           ],
         ]);
 
@@ -210,10 +240,7 @@ class Client {
       return json_decode((string) $response->getBody(), FALSE);
     }
     catch (\Exception $e) {
-      return [
-        'error' => 1,
-        'message' => $e->getMessage(),
-      ];
+      $this->logger->error($e->getMessage());
     }
   }
 

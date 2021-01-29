@@ -142,14 +142,9 @@ class OAuth2Controller extends ControllerBase {
       );
     }
 
-    // Return new JsonResponse(dump($userData));
     if ($this->recliqueOauth2Client->validateUserSubscription($userData)) {
-      // @TODO implement $name, $email variables
-      // $name = $userData->name->first_name . ' '
-      // . $userDetails->name->last_name . ' ' . $userDetails->member_id;
-      // $email = "reclique-{$userData->member_id}@virtualy.openy.org";
-      $name = '';
-      $email = '';
+      [$name, $email] = $this->recliqueOauth2Client
+        ->prepareUserNameAndEmail($userData);
 
       // Authorize user (register, login, log, etc).
       $this->gcUserAuthorizer->authorizeUser($name, $email);
