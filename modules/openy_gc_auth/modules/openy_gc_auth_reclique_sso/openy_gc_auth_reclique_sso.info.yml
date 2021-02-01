@@ -1,0 +1,9 @@
+name: Reclique SSO OAuth2 Virtual YMCA integration
+type: module
+description: 'Provides Reclique SSO OAuth2 authentication plugin for Virtual YMCA'
+package: Open Y Virtual YMCA
+version: 0.1
+core: 8.x
+core_version_requirement: ^8 || ^9
+dependencies:
+  - drupal:openy_gc_auth
