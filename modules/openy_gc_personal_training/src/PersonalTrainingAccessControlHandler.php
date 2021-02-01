@@ -22,8 +22,10 @@ class PersonalTrainingAccessControlHandler extends EntityAccessControlHandler {
       case 'view':
         $active_provider = \Drupal::config('openy_gc_personal_training.settings')->get('active_provider');
         $plugin_instance = \Drupal::service('plugin.manager.personal_training_provider')->createInstance($active_provider);
-        $have_access = $plugin_instance->checkPersonalTrainingAccess($account, $entity);
-        return AccessResult::allowedIf($have_access)->cachePerUser();
+        if ($plugin_instance->checkPersonalTrainingAccess($account, $entity)) {
+          return AccessResult::allowed()->cachePerUser();
+        }
+        break;
 
       case 'update':
         return AccessResult::allowedIfHasPermission($account, 'edit personal training entities');

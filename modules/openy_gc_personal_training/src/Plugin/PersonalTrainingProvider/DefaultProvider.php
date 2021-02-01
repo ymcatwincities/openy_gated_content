@@ -4,6 +4,7 @@ namespace Drupal\openy_gc_personal_training\Plugin\PersonalTrainingProvider;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\openy_gated_content\VirtualYAccessTrait;
 use Drupal\openy_gc_personal_training\Entity\PersonalTrainingInterface;
 use Drupal\openy_gc_personal_training\PersonalTrainingProviderPluginBase;
 
@@ -17,6 +18,8 @@ use Drupal\openy_gc_personal_training\PersonalTrainingProviderPluginBase;
  * )
  */
 class DefaultProvider extends PersonalTrainingProviderPluginBase {
+
+  use VirtualYAccessTrait;
 
   /**
    * {@inheritdoc}
@@ -65,15 +68,21 @@ class DefaultProvider extends PersonalTrainingProviderPluginBase {
    */
   public function checkPersonalTrainingAccess(AccountProxyInterface $user, PersonalTrainingInterface $personal_training):bool {
     $roles = $user->getRoles();
-    if (in_array('administrator', $roles)) {
-      // TODO: do we need access for admins here?
+    if (in_array('administrator', $roles) || in_array(self::$virtualYAccessEditorRole, $roles)) {
       return TRUE;
     }
 
     $config = $this->getConfiguration();
     if (in_array($config['personal_trainer_role'], $roles)) {
+      if (!$personal_training->get('instructor_id')->target_id) {
+        return FALSE;
+      }
       // Check access for personal trainer role.
       return $user->id() === $personal_training->get('instructor_id')->target_id;
+    }
+
+    if (!$personal_training->get('customer_id')->target_id) {
+      return FALSE;
     }
 
     // Check access for customer.
@@ -84,9 +93,16 @@ class DefaultProvider extends PersonalTrainingProviderPluginBase {
    * {@inheritdoc}
    */
   public function getUserPersonalTrainings(AccountProxyInterface $user, string $date_start, string $date_end): array {
-    // TODO add implementation for default provider.
-    // What we should load here, PersonalTraining entities?
-    return [];
+    $storage = $this->entityTypeManager->getStorage('personal_training');
+    $ids = $storage->getQuery()
+      ->condition('customer_id', $this->currentUser->id())
+      // TODO: test date conditions.
+      ->condition('date.value', $date_start, '>=')
+      ->condition('date.end_value', $date_end, '<=')
+      ->range(0, 50)
+      ->execute();
+
+    return $storage->loadMultiple($ids);
   }
 
 }
