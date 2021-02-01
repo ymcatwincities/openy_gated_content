@@ -20,8 +20,8 @@ openy_gc_log.log_controller_index:
     _controller: '\Drupal\openy_gc_log\Controller\LogController::index'
     _title: 'index'
   requirements:
-    #logging is available for all
-    _access: 'TRUE'
+    _permission: 'access content'
+    _role: 'authenticated'
   options:
     no_cache: TRUE
 
@@ -31,7 +31,7 @@ openy_gc_log.log_controller_track_activity:
     _controller: '\Drupal\openy_gc_log\Controller\LogController::trackActivity'
     _title: 'activity'
   requirements:
-    #logging is available for all
-    _access: 'TRUE'
+    _permission: 'access content'
+    _role: 'authenticated'
   options:
     no_cache: TRUE

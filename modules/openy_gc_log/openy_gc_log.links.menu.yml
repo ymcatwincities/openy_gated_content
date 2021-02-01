@@ -30,3 +30,8 @@ openy_gated_content.logs_archives:
     query:
       filename: virtual-y
       filemime: application/x-gzip
+
+openy_gc_log.activity_report:
+  title: 'Activity report'
+  route_name: view.virtual_y_logs.activity_report
+  parent: openy_gated_content.logs
