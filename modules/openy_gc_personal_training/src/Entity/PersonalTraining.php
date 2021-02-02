@@ -192,6 +192,7 @@ class PersonalTraining extends ContentEntityBase implements PersonalTrainingInte
       ->setDescription(t('The link to remote platform (zoom, google meet, etc).'))
       ->setSettings([
         'link_type' => LinkItemInterface::LINK_GENERIC,
+        'title' => DRUPAL_DISABLED,
       ])
       ->setDefaultValue('')
       ->setDisplayOptions('view', [

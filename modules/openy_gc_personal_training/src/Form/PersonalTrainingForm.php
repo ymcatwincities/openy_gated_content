@@ -37,7 +37,7 @@ class PersonalTrainingForm extends ContentEntityForm {
     $form = parent::buildForm($form, $form_state);
 
     // Show remote_link only if 'training_type' is 'link'.
-    $form['remote_link']['widget'][0]['#states'] = [
+    $form['remote_link']['#states'] = [
       'visible' => [
         ':input[name="training_type"]' => ['value' => 'link'],
       ],
