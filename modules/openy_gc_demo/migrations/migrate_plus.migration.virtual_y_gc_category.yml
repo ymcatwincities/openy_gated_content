@@ -84,6 +84,7 @@ process:
     plugin: default_value
     default_value: 1
   name: title
+  weight: tid
   field_gc_category_media:
     -
       plugin: migration_lookup

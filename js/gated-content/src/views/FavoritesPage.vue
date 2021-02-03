@@ -194,8 +194,7 @@ export default {
   data() {
     return {
       itemsLimit: 8,
-      selectedSort: 'date_asc',
-      preSelectedSort: 'date_asc',
+      DEFAULT_SORT: 'date_asc',
       contentTypeOptions: [
         { value: 'all', label: 'Show All' },
         { value: 'gc_video', type: 'node', label: 'Video' },
