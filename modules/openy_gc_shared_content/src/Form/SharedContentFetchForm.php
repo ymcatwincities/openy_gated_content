@@ -86,10 +86,7 @@ class SharedContentFetchForm extends EntityForm {
     ];
 
     $type = $this->getRouteMatch()->getParameter('type');
-    // JSON:API module does not provide a count because it would severely
-    // degrade performance, so we use here 1000 as total items count.
-    $pager = $this->pagerManager->createPager(1000, self::PAGE_LIMIT);
-    $current_page = $pager->getCurrentPage();
+    $current_page = $this->getRequest()->query->get('page') ?? 0;
     $pager_query = [
       'page[offset]' => $current_page * self::PAGE_LIMIT,
       'page[limit]' => self::PAGE_LIMIT,
@@ -173,14 +170,44 @@ class SharedContentFetchForm extends EntityForm {
         ];
       }
 
-      if (count($source_data['data']) < self::PAGE_LIMIT) {
-        // Fix pager when there no next page.
-        $this->pagerManager->createPager($current_page * self::PAGE_LIMIT, self::PAGE_LIMIT);
-      }
+      // Create custom pager instead of build in drupal pager that throws
+      // AJAX errors during navigation.
       $form['fetched_data']['pager'] = [
-        '#type' => 'pager',
-        '#quantity' => 1,
+        '#theme' => 'item_list',
+        '#list_type' => 'ul',
+        '#items' => [],
+        '#attributes' => ['class' => 'pager__items'],
+        '#wrapper_attributes' => ['class' => 'pager'],
       ];
+      if ($current_page != 0) {
+        $form['fetched_data']['pager']['#items'][] = [
+          '#title' => $this->t('prev'),
+          '#type' => 'link',
+          '#wrapper_attributes' => ['class' => 'pager__item'],
+          '#url' => Url::fromRoute('<current>', [], [
+            'query' => [
+              'page' => $current_page - 1,
+            ],
+          ]),
+        ];
+      }
+      $form['fetched_data']['pager']['#items'][] = [
+        '#markup' => $current_page + 1,
+        '#type' => 'markup',
+        '#wrapper_attributes' => ['class' => 'pager__item'],
+      ];
+      if (!count($source_data['data']) < self::PAGE_LIMIT) {
+        $form['fetched_data']['pager']['#items'][] = [
+          '#title' => $this->t('next'),
+          '#type' => 'link',
+          '#wrapper_attributes' => ['class' => 'pager__item'],
+          '#url' => Url::fromRoute('<current>', [], [
+            'query' => [
+              'page' => $current_page + 1,
+            ],
+          ]),
+        ];
+      }
     }
     $form['#attached']['library'][] = 'core/drupal.dialog.ajax';
 
