@@ -217,4 +217,4 @@ function openy_gc_storage_update_8011() {
       $config_updater->update($config, $config_name, $param);
     }
   }
-} 
+}
