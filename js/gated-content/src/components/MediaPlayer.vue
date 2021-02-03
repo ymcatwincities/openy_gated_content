@@ -45,7 +45,7 @@ export default {
         return embedObj;
       }
       // If the video matches Vimeo's private link format, return the full url.
-      else if (embedObj.match(/^https?:\/\/(www\.)?vimeo.com\/([0-9]*)(\/[a-zA-Z0-9]+)$/)) {
+      if (embedObj.match(/^https?:\/\/(www\.)?vimeo.com\/([0-9]*)(\/[a-zA-Z0-9]+)$/)) {
         return embedObj;
       }
       return this.media.field_media_video_id;
