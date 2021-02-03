@@ -65,7 +65,7 @@ class Custom extends GCIdentityProviderPluginBase {
 
     $form['verification']['require_email_verification'] = [
       '#title' => $this->t('Require Email verification'),
-      '#description' => $this->t('Set to TRUE if you want to use email verification on each user login. If FALSE - email verification will be used only on first login for account activation.'),
+      '#description' => $this->t('Set to TRUE if you want to use email verification on user login using a new browser. If FALSE - email verification will be used only on first login for account activation.'),
       '#type' => 'checkbox',
       '#default_value' => $config['require_email_verification'],
       '#states' => [

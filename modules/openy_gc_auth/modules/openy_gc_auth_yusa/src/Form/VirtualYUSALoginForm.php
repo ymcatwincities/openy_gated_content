@@ -13,6 +13,7 @@ use Drupal\Core\Url;
 use Drupal\openy_gc_auth\GCUserAuthorizer;
 use Drupal\openy_gc_auth_yusa\YUSAClientService;
 use Drupal\user\Entity\User;
+use Drupal\user\UserDataInterface;
 use GuzzleHttp\Client;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -81,6 +82,13 @@ class VirtualYUSALoginForm extends FormBase {
   protected $gcUserAuthorizer;
 
   /**
+   * The user data service.
+   *
+   * @var \Drupal\user\UserDataInterface
+   */
+  protected $userData;
+
+  /**
    * YUSAClientService instance.
    *
    * @var \Drupal\openy_gc_auth_yusa\YUSAClientService
@@ -99,6 +107,7 @@ class VirtualYUSALoginForm extends FormBase {
     PrivateTempStoreFactory $private_temp_store,
     Client $client,
     GCUserAuthorizer $gcUserAuthorizer,
+    UserDataInterface $user_data,
     YUSAClientService $yusaClientService
   ) {
     $this->currentRequest = $requestStack->getCurrentRequest();
@@ -109,6 +118,7 @@ class VirtualYUSALoginForm extends FormBase {
     $this->privateTempStore = $private_temp_store->get('openy_gc_auth.provider.yusa');
     $this->client = $client;
     $this->gcUserAuthorizer = $gcUserAuthorizer;
+    $this->userData = $user_data;
     $this->yusaClient = $yusaClientService;
   }
 
@@ -125,6 +135,7 @@ class VirtualYUSALoginForm extends FormBase {
       $container->get('tempstore.private'),
       $container->get('http_client'),
       $container->get('openy_gc_auth.user_authorizer'),
+      $container->get('user.data'),
       $container->get('openy_gc_auth_yusa_client')
     );
   }
@@ -191,7 +202,7 @@ class VirtualYUSALoginForm extends FormBase {
     $id = $form_state->getValue('verification_id');
     $result = $this->yusaClient->getUserData($id);
     // Proceed only if user is Active.
-    if (isset($result['Status']) && $result['Status'] == 'Active') {
+    if (isset($result['Status']) && $result['Status'] === 'Active') {
       // 1. Case when user has no email but First Name and Last Name.
       if (
         !empty($result['FirstName']) &&
@@ -233,21 +244,19 @@ class VirtualYUSALoginForm extends FormBase {
         }
 
         if ($user instanceof User) {
-          if ($provider_config->get('enable_email_verification')) {
+          if ($provider_config->get('enable_email_verification') && $this->isVerificationNeeded($user)) {
             $this->sendEmailVerification($user, $provider_config, $email);
             $form_state->setValue('verified', TRUE);
             $form_state->setRebuild(TRUE);
             return;
           }
-          else {
-            // Authorize user (register, login, log, etc).
-            $this->gcUserAuthorizer->authorizeUser($name, $email, $result);
-          }
+          // Authorize user (register, login, log, etc).
+          $this->gcUserAuthorizer->authorizeUser($name, $email, $result);
         }
       }
     }
     else {
-      if (isset($result['Status']) && $result['Status'] == 'Inactive') {
+      if (isset($result['Status']) && $result['Status'] === 'Inactive') {
         $user_inactive_message = $this->configFactory->get('openy_gc_auth.provider.yusa')->get('user_inactive_message');
         $message = !empty($user_inactive_message) ? $user_inactive_message : $this->t('User is Inactive.');
         $this->messenger()->addError($message);
@@ -278,6 +287,29 @@ class VirtualYUSALoginForm extends FormBase {
     $params['message'] .= 'Click to verify your email: ' . $path;
     $this->mailManager->mail('openy_gc_auth_yusa', 'openy_gc_auth_yusa_email_verification', $mail, 'en', $params, NULL, TRUE);
     $this->privateTempStore->set($mail, TRUE);
+  }
+
+  /**
+   * Defines if we need to verify the user in a current browser.
+   *
+   * @param \Drupal\user\Entity\User $user
+   *   User object.
+   *
+   * @return bool
+   *   Check result.
+   */
+  protected function isVerificationNeeded(User $user): bool {
+    if (!$this->currentRequest->cookies->has('Drupal_visitor_auth_yusa_authorized')) {
+      return TRUE;
+    }
+
+    $verified_browsers = $this->userData->get('openy_gc_auth_yusa', $user->id(), 'verified_browsers');
+    if (empty($verified_browsers)) {
+      return TRUE;
+    }
+
+    $token = $this->currentRequest->cookies->get('Drupal_visitor_auth_yusa_authorized');
+    return !array_key_exists($token, $verified_browsers);
   }
 
 }
