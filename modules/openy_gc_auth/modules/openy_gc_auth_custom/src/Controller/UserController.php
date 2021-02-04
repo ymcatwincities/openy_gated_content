@@ -140,7 +140,8 @@ class UserController extends ControllerBase {
       return new RedirectResponse($vy_settings->get('virtual_y_url'), 302);
     }
 
-    $this->messenger()->addError($this->t('You have tried to use a one-time login link that has either been used or is no longer valid. Please request a new one using the form below.'));
+    $provider_config = $this->config('openy_gc_auth.provider.custom');
+    $this->messenger()->addError($provider_config->get('one_time_link_invalid_message'));
     return new RedirectResponse($vy_settings->get('virtual_y_login_url'), 302);
   }
 
