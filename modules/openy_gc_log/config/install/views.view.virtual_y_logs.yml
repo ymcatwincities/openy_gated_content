@@ -23,7 +23,7 @@ display:
         options:
           perm: 'view log entity entities'
       cache:
-        type: tag
+        type: none
         options: {  }
       query:
         type: views_query
@@ -467,7 +467,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          label: 'Entity Info'
+          label: 'Event Info'
           exclude: false
           alter:
             alter_text: true
@@ -728,47 +728,6 @@ display:
           entity_type: user
           entity_field: uid
           plugin_id: user_name
-        event_type_1:
-          id: event_type_1
-          table: log_entity
-          field: event_type
-          relationship: none
-          group_type: group
-          admin_label: ''
-          operator: '!='
-          value: userActivity
-          group: 1
-          exposed: false
-          expose:
-            operator_id: ''
-            label: ''
-            description: ''
-            use_operator: false
-            operator: ''
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: ''
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-            placeholder: ''
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          entity_type: log_entity
-          entity_field: event_type
-          plugin_id: string
         event_type:
           id: event_type
           table: log_entity
@@ -827,6 +786,10 @@ display:
                 title: videoPlaybackEnded
                 operator: contains
                 value: videoPlaybackEnded
+              5:
+                title: userActivity
+                operator: contains
+                value: userActivity
           entity_type: log_entity
           entity_field: event_type
           plugin_id: string
@@ -1012,7 +975,7 @@ display:
         filters: false
         filter_groups: false
         sorts: false
-        cache: false
+        cache: true
       fields:
         changed:
           id: changed
@@ -1021,7 +984,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          label: 'Last activity registered'
+          label: 'Last active'
           exclude: false
           alter:
             alter_text: false
@@ -1153,7 +1116,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          label: 'Activity duration'
+          label: 'Total Time on Virtual Y'
           exclude: false
           alter:
             alter_text: true
@@ -1431,9 +1394,6 @@ display:
           entity_type: log_entity
           entity_field: changed
           plugin_id: date
-      cache:
-        type: none
-        options: {  }
     cache_metadata:
       max-age: -1
       contexts:
