@@ -288,7 +288,7 @@ function openy_gated_content_user_login_validation(array &$form, FormStateInterf
     if (count($vy_roles) > 0 &&
       count(array_diff($roles, array_merge([AccountInterface::AUTHENTICATED_ROLE], $vy_roles))) === 0
     ) {
-      \Drupal::messenger()->addError('You\'re not allowing to login with Virtual Y user role.');
+      \Drupal::messenger()->addError('Virtual YMCA members are not permitted to use this form. Please contact your branch for assistance or go back to the homepage to log in.');
       throw new AccessDeniedHttpException();
     }
   }
