@@ -3,6 +3,7 @@
 namespace Drupal\openy_gc_log;
 
 use Drupal\Core\Config\ConfigFactory;
+use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManager;
 use Drupal\Core\Extension\ModuleHandlerInterface;
@@ -64,7 +65,6 @@ class LogArchiver {
    */
   private $logger;
 
-
   /**
    * Configs.
    *
@@ -94,6 +94,13 @@ class LogArchiver {
   protected $moduleHandler;
 
   /**
+   * The date formatter service.
+   *
+   * @var \Drupal\Core\Datetime\DateFormatterInterface
+   */
+  protected $dateFormatter;
+
+  /**
    * LogArchiver constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManager $entityTypeManager
@@ -108,6 +115,8 @@ class LogArchiver {
    *   Settings.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
+   * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
+   *   The date formatter service.
    */
   public function __construct(
     EntityTypeManager $entityTypeManager,
@@ -115,7 +124,8 @@ class LogArchiver {
     ConfigFactory $configFactory,
     FileSystem $fileSystem,
     Settings $settings,
-    ModuleHandlerInterface $module_handler
+    ModuleHandlerInterface $module_handler,
+    DateFormatterInterface $date_formatter
   ) {
     $this->entityTypeManager = $entityTypeManager;
     $this->logger = $logger;
@@ -123,6 +133,7 @@ class LogArchiver {
     $this->fileSystem = $fileSystem;
     $this->settings = $settings;
     $this->moduleHandler = $module_handler;
+    $this->dateFormatter = $date_formatter;
   }
 
   /**
@@ -275,26 +286,31 @@ class LogArchiver {
         'entity_title' => '',
         'entity_instructor_name' => '',
         'entity_created' => '',
+        'activity_duration' => '',
       ];
 
-      if (in_array($event_type, [
-        LogEntityInterface::EVENT_TYPE_ENTITY_VIEW,
-        LogEntityInterface::EVENT_TYPE_VIDEO_PLAYBACK_STARTED,
-        LogEntityInterface::EVENT_TYPE_VIDEO_PLAYBACK_ENDED,
-      ])) {
-        $entity_type_id = $entity_type === 'node' ? 'node' : 'eventinstance';
-        $entity = $this->entityTypeManager->getStorage($entity_type_id)
-          ->load($entity_id);
-        if (!$entity instanceof EntityInterface) {
-          continue;
-        }
-        $export_row['entity_title'] = $entity_type === 'node' ?
-          $entity->label() :
-          ($entity->get('field_ls_title')->value ? $entity->get('field_ls_title')->value : $entity->get('title')->value);
-        $export_row['entity_instructor_name'] = $entity_type === 'node' ?
-          ($entity_bundle === 'gc_video' ? $entity->get('field_gc_video_instructor')->value : '') :
-          ($entity->get('field_ls_host_name')->value ? $entity->get('field_ls_host_name')->value : $entity->get('host_name')->value);
-        $export_row['entity_created'] = date('m/d/Y - H:i:s', $entity->getCreatedTime());
+      switch ($event_type) {
+        case LogEntityInterface::EVENT_TYPE_ENTITY_VIEW:
+        case LogEntityInterface::EVENT_TYPE_VIDEO_PLAYBACK_STARTED:
+        case LogEntityInterface::EVENT_TYPE_VIDEO_PLAYBACK_ENDED:
+          $entity_type_id = $entity_type === 'node' ? 'node' : 'eventinstance';
+          $entity = $this->entityTypeManager->getStorage($entity_type_id)
+            ->load($entity_id);
+          if (!$entity instanceof EntityInterface) {
+            continue 2;
+          }
+          $export_row['entity_title'] = $entity_type === 'node' ?
+            $entity->label() :
+            ($entity->get('field_ls_title')->value ?: $entity->get('title')->value);
+          $export_row['entity_instructor_name'] = $entity_type === 'node' ?
+            ($entity_bundle === 'gc_video' ? $entity->get('field_gc_video_instructor')->value : '') :
+            ($entity->get('field_ls_host_name')->value ?: $entity->get('host_name')->value);
+          $export_row['entity_created'] = date('m/d/Y - H:i:s', $entity->getCreatedTime());
+          break;
+
+        case LogEntityInterface::EVENT_TYPE_USER_ACTIVITY:
+          $export_row['activity_duration'] = $this->dateFormatter->formatDiff($log->getCreatedTime(), $log->getChangedTime());
+          break;
       }
 
       $this->moduleHandler->alter(
