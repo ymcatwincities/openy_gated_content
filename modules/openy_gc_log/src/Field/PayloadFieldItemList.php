@@ -28,6 +28,13 @@ class PayloadFieldItemList extends FieldItemList {
   protected $dateFormatter;
 
   /**
+   * The Gated Content Logger.
+   *
+   * @var \Drupal\openy_gc_log\Logger
+   */
+  protected $gcLogger;
+
+  /**
    * Constructs a TypedData object given its definition and context.
    *
    * @param \Drupal\Core\TypedData\DataDefinitionInterface $definition
@@ -42,6 +49,7 @@ class PayloadFieldItemList extends FieldItemList {
   public function __construct(DataDefinitionInterface $definition, $name, TypedDataInterface $parent) {
     parent::__construct($definition, $name, $parent);
     $this->dateFormatter = \Drupal::getContainer()->get('date.formatter');
+    $this->gcLogger = \Drupal::getContainer()->get('openy_gc_log.logger');
   }
 
   /**
@@ -59,11 +67,14 @@ class PayloadFieldItemList extends FieldItemList {
       case LogEntityInterface::EVENT_TYPE_ENTITY_VIEW:
       case LogEntityInterface::EVENT_TYPE_VIDEO_PLAYBACK_STARTED:
       case LogEntityInterface::EVENT_TYPE_VIDEO_PLAYBACK_ENDED:
-        $entityType = $log->get('entity_type')->value;
-        $bundle = $log->get('entity_bundle')->value;
-        $entityId = $log->get('entity_id')->value;
-
-        $value = "$entityType:$bundle/$entityId";
+        $metadata = $this->gcLogger->getMetadata($log);
+        if (empty($metadata)) {
+          $metadata = unserialize($log->get('event_metadata')->value, ['allowed_classes' => FALSE]);
+        }
+        $value = $metadata['entity_title'];
+        if (array_key_exists('entity_instructor_name', $metadata) && $instructor_name = $metadata['entity_instructor_name']) {
+          $value .= ' (Instructor name: ' . $instructor_name . ')';
+        }
         break;
 
       case LogEntityInterface::EVENT_TYPE_USER_ACTIVITY:
