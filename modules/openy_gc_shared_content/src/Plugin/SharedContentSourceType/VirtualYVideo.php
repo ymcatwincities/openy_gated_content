@@ -123,7 +123,7 @@ class VirtualYVideo extends SharedContentSourceTypeBase {
 
       foreach ($rel_data as $seared_item) {
         foreach ($data['included'] as $item) {
-          if ($item['type'] == $seared_item['type'] && $item['id'] == $seared_item['id']) {
+          if (isset($item['type'], $seared_item['type']) && $item['type'] == $seared_item['type'] && $item['id'] == $seared_item['id']) {
             if (strpos($item['type'], 'taxonomy_term') !== FALSE) {
               $content['#' . $field_name][] = $item['attributes']['name'];
             }
