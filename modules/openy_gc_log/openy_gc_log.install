@@ -131,3 +131,32 @@ function openy_gc_log_update_8006() {
     $fields[$field_name]
   );
 }
+
+/**
+ * Update Log entity to add the event_metadata field.
+ */
+function openy_gc_log_update_8007() {
+  $entity_type = 'log_entity';
+  $field_name = 'event_metadata';
+  $fields = [];
+  LogEntity::defineMetadataField($fields);
+  \Drupal::entityDefinitionUpdateManager()->installFieldStorageDefinition(
+    $field_name,
+    $entity_type,
+    $entity_type,
+    $fields[$field_name]
+  );
+}
+
+/**
+ * Import logs view config.
+ */
+function openy_gc_log_update_8008() {
+  $config_dir = drupal_get_path('module', 'openy_gc_log');
+  $config_dir .= '/config/install/';
+  $config_importer = \Drupal::service('openy_upgrade_tool.importer');
+  $config_importer->setDirectory($config_dir);
+  $config_importer->importConfigs([
+    'views.view.virtual_y_logs',
+  ]);
+}

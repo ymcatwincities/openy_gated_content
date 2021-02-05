@@ -62,6 +62,7 @@ class LogEntity extends ContentEntityBase implements LogEntityInterface {
     self::definePayloadField($fields);
     self::defineCreatedField($fields);
     self::defineChangedField($fields);
+    self::defineMetadataField($fields);
     return $fields;
   }
 
@@ -266,6 +267,20 @@ class LogEntity extends ContentEntityBase implements LogEntityInterface {
     $fields['changed'] = BaseFieldDefinition::create('changed')
       ->setLabel(t('Changed'))
       ->setDescription(t('The time that the entity was last edited.'));
+  }
+
+  /**
+   * Define event_metadata field.
+   *
+   * @param array $fields
+   *   Fields.
+   */
+  public static function defineMetadataField(array &$fields) {
+    $fields['event_metadata'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Event Metadata'))
+      ->setDescription(t('The event metadata, related to the Log entity.'))
+      ->setSetting('max_length', 4096)
+      ->setDefaultValue('');
   }
 
   /**

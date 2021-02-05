@@ -64,6 +64,9 @@ class LogController extends ControllerBase {
   public function index(Request $request) {
     $content = $request->getContent();
     $params = json_decode($content, TRUE);
+    // We should be sure we are logging activity of the current user.
+    $params['uid'] = $this->currentUser()->id();
+    $params['email'] = $this->currentUser()->getEmail();
     $status = $this->gcLogger->addLog($params);
     if ($status instanceof LogEntity) {
       return new AjaxResponse([
