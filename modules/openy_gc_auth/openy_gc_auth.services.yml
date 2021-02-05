@@ -14,4 +14,4 @@ services:
 
   openy_gc_auth.user_authorizer:
     class: Drupal\openy_gc_auth\GCUserAuthorizer
-    arguments: ['@entity_type.manager', '@event_dispatcher', '@logger.factory']
+    arguments: ['@entity_type.manager', '@event_dispatcher', '@logger.factory', '@messenger']

@@ -4,6 +4,8 @@ namespace Drupal\openy_gc_auth;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\Messenger\Messenger;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\openy_gc_auth\Event\GCUserLoginEvent;
 use Drupal\user\UserInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -12,6 +14,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  * User Authorizer class.
  */
 class GCUserAuthorizer {
+
+  use StringTranslationTrait;
 
   const VIRTUAL_Y_DEFAULT_ROLE = 'virtual_y';
 
@@ -37,6 +41,13 @@ class GCUserAuthorizer {
   protected $logger;
 
   /**
+   * Messenger service instance.
+   *
+   * @var \Drupal\Core\Messenger\Messenger
+   */
+  protected $messenger;
+
+  /**
    * GCUserAuthorizer constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
@@ -45,20 +56,33 @@ class GCUserAuthorizer {
    *   Event dispatcher.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_channel_factory
    *   Logger factory.
+   * @param \Drupal\Core\Messenger\Messenger $messenger
+   *   Messenger service.
    */
-  public function __construct(EntityTypeManagerInterface $entityTypeManager, EventDispatcherInterface $event_dispatcher, LoggerChannelFactoryInterface $logger_channel_factory) {
+  public function __construct(EntityTypeManagerInterface $entityTypeManager, EventDispatcherInterface $event_dispatcher, LoggerChannelFactoryInterface $logger_channel_factory, Messenger $messenger) {
     $this->userStorage = $entityTypeManager->getStorage('user');
     $this->eventDispatcher = $event_dispatcher;
     $this->logger = $logger_channel_factory->get('gc_user_authorizer');
+    $this->messenger = $messenger;
   }
 
   /**
-   * {@inheritdoc}
+   * Aauthorize user with provided data.
+   *
+   * @param string $name
+   *   Username from service provider.
+   * @param string $mail
+   *   Email from service provider.
+   * @param array $extra_data
+   *   Array with optional data.
+   *
+   * @return bool
+   *   True if the user successfully logged in.
    */
   public function authorizeUser($name, $mail, array $extra_data = []) {
 
-    if (empty($name) || empty($email)) {
-      return;
+    if (empty($name) || empty($mail)) {
+      return FALSE;
     }
 
     $account = NULL;
@@ -76,7 +100,7 @@ class GCUserAuthorizer {
         // If for email and name from service provider registered two different
         // account. Should be resolved manually in Drupal.
         if ($account_by_mail->id() !== $account_by_name->id()) {
-          throw new \Exception("For email '{$mail}' and name '{$name}' registered two different accounts in Virtual Y. Please contact to Virtual Y administrator.");
+          $this->resolveAccountConflict($name, $mail);
         }
         // If both account point to same User.
         else {
@@ -114,6 +138,7 @@ class GCUserAuthorizer {
 
     if ($account) {
       $this->loginUser($account);
+      return TRUE;
     }
   }
 
@@ -169,6 +194,31 @@ class GCUserAuthorizer {
 
     return $account;
 
+  }
+
+  /**
+   * Function to handle case when there is a conflict with the name and email.
+   *
+   * Logic (message) can be overridden in the child class.
+   *
+   * @param string $name
+   *   Username from service provider.
+   * @param string $mail
+   *   Email from service provider.
+   */
+  protected function resolveAccountConflict($name, $mail) {
+    $this->logger->error("For email %mail and name %name registered two different accounts in Virtual Y. Please contact to Virtual Y administrator.",
+      [
+        '%mail' => $name,
+        '%name' => $mail,
+      ]
+    );
+    $this->messenger->addError($this->t("For email %mail and name %name registered two different accounts in Virtual Y. Please contact to Virtual Y administrator.",
+      [
+        '%mail' => $name,
+        '%name' => $mail,
+      ])
+    );
   }
 
 }
