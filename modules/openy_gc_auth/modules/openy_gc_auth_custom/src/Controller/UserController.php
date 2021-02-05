@@ -6,6 +6,7 @@ use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Flood\FloodInterface;
 use Drupal\openy_gc_auth\GCUserAuthorizer;
+use Drupal\openy_gc_auth\GCVerificationTrait;
 use Drupal\user\Entity\User;
 use Drupal\user\UserDataInterface;
 use Drupal\user\UserStorageInterface;
@@ -20,6 +21,8 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
  * Controller routines for user routes.
  */
 class UserController extends ControllerBase {
+
+  use GCVerificationTrait;
 
   /**
    * The user storage.
@@ -161,19 +164,13 @@ class UserController extends ControllerBase {
       ($timestamp <= $current) &&
       hash_equals($hash, user_pass_rehash($user, $timestamp))
     ) {
-      $verified_browsers = [];
-      if (!$request->cookies->has('Drupal_visitor_auth_custom_authorized')) {
-        $verified_browsers = $this->userData->get('openy_gc_auth_custom', $user->id(), 'verified_browsers');
-      }
-      $token = user_pass_rehash($user, $current);
-      $verified_browsers[$token] = $current;
-      $this->userData->set('openy_gc_auth_custom', $user->id(), 'verified_browsers', $verified_browsers);
+      $token = $this->saveVerification($request, $user, $current);
 
       $this->gcUserAuthorizer->authorizeUser($user->getAccountName(), $user->getEmail());
       // Clear any flood events for this IP.
       $this->flood->clear('openy_gc_auth_custom.login');
       $response = new RedirectResponse($vy_settings->get('virtual_y_url'), 302);
-      $response->headers->setCookie(new Cookie('Drupal_visitor_auth_custom_authorized', $token));
+      $response->headers->setCookie(new Cookie('Drupal_visitor_gc_auth_authorized', $token));
       return $response;
     }
 

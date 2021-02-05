@@ -11,6 +11,7 @@ use Drupal\Core\Mail\MailManagerInterface;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\Core\Url;
 use Drupal\openy_gc_auth\GCUserAuthorizer;
+use Drupal\openy_gc_auth\GCVerificationTrait;
 use Drupal\user\Entity\User;
 use Drupal\user\UserDataInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -22,6 +23,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
  * @package Drupal\openy_gc_auth_custom\Form
  */
 class VirtualYCustomLoginForm extends FormBase {
+
+  use GCVerificationTrait;
 
   /**
    * The current request.
@@ -232,7 +235,11 @@ class VirtualYCustomLoginForm extends FormBase {
 
     if (($user instanceof User) &&
       $provider_config->get('enable_email_verification') &&
-      (!$user->isActive() || $this->isVerificationNeeded($user))
+      (
+        !$user->isActive() ||
+        $provider_config->get('require_email_verification') ||
+        $this->isVerificationNeeded($user)
+      )
     ) {
       // Send email verification if user is blocked or if enabled required
       // email verification and the browser is not yet verified.
@@ -264,34 +271,6 @@ class VirtualYCustomLoginForm extends FormBase {
     $params['message'] .= 'Click to verify your email: ' . $path;
     $this->mailManager->mail('openy_gc_auth_custom', 'email_verification', $mail, 'en', $params, NULL, TRUE);
     $this->privateTempStore->set($mail, TRUE);
-  }
-
-  /**
-   * Defines if we need to verify the user in a current browser.
-   *
-   * @param \Drupal\user\Entity\User $user
-   *   User object.
-   *
-   * @return bool
-   *   Check result.
-   */
-  protected function isVerificationNeeded(User $user): bool {
-    $verification_required = $this->configFactory->get('openy_gc_auth.provider.custom')->get('require_email_verification');
-    if (!$verification_required) {
-      return FALSE;
-    }
-
-    if (!$this->currentRequest->cookies->has('Drupal_visitor_auth_custom_authorized')) {
-      return TRUE;
-    }
-
-    $verified_browsers = $this->userData->get('openy_gc_auth_custom', $user->id(), 'verified_browsers');
-    if (empty($verified_browsers)) {
-      return TRUE;
-    }
-
-    $token = $this->currentRequest->cookies->get('Drupal_visitor_auth_custom_authorized');
-    return !array_key_exists($token, $verified_browsers);
   }
 
 }

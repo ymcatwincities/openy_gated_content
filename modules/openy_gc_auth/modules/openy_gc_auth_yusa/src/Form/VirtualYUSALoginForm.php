@@ -11,6 +11,7 @@ use Drupal\Core\Mail\MailManagerInterface;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\Core\Url;
 use Drupal\openy_gc_auth\GCUserAuthorizer;
+use Drupal\openy_gc_auth\GCVerificationTrait;
 use Drupal\openy_gc_auth_yusa\YUSAClientService;
 use Drupal\user\Entity\User;
 use Drupal\user\UserDataInterface;
@@ -24,6 +25,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
  * @package Drupal\openy_gc_auth_yusa\Form
  */
 class VirtualYUSALoginForm extends FormBase {
+
+  use GCVerificationTrait;
 
   /**
    * The current request.
@@ -287,29 +290,6 @@ class VirtualYUSALoginForm extends FormBase {
     $params['message'] .= 'Click to verify your email: ' . $path;
     $this->mailManager->mail('openy_gc_auth_yusa', 'openy_gc_auth_yusa_email_verification', $mail, 'en', $params, NULL, TRUE);
     $this->privateTempStore->set($mail, TRUE);
-  }
-
-  /**
-   * Defines if we need to verify the user in a current browser.
-   *
-   * @param \Drupal\user\Entity\User $user
-   *   User object.
-   *
-   * @return bool
-   *   Check result.
-   */
-  protected function isVerificationNeeded(User $user): bool {
-    if (!$this->currentRequest->cookies->has('Drupal_visitor_auth_yusa_authorized')) {
-      return TRUE;
-    }
-
-    $verified_browsers = $this->userData->get('openy_gc_auth_yusa', $user->id(), 'verified_browsers');
-    if (empty($verified_browsers)) {
-      return TRUE;
-    }
-
-    $token = $this->currentRequest->cookies->get('Drupal_visitor_auth_yusa_authorized');
-    return !array_key_exists($token, $verified_browsers);
   }
 
 }
