@@ -1068,7 +1068,7 @@ display:
           admin_label: ''
           empty: true
           tokenize: false
-          content: 'Below are this month''s logs. Older log entries can be found in the <a href=/admin/content/files?filename=virtual-y&filemime=application/x-gzip>Log Archives</a>.'
+          content: '<div class="messages messages--warning">Below are this month's logs. Older log entries can be found in the <a href=/admin/content/files?filename=virtual-y&filemime=application/x-gzip>Log Archives</a>.</div>'
           plugin_id: text_custom
       footer: {  }
       empty: {  }
