@@ -133,18 +133,9 @@ function openy_gc_log_update_8006() {
 }
 
 /**
- * Import view config and update entity.
+ * Update Log entity to add the event_metadata field.
  */
 function openy_gc_log_update_8007() {
-  $config_dir = drupal_get_path('module', 'openy_gc_log');
-  $config_dir .= '/config/install/';
-  $config_importer = \Drupal::service('openy_upgrade_tool.importer');
-  $config_importer->setDirectory($config_dir);
-  $config_importer->importConfigs([
-    'views.view.virtual_y_logs',
-  ]);
-
-  // Update entity to add the changed field.
   $entity_type = 'log_entity';
   $field_name = 'event_metadata';
   $fields = [];
@@ -155,4 +146,17 @@ function openy_gc_log_update_8007() {
     $entity_type,
     $fields[$field_name]
   );
+}
+
+/**
+ * Import logs view config.
+ */
+function openy_gc_log_update_8008() {
+  $config_dir = drupal_get_path('module', 'openy_gc_log');
+  $config_dir .= '/config/install/';
+  $config_importer = \Drupal::service('openy_upgrade_tool.importer');
+  $config_importer->setDirectory($config_dir);
+  $config_importer->importConfigs([
+    'views.view.virtual_y_logs',
+  ]);
 }

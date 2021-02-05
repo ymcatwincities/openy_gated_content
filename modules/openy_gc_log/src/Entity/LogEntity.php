@@ -279,7 +279,7 @@ class LogEntity extends ContentEntityBase implements LogEntityInterface {
     $fields['event_metadata'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Event Metadata'))
       ->setDescription(t('The event metadata, related to the Log entity.'))
-      ->setSetting('max_length', 255)
+      ->setSetting('max_length', 4096)
       ->setDefaultValue('');
   }
 
