@@ -1,0 +1,6 @@
+services:
+  openy_gc_auth.reclique_sso_client:
+    class: Drupal\openy_gc_auth_reclique_sso\SSOClient
+    arguments: [ '@logger.factory', '@config.factory',
+                 '@http_client', '@csrf_token',
+                 '@user.private_tempstore' ]
