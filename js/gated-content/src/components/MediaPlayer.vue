@@ -67,6 +67,8 @@ export default {
         return {
           rel: 0,
         };
+      } else {
+        return;
       }
     },
   },
