@@ -237,8 +237,10 @@ class VirtualYCustomLoginForm extends FormBase {
       $provider_config->get('enable_email_verification') &&
       (
         !$user->isActive() ||
-        $provider_config->get('require_email_verification') ||
-        $this->isVerificationNeeded($user)
+        (
+          $provider_config->get('require_email_verification') &&
+          $this->isVerificationNeeded($user)
+        )
       )
     ) {
       // Send email verification if user is blocked or if enabled required
