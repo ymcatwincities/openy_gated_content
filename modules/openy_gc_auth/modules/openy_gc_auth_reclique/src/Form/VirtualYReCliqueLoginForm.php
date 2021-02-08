@@ -11,8 +11,10 @@ use Drupal\Core\Mail\MailManagerInterface;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\Core\Url;
 use Drupal\openy_gc_auth\GCUserAuthorizer;
+use Drupal\openy_gc_auth\GCVerificationTrait;
 use Drupal\openy_gc_auth_reclique\RecliqueClientService;
 use Drupal\user\Entity\User;
+use Drupal\user\UserDataInterface;
 use GuzzleHttp\Client;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -23,6 +25,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
  * @package Drupal\openy_gc_auth_reclique\Form
  */
 class VirtualYReCliqueLoginForm extends FormBase {
+
+  use GCVerificationTrait;
 
   /**
    * The current request.
@@ -81,6 +85,13 @@ class VirtualYReCliqueLoginForm extends FormBase {
   protected $gcUserAuthorizer;
 
   /**
+   * The user data service.
+   *
+   * @var \Drupal\user\UserDataInterface
+   */
+  protected $userData;
+
+  /**
    * RecliqueClientService client service.
    *
    * @var \Drupal\openy_gc_auth_reclique\RecliqueClientService
@@ -99,6 +110,7 @@ class VirtualYReCliqueLoginForm extends FormBase {
     PrivateTempStoreFactory $private_temp_store,
     Client $client,
     GCUserAuthorizer $gcUserAuthorizer,
+    UserDataInterface $user_data,
     RecliqueClientService $recliqueClientService
   ) {
     $this->currentRequest = $requestStack->getCurrentRequest();
@@ -109,6 +121,7 @@ class VirtualYReCliqueLoginForm extends FormBase {
     $this->privateTempStore = $private_temp_store->get('openy_gc_auth.provider.reclique');
     $this->client = $client;
     $this->gcUserAuthorizer = $gcUserAuthorizer;
+    $this->userData = $user_data;
     $this->recliqueClientService = $recliqueClientService;
   }
 
@@ -125,6 +138,7 @@ class VirtualYReCliqueLoginForm extends FormBase {
       $container->get('tempstore.private'),
       $container->get('http_client'),
       $container->get('openy_gc_auth.user_authorizer'),
+      $container->get('user.data'),
       $container->get('openy_gc_auth_reclique_client')
     );
   }
@@ -214,16 +228,14 @@ class VirtualYReCliqueLoginForm extends FormBase {
       }
 
       if ($user instanceof User) {
-        if ($provider_config->get('enable_email_verification')) {
+        if ($provider_config->get('enable_email_verification') && $this->isVerificationNeeded($user)) {
           $this->sendEmailVerification($user, $provider_config, $email);
           $form_state->setValue('verified', TRUE);
           $form_state->setRebuild(TRUE);
           return;
         }
-        else {
-          // Authorize user (register, login, log, etc).
-          $this->gcUserAuthorizer->authorizeUser($name, $email, $result);
-        }
+        // Authorize user (register, login, log, etc).
+        $this->gcUserAuthorizer->authorizeUser($name, $email, $result);
       }
     }
     else {
