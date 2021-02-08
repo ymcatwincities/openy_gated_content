@@ -16,9 +16,19 @@
         <SvgIcon icon="clock-regular"></SvgIcon>
         {{ time }} ({{ duration }})
       </div>
-      <div class="instructor">
+      <div
+        class="instructor"
+        v-if="this.video.attributes.host_name"
+      >
         <SvgIcon icon="instructor-icon"></SvgIcon>
         {{ this.video.attributes.host_name }}
+      </div>
+      <div
+        class="level"
+        v-if="level"
+      >
+        <SvgIcon icon="difficulty-icon-grey" :css-fill="false"></SvgIcon>
+        {{ level | capitalize }}
       </div>
       <div class="timer" :class="{live: isOnAir}">
         <template v-if="isOnAir">
@@ -61,7 +71,7 @@ export default {
       return moment(this.video.attributes.date.value).format('YYYY-MM-DD');
     },
     time() {
-      return moment(this.video.attributes.date.value).format('HH:MM:SS');
+      return moment(this.video.attributes.date.value).format('h:mm a');
     },
     duration() {
       return moment.duration(moment(this.video.attributes.date.value)
@@ -71,7 +81,7 @@ export default {
       const duration = moment.duration(moment(this.video.attributes.date.value)
         .diff(moment()));
       if (duration.asHours() > 48) {
-        return duration.format();
+        return duration.format('d [day]');
       }
       return duration.format('hh:mm:ss');
     },

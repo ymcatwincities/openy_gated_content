@@ -51,7 +51,7 @@ export default {
   methods: {
     onClick() {
       this.loading = true;
-      setTimeout(this.addToFavorite, 1000);
+      setTimeout(this.addToFavorite, 300);
     },
     addToFavorite() {
       let action = 'addItemToFavorites';

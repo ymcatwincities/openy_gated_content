@@ -163,3 +163,33 @@ function openy_gc_storage_update_8007() {
     'core.entity_view_display.eventinstance.virtual_meeting.default',
   ]);
 }
+
+/**
+ * Update event link field description.
+ */
+function openy_gc_storage_update_8008() {
+  $config_dir = drupal_get_path('module', 'openy_gc_storage');
+  $config_dir .= '/config/install/';
+  // Import new configuration.
+  $config_importer = \Drupal::service('openy_upgrade_tool.importer');
+  $config_importer->setDirectory($config_dir);
+  $config_importer->importConfigs([
+    'field.field.eventinstance.virtual_meeting.field_vm_link',
+    'field.field.eventseries.virtual_meeting.field_vm_link',
+  ]);
+}
+
+/**
+ * Update media descriptions.
+ */
+function openy_gc_storage_update_8009() {
+  $config_dir = drupal_get_path('module', 'openy_gc_storage');
+  $config_dir .= '/config/install/';
+  // Import new configuration.
+  $config_importer = \Drupal::service('openy_upgrade_tool.importer');
+  $config_importer->setDirectory($config_dir);
+  $config_importer->importConfigs([
+    'field.field.node.gc_video.field_gc_video_media',
+    'field.field.eventseries.live_stream.field_ls_media',
+  ]);
+}

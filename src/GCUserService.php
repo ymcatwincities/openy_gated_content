@@ -47,7 +47,7 @@ class GCUserService implements ContainerInjectionInterface {
   public function getRoles() {
     $roles = [];
     foreach ($this->entityTypeManager->getStorage('user_role')->loadMultiple() as $role_name => $role) {
-      if (strstr($role_name, 'virtual_y') && (!in_array($role_name, self::getVirtualyEditorRoles()))) {
+      if (strpos($role_name, 'virtual_y') !== FALSE && (!in_array($role_name, $this->getVirtualyEditorRoles()))) {
         $roles[$role_name] = $role->label();
       }
     }

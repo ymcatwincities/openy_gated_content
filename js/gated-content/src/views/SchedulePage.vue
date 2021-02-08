@@ -56,7 +56,7 @@
           <div class="slot dates">
             <div class="hour-row">
               <div v-for="(day, index) in listing" :key="index" class="event-cell date"
-                   :class="{'active': index === currentDay}">
+                   :class="{'active': currentDay(day.date)}">
                 <div class="weekday">{{ day.date | weekday }}</div>
                 <div class="date">{{ day.date | month }} {{ day.date | day }}</div>
               </div>
@@ -66,8 +66,8 @@
             <div v-if="typeof eventsCount !== 'undefined'" class="slot" :key="hour">
               <div class="caption">
                 <template v-for="(day, index) in listing">
-                  <div class="hour-card" :class="{'active': index === currentDay}" :key="index">
-                    <template v-if="index === currentDay">{{ hour | hour }}</template>
+                  <div class="hour-card" :class="{'active': currentDay(day.date)}" :key="index">
+                    <template v-if="outputHours(index)">{{ hour | hour }}</template>
                   </div>
                 </template>
               </div>
@@ -140,9 +140,6 @@ export default {
         this.startDate.getTime() <= today.getTime()
         && today.getTime() < this.endDate.getTime()
       );
-    },
-    currentDay() {
-      return (new Date()).getDay();
     },
   },
   methods: {
@@ -247,8 +244,20 @@ export default {
           this.error = true;
           this.loading = false;
           console.error(error);
-          throw error;
         });
+    },
+    currentDay(date) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      return today.getTime() === date.getTime();
+    },
+    outputHours(index) {
+      const sunday = new Date();
+      sunday.setHours(0, 0, 0, 0);
+      sunday.setDate(sunday.getDate() - sunday.getDay());
+      const day = this.listing[index].date;
+      return (day.getTime() >= sunday.getTime() + this.oneWeek && index === 3)
+        || this.currentDay(day);
     },
     backOneWeek() {
       this.startDate = new Date(this.startDate.setTime(this.startDate.getTime() - this.oneWeek));
