@@ -4,10 +4,7 @@
       ref="player"
       :player="player"
       :videoId="videoId"
-      :options="{
-        responsive: 'true',
-        url: media.field_media_video_embed_field,
-      }"
+      :options="{responsive: 'true', url: media.field_media_video_embed_field}"
       :player-vars="handleAttributes()"
       @loaded="$refs.player.pause()"
       @play="handlePlay()"
@@ -17,10 +14,10 @@
 </template>
 
 <script>
-import VueVideoWrapper from "vue-video-wrapper";
+import VueVideoWrapper from 'vue-video-wrapper';
 
 export default {
-  name: "MediaPlayer",
+  name: 'MediaPlayer',
   data() {
     return {
       playbackLogged: false,
@@ -36,17 +33,15 @@ export default {
     },
   },
   watch: {
-    media: "reload",
+    media: 'reload',
   },
   computed: {
     player() {
-      return this.media.field_media_source.startsWith("youtube")
-        ? "youtube"
-        : "vimeo";
+      return this.media.field_media_source.startsWith('youtube') ? 'youtube' : 'vimeo';
     },
     videoId() {
       let embedObj = this.media.field_media_video_embed_field;
-      if (this.media.field_media_source === "youtube_playlist") {
+      if (this.media.field_media_source === 'youtube_playlist') {
         embedObj = embedObj.match(/(\?|&)v=([^&#]+)/).pop();
         return embedObj;
       }
@@ -58,17 +53,17 @@ export default {
       this.$forceUpdate();
     },
     handlePlayerEvent(eventType) {
-      this.$emit("playerEvent", eventType);
+      this.$emit('playerEvent', eventType);
     },
     handlePlay() {
       if (this.playbackLogged) {
         return;
       }
       this.playbackLogged = true;
-      this.handlePlayerEvent("videoPlaybackStarted");
+      this.handlePlayerEvent('videoPlaybackStarted');
     },
     handleAttributes() {
-      if (this.media.field_media_source === "youtube") {
+      if (this.media.field_media_source === 'youtube') {
         return {
           rel: 0,
         };
