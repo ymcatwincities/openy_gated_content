@@ -68,7 +68,6 @@ export default {
           rel: 0,
         };
       }
-      return;
     },
   },
   updated() {
