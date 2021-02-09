@@ -6,14 +6,10 @@ use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Flood\FloodInterface;
 use Drupal\openy_gc_auth\GCUserAuthorizer;
-use Drupal\openy_gc_auth\GCVerificationTrait;
 use Drupal\openy_gc_auth_reclique\RecliqueClientService;
-use Drupal\user\Entity\User;
-use Drupal\user\UserDataInterface;
 use Drupal\user\UserStorageInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -22,8 +18,6 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
  * Controller routines for user routes.
  */
 class UserController extends ControllerBase {
-
-  use GCVerificationTrait;
 
   /**
    * The user storage.
@@ -61,13 +55,6 @@ class UserController extends ControllerBase {
   protected $gcUserAuthorizer;
 
   /**
-   * The user data service.
-   *
-   * @var \Drupal\user\UserDataInterface
-   */
-  protected $userData;
-
-  /**
    * RecliqueClientService client service.
    *
    * @var \Drupal\openy_gc_auth_reclique\RecliqueClientService
@@ -87,8 +74,6 @@ class UserController extends ControllerBase {
    *   The time service.
    * @param \Drupal\openy_gc_auth\GCUserAuthorizer $gcUserAuthorizer
    *   The GCUserAuthorizer service.
-   * @param \Drupal\user\UserDataInterface $user_data
-   *   The user data service.
    * @param \Drupal\openy_gc_auth_reclique\RecliqueClientService $recliqueClientService
    *   Reclique service.
    */
@@ -98,7 +83,6 @@ class UserController extends ControllerBase {
     FloodInterface $flood,
     TimeInterface $datetime,
     GCUserAuthorizer $gcUserAuthorizer,
-    UserDataInterface $user_data,
     RecliqueClientService $recliqueClientService
   ) {
     $this->userStorage = $user_storage;
@@ -106,7 +90,6 @@ class UserController extends ControllerBase {
     $this->flood = $flood;
     $this->datetime = $datetime;
     $this->gcUserAuthorizer = $gcUserAuthorizer;
-    $this->userData = $user_data;
     $this->recliqueClientService = $recliqueClientService;
   }
 
@@ -120,7 +103,6 @@ class UserController extends ControllerBase {
       $container->get('flood'),
       $container->get('datetime.time'),
       $container->get('openy_gc_auth.user_authorizer'),
-      $container->get('user.data'),
       $container->get('openy_gc_auth_reclique_client')
     );
   }
@@ -174,15 +156,7 @@ class UserController extends ControllerBase {
         ->addError($this->t('You have tried to use a one-time login link that has expired. Please request a new one using the form below.'));
       return new RedirectResponse($vy_settings->get('virtual_y_login_url'), 302);
     }
-
-    if (($user instanceof User) &&
-      $user->isAuthenticated() &&
-      ($timestamp >= $user->getLastLoginTime()) &&
-      ($timestamp <= $current) &&
-      hash_equals($hash, user_pass_rehash($user, $timestamp))
-    ) {
-      $token = $this->saveVerification($request, $user, $current);
-
+    elseif ($user->isAuthenticated() && ($timestamp >= $user->getLastLoginTime()) && ($timestamp <= $current) && hash_equals($hash, user_pass_rehash($user, $timestamp))) {
       $this
         ->gcUserAuthorizer
         ->authorizeUser(
@@ -192,9 +166,7 @@ class UserController extends ControllerBase {
         );
       // Clear any flood events for this IP.
       $this->flood->clear('openy_gc_auth_reclique.login');
-      $response = new RedirectResponse($vy_settings->get('virtual_y_url'), 302);
-      $response->headers->setCookie(new Cookie('Drupal_visitor_gc_auth_authorized', $token));
-      return $response;
+      return new RedirectResponse($vy_settings->get('virtual_y_url'), 302);
     }
     $this
       ->messenger()
