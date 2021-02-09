@@ -282,11 +282,14 @@ function openy_gated_content_user_login_validation(array &$form, FormStateInterf
   $account = \Drupal::entityTypeManager()->getStorage('user')->load($form_state->get('uid'));
   if ($account) {
     $roles = $account->getRoles();
-    foreach ($roles as $role) {
-      if (strpos($role, 'virtual_y_') !== FALSE || $role == 'virtual_y') {
-        \Drupal::messenger()->addError('You\'re not allowing to login with Virtual Y user role.');
-        throw new AccessDeniedHttpException();
-      }
+    $vy_roles = array_filter($roles, function ($role) {
+      return strpos($role, 'virtual_y_') !== FALSE || $role === 'virtual_y';
+    });
+    if (count($vy_roles) > 0 &&
+      count(array_diff($roles, array_merge([AccountInterface::AUTHENTICATED_ROLE], $vy_roles))) === 0
+    ) {
+      \Drupal::messenger()->addError('Virtual YMCA members are not permitted to use this form. Please contact your branch for assistance or go back to the homepage to log in.');
+      throw new AccessDeniedHttpException();
     }
   }
 }
