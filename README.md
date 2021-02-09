@@ -4,6 +4,13 @@ Virtual Y is a package for Open Y and consists of features, needed to organize g
 
 Active development is currently happening at [fivejars/openy_gated_content](https://github.com/fivejars/openy_gated_content). Pull requests should be submitted there. They will be pulled into this repo as they are reviewed and released.
 
+## Server requirements
+In order to work Virtual Y requires HTTP server to allow 
+- GET
+- POST
+- DELETE
+http methods.
+
 ## Submodules
 
 1. [Authentication system](https://github.com/ymcatwincities/openy_gated_content/tree/master/modules/openy_gc_auth) - pluginable system for different authentication types.

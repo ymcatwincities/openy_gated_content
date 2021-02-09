@@ -7,6 +7,7 @@ use Drupal\Core\Batch\BatchBuilder;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Pager\PagerManagerInterface;
+use Drupal\Core\Render\Element;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -86,17 +87,14 @@ class SharedContentFetchForm extends EntityForm {
     ];
 
     $type = $this->getRouteMatch()->getParameter('type');
-    // JSON:API module does not provide a count because it would severely
-    // degrade performance, so we use here 1000 as total items count.
-    $pager = $this->pagerManager->createPager(1000, self::PAGE_LIMIT);
-    $current_page = $pager->getCurrentPage();
+    $current_page = $this->getRequest()->query->get('page') ?? 0;
     $pager_query = [
       'page[offset]' => $current_page * self::PAGE_LIMIT,
       'page[limit]' => self::PAGE_LIMIT,
     ];
     $instance = $this->sharedSourceTypeManager->createInstance($type);
     $query_arg = array_merge($instance->getTeaserJsonApiQueryArgs(), $pager_query);
-    $instance->applyFormFilters($query_arg, $form_state);
+    $instance->applyFormFilters($query_arg, $this->getRequest());
     $source_data = $instance->jsonApiCall($this->entity, $query_arg);
     $form['fetched_data'] = [
       '#type' => 'container',
@@ -114,22 +112,20 @@ class SharedContentFetchForm extends EntityForm {
       'filter_actions' => [
         '#type' => 'actions',
         'button' => [
-          '#type' => 'button',
+          '#type' => 'submit',
           '#value' => $this->t('Apply'),
-          '#ajax' => [
-            'callback' => '::fetchSourceDataAjax',
-            'wrapper' => 'fetched-data',
-            'effect' => 'fade',
-            'progress' => [
-              'type' => 'throbber',
-              'message' => $this->t('Loading content..'),
-            ],
-          ],
+          '#name' => 'apply_filters',
+          '#submit' => ['::applyFilters'],
         ],
       ],
     ];
 
-    if (empty($source_data)) {
+    // Default values for fields.
+    foreach (Element::children($form['fetched_data']['filters']['fields']) as $name) {
+      $form['fetched_data']['filters']['fields'][$name]['#default_value'] = $this->getRequest()->query->get($name) ?? '';
+    }
+
+    if (empty($source_data['data'])) {
       $form['fetched_data']['message'] = [
         '#type' => 'markup',
         '#markup' => $this->t('No data for selected source content type.'),
@@ -173,26 +169,45 @@ class SharedContentFetchForm extends EntityForm {
         ];
       }
 
-      if (count($source_data['data']) < self::PAGE_LIMIT) {
-        // Fix pager when there no next page.
-        $this->pagerManager->createPager($current_page * self::PAGE_LIMIT, self::PAGE_LIMIT);
-      }
+      // Create custom pager instead of build in drupal pager that throws
+      // AJAX errors during navigation.
       $form['fetched_data']['pager'] = [
-        '#type' => 'pager',
-        '#quantity' => 1,
+        '#theme' => 'item_list',
+        '#list_type' => 'ul',
+        '#items' => [],
+        '#attributes' => ['class' => 'pager__items'],
+        '#wrapper_attributes' => ['class' => 'pager'],
       ];
+      $current_page_query = $this->getRequest()->query->all();
+      if ($current_page != 0) {
+        $form['fetched_data']['pager']['#items'][] = [
+          '#title' => $this->t('prev'),
+          '#type' => 'link',
+          '#wrapper_attributes' => ['class' => 'pager__item'],
+          '#url' => Url::fromRoute('<current>', [], [
+            'query' => array_merge($current_page_query, ['page' => $current_page - 1]),
+          ]),
+        ];
+      }
+      $form['fetched_data']['pager']['#items'][] = [
+        '#markup' => $current_page + 1,
+        '#type' => 'markup',
+        '#wrapper_attributes' => ['class' => 'pager__item'],
+      ];
+      if (count($source_data['data']) == self::PAGE_LIMIT) {
+        $form['fetched_data']['pager']['#items'][] = [
+          '#title' => $this->t('next'),
+          '#type' => 'link',
+          '#wrapper_attributes' => ['class' => 'pager__item'],
+          '#url' => Url::fromRoute('<current>', [], [
+            'query' => array_merge($current_page_query, ['page' => $current_page + 1]),
+          ]),
+        ];
+      }
     }
     $form['#attached']['library'][] = 'core/drupal.dialog.ajax';
 
     return $form;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function fetchSourceDataAjax(array &$form, FormStateInterface $form_state) {
-    $form_state->setRebuild(TRUE);
-    return $form['fetched_data'];
   }
 
   /**
@@ -203,6 +218,21 @@ class SharedContentFetchForm extends EntityForm {
     unset($actions['delete']);
     $actions['submit']['#value'] = $this->t('Fetch to my site');
     return $actions;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function applyFilters(array $form, FormStateInterface $form_state) {
+    $input = $form_state->getUserInput();
+    $query = ['page' => 0];
+    foreach (Element::children($form['fetched_data']['filters']['fields']) as $name) {
+      if (isset($input[$name])) {
+        $query[$name] = $input[$name];
+      }
+    }
+    $url = Url::fromRoute('<current>', [], ['query' => $query]);
+    $form_state->setRedirectUrl($url);
   }
 
   /**
