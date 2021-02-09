@@ -9,7 +9,7 @@
  * Update configuration.
  */
 function openy_gc_auth_daxko_sso_update_8001(&$sandbox) {
-  $config_dir = drupal_get_path('module', 'openy_gc_auth_daxko_sso') . '/config/';
+  $config_dir = drupal_get_path('module', 'openy_gc_auth_daxko_sso') . '/config/install/';
   // Update multiple configurations.
   $configs = [
     'openy_gc_auth.provider.daxko_sso' => [
@@ -31,7 +31,7 @@ function openy_gc_auth_daxko_sso_update_8001(&$sandbox) {
  * Add value for login_mode variable.
  */
 function openy_gc_auth_daxko_sso_update_8002(&$sandbox) {
-  $config_dir = drupal_get_path('module', 'openy_gc_auth_daxko_sso') . '/config/';
+  $config_dir = drupal_get_path('module', 'openy_gc_auth_daxko_sso') . '/config/install/';
   // Update multiple configurations.
   $configs = [
     'openy_gc_auth.provider.daxko_sso' => [
@@ -45,5 +45,23 @@ function openy_gc_auth_daxko_sso_update_8002(&$sandbox) {
     foreach ($params as $param) {
       $config_updater->update($config, $config_name, $param);
     }
+  }
+}
+
+/**
+ * Re-import config if it failed previously.
+ */
+function openy_gc_auth_daxko_sso_update_8003(&$sandbox) {
+  $config_factory = \Drupal::configFactory();
+  $config = $config_factory->get('openy_gc_auth.provider.daxko_sso')->getRawData();
+  if (empty($config)) {
+    $config_dir = drupal_get_path('module', 'openy_gc_auth_daxko_sso');
+    $config_dir .= '/config/install/';
+    // Import new configuration.
+    $config_importer = \Drupal::service('openy_upgrade_tool.importer');
+    $config_importer->setDirectory($config_dir);
+    $config_importer->importConfigs([
+      'openy_gc_auth.provider.daxko_sso',
+    ]);
   }
 }
