@@ -30,6 +30,7 @@ class Custom extends GCIdentityProviderPluginBase {
       'email_verification_link_life_time' => self::DEFAULT_LINK_LIFE_TIME,
       'email_verification_text' => 'Hello! <br> You’re just one step away from accessing your Virtual YMCA. Please open the link below to begin enjoying YMCA content made exclusively for members like you.',
       'verification_message' => 'We have sent a verification link to the email address you provided. Please open this link and activate your account. If you do not receive an email, please try again or contact us at XXX-XXX-XXXX to ensure we have the correct email on file for your membership.',
+      'one_time_link_invalid_message' => 'You have tried to use a one-time login link that has either been used or is no longer valid. Please request a new one using the form below.',
     ];
   }
 
@@ -110,6 +111,14 @@ class Custom extends GCIdentityProviderPluginBase {
       '#required' => TRUE,
     ];
 
+    $form['verification']['one_time_link_invalid_message'] = [
+      '#title' => $this->t('Message for One Time Link no valid'),
+      '#description' => $this->t('This text will be displayed as error message when user was used a no valid  One time link.'),
+      '#type' => 'textarea',
+      '#default_value' => $config['one_time_link_invalid_message'],
+      '#required' => TRUE,
+    ];
+
     $form['migrate'] = [
       '#type' => 'details',
       '#title' => $this->t('Migration settings'),
@@ -155,6 +164,7 @@ class Custom extends GCIdentityProviderPluginBase {
       $this->configuration['email_verification_link_life_time'] = $form_state->getValue('email_verification_link_life_time');
       $this->configuration['email_verification_text'] = !empty($form_state->getValue('email_verification_text')) ? $form_state->getValue('email_verification_text')['value'] : '';
       $this->configuration['verification_message'] = !empty($form_state->getValue('verification_message')) ? $form_state->getValue('verification_message')['value'] : '';
+      $this->configuration['one_time_link_invalid_message'] = !empty($form_state->getValue('one_time_link_invalid_message')) ? $form_state->getValue('one_time_link_invalid_message') : '';
       parent::submitConfigurationForm($form, $form_state);
     }
   }
