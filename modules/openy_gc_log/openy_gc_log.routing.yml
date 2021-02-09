@@ -1,3 +1,11 @@
+openy_gc_log.settings:
+  path: '/admin/virtual-y-logs/settings'
+  defaults:
+    _form: '\Drupal\openy_gc_log\Form\LogSettingsForm'
+    _title: 'Virtual Y Log settings'
+  requirements:
+    _permission: 'administer site configuration'
+
 openy_gc_log.manual_csv_export:
   path: '/admin/virtual-y-logs/export'
   defaults:
@@ -12,7 +20,18 @@ openy_gc_log.log_controller_index:
     _controller: '\Drupal\openy_gc_log\Controller\LogController::index'
     _title: 'index'
   requirements:
-    #logging is available for all
-    _access: 'TRUE'
+    _permission: 'access content'
+    _role: 'authenticated'
+  options:
+    no_cache: TRUE
+
+openy_gc_log.log_controller_track_activity:
+  path: '/virtual-y/log-activity'
+  defaults:
+    _controller: '\Drupal\openy_gc_log\Controller\LogController::trackActivity'
+    _title: 'activity'
+  requirements:
+    _permission: 'access content'
+    _role: 'authenticated'
   options:
     no_cache: TRUE
