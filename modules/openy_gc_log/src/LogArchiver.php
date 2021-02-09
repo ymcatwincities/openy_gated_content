@@ -292,8 +292,8 @@ class LogArchiver {
       $entity_bundle = $log->get('entity_bundle')->value;
       $entity_id = $log->get('entity_id')->value;
       $user_data = $log->get('uid')->target_id && ($log->get('uid')->entity instanceof UserInterface) ?
-        $log->get('uid')->entity->getEmail() :
-        $log->get('email')->value;
+      $log->get('uid')->entity->getEmail() :
+      $log->get('email')->value;
       $export_row = [
         'created' => date('m/d/Y - H:i:s', $log->get('created')->value),
         'user' => $user_data,

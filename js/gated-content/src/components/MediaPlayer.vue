@@ -71,9 +71,8 @@ export default {
         return {
           rel: 0,
         };
-      } else {
-        return;
       }
+      return false;
     },
     handlePause() {
       this.playbackInProgress = false;
