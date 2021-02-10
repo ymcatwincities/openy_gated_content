@@ -243,3 +243,18 @@ function openy_gated_content_update_8012() {
       ],
     ]));
 }
+
+/**
+ * Added empty block components settings.
+ */
+function openy_gated_content_update_8013() {
+  $config_importer = \Drupal::service('openy_upgrade_tool.param_updater');
+  $config = drupal_get_path('module', 'openy_gated_content');
+  $config .= '/config/install/';
+  $config .= 'openy_gated_content.settings.yml';
+  $config_importer->update(
+    $config,
+    'openy_gated_content.settings',
+    'components'
+  );
+}
