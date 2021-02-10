@@ -193,3 +193,28 @@ function openy_gc_storage_update_8009() {
     'field.field.eventseries.live_stream.field_ls_media',
   ]);
 }
+
+/**
+ * Enabling scheduler module.
+ */
+function openy_gc_storage_update_8011() {
+  $config_dir = drupal_get_path('module', 'openy_gc_storage') . '/config/install/';
+  // Update multiple configurations.
+  $configs = [
+    'node.type.gc_video' => [
+      'dependencies.module',
+      'third_party_settings.scheduler',
+    ],
+    'node.type.vy_blog_post' => [
+      'dependencies.module',
+      'third_party_settings.scheduler',
+    ],
+  ];
+  $config_updater = \Drupal::service('openy_upgrade_tool.param_updater');
+  foreach ($configs as $config_name => $params) {
+    $config = $config_dir . $config_name . '.yml';
+    foreach ($params as $param) {
+      $config_updater->update($config, $config_name, $param);
+    }
+  }
+}
