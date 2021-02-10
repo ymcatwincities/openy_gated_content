@@ -151,7 +151,9 @@ function openy_gated_content_post_update_paragraph_headline(&$sandbox) {
       if (!empty($header_prgf->field_prgf_headline->value)) {
         $title = $header_prgf->field_prgf_headline->value;
       }
-
+      if (!empty($header_prgf->field_prgf_image->first())) {
+        $image = $header_prgf->field_prgf_image->first();
+      }
       if (!empty($header_prgf->field_prgf_description->value)) {
         $description = $header_prgf->field_prgf_description->value;
       }
@@ -164,6 +166,9 @@ function openy_gated_content_post_update_paragraph_headline(&$sandbox) {
     if (empty($gated_content_prgf->field_prgf_description->value)) {
       $gated_content_prgf->field_prgf_description->value = $description;
       $gated_content_prgf->field_prgf_description->format = 'full_html';
+    }
+    if (empty($gated_content_prgf->field_prgf_image->first())) {
+      $gated_content_prgf->field_prgf_image->set(0, $image);
     }
     $gated_content_prgf->save();
   }

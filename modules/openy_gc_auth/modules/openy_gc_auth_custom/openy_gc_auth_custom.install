@@ -147,3 +147,27 @@ function openy_gc_auth_custom_update_8008(&$sandbox) {
     ->set('one_time_link_invalid_message', $message)
     ->save();
 }
+
+/**
+ * Add SkipRowIfEmailExcluded migrate process plugin to csv migration.
+ */
+function openy_gc_auth_custom_update_8009(&$sandbox) {
+  $config_dir = drupal_get_path('module', 'openy_gc_auth_custom') . '/config/';
+  // Update multiple configurations.
+  $configs = [
+    'openy_gc_auth.provider.custom' => [
+      'exclude_users',
+    ],
+    'migrate_plus.migration.gc_auth_custom_users' => [
+      'process.mail',
+    ],
+  ];
+
+  $config_updater = \Drupal::service('openy_upgrade_tool.param_updater');
+  foreach ($configs as $config_name => $params) {
+    $config = $config_dir . $config_name . '.yml';
+    foreach ($params as $param) {
+      $config_updater->update($config, $config_name, $param);
+    }
+  }
+}

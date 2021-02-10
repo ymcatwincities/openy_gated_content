@@ -109,7 +109,7 @@ class DaxkoBarcodeController extends ControllerBase {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function validate(Request $request, $barcode) {
-    $config = $this->configFactory->get('openy_gc_auth.provider.daxco_barcode');
+    $config = $this->configFactory->get('openy_gc_auth.provider.daxko_barcode');
 
     // First make sure we have barcode in $request.
     if (empty($barcode)) {
