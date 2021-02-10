@@ -124,7 +124,7 @@ export default {
       return this.listing !== null && this.listing.length > 0;
     },
     emptyBlockMsg() {
-      if(this.config.components.gc_video.empty_block_text !== '') {
+      if (this.config.components.gc_video.empty_block_text !== '') {
         return this.config.components.gc_video.empty_block_text;
       }
       return this.msg;

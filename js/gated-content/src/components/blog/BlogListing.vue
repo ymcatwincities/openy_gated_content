@@ -120,7 +120,7 @@ export default {
       return this.listing !== null && this.listing.length > 0;
     },
     emptyBlockMsg() {
-      if(this.config.components.vy_blog_post.empty_block_text !== '') {
+      if (this.config.components.vy_blog_post.empty_block_text !== '') {
         return this.config.components.vy_blog_post.empty_block_text;
       }
       return this.msg;
