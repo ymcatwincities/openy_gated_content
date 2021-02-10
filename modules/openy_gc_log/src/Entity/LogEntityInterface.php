@@ -15,6 +15,7 @@ interface LogEntityInterface extends ContentEntityInterface {
   const EVENT_TYPE_ENTITY_VIEW = 'entityView';
   const EVENT_TYPE_VIDEO_PLAYBACK_STARTED = 'videoPlaybackStarted';
   const EVENT_TYPE_VIDEO_PLAYBACK_ENDED = 'videoPlaybackEnded';
+  const EVENT_TYPE_USER_ACTIVITY = 'userActivity';
 
   /**
    * Add get/set methods for your configuration properties here.
