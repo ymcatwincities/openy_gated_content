@@ -17,8 +17,8 @@
       :featured="true"
       :viewAll="true"
       :limit="8"
-      :msg="config.components.live_stream.empty_block_text"
       :title="config.components.live_stream.title"
+      :msg="config.components.live_stream.empty_block_text"
       v-if="isActive('live_stream')"
     />
     <EventListing
@@ -26,8 +26,8 @@
       :featured="true"
       :viewAll="true"
       :limit="8"
-      :eventType="'virtual_meeting'"
       :msg="config.components.virtual_meeting.empty_block_text"
+      :eventType="'virtual_meeting'"
       v-if="isActive('virtual_meeting')"
     />
     <BlogListing
