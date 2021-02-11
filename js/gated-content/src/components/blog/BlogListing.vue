@@ -54,7 +54,7 @@ export default {
   props: {
     title: {
       type: String,
-      default: 'Blog posts',
+      default: 'Blog Posts',
     },
     excludedId: {
       type: String,
