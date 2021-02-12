@@ -252,9 +252,17 @@ function openy_gated_content_update_8013() {
   $config = drupal_get_path('module', 'openy_gated_content');
   $config .= '/config/install/';
   $config .= 'openy_gated_content.settings.yml';
-  $config_importer->update(
-    $config,
-    'openy_gated_content.settings',
-    'components'
-  );
+  $components = [
+    'gc_video',
+    'live_stream',
+    'virtual_meeting',
+    'vy_blog_post',
+  ];
+  foreach ($components as $id) {
+    $config_importer->update(
+      $config,
+      'openy_gated_content.settings',
+      'components.' . $id . '.empty_block_text'
+    );
+  }
 }
