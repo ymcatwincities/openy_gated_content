@@ -132,8 +132,10 @@ class PersonifyAuthController extends ControllerBase {
           user_cookie_save([
             'personify_authorized' => $token,
             'personify_time' => REQUEST_TIME,
-          ]);		
-        } else {
+          ]);
+        }
+        else
+        {
           user_cookie_delete('personify_authorized');
           user_cookie_delete('personify_time');
 
@@ -198,7 +200,7 @@ class PersonifyAuthController extends ControllerBase {
       )->toString();
       return new RedirectResponse($path);
     }
-    
+
     // {"UserExists":true|false,"UserName":"","Email":"","DisableAccountFlag":false|true}.
     $userInfo = $this->personifySSO->getCustomerInfo($token);
 
@@ -303,7 +305,7 @@ class PersonifyAuthController extends ControllerBase {
         return TRUE;
       }
     }
-    
+
     return FALSE;
   }
 
