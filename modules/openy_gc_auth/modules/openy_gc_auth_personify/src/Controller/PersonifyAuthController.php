@@ -123,27 +123,27 @@ class PersonifyAuthController extends ControllerBase {
     $query = $request->query->all();
     if (isset($query['ct']) && !empty($query['ct'])) {
       $errorMessage = 'An attempt to login with wrong personify token was detected.';
-      
+
       $decrypted_token = $this->personifySSO->decryptCustomerToken($query['ct']);
       if ($token = $this->personifySSO->validateCustomerToken($decrypted_token)) {
-		if ($this->userHasActiveMembership($token)) {
-		  $userInfo = $this->personifySSO->getCustomerInfo($token);
+        if ($this->userHasActiveMembership($token)) {
+          $userInfo = $this->personifySSO->getCustomerInfo($token);
           $errorMessage = NULL;
           user_cookie_save([
             'personify_authorized' => $token,
             'personify_time' => REQUEST_TIME,
           ]);		
-		} else {
+        } else {
           user_cookie_delete('personify_authorized');
           user_cookie_delete('personify_time');
-          
+
           $path = URL::fromUserInput(
             $this->configFactory->get('openy_gated_content.settings')->get('virtual_y_login_url'),
             ['query' => ['personify-error' => '1']]
           )->toString();
           return new RedirectResponse($path);
-	    }
-	  }
+        }
+      }
     }
 
     // Failed auth attempt.
@@ -187,7 +187,7 @@ class PersonifyAuthController extends ControllerBase {
       // Personify user not found. Redirect to login page.
       return new RedirectResponse(Url::fromRoute('openy_gc_auth_personify.api_login_personify', [''])->toString());
     }
-    
+
     if (!$this->userHasActiveMembership($token)) {
       user_cookie_delete('personify_authorized');
       user_cookie_delete('personify_time');
@@ -325,7 +325,7 @@ class PersonifyAuthController extends ControllerBase {
 
     // Generate auth URL that would base of validation token.
     $url = Url::fromRoute('openy_gc_auth_personify.personify_auth', [], $options)->toString();
-	
+
     $vendor_token = $this->personifySSO->getVendorToken($url);
     $options = [
       'query' => [
@@ -336,7 +336,7 @@ class PersonifyAuthController extends ControllerBase {
 
     $env = $this->configFactory->get('personify.settings')->get('environment');
     $configLoginUrl = $this->configFactory->get('openy_gc_auth_personify.settings')->get($env . '_url_login');
-	
+
     if (empty($configLoginUrl)) {
       $this->messenger->addWarning('Please, check Personify configs in settings.php.');
       return NULL;
@@ -348,5 +348,4 @@ class PersonifyAuthController extends ControllerBase {
 
     exit();
   }
-
 }
