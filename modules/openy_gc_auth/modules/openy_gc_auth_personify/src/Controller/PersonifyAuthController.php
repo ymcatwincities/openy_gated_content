@@ -134,8 +134,7 @@ class PersonifyAuthController extends ControllerBase {
             'personify_time' => REQUEST_TIME,
           ]);
         }
-        else
-        {
+        else {
           user_cookie_delete('personify_authorized');
           user_cookie_delete('personify_time');
 
@@ -350,4 +349,5 @@ class PersonifyAuthController extends ControllerBase {
 
     exit();
   }
+
 }
