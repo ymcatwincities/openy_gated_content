@@ -117,6 +117,7 @@
           v-if="selectedComponent === 'gc_video' || selectedComponent === 'all'"
           :title="config.components.gc_video.title"
           :category="category.id"
+          :pagination="selectedComponent === 'gc_video'"
           :viewAll="false"
           :sort="sortData('node')"
           :limit="itemsLimit"
