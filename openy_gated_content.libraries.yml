@@ -1,3 +1,9 @@
+styles:
+  version: 0.1
+  css:
+    theme:
+      assets/css/styles.css: {}
+
 openy-rose-menu:
   version: 0.1
   js:
