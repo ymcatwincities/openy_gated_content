@@ -147,7 +147,8 @@ class GCSettingsForm extends ConfigFormBase {
       ];
     }
 
-    uasort($form['app_settings']['components'], [SortArray::class, 'sortByWeightProperty']);
+    uasort($form['app_settings']['components'],
+      [SortArray::class, 'sortByWeightProperty']);
 
     $form['app_settings']['virtual_y_url'] = [
       '#type' => 'textfield',
