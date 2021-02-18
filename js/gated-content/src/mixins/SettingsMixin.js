@@ -12,5 +12,5 @@ export const SettingsMixin = {
     showOnCurrentIteration(component, iteration) {
       return (component === iteration);
     },
-  }
+  },
 };

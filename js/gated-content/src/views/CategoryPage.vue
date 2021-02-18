@@ -68,13 +68,15 @@
       </div>
 
       <div v-for="component in componentsOrder" :key="component">
-        <div class="live-stream-wrapper" v-if="showComponent.live_stream && showOnCurrentIteration('live_stream', component)">
+        <div class="live-stream-wrapper" v-if="showComponent.live_stream
+          && showOnCurrentIteration('live_stream', component)">
           <EventListing
             v-if="selectedComponent === 'live_stream' || selectedComponent === 'all'"
             :title="config.components.live_stream.title"
             :category="category.id"
             :msg="'Live streams not found.'"
             :sort="sortData('eventinstance')"
+            :pagination="selectedComponent === 'live_stream'"
             :limit="viewAllContentMode ? 50 : itemsLimit"
             @listing-not-empty="listingIsNotEmpty('live_stream', ...arguments)"
           >
@@ -90,7 +92,8 @@
           </EventListing>
         </div>
 
-        <div class="virtual-meeting-wrapper" v-if="showComponent.virtual_meeting && showOnCurrentIteration('virtual_meeting', component)">
+        <div class="virtual-meeting-wrapper" v-if="showComponent.virtual_meeting
+          && showOnCurrentIteration('virtual_meeting', component)">
           <EventListing
             v-if="selectedComponent === 'virtual_meeting' || selectedComponent === 'all'"
             :title="config.components.virtual_meeting.title"
@@ -98,6 +101,7 @@
             :eventType="'virtual_meeting'"
             :msg="'Virtual Meetings not found.'"
             :sort="sortData('eventinstance')"
+            :pagination="selectedComponent === 'virtual_meeting'"
             :limit="viewAllContentMode ? 50 : itemsLimit"
             @listing-not-empty="listingIsNotEmpty('virtual_meeting', ...arguments)"
           >
@@ -113,11 +117,13 @@
           </EventListing>
         </div>
 
-        <div class="videos-wrapper" v-if="showComponent.gc_video && showOnCurrentIteration('gc_video', component)">
+        <div class="videos-wrapper" v-if="showComponent.gc_video
+          && showOnCurrentIteration('gc_video', component)">
           <VideoListing
             v-if="selectedComponent === 'gc_video' || selectedComponent === 'all'"
             :title="config.components.gc_video.title"
             :category="category.id"
+            :pagination="selectedComponent === 'gc_video'"
             :viewAll="false"
             :sort="sortData('node')"
             :limit="itemsLimit"
@@ -135,13 +141,15 @@
           </VideoListing>
         </div>
 
-        <div class="blogs-wrapper" v-if="showComponent.vy_blog_post && showOnCurrentIteration('vy_blog_post', component)">
+        <div class="blogs-wrapper" v-if="showComponent.vy_blog_post
+          && showOnCurrentIteration('vy_blog_post', component)">
           <BlogListing
             v-if="selectedComponent === 'vy_blog_post' || selectedComponent === 'all'"
             :title="config.components.vy_blog_post.title"
             :category="category.id"
             :viewAll="false"
             :sort="sortData('node')"
+            :pagination="selectedComponent === 'vy_blog_post'"
             :limit="itemsLimit"
             @listing-not-empty="listingIsNotEmpty('vy_blog_post', ...arguments)"
             class="my-40-20"
