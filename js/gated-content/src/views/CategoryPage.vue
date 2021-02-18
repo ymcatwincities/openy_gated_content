@@ -74,6 +74,7 @@
           :category="category.id"
           :msg="'Live streams not found.'"
           :sort="sortData('eventinstance')"
+          :pagination="selectedComponent === 'live_stream'"
           :limit="viewAllContentMode ? 50 : itemsLimit"
           @listing-not-empty="listingIsNotEmpty('live_stream', ...arguments)"
         >
@@ -97,6 +98,7 @@
           :eventType="'virtual_meeting'"
           :msg="'Virtual Meetings not found.'"
           :sort="sortData('eventinstance')"
+          :pagination="selectedComponent === 'virtual_meeting'"
           :limit="viewAllContentMode ? 50 : itemsLimit"
           @listing-not-empty="listingIsNotEmpty('virtual_meeting', ...arguments)"
         >
@@ -117,6 +119,7 @@
           v-if="selectedComponent === 'gc_video' || selectedComponent === 'all'"
           :title="config.components.gc_video.title"
           :category="category.id"
+          :pagination="selectedComponent === 'gc_video'"
           :viewAll="false"
           :sort="sortData('node')"
           :limit="itemsLimit"
@@ -141,6 +144,7 @@
           :category="category.id"
           :viewAll="false"
           :sort="sortData('node')"
+          :pagination="selectedComponent === 'vy_blog_post'"
           :limit="itemsLimit"
           @listing-not-empty="listingIsNotEmpty('vy_blog_post', ...arguments)"
           class="my-40-20"
