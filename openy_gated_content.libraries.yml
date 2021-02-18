@@ -1,8 +1,8 @@
-styles:
+admin_ui_styles:
   version: 0.1
   css:
     theme:
-      assets/css/styles.css: {}
+      assets/css/admin_ui_styles.css: {}
 
 openy-rose-menu:
   version: 0.1
