@@ -104,7 +104,7 @@ import MediaPlayer from '@/components/MediaPlayer.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
 import { SettingsMixin } from '@/mixins/SettingsMixin';
 import SvgIcon from '@/components/SvgIcon.vue';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 export default {
   name: 'VideoPage',
@@ -153,7 +153,8 @@ export default {
       return this.video.relationships.field_gc_video_category.data[0].id;
     },
     video_length() {
-      return moment.duration(this.video.attributes.field_gc_video_duration, 'seconds').format('m [minute]');
+      return `${Math.floor(dayjs.duration(this.video.attributes.field_gc_video_duration, 'seconds')
+        .asMinutes())} minutes`;
     },
   },
   methods: {

@@ -38,9 +38,7 @@
 <script>
 import AddToFavorite from '@/components/AddToFavorite.vue';
 import SvgIcon from '@/components/SvgIcon.vue';
-import moment from 'moment';
-// eslint-disable-next-line no-unused-vars
-import momentDurationFormatSetup from 'moment-duration-format';
+import dayjs from 'dayjs';
 
 export default {
   name: 'VideoTeaser',
@@ -68,7 +66,8 @@ export default {
       return this.video.attributes['field_gc_video_media.thumbnail'].image_style_uri[0].gated_content_teaser;
     },
     duration() {
-      return moment.duration(this.video.attributes.field_gc_video_duration, 'seconds').format('m [minute]');
+      return `${Math.floor(dayjs.duration(this.video.attributes.field_gc_video_duration, 'seconds')
+        .asMinutes())} minutes`;
     },
   },
 };
