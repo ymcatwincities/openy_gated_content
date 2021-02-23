@@ -153,8 +153,13 @@ export default {
       return this.video.relationships.field_gc_video_category.data[0].id;
     },
     video_length() {
-      return `${Math.floor(dayjs.duration(this.video.attributes.field_gc_video_duration, 'seconds')
-        .asMinutes())} minutes`;
+      const sec = this.video.attributes.field_gc_video_duration;
+      if (sec > 0 && sec < 60) {
+        return `${sec} ${this.$options.filters.simplePluralize('second', sec)}`;
+      }
+
+      const min = Math.floor(dayjs.duration(sec, 'seconds').asMinutes());
+      return `${min} ${this.$options.filters.simplePluralize('minute', min)}`;
     },
   },
   methods: {

@@ -66,15 +66,17 @@ export default {
   },
   computed: {
     date() {
-      return dayjs(new Date(this.video.attributes.date.value)).format('YYYY-MM-DD');
+      return dayjs(this.video.attributes.date.value).format('YYYY-MM-DD');
     },
     time() {
-      return dayjs(new Date(this.video.attributes.date.value)).format('h:mm a');
+      return dayjs(this.video.attributes.date.value).format('h:mm a');
     },
     duration() {
-      return `${Math.floor(dayjs.duration(
+      const min = Math.floor(dayjs.duration(
         new Date(this.video.attributes.date.end_value) - new Date(this.video.attributes.date.value),
-      ).asMinutes())} minutes`;
+      ).asMinutes());
+
+      return `${min} ${this.$options.filters.simplePluralize('minute', min)}`;
     },
     startsIn() {
       const eventStartDate = new Date(this.video.attributes.date.value);
@@ -84,10 +86,8 @@ export default {
         return `${Math.floor(startsDuration.asDays())} days`;
       }
 
-      return `${(`0${Math.floor(startsDuration.asHours())}`)
-        .slice(-2)}:${(`0${startsDuration.minutes()}`)
-        .slice(-2)}:${(`0${startsDuration.seconds()}`)
-        .slice(-2)}`;
+      const { appendZero } = this.$options.filters;
+      return `${appendZero(Math.floor(startsDuration.asHours()))}:${appendZero(startsDuration.minutes())}:${appendZero(startsDuration.seconds())}`;
     },
     image() {
       if (this.video.attributes['field_ls_image.field_media_image']) {
