@@ -25,7 +25,7 @@ const filters = [
     },
   },
   {
-    name: 'appendZero',
+    name: 'prependZero',
     execute: (number) => {
       if (number < 10) {
         return `0${number}`;

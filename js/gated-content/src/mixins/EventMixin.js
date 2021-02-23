@@ -54,8 +54,8 @@ export const EventMixin = {
         return `${Math.floor(startsDuration.asDays())} days`;
       }
 
-      const { appendZero } = this.$options.filters;
-      return `${appendZero(Math.floor(startsDuration.asHours()))}:${appendZero(startsDuration.minutes())}:${appendZero(startsDuration.seconds())}`;
+      const { prependZero } = this.$options.filters;
+      return `${prependZero(Math.floor(startsDuration.asHours()))}:${prependZero(startsDuration.minutes())}:${prependZero(startsDuration.seconds())}`;
     },
     isOnAir() {
       const dateStart = new Date(this.video.attributes.date.value);
