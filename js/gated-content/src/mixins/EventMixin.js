@@ -34,14 +34,14 @@ export const EventMixin = {
       return this.$store.getters.getAppSettings;
     },
     date() {
-      return dayjs(new Date(this.video.attributes.date.value)).format('dddd, MMMM Do, YYYY');
+      return dayjs(this.video.attributes.date.value).format('dddd, MMMM Do, YYYY');
     },
     time() {
-      return dayjs(new Date(this.video.attributes.date.value)).format('h:mm a');
+      return dayjs(this.video.attributes.date.value).format('h:mm a');
     },
     duration() {
       const min = Math.floor(dayjs.duration(
-        new Date(this.video.attributes.date.end_value) - new Date(this.video.attributes.date.value),
+        dayjs(this.video.attributes.date.end_value) - dayjs(this.video.attributes.date.value),
       ).asMinutes());
 
       return `${min} ${this.$options.filters.simplePluralize('minute', min)}`;

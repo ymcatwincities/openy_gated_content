@@ -73,7 +73,7 @@ export default {
     },
     duration() {
       const min = Math.floor(dayjs.duration(
-        new Date(this.video.attributes.date.end_value) - new Date(this.video.attributes.date.value),
+        dayjs(this.video.attributes.date.end_value) - dayjs(this.video.attributes.date.value),
       ).asMinutes());
 
       return `${min} ${this.$options.filters.simplePluralize('minute', min)}`;
