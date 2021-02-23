@@ -79,8 +79,8 @@ export default {
       return `${min} ${this.$options.filters.simplePluralize('minute', min)}`;
     },
     startsIn() {
-      const eventStartDate = new Date(this.video.attributes.date.value);
-      const startsDuration = dayjs.duration(eventStartDate - new Date());
+      const eventStartDate = dayjs(this.video.attributes.date.value);
+      const startsDuration = dayjs.duration(eventStartDate - dayjs());
 
       if (startsDuration.asHours() >= 48) {
         return `${Math.floor(startsDuration.asDays())} days`;
