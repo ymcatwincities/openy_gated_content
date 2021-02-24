@@ -11,5 +11,12 @@
         "ext-zlib": "*"
     },
     "license": "GPL-2.0+",
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "extra": {
+        "patches": {
+            "drupal/recurring_events": {
+                "Publishing Series Workflow Should Be Reflected in Instances [3178669]": "https://www.drupal.org/files/issues/2020-10-28/recurring_events-status_changes-3178669-5.patch"
+            }
+        }
+    }
 }
