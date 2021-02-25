@@ -28,6 +28,10 @@
             </div>
           </div>
           <div class="verdana-14-12">
+            <div class="video-footer__block">
+              <SvgIcon icon="date-icon" class="fill-white" :growByHeight=false></SvgIcon>
+              {{ date }}
+            </div>
             <div
               v-if="video.attributes.field_gc_video_instructor"
               class="video-footer__block">
@@ -152,6 +156,9 @@ export default {
       }
       return this.video.relationships.field_gc_video_category.data[0].id;
     },
+    date() {
+      return dayjs(this.video.attributes.created).format('dddd, MMMM Do, YYYY');
+    },
     video_length() {
       const sec = this.video.attributes.field_gc_video_duration;
       if (sec > 0 && sec < 60) {
@@ -174,6 +181,7 @@ export default {
         .then((response) => {
           this.video = this.combine(response.data.data, response.data.included, this.params);
           this.loading = false;
+          console.log(this.video);
         }).then(() => {
           this.logPlaybackEvent('entityView');
         })
