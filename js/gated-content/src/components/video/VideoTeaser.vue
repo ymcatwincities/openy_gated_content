@@ -22,7 +22,8 @@
         <SvgIcon icon="difficulty-icon-white" :css-fill="false"></SvgIcon>
         {{ video.attributes.field_gc_video_level.name | capitalize }}
       </div>
-      <div class="timer">
+      <div class="timer" :style="{ visibility: this.video
+        .attributes.field_gc_video_duration ? 'visible': 'hidden'}">
         {{ duration }}
       </div>
     </router-link>

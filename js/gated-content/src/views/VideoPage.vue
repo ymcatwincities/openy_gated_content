@@ -23,7 +23,8 @@
               :bundle="'gc_video'"
               class="rounded-border border-thunder white"
             ></AddToFavorite>
-            <div class="timer">
+            <div class="timer" :style="{ visibility: this.video
+              .attributes.field_gc_video_duration ? 'visible': 'hidden'}">
               {{ video_length }}
             </div>
           </div>
