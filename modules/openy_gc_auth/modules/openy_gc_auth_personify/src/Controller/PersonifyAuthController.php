@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\openy_gc_auth\GCUserAuthorizer;
-use Drupal\openy_gc_auth_personify\Client as ProviderClient;
+use Drupal\openy_gc_auth_personify\LogoutClient;
 
 /**
  * Personify controller to handle Personify SSO authentication.
@@ -75,9 +75,9 @@ class PersonifyAuthController extends ControllerBase {
   /**
    * Provider client.
    *
-   * @var \Drupal\openy_gc_auth_personify\Client
+   * @var \Drupal\openy_gc_auth_personify\LogoutClient
    */
-  protected $providerClient;
+  protected $logoutClient;
 
   /**
    * PersonifyAuthController constructor.
@@ -96,8 +96,8 @@ class PersonifyAuthController extends ControllerBase {
    *   The Gated User Authorizer.
    * @param \Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher $eventDispatcher
    *   Event Dispatcher.
-   * @param \Drupal\openy_gc_auth_personify\Client $providerClient
-   *   Provider client.
+   * @param \Drupal\openy_gc_auth_personify\LogoutClient $logoutClient
+   *   Logout client.
    */
   public function __construct(
     PersonifySSO $personifySSO,
@@ -107,7 +107,7 @@ class PersonifyAuthController extends ControllerBase {
     MessengerInterface $messenger,
     GCUserAuthorizer $gcUserAuthorizer,
     ContainerAwareEventDispatcher $eventDispatcher,
-    ProviderClient $providerClient
+    LogoutClient $logoutClient
   ) {
     $this->personifySSO = $personifySSO;
     $this->personifyClient = $personifyClient;
@@ -116,7 +116,7 @@ class PersonifyAuthController extends ControllerBase {
     $this->messenger = $messenger;
     $this->gcUserAuthorizer = $gcUserAuthorizer;
     $this->eventDispatcher = $eventDispatcher;
-    $this->providerClient = $providerClient;
+    $this->logoutClient = $logoutClient;
   }
 
   /**
@@ -131,7 +131,7 @@ class PersonifyAuthController extends ControllerBase {
       $container->get('messenger'),
       $container->get('openy_gc_auth.user_authorizer'),
       $container->get('event_dispatcher'),
-      $container->get('openy_gc_auth_personify.client')
+      $container->get('openy_gc_auth_personify.logout_client')
     );
   }
 
@@ -161,7 +161,7 @@ class PersonifyAuthController extends ControllerBase {
           ]);
         }
         else {
-          $isUserSuccessfullyLogout = $this->providerClient->logout($token);
+          $isUserSuccessfullyLogout = $this->logoutClient->logout($token);
           if ($isUserSuccessfullyLogout) {
             user_cookie_delete('personify_authorized');
             user_cookie_delete('personify_time');

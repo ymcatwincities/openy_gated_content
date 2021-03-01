@@ -8,9 +8,9 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use GuzzleHttp\Client as HttpClient;
 
 /**
- * Personify provider client.
+ * Personify logout client.
  */
-class Client {
+class LogoutClient {
 
   use StringTranslationTrait;
 

@@ -6,7 +6,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\openy_gc_auth\Event\GCUserLogoutEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Drupal\openy_gc_auth_personify\Client;
+use Drupal\openy_gc_auth_personify\LogoutClient;
 
 /**
  * Class PersonifyUserLogoutSubscriber Subscriber.
@@ -32,9 +32,9 @@ class PersonifyUserLogoutSubscriber implements EventSubscriberInterface {
   /**
    * Personify Client.
    *
-   * @var \Drupal\openy_gc_auth_personify\Client
+   * @var \Drupal\openy_gc_auth_personify\LogoutClient
    */
-  protected $client;
+  protected $logoutClient;
 
   /**
    * Constructs a new PersonifyUserLogoutSubscriber.
@@ -43,17 +43,17 @@ class PersonifyUserLogoutSubscriber implements EventSubscriberInterface {
    *   The request stack.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   Config factory.
-   * @param \Drupal\openy_gc_auth_personify\Client $client
-   *   Personify Client.
+   * @param \Drupal\openy_gc_auth_personify\LogoutClient $logoutClient
+   *   Personify Logout Client.
    */
   public function __construct(
     RequestStack $requestStack,
     ConfigFactoryInterface $configFactory,
-    Client $client
+    LogoutClient $logoutClient
   ) {
     $this->currentRequest = $requestStack->getCurrentRequest();
     $this->configFactory = $configFactory;
-    $this->client = $client;
+    $this->logoutClient = $logoutClient;
   }
 
   /**
@@ -82,7 +82,7 @@ class PersonifyUserLogoutSubscriber implements EventSubscriberInterface {
         return FALSE;
       }
 
-      $isUserSuccessfullyLogout = $this->client->logout($token);
+      $isUserSuccessfullyLogout = $this->logoutClient->logout($token);
       if ($isUserSuccessfullyLogout) {
         user_cookie_delete('personify_authorized');
         user_cookie_delete('personify_time');
