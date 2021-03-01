@@ -7,7 +7,6 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\Core\Routing\TrustedRedirectResponse;
 use Drupal\Core\Url;
-use Drupal\openy_gc_auth\Event\GCUserLogoutEvent;
 use Drupal\personify\PersonifyClient;
 use Drupal\personify\PersonifySSO;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -17,6 +16,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\openy_gc_auth\GCUserAuthorizer;
+use Drupal\openy_gc_auth_personify\Client as ProviderClient;
 
 /**
  * Personify controller to handle Personify SSO authentication.
@@ -73,6 +73,13 @@ class PersonifyAuthController extends ControllerBase {
   protected $eventDispatcher;
 
   /**
+   * Provider client.
+   *
+   * @var \Drupal\openy_gc_auth_personify\Client
+   */
+  protected $providerClient;
+
+  /**
    * PersonifyAuthController constructor.
    *
    * @param \Drupal\personify\PersonifySSO $personifySSO
@@ -89,6 +96,8 @@ class PersonifyAuthController extends ControllerBase {
    *   The Gated User Authorizer.
    * @param \Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher $eventDispatcher
    *   Event Dispatcher.
+   * @param \Drupal\openy_gc_auth_personify\Client $providerClient
+   *   Provider client.
    */
   public function __construct(
     PersonifySSO $personifySSO,
@@ -97,7 +106,8 @@ class PersonifyAuthController extends ControllerBase {
     LoggerChannelFactory $loggerChannelFactory,
     MessengerInterface $messenger,
     GCUserAuthorizer $gcUserAuthorizer,
-    ContainerAwareEventDispatcher $eventDispatcher
+    ContainerAwareEventDispatcher $eventDispatcher,
+    ProviderClient $providerClient
   ) {
     $this->personifySSO = $personifySSO;
     $this->personifyClient = $personifyClient;
@@ -106,6 +116,7 @@ class PersonifyAuthController extends ControllerBase {
     $this->messenger = $messenger;
     $this->gcUserAuthorizer = $gcUserAuthorizer;
     $this->eventDispatcher = $eventDispatcher;
+    $this->providerClient = $providerClient;
   }
 
   /**
@@ -119,7 +130,8 @@ class PersonifyAuthController extends ControllerBase {
       $container->get('logger.factory'),
       $container->get('messenger'),
       $container->get('openy_gc_auth.user_authorizer'),
-      $container->get('event_dispatcher')
+      $container->get('event_dispatcher'),
+      $container->get('openy_gc_auth_personify.client')
     );
   }
 
@@ -149,9 +161,7 @@ class PersonifyAuthController extends ControllerBase {
           ]);
         }
         else {
-          $request->cookies->set('Drupal_visitor_personify_authorized', $token);
-          $event = new GCUserLogoutEvent();
-          $this->eventDispatcher->dispatch(GCUserLogoutEvent::EVENT_NAME, $event);
+          $this->providerClient->logout($token);
 
           $path = URL::fromUserInput(
             $this->configFactory->get('openy_gated_content.settings')->get('virtual_y_login_url'),
