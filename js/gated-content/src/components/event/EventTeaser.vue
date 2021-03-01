@@ -50,9 +50,7 @@
 <script>
 import AddToFavorite from '@/components/AddToFavorite.vue';
 import SvgIcon from '@/components/SvgIcon.vue';
-import moment from 'moment';
-// eslint-disable-next-line no-unused-vars
-import momentDurationFormatSetup from 'moment-duration-format';
+import dayjs from 'dayjs';
 
 export default {
   name: 'EventTeaser',
@@ -68,22 +66,28 @@ export default {
   },
   computed: {
     date() {
-      return moment(this.video.attributes.date.value).format('YYYY-MM-DD');
+      return dayjs(this.video.attributes.date.value).format('YYYY-MM-DD');
     },
     time() {
-      return moment(this.video.attributes.date.value).format('h:mm a');
+      return dayjs(this.video.attributes.date.value).format('h:mm a');
     },
     duration() {
-      return moment.duration(moment(this.video.attributes.date.value)
-        .diff(moment(this.video.attributes.date.end_value))).humanize();
+      const min = Math.floor(dayjs.duration(
+        dayjs(this.video.attributes.date.end_value) - dayjs(this.video.attributes.date.value),
+      ).asMinutes());
+
+      return `${min} ${this.$options.filters.simplePluralize('minute', min)}`;
     },
     startsIn() {
-      const duration = moment.duration(moment(this.video.attributes.date.value)
-        .diff(moment()));
-      if (duration.asHours() > 48) {
-        return duration.format('d [day]');
+      const eventStartDate = dayjs(this.video.attributes.date.value);
+      const startsDuration = dayjs.duration(eventStartDate - dayjs());
+
+      if (startsDuration.asHours() >= 48) {
+        return `${Math.floor(startsDuration.asDays())} days`;
       }
-      return duration.format('hh:mm:ss');
+
+      const { prependZero } = this.$options.filters;
+      return `${prependZero(Math.floor(startsDuration.asHours()))}:${prependZero(startsDuration.minutes())}:${prependZero(startsDuration.seconds())}`;
     },
     image() {
       if (this.video.attributes['field_ls_image.field_media_image']) {

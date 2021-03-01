@@ -116,7 +116,7 @@ class GatedContentPermissionsFieldWidget extends WidgetBase implements Container
   public function massageFormValues(array $values, array $form, FormStateInterface $form_state) {
 
     // Predefine right value for CT that are not using VY permissions.
-    if (array_key_first($values) === 0) {
+    if (!$form['field_vy_permission']['#access']) {
       return '';
     }
 
