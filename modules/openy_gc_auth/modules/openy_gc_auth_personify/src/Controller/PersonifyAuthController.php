@@ -161,7 +161,11 @@ class PersonifyAuthController extends ControllerBase {
           ]);
         }
         else {
-          $this->providerClient->logout($token);
+          $isUserSuccessfullyLogout = $this->providerClient->logout($token);
+          if ($isUserSuccessfullyLogout) {
+            user_cookie_delete('personify_authorized');
+            user_cookie_delete('personify_time');
+          }
 
           $path = URL::fromUserInput(
             $this->configFactory->get('openy_gated_content.settings')->get('virtual_y_login_url'),
