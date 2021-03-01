@@ -1,6 +1,9 @@
 services:
   gated_content_events_user_logout:
     class: '\Drupal\openy_gc_auth_personify\EventSubscriber\PersonifyUserLogoutSubscriber'
-    arguments: ['@request_stack', '@config.factory', '@logger.factory', '@http_client']
+    arguments: ['@request_stack', '@config.factory', '@openy_gc_auth_personify.logout_client']
     tags:
       - { name: 'event_subscriber' }
+  openy_gc_auth_personify.logout_client:
+    class: '\Drupal\openy_gc_auth_personify\LogoutClient'
+    arguments: ['@config.factory', '@logger.factory', '@http_client']
