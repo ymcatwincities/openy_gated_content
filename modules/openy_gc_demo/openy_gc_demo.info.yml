@@ -16,3 +16,6 @@ dependencies:
   - drupal:openy_gc_storage
   - drupal:openy_gc_auth_example
   - drupal:openy_demo_tcolor
+  - drupal:openy_node_landing
+  - drupal:openy_prgf_banner
+  - drupal:openy_prgf_simple_content
