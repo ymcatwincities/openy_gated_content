@@ -160,3 +160,16 @@ function openy_gc_log_update_8008() {
     'views.view.virtual_y_logs',
   ]);
 }
+
+/**
+ * Import activity logs view config.
+ */
+function openy_gc_log_update_8009() {
+  $config_dir = drupal_get_path('module', 'openy_gc_log');
+  $config_dir .= '/config/install/';
+  $config_importer = \Drupal::service('openy_upgrade_tool.importer');
+  $config_importer->setDirectory($config_dir);
+  $config_importer->importConfigs([
+    'views.view.virtual_y_logs',
+  ]);
+}
