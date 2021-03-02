@@ -107,7 +107,7 @@ class SourceMigrationDeriver extends DeriverBase implements DeriverInterface, Co
    *   Url with request part.
    * @param string $url
    *   Dynamic url for every Virtual Y content source.
-   * @param  string $token
+   * @param string $token
    *   Server check token.
    *
    * @return array
