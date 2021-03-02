@@ -8,6 +8,9 @@ vy_component_settings:
     up_next_title:
       type: string
       label: 'Up next block title'
+    empty_block_text:
+      type: string
+      label: 'Text for empty block'
     status:
       type: boolean
       label: 'Enable/Disable component'

@@ -17,7 +17,7 @@
       :featured="true"
       :viewAll="true"
       :limit="8"
-      :msg="'Live streams not found.'"
+      :msg="config.components.live_stream.empty_block_text"
       :title="config.components.live_stream.title"
       v-if="isActive('live_stream')"
     />
@@ -27,7 +27,7 @@
       :viewAll="true"
       :limit="8"
       :eventType="'virtual_meeting'"
-      :msg="'Virtual Meetings not found.'"
+      :msg="config.components.virtual_meeting.empty_block_text"
       v-if="isActive('virtual_meeting')"
     />
     <BlogListing
