@@ -36,7 +36,7 @@ class SourceMigrationDeriver extends DeriverBase implements DeriverInterface, Co
    *
    * @param \Drupal\Core\Entity\EntityTypeManager $entityTypeManager
    *   EntityTypeManager service instance.
-   * @param \Symfony\Component\HttpFoundation\RequestStack
+   * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
    *   Request stack.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
@@ -107,6 +107,8 @@ class SourceMigrationDeriver extends DeriverBase implements DeriverInterface, Co
    *   Url with request part.
    * @param string $url
    *   Dynamic url for every Virtual Y content source.
+   * @param  string $token
+   *   Server check token.
    *
    * @return array
    *   Updated plugin data.
@@ -114,10 +116,9 @@ class SourceMigrationDeriver extends DeriverBase implements DeriverInterface, Co
   private function getDerivativeValues(array $base_plugin_definition, $url_long, $url, $token) {
 
     $base_plugin_definition['source']['urls'] = $url_long;
-
     $base_plugin_definition['source']['headers']['x-shared-referer'] = $this
-        ->request
-        ->getSchemeAndHttpHost() . '/';
+      ->request
+      ->getSchemeAndHttpHost() . '/';
     $base_plugin_definition['source']['headers']['authorization'] = 'Bearer ' . $token;
 
     if (!empty($base_plugin_definition['process']['field_gc_video_media'])) {
