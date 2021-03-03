@@ -90,7 +90,7 @@
           && (selectedComponent === 'live_stream' || selectedComponent === 'all')">
           <EventListing
             :title="config.components.live_stream.title"
-            :msg="'Live streams not found.'"
+            :msg="config.components.live_stream.empty_block_text"
             :favorites="true"
             :sort="sortData('eventinstance')"
             :limit="viewAllContentMode ? 50 : itemsLimit"
@@ -113,7 +113,7 @@
           <EventListing
             :title="config.components.virtual_meeting.title"
             :eventType="'virtual_meeting'"
-            :msg="'Virtual Meetings not found.'"
+            :msg="config.components.virtual_meeting.empty_block_text"
             :favorites="true"
             :sort="sortData('eventinstance')"
             :limit="viewAllContentMode ? 50 : itemsLimit"

@@ -1117,11 +1117,12 @@ display:
         filter_groups: false
         sorts: false
         cache: true
+        group_by: false
       fields:
-        changed:
-          id: changed
+        aggregated_date:
+          id: aggregated_date
           table: log_entity
-          field: changed
+          field: aggregated_date
           relationship: none
           group_type: group
           admin_label: ''
@@ -1166,25 +1167,11 @@ display:
           hide_empty: false
           empty_zero: false
           hide_alter_empty: true
-          click_sort_column: value
-          type: timestamp
-          settings:
-            date_format: medium
-            custom_date_format: ''
-            timezone: ''
-          group_column: value
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
+          date_format: custom
+          custom_date_format: 'D, d/m/Y'
+          timezone: ''
           entity_type: log_entity
-          entity_field: changed
-          plugin_id: field
+          plugin_id: openy_gc_log_day_field
         email:
           id: email
           table: log_entity
@@ -1315,18 +1302,18 @@ display:
           entity_type: user
           entity_field: name
           plugin_id: field
-        payload:
-          id: payload
+        total_duration:
+          id: total_duration
           table: log_entity
-          field: payload
+          field: total_duration
           relationship: none
           group_type: group
           admin_label: ''
           label: 'Total Time on Virtual Y'
           exclude: false
           alter:
-            alter_text: true
-            text: "{% if entity_id != false %}\r\n<a href=\"/{{ entity_type == 'node' ? 'node' : 'events' }}/{{ entity_id }}\">{{ payload }}</a>\r\n{% else %}\r\n{{ payload }}\r\n{% endif %}\r\n"
+            alter_text: false
+            text: ''
             make_link: false
             path: ''
             absolute: false
@@ -1363,22 +1350,8 @@ display:
           hide_empty: false
           empty_zero: false
           hide_alter_empty: true
-          click_sort_column: value
-          type: string
-          settings:
-            link_to_entity: false
-          group_column: value
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
           entity_type: log_entity
-          plugin_id: field
+          plugin_id: openy_gc_log_duration_field
       filters:
         event_type:
           id: event_type
@@ -1585,10 +1558,10 @@ display:
         groups:
           1: AND
       sorts:
-        changed:
-          id: changed
+        created:
+          id: created
           table: log_entity
-          field: changed
+          field: created
           relationship: none
           group_type: group
           admin_label: ''
@@ -1596,10 +1569,11 @@ display:
           exposed: false
           expose:
             label: ''
-          granularity: second
+          granularity: day
           entity_type: log_entity
-          entity_field: changed
+          entity_field: created
           plugin_id: date
+      group_by: true
     cache_metadata:
       max-age: -1
       contexts:
