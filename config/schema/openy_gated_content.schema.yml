@@ -14,6 +14,9 @@ vy_component_settings:
     status:
       type: boolean
       label: 'Enable/Disable component'
+    weight:
+      type: integer
+      label: 'Component order'
 
 openy_gated_content.settings:
   type: config_object

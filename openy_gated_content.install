@@ -266,3 +266,23 @@ function openy_gated_content_update_8013() {
     );
   }
 }
+
+/**
+ * Add components settings to openy_gated_content.settings.
+ */
+function openy_gated_content_update_8014() {
+  // Update multiple params.
+  $params = [
+    'components.gc_video.weight',
+    'components.live_stream.weight',
+    'components.virtual_meeting.weight',
+    'components.vy_blog_post.weight',
+  ];
+  $config_updater = \Drupal::service('openy_upgrade_tool.param_updater');
+  $config_dir = drupal_get_path('module', 'openy_gated_content') . '/config/install/';
+  $config_name = 'openy_gated_content.settings';
+  $config = $config_dir . $config_name . '.yml';
+  foreach ($params as $param) {
+    $config_updater->update($config, $config_name, $param);
+  }
+}
