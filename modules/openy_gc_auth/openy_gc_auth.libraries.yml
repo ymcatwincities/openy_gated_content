@@ -1,0 +1,7 @@
+auth:
+  version: 0.1
+  js:
+    js/auth.behaviors.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.cookie
