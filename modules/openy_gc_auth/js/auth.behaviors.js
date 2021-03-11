@@ -8,7 +8,7 @@
      if (!window.location.hash || window.location.hash === '#') {
        return;
      }
-     $.cookie('Drupal_visitor_gc_auth_destination', window.location.hash);
+     $.cookie('openy_gc_auth_destination', window.location.hash);
    }
  }
 })(jQuery, Drupal);

@@ -48,7 +48,7 @@ new Vue({
   mounted() {
     const app = this;
 
-    const cookieName = 'Drupal_visitor_gc_auth_destination';
+    const cookieName = 'openy_gc_auth_destination';
     if (this.$cookies.isKey(cookieName)) {
       window.location.hash = this.$cookies.get(cookieName);
       this.$cookies.remove(cookieName);
