@@ -1,11 +1,11 @@
 services:
   openy_gc_log.logger:
     class: Drupal\openy_gc_log\Logger
-    arguments: ['@logger.channel.openy_gc_log', '@entity_type.manager']
+    arguments: ['@logger.channel.openy_gc_log', '@entity_type.manager', '@config.factory']
 
   openy_gc_log.log_archiver:
     class: Drupal\openy_gc_log\LogArchiver
-    arguments: ['@entity_type.manager', '@logger.channel.openy_gc_log', '@config.factory', '@file_system', '@settings', '@module_handler']
+    arguments: ['@entity_type.manager', '@logger.channel.openy_gc_log', '@config.factory', '@file_system', '@settings', '@module_handler', '@date.formatter', '@openy_gc_log.logger']
 
   logger.channel.openy_gc_log:
     parent: logger.channel_base

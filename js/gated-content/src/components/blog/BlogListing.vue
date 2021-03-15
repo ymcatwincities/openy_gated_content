@@ -25,7 +25,7 @@
       </div>
     </template>
     <div v-else class="empty-listing">
-      Blog posts not found.
+      {{ emptyBlockMsg }}
     </div>
     <Pagination
       v-if="pagination"
@@ -54,13 +54,16 @@ export default {
   props: {
     title: {
       type: String,
-      default: 'Blog posts',
+      default: 'Blog Posts',
     },
     excludedId: {
       type: String,
       default: '',
     },
-    msg: String,
+    msg: {
+      type: String,
+      default: 'No blog posts found.',
+    },
     viewAll: {
       type: Boolean,
       default: false,
@@ -115,6 +118,12 @@ export default {
   computed: {
     listingIsNotEmpty() {
       return this.listing !== null && this.listing.length > 0;
+    },
+    emptyBlockMsg() {
+      if (this.config.components.vy_blog_post.empty_block_text !== '') {
+        return this.config.components.vy_blog_post.empty_block_text;
+      }
+      return this.msg;
     },
   },
   methods: {
