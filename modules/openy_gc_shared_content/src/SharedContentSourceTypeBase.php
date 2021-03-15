@@ -5,7 +5,6 @@ namespace Drupal\openy_gc_shared_content;
 use Drupal\Component\Plugin\PluginBase;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Messenger\MessengerTrait;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -214,7 +213,7 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
           'headers' => [
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
-            'Referer' => $this->requestStack->getSchemeAndHttpHost(),
+            'x-shared-referer' => $this->requestStack->getSchemeAndHttpHost(),
             'Authorization' => 'Bearer ' . $shared_content_server->getToken(),
             'X-Shared-Content' => TRUE,
           ],
@@ -248,7 +247,7 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
     }
 
     $data = $this->serializer->decode($request->getBody()->getContents(), 'api_json');
-    $options = ['none' => $this->t('- None -')];
+    $options = ['' => $this->t('- None -')];
     foreach ($data['data'] as $category) {
       $options[$category['id']] = $category['attributes']['name'];
     }
@@ -270,7 +269,6 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
       '#type' => 'select',
       '#title' => $this->t('Category'),
       '#options' => $options,
-      '#default' => 'none',
     ];
 
     return $form;
@@ -279,9 +277,9 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
   /**
    * {@inheritdoc}
    */
-  public function applyFormFilters(&$query_arg, FormStateInterface $form_state) {
-    $values = $form_state->getUserInput('category');
-    if (isset($values['category']) && $values['category'] != 'none') {
+  public function applyFormFilters(&$query_arg, $request) {
+    $values = $request->query->all();
+    if (isset($values['category']) && $values['category'] != '') {
       $query_arg['filter[field_gc_video_category.id]'] = $values['category'];
     }
     if (isset($values['title']) && $values['title'] != '') {
