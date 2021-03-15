@@ -22,6 +22,16 @@ function openy_gc_storage_install() {
   $config = $config_factory->getEditable('jsonapi_image_styles.settings');
   $config->set('image_styles.gated_content_teaser', 'gated_content_teaser');
   $config->save(TRUE);
+
+  $config_dir = drupal_get_path('module', 'openy_gc_storage');
+  $config_dir .= '/config/install/';
+  $config_importer = \Drupal::service('openy_upgrade_tool.importer');
+  $config_importer->setDirectory($config_dir);
+  $config_importer->importConfigs([
+    'views.view.event_series',
+    'views.view.events',
+  ]);
+
 }
 
 /**
@@ -223,7 +233,7 @@ function openy_gc_storage_update_8011() {
  * Reimport event and event series views.
  */
 function openy_gc_storage_update_8012() {
-  $config_dir = drupal_get_path('module', 'openy_gc_log');
+  $config_dir = drupal_get_path('module', 'openy_gc_storage');
   $config_dir .= '/config/install/';
   $config_importer = \Drupal::service('openy_upgrade_tool.importer');
   $config_importer->setDirectory($config_dir);
