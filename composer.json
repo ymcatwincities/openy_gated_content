@@ -16,6 +16,19 @@
         "patches": {
             "drupal/recurring_events": {
                 "Publishing Series Workflow Should Be Reflected in Instances [3178669]": "https://www.drupal.org/files/issues/2020-10-28/recurring_events-status_changes-3178669-5.patch"
+            },
+            "drupal/search_api": {
+                "Add a \"Role-based access\" processor [2898334]": "https://www.drupal.org/files/issues/2021-01-31/2898334-30--role_based_access_check.patch"
+            },
+            "ymcatwincities/openy": {
+                "[PRODDEV-240] Display search input field for the lily theme": "https://patch-diff.githubusercontent.com/raw/ymcatwincities/openy/pull/2420.patch"
+            }
+        },
+        "patches-ignore": {
+            "ymcatwincities/openy": {
+                "drupal/search_api": {
+                    "2898334 - Add a Role-based access processor": "https://www.drupal.org/files/issues/2021-01-31/2898334-30--role_based_access_check.patch"
+                }
             }
         }
     }

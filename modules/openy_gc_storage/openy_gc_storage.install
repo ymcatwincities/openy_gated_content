@@ -22,6 +22,7 @@ function openy_gc_storage_install() {
   $config = $config_factory->getEditable('jsonapi_image_styles.settings');
   $config->set('image_styles.gated_content_teaser', 'gated_content_teaser');
   $config->save(TRUE);
+
 }
 
 /**
@@ -191,5 +192,44 @@ function openy_gc_storage_update_8009() {
   $config_importer->importConfigs([
     'field.field.node.gc_video.field_gc_video_media',
     'field.field.eventseries.live_stream.field_ls_media',
+  ]);
+}
+
+/**
+ * Enabling scheduler module.
+ */
+function openy_gc_storage_update_8011() {
+  $config_dir = drupal_get_path('module', 'openy_gc_storage') . '/config/install/';
+  // Update multiple configurations.
+  $configs = [
+    'node.type.gc_video' => [
+      'dependencies.module',
+      'third_party_settings.scheduler',
+    ],
+    'node.type.vy_blog_post' => [
+      'dependencies.module',
+      'third_party_settings.scheduler',
+    ],
+  ];
+  $config_updater = \Drupal::service('openy_upgrade_tool.param_updater');
+  foreach ($configs as $config_name => $params) {
+    $config = $config_dir . $config_name . '.yml';
+    foreach ($params as $param) {
+      $config_updater->update($config, $config_name, $param);
+    }
+  }
+}
+
+/**
+ * Reimport event and event series views.
+ */
+function openy_gc_storage_update_8012() {
+  $config_dir = drupal_get_path('module', 'openy_gc_storage');
+  $config_dir .= '/config/install/';
+  $config_importer = \Drupal::service('openy_upgrade_tool.importer');
+  $config_importer->setDirectory($config_dir);
+  $config_importer->importConfigs([
+    'views.view.virtual_y_event_series',
+    'views.view.virtual_y_events',
   ]);
 }

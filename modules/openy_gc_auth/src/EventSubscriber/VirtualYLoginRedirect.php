@@ -137,7 +137,7 @@ class VirtualYLoginRedirect implements EventSubscriberInterface {
           $currentUser->isAuthenticated()
           && $this->authManager->checkIfParagraphAtNode($node, 'gated_content_login')
         ) {
-          if (!empty($config->get('virtual_y_login_url'))) {
+          if (!empty($config->get('virtual_y_url'))) {
             $event->setResponse(new RedirectResponse($config->get('virtual_y_url')));
           }
           else {

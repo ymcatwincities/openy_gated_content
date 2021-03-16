@@ -6,20 +6,32 @@ openy_gated_content.logs:
   parent: openy_gated_content.openy
   weight: 100
 
+openy_gc_log.settings:
+  title: Logging settings
+  route_name: openy_gc_log.settings
+  description: 'Configure Virtual YMCA Log module settings.'
+  parent: openy_gated_content.logs
+  weight: 0
+
 openy_gc_log.manual_csv_export:
   title: 'Export log records'
   route_name: openy_gc_log.manual_csv_export
   description: 'Allows to create an archive file manually, based on a start and end dates.'
   parent: openy_gated_content.logs
-  weight: 0
+  weight: 1
 
 openy_gated_content.logs_archives:
   title: 'Logs Archives'
   route_name: view.files.page_1
   description: 'List Log entity entities'
   parent: openy_gated_content.logs
-  weight: 1
+  weight: 2
   options:
     query:
       filename: virtual-y
       filemime: application/x-gzip
+
+openy_gc_log.activity_report:
+  title: 'Activity report'
+  route_name: view.virtual_y_logs.activity_report
+  parent: openy_gated_content.logs

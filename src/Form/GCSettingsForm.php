@@ -3,6 +3,7 @@
 namespace Drupal\openy_gated_content\Form;
 
 use Drupal\Component\Plugin\PluginManagerInterface;
+use Drupal\Component\Utility\SortArray;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -80,8 +81,19 @@ class GCSettingsForm extends ConfigFormBase {
     ];
 
     $form['app_settings']['components'] = [
-      '#type' => 'fieldset',
+      '#type' => 'table',
       '#title' => $this->t('Components settings'),
+      '#header' => [
+        $this->t('Components settings'),
+        $this->t('Weight'),
+      ],
+      '#tabledrag' => [
+        [
+          'action' => 'order',
+          'relationship' => 'sibling',
+          'group' => 'weight',
+        ],
+      ],
     ];
 
     $components = [
@@ -93,12 +105,25 @@ class GCSettingsForm extends ConfigFormBase {
 
     foreach ($components as $id => $title) {
       $form['app_settings']['components'][$id] = [
-        '#type' => 'details',
-        '#open' => FALSE,
-        '#title' => $title,
+        '#attributes' => [
+          'class' => ['draggable'],
+        ],
+        '#weight' => $config->get('components.' . $id . '.weight'),
+        'component' => [
+          '#type' => 'details',
+          '#open' => FALSE,
+          '#title' => $title,
+        ],
+        'weight' => [
+          '#type' => 'weight',
+          '#default_value' => $config->get('components.' . $id . '.weight'),
+          '#attributes' => [
+            'class' => ['weight'],
+          ],
+        ],
       ];
 
-      $form['app_settings']['components'][$id]['status'] = [
+      $form['app_settings']['components'][$id]['component']['status'] = [
         '#title' => $this->t('Show on the VY home page'),
         '#description' => $this->t('Enable/Disable "@name" component.', [
           '@name' => $title,
@@ -107,20 +132,29 @@ class GCSettingsForm extends ConfigFormBase {
         '#default_value' => $config->get('components.' . $id . '.status') ?? TRUE,
       ];
 
-      $form['app_settings']['components'][$id]['title'] = [
+      $form['app_settings']['components'][$id]['component']['title'] = [
         '#type' => 'textfield',
         '#title' => $this->t('Block title'),
         '#required' => TRUE,
         '#default_value' => $config->get('components.' . $id . '.title'),
       ];
 
-      $form['app_settings']['components'][$id]['up_next_title'] = [
+      $form['app_settings']['components'][$id]['component']['up_next_title'] = [
         '#type' => 'textfield',
         '#title' => $this->t('Up next block title'),
         '#required' => TRUE,
         '#default_value' => $config->get('components.' . $id . '.up_next_title'),
       ];
+
+      $form['app_settings']['components'][$id]['empty_block_text'] = [
+        '#type' => 'textfield',
+        '#title' => $this->t('Text for empty block'),
+        '#default_value' => $config->get('components.' . $id . '.empty_block_text'),
+      ];
     }
+
+    uasort($form['app_settings']['components'],
+      [SortArray::class, 'sortByWeightProperty']);
 
     $form['app_settings']['virtual_y_url'] = [
       '#type' => 'textfield',
@@ -197,7 +231,11 @@ class GCSettingsForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $settings = $this->config('openy_gated_content.settings');
     $permissions = $settings->get('permissions_entities');
-    $settings->setData($form_state->getValue('app_settings'));
+    $value = $form_state->getValue('app_settings');
+    array_walk($value['components'], function (&$item) {
+      $item = array_merge($item['component'], ['weight' => $item['weight']]);
+    });
+    $settings->setData($value);
     // Hard save for setting that is not present at form.
     $settings->set('permissions_entities', $permissions);
     $settings->save();

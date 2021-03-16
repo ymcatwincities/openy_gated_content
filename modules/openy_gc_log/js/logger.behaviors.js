@@ -14,6 +14,15 @@
          processData: false,
        });
      });
+     document.body.addEventListener('virtual-y-activity', function (event) {
+       $.ajax({
+         url: "/virtual-y/log-activity",
+         method: "POST",
+         contentType: "application/json",
+         data: JSON.stringify(event.detail),
+         processData: false,
+       });
+     });
    }
  }
 })(jQuery, Drupal);
