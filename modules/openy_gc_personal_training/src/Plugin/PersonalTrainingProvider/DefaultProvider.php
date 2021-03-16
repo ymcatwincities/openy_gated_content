@@ -67,18 +67,16 @@ class DefaultProvider extends PersonalTrainingProviderPluginBase {
    * {@inheritdoc}
    */
   public function checkPersonalTrainingAccess(AccountProxyInterface $user, PersonalTrainingInterface $personal_training):bool {
-    $roles = $user->getRoles();
-    if (in_array('administrator', $roles) || in_array(self::$virtualYAccessEditorRole, $roles)) {
-      return TRUE;
-    }
-
+    $roles = $user->getRoles(TRUE);
     $config = $this->getConfiguration();
-    if (in_array($config['personal_trainer_role'], $roles)) {
-      if (!$personal_training->get('instructor_id')->target_id) {
-        return FALSE;
-      }
-      // Check access for personal trainer role.
-      return $user->id() === $personal_training->get('instructor_id')->target_id;
+    $allowed_roles = [
+      'administrator',
+      $config['personal_trainer_role'],
+      self::$virtualYAccessEditorRole,
+    ];
+    if (!empty(array_intersect($allowed_roles, $roles))) {
+      // Give access if user have at least one of allowed roles.
+      return TRUE;
     }
 
     if (!$personal_training->get('customer_id')->target_id) {
