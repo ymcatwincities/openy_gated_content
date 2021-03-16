@@ -17,7 +17,7 @@ class UnshareFromVirtualYBase extends FieldUpdateActionBase {
   protected function getFieldsToUpdate() {
     return ['field_gc_share' => self::GC_SHARE_DEFAULT_VALUE];
   }
-  
+
   /**
    * {@inheritdoc}
    */
@@ -32,6 +32,6 @@ class UnshareFromVirtualYBase extends FieldUpdateActionBase {
       $result->andIf($object->{$field}->access('edit', $account, TRUE));
     }
     return $return_as_object ? $result : $result->isAllowed();
-   }
-   
+  }
+
 }

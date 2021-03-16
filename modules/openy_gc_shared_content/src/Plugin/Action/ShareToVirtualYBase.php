@@ -32,6 +32,6 @@ class ShareToVirtualYBase extends FieldUpdateActionBase {
       $result->andIf($object->{$field}->access('edit', $account, TRUE));
     }
     return $return_as_object ? $result : $result->isAllowed();
-   }
+  }
 
 }
