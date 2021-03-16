@@ -3,7 +3,6 @@
 namespace Drupal\openy_gc_shared_content\Plugin\Action;
 
 use Drupal\Core\Field\FieldUpdateActionBase;
-use Drupal\Core\Action\ActionBase;
 use Drupal\Core\Session\AccountInterface;
 
 /**
