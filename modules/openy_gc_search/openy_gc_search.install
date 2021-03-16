@@ -59,13 +59,14 @@ function openy_gc_search_install() {
   ];
   $search_api_index->getProcessor('type_boost')->setConfiguration($p_config);
 
-  $search_api_index->addProcessor(\Drupal::getContainer()
-    ->get('search_api.plugin_helper')
-    ->createProcessorPlugin($search_api_index, 'content_access'));
-
-  $search_api_index->addProcessor(\Drupal::getContainer()
-    ->get('search_api.plugin_helper')
-    ->createProcessorPlugin($search_api_index, 'role_access'));
+  foreach (['content_access', 'role_access'] as $processor) {
+    if ($search_api_index->isValidProcessor($processor)) {
+      continue;
+    }
+    $search_api_index->addProcessor(\Drupal::getContainer()
+      ->get('search_api.plugin_helper')
+      ->createProcessorPlugin($search_api_index, $processor));
+  }
 
   $search_api_index->save();
 
