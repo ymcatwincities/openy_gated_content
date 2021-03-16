@@ -1,0 +1,12 @@
+.toolbar-icon-openy-gated-content-openy:before {
+  background-image: url(/profiles/contrib/openy/modules/custom/openy_system/assets/images/icon-gear-inactive.png);
+}
+
+#edit-app-settings-components .draggable a.tabledrag-handle {
+  margin: 1.8em 0 1.8em -1em;
+}
+
+#edit-app-settings-components .draggable td details {
+  float: left;
+  width: calc(100% - 40px);
+}

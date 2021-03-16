@@ -4,7 +4,7 @@ namespace Drupal\openy_gc_auth_daxko_barcode\Controller;
 
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Logger\LoggerChannelFactory;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
@@ -59,7 +59,7 @@ class DaxkoBarcodeController extends ControllerBase {
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   Config factory.
-   * @param \Drupal\Core\Logger\LoggerChannelFactory $loggerChannelFactory
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $loggerChannelFactory
    *   Logger factory.
    * @param \GuzzleHttp\Client $http_client
    *   HTTP client.
@@ -70,7 +70,7 @@ class DaxkoBarcodeController extends ControllerBase {
    */
   public function __construct(
     ConfigFactoryInterface $configFactory,
-    LoggerChannelFactory $loggerChannelFactory,
+    LoggerChannelFactoryInterface $loggerChannelFactory,
     Client $http_client,
     MessengerInterface $messenger,
     GCUserAuthorizer $gcUserAuthorizer
@@ -109,7 +109,7 @@ class DaxkoBarcodeController extends ControllerBase {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function validate(Request $request, $barcode) {
-    $config = $this->configFactory->get('openy_gc_auth.provider.daxco_barcode');
+    $config = $this->configFactory->get('openy_gc_auth.provider.daxko_barcode');
 
     // First make sure we have barcode in $request.
     if (empty($barcode)) {

@@ -2,6 +2,7 @@
 
 namespace Drupal\openy_gc_log\Entity;
 
+use Drupal\Core\Entity\EntityChangedTrait;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityTypeInterface;
@@ -45,6 +46,8 @@ use Drupal\openy_gc_log\Field\PayloadFieldItemList;
  */
 class LogEntity extends ContentEntityBase implements LogEntityInterface {
 
+  use EntityChangedTrait;
+
   /**
    * {@inheritdoc}
    */
@@ -58,6 +61,8 @@ class LogEntity extends ContentEntityBase implements LogEntityInterface {
     self::defineEntityIdField($fields);
     self::definePayloadField($fields);
     self::defineCreatedField($fields);
+    self::defineChangedField($fields);
+    self::defineMetadataField($fields);
     return $fields;
   }
 
@@ -250,6 +255,32 @@ class LogEntity extends ContentEntityBase implements LogEntityInterface {
     $fields['created'] = BaseFieldDefinition::create('created')
       ->setLabel(t('Created'))
       ->setDescription(t('The time that the entity was created.'));
+  }
+
+  /**
+   * Define changed field.
+   *
+   * @param array $fields
+   *   Fields.
+   */
+  public static function defineChangedField(array &$fields) {
+    $fields['changed'] = BaseFieldDefinition::create('changed')
+      ->setLabel(t('Changed'))
+      ->setDescription(t('The time that the entity was last edited.'));
+  }
+
+  /**
+   * Define event_metadata field.
+   *
+   * @param array $fields
+   *   Fields.
+   */
+  public static function defineMetadataField(array &$fields) {
+    $fields['event_metadata'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Event Metadata'))
+      ->setDescription(t('The event metadata, related to the Log entity.'))
+      ->setSetting('max_length', 4096)
+      ->setDefaultValue('');
   }
 
   /**
