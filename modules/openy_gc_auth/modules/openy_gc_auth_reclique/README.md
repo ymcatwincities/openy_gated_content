@@ -1,7 +1,7 @@
 ## About
 
-## This module is outdated. 
-*Please, use [Reclique SSO](https://github.com/ymcatwincities/openy_gated_content/tree/master/modules/openy_gc_auth/modules/openy_gc_reclique_sso)*
+## This module is outdated! Please use Reclique SSO module for this CRM. 
+Link to the new moodule [Reclique SSO](https://github.com/ymcatwincities/openy_gated_content/tree/master/modules/openy_gc_auth/modules/openy_gc_reclique_sso)
 
 This module provides [ReClique CRM](https://reclique.com/) authentication plugin for Virtual Y.
 
