@@ -2,19 +2,18 @@ langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_view_mode.eventinstance.list
+    - core.entity_view_mode.eventseries.list
     - system.menu.main
   module:
-    - datetime
-    - datetime_range
+    - options
     - recurring_events
     - user
-id: events
-label: Events
+id: virtual_y_event_series
+label: 'Virtual Y Event Series'
 module: views
-description: 'A view showing all the event instances on the site'
+description: 'A view showing all the event series on the site.'
 tag: ''
-base_table: eventinstance_field_data
+base_table: eventseries_field_data
 base_field: id
 display:
   default:
@@ -26,7 +25,7 @@ display:
       access:
         type: perm
         options:
-          perm: 'view eventinstance entity'
+          perm: 'view eventseries entity'
       cache:
         type: tag
         options: {  }
@@ -81,55 +80,25 @@ display:
           summary: ''
           description: ''
           columns:
-            eventinstance_bulk_form: eventinstance_bulk_form
+            eventseries_bulk_form: eventseries_bulk_form
             title: title
-            view_eventseries: view_eventseries
-            view_eventinstance: view_eventinstance
-            title_2: title_2
-            title_1: title_1
             type: type
-            date__value: date__value
+            recur_type: recur_type
+            eventseries_instance_count: eventseries_instance_count
+            eventseries_start_date: eventseries_start_date
             uid: uid
             status: status
             created: created
             changed: changed
             operations: operations
           info:
-            eventinstance_bulk_form:
+            eventseries_bulk_form:
               align: ''
               separator: ''
               empty_column: false
               responsive: ''
             title:
-              sortable: false
-              default_sort_order: asc
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: ''
-            view_eventseries:
-              sortable: false
-              default_sort_order: asc
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: ''
-            view_eventinstance:
-              sortable: false
-              default_sort_order: asc
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: ''
-            title_2:
               sortable: true
-              default_sort_order: asc
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: ''
-            title_1:
-              sortable: false
               default_sort_order: asc
               align: ''
               separator: ''
@@ -142,9 +111,19 @@ display:
               separator: ''
               empty_column: false
               responsive: ''
-            date__value:
-              sortable: true
+            recur_type:
+              sortable: false
               default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            eventseries_instance_count:
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            eventseries_start_date:
               align: ''
               separator: ''
               empty_column: false
@@ -185,12 +164,12 @@ display:
           default: '-1'
           empty_table: false
       row:
-        type: 'entity:eventinstance'
+        type: fields
       fields:
-        eventinstance_bulk_form:
-          id: eventinstance_bulk_form
-          table: eventinstance
-          field: eventinstance_bulk_form
+        eventseries_bulk_form:
+          id: eventseries_bulk_form
+          table: eventseries
+          field: eventseries_bulk_form
           relationship: none
           group_type: group
           admin_label: ''
@@ -238,258 +217,22 @@ display:
           action_title: Action
           include_exclude: exclude
           selected_actions: {  }
-          entity_type: eventinstance
+          entity_type: eventseries
           plugin_id: bulk_form
         title:
           id: title
           table: eventseries_field_data
           field: title
-          relationship: eventseries_id
-          group_type: group
-          admin_label: ''
-          label: ''
-          exclude: true
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: false
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: value
-          type: string
-          settings:
-            link_to_entity: false
-          group_column: value
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
-          entity_type: eventseries
-          entity_field: title
-          plugin_id: field
-        view_eventseries:
-          id: view_eventseries
-          table: eventseries
-          field: view_eventseries
-          relationship: eventseries_id
-          group_type: group
-          admin_label: ''
-          label: ''
-          exclude: true
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: false
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          text: view
-          output_url_as_text: true
-          absolute: false
-          entity_type: eventseries
-          plugin_id: entity_link
-        view_eventinstance:
-          id: view_eventinstance
-          table: eventinstance
-          field: view_eventinstance
           relationship: none
           group_type: group
           admin_label: ''
-          label: ''
-          exclude: true
+          label: Title
+          exclude: false
           alter:
             alter_text: false
-            text: '{{ title }}'
+            text: ''
             make_link: false
             path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: false
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          text: ''
-          output_url_as_text: true
-          absolute: false
-          entity_type: eventinstance
-          plugin_id: entity_link
-        title_2:
-          id: title_2
-          table: eventseries_field_data
-          field: title
-          relationship: eventseries_id
-          group_type: group
-          admin_label: ''
-          label: 'Event Name'
-          exclude: false
-          alter:
-            alter_text: true
-            text: '{{ title }}'
-            make_link: true
-            path: '{{ view_eventinstance }}'
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: true
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: value
-          type: string
-          settings:
-            link_to_entity: false
-          group_column: value
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
-          entity_type: eventseries
-          entity_field: title
-          plugin_id: field
-        title_1:
-          id: title_1
-          table: eventseries_field_data
-          field: title
-          relationship: eventseries_id
-          group_type: group
-          admin_label: ''
-          label: Series
-          exclude: false
-          alter:
-            alter_text: true
-            text: '{{ "View Series"|t }}'
-            make_link: true
-            path: '{{ view_eventseries }}'
             absolute: false
             external: false
             replace_spaces: false
@@ -538,12 +281,12 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-          entity_type: eventseries
+          entity_type: null
           entity_field: title
           plugin_id: field
         type:
           id: type
-          table: eventinstance_field_data
+          table: eventseries_field_data
           field: type
           relationship: none
           group_type: group
@@ -603,17 +346,17 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-          entity_type: eventinstance
+          entity_type: eventseries
           entity_field: type
           plugin_id: field
-        date__value:
-          id: date__value
-          table: eventinstance_field_data
-          field: date__value
+        recur_type:
+          id: recur_type
+          table: eventseries_field_data
+          field: recur_type
           relationship: none
           group_type: group
           admin_label: ''
-          label: 'Event Date'
+          label: 'Recur Type'
           exclude: false
           alter:
             alter_text: false
@@ -655,12 +398,8 @@ display:
           empty_zero: false
           hide_alter_empty: true
           click_sort_column: value
-          type: daterange_default
-          settings:
-            timezone_override: ''
-            format_type: medium
-            fromto: start_date
-            separator: '-'
+          type: list_default
+          settings: {  }
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -671,12 +410,112 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-          entity_type: eventinstance
-          entity_field: date
+          entity_type: eventseries
+          entity_field: recur_type
           plugin_id: field
+        eventseries_instance_count:
+          id: eventseries_instance_count
+          table: eventseries_field_data
+          field: eventseries_instance_count
+          relationship: none
+          group_type: group
+          admin_label: ''
+          label: Instances
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          entity_type: eventseries
+          plugin_id: eventseries_instance_count
+        eventseries_start_date:
+          id: eventseries_start_date
+          table: eventseries_field_data
+          field: eventseries_start_date
+          relationship: none
+          group_type: group
+          admin_label: ''
+          label: 'Series Starts'
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          entity_type: eventseries
+          plugin_id: eventseries_start_date
         uid:
           id: uid
-          table: eventinstance_field_data
+          table: eventseries_field_data
           field: uid
           relationship: none
           group_type: group
@@ -736,12 +575,12 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-          entity_type: eventinstance
+          entity_type: eventseries
           entity_field: uid
           plugin_id: field
         status:
           id: status
-          table: eventinstance_field_data
+          table: eventseries_field_data
           field: status
           relationship: none
           group_type: group
@@ -803,12 +642,12 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-          entity_type: eventinstance
+          entity_type: eventseries
           entity_field: status
           plugin_id: field
         created:
           id: created
-          table: eventinstance_field_data
+          table: eventseries_field_data
           field: created
           relationship: none
           group_type: group
@@ -870,12 +709,12 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-          entity_type: eventinstance
+          entity_type: eventseries
           entity_field: created
           plugin_id: field
         changed:
           id: changed
-          table: eventinstance_field_data
+          table: eventseries_field_data
           field: changed
           relationship: none
           group_type: group
@@ -937,12 +776,12 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-          entity_type: eventinstance
+          entity_type: eventseries
           entity_field: changed
           plugin_id: field
         operations:
           id: operations
-          table: eventinstance
+          table: eventseries
           field: operations
           relationship: none
           group_type: group
@@ -989,14 +828,14 @@ display:
           empty_zero: false
           hide_alter_empty: true
           destination: false
-          entity_type: eventinstance
+          entity_type: eventseries
           plugin_id: entity_operations
       filters:
         title:
           id: title
           table: eventseries_field_data
           field: title
-          relationship: eventseries_id
+          relationship: none
           group_type: group
           admin_label: ''
           operator: contains
@@ -1005,7 +844,7 @@ display:
           exposed: true
           expose:
             operator_id: title_op
-            label: 'Event Name'
+            label: Title
             description: ''
             use_operator: false
             operator: title_op
@@ -1037,7 +876,7 @@ display:
           plugin_id: string
         type:
           id: type
-          table: eventinstance_field_data
+          table: eventseries_field_data
           field: type
           relationship: none
           group_type: group
@@ -1075,9 +914,52 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          entity_type: eventinstance
+          entity_type: eventseries
           entity_field: type
           plugin_id: bundle
+        recur_type:
+          id: recur_type
+          table: eventseries_field_data
+          field: recur_type
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: contains
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: recur_type_op
+            label: 'Recur Type'
+            description: ''
+            use_operator: false
+            operator: recur_type_op
+            identifier: recur_type
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+            placeholder: ''
+            operator_limit_selection: false
+            operator_list: {  }
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          entity_type: eventseries
+          entity_field: recur_type
+          plugin_id: string
         uid:
           id: uid
           table: users_field_data
@@ -1123,7 +1005,7 @@ display:
           plugin_id: user_name
         created:
           id: created
-          table: eventinstance_field_data
+          table: eventseries_field_data
           field: created
           relationship: none
           group_type: group
@@ -1167,12 +1049,12 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          entity_type: eventinstance
+          entity_type: eventseries
           entity_field: created
           plugin_id: date
         created_1:
           id: created_1
-          table: eventinstance_field_data
+          table: eventseries_field_data
           field: created
           relationship: none
           group_type: group
@@ -1216,12 +1098,12 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          entity_type: eventinstance
+          entity_type: eventseries
           entity_field: created
           plugin_id: date
         status:
           id: status
-          table: eventinstance_field_data
+          table: eventseries_field_data
           field: status
           relationship: none
           group_type: group
@@ -1258,29 +1140,15 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          entity_type: eventinstance
+          entity_type: eventseries
           entity_field: status
           plugin_id: boolean
       sorts:
-        date__value:
-          id: date__value
-          table: eventinstance_field_data
-          field: date__value
-          relationship: none
-          group_type: group
-          admin_label: ''
-          order: ASC
-          exposed: false
-          expose:
-            label: ''
-          entity_type: eventinstance
-          entity_field: date
-          plugin_id: standard
         title:
           id: title
           table: eventseries_field_data
           field: title
-          relationship: eventseries_id
+          relationship: none
           group_type: group
           admin_label: ''
           order: ASC
@@ -1290,31 +1158,20 @@ display:
           entity_type: eventseries
           entity_field: title
           plugin_id: standard
-      title: Events
+      title: 'Event Series'
       header: {  }
       footer: {  }
       empty: {  }
       relationships:
-        eventseries_id:
-          id: eventseries_id
-          table: eventinstance_field_data
-          field: eventseries_id
-          relationship: none
-          group_type: group
-          admin_label: 'Event series entity'
-          required: true
-          entity_type: eventinstance
-          entity_field: eventseries_id
-          plugin_id: standard
         uid:
           id: uid
-          table: eventinstance_field_data
+          table: eventseries_field_data
           field: uid
           relationship: none
           group_type: group
           admin_label: User
           required: false
-          entity_type: eventinstance
+          entity_type: eventseries
           entity_field: uid
           plugin_id: standard
       arguments: {  }
@@ -1339,11 +1196,11 @@ display:
     position: 1
     display_options:
       display_extenders: {  }
-      path: admin/content/events/instances
+      path: admin/virtual-y/events/series
       access:
         type: perm
         options:
-          perm: 'access eventinstance overview'
+          perm: 'access eventseries overview'
       defaults:
         access: false
         pager: false
@@ -1370,13 +1227,12 @@ display:
             offset: false
             offset_label: Offset
           quantity: 9
-      exposed_block: false
       filters:
         title:
           id: title
           table: eventseries_field_data
           field: title
-          relationship: eventseries_id
+          relationship: none
           group_type: group
           admin_label: ''
           operator: contains
@@ -1385,7 +1241,7 @@ display:
           exposed: true
           expose:
             operator_id: title_op
-            label: 'Event Name'
+            label: Title
             description: ''
             use_operator: false
             operator: title_op
@@ -1417,7 +1273,7 @@ display:
           plugin_id: string
         type:
           id: type
-          table: eventinstance_field_data
+          table: eventseries_field_data
           field: type
           relationship: none
           group_type: group
@@ -1455,75 +1311,75 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          entity_type: eventinstance
+          entity_type: eventseries
           entity_field: type
           plugin_id: bundle
-        date__value_2:
-          id: date__value_2
-          table: eventinstance_field_data
-          field: date__value
+        recur_type:
+          id: recur_type
+          table: eventseries_field_data
+          field: recur_type
           relationship: none
           group_type: group
           admin_label: ''
-          operator: '='
-          value:
-            min: ''
-            max: ''
-            value: ''
-            type: date
+          operator: contains
+          value: ''
           group: 1
           exposed: true
           expose:
-            operator_id: date__value_2_op
-            label: 'Event Date'
-            description: null
+            operator_id: recur_type_op
+            label: 'Recur Type'
+            description: ''
             use_operator: false
-            operator: date__value_2_op
+            operator: recur_type_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: date__value_2
+            identifier: recur_type
             required: false
             remember: false
             multiple: false
             remember_roles:
               authenticated: authenticated
-            placeholder: null
-            min_placeholder: null
-            max_placeholder: null
+              anonymous: '0'
+              administrator: '0'
+            placeholder: ''
           is_grouped: true
           group_info:
-            label: 'Event Date'
+            label: 'Recur Type'
             description: ''
-            identifier: date__value_2
+            identifier: recur_type
             optional: true
             widget: select
             multiple: false
             remember: false
-            default_group: '1'
+            default_group: All
             default_group_multiple: {  }
             group_items:
               1:
-                title: Future
-                operator: '>='
-                value:
-                  type: offset
-                  value: today
-                  min: ''
-                  max: ''
+                title: Consecutive
+                operator: contains
+                value: consecutive_recurring_date
               2:
-                title: Past
-                operator: '<='
-                value:
-                  type: offset
-                  value: today
-                  min: ''
-                  max: ''
-          entity_type: eventinstance
-          entity_field: date
-          plugin_id: datetime
+                title: Daily
+                operator: contains
+                value: daily_recurring_date
+              3:
+                title: Weekly
+                operator: contains
+                value: weekly_recurring_date
+              4:
+                title: Monthly
+                operator: contains
+                value: monthly_recurring_date
+              5:
+                title: Custom
+                operator: contains
+                value: custom
+          entity_type: eventseries
+          entity_field: recur_type
+          plugin_id: string
         status:
           id: status
-          table: eventinstance_field_data
+          table: eventseries_field_data
           field: status
           relationship: none
           group_type: group
@@ -1568,7 +1424,7 @@ display:
                 title: Unpublished
                 operator: '='
                 value: '0'
-          entity_type: eventinstance
+          entity_type: eventseries
           entity_field: status
           plugin_id: boolean
       filter_groups:
@@ -1584,405 +1440,45 @@ display:
         - url.query_args
         - user.permissions
       tags: {  }
-  events_listing:
+  eventseries_listing:
     display_plugin: page
-    id: events_listing
+    id: eventseries_listing
     display_title: Page
     position: 1
     display_options:
       display_extenders: {  }
-      path: events
+      path: virtual-y-events/series
       menu:
         type: normal
-        title: Events
-        description: 'Events listing page'
+        title: 'Event Series'
+        description: 'Event series listing'
         expanded: false
         parent: ''
         weight: 0
         context: '0'
         menu_name: main
-      fields:
-        title:
-          id: title
-          table: eventseries_field_data
-          field: title
-          relationship: eventseries_id
-          group_type: group
-          admin_label: ''
-          label: ''
-          exclude: true
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: false
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: value
-          type: string
-          settings:
-            link_to_entity: false
-          group_column: value
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
-          entity_type: eventseries
-          entity_field: title
-          plugin_id: field
-        view_eventseries:
-          id: view_eventseries
-          table: eventseries
-          field: view_eventseries
-          relationship: eventseries_id
-          group_type: group
-          admin_label: ''
-          label: ''
-          exclude: true
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: false
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          text: view
-          output_url_as_text: true
-          absolute: false
-          entity_type: eventseries
-          plugin_id: entity_link
-        view_eventinstance:
-          id: view_eventinstance
-          table: eventinstance
-          field: view_eventinstance
-          relationship: none
-          group_type: group
-          admin_label: ''
-          label: ''
-          exclude: true
-          alter:
-            alter_text: false
-            text: '{{ title }}'
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: false
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          text: ''
-          output_url_as_text: true
-          absolute: false
-          entity_type: eventinstance
-          plugin_id: entity_link
-        title_2:
-          id: title_2
-          table: eventseries_field_data
-          field: title
-          relationship: eventseries_id
-          group_type: group
-          admin_label: ''
-          label: 'Event Name'
-          exclude: false
-          alter:
-            alter_text: true
-            text: '{{ title }}'
-            make_link: true
-            path: '{{ view_eventinstance }}'
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: true
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: value
-          type: string
-          settings:
-            link_to_entity: false
-          group_column: value
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
-          entity_type: eventseries
-          entity_field: title
-          plugin_id: field
-        title_1:
-          id: title_1
-          table: eventseries_field_data
-          field: title
-          relationship: eventseries_id
-          group_type: group
-          admin_label: ''
-          label: Series
-          exclude: false
-          alter:
-            alter_text: true
-            text: '{{ "View Series"|t }}'
-            make_link: true
-            path: '{{ view_eventseries }}'
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: true
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: value
-          type: string
-          settings:
-            link_to_entity: true
-          group_column: value
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
-          entity_type: eventseries
-          entity_field: title
-          plugin_id: field
-        date__value:
-          id: date__value
-          table: eventinstance_field_data
-          field: date__value
-          relationship: none
-          group_type: group
-          admin_label: ''
-          label: 'Event Date'
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: true
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: value
-          type: daterange_default
-          settings:
-            timezone_override: ''
-            format_type: medium
-            fromto: start_date
-            separator: '-'
-          group_column: value
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
-          entity_type: eventinstance
-          entity_field: date
-          plugin_id: field
+      style:
+        type: default
+        options:
+          grouping: {  }
+          row_class: ''
+          default_row_class: true
       defaults:
-        fields: false
-        filters: false
-        filter_groups: false
         style: false
         row: false
+        filters: false
+        filter_groups: false
+      row:
+        type: 'entity:eventseries'
+        options:
+          relationship: none
+          view_mode: list
       filters:
         title:
           id: title
           table: eventseries_field_data
           field: title
-          relationship: eventseries_id
+          relationship: none
           group_type: group
           admin_label: ''
           operator: contains
@@ -1991,7 +1487,7 @@ display:
           exposed: true
           expose:
             operator_id: title_op
-            label: 'Event Name'
+            label: Title
             description: ''
             use_operator: false
             operator: title_op
@@ -2021,107 +1517,9 @@ display:
           entity_type: eventseries
           entity_field: title
           plugin_id: string
-        date__value:
-          id: date__value
-          table: eventinstance_field_data
-          field: date__value
-          relationship: none
-          group_type: group
-          admin_label: ''
-          operator: '>='
-          value:
-            min: ''
-            max: ''
-            value: ''
-            type: date
-          group: 1
-          exposed: true
-          expose:
-            operator_id: date__value_op
-            label: 'Date After'
-            description: ''
-            use_operator: false
-            operator: date__value_op
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: date__value
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-              anonymous: '0'
-              administrator: '0'
-            placeholder: ''
-            min_placeholder: ''
-            max_placeholder: ''
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          entity_type: eventinstance
-          entity_field: date
-          plugin_id: datetime
-        date__value_1:
-          id: date__value_1
-          table: eventinstance_field_data
-          field: date__value
-          relationship: none
-          group_type: group
-          admin_label: ''
-          operator: '<='
-          value:
-            min: ''
-            max: ''
-            value: ''
-            type: date
-          group: 1
-          exposed: true
-          expose:
-            operator_id: date__value_1_op
-            label: 'Date Before'
-            description: ''
-            use_operator: false
-            operator: date__value_1_op
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: date__value_1
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-              anonymous: '0'
-              administrator: '0'
-            placeholder: ''
-            min_placeholder: ''
-            max_placeholder: ''
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          entity_type: eventinstance
-          entity_field: date
-          plugin_id: datetime
         status:
           id: status
-          table: eventinstance_field_data
+          table: eventseries_field_data
           field: status
           relationship: none
           group_type: group
@@ -2156,73 +1554,15 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          entity_type: eventinstance
+          entity_type: eventseries
           entity_field: status
           plugin_id: boolean
-        date__value_2:
-          id: date__value_2
-          table: eventinstance_field_data
-          field: date__value
-          relationship: none
-          group_type: group
-          admin_label: ''
-          operator: '>='
-          value:
-            min: ''
-            max: ''
-            value: today
-            type: offset
-          group: 1
-          exposed: false
-          expose:
-            operator_id: ''
-            label: ''
-            description: ''
-            use_operator: false
-            operator: ''
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: ''
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-            placeholder: ''
-            min_placeholder: ''
-            max_placeholder: ''
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          entity_type: eventinstance
-          entity_field: date
-          plugin_id: datetime
       filter_groups:
         operator: AND
         groups:
           1: AND
-      style:
-        type: default
-        options:
-          row_class: ''
-          default_row_class: true
-          uses_fields: false
-      row:
-        type: 'entity:eventinstance'
-        options:
-          relationship: none
-          view_mode: list
     cache_metadata:
-      max-age: -1
+      max-age: 0
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
