@@ -3,12 +3,10 @@
 namespace Drupal\openy_gc_auth_personify\EventSubscriber;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\openy_gc_auth\Event\GCUserLogoutEvent;
-use GuzzleHttp\Client;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\openy_gc_auth_personify\LogoutClient;
 
 /**
  * Class PersonifyUserLogoutSubscriber Subscriber.
@@ -16,8 +14,6 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
  * @package Drupal\openy_gc_auth_personify\EventSubscriber
  */
 class PersonifyUserLogoutSubscriber implements EventSubscriberInterface {
-
-  use StringTranslationTrait;
 
   /**
    * The current request.
@@ -27,13 +23,6 @@ class PersonifyUserLogoutSubscriber implements EventSubscriberInterface {
   protected $currentRequest;
 
   /**
-   * Logger interface.
-   *
-   * @var \Drupal\Core\Logger\LoggerChannelInterface
-   */
-  protected $logger;
-
-  /**
    * Config factory.
    *
    * @var \Drupal\Core\Config\ConfigFactoryInterface
@@ -41,11 +30,11 @@ class PersonifyUserLogoutSubscriber implements EventSubscriberInterface {
   protected $configFactory;
 
   /**
-   * The Http client.
+   * Personify Client.
    *
-   * @var \GuzzleHttp\Client
+   * @var \Drupal\openy_gc_auth_personify\LogoutClient
    */
-  protected $client;
+  protected $logoutClient;
 
   /**
    * Constructs a new PersonifyUserLogoutSubscriber.
@@ -54,21 +43,17 @@ class PersonifyUserLogoutSubscriber implements EventSubscriberInterface {
    *   The request stack.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   Config factory.
-   * @param \Drupal\Core\Logger\LoggerChannelFactory $loggerChannelFactory
-   *   Logger factory.
-   * @param \GuzzleHttp\Client $client
-   *   The Http client.
+   * @param \Drupal\openy_gc_auth_personify\LogoutClient $logoutClient
+   *   Personify Logout Client.
    */
   public function __construct(
     RequestStack $requestStack,
     ConfigFactoryInterface $configFactory,
-    LoggerChannelFactory $loggerChannelFactory,
-    Client $client
+    LogoutClient $logoutClient
   ) {
     $this->currentRequest = $requestStack->getCurrentRequest();
     $this->configFactory = $configFactory;
-    $this->logger = $loggerChannelFactory->get('openy_gc_auth_personify');
-    $this->client = $client;
+    $this->logoutClient = $logoutClient;
   }
 
   /**
@@ -97,7 +82,7 @@ class PersonifyUserLogoutSubscriber implements EventSubscriberInterface {
         return FALSE;
       }
 
-      $isUserSuccessfullyLogout = $this->apiLogout($token);
+      $isUserSuccessfullyLogout = $this->logoutClient->logout($token);
       if ($isUserSuccessfullyLogout) {
         user_cookie_delete('personify_authorized');
         user_cookie_delete('personify_time');
@@ -105,54 +90,6 @@ class PersonifyUserLogoutSubscriber implements EventSubscriberInterface {
       }
       return FALSE;
     }
-  }
-
-  /**
-   * Logout user from Personify.
-   *
-   * @param string $customerToken
-   *   Personify customer's token.
-   *
-   * @throws \GuzzleHttp\Exception\GuzzleException
-   */
-  public function apiLogout($customerToken) {
-    $settings = $this->configFactory->get('personify.settings');
-    $env = $settings->get('environment');
-
-    $options = [
-      'headers' => [
-        'Content-Type' => 'application/x-www-form-urlencoded;charset=utf-8',
-        'User-Agent' => '',
-      ],
-      'auth' => [
-        $settings->get($env . 'username'),
-        $settings->get($env . 'password'),
-      ],
-      'verify' => FALSE,
-      'form_params' => [
-        'vendorUsername' => $settings->get('vendor_username'),
-        'vendorPassword' => $settings->get('vendor_password'),
-        'customerToken' => $customerToken,
-      ],
-    ];
-
-    try {
-
-      $endpoint = $this->configFactory->get('openy_gc_auth_personify.settings')->get($env . '_url_logout');
-
-      $response = $this->client->request('POST', $endpoint, $options);
-
-      if ($response->getStatusCode() != '200') {
-        $this->logger->error($this->t('Failed attempt to logout a user from Personify'));
-        return FALSE;
-      }
-
-      return TRUE;
-    }
-    catch (\Exception $e) {
-      $this->logger->error($e->getMessage());
-    }
-    return FALSE;
   }
 
 }
