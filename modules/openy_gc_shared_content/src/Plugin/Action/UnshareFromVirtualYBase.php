@@ -26,6 +26,7 @@ class UnshareFromVirtualYBase extends FieldUpdateActionBase {
 
     /** @var \Drupal\Core\Access\AccessResultInterface $result */
     $result = $object->access('update', $account, TRUE);
+    // Checking if object has field_gc_share.
     if (!$object->hasField('field_gc_share')) {
       return $result->isForbidden();
     }
