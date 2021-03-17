@@ -23,11 +23,16 @@
               :bundle="'gc_video'"
               class="rounded-border border-thunder white"
             ></AddToFavorite>
-            <div class="timer">
+            <div class="timer" :style="{ visibility: this.video
+              .attributes.field_gc_video_duration ? 'visible': 'hidden'}">
               {{ video_length }}
             </div>
           </div>
           <div class="verdana-14-12">
+            <div class="video-footer__block">
+              <SvgIcon icon="date-icon" class="fill-white" :growByHeight=false></SvgIcon>
+              {{ date }}
+            </div>
             <div
               v-if="video.attributes.field_gc_video_instructor"
               class="video-footer__block">
@@ -104,7 +109,7 @@ import MediaPlayer from '@/components/MediaPlayer.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
 import { SettingsMixin } from '@/mixins/SettingsMixin';
 import SvgIcon from '@/components/SvgIcon.vue';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 export default {
   name: 'VideoPage',
@@ -152,8 +157,17 @@ export default {
       }
       return this.video.relationships.field_gc_video_category.data[0].id;
     },
+    date() {
+      return dayjs(this.video.attributes.created).format('dddd, MMMM Do, YYYY');
+    },
     video_length() {
-      return moment.duration(this.video.attributes.field_gc_video_duration, 'seconds').format('m [minute]');
+      const sec = this.video.attributes.field_gc_video_duration;
+      if (sec > 0 && sec < 60) {
+        return `${sec} ${this.$options.filters.simplePluralize('second', sec)}`;
+      }
+
+      const min = Math.floor(dayjs.duration(sec, 'seconds').asMinutes());
+      return `${min} ${this.$options.filters.simplePluralize('minute', min)}`;
     },
   },
   methods: {

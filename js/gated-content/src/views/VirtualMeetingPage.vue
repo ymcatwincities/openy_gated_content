@@ -87,7 +87,7 @@
         :eventType="'virtual_meeting'"
         :viewAll="true"
         :limit="8"
-        :msg="'Virtual Meetings not found.'"
+        :msg="config.components.virtual_meeting.empty_block_text"
       />
     </template>
   </div>

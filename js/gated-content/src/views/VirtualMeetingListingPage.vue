@@ -4,7 +4,7 @@
       :title="config.components.virtual_meeting.title"
       :eventType="'virtual_meeting'"
       :withDateFilter="true"
-      :msg="'No Virtual Meetings scheduled for this date.'"
+      :msg="config.components.virtual_meeting.empty_block_text"
     />
   </div>
 </template>

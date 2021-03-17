@@ -22,6 +22,8 @@ class LogArchiver {
   const WORKER_CHUNK_SIZE = 600;
 
   const BASE_ARCHIVE_PATH = 'vy_logs';
+  const VIRTUAL_Y_LOGS = 'virtual-y-logs-';
+  const VIRTUAL_Y_ACTIVITY_LOGS = 'virtual-y-activity-logs-';
 
   /**
    * Log Ids.
@@ -36,6 +38,13 @@ class LogArchiver {
    * @var \Drupal\Core\Entity\EntityInterface[]
    */
   protected $logEntities;
+
+  /**
+   * Activity Log Entities.
+   *
+   * @var \Drupal\Core\Entity\EntityInterface[]
+   */
+  protected $activityLogEntities;
 
   /**
    * Prepared Logs.
@@ -161,7 +170,7 @@ class LogArchiver {
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function archive($start = NULL, $end = NULL, $remove_entities = TRUE) {
-    $filename = '';
+    $filename = $activity_filename = '';
     if (!isset($end)) {
       $tz = $this->config->get('system.date')->get('timezone')['default'];
       $end = (new \DateTime(
@@ -170,7 +179,7 @@ class LogArchiver {
       ))->setTime(23, 59, 59);
     }
     else {
-      $filename = $end->format('Y_m_d_H_i_s');
+      $filename = $end->format('Y-m-d-H-i-s');
     }
     $end_time = $end->getTimeStamp();
 
@@ -179,7 +188,9 @@ class LogArchiver {
       $start->modify('first day of this month 00:00');
     }
     else {
-      $filename = 'virtual-y-logs-' . $start->format('Y_m_d') . '-' . $filename . '.csv.gz';
+      $filename_end = $start->format('Y-m-d') . '-' . $filename . '.csv.gz';
+      $filename = self::VIRTUAL_Y_LOGS . $filename_end;
+      $activity_filename = self::VIRTUAL_Y_ACTIVITY_LOGS . $filename_end;
     }
     $start_time = $start->getTimestamp();
 
@@ -204,6 +215,28 @@ class LogArchiver {
       ->saveFileEntities()
       ->reportToDbLog();
 
+    $query = $this->entityTypeManager->getStorage('log_entity')
+      ->getQuery()
+      ->condition('event_type', LogEntityInterface::EVENT_TYPE_USER_ACTIVITY)
+      ->condition('created', [$start_time, $end_time], 'BETWEEN')
+      ->sort('created', 'ASC');
+    if (!isset($start) && !isset($end)) {
+      $query->range(0, self::WORKER_CHUNK_SIZE);
+    }
+    $log_ids = $query->execute();
+
+    if (empty($log_ids)) {
+      return;
+    }
+
+    $this->setLogIds($log_ids)
+      ->loadActivityLogEntities()
+      ->prepareActivityLogsForExport($activity_filename)
+      ->loadFileEntities()
+      ->writeLogsToFiles()
+      ->saveFileEntities()
+      ->reportToDbLog();
+
     if ($remove_entities) {
       $this->removeLogsFromDb();
     }
@@ -223,6 +256,17 @@ class LogArchiver {
    */
   protected function loadLogEntities() {
     $this->logEntities = $this->entityTypeManager
+      ->getStorage('log_entity')
+      ->loadMultiple($this->logIds);
+
+    return $this;
+  }
+
+  /**
+   * Load activity log entities.
+   */
+  protected function loadActivityLogEntities() {
+    $this->activityLogEntities = $this->entityTypeManager
       ->getStorage('log_entity')
       ->loadMultiple($this->logIds);
 
@@ -259,12 +303,12 @@ class LogArchiver {
   /**
    * Make filename.
    */
-  protected function makeFilename($logEntity) {
+  protected function makeFilename($base, $logEntity) {
     $created = (int) $logEntity->get('created')->value;
     $created_month = date('m', $created);
     $created_year = date('Y', $created);
 
-    return "virtual-y-logs-{$created_year}-{$created_month}.csv.gz";
+    return $base . "{$created_year}-{$created_month}.csv.gz";
   }
 
   /**
@@ -280,7 +324,7 @@ class LogArchiver {
         continue;
       }
 
-      $fileName = $logFileName ?: $this->makeFilename($log);
+      $fileName = $logFileName ?: $this->makeFilename(self::VIRTUAL_Y_LOGS, $log);
       if (!isset($this->preparedLogs[$fileName])) {
         $this->preparedLogs[$fileName] = [
           'Y' => date('Y', $log->get('created')->value),
@@ -339,6 +383,69 @@ class LogArchiver {
       );
 
       $this->preparedLogs[$fileName][] = $export_row;
+    }
+
+    return $this;
+  }
+
+  /**
+   * Prepare activity logs for export.
+   *
+   * @param string $logFileName
+   *   Filename to put all the records into, default -- to create from record's
+   *   year and month.
+   */
+  protected function prepareActivityLogsForExport($logFileName = '') {
+    $preparedLogs = [];
+    foreach ($this->activityLogEntities as $log) {
+      if (!$log instanceof LogEntityInterface) {
+        continue;
+      }
+
+      $fileName = $logFileName ?: $this->makeFilename(self::VIRTUAL_Y_ACTIVITY_LOGS, $log);
+      if (!isset($this->preparedLogs[$fileName])) {
+        $this->preparedLogs[$fileName] = [
+          'Y' => date('Y', $log->get('created')->value),
+        ];
+      }
+
+      $user_data = $log->get('uid')->target_id && ($log->get('uid')->entity instanceof UserInterface) ?
+        $log->get('uid')->entity->getEmail() :
+        $log->get('email')->value;
+      $date = date('m/d/Y', $log->get('created')->value);
+      $export_row = [
+        'created' => $date,
+        'user' => $user_data,
+        'activity_duration' => $log->getChangedTime() - $log->getCreatedTime(),
+      ];
+
+      $this->moduleHandler->alter(
+        'openy_gc_activity_log_export_row',
+        $export_row,
+        $log
+      );
+
+      $preparedLogs[$fileName][$date][$user_data][] = $export_row;
+    }
+
+    foreach ($preparedLogs as $fileName => $logs_lvl1) {
+      foreach ($logs_lvl1 as $date => $logs_lvl2) {
+        foreach ($logs_lvl2 as $user_data => $logs_lvl3) {
+          $row = [];
+          foreach ($logs_lvl3 as $logs_lvl4) {
+            if (empty($row)) {
+              $row = $logs_lvl4;
+            }
+            else {
+              $row['activity_duration'] += $logs_lvl4['activity_duration'];
+            }
+          }
+          $from = new \DateTime();
+          $to = (clone $from)->add(\DateInterval::createFromDateString("{$row['activity_duration']} seconds"));
+          $row['activity_duration'] = $this->dateFormatter->formatDiff($from->getTimestamp(), $to->getTimestamp());
+          $this->preparedLogs[$fileName][] = $row;
+        }
+      }
     }
 
     return $this;
