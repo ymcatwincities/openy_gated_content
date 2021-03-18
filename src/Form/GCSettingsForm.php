@@ -102,6 +102,26 @@ class GCSettingsForm extends ConfigFormBase {
       'virtual_meeting' => $this->t('Virtual meetings'),
       'vy_blog_post' => $this->t('Blog posts'),
     ];
+    $bundles_entity_types = [
+      'gc_video' => 'node',
+      'live_stream' => 'eventinstance',
+      'virtual_meeting' => 'eventinstance',
+      'vy_blog_post' => 'node',
+    ];
+    $date_options = [
+      'node' => [
+        'date_desc' => 'By Date (New-Old)',
+        'date_asc' => 'By Date (Old-New)',
+      ],
+      'eventinstance' => [
+        'date_desc' => 'By Event Date (desc)',
+        'date_asc' => 'By Event Date (asc)',
+      ],
+    ];
+    $title_options = [
+      'title_asc' => 'By Title (A-Z)',
+      'title_desc' => 'By Title (Z-A)',
+    ];
 
     foreach ($components as $id => $title) {
       $form['app_settings']['components'][$id] = [
@@ -152,16 +172,10 @@ class GCSettingsForm extends ConfigFormBase {
         '#default_value' => $config->get('components.' . $id . '.empty_block_text'),
       ];
 
-      $select_options = [
-        'date_desc' => 'By date (New-Old)',
-        'date_asc' => 'By date (Old-New)',
-        'title_asc' => 'By title (A-Z)',
-        'title_desc' => 'By title (Z-A)',
-      ];
       $form['app_settings']['components'][$id]['component']['default_sort'] = [
         '#type' => 'select',
         '#title' => $this->t('Default view order'),
-        '#options' => $select_options,
+        '#options' => array_merge($date_options[$bundles_entity_types[$id]], $title_options),
         '#default_value' => $config->get('components.' . $id . '.default_sort'),
       ];
     }
