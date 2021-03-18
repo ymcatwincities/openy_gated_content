@@ -11,6 +11,9 @@ vy_component_settings:
     empty_block_text:
       type: string
       label: 'Text for empty block'
+    default_sort:
+      type: string
+      label: 'Default view order'
     status:
       type: boolean
       label: 'Enable/Disable component'

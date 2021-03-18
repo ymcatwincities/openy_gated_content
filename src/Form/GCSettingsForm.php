@@ -151,6 +151,19 @@ class GCSettingsForm extends ConfigFormBase {
         '#title' => $this->t('Text for empty block'),
         '#default_value' => $config->get('components.' . $id . '.empty_block_text'),
       ];
+
+      $select_options = [
+        'date_desc' => 'By date (New-Old)',
+        'date_asc' => 'By date (Old-New)',
+        'title_asc' => 'By title (A-Z)',
+        'title_desc' => 'By title (Z-A)',
+      ];
+      $form['app_settings']['components'][$id]['component']['default_sort'] = [
+        '#type' => 'select',
+        '#title' => $this->t('Default view order'),
+        '#options' => $select_options,
+        '#default_value' => $config->get('components.' . $id . '.default_sort'),
+      ];
     }
 
     uasort($form['app_settings']['components'],
