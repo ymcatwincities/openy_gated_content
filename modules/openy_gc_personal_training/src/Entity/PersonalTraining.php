@@ -128,43 +128,31 @@ class PersonalTraining extends ContentEntityBase implements PersonalTrainingInte
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
-    $fields['customer_metadata'] = BaseFieldDefinition::create('string')
+    $fields['customer_metadata'] = BaseFieldDefinition::create('text_long')
       ->setLabel(t('Customer metadata'))
       ->setDescription(t('The metadata for the customer from CRM systems (It could be user id, email, or something else).'))
-      ->setSettings([
-        'max_length' => 50,
-        'text_processing' => 0,
+      ->setRequired(FALSE)
+      ->setDisplayOptions('form', [
+        'type' => 'text_textarea',
       ])
-      ->setDefaultValue('')
       ->setDisplayOptions('view', [
         'label' => 'above',
-        'type' => 'string',
-      ])
-      ->setDisplayOptions('form', [
-        'type' => 'string_textfield',
       ])
       ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE)
-      ->setRequired(FALSE);
+      ->setDisplayConfigurable('view', TRUE);
 
-    $fields['instructor_metadata'] = BaseFieldDefinition::create('string')
+    $fields['instructor_metadata'] = BaseFieldDefinition::create('text_long')
       ->setLabel(t('Instructor metadata'))
       ->setDescription(t('The metadata for the instructor from CRM systems (It could be user id, email, or something else).'))
-      ->setSettings([
-        'max_length' => 50,
-        'text_processing' => 0,
+      ->setRequired(FALSE)
+      ->setDisplayOptions('form', [
+        'type' => 'text_textarea',
       ])
-      ->setDefaultValue('')
       ->setDisplayOptions('view', [
         'label' => 'above',
-        'type' => 'string',
-      ])
-      ->setDisplayOptions('form', [
-        'type' => 'string_textfield',
       ])
       ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE)
-      ->setRequired(FALSE);
+      ->setDisplayConfigurable('view', TRUE);
 
     $fields['training_type'] = BaseFieldDefinition::create('list_string')
       ->setLabel(t('Training type'))
