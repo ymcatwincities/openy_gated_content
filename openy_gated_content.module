@@ -255,7 +255,7 @@ function _openy_gated_content_form_eventseries_live_stream_submit(&$form, FormSt
  * Implements hook_page_attachments().
  */
 function openy_gated_content_page_attachments(array &$attachments) {
-  $attachments['#attached']['library'][] = 'openy_gated_content/styles';
+  $attachments['#attached']['library'][] = 'openy_gated_content/admin_ui_styles';
 }
 
 /**

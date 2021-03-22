@@ -136,3 +136,38 @@ function openy_gc_auth_custom_update_8007(&$sandbox) {
     ->set('require_email_verification', 0)
     ->save();
 }
+
+/**
+ * Add value for one_time_link_invalid_message setting.
+ */
+function openy_gc_auth_custom_update_8008(&$sandbox) {
+  $message = 'You have tried to use a one-time login link that has either been used or is no longer valid. Please request a new one using the form below.';
+  \Drupal::configFactory()
+    ->getEditable('openy_gc_auth.provider.custom')
+    ->set('one_time_link_invalid_message', $message)
+    ->save();
+}
+
+/**
+ * Add SkipRowIfEmailExcluded migrate process plugin to csv migration.
+ */
+function openy_gc_auth_custom_update_8009(&$sandbox) {
+  $config_dir = drupal_get_path('module', 'openy_gc_auth_custom') . '/config/';
+  // Update multiple configurations.
+  $configs = [
+    'openy_gc_auth.provider.custom' => [
+      'exclude_users',
+    ],
+    'migrate_plus.migration.gc_auth_custom_users' => [
+      'process.mail',
+    ],
+  ];
+
+  $config_updater = \Drupal::service('openy_upgrade_tool.param_updater');
+  foreach ($configs as $config_name => $params) {
+    $config = $config_dir . $config_name . '.yml';
+    foreach ($params as $param) {
+      $config_updater->update($config, $config_name, $param);
+    }
+  }
+}

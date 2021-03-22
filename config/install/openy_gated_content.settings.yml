@@ -4,19 +4,27 @@ components:
   gc_video:
     status: true
     title: 'Videos'
-    up_next_title: 'Up next'
+    up_next_title: 'Up Next'
+    empty_block_text: 'No videos found.'
+    weight: 0
   live_stream:
     status: true
-    title: 'Live streams'
-    up_next_title: 'Up next'
+    title: 'Live Streams'
+    up_next_title: 'Up Next'
+    empty_block_text: 'No Live streams scheduled for this date.'
+    weight: 1
   virtual_meeting:
     status: true
-    title: 'Virtual meetings'
-    up_next_title: 'Up next'
+    title: 'Virtual Meetings'
+    up_next_title: 'Up Next'
+    empty_block_text: 'No Virtual meetings scheduled for this date.'
+    weight: 2
   vy_blog_post:
     status: true
-    title: 'Blog posts'
+    title: 'Blog Posts'
     up_next_title: 'Next blog posts'
+    empty_block_text: 'No blog posts found.'
+    weight: 3
 virtual_y_url: /virtual-ymca
 virtual_y_login_url: /virtual-y-login
 virtual_y_logout_url: ''

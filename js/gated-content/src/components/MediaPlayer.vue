@@ -5,9 +5,11 @@
       :player="player"
       :videoId="videoId"
       :options="{responsive: 'true', url: media.field_media_video_embed_field}"
+      :player-vars="handleAttributes()"
       @loaded="$refs.player.pause()"
       @play="handlePlay()"
-      @ended="handlePlayerEvent('videoPlaybackEnded')"
+      @pause="handlePause()"
+      @ended="handleEnded()"
     />
   </div>
 </template>
@@ -20,6 +22,8 @@ export default {
   data() {
     return {
       playbackLogged: false,
+      playbackInProgress: false,
+      intervalId: 0,
     };
   },
   components: {
@@ -59,15 +63,42 @@ export default {
       this.$emit('playerEvent', eventType);
     },
     handlePlay() {
+      this.playbackInProgress = true;
       if (this.playbackLogged) {
         return;
       }
       this.playbackLogged = true;
       this.handlePlayerEvent('videoPlaybackStarted');
     },
+    handleAttributes() {
+      if (this.media.field_media_source === 'youtube') {
+        return {
+          rel: 0,
+        };
+      }
+      return false;
+    },
+    handlePause() {
+      this.playbackInProgress = false;
+    },
+    handleEnded() {
+      this.playbackInProgress = false;
+      this.handlePlayerEvent('videoPlaybackEnded');
+    },
+  },
+  mounted() {
+    this.intervalId = setInterval(() => {
+      if (this.playbackInProgress) {
+        this.$log.trackActivity({ path: this.$route.fullPath });
+      }
+    }, 60 * 1000);
   },
   updated() {
     this.playbackLogged = false;
+    this.playbackInProgress = false;
+  },
+  beforeDestroy() {
+    clearInterval(this.intervalId);
   },
 };
 </script>

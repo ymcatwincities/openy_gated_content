@@ -95,8 +95,10 @@ See https://www.drupal.org/project/migrate_tools/issues/2809433#comment-13362844
 To fix this - apply a patch for migrate_tools
 patches/migrate_tools_sync_option_for_drush8.patch
 
-
 ### Migrate tools 5.0 and sync option from UI
 
-For the ability to use sync option from UI in Migrate tools 5.0 we need to apply
-a custom patch, see `composer.json` of this module.
+In the current module version no need to apply a patch to add sync option for
+migrate tools. Migrate tools UI form was altered in
+`openy_gc_auth_custom_form_migration_execute_form_alter` and used overridden
+`MigrateBatchExecutable.php`. In this case we have only one requirement -
+`drupal:migrate_tools` version should `be 8.x-5.0`.
