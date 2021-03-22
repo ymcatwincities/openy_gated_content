@@ -18,6 +18,9 @@ source:
   headers:
     Accept: 'application/json; charset=utf-8'
     Content-Type: 'application/json'
+    x-shared-content: 1
+    x-shared-referer: SHARED_CONTENT_REFERRER_WEBSITE
+    authorization: SHARED_CONTENT_CONNECTION_TOKEN
   urls: replace_me
   constants:
     DOMAIN: replace_me

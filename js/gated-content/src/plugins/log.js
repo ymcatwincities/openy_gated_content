@@ -15,6 +15,11 @@ const Log = {
         });
         document.body.dispatchEvent(event);
       },
+      trackActivity(detail) {
+        document.body.dispatchEvent(new CustomEvent('virtual-y-activity', {
+          detail,
+        }));
+      },
     };
   },
 };

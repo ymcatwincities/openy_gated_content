@@ -48,6 +48,13 @@
               <SvgIcon icon="instructor-icon" class="fill-gray" :growByHeight=false></SvgIcon>
               {{ instructor }}
             </div>
+            <div
+              class="video-footer__block"
+              v-if="level"
+            >
+              <SvgIcon icon="difficulty-icon-grey" :css-fill="false"></SvgIcon>
+              {{ level | capitalize }}
+            </div>
             <div class="video-footer__block video-footer__category"
                  v-if="category && category.length > 0">
               <SvgIcon icon="categories" class="fill-gray" :growByHeight=false></SvgIcon>
@@ -80,7 +87,7 @@
         :eventType="'virtual_meeting'"
         :viewAll="true"
         :limit="8"
-        :msg="'Virtual Meetings not found.'"
+        :msg="config.components.virtual_meeting.empty_block_text"
       />
     </template>
   </div>

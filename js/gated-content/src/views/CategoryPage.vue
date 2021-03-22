@@ -67,94 +67,104 @@
                 class="adjust-button" @click="showModal = true">Filter</button>
       </div>
 
-      <div class="live-stream-wrapper" v-if="showComponent.live_stream">
-        <EventListing
-          v-if="selectedComponent === 'live_stream' || selectedComponent === 'all'"
-          :title="config.components.live_stream.title"
-          :category="category.id"
-          :msg="'Live streams not found.'"
-          :sort="sortData('eventinstance')"
-          :limit="viewAllContentMode ? 50 : itemsLimit"
-          @listing-not-empty="listingIsNotEmpty('live_stream', ...arguments)"
-        >
-          <template #filterButton>
-            <button
-              v-if="selectedComponent === 'all'"
-              type="button"
-              class="view-all"
-              @click="preSelectedComponent = 'live_stream'; applyFilters()">
-              More
-            </button>
-          </template>
-        </EventListing>
-      </div>
+      <div v-for="component in componentsOrder" :key="component">
+        <div class="live-stream-wrapper" v-if="showComponent.live_stream
+          && showOnCurrentIteration('live_stream', component)">
+          <EventListing
+            v-if="selectedComponent === 'live_stream' || selectedComponent === 'all'"
+            :title="config.components.live_stream.title"
+            :category="category.id"
+            :msg="config.components.live_stream.empty_block_text"
+            :sort="sortData('eventinstance', 'live_stream')"
+            :pagination="selectedComponent === 'live_stream'"
+            :limit="viewAllContentMode ? 50 : itemsLimit"
+            @listing-not-empty="listingIsNotEmpty('live_stream', ...arguments)"
+          >
+            <template #filterButton>
+              <button
+                v-if="selectedComponent === 'all'"
+                type="button"
+                class="view-all"
+                @click="preSelectedComponent = 'live_stream'; applyFilters()">
+                More
+              </button>
+            </template>
+          </EventListing>
+        </div>
 
-      <div class="virtual-meeting-wrapper" v-if="showComponent.virtual_meeting">
-        <EventListing
-          v-if="selectedComponent === 'virtual_meeting' || selectedComponent === 'all'"
-          :title="config.components.virtual_meeting.title"
-          :category="category.id"
-          :eventType="'virtual_meeting'"
-          :msg="'Virtual Meetings not found.'"
-          :sort="sortData('eventinstance')"
-          :limit="viewAllContentMode ? 50 : itemsLimit"
-          @listing-not-empty="listingIsNotEmpty('virtual_meeting', ...arguments)"
-        >
-          <template #filterButton>
-            <button
-              v-if="selectedComponent === 'all'"
-              type="button"
-              class="view-all"
-              @click="preSelectedComponent = 'virtual_meeting'; applyFilters()">
-              More
-            </button>
-          </template>
-        </EventListing>
-      </div>
+        <div class="virtual-meeting-wrapper" v-if="showComponent.virtual_meeting
+          && showOnCurrentIteration('virtual_meeting', component)">
+          <EventListing
+            v-if="selectedComponent === 'virtual_meeting' || selectedComponent === 'all'"
+            :title="config.components.virtual_meeting.title"
+            :category="category.id"
+            :eventType="'virtual_meeting'"
+            :msg="config.components.virtual_meeting.empty_block_text"
+            :sort="sortData('eventinstance', 'virtual_meeting')"
+            :pagination="selectedComponent === 'virtual_meeting'"
+            :limit="viewAllContentMode ? 50 : itemsLimit"
+            @listing-not-empty="listingIsNotEmpty('virtual_meeting', ...arguments)"
+          >
+            <template #filterButton>
+              <button
+                v-if="selectedComponent === 'all'"
+                type="button"
+                class="view-all"
+                @click="preSelectedComponent = 'virtual_meeting'; applyFilters()">
+                More
+              </button>
+            </template>
+          </EventListing>
+        </div>
 
-      <div class="videos-wrapper" v-if="showComponent.gc_video">
-        <VideoListing
-          v-if="selectedComponent === 'gc_video' || selectedComponent === 'all'"
-          :title="config.components.gc_video.title"
-          :category="category.id"
-          :viewAll="false"
-          :sort="sortData('node')"
-          :limit="itemsLimit"
-          @listing-not-empty="listingIsNotEmpty('gc_video', ...arguments)"
-        >
-          <template #filterButton>
-            <button
-              v-if="selectedComponent === 'all'"
-              type="button"
-              class="view-all"
-              @click="preSelectedComponent = 'gc_video'; applyFilters()">
-              More
-            </button>
-          </template>
-        </VideoListing>
-      </div>
+        <div class="videos-wrapper" v-if="showComponent.gc_video
+          && showOnCurrentIteration('gc_video', component)">
+          <VideoListing
+            v-if="selectedComponent === 'gc_video' || selectedComponent === 'all'"
+            :title="config.components.gc_video.title"
+            :category="category.id"
+            :pagination="selectedComponent === 'gc_video'"
+            :viewAll="false"
+            :sort="sortData('node', 'gc_video')"
+            :limit="itemsLimit"
+            @listing-not-empty="listingIsNotEmpty('gc_video', ...arguments)"
+          >
+            <template #filterButton>
+              <button
+                v-if="selectedComponent === 'all'"
+                type="button"
+                class="view-all"
+                @click="preSelectedComponent = 'gc_video'; applyFilters()">
+                More
+              </button>
+            </template>
+          </VideoListing>
+        </div>
 
-      <div class="blogs-wrapper" v-if="showComponent.vy_blog_post">
-        <BlogListing
-          v-if="selectedComponent === 'vy_blog_post' || selectedComponent === 'all'"
-          :title="config.components.vy_blog_post.title"
-          :category="category.id"
-          :viewAll="false"
-          :sort="sortData('node')"
-          :limit="itemsLimit"
-          @listing-not-empty="listingIsNotEmpty('vy_blog_post', ...arguments)"
-          class="my-40-20"
-        >
-          <template #filterButton>
-            <button
-              v-if="selectedComponent === 'all'"
-              type="button"
-              class="view-all"
-              @click="preSelectedComponent = 'vy_blog_post'; applyFilters()">
-              More
-            </button>
-          </template>
-        </BlogListing>
+        <div class="blogs-wrapper" v-if="showComponent.vy_blog_post
+          && showOnCurrentIteration('vy_blog_post', component)">
+          <BlogListing
+            v-if="selectedComponent === 'vy_blog_post' || selectedComponent === 'all'"
+            :title="config.components.vy_blog_post.title"
+            :category="category.id"
+            :viewAll="false"
+            :sort="sortData('node', 'vy_blog_post')"
+            :pagination="selectedComponent === 'vy_blog_post'"
+            :limit="itemsLimit"
+            @listing-not-empty="listingIsNotEmpty('vy_blog_post', ...arguments)"
+            class="my-40-20"
+          >
+            <template #filterButton>
+              <button
+                v-if="selectedComponent === 'all'"
+                type="button"
+                class="view-all"
+                @click="preSelectedComponent = 'vy_blog_post'; applyFilters()">
+                More
+              </button>
+            </template>
+          </BlogListing>
+        </div>
       </div>
     </template>
   </div>
@@ -193,8 +203,7 @@ export default {
       error: false,
       category: null,
       itemsLimit: 8,
-      selectedSort: 'date_asc',
-      preSelectedSort: 'date_asc',
+      DEFAULT_SORT: 'date_asc',
       showComponent: {
         gc_video: true,
         vy_blog_post: true,
@@ -203,20 +212,6 @@ export default {
       },
       showLiveStreamViewAll: false,
       showVirtualMeetingViewAll: false,
-      filterQueryByTypes: {
-        node: {
-          date_desc: { path: 'created', direction: 'DESC' },
-          date_asc: { path: 'created', direction: 'ASC' },
-          title_asc: { path: 'title', direction: 'ASC' },
-          title_desc: { path: 'title', direction: 'DESC' },
-        },
-        eventinstance: {
-          date_desc: { path: 'date.value', direction: 'DESC' },
-          date_asc: { path: 'date.value', direction: 'ASC' },
-          title_asc: { path: 'eventseries_id.title', direction: 'ASC' },
-          title_desc: { path: 'eventseries_id.title', direction: 'DESC' },
-        },
-      },
     };
   },
   watch: {
@@ -240,9 +235,6 @@ export default {
           console.error(error);
           throw error;
         });
-    },
-    sortData(type) {
-      return this.filterQueryByTypes[type][this.selectedSort];
     },
     listingIsNotEmpty(component, notEmpty) {
       this.showComponent[component] = notEmpty;
