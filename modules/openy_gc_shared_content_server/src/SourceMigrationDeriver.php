@@ -84,7 +84,7 @@ class SourceMigrationDeriver extends DeriverBase implements DeriverInterface, Co
       'sort[sortByDate][direction]' => 'DESC',
       'filter[status]' => 1,
       'filter[field_gc_share]' => 1,
-      //'XDEBUG_SESSION_START' => 'PHPSTORM',
+      // Use 'XDEBUG_SESSION_START' => 'PHPSTORM' to test.
     ];
 
     $jsonapi_uri = '/jsonapi/node/' . $base_plugin_definition['source']['entity_type'] . '?' . http_build_query($params);
