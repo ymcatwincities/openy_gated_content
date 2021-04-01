@@ -84,6 +84,7 @@ class SourceMigrationDeriver extends DeriverBase implements DeriverInterface, Co
       'sort[sortByDate][direction]' => 'DESC',
       'filter[status]' => 1,
       'filter[field_gc_share]' => 1,
+      //'XDEBUG_SESSION_START' => 'PHPSTORM',
     ];
 
     $jsonapi_uri = '/jsonapi/node/' . $base_plugin_definition['source']['entity_type'] . '?' . http_build_query($params);
@@ -118,7 +119,7 @@ class SourceMigrationDeriver extends DeriverBase implements DeriverInterface, Co
     $base_plugin_definition['source']['urls'] = $url_long;
     $base_plugin_definition['source']['headers']['x-shared-referer'] = $this
       ->request
-      ->getSchemeAndHttpHost() . '/';
+      ->getSchemeAndHttpHost();
     $base_plugin_definition['source']['headers']['authorization'] = 'Bearer ' . $token;
 
     if (!empty($base_plugin_definition['process']['field_gc_video_media'])) {
@@ -223,7 +224,7 @@ class SourceMigrationDeriver extends DeriverBase implements DeriverInterface, Co
   private function getKey($url) {
     $url_key = str_replace('http://', '', $url);
     $url_key = str_replace('https://', '', $url_key);
-    $url_key = str_replace('.', '_', $url_key);
+    $url_key = str_replace(['.', '-'], '_', $url_key);
     return $url_key;
   }
 
