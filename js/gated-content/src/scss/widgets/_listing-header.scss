@@ -13,8 +13,12 @@
   }
 
   .view-all {
-    @include median(font-size, 14px, 12px);
+    @include median(font-size, 20px, 18px);
+    text-decoration: underline;
 
+    :after {
+      content: "→";
+    }
   }
 
   button.view-all {
