@@ -16,7 +16,7 @@
     @include median(font-size, 20px, 18px);
     text-decoration: underline;
 
-    :after {
+    &:after {
       content: "→";
     }
   }
