@@ -5,3 +5,19 @@ openy_gc_personal_training.provider.edit:
     _title: 'Personal training provider'
   requirements:
     _permission: 'administer gated content configuration'
+
+openy_gc_personal_training.publish_customer_peer:
+  path: '/personal-training/publish-customer-peer'
+  defaults:
+    _controller: '\Drupal\openy_gc_personal_training\Controller\PeerController::publishCustomerPeer'
+    _title: 'Publish Customer Peer'
+  requirements:
+    _permission: 'access content'
+
+openy_gc_personal_training.load_customer_peer:
+  path: '/personal-training/load-customer-peer'
+  defaults:
+    _controller: '\Drupal\openy_gc_personal_training\Controller\PeerController::loadCustomerPeer'
+    _title: 'Load Customer Peer'
+  requirements:
+    _permission: 'access content'

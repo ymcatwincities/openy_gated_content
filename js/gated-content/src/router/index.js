@@ -12,6 +12,7 @@ import VirtualMeetingPage from '@/views/VirtualMeetingPage.vue';
 import BlogsListingPage from '@/views/BlogsListingPage.vue';
 import VideosListingPage from '@/views/VideosListingPage.vue';
 import FavoritesPage from '@/views/FavoritesPage.vue';
+import PersonalTrainingPage from '@/views/PersonalTrainingPage.vue';
 
 Vue.use(VueRouter);
 
@@ -97,6 +98,13 @@ const routes = [
     path: '/schedule',
     name: 'Schedule',
     component: SchedulePage,
+    props: true,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/personal-training/:tid',
+    name: 'PersonalTraining',
+    component: PersonalTrainingPage,
     props: true,
     meta: { requiresAuth: true },
   },

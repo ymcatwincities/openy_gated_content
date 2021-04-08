@@ -1,0 +1,10 @@
+.personal-training-meeting {
+  .meeting-player {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    video {
+      width: 100%;
+    }
+  }
+}
