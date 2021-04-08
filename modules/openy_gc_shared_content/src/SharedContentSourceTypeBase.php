@@ -213,7 +213,7 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
           'headers' => [
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
-            'Referer' => $this->requestStack->getSchemeAndHttpHost(),
+            'x-shared-referer' => $this->requestStack->getSchemeAndHttpHost(),
             'Authorization' => 'Bearer ' . $shared_content_server->getToken(),
             'X-Shared-Content' => TRUE,
           ],

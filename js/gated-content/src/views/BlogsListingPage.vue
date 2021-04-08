@@ -56,7 +56,7 @@
       :title="'none'"
       :pagination="true"
       :category="selectedComponent === 'all' ? '' : selectedComponent"
-      :sort="filterQuery[selectedSort]"
+      :sort="sortData('node', 'vy_blog_post')"
       class="mb-40-20"
     />
   </div>
@@ -80,26 +80,8 @@ export default {
       contentTypeOptions: [],
     };
   },
-  watch: {
-    '$route.query': function $routeQuery(newQuery, oldQuery) {
-      if (newQuery !== oldQuery) {
-        this.selectedComponent = newQuery.type ? newQuery.type : 'all';
-        this.preSelectedComponent = newQuery.type ? newQuery.type : 'all';
-        this.selectedSort = newQuery.sort ? newQuery.sort : 'date_desc';
-        this.preSelectedSort = newQuery.sort ? newQuery.sort : 'date_desc';
-        this.$forceUpdate();
-      }
-    },
-  },
   created() {
-    if (this.$route.query.type) {
-      this.selectedComponent = this.$route.query.type;
-      this.preSelectedComponent = this.$route.query.type;
-    }
-    if (this.$route.query.sort) {
-      this.selectedSort = this.$route.query.sort;
-      this.preSelectedSort = this.$route.query.sort;
-    }
+    this.initSelectedFilters();
     this.loadCategories();
   },
   methods: {

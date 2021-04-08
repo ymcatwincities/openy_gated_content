@@ -75,7 +75,7 @@
             :title="config.components.live_stream.title"
             :category="category.id"
             :msg="config.components.live_stream.empty_block_text"
-            :sort="sortData('eventinstance')"
+            :sort="sortData('eventinstance', 'live_stream')"
             :pagination="selectedComponent === 'live_stream'"
             :limit="viewAllContentMode ? 50 : itemsLimit"
             @listing-not-empty="listingIsNotEmpty('live_stream', ...arguments)"
@@ -100,7 +100,7 @@
             :category="category.id"
             :eventType="'virtual_meeting'"
             :msg="config.components.virtual_meeting.empty_block_text"
-            :sort="sortData('eventinstance')"
+            :sort="sortData('eventinstance', 'virtual_meeting')"
             :pagination="selectedComponent === 'virtual_meeting'"
             :limit="viewAllContentMode ? 50 : itemsLimit"
             @listing-not-empty="listingIsNotEmpty('virtual_meeting', ...arguments)"
@@ -125,7 +125,7 @@
             :category="category.id"
             :pagination="selectedComponent === 'gc_video'"
             :viewAll="false"
-            :sort="sortData('node')"
+            :sort="sortData('node', 'gc_video')"
             :limit="itemsLimit"
             @listing-not-empty="listingIsNotEmpty('gc_video', ...arguments)"
           >
@@ -148,7 +148,7 @@
             :title="config.components.vy_blog_post.title"
             :category="category.id"
             :viewAll="false"
-            :sort="sortData('node')"
+            :sort="sortData('node', 'vy_blog_post')"
             :pagination="selectedComponent === 'vy_blog_post'"
             :limit="itemsLimit"
             @listing-not-empty="listingIsNotEmpty('vy_blog_post', ...arguments)"
@@ -212,20 +212,6 @@ export default {
       },
       showLiveStreamViewAll: false,
       showVirtualMeetingViewAll: false,
-      filterQueryByTypes: {
-        node: {
-          date_desc: { path: 'created', direction: 'DESC' },
-          date_asc: { path: 'created', direction: 'ASC' },
-          title_asc: { path: 'title', direction: 'ASC' },
-          title_desc: { path: 'title', direction: 'DESC' },
-        },
-        eventinstance: {
-          date_desc: { path: 'date.value', direction: 'DESC' },
-          date_asc: { path: 'date.value', direction: 'ASC' },
-          title_asc: { path: 'eventseries_id.title', direction: 'ASC' },
-          title_desc: { path: 'eventseries_id.title', direction: 'DESC' },
-        },
-      },
     };
   },
   watch: {
@@ -249,9 +235,6 @@ export default {
           console.error(error);
           throw error;
         });
-    },
-    sortData(type) {
-      return this.filterQueryByTypes[type][this.selectedSort];
     },
     listingIsNotEmpty(component, notEmpty) {
       this.showComponent[component] = notEmpty;

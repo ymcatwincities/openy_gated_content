@@ -12,6 +12,7 @@
         :viewAll="true"
         :limit="8"
         :title="config.components.gc_video.title"
+        :sort="sortData('node', 'gc_video')"
         v-if="isActive('gc_video') && showOnCurrentIteration('gc_video', component)"
       />
       <EventListing
@@ -20,6 +21,7 @@
         :limit="8"
         :msg="config.components.live_stream.empty_block_text"
         :title="config.components.live_stream.title"
+        :sort="sortData('eventinstance', 'live_stream')"
         v-if="isActive('live_stream') && showOnCurrentIteration('live_stream', component)"
       />
       <EventListing
@@ -29,6 +31,7 @@
         :limit="8"
         :eventType="'virtual_meeting'"
         :msg="config.components.virtual_meeting.empty_block_text"
+        :sort="sortData('eventinstance', 'virtual_meeting')"
         v-if="isActive('virtual_meeting') && showOnCurrentIteration('virtual_meeting', component)"
       />
       <BlogListing
@@ -36,6 +39,7 @@
         :viewAll="true"
         :limit="8"
         :title="config.components.vy_blog_post.title"
+        :sort="sortData('node', 'vy_blog_post')"
         v-if="isActive('vy_blog_post') && showOnCurrentIteration('vy_blog_post', component)"
         class="my-40-20"
       />
@@ -49,12 +53,13 @@ import VideoListing from '@/components/video/VideoListing.vue';
 import EventListing from '@/components/event/EventListing.vue';
 import ParagraphHeadline from '@/components/ParagraphHeadline.vue';
 import { SettingsMixin } from '@/mixins/SettingsMixin';
+import { FilterAndSortMixin } from '@/mixins/FilterAndSortMixin';
 import { mapGetters } from 'vuex';
 import PageHeader from '@/components/PageHeader.vue';
 
 export default {
   name: 'Home',
-  mixins: [SettingsMixin],
+  mixins: [SettingsMixin, FilterAndSortMixin],
   components: {
     PageHeader,
     BlogListing,
