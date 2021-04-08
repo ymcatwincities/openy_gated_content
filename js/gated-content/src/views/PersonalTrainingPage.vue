@@ -148,8 +148,9 @@ export default {
           this.$log.trackEvent('entityView', 'personal_training', 'personal_training', this.video.attributes.drupal_internal__id);
         }).then(() => {
           let instructorRole = false;
+          const instructorId = this.video.attributes.instructor_id.drupal_internal__uid;
           // eslint-disable-next-line no-undef
-          if (drupalSettings.user.uid == this.video.attributes.instructor_id.drupal_internal__uid) {
+          if (parseInt(drupalSettings.user.uid, 10) === instructorId) {
             instructorRole = true;
           }
           // @TODO implement reading customerPeerId from video attribute
