@@ -13,6 +13,7 @@ openy_gc_personal_training.publish_customer_peer:
     _title: 'Publish Customer Peer'
   requirements:
     _permission: 'access content'
+    _role: 'authenticated'
 
 openy_gc_personal_training.load_customer_peer:
   path: '/personal-training/load-customer-peer'
@@ -21,3 +22,4 @@ openy_gc_personal_training.load_customer_peer:
     _title: 'Load Customer Peer'
   requirements:
     _permission: 'access content'
+    _role: 'authenticated'

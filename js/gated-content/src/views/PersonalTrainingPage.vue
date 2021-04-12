@@ -16,7 +16,6 @@
               :bundle="'virtual_meeting'"
               class="rounded-border border-concrete"
             ></AddToFavorite>
-            <AddToCalendar :event="event"></AddToCalendar>
             <div class="timer">
               Private
             </div>
@@ -62,20 +61,18 @@
 import client from '@/client';
 import AddToFavorite from '@/components/AddToFavorite.vue';
 import Spinner from '@/components/Spinner.vue';
-import AddToCalendar from '@/components/event/AddToCalendar.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
-import { EventMixin } from '@/mixins/EventMixin';
 import SvgIcon from '@/components/SvgIcon.vue';
 import Meeting from '@/components/personal-training/Meeting.vue';
+import dayjs from 'dayjs';
 
 export default {
   name: 'PersonalTrainingPage',
-  mixins: [JsonApiCombineMixin, EventMixin],
+  mixins: [JsonApiCombineMixin],
   components: {
     Meeting,
     SvgIcon,
     AddToFavorite,
-    AddToCalendar,
     Spinner,
   },
   props: {
@@ -104,20 +101,24 @@ export default {
     };
   },
   computed: {
-    // This values most of all from parent (series), but can be overridden by item,
-    // so ve need to check this here and use correct value.
     descriptionProcessed() {
       return this.video.attributes.description ? this.video.attributes.description.processed : '';
     },
-    event() {
-      return {
-        start: this.formatDate(this.video.attributes.date.value),
-        duration: [this.getDuration(this.video.attributes.date), 'hour'],
-        title: this.video.attributes.title,
-      };
-    },
     instructor() {
-      return this.video.attributes.instructor_id.display_name;
+      return this.video.attributes.instructor_id ? this.video.attributes.instructor_id.display_name : '';
+    },
+    date() {
+      return dayjs(this.video.attributes.date.value).format('dddd, MMMM Do, YYYY');
+    },
+    time() {
+      return dayjs(this.video.attributes.date.value).format('h:mm a');
+    },
+    duration() {
+      const min = Math.floor(dayjs.duration(
+        dayjs(this.video.attributes.date.end_value) - dayjs(this.video.attributes.date.value),
+      ).asMinutes());
+
+      return `${min} ${this.$options.filters.simplePluralize('minute', min)}`;
     },
   },
   methods: {
@@ -143,7 +144,6 @@ export default {
             });
           }
           this.loading = false;
-          console.log(this.video);
         }).then(() => {
           this.$log.trackEvent('entityView', 'personal_training', 'personal_training', this.video.attributes.drupal_internal__id);
         }).then(() => {

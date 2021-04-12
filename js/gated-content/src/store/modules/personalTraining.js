@@ -50,23 +50,6 @@ export default {
       };
       context.commit('addChatMessage', msgObj);
     },
-    joinVideoSession(context) {
-      context.commit('showJoinOptionsModal', false);
-      context.commit('setVideoSessionStatus', true);
-      if (context.state.instructorRole) {
-        context.dispatch('callCustomer');
-      } else {
-        context.dispatch('subscribeCustomerToCall');
-      }
-    },
-    leaveVideoSession(context) {
-      context.commit('showLeaveMeetingModal', false);
-      context.commit('setVideoSessionStatus', false);
-      context.getters.ownVideoStream.getTracks().forEach((track) => {
-        track.stop();
-      });
-      context.state.peerMediaConnection.stop();
-    },
     setHorizontalView(context) {
       context.commit('showViewOptionsModal', false);
       context.commit('setView', 'horizontal');
@@ -96,6 +79,8 @@ export default {
 
       if (context.state.showJoinOptionsModal) {
         context.dispatch('initMediaStream');
+      } else {
+        context.dispatch('closeMediaStream');
       }
     },
     toggleShowLeaveMeetingModal(context) {
@@ -103,6 +88,20 @@ export default {
     },
     toggleViewOptionsModal(context) {
       context.commit('showViewOptionsModal', !context.state.showViewOptionsModal);
+    },
+    joinVideoSession(context) {
+      context.commit('showJoinOptionsModal', false);
+      context.commit('setVideoSessionStatus', true);
+      if (context.state.instructorRole) {
+        context.dispatch('callCustomer');
+      } else {
+        context.dispatch('subscribeCustomerToCall');
+      }
+    },
+    leaveVideoSession(context) {
+      context.commit('showLeaveMeetingModal', false);
+      context.commit('setVideoSessionStatus', false);
+      context.dispatch('closeMediaStream');
     },
     async initPeer(context, payload) {
       console.log(payload);
@@ -185,14 +184,29 @@ export default {
         video: context.getters.isCameraEnabled,
       }, (mediaStream) => {
         console.log(mediaStream);
-        if (context.state.instructorRole) {
-          context.commit('setInstructorMediaStream', mediaStream);
-        } else {
-          context.commit('setCustomerMediaStream', mediaStream);
-        }
+        context.dispatch('setOwnMediaStream', mediaStream);
       }, (error) => {
         console.log(error);
       });
+    },
+    async setOwnMediaStream(context, mediaStream) {
+      if (context.state.instructorRole) {
+        context.commit('setInstructorMediaStream', mediaStream);
+      } else {
+        context.commit('setCustomerMediaStream', mediaStream);
+      }
+    },
+    async closeMediaStream(context) {
+      if (context.getters.ownMediaStream !== null) {
+        context.getters.ownMediaStream.getTracks().forEach((track) => {
+          track.stop();
+        });
+        context.dispatch('setOwnMediaStream', null);
+      }
+      if (context.state.peerMediaConnection !== null) {
+        context.state.peerMediaConnection.stop();
+        context.commit('setPeerMediaConnection', null);
+      }
     },
     async subscribeCustomerToCall(context) {
       console.log('subscribe customer to a call');
@@ -353,7 +367,7 @@ export default {
     isShowChatModal: (state) => state.showChatModal,
     peer: (state) => state.peer,
     isInstructorRole: (state) => state.instructorRole,
-    ownVideoStream: (state) => (
+    ownMediaStream: (state) => (
       state.instructorRole
         ? state.instructorMediaStream
         : state.customerMediaStream),
