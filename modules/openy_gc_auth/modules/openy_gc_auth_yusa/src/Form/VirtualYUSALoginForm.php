@@ -241,9 +241,14 @@ class VirtualYUSALoginForm extends FormBase {
         $user = reset($users);
 
         // Create a new user in DB.
-        if (!$user) {
-          $active = TRUE;
-          $user = $this->gcUserAuthorizer->createUser($name, $email, $active);
+        try {
+          if (!$user) {
+            $active = TRUE;
+            $user = $this->gcUserAuthorizer->createUser($name, $email, $active);
+          }
+        }
+        catch (\Exception $e) {
+          $this->messenger()->addError($this->t('Something went wrong. Please try again.'));
         }
 
         if ($user instanceof User) {
