@@ -15,6 +15,9 @@
 }
 .modal-container {
   width: 400px;
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
   margin: 0 auto;
   background-color: #fff;
   border-radius: 2px;
@@ -27,6 +30,7 @@
   }
   .modal-body {
     margin: 20px 0;
+    overflow-y: scroll;
   }
   .modal-default-button {
     float: right;
