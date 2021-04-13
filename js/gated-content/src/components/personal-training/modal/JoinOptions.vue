@@ -22,15 +22,21 @@
              :class="{enabled: isMicEnabled}"
              @click="toggleMicEnabled"
         >
-          <SvgIcon icon="sliders-h-solid" class="fill-white"></SvgIcon>
+          <SvgIcon :icon="isMicEnabled ? 'mic_black_24dp':'mic_off_black_24dp'"
+                   class="fill-white mic-icon"></SvgIcon>
           <span>Microphone</span>
+          <SvgIcon :icon="isMicEnabled ? 'toggle_on_black_24dp':'toggle_off_black_24dp'"
+                   class="fill-white switch-icon"></SvgIcon>
         </div>
         <div class="cam"
              :class="{enabled: isCameraEnabled}"
              @click="toggleCameraEnabled"
         >
-          <SvgIcon icon="sliders-h-solid" class="fill-white"></SvgIcon>
+          <SvgIcon :icon="isCameraEnabled ? 'videocam_black_24dp':'videocam_off_black_24dp'"
+                   class="fill-white camera-icon"></SvgIcon>
           <span>Video Camera</span>
+          <SvgIcon :icon="isCameraEnabled ? 'toggle_on_black_24dp':'toggle_off_black_24dp'"
+                   class="fill-white switch-icon"></SvgIcon>
         </div>
       </div>
       <div>
