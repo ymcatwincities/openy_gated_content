@@ -79,6 +79,21 @@ class PersonalTraining extends ContentEntityBase implements PersonalTrainingInte
   /**
    * {@inheritdoc}
    */
+  public function setCustomerPeerId($peerId) {
+    $this->set('customer_peer_id', $peerId);
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCustomerPeerId() {
+    return $this->get('customer_peer_id')->value;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
     $fields = parent::baseFieldDefinitions($entity_type);
 
@@ -207,6 +222,70 @@ class PersonalTraining extends ContentEntityBase implements PersonalTrainingInte
       ])
       ->setDisplayOptions('form', [
         'type' => 'daterange_default',
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['title'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Title'))
+      ->setDefaultValue(NULL)
+      ->setDisplayOptions('view', [
+        'label' => 'above',
+        'type' => 'string',
+      ])
+      ->setDisplayOptions('form', [
+        'type' => 'string_textfield',
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['description'] = BaseFieldDefinition::create('text_long')
+      ->setLabel(t('Description'))
+      ->setDisplayOptions('view', [
+        'label' => 'visible',
+        'type' => 'text_default',
+      ])
+      ->setDisplayOptions('form', [
+        'type' => 'text_textarea',
+        'rows' => 6,
+      ])
+      ->setRequired(FALSE)
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['customer_peer_id'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Customer Peer Id'))
+      ->setDefaultValue(NULL)
+      ->setDisplayOptions('view', [
+        'label' => 'above',
+        'type' => 'string',
+      ])
+      ->setDisplayOptions('form', [
+        'type' => 'string_textfield',
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['pt_equipment'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Equipment'))
+      ->setCardinality(-1)
+      ->setRequired(FALSE)
+      ->setSetting('target_type', 'taxonomy_term')
+      ->setSetting('handler', 'default:taxonomy_term')
+      ->setSetting('handler_settings',
+        [
+          'target_bundles' => [
+            'gc_equipment' => 'gc_equipment',
+          ],
+        ])
+      ->setDisplayOptions('form', [
+        'type' => 'entity_reference_autocomplete',
+        'settings' => [
+          'match_operator' => 'CONTAINS',
+          'match_limit' => '10',
+          'size' => '60',
+          'placeholder' => '',
+        ],
       ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);

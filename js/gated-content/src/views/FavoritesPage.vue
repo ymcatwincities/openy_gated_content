@@ -70,7 +70,7 @@
             :title="config.components.gc_video.title"
             :favorites="true"
             :pagination="viewAllContentMode"
-            :sort="sortData('node')"
+            :sort="sortData('node', 'gc_video')"
             :limit="viewAllContentMode ? 0 : itemsLimit"
           >
             <template #filterButton>
@@ -92,7 +92,7 @@
             :title="config.components.live_stream.title"
             :msg="config.components.live_stream.empty_block_text"
             :favorites="true"
-            :sort="sortData('eventinstance')"
+            :sort="sortData('eventinstance', 'live_stream')"
             :limit="viewAllContentMode ? 50 : itemsLimit"
           >
             <template #filterButton>
@@ -115,7 +115,7 @@
             :eventType="'virtual_meeting'"
             :msg="config.components.virtual_meeting.empty_block_text"
             :favorites="true"
-            :sort="sortData('eventinstance')"
+            :sort="sortData('eventinstance', 'virtual_meeting')"
             :limit="viewAllContentMode ? 50 : itemsLimit"
           >
             <template #filterButton>
@@ -137,7 +137,7 @@
             :title="config.components.vy_blog_post.title"
             :favorites="true"
             :pagination="viewAllContentMode"
-            :sort="sortData('node')"
+            :sort="sortData('node', 'vy_blog_post')"
             :limit="viewAllContentMode ? 0 : itemsLimit"
             class="my-40-20"
           >
@@ -209,26 +209,6 @@ export default {
         { value: 'vy_blog_post', type: 'node', label: 'Blog' },
         { value: 'gc_category', type: 'taxonomy_term', label: 'Categories' },
       ],
-      filterQueryByTypes: {
-        node: {
-          // date_desc: { path: 'created', direction: 'DESC' },
-          // date_asc: { path: 'created', direction: 'ASC' },
-          title_asc: { path: 'title', direction: 'ASC' },
-          title_desc: { path: 'title', direction: 'DESC' },
-        },
-        eventinstance: {
-          date_desc: { path: 'date.value', direction: 'DESC' },
-          date_asc: { path: 'date.value', direction: 'ASC' },
-          title_asc: { path: 'eventseries_id.title', direction: 'ASC' },
-          title_desc: { path: 'eventseries_id.title', direction: 'DESC' },
-        },
-        taxonomy_term: {
-          date_desc: { path: 'weight', direction: 'DESC' },
-          date_asc: { path: 'weight', direction: 'ASC' },
-          title_asc: { path: 'name', direction: 'ASC' },
-          title_desc: { path: 'name', direction: 'DESC' },
-        },
-      },
     };
   },
   computed: {
@@ -262,11 +242,6 @@ export default {
         this.$forceUpdate();
       },
       deep: true,
-    },
-  },
-  methods: {
-    sortData(type) {
-      return this.filterQueryByTypes[type][this.selectedSort];
     },
   },
 };

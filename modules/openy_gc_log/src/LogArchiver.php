@@ -61,6 +61,13 @@ class LogArchiver {
   protected $fileEntities;
 
   /**
+   * Limit log entities count loaded by current process.
+   *
+   * @var int
+   */
+  protected $workerChunkSize = NULL;
+
+  /**
    * Entity Type Manager to work with.
    *
    * @var \Drupal\Core\Entity\EntityTypeManager
@@ -194,52 +201,92 @@ class LogArchiver {
     }
     $start_time = $start->getTimestamp();
 
-    $query = $this->entityTypeManager->getStorage('log_entity')
-      ->getQuery()
-      ->condition('created', [$start_time, $end_time], 'BETWEEN')
-      ->sort('created', 'ASC');
-    if (!isset($start) && !isset($end)) {
-      $query->range(0, self::WORKER_CHUNK_SIZE);
-    }
-    $log_ids = $query->execute();
+    $log_ids = $this->loadLogIdsByDataRange($start_time, $end_time);
 
     if (empty($log_ids)) {
       return;
     }
 
-    $this->setLogIds($log_ids)
-      ->loadLogEntities()
-      ->prepareLogsForExport($filename)
-      ->loadFileEntities()
-      ->writeLogsToFiles()
-      ->saveFileEntities()
-      ->reportToDbLog();
+    $activity_log_ids = $this->loadActivityLogIdsByDateRange($start_time, $end_time);
 
+    if ($log_ids) {
+      $this->loadLogEntities($log_ids);
+      $this->prepareLogsForExport($filename);
+    }
+
+    if ($activity_log_ids) {
+      $this->loadActivityLogEntities($activity_log_ids);
+      $this->prepareActivityLogsForExport($activity_filename);
+    }
+
+    $this->loadFileEntities();
+    $this->writeLogsToFiles();
+    $this->saveFileEntities();
+    $this->reportToDbLog();
+
+    if ($remove_entities) {
+      $this->removeLogsFromDb();
+    }
+  }
+
+  /**
+   * Limit log entities count loaded by current process.
+   *
+   * @param int $chunk_size
+   *   Chunk Size.
+   */
+  public function setWorkerChunkSize($chunk_size) {
+    $this->workerChunkSize = $chunk_size;
+  }
+
+  /**
+   * Build, run query and return log ids array.
+   *
+   * @param int $start_time
+   *   Timestamp.
+   * @param int $end_time
+   *   Timestamp.
+   *
+   * @return array|int
+   *   Logs ids.
+   */
+  protected function loadLogIdsByDataRange($start_time, $end_time) {
+    $query = $this->entityTypeManager
+      ->getStorage('log_entity')
+      ->getQuery()
+      ->condition('created', [$start_time, $end_time], 'BETWEEN')
+      ->sort('created', 'ASC');
+
+    if ($this->workerChunkSize > 0) {
+      $query->range(0, $this->workerChunkSize);
+    }
+
+    return $query->execute();
+  }
+
+  /**
+   * Build, run query and return activity log ids array.
+   *
+   * @param int $start_time
+   *   Timestamp.
+   * @param int $end_time
+   *   Timestamp.
+   *
+   * @return array|int
+   *   Logs ids array.
+   */
+  protected function loadActivityLogIdsByDateRange($start_time, $end_time) {
     $query = $this->entityTypeManager->getStorage('log_entity')
       ->getQuery()
       ->condition('event_type', LogEntityInterface::EVENT_TYPE_USER_ACTIVITY)
       ->condition('created', [$start_time, $end_time], 'BETWEEN')
       ->sort('created', 'ASC');
-    if (!isset($start) && !isset($end)) {
-      $query->range(0, self::WORKER_CHUNK_SIZE);
-    }
-    $log_ids = $query->execute();
 
-    if (empty($log_ids)) {
-      return;
+    if ($this->workerChunkSize > 0) {
+      $query->range(0, $this->workerChunkSize);
     }
 
-    $this->setLogIds($log_ids)
-      ->loadActivityLogEntities()
-      ->prepareActivityLogsForExport($activity_filename)
-      ->loadFileEntities()
-      ->writeLogsToFiles()
-      ->saveFileEntities()
-      ->reportToDbLog();
-
-    if ($remove_entities) {
-      $this->removeLogsFromDb();
-    }
+    return $query->execute();
   }
 
   /**
@@ -253,22 +300,28 @@ class LogArchiver {
 
   /**
    * Load log entities.
+   *
+   * @param array $log_ids
+   *   Log ids.
    */
-  protected function loadLogEntities() {
+  protected function loadLogEntities(array $log_ids) {
     $this->logEntities = $this->entityTypeManager
       ->getStorage('log_entity')
-      ->loadMultiple($this->logIds);
+      ->loadMultiple($log_ids);
 
     return $this;
   }
 
   /**
    * Load activity log entities.
+   *
+   * @param array $log_ids
+   *   Log ids.
    */
-  protected function loadActivityLogEntities() {
+  protected function loadActivityLogEntities(array $log_ids) {
     $this->activityLogEntities = $this->entityTypeManager
       ->getStorage('log_entity')
-      ->loadMultiple($this->logIds);
+      ->loadMultiple($log_ids);
 
     return $this;
   }
@@ -336,8 +389,8 @@ class LogArchiver {
       $entity_bundle = $log->get('entity_bundle')->value;
       $entity_id = $log->get('entity_id')->value;
       $user_data = $log->get('uid')->target_id && ($log->get('uid')->entity instanceof UserInterface) ?
-        $log->get('uid')->entity->getEmail() :
-        $log->get('email')->value;
+      $log->get('uid')->entity->getEmail() :
+      $log->get('email')->value;
       $export_row = [
         'created' => date('m/d/Y - H:i:s', $log->get('created')->value),
         'user' => $user_data,
@@ -542,9 +595,10 @@ class LogArchiver {
    */
   protected function reportToDbLog() {
     $this->logger->debug(
-      'Virtual Y Logs processed into archive: %count entities.',
+      'Virtual Y Logs processed into archive: %count entities (%activity_count activity).',
       [
-        '%count' => count($this->logIds),
+        '%count' => count($this->logEntities),
+        '%activity_count' => count($this->activityLogEntities),
       ]
     );
 

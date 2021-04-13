@@ -25,14 +25,14 @@ openy_gated_content.video_add:
 
 openy_gated_content.event_series:
   title: 'Event series'
-  route_name: entity.eventseries.admin_collection
+  route_name: view.virtual_y_event_series.admin_page
   description: 'Event series.'
   parent: openy_gated_content.openy
   weight: 2
 
 openy_gated_content.event_instances:
   title: 'Event instances'
-  route_name: entity.eventinstance.admin_collection
+  route_name: view.virtual_y_events.admin_page
   description: ''
   parent: openy_gated_content.event_series
   weight: 1

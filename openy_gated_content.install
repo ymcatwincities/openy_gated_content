@@ -268,7 +268,7 @@ function openy_gated_content_update_8013() {
 }
 
 /**
- * Add components settings to openy_gated_content.settings.
+ * Add components weight settings to openy_gated_content.settings.
  */
 function openy_gated_content_update_8014() {
   // Update multiple params.
@@ -284,5 +284,24 @@ function openy_gated_content_update_8014() {
   $config = $config_dir . $config_name . '.yml';
   foreach ($params as $param) {
     $config_updater->update($config, $config_name, $param);
+  }
+}
+
+/**
+ * Add components sorting settings to openy_gated_content.settings.
+ */
+function openy_gated_content_update_8015() {
+  $config_updater = \Drupal::service('openy_upgrade_tool.param_updater');
+  $config_dir = drupal_get_path('module', 'openy_gated_content') . '/config/install/';
+  $config_name = 'openy_gated_content.settings';
+  $config = $config_dir . $config_name . '.yml';
+  $components = [
+    'gc_video',
+    'live_stream',
+    'virtual_meeting',
+    'vy_blog_post',
+  ];
+  foreach ($components as $id) {
+    $config_updater->update($config, $config_name, "components.$id.default_sort");
   }
 }
