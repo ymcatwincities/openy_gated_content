@@ -6,8 +6,8 @@
     <template #body>
       <div class="video">
         <video
-          v-if="ownMediaStream"
-          :srcObject.prop="ownMediaStream"
+          v-if="localMediaStream"
+          :srcObject.prop="localMediaStream"
           autoplay="autoplay"
         ></video>
       </div>
@@ -62,7 +62,7 @@ export default {
       'isShowJoinOptionsModal',
       'isMicEnabled',
       'isCameraEnabled',
-      'ownMediaStream',
+      'localMediaStream',
     ]),
   },
   methods: {
