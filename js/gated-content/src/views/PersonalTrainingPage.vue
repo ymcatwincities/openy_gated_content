@@ -66,14 +66,14 @@ import client from '@/client';
 import AddToFavorite from '@/components/AddToFavorite.vue';
 import Spinner from '@/components/Spinner.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
+import { EventMixin } from '@/mixins/EventMixin';
 import SvgIcon from '@/components/SvgIcon.vue';
 import Meeting from '@/components/personal-training/Meeting.vue';
-import dayjs from 'dayjs';
 import AccordionTab from '@/components/AccordionTab.vue';
 
 export default {
   name: 'PersonalTrainingPage',
-  mixins: [JsonApiCombineMixin],
+  mixins: [JsonApiCombineMixin, EventMixin],
   components: {
     AccordionTab,
     Meeting,
@@ -112,19 +112,6 @@ export default {
     },
     instructor() {
       return this.video.attributes.instructor_id ? this.video.attributes.instructor_id.display_name : '';
-    },
-    date() {
-      return dayjs(this.video.attributes.date.value).format('dddd, MMMM Do, YYYY');
-    },
-    time() {
-      return dayjs(this.video.attributes.date.value).format('h:mm a');
-    },
-    duration() {
-      const min = Math.floor(dayjs.duration(
-        dayjs(this.video.attributes.date.end_value) - dayjs(this.video.attributes.date.value),
-      ).asMinutes());
-
-      return `${min} ${this.$options.filters.simplePluralize('minute', min)}`;
     },
   },
   methods: {

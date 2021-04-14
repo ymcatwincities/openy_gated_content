@@ -51,9 +51,11 @@
 import AddToFavorite from '@/components/AddToFavorite.vue';
 import SvgIcon from '@/components/SvgIcon.vue';
 import dayjs from 'dayjs';
+import { EventMixin } from '@/mixins/EventMixin';
 
 export default {
   name: 'EventTeaser',
+  mixins: [EventMixin],
   components: {
     SvgIcon,
     AddToFavorite,
@@ -67,28 +69,6 @@ export default {
   computed: {
     date() {
       return this.$dayjs.date(this.video.attributes.date.value).format('YYYY-MM-DD');
-    },
-    time() {
-      return this.$dayjs.date(this.video.attributes.date.value).format('h:mm a');
-    },
-    duration() {
-      const min = Math.floor(dayjs.duration(
-        this.$dayjs.date(this.video.attributes.date.end_value)
-        - this.$dayjs.date(this.video.attributes.date.value),
-      ).asMinutes());
-
-      return `${min} ${this.$options.filters.simplePluralize('minute', min)}`;
-    },
-    startsIn() {
-      const eventStartDate = this.$dayjs.date(this.video.attributes.date.value);
-      const startsDuration = dayjs.duration(eventStartDate - dayjs());
-
-      if (startsDuration.asHours() >= 48) {
-        return `${Math.floor(startsDuration.asDays())} days`;
-      }
-
-      const { prependZero } = this.$options.filters;
-      return `${prependZero(Math.floor(startsDuration.asHours()))}:${prependZero(startsDuration.minutes())}:${prependZero(startsDuration.seconds())}`;
     },
     image() {
       if (this.video.attributes['field_ls_image.field_media_image']) {
@@ -105,12 +85,6 @@ export default {
     level() {
       return this.video.attributes.field_ls_level ? this.video.attributes.field_ls_level.name
         : this.video.attributes.level.name;
-    },
-    isOnAir() {
-      const dateStart = new Date(this.video.attributes.date.value);
-      const dateEnd = new Date(this.video.attributes.date.end_value);
-      const now = new Date();
-      return dateStart < now && now < dateEnd;
     },
     route() {
       switch (this.video.type) {
