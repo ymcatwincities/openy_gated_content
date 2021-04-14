@@ -16,6 +16,7 @@
               :bundle="'personal_training'"
               class="rounded-border border-concrete"
             ></AddToFavorite>
+            <AddToCalendar :event="event"></AddToCalendar>
             <div class="timer">
               Private
             </div>
@@ -65,6 +66,7 @@
 import client from '@/client';
 import AddToFavorite from '@/components/AddToFavorite.vue';
 import Spinner from '@/components/Spinner.vue';
+import AddToCalendar from '@/components/event/AddToCalendar.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
 import { EventMixin } from '@/mixins/EventMixin';
 import SvgIcon from '@/components/SvgIcon.vue';
@@ -79,6 +81,7 @@ export default {
     Meeting,
     SvgIcon,
     AddToFavorite,
+    AddToCalendar,
     Spinner,
   },
   props: {
@@ -109,6 +112,16 @@ export default {
   computed: {
     descriptionProcessed() {
       return this.video.attributes.description ? this.video.attributes.description.processed : '';
+    },
+    event() {
+      return {
+        start: this.formatDate(this.video.attributes.date.value),
+        duration: [this.getDuration(this.video.attributes.date), 'hour'],
+        title: this.video.attributes.title,
+        description: `Personal training page: ${this.pageUrl}`,
+        busy: true,
+        guests: [],
+      };
     },
     instructor() {
       return this.video.attributes.instructor_id ? this.video.attributes.instructor_id.display_name : '';
