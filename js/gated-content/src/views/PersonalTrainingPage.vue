@@ -12,8 +12,8 @@
           <div class="video-footer__fav pb-40-20">
             <AddToFavorite
               :id="video.attributes.drupal_internal__id"
-              :type="'eventinstance'"
-              :bundle="'virtual_meeting'"
+              :type="'personal_training'"
+              :bundle="'personal_training'"
               class="rounded-border border-concrete"
             ></AddToFavorite>
             <div class="timer">
