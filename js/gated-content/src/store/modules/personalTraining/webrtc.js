@@ -39,6 +39,10 @@ export default {
       // eslint-disable-next-line no-undef
       const peer = new Peer(peerId, {
         debug: 3,
+        host: '9000-olive-silkworm-d37irlao.ws-eu03.gitpod.io',
+        port: 443,
+        path: '/',
+        secure: true,
         config: {
           iceServers: [
             { url: 'stun:stun1.l.google.com:19302' },
@@ -127,7 +131,6 @@ export default {
       }
     },
     async publishCustomerPeer(context) {
-      console.log('publish per tr id ', context.getters.personalTrainingId);
       client.get('personal-training/publish-customer-peer', {
         params: {
           trainingId: context.getters.personalTrainingId,
