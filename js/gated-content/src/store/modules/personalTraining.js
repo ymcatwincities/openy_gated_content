@@ -41,8 +41,6 @@ export default {
       }
     },
     async receiveChatMessage(context, msgObj) {
-      // @TODO imlement chat message save
-      console.log('Received data:', msgObj);
       context.commit('addChatMessage', msgObj);
     },
     setHorizontalView(context) {
@@ -62,8 +60,6 @@ export default {
       if (context.getters.localMediaStream) {
         context.getters.localMediaStream.getAudioTracks().forEach((t) => {
           // eslint-disable-next-line no-param-reassign
-          console.log(t.getConstraints());
-          console.log(t.getSettings());
           t.enabled = context.state.micEnabled;
         });
       }
@@ -114,7 +110,6 @@ export default {
       context.dispatch('closeMediaStream');
     },
     async initPeer(context, payload) {
-      console.log('init peer', payload);
       if (context.state.peer !== null
         || context.state.personalTrainigId === payload.personalTrainigId) {
         return;
@@ -173,7 +168,6 @@ export default {
       });
 
       peer.on('connection', (dataConnection) => {
-        console.log('peer dataConnection event');
         context.dispatch('handleDataConnection', dataConnection);
 
         if (context.getters.isJoinedVideoSession) {
@@ -189,7 +183,6 @@ export default {
       });
     },
     async initMediaStream(context) {
-      console.log('initMediaStream');
       navigator.mediaDevices.getUserMedia({
         audio: {
           echoCancellation: true,
@@ -199,7 +192,6 @@ export default {
         video: true,
       })
         .then((mediaStream) => {
-          console.log(mediaStream);
           context.dispatch('setOwnMediaStream', mediaStream);
         })
         .catch((error) => {
@@ -238,8 +230,6 @@ export default {
           trainingId: context.state.personalTrainigId,
         },
       }).then((response) => {
-        console.log(response, response.data);
-
         const peerId = response.data;
         if (peerId) {
           context.commit('setCustomerPeerId', peerId);
@@ -253,7 +243,6 @@ export default {
       });
     },
     async connectToCustomerPeer(context) {
-      console.log('connectToCustomerPeer');
       const dataConnection = context.state.peer.connect(context.state.customerPeerId);
       context.dispatch('handleDataConnection', dataConnection);
     },
@@ -270,7 +259,6 @@ export default {
         context.dispatch('receiveChatMessage', data);
       });
       dataConnection.on('close', () => {
-        console.log('data connection closed');
         context.commit('setPeerDataConnected', false);
         context.commit('setPeerDataConnection', null);
         context.dispatch('setPartnerMediaStream', null);
@@ -283,13 +271,10 @@ export default {
       });
     },
     async subscribeToACall(context) {
-      console.log('subscribe to a call');
       context.state.peer.on('call', (call) => {
-        console.log('call received');
         call.answer(context.getters.localMediaStream);
         context.commit('setPeerMediaConnection', call);
         call.on('stream', (stream) => {
-          console.log('partner stream received');
           context.commit('setPeerStreamConnected', true);
           context.dispatch('setPartnerMediaStream', stream);
         });
@@ -300,19 +285,15 @@ export default {
       });
     },
     async callPartner(context) {
-      console.log('call partner');
       const call = context.state.peer.call(
         context.getters.partnerPeerId,
         context.getters.localMediaStream,
       );
-      console.log('call', call);
       call.on('stream', (stream) => {
-        console.log('partner answered a call, stream received');
         context.commit('setPeerStreamConnected', true);
         context.dispatch('setPartnerMediaStream', stream);
       });
       call.on('close', () => {
-        console.log('partner stoped the call');
         context.commit('setPeerStreamConnected', false);
         context.dispatch('setPartnerMediaStream', null);
       });
