@@ -4,39 +4,41 @@
          :class="{enabled: isMicEnabled}"
          @click="toggleMicEnabled"
     >
-      <SvgIcon icon="sliders-h-solid" class="fill-white"></SvgIcon>
+      <SvgIcon :icon="isMicEnabled ? 'mic_black_24dp':'mic_off_black_24dp'"
+               class="fill-white"></SvgIcon>
       <span>Mic</span>
     </div>
     <div class="cam"
          :class="{enabled: isCameraEnabled}"
          @click="toggleCameraEnabled"
     >
-      <SvgIcon icon="sliders-h-solid" class="fill-white"></SvgIcon>
+      <SvgIcon :icon="isCameraEnabled ? 'videocam_black_24dp':'videocam_off_black_24dp'"
+               class="fill-white"></SvgIcon>
       <span>Camera</span>
     </div>
     <div class="view"
          :class="view"
          @click="toggleViewOptionsModal"
     >
-      <SvgIcon icon="sliders-h-solid" class="fill-white"></SvgIcon>
+      <SvgIcon icon="view-vertical-split-gray" class="fill-white"></SvgIcon>
       <span>View</span>
     </div>
     <div class="leave"
          @click="toggleShowLeaveMeetingModal"
     >
-      <SvgIcon icon="sliders-h-solid" class="fill-white"></SvgIcon>
+      <SvgIcon icon="cancel_black_24dp" class="fill-white bg-red"></SvgIcon>
       <span>Leave</span>
     </div>
     <div class="chat ml-auto"
          @click="toggleShowChatModal"
     >
-      <SvgIcon icon="sliders-h-solid" class="fill-white"></SvgIcon>
+      <SvgIcon icon="question_answer_black_24dp" class="fill-white"></SvgIcon>
       <span>Chat</span>
     </div>
     <div class="full-screen"
          @click="toggleFullScreenMode"
     >
-      <SvgIcon icon="sliders-h-solid" class="fill-white"></SvgIcon>
+      <SvgIcon icon="fullscreen_black_24dp" class="fill-white"></SvgIcon>
       <span>Full</span>
     </div>
   </div>

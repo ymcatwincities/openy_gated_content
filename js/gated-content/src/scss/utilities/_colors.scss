@@ -22,12 +22,20 @@
   background-color: $white !important;
 }
 
+.bg-red {
+  background-color: $red !important;
+}
+
 .fill-white {
   fill: $white !important;
 }
 
 .fill-gray {
   fill: $gray !important;
+}
+
+.fill-red {
+  fill: $red !important;
 }
 
 .border-thunder {

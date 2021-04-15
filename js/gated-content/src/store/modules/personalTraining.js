@@ -7,29 +7,14 @@ export default {
     cameraEnabled: true,
     view: 'horizontal',
     fullScreenMode: false,
-    chatSession: [
-      {
-        author: 'user1',
-        message: 'msg1',
-        date: new Date(),
-      },
-      {
-        author: 'user2',
-        message: 'msg2',
-        date: new Date(),
-      },
-      {
-        author: 'user1',
-        message: 'msg3',
-        date: new Date(),
-      },
-    ],
+    chatSession: [],
     showJoinOptionsModal: false,
     showViewOptionsModal: false,
     showChatModal: false,
     showLeaveMeetingModal: false,
     peer: null,
     customerPeerId: null,
+    instructorPeerId: null,
     customerPeerSource: null,
     peerOpened: false,
     peerDataConnected: false,
@@ -40,14 +25,22 @@ export default {
     customerMediaStream: null,
     instructorRole: false,
     personalTrainigId: null,
+    instructorName: null,
+    customerName: null,
   },
   actions: {
-    addChatMessage(context, message) {
+    sendChatMessage(context, message) {
       const msgObj = {
-        author: 'user2',
+        author: context.getters.localName,
         message,
         date: new Date(),
       };
+      context.commit('addChatMessage', msgObj);
+      if (context.state.peerDataConnection) {
+        context.state.peerDataConnection.send(msgObj);
+      }
+    },
+    async receiveChatMessage(context, msgObj) {
       context.commit('addChatMessage', msgObj);
     },
     setHorizontalView(context) {
@@ -64,9 +57,21 @@ export default {
     },
     toggleMicEnabled(context) {
       context.commit('setMicEnabled', !context.state.micEnabled);
+      if (context.getters.localMediaStream) {
+        context.getters.localMediaStream.getAudioTracks().forEach((t) => {
+          // eslint-disable-next-line no-param-reassign
+          t.enabled = context.state.micEnabled;
+        });
+      }
     },
     toggleCameraEnabled(context) {
       context.commit('setCameraEnabled', !context.state.cameraEnabled);
+      if (context.getters.localMediaStream) {
+        context.getters.localMediaStream.getVideoTracks().forEach((t) => {
+          // eslint-disable-next-line no-param-reassign
+          t.enabled = context.state.cameraEnabled;
+        });
+      }
     },
     toggleFullScreenMode(context) {
       context.commit('toggleFullScreenMode', !context.state.fullScreenMode);
@@ -92,19 +97,19 @@ export default {
     joinVideoSession(context) {
       context.commit('showJoinOptionsModal', false);
       context.commit('setVideoSessionStatus', true);
-      if (context.state.instructorRole) {
-        context.dispatch('callCustomer');
-      } else {
-        context.dispatch('subscribeCustomerToCall');
+      context.dispatch('subscribeToACall');
+      if (context.state.peerDataConnected) {
+        context.dispatch('callPartner');
       }
     },
     leaveVideoSession(context) {
       context.commit('showLeaveMeetingModal', false);
       context.commit('setVideoSessionStatus', false);
+      context.commit('setMicEnabled', false);
+      context.commit('setCameraEnabled', false);
       context.dispatch('closeMediaStream');
     },
     async initPeer(context, payload) {
-      console.log(payload);
       if (context.state.peer !== null
         || context.state.personalTrainigId === payload.personalTrainigId) {
         return;
@@ -112,6 +117,8 @@ export default {
 
       context.commit('setInstructorRole', payload.instructorRole);
       context.commit('setPersonalTrainingId', payload.personalTrainingId);
+      context.commit('setInstructorName', payload.instructorName);
+      context.commit('setCustomerName', payload.customerName);
 
       let peerId = null;
       if (!payload.instructorRole && payload.customerPeerId) {
@@ -121,7 +128,7 @@ export default {
       // @TODO implement configuration load from settings
       // eslint-disable-next-line no-undef
       const peer = new Peer(peerId, {
-        debug: 3,
+        debug: 1,
         config: {
           iceServers: [
             { url: 'stun:stun1.l.google.com:19302' },
@@ -161,33 +168,35 @@ export default {
       });
 
       peer.on('connection', (dataConnection) => {
-        context.commit('setPeerDataConnected', true);
-        context.commit('setPeerDataConnection', dataConnection);
-        dataConnection.on('data', (data) => {
-          context.dispatch('receivePeerData', data);
-        });
-        dataConnection.on('close', () => {
-          context.commit('setPeerDataConnected', false);
-          context.commit('setPeerDataConnection', null);
-        });
+        context.dispatch('handleDataConnection', dataConnection);
+
+        if (context.getters.isJoinedVideoSession) {
+          context.dispatch('callPartner');
+        }
+      });
+
+      peer.on('error', (error) => {
+        console.log('peer error', error.type, error);
+        if (error.type === 'peer-unavailable') {
+          context.dispatch('connectToCustomerPeer');
+        }
       });
     },
     async initMediaStream(context) {
-      console.log('initMediaStream');
-      // Monkeypatch for crossbrowser geusermedia
-      navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia
-        || navigator.mozGetUserMedia;
-
-      // Request audio an video
-      navigator.getUserMedia({
-        audio: context.getters.isMicEnabled,
-        video: context.getters.isCameraEnabled,
-      }, (mediaStream) => {
-        console.log(mediaStream);
-        context.dispatch('setOwnMediaStream', mediaStream);
-      }, (error) => {
-        console.log(error);
-      });
+      navigator.mediaDevices.getUserMedia({
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: false,
+        },
+        video: true,
+      })
+        .then((mediaStream) => {
+          context.dispatch('setOwnMediaStream', mediaStream);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     async setOwnMediaStream(context, mediaStream) {
       if (context.state.instructorRole) {
@@ -197,32 +206,15 @@ export default {
       }
     },
     async closeMediaStream(context) {
-      if (context.getters.ownMediaStream !== null) {
-        context.getters.ownMediaStream.getTracks().forEach((track) => {
+      if (context.getters.localMediaStream !== null) {
+        context.getters.localMediaStream.getTracks().forEach((track) => {
           track.stop();
         });
         context.dispatch('setOwnMediaStream', null);
       }
       if (context.state.peerMediaConnection !== null) {
-        context.state.peerMediaConnection.stop();
         context.commit('setPeerMediaConnection', null);
       }
-    },
-    async subscribeCustomerToCall(context) {
-      console.log('subscribe customer to a call');
-      context.state.peer.on('call', (call) => {
-        call.answer(context.state.customerMediaStream);
-        context.commit('setPeerMediaConnection', call);
-        call.on('stream', (stream) => {
-          console.log('instructor stream received');
-          context.commit('setPeerStreamConnected', true);
-          context.commit('setInstructorMediaStream', stream);
-        });
-        call.on('close', () => {
-          context.commit('setPeerStreamConnected', false);
-          context.commit('setInstructorMediaStream', null);
-        });
-      });
     },
     async publishCustomerPeer(context) {
       client.get('personal-training/publish-customer-peer', {
@@ -238,8 +230,6 @@ export default {
           trainingId: context.state.personalTrainigId,
         },
       }).then((response) => {
-        console.log(response, response.data);
-
         const peerId = response.data;
         if (peerId) {
           context.commit('setCustomerPeerId', peerId);
@@ -254,37 +244,76 @@ export default {
     },
     async connectToCustomerPeer(context) {
       const dataConnection = context.state.peer.connect(context.state.customerPeerId);
+      context.dispatch('handleDataConnection', dataConnection);
+    },
+    async handleDataConnection(context, dataConnection) {
+      context.dispatch('setPartnerMediaStream', null);
+      context.commit('setPeerDataConnected', true);
+      context.commit('setPeerDataConnection', dataConnection);
+      context.dispatch('setPartnerPeerId', dataConnection.peer);
       dataConnection.on('open', () => {
         context.commit('setPeerDataConnected', true);
         context.commit('setPeerDataConnection', dataConnection);
       });
       dataConnection.on('data', (data) => {
-        context.dispatch('receivePeerData', data);
+        context.dispatch('receiveChatMessage', data);
       });
       dataConnection.on('close', () => {
         context.commit('setPeerDataConnected', false);
         context.commit('setPeerDataConnection', null);
+        context.dispatch('setPartnerMediaStream', null);
+        if (context.state.instructorRole) {
+          context.dispatch('connectToCustomerPeer');
+        }
+      });
+      dataConnection.on('error', (error) => {
+        console.log('dataConnection error:', error);
       });
     },
-    async callCustomer(context) {
-      console.log('call customer');
+    async subscribeToACall(context) {
+      context.state.peer.on('call', (call) => {
+        call.answer(context.getters.localMediaStream);
+        context.commit('setPeerMediaConnection', call);
+        call.on('stream', (stream) => {
+          context.commit('setPeerStreamConnected', true);
+          context.dispatch('setPartnerMediaStream', stream);
+        });
+        call.on('close', () => {
+          context.commit('setPeerStreamConnected', false);
+          context.dispatch('setPartnerMediaStream', null);
+        });
+      });
+    },
+    async callPartner(context) {
       const call = context.state.peer.call(
-        context.state.customerPeerId,
-        context.state.instructorMediaStream,
+        context.getters.partnerPeerId,
+        context.getters.localMediaStream,
       );
       call.on('stream', (stream) => {
-        console.log('client stream received');
         context.commit('setPeerStreamConnected', true);
-        context.commit('setCustomerMediaStream', stream);
+        context.dispatch('setPartnerMediaStream', stream);
       });
       call.on('close', () => {
         context.commit('setPeerStreamConnected', false);
-        context.commit('setCustomerMediaStream', null);
+        context.dispatch('setPartnerMediaStream', null);
+      });
+      call.on('error', (error) => {
+        console.log(error);
       });
     },
-    async receivePeerData(context, data) {
-      // @TODO imlement chat message save
-      console.log('Received data:', data);
+    setPartnerPeerId(context, peerId) {
+      if (context.state.instructorRole) {
+        context.commit('setCustomerPeerId', peerId);
+      } else {
+        context.commit('setInstructorPeerId', peerId);
+      }
+    },
+    setPartnerMediaStream(context, value) {
+      if (context.state.instructorRole) {
+        context.commit('setCustomerMediaStream', value);
+      } else {
+        context.commit('setInstructorMediaStream', value);
+      }
     },
   },
   mutations: {
@@ -324,6 +353,9 @@ export default {
     setCustomerPeerId(state, peerId) {
       state.customerPeerId = peerId;
     },
+    setInstructorPeerId(state, peerId) {
+      state.instructorPeerId = peerId;
+    },
     setCustomerPeerSource(state, source) {
       state.customerPeerSource = source;
     },
@@ -354,6 +386,12 @@ export default {
     setPersonalTrainingId(state, value) {
       state.personalTrainigId = value;
     },
+    setInstructorName(state, value) {
+      state.instructorName = value;
+    },
+    setCustomerName(state, value) {
+      state.customerName = value;
+    },
   },
   getters: {
     chatSession: (state) => state.chatSession,
@@ -367,10 +405,28 @@ export default {
     isShowChatModal: (state) => state.showChatModal,
     peer: (state) => state.peer,
     isInstructorRole: (state) => state.instructorRole,
-    ownMediaStream: (state) => (
+    partnerPeerId: (state) => (
       state.instructorRole
-        ? state.instructorMediaStream
-        : state.customerMediaStream),
+        ? state.customerPeerId
+        : state.instructorPeerId),
+    localPeerId: (state) => (
+      state.instructorRole
+        ? state.instructorPeerId
+        : state.customerPeerId),
+    localMediaStream: (state) => (state.instructorRole
+      ? state.instructorMediaStream
+      : state.customerMediaStream),
+    partnerMediaStream: (state) => (
+      state.instructorRole
+        ? state.customerMediaStream
+        : state.instructorMediaStream),
+    localName: (state) => (state.instructorRole
+      ? state.instructorName
+      : state.customerName),
+    partnerName: (state) => (
+      state.instructorRole
+        ? state.customerName
+        : state.instructorName),
     customerMediaStream: (state) => state.customerMediaStream,
     instructorMediaStream: (state) => state.instructorMediaStream,
   },
