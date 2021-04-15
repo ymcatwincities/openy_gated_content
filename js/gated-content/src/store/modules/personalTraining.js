@@ -2,15 +2,14 @@ import personalTrainingChat from '@/store/modules/personalTraining/chat';
 import personalTrainingModal from '@/store/modules/personalTraining/modal';
 import personalTrainingWebRtc from '@/store/modules/personalTraining/webrtc';
 import personalTrainingControls from '@/store/modules/personalTraining/controls';
+import dayjs from 'dayjs';
 
 export default {
   state: {
     videoSessionStatus: false,
     personalTrainingId: null,
     personalTrainingDate: null,
-    instructorRole: false,
-    instructorName: null,
-    customerName: null,
+
   },
   actions: {
     joinVideoSession(context) {
@@ -39,26 +38,12 @@ export default {
     setPersonalTrainingDate(state, value) {
       state.personalTrainingDate = value;
     },
-    setInstructorRole(state, value) {
-      state.instructorRole = value;
-    },
-    setInstructorName(state, value) {
-      state.instructorName = value;
-    },
-    setCustomerName(state, value) {
-      state.customerName = value;
-    },
   },
   getters: {
     isJoinedVideoSession: (state) => state.videoSessionStatus,
-    isInstructorRole: (state) => state.instructorRole,
-    localName: (state) => (state.instructorRole
-      ? state.instructorName
-      : state.customerName),
-    partnerName: (state) => (
-      state.instructorRole
-        ? state.customerName
-        : state.instructorName),
+    isMeetingComplete: (state) => dayjs(state.personalTrainingDate.end_value).isBefore(dayjs()),
+
+    personalTrainingId: (state) => state.personalTrainingId,
   },
   modules: {
     personalTrainingChat,

@@ -153,12 +153,14 @@ export default {
           if (parseInt(drupalSettings.user.uid, 10) === instructorId) {
             instructorRole = true;
           }
+          console.log(this.video.attributes.date);
           this.$store.dispatch('initPeer', {
             instructorRole,
             instructorName: this.video.attributes.instructor_id.display_name,
             customerName: this.video.attributes.customer_id.display_name,
             customerPeerId: this.video.attributes.customer_peer_id,
             personalTrainingId: this.video.attributes.drupal_internal__id,
+            personalTrainingDate: this.video.attributes.date,
           });
         })
         .catch((error) => {

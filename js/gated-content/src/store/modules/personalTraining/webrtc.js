@@ -13,6 +13,9 @@ export default {
     peerDataConnection: null,
     peerStreamConnected: false,
     peerMediaConnection: null,
+    instructorRole: false,
+    instructorName: null,
+    customerName: null,
   },
   actions: {
     async initPeer(context, payload) {
@@ -23,6 +26,7 @@ export default {
 
       context.commit('setInstructorRole', payload.instructorRole);
       context.commit('setPersonalTrainingId', payload.personalTrainingId);
+      context.commit('setPersonalTrainingDate', payload.personalTrainingDate);
       context.commit('setInstructorName', payload.instructorName);
       context.commit('setCustomerName', payload.customerName);
 
@@ -123,17 +127,18 @@ export default {
       }
     },
     async publishCustomerPeer(context) {
+      console.log('publish per tr id ', context.getters.personalTrainingId);
       client.get('personal-training/publish-customer-peer', {
         params: {
-          trainingId: context.state.personalTrainingId,
-          peerId: context.state.customerPeerId,
+          trainingId: context.getters.personalTrainingId,
+          peerId: context.getters.customerPeerId,
         },
       });
     },
     async loadCustomerPeer(context) {
       client.get('personal-training/load-customer-peer', {
         params: {
-          trainingId: context.state.personalTrainingId,
+          trainingId: context.getters.personalTrainingId,
         },
       }).then((response) => {
         const peerId = response.data;
@@ -256,6 +261,16 @@ export default {
     setCustomerMediaStream(state, value) {
       state.customerMediaStream = value;
     },
+    setInstructorRole(state, value) {
+      state.instructorRole = value;
+    },
+    setInstructorName(state, value) {
+      state.instructorName = value;
+    },
+    setCustomerName(state, value) {
+      state.customerName = value;
+    },
+
   },
   getters: {
     peer: (state) => state.peer,
@@ -267,6 +282,7 @@ export default {
       state.instructorRole
         ? state.instructorPeerId
         : state.customerPeerId),
+    customerPeerId: (state) => state.customerPeerId,
     localMediaStream: (state) => (state.instructorRole
       ? state.instructorMediaStream
       : state.customerMediaStream),
@@ -276,5 +292,13 @@ export default {
         : state.instructorMediaStream),
     customerMediaStream: (state) => state.customerMediaStream,
     instructorMediaStream: (state) => state.instructorMediaStream,
+    isInstructorRole: (state) => state.instructorRole,
+    localName: (state) => (state.instructorRole
+      ? state.instructorName
+      : state.customerName),
+    partnerName: (state) => (
+      state.instructorRole
+        ? state.customerName
+        : state.instructorName),
   },
 };
