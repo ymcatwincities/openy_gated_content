@@ -24,7 +24,7 @@ export default {
     instructorMediaStream: null,
     customerMediaStream: null,
     instructorRole: false,
-    personalTrainigId: null,
+    personalTrainingId: null,
     instructorName: null,
     customerName: null,
   },
@@ -105,13 +105,13 @@ export default {
     leaveVideoSession(context) {
       context.commit('showLeaveMeetingModal', false);
       context.commit('setVideoSessionStatus', false);
-      context.commit('setMicEnabled', false);
-      context.commit('setCameraEnabled', false);
       context.dispatch('closeMediaStream');
+      context.commit('setMicEnabled', true);
+      context.commit('setCameraEnabled', true);
     },
     async initPeer(context, payload) {
       if (context.state.peer !== null
-        || context.state.personalTrainigId === payload.personalTrainigId) {
+        || context.state.personalTrainingId === payload.personalTrainingId) {
         return;
       }
 
@@ -128,7 +128,7 @@ export default {
       // @TODO implement configuration load from settings
       // eslint-disable-next-line no-undef
       const peer = new Peer(peerId, {
-        debug: 1,
+        debug: 3,
         config: {
           iceServers: [
             { url: 'stun:stun1.l.google.com:19302' },
@@ -192,13 +192,13 @@ export default {
         video: true,
       })
         .then((mediaStream) => {
-          context.dispatch('setOwnMediaStream', mediaStream);
+          context.dispatch('setLocalMediaStream', mediaStream);
         })
         .catch((error) => {
           console.log(error);
         });
     },
-    async setOwnMediaStream(context, mediaStream) {
+    async setLocalMediaStream(context, mediaStream) {
       if (context.state.instructorRole) {
         context.commit('setInstructorMediaStream', mediaStream);
       } else {
@@ -210,7 +210,7 @@ export default {
         context.getters.localMediaStream.getTracks().forEach((track) => {
           track.stop();
         });
-        context.dispatch('setOwnMediaStream', null);
+        context.dispatch('setLocalMediaStream', null);
       }
       if (context.state.peerMediaConnection !== null) {
         context.commit('setPeerMediaConnection', null);
@@ -219,7 +219,7 @@ export default {
     async publishCustomerPeer(context) {
       client.get('personal-training/publish-customer-peer', {
         params: {
-          trainingId: context.state.personalTrainigId,
+          trainingId: context.state.personalTrainingId,
           peerId: context.state.customerPeerId,
         },
       });
@@ -227,7 +227,7 @@ export default {
     async loadCustomerPeer(context) {
       client.get('personal-training/load-customer-peer', {
         params: {
-          trainingId: context.state.personalTrainigId,
+          trainingId: context.state.personalTrainingId,
         },
       }).then((response) => {
         const peerId = response.data;
@@ -384,7 +384,7 @@ export default {
       state.customerMediaStream = value;
     },
     setPersonalTrainingId(state, value) {
-      state.personalTrainigId = value;
+      state.personalTrainingId = value;
     },
     setInstructorName(state, value) {
       state.instructorName = value;

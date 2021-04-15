@@ -42,7 +42,7 @@
                      class="fill-white camera-icon"></SvgIcon>
             <SvgIcon :icon="isCameraEnabled ? 'toggle_on_black_24dp':'toggle_off_black_24dp'"
                      class="fill-white switch-icon"
-                     :class="isMicEnabled ? 'fill-camarone':''"></SvgIcon>
+                     :class="isCameraEnabled ? 'fill-camarone':''"></SvgIcon>
           </div>
           <span>Video Camera</span>
         </div>
