@@ -6,8 +6,9 @@ import personalTrainingControls from '@/store/modules/personalTraining/controls'
 export default {
   state: {
     videoSessionStatus: false,
-    instructorRole: false,
     personalTrainingId: null,
+    personalTrainingDate: null,
+    instructorRole: false,
     instructorName: null,
     customerName: null,
   },
@@ -32,11 +33,14 @@ export default {
     setVideoSessionStatus(state, value) {
       state.videoSessionStatus = value;
     },
-    setInstructorRole(state, value) {
-      state.instructorRole = value;
-    },
     setPersonalTrainingId(state, value) {
       state.personalTrainingId = value;
+    },
+    setPersonalTrainingDate(state, value) {
+      state.personalTrainingDate = value;
+    },
+    setInstructorRole(state, value) {
+      state.instructorRole = value;
     },
     setInstructorName(state, value) {
       state.instructorName = value;
@@ -47,6 +51,7 @@ export default {
   },
   getters: {
     isJoinedVideoSession: (state) => state.videoSessionStatus,
+    isInstructorRole: (state) => state.instructorRole,
     localName: (state) => (state.instructorRole
       ? state.instructorName
       : state.customerName),

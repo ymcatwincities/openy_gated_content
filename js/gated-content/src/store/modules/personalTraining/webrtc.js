@@ -3,12 +3,12 @@ import client from '@/client';
 export default {
   state: {
     peer: null,
+    peerOpened: false,
     customerPeerId: null,
     instructorPeerId: null,
     customerPeerSource: null,
     instructorMediaStream: null,
     customerMediaStream: null,
-    peerOpened: false,
     peerDataConnected: false,
     peerDataConnection: null,
     peerStreamConnected: false,
@@ -259,7 +259,6 @@ export default {
   },
   getters: {
     peer: (state) => state.peer,
-    isInstructorRole: (state) => state.instructorRole,
     partnerPeerId: (state) => (
       state.instructorRole
         ? state.customerPeerId
