@@ -7,23 +7,7 @@ export default {
     cameraEnabled: true,
     view: 'horizontal',
     fullScreenMode: false,
-    chatSession: [
-      {
-        author: 'user1',
-        message: 'msg1',
-        date: new Date(),
-      },
-      {
-        author: 'user2',
-        message: 'msg2',
-        date: new Date(),
-      },
-      {
-        author: 'user1',
-        message: 'msg3',
-        date: new Date(),
-      },
-    ],
+    chatSession: [],
     showJoinOptionsModal: false,
     showViewOptionsModal: false,
     showChatModal: false,
@@ -78,6 +62,8 @@ export default {
       if (context.getters.localMediaStream) {
         context.getters.localMediaStream.getAudioTracks().forEach((t) => {
           // eslint-disable-next-line no-param-reassign
+          console.log(t.getConstraints());
+          console.log(t.getSettings());
           t.enabled = context.state.micEnabled;
         });
       }
@@ -123,6 +109,8 @@ export default {
     leaveVideoSession(context) {
       context.commit('showLeaveMeetingModal', false);
       context.commit('setVideoSessionStatus', false);
+      context.commit('setMicEnabled', false);
+      context.commit('setCameraEnabled', false);
       context.dispatch('closeMediaStream');
     },
     async initPeer(context, payload) {
