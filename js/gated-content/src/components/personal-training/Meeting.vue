@@ -9,9 +9,6 @@
       <MeetingPlayer></MeetingPlayer>
       <ControlPanel></ControlPanel>
     </template>
-    <template v-else-if="isMeetingComplete">
-      meeting complete
-    </template>
     <JoinMeeting
       v-else
     ></JoinMeeting>
@@ -34,7 +31,6 @@ export default {
   computed: {
     ...mapGetters([
       'isJoinedVideoSession',
-      'isMeetingComplete',
     ]),
   },
 };
