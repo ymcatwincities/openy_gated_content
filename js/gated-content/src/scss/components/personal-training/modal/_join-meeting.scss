@@ -32,10 +32,12 @@
           }
 
           .video {
+            margin:              24px;
             background-image:    url('assets/img/join-options-video.png');
             background-repeat:   no-repeat;
             background-position: center;
-            padding:             24px;
+            background-size:     77%;
+            min-height:          260px;
             grid-column:         1;
             grid-row:            1/ span 3;
 
@@ -64,19 +66,27 @@
             align-items:     center;
             justify-content: space-around;
 
-            > div {
+            .mic, .cam {
               display:        flex;
               flex-direction: column;
               align-items:    center;
               cursor:         pointer;
 
               .mic-icon, .camera-icon {
-                border:        2px solid $white;
                 border-radius: 50%;
-                padding:       14px;
+                padding:       18px;
               }
 
-              span:nth-child(2) {
+              .switch-icon {
+                font-size: 52px;
+                margin-left: 12px;
+              }
+
+              > div {
+                display: flex;
+              }
+
+              > span {
                 padding-top: 6px;
                 font-size:   10px;
               }
@@ -85,6 +95,7 @@
                 .mic-icon, .camera-icon {
                   background-color: $camarone;
                 }
+
               }
             }
           }
