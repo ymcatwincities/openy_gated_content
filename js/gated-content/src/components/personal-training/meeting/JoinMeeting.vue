@@ -1,8 +1,11 @@
 <template>
-  <div class="join-meeting">
+  <div
+    class="join-meeting"
+    :class="{complete: isMeetingComplete}"
+  >
     <JoinOptions></JoinOptions>
     <template v-if="isMeetingComplete">
-      meeting complete
+      <div class="message cachet-book-24-20">Meeting Complete</div>
     </template>
     <button
       v-else
@@ -18,12 +21,14 @@ import JoinOptions from '@/components/personal-training/modal/JoinOptions.vue';
 
 export default {
   components: { JoinOptions },
+  computed: {
+    ...mapGetters([
+      'isMeetingComplete',
+    ]),
+  },
   methods: {
     ...mapActions([
       'toggleShowJoinOptionsModal',
-    ]),
-    ...mapGetters([
-      'isMeetingComplete',
     ]),
   },
 };

@@ -41,9 +41,7 @@ export default {
   },
   getters: {
     isJoinedVideoSession: (state) => state.videoSessionStatus,
-    isMeetingComplete: (state) => (state.personalTrainingDate
-      ? dayjs(state.personalTrainingDate.end_value).isBefore(dayjs())
-      : false),
+    isMeetingComplete: (state) => dayjs().isAfter(dayjs(state.personalTrainingDate)),
     personalTrainingId: (state) => state.personalTrainingId,
   },
   modules: {
