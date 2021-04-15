@@ -20,13 +20,13 @@
          :class="view"
          @click="toggleViewOptionsModal"
     >
-      <SvgIcon icon="view-horizontal-split-gray" class="fill-white"></SvgIcon>
+      <SvgIcon icon="view-vertical-split-gray" class="fill-white"></SvgIcon>
       <span>View</span>
     </div>
     <div class="leave"
          @click="toggleShowLeaveMeetingModal"
     >
-      <SvgIcon icon="cancel_black_24dp" class="fill-white"></SvgIcon>
+      <SvgIcon icon="cancel_black_24dp" class="fill-white bg-red"></SvgIcon>
       <span>Leave</span>
     </div>
     <div class="chat ml-auto"
