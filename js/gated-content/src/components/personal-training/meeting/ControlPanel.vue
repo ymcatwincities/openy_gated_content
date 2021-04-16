@@ -17,10 +17,9 @@
       <span>Camera</span>
     </div>
     <div class="view"
-         :class="view"
          @click="toggleViewOptionsModal"
     >
-      <SvgIcon icon="view-vertical-split-gray" class="fill-white"></SvgIcon>
+      <SvgIcon :icon="view" class="fill-white"></SvgIcon>
       <span>View</span>
     </div>
     <div class="leave"

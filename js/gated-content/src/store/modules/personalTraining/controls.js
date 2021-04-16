@@ -2,21 +2,21 @@ export default {
   state: {
     micEnabled: true,
     cameraEnabled: true,
-    view: 'horizontal',
+    view: 'view-inset',
     fullScreenMode: false,
   },
   actions: {
     setHorizontalView(context) {
       context.commit('showViewOptionsModal', false);
-      context.commit('setView', 'horizontal');
+      context.commit('setView', 'view-horizontal');
     },
     setVerticalView(context) {
       context.commit('showViewOptionsModal', false);
-      context.commit('setView', 'vertical');
+      context.commit('setView', 'view-vertical');
     },
     setInsetView(context) {
       context.commit('showViewOptionsModal', false);
-      context.commit('setView', 'inset');
+      context.commit('setView', 'view-inset');
     },
     toggleMicEnabled(context) {
       context.commit('setMicEnabled', !context.state.micEnabled);

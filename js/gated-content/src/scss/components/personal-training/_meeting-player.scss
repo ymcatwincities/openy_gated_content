@@ -1,10 +1,34 @@
 .personal-training-meeting {
   .meeting-player {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display:               grid;
 
     video {
       width: 100%;
+    }
+
+    &.view-inset {
+      grid-template-columns: 1fr;
+
+      .partner {
+        grid-row:    1;
+        grid-column: 1;
+      }
+
+      .local {
+        align-self:   end;
+        width:        20%;
+        grid-row:     1;
+        grid-column:  1;
+        justify-self: end;
+      }
+    }
+
+    &.view-horizontal {
+      grid-template-columns: 1fr;
+    }
+
+    &.view-vertical {
+      grid-template-columns: 1fr 1fr;
     }
   }
 }

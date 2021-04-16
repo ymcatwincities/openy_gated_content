@@ -14,7 +14,8 @@
         .svg-container {
           border:        2px solid $white;
           border-radius: 50%;
-          padding:       14px;
+          padding:       9px;
+          font-size:     26px;
         }
 
         span:nth-child(2) {
@@ -25,6 +26,13 @@
         &.enabled {
           .svg-container {
             background-color: $camarone;
+          }
+        }
+
+        &.view {
+          .svg-container {
+            padding:   12px;
+            font-size: 20px;
           }
         }
       }

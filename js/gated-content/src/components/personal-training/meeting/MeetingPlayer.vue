@@ -1,19 +1,17 @@
 <template>
   <div class="meeting-player" :class="view">
-    <div class="customer">
-      <video
-        v-if="customerMediaStream"
-        :srcObject.prop="customerMediaStream"
-        autoplay="autoplay"
-      ></video>
-    </div>
-    <div class="instructor">
-      <video
-        v-if="instructorMediaStream"
-        :srcObject.prop="instructorMediaStream"
-        autoplay="autoplay"
-      ></video>
-    </div>
+    <video
+      v-if="localMediaStream"
+      class="partner"
+      :srcObject.prop="localMediaStream"
+      autoplay="autoplay"
+    ></video>
+    <video
+      v-if="localMediaStream"
+      class="local"
+      :srcObject.prop="localMediaStream"
+      autoplay="autoplay"
+    ></video>
   </div>
 </template>
 
@@ -24,8 +22,8 @@ export default {
   computed: {
     ...mapGetters([
       'view',
-      'instructorMediaStream',
-      'customerMediaStream',
+      'localMediaStream',
+      'partnerMediaStream',
     ]),
   },
 };

@@ -9,7 +9,6 @@ export default {
     videoSessionStatus: false,
     personalTrainingId: null,
     personalTrainingDate: null,
-
   },
   actions: {
     joinVideoSession(context) {
@@ -23,9 +22,10 @@ export default {
     leaveVideoSession(context) {
       context.commit('showLeaveMeetingModal', false);
       context.commit('setVideoSessionStatus', false);
-      context.dispatch('closeMediaStream');
-      context.commit('setMicEnabled', true);
-      context.commit('setCameraEnabled', true);
+      context.dispatch('closeMediaStream').then(() => {
+        context.commit('setMicEnabled', true);
+        context.commit('setCameraEnabled', true);
+      });
     },
   },
   mutations: {

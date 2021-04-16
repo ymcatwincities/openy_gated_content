@@ -62,8 +62,10 @@
             cursor:         pointer;
 
             .mic-icon, .camera-icon {
-              border-radius: 50%;
-              padding:       18px;
+              border-radius:    50%;
+              background-color: $red;
+              padding:          13px;
+              font-size:        26px;
             }
 
             .switch-icon {

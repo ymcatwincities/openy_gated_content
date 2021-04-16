@@ -38,11 +38,11 @@ export default {
       // @TODO implement configuration load from settings
       // eslint-disable-next-line no-undef
       const peer = new Peer(peerId, {
-        debug: 3,
-        host: '9000-olive-silkworm-d37irlao.ws-eu03.gitpod.io',
-        port: 443,
-        path: '/',
-        secure: true,
+        debug: 0,
+        // host: '9000-olive-silkworm-d37irlao.ws-eu03.gitpod.io',
+        // port: 443,
+        // path: '/',
+        // secure: true,
         config: {
           iceServers: [
             { url: 'stun:stun1.l.google.com:19302' },
@@ -289,12 +289,9 @@ export default {
     localMediaStream: (state) => (state.instructorRole
       ? state.instructorMediaStream
       : state.customerMediaStream),
-    partnerMediaStream: (state) => (
-      state.instructorRole
-        ? state.customerMediaStream
-        : state.instructorMediaStream),
-    customerMediaStream: (state) => state.customerMediaStream,
-    instructorMediaStream: (state) => state.instructorMediaStream,
+    partnerMediaStream: (state) => (state.instructorRole
+      ? state.customerMediaStream
+      : state.instructorMediaStream),
     isInstructorRole: (state) => state.instructorRole,
     localName: (state) => (state.instructorRole
       ? state.instructorName

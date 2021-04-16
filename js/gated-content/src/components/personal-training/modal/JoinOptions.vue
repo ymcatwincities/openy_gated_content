@@ -27,9 +27,9 @@
           <div>
             <SvgIcon :icon="isMicEnabled ? 'mic_black_24dp':'mic_off_black_24dp'"
                      class="fill-white mic-icon"></SvgIcon>
-            <SvgIcon :icon="isMicEnabled ? 'toggle_on_black_24dp':'toggle_off_black_24dp'"
+            <!--SvgIcon :icon="isMicEnabled ? 'toggle_on_black_24dp':'toggle_off_black_24dp'"
                      class="fill-white switch-icon"
-                     :class="isMicEnabled ? 'fill-camarone':''"></SvgIcon>
+                     :class="isMicEnabled ? 'fill-camarone':''"></SvgIcon-->
           </div>
           <span>Microphone</span>
         </div>
@@ -40,9 +40,9 @@
           <div>
             <SvgIcon :icon="isCameraEnabled ? 'videocam_black_24dp':'videocam_off_black_24dp'"
                      class="fill-white camera-icon"></SvgIcon>
-            <SvgIcon :icon="isCameraEnabled ? 'toggle_on_black_24dp':'toggle_off_black_24dp'"
+            <!--SvgIcon :icon="isCameraEnabled ? 'toggle_on_black_24dp':'toggle_off_black_24dp'"
                      class="fill-white switch-icon"
-                     :class="isCameraEnabled ? 'fill-camarone':''"></SvgIcon>
+                     :class="isCameraEnabled ? 'fill-camarone':''"></SvgIcon-->
           </div>
           <span>Video Camera</span>
         </div>
