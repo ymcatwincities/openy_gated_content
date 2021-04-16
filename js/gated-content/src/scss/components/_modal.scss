@@ -15,7 +15,7 @@
 }
 .modal-container {
   width: 400px;
-  height: 80vh;
+  max-height: 80vh;
   display: flex;
   flex-direction: column;
   margin: 0 auto;
