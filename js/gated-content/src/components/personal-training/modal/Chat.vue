@@ -19,9 +19,10 @@
         type="text"
         placeholder="Message"
         v-model.trim="newMessage"
+        @keyup.enter="messageEnterEvent(newMessage)"
       />
       <button
-        @click="sendMessage(newMessage)"
+        @click="messageEnterEvent(newMessage)"
       >Send message</button>
     </template>
   </Modal>
@@ -48,11 +49,11 @@ export default {
   methods: {
     ...mapActions([
       'toggleShowChatModal',
-      'addChatMessage',
+      'sendChatMessage',
     ]),
-    sendMessage(message) {
+    messageEnterEvent(message) {
       this.newMessage = '';
-      this.addChatMessage(message);
+      this.sendChatMessage(message);
     },
     formatDate(date) {
       return dayjs(date).format('ddd, MMM D, YYYY @ h:mm a');

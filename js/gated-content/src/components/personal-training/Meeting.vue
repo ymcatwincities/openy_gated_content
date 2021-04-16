@@ -17,9 +17,9 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import ControlPanel from '@/components/personal-training/ControlPanel.vue';
-import MeetingPlayer from '@/components/personal-training/MeetingPlayer.vue';
-import JoinMeeting from '@/components/personal-training/JoinMeeting.vue';
+import ControlPanel from '@/components/personal-training/meeting/ControlPanel.vue';
+import MeetingPlayer from '@/components/personal-training/meeting/MeetingPlayer.vue';
+import JoinMeeting from '@/components/personal-training/meeting/JoinMeeting.vue';
 import Chat from '@/components/personal-training/modal/Chat.vue';
 import LeaveMeeting from '@/components/personal-training/modal/LeaveMeeting.vue';
 import ViewOptions from '@/components/personal-training/modal/ViewOptions.vue';
