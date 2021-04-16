@@ -1,0 +1,61 @@
+.personal-training-page {
+  .modal-leave-meeting {
+    .modal-container {
+      .modal-header {
+        border-bottom:  none;
+        padding:        14px 15px 14px 24px;
+        text-transform: uppercase;
+        color:          $gray;
+        font-family:    $cachet-book;
+        font-size:      18px;
+        font-weight:    400;
+
+        .modal-default-button {
+          border:           none;
+          background-color: initial;
+          padding:          0;
+          line-height:      24px;
+          font-size:        24px;
+        }
+      }
+
+      .modal-body {
+        margin:      0;
+        padding:     17px 24px 24px;
+
+        .button {
+          float:            left;
+          border:           2px solid $dark-blue;
+          border-radius:    6px;
+          background-color: $white;
+          cursor:           pointer;
+          padding:          9px 24px;
+          text-transform:   uppercase;
+          color:            $dark-blue;
+          font-family:      $cachet-book;
+          font-size:        24px;
+
+          &:hover {
+            background-color: $dark-blue;
+            color:            $white;
+          }
+
+          &:last-child {
+            float:            right;
+            background-color: $dark-blue;
+            color:            $white;
+
+            &:hover {
+              background-color: $white;
+              color:            $dark-blue;
+            }
+          }
+        }
+      }
+
+      .modal-footer {
+        display: none;
+      }
+    }
+  }
+}

@@ -1,0 +1,93 @@
+.personal-training-page {
+  .modal-join-options {
+    .modal-container {
+      background-color: $black;
+      width:            46vw;
+      color:            $white;
+
+      .modal-header, .modal-footer {
+        display: none;
+      }
+
+      .modal-body {
+        display:               grid;
+        margin:                0;
+
+        padding:               0;
+        grid-template-columns: 1fr 1fr;
+
+        .header, .controls, .button {
+          grid-column: 2;
+        }
+
+        .video {
+          margin:              24px;
+          background-image:    url('assets/img/join-options-video.png');
+          background-repeat:   no-repeat;
+          background-position: center;
+          background-size:     77%;
+          min-height:          260px;
+          grid-column:         1;
+          grid-row:            1/ span 3;
+
+          video {
+            width: 100%;
+          }
+        }
+
+        .header {
+          display:     flex;
+          align-items: flex-start;
+          margin-top:  11px;
+
+          button {
+            margin-left:      auto;
+            outline:          none;
+            border:           none;
+            background-color: transparent;
+            padding:          0 17px;
+            color:            $white;
+          }
+        }
+
+        .controls {
+          display:         flex;
+          align-items:     center;
+          justify-content: space-around;
+
+          .mic, .cam {
+            display:        flex;
+            flex-direction: column;
+            align-items:    center;
+            cursor:         pointer;
+
+            .mic-icon, .camera-icon {
+              border-radius: 50%;
+              padding:       18px;
+            }
+
+            .switch-icon {
+              margin-left: 12px;
+              font-size:   52px;
+            }
+
+            > div {
+              display: flex;
+            }
+
+            > span {
+              padding-top: 6px;
+              font-size:   10px;
+            }
+
+            &.enabled {
+              .mic-icon, .camera-icon {
+                background-color: $camarone;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
