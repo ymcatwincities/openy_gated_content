@@ -2,9 +2,9 @@
   <div class="meeting-player" :class="view">
     <div>
       <video
-        v-if="localMediaStream"
+        v-if="partnerMediaStream"
         class="partner"
-        :srcObject.prop="localMediaStream"
+        :srcObject.prop="partnerMediaStream"
         autoplay="autoplay"
       ></video>
       <video
