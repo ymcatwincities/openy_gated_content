@@ -1,14 +1,13 @@
-
 # Personal training menu items definition
 entity.personal_training.collection:
-  title: 'Personal training list'
+  title: 'Personal Trainings'
   route_name: entity.personal_training.collection
-  description: 'List Personal training entities'
+  description: 'Personal Trainings list'
   parent: openy_gated_content.openy
   weight: 100
 
 personal_training.admin.settings:
-  title: 'Personal training settings'
-  description: 'Configure Personal training entities'
+  title: 'Settings'
+  description: 'Configure Personal Trainings'
   route_name: personal_training.settings
   parent: entity.personal_training.collection
