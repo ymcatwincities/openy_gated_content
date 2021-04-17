@@ -56,11 +56,35 @@ class PersonalTrainingSettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
+
+    $config = $this->config('openy_gc_personal_training.settings');
     $active_provider = $this->config('openy_gc_personal_training.settings')->get('active_provider');
     $plugin_definitions = $this->personalTrainingProviderManager->getDefinitions();
     if (empty($plugin_definitions)) {
       return ['#markup' => $this->t('Personal training providers not found.')];
     }
+
+    $form['peerjs_domain'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t(' PeerJS Domain'),
+      '#default_value' => $config->get('peerjs_domain'),
+
+      '#required' => TRUE,
+    ];
+
+    $form['peerjs_port'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t(' PeerJS Port'),
+      '#default_value' => $config->get('peerjs_port'),
+      '#required' => TRUE,
+    ];
+
+    $form['peerjs_uri'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t(' PeerJS Uri'),
+      '#default_value' => $config->get('peerjs_uri'),
+      '#required' => TRUE,
+    ];
 
     $form['providers'] = [
       '#type' => 'table',
@@ -128,6 +152,9 @@ class PersonalTrainingSettingsForm extends ConfigFormBase {
     reset($selected);
     $settings = $this->config('openy_gc_personal_training.settings');
     $settings->set('active_provider', key($selected));
+    $settings->set('peerjs_domain', $form_state->getValue('peerjs_domain'));
+    $settings->set('peerjs_port', $form_state->getValue('peerjs_port'));
+    $settings->set('peerjs_uri', $form_state->getValue('peerjs_uri'));
     $settings->save();
     parent::submitForm($form, $form_state);
   }

@@ -6,6 +6,14 @@ openy_gc_personal_training.provider.edit:
   requirements:
     _permission: 'administer gated content configuration'
 
+openy_gc_personal_training.settings:
+  path: '/admin/virtual-y/personal_training/settings'
+  defaults:
+    _form: '\Drupal\openy_gc_personal_training\Form\PersonalTrainingSettingsForm'
+    _title: 'Virtual YMCA Auth settings'
+  requirements:
+    _permission: 'administer gated content configuration'
+
 openy_gc_personal_training.publish_customer_peer:
   path: '/personal-training/publish-customer-peer'
   defaults:

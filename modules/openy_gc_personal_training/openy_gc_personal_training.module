@@ -44,3 +44,16 @@ function openy_gc_personal_training_preprocess_html(&$variables) {
     }
   }
 }
+
+/**
+ * Implements hook_virtual_y_app_settings_alter().
+ */
+function openy_gc_personal_training_virtual_y_app_settings_alter(&$config) {
+
+  $config['personal_training_enabled'] = TRUE;
+  $moduleConfig = \Drupal::config('openy_gc_personal_training.settings');
+  $config['peerjs_domain'] = $moduleConfig->get('peerjs_domain');
+  $config['peerjs_port'] = $moduleConfig->get('peerjs_port');
+  $config['peerjs_uri'] = $moduleConfig->get('peerjs_uri');
+
+}

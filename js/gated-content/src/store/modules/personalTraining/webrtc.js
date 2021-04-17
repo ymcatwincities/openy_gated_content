@@ -35,13 +35,12 @@ export default {
         peerId = payload.customerPeerId;
       }
 
-      // @TODO implement configuration load from settings
       // eslint-disable-next-line no-undef
       const peer = new Peer(peerId, {
         debug: 3,
-        host: '9000-olive-silkworm-d37irlao.ws-eu03.gitpod.io',
-        port: 443,
-        path: '/',
+        host: context.getters.getAppSettings.peerjs_domain,
+        port: context.getters.getAppSettings.peerjs_port,
+        path: context.getters.getAppSettings.peerjs_uri,
         secure: true,
         config: {
           iceServers: [

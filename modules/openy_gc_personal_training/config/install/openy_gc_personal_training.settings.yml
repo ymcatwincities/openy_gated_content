@@ -1,1 +1,4 @@
+peerjs_domain: ''
+peerjs_port: 443
+peerjs_uri: '/'
 active_provider: default
