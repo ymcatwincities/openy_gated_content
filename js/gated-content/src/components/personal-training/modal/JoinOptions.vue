@@ -10,7 +10,9 @@
         <video
           v-if="localMediaStream && isCameraEnabled"
           :srcObject.prop="localMediaStream"
+          :volume.prop="0"
           autoplay="autoplay"
+          muted="muted"
         ></video>
       </div>
       <div class="header cachet-book-18">

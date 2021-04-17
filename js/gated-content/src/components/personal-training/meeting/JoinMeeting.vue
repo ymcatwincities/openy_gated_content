@@ -1,6 +1,6 @@
 <template>
   <div
-    class="join-meeting"
+    class="join-meeting gated-containerV2 pt-40-20 px--20-10 text-black"
     :class="{complete: isMeetingComplete}"
   >
     <JoinOptions></JoinOptions>

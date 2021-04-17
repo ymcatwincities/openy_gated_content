@@ -1,0 +1,37 @@
+.personal-training-page {
+  .meeting-player {
+    position: relative;
+    height: 90vh;
+    background-color: black;
+
+    video {
+      //width: 100%;
+      transform: scaleX(-1);
+    }
+
+    &.view-inset {
+      //grid-template-columns: 1fr;
+
+      .partner {
+        height: 100%;
+        width: 100%;
+        position: absolute;
+      }
+
+      .local {
+        width:        20%;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+      }
+    }
+
+    &.view-horizontal {
+      //grid-template-columns: 1fr;
+    }
+
+    &.view-vertical {
+      //grid-template-columns: 1fr 1fr;
+    }
+  }
+}

@@ -1,17 +1,21 @@
 <template>
   <div class="meeting-player" :class="view">
-    <video
-      v-if="localMediaStream"
-      class="partner"
-      :srcObject.prop="localMediaStream"
-      autoplay="autoplay"
-    ></video>
-    <video
-      v-if="localMediaStream"
-      class="local"
-      :srcObject.prop="localMediaStream"
-      autoplay="autoplay"
-    ></video>
+    <div>
+      <video
+        v-if="localMediaStream"
+        class="partner"
+        :srcObject.prop="localMediaStream"
+        autoplay="autoplay"
+      ></video>
+      <video
+        v-if="localMediaStream"
+        class="local"
+        :srcObject.prop="localMediaStream"
+        autoplay="autoplay"
+        muted="muted"
+        :volume.prop="0"
+      ></video>
+    </div>
   </div>
 </template>
 
