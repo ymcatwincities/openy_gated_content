@@ -35,5 +35,9 @@
   text-transform:   uppercase;
 
   @include median(margin, 24px, 12px);
+
+  &:hover {
+    background-color: darken($indigo, 10%);
+  }
 }
 

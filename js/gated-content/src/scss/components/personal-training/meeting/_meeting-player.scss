@@ -6,6 +6,20 @@
 
     video {
       transform: scaleX(-1);
+
+      &.partner {
+        background-image:    url('assets/img/background.png');
+        background-repeat:   no-repeat;
+        background-position: center;
+        background-size:     cover;
+      }
+
+      &.local {
+        background-image:    url('assets/img/join-options-video.png');
+        background-repeat:   no-repeat;
+        background-position: center;
+        background-size:     cover;
+      }
     }
 
     &.view-inset {
@@ -27,7 +41,7 @@
       .partner {
         position:  absolute;
         left:      50%;
-        transform: translateX(-50%);
+        transform: translateX(-50%) scaleX(-1);
         height:    50%;
       }
 
@@ -35,22 +49,24 @@
         position:  absolute;
         top:       50%;
         left:      50%;
-        transform: translateX(-50%);
+        transform: translateX(-50%) scaleX(-1);
         height:    50%;
       }
     }
 
     &.view-vertical {
       .partner {
-        position:  absolute;
-        transform: translateY(50%);
-        width:     50%;
+        position:    absolute;
+        transform:   translateY(50%) scaleX(-1);
+        padding-top: calc(56.25% / 2);
+        width:       50%;
+        height:      0;
       }
 
       .local {
         position:  absolute;
         left:      50%;
-        transform: translateY(50%);
+        transform: translateY(50%) scaleX(-1);
         width:     50%;
       }
     }
