@@ -37,7 +37,8 @@
     <div class="full-screen"
          @click="toggleFullScreenMode"
     >
-      <SvgIcon icon="fullscreen_black_24dp" class="fill-white"></SvgIcon>
+      <SvgIcon :icon="isFullScreen ? 'fullscreen_exit_black_24dp' : 'fullscreen_black_24dp'"
+               class="fill-white"></SvgIcon>
       <span>Full</span>
     </div>
   </div>
@@ -51,6 +52,7 @@ export default {
   components: { SvgIcon },
   computed: {
     ...mapGetters([
+      'isFullScreen',
       'isMicEnabled',
       'isCameraEnabled',
       'view',

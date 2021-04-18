@@ -4,7 +4,7 @@
   ></JoinMeeting>
   <div
     v-else
-    class="meeting"
+    class="personal-training-meeting"
   >
     <Chat></Chat>
     <LeaveMeeting></LeaveMeeting>

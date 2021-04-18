@@ -37,7 +37,16 @@ export default {
       }
     },
     toggleFullScreenMode(context) {
-      context.commit('toggleFullScreenMode', !context.state.fullScreenMode);
+      if (document.fullscreenElement) {
+        document.exitFullscreen()
+          .then(() => context.commit('setFullScreenMode', false))
+          .catch((err) => console.error(err));
+      } else {
+        const elem = document.querySelector('.personal-training-meeting');
+        elem.requestFullscreen()
+          .then(() => context.commit('setFullScreenMode', true))
+          .catch((err) => console.error(err));
+      }
     },
   },
   mutations: {
@@ -58,5 +67,6 @@ export default {
     view: (state) => state.view,
     isMicEnabled: (state) => state.micEnabled,
     isCameraEnabled: (state) => state.cameraEnabled,
+    isFullScreen: (state) => state.fullScreenMode,
   },
 };
