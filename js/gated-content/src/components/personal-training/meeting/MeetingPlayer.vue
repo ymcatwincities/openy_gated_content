@@ -4,10 +4,11 @@
       class="partner"
       :srcObject.prop="partnerMediaStream ? partnerMediaStream : undefined"
       autoplay="autoplay"
-      :style="partnerVideoStyle"
+      :class="{connected: partnerMediaStream ? 'connected' : ''}"
     ></video>
     <video
       class="local"
+      :class="{connected: localMediaStream ? 'connected' : ''}"
       :srcObject.prop="localMediaStream ? localMediaStream : undefined"
       autoplay="autoplay"
       muted="muted"
@@ -20,16 +21,18 @@
 import { mapGetters } from 'vuex';
 
 export default {
-  data() {
-    return {
-      partnerVideoStyle: {
-        width: undefined,
-      },
-    };
-  },
-  updated() {
-    this.partnerVideoStyle.width = this.$el.querySelector('.partner').clientHeight * 1.777777778;
-  },
+  // data() {
+  //   return {
+  //     partnerVideoStyle: {
+  //       width: undefined,
+  //       background: this.partnerMediaStream ? 'black' : undefined,
+  //     },
+  //   };
+  // },
+  // updated() {
+  //   // this.partnerVideoStyle.width = this.$el.querySelector('.partner')
+  //   .clientHeight * 1.777777778;
+  // },
   computed: {
     ...mapGetters([
       'view',

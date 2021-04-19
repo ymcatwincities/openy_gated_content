@@ -15,7 +15,7 @@ export default {
       context.commit('showJoinOptionsModal', false);
       context.commit('setVideoSessionStatus', true);
       context.dispatch('subscribeToACall');
-      if (context.state.peerDataConnected) {
+      if (context.getters.peerDataConnected) {
         context.dispatch('callPartner');
       }
     },

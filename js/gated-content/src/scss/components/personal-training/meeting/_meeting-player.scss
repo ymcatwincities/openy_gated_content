@@ -20,6 +20,10 @@
         background-position: center;
         background-size:     cover;
       }
+
+      &.connected {
+        background: $black;
+      }
     }
 
     &.view-inset {
