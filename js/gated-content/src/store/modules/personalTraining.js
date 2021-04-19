@@ -23,6 +23,8 @@ export default {
       context.commit('showLeaveMeetingModal', false);
       context.commit('setVideoSessionStatus', false);
       context.dispatch('closeMediaStream').then(() => {
+        context.dispatch('sendCallEndedEvent');
+        context.dispatch('sendVideoStateEvent', true);
         context.commit('setMicEnabled', true);
         context.commit('setCameraEnabled', true);
       });

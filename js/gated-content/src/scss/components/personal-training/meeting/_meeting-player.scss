@@ -6,24 +6,24 @@
 
     video {
       transform: scaleX(-1);
+    }
 
-      &.partner {
-        background-image:    url('assets/img/background.png');
-        background-repeat:   no-repeat;
-        background-position: center;
-        background-size:     cover;
-      }
+    .partner {
+      background-image:    url('assets/img/background.png');
+      background-repeat:   no-repeat;
+      background-position: center;
+      background-size:     cover;
+    }
 
-      &.local {
-        background-image:    url('assets/img/join-options-video.png');
-        background-repeat:   no-repeat;
-        background-position: center;
-        background-size:     cover;
-      }
+    .local {
+      background-image:    url('assets/img/join-options-video.png');
+      background-repeat:   no-repeat;
+      background-position: center;
+      background-size:     cover;
+    }
 
-      &.connected {
-        background: $black;
-      }
+    .connected:not(.video-disabled) {
+      background: $black;
     }
 
     &.view-inset {

@@ -1,4 +1,5 @@
 import client from '@/client';
+import personalTrainingWebRtcEvents from '@/store/modules/personalTraining/webrtc/events';
 
 export default {
   state: {
@@ -142,8 +143,19 @@ export default {
         });
         context.dispatch('setLocalMediaStream', null);
       }
+      context.dispatch('closeMediaConnection');
+    },
+    async closeMediaConnection(context) {
+      console.log('closeMediaConnection 1');
+      console.log(context.state.peerMediaConnection);
       if (context.state.peerMediaConnection !== null) {
+        console.log('closeMediaConnection 2');
+        if (context.state.peerMediaConnection.close) {
+          context.state.peerMediaConnection.close();
+        }
+        context.commit('setPeerStreamConnected', false);
         context.commit('setPeerMediaConnection', null);
+        context.dispatch('setPartnerMediaStream', null);
       }
     },
     async publishCustomerPeer(context) {
@@ -186,7 +198,14 @@ export default {
         context.commit('setPeerDataConnection', dataConnection);
       });
       dataConnection.on('data', (data) => {
-        context.dispatch('receiveChatMessage', data);
+        console.log(data);
+        if (data.newMessage) {
+          context.dispatch('receiveChatMessage', data.newMessage);
+        } else if (data.videoStateEvent) {
+          context.dispatch('setRemoteVideoStateEvent', data.videoStateEvent);
+        } else if (data === 'callEndedEvent') {
+          context.dispatch('callEndedEvent');
+        }
       });
       dataConnection.on('close', () => {
         context.commit('setPeerDataConnected', false);
@@ -205,6 +224,7 @@ export default {
         call.answer(context.getters.localMediaStream);
         context.commit('setPeerMediaConnection', call);
         call.on('stream', (stream) => {
+          context.dispatch('sendVideoStateEvent', context.getters.isCameraEnabled);
           context.commit('setPeerStreamConnected', true);
           context.dispatch('setPartnerMediaStream', stream);
         });
@@ -214,12 +234,19 @@ export default {
         });
       });
     },
+    async sendData(context, data) {
+      if (context.getters.peerDataConnection) {
+        context.getters.peerDataConnection.send(data);
+      }
+    },
     async callPartner(context) {
       const call = context.state.peer.call(
         context.getters.partnerPeerId,
         context.getters.localMediaStream,
       );
+      context.commit('setPeerMediaConnection', call);
       call.on('stream', (stream) => {
+        context.dispatch('sendVideoStateEvent', context.getters.isCameraEnabled);
         context.commit('setPeerStreamConnected', true);
         context.dispatch('setPartnerMediaStream', stream);
       });
@@ -294,6 +321,7 @@ export default {
   getters: {
     peer: (state) => state.peer,
     peerDataConnected: (state) => state.peerDataConnected,
+    peerDataConnection: (state) => state.peerDataConnection,
     partnerPeerId: (state) => (
       state.instructorRole
         ? state.customerPeerId
@@ -317,5 +345,8 @@ export default {
       state.instructorRole
         ? state.customerName
         : state.instructorName),
+  },
+  modules: {
+    personalTrainingWebRtcEvents,
   },
 };

@@ -2,14 +2,17 @@
   <div class="meeting-player" :class="view">
     <video
       class="partner"
-      :srcObject.prop="partnerMediaStream ? partnerMediaStream : undefined"
+      :srcObject.prop="partnerMediaStream && remoteVideoState ? partnerMediaStream : ''"
       autoplay="autoplay"
-      :class="{connected: partnerMediaStream ? 'connected' : ''}"
+      :class="{
+        connected: partnerMediaStream,
+        'video-disabled': !remoteVideoState,
+      }"
     ></video>
     <video
       class="local"
       :class="{connected: localMediaStream ? 'connected' : ''}"
-      :srcObject.prop="localMediaStream ? localMediaStream : undefined"
+      :srcObject.prop="localMediaStream ? localMediaStream : null"
       autoplay="autoplay"
       muted="muted"
       :volume.prop="0"
@@ -38,6 +41,7 @@ export default {
       'view',
       'localMediaStream',
       'partnerMediaStream',
+      'remoteVideoState',
     ]),
   },
 };

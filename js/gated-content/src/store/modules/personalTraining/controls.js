@@ -29,6 +29,7 @@ export default {
     },
     toggleCameraEnabled(context) {
       context.commit('setCameraEnabled', !context.state.cameraEnabled);
+      context.dispatch('sendVideoStateEvent', context.state.cameraEnabled);
       if (context.getters.localMediaStream) {
         context.getters.localMediaStream.getVideoTracks().forEach((t) => {
           // eslint-disable-next-line no-param-reassign

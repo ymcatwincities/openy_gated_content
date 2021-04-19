@@ -10,9 +10,8 @@ export default {
         date: new Date(),
       };
       context.commit('addChatMessage', msgObj);
-      if (context.state.peerDataConnection) {
-        context.state.peerDataConnection.send(msgObj);
-      }
+      console.log(context.getters.peerDataConnection);
+      context.dispatch('sendData', { newMessage: msgObj });
     },
     async receiveChatMessage(context, msgObj) {
       context.commit('addChatMessage', msgObj);
