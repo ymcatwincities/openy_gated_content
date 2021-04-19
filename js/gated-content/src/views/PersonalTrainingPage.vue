@@ -43,7 +43,7 @@
             >
             </AccordionTab>
             <AccordionTab
-              v-if="video.attributes.equipment"
+              v-if="video.attributes.equipment.length > 0"
               class="verdana-16-14"
               title="Equipment Needed"
             >

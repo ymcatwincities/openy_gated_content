@@ -35,8 +35,7 @@ export default {
         peerId = payload.customerPeerId;
       }
 
-      // eslint-disable-next-line no-undef
-      const peer = new Peer(peerId, {
+      const config = {
         debug: 3,
         host: context.getters.getAppSettings.peerjs_domain === ''
           ? undefined
@@ -92,7 +91,25 @@ export default {
             },
           ],
         },
-      });
+      };
+
+      if (context.getters.getAppSettings.peerjs_domain
+        && context.getters.getAppSettings.peerjs_domain.length > 0) {
+        config.host = context.getters.getAppSettings.peerjs_domain;
+      }
+
+      if (context.getters.getAppSettings.peerjs_port
+        && context.getters.getAppSettings.peerjs_port.length > 0) {
+        config.port = context.getters.getAppSettings.peerjs_port;
+      }
+
+      if (context.getters.getAppSettings.peerjs_uri
+        && context.getters.getAppSettings.peerjs_uri.length > 0) {
+        config.path = context.getters.getAppSettings.peerjs_uri;
+      }
+
+      // eslint-disable-next-line no-undef
+      const peer = new Peer(peerId, config);
       context.commit('setPeer', peer);
 
       peer.on('open', (id) => {
