@@ -38,9 +38,15 @@ export default {
       // eslint-disable-next-line no-undef
       const peer = new Peer(peerId, {
         debug: 3,
-        host: context.getters.getAppSettings.peerjs_domain,
-        port: context.getters.getAppSettings.peerjs_port,
-        path: context.getters.getAppSettings.peerjs_uri,
+        host: context.getters.getAppSettings.peerjs_domain === ''
+          ? undefined
+          : context.getters.getAppSettings.peerjs_domain,
+        port: context.getters.getAppSettings.peerjs_port === ''
+          ? undefined
+          : context.getters.getAppSettings.peerjs_port,
+        path: context.getters.getAppSettings.peerjs_uri === ''
+          ? undefined
+          : context.getters.getAppSettings.peerjs_uri,
         secure: true,
         config: {
           iceServers: [
