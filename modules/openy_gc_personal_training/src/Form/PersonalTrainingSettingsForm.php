@@ -69,21 +69,21 @@ class PersonalTrainingSettingsForm extends ConfigFormBase {
       '#title' => $this->t('PeerJS Domain'),
       '#default_value' => $config->get('peerjs_domain'),
 
-      '#required' => TRUE,
+      '#required' => FALSE,
     ];
 
     $form['peerjs_port'] = [
       '#type' => 'textfield',
       '#title' => $this->t('PeerJS Port'),
       '#default_value' => $config->get('peerjs_port'),
-      '#required' => TRUE,
+      '#required' => FALSE,
     ];
 
     $form['peerjs_uri'] = [
       '#type' => 'textfield',
       '#title' => $this->t('PeerJS Uri'),
       '#default_value' => $config->get('peerjs_uri'),
-      '#required' => TRUE,
+      '#required' => FALSE,
     ];
 
     $form['providers'] = [
