@@ -1,0 +1,52 @@
+.personal-training-page {
+  .modal-view-options {
+    .modal-container {
+      background-color: $black;
+      width:            30vw;
+      color:            $white;
+
+      .modal-header {
+        display:       flex;
+        align-items:   flex-start;
+        border-bottom: $gray;
+        padding:       12px;
+
+        button {
+          margin-left:      auto;
+          outline:          none;
+          border:           none;
+          background-color: transparent;
+          padding:          0 17px;
+          color:            $white;
+          font-size:        18px;
+        }
+      }
+
+      .modal-body {
+        margin:  0;
+        padding: 0;
+
+        > div {
+          display:       flex;
+          align-items:   center;
+          border-bottom: $gray;
+          padding:       15px 12px;
+          cursor: pointer;
+
+          .svg-container {
+            padding-right: 15px;
+            font-size:     18px;
+          }
+
+          &:hover, &.selected {
+            background-color: $thunder;
+          }
+        }
+      }
+
+      .modal-footer {
+        display: none;
+      }
+    }
+  }
+}

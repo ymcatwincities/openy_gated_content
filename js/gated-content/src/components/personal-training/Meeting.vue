@@ -1,17 +1,16 @@
 <template>
-  <div class="personal-training-meeting gated-containerV2 pt-40-20 px--20-10 text-black">
-    <template
-      v-if="isJoinedVideoSession"
-    >
-      <Chat></Chat>
-      <LeaveMeeting></LeaveMeeting>
-      <ViewOptions></ViewOptions>
-      <MeetingPlayer></MeetingPlayer>
-      <ControlPanel></ControlPanel>
-    </template>
-    <JoinMeeting
-      v-else
-    ></JoinMeeting>
+  <JoinMeeting
+    v-if="!isJoinedVideoSession"
+  ></JoinMeeting>
+  <div
+    v-else
+    class="personal-training-meeting"
+  >
+    <Chat></Chat>
+    <LeaveMeeting></LeaveMeeting>
+    <ViewOptions></ViewOptions>
+    <MeetingPlayer></MeetingPlayer>
+    <ControlPanel></ControlPanel>
   </div>
 </template>
 
@@ -32,6 +31,15 @@ export default {
     ...mapGetters([
       'isJoinedVideoSession',
     ]),
+  },
+  watch: {
+    isJoinedVideoSession(newVal) {
+      if (newVal === true) {
+        document.querySelector('html').style.overflow = 'hidden';
+      } else {
+        document.querySelector('html').style.overflow = 'scroll';
+      }
+    },
   },
 };
 </script>

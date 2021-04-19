@@ -20,6 +20,7 @@
 @import "widgets/button";
 @import "widgets/timer";
 @import "widgets/adjust-button";
+@import "widgets/accordion-tab";
 @import "components/pagination";
 @import "components/svg-icon";
 @import "components/top-menu";
@@ -34,10 +35,12 @@
 @import "components/adjust-modal";
 @import "components/spinner";
 @import "components/paragraph-headline";
-@import "components/personal-training/join-meeting";
-@import "components/personal-training/meeting-player";
-@import "components/personal-training/control-panel";
+@import "components/personal-training/meeting";
+@import "components/personal-training/meeting/join-meeting";
+@import "components/personal-training/meeting/meeting-player";
+@import "components/personal-training/meeting/control-panel";
 @import "components/personal-training/modal/join-options";
+@import "components/personal-training/modal/view-options";
 @import "components/personal-training/modal/leave-meeting";
 @import "views/favorites_page";
 @import "views/video-page";

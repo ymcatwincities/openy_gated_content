@@ -33,24 +33,28 @@
               <SvgIcon icon="instructor-icon" class="fill-gray" :growByHeight=false></SvgIcon>
               {{ instructor }}
             </div>
-            <div
-              v-if="video.attributes.equipment.length > 0"
-              class="video-footer__block">
-              <SvgIcon icon="cubes-solid" :growByHeight=false></SvgIcon>
-              Equipment:
-            </div>
-            <ul class="video-footer__equipment">
-              <li v-for="equip in video.attributes.equipment"
-                  :key="equip.drupal_internal__tid">
-                {{ equip.name }}
-              </li>
-            </ul>
           </div>
-          <div
-            v-if="descriptionProcessed"
-            class="verdana-16-14"
-            v-html="descriptionProcessed"
-          ></div>
+          <div class="verdana-16-14">
+            <AccordionTab
+              v-if="descriptionProcessed"
+              class="verdana-16-14"
+              title="Description"
+              :content="descriptionProcessed"
+            >
+            </AccordionTab>
+            <AccordionTab
+              v-if="video.attributes.equipment.length > 0"
+              class="verdana-16-14"
+              title="Equipment Needed"
+            >
+              <ul class="video-footer__equipment">
+                <li v-for="equip in video.attributes.equipment"
+                    :key="equip.drupal_internal__tid">
+                  {{ equip.name }}
+                </li>
+              </ul>
+            </AccordionTab>
+          </div>
         </div>
       </div>
     </template>
@@ -65,11 +69,13 @@ import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
 import SvgIcon from '@/components/SvgIcon.vue';
 import Meeting from '@/components/personal-training/Meeting.vue';
 import dayjs from 'dayjs';
+import AccordionTab from '@/components/AccordionTab.vue';
 
 export default {
   name: 'PersonalTrainingPage',
   mixins: [JsonApiCombineMixin],
   components: {
+    AccordionTab,
     Meeting,
     SvgIcon,
     AddToFavorite,

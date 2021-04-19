@@ -2,21 +2,21 @@ export default {
   state: {
     micEnabled: true,
     cameraEnabled: true,
-    view: 'horizontal',
+    view: 'view-inset',
     fullScreenMode: false,
   },
   actions: {
     setHorizontalView(context) {
       context.commit('showViewOptionsModal', false);
-      context.commit('setView', 'horizontal');
+      context.commit('setView', 'view-horizontal');
     },
     setVerticalView(context) {
       context.commit('showViewOptionsModal', false);
-      context.commit('setView', 'vertical');
+      context.commit('setView', 'view-vertical');
     },
     setInsetView(context) {
       context.commit('showViewOptionsModal', false);
-      context.commit('setView', 'inset');
+      context.commit('setView', 'view-inset');
     },
     toggleMicEnabled(context) {
       context.commit('setMicEnabled', !context.state.micEnabled);
@@ -29,6 +29,7 @@ export default {
     },
     toggleCameraEnabled(context) {
       context.commit('setCameraEnabled', !context.state.cameraEnabled);
+      context.dispatch('sendVideoStateEvent', context.state.cameraEnabled);
       if (context.getters.localMediaStream) {
         context.getters.localMediaStream.getVideoTracks().forEach((t) => {
           // eslint-disable-next-line no-param-reassign
@@ -37,7 +38,16 @@ export default {
       }
     },
     toggleFullScreenMode(context) {
-      context.commit('toggleFullScreenMode', !context.state.fullScreenMode);
+      if (document.fullscreenElement) {
+        document.exitFullscreen()
+          .then(() => context.commit('setFullScreenMode', false))
+          .catch((err) => console.error(err));
+      } else {
+        const elem = document.querySelector('.personal-training-meeting');
+        elem.requestFullscreen()
+          .then(() => context.commit('setFullScreenMode', true))
+          .catch((err) => console.error(err));
+      }
     },
   },
   mutations: {
@@ -58,5 +68,6 @@ export default {
     view: (state) => state.view,
     isMicEnabled: (state) => state.micEnabled,
     isCameraEnabled: (state) => state.cameraEnabled,
+    isFullScreen: (state) => state.fullScreenMode,
   },
 };

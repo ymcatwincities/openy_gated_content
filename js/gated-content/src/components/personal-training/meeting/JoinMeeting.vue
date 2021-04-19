@@ -1,12 +1,13 @@
 <template>
   <div
-    class="join-meeting"
+    class="join-meeting gated-containerV2 pt-40-20 px--20-10 text-black"
     :class="{complete: isMeetingComplete}"
   >
     <JoinOptions></JoinOptions>
-    <template v-if="isMeetingComplete">
-      <div class="message cachet-book-24-20">Meeting Complete</div>
-    </template>
+    <div
+      v-if="isMeetingComplete"
+      class="message cachet-book-24-20"
+    >Meeting Complete</div>
     <button
       v-else
       class="indigo-button cachet-book-30-24 text-white px-36-24"

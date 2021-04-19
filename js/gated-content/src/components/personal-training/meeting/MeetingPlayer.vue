@@ -1,19 +1,22 @@
 <template>
   <div class="meeting-player" :class="view">
-    <div class="customer">
-      <video
-        v-if="customerMediaStream"
-        :srcObject.prop="customerMediaStream"
-        autoplay="autoplay"
-      ></video>
-    </div>
-    <div class="instructor">
-      <video
-        v-if="instructorMediaStream"
-        :srcObject.prop="instructorMediaStream"
-        autoplay="autoplay"
-      ></video>
-    </div>
+    <video
+      class="partner"
+      :srcObject.prop="partnerMediaStream && remoteVideoState ? partnerMediaStream : ''"
+      autoplay="autoplay"
+      :class="{
+        connected: partnerMediaStream,
+        'video-disabled': !remoteVideoState,
+      }"
+    ></video>
+    <video
+      class="local"
+      :class="{connected: localMediaStream ? 'connected' : ''}"
+      :srcObject.prop="localMediaStream ? localMediaStream : null"
+      autoplay="autoplay"
+      muted="muted"
+      :volume.prop="0"
+    ></video>
   </div>
 </template>
 
@@ -21,11 +24,24 @@
 import { mapGetters } from 'vuex';
 
 export default {
+  // data() {
+  //   return {
+  //     partnerVideoStyle: {
+  //       width: undefined,
+  //       background: this.partnerMediaStream ? 'black' : undefined,
+  //     },
+  //   };
+  // },
+  // updated() {
+  //   // this.partnerVideoStyle.width = this.$el.querySelector('.partner')
+  //   .clientHeight * 1.777777778;
+  // },
   computed: {
     ...mapGetters([
       'view',
-      'instructorMediaStream',
-      'customerMediaStream',
+      'localMediaStream',
+      'partnerMediaStream',
+      'remoteVideoState',
     ]),
   },
 };

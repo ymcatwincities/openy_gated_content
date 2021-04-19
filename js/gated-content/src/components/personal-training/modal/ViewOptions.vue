@@ -4,25 +4,28 @@
     :class="{'d-none': !isShowViewOptionsModal}"
     @close="toggleViewOptionsModal"
   >
-    <template #header>View Options</template>
+    <template #header><div class="cachet-book-18">View Options</div></template>
     <template #body>
-      <div
-        @click="setHorizontalView"
-      >
-        <SvgIcon icon="sliders-h-solid"></SvgIcon>
-        horizontal
-      </div>
-      <div
-        @click="setVerticalView"
-      >
-        <SvgIcon icon="sliders-h-solid"></SvgIcon>
-        vertical
-      </div>
-      <div
+      <div class="verdana-14-12"
+        :class="{selected: view === 'view-inset'}"
         @click="setInsetView"
       >
-        <SvgIcon icon="sliders-h-solid"></SvgIcon>
-        inset
+        <SvgIcon icon="view-inset" class="fill-white"></SvgIcon>
+        Inset View
+      </div>
+      <div class="verdana-14-12"
+        :class="{selected: view === 'view-vertical'}"
+        @click="setVerticalView"
+      >
+        <SvgIcon icon="view-vertical" class="fill-white"></SvgIcon>
+        Vertical Split View
+      </div>
+      <div class="verdana-14-12"
+        :class="{selected: view === 'view-horizontal'}"
+        @click="setHorizontalView"
+      >
+        <SvgIcon icon="view-horizontal" class="fill-white"></SvgIcon>
+        Horizontal Split View
       </div>
     </template>
   </Modal>
@@ -38,6 +41,7 @@ export default {
   computed: {
     ...mapGetters([
       'isShowViewOptionsModal',
+      'view',
     ]),
   },
   methods: {

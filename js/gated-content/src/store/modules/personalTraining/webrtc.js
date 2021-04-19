@@ -1,4 +1,5 @@
 import client from '@/client';
+import personalTrainingWebRtcEvents from '@/store/modules/personalTraining/webrtc/events';
 
 export default {
   state: {
@@ -35,58 +36,38 @@ export default {
         peerId = payload.customerPeerId;
       }
 
-      // eslint-disable-next-line no-undef
-      const peer = new Peer(peerId, {
+      const config = {
         debug: 3,
-        host: context.getters.getAppSettings.peerjs_domain,
-        port: context.getters.getAppSettings.peerjs_port,
-        path: context.getters.getAppSettings.peerjs_uri,
         secure: true,
         config: {
           iceServers: [
-            { url: 'stun:stun1.l.google.com:19302' },
-            { url: 'stun:stun2.l.google.com:19302' },
-            { url: 'stun:stun3.l.google.com:19302' },
-            { url: 'stun:stun4.l.google.com:19302' },
-            { url: 'stun:stun.services.mozilla.org' },
-            { url: 'stun:s1.taraba.net' },
-            { url: 'stun:s2.taraba.net' },
-            { url: 'stun:s1.voipstation.jp' },
-            { url: 'stun:s2.voipstation.jp' },
-            { url: 'stun:stun.sipnet.net:3478' },
-            { url: 'stun:stun.sipnet.ru:3478' },
-            { url: 'stun:stun.stunprotocol.org:3478' },
-            { url: 'stun:stun01.sipphone.com' },
-            { url: 'stun:stun.ekiga.net' },
-            { url: 'stun:stun.fwdnet.net' },
-            { url: 'stun:stun.ideasip.com' },
-            { url: 'stun:stun.iptel.org' },
-            { url: 'stun:stun.rixtelecom.se' },
-            { url: 'stun:stun.schlund.de' },
-            { url: 'stun:stunserver.org' },
-            { url: 'stun:stun.softjoys.com' },
-            { url: 'stun:stun.voiparound.com' },
-            { url: 'stun:stun.voipbuster.com' },
-            { url: 'stun:stun.voipstunt.com' },
-            { url: 'stun:stun.voxgratia.org' },
+            { url: 'stun:stun.l.google.com:19302' },
             {
               url: 'turn:192.158.29.39:3478?transport=udp',
               credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
               username: '28224511:1379330808',
             },
-            {
-              url: 'turn:192.158.29.39:3478?transport=tcp',
-              credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
-              username: '28224511:1379330808',
-            },
-            {
-              url: 'turn:numb.viagenie.ca',
-              credential: 'muazkh',
-              username: 'webrtc@live.com',
-            },
           ],
         },
-      });
+      };
+
+      if (context.getters.getAppSettings.peerjs_domain
+        && context.getters.getAppSettings.peerjs_domain.length > 0) {
+        config.host = context.getters.getAppSettings.peerjs_domain;
+      }
+
+      if (context.getters.getAppSettings.peerjs_port
+        && context.getters.getAppSettings.peerjs_port.length > 0) {
+        config.port = context.getters.getAppSettings.peerjs_port;
+      }
+
+      if (context.getters.getAppSettings.peerjs_uri
+        && context.getters.getAppSettings.peerjs_uri.length > 0) {
+        config.path = context.getters.getAppSettings.peerjs_uri;
+      }
+
+      // eslint-disable-next-line no-undef
+      const peer = new Peer(peerId, config);
       context.commit('setPeer', peer);
 
       peer.on('open', (id) => {
@@ -123,7 +104,6 @@ export default {
       });
 
       peer.on('error', (error) => {
-        console.log('peer error', error.type, error);
         if (error.type === 'peer-unavailable') {
           context.dispatch('connectToCustomerPeer');
         }
@@ -136,7 +116,11 @@ export default {
           noiseSuppression: true,
           autoGainControl: false,
         },
-        video: true,
+        video: {
+          width: { min: 640, ideal: 1920, max: 1920 },
+          height: { min: 400, ideal: 1080 },
+          aspectRatio: 1.777777778,
+        },
       })
         .then((mediaStream) => {
           context.dispatch('setLocalMediaStream', mediaStream);
@@ -159,8 +143,19 @@ export default {
         });
         context.dispatch('setLocalMediaStream', null);
       }
+      context.dispatch('closeMediaConnection');
+    },
+    async closeMediaConnection(context) {
+      console.log('closeMediaConnection 1');
+      console.log(context.state.peerMediaConnection);
       if (context.state.peerMediaConnection !== null) {
+        console.log('closeMediaConnection 2');
+        if (context.state.peerMediaConnection.close) {
+          context.state.peerMediaConnection.close();
+        }
+        context.commit('setPeerStreamConnected', false);
         context.commit('setPeerMediaConnection', null);
+        context.dispatch('setPartnerMediaStream', null);
       }
     },
     async publishCustomerPeer(context) {
@@ -203,7 +198,14 @@ export default {
         context.commit('setPeerDataConnection', dataConnection);
       });
       dataConnection.on('data', (data) => {
-        context.dispatch('receiveChatMessage', data);
+        console.log(data);
+        if (data.newMessage) {
+          context.dispatch('receiveChatMessage', data.newMessage);
+        } else if (data.videoStateEvent) {
+          context.dispatch('setRemoteVideoStateEvent', data.videoStateEvent);
+        } else if (data === 'callEndedEvent') {
+          context.dispatch('callEndedEvent');
+        }
       });
       dataConnection.on('close', () => {
         context.commit('setPeerDataConnected', false);
@@ -222,6 +224,7 @@ export default {
         call.answer(context.getters.localMediaStream);
         context.commit('setPeerMediaConnection', call);
         call.on('stream', (stream) => {
+          context.dispatch('sendVideoStateEvent', context.getters.isCameraEnabled);
           context.commit('setPeerStreamConnected', true);
           context.dispatch('setPartnerMediaStream', stream);
         });
@@ -231,12 +234,19 @@ export default {
         });
       });
     },
+    async sendData(context, data) {
+      if (context.getters.peerDataConnection) {
+        context.getters.peerDataConnection.send(data);
+      }
+    },
     async callPartner(context) {
       const call = context.state.peer.call(
         context.getters.partnerPeerId,
         context.getters.localMediaStream,
       );
+      context.commit('setPeerMediaConnection', call);
       call.on('stream', (stream) => {
+        context.dispatch('sendVideoStateEvent', context.getters.isCameraEnabled);
         context.commit('setPeerStreamConnected', true);
         context.dispatch('setPartnerMediaStream', stream);
       });
@@ -310,6 +320,8 @@ export default {
   },
   getters: {
     peer: (state) => state.peer,
+    peerDataConnected: (state) => state.peerDataConnected,
+    peerDataConnection: (state) => state.peerDataConnection,
     partnerPeerId: (state) => (
       state.instructorRole
         ? state.customerPeerId
@@ -322,12 +334,9 @@ export default {
     localMediaStream: (state) => (state.instructorRole
       ? state.instructorMediaStream
       : state.customerMediaStream),
-    partnerMediaStream: (state) => (
-      state.instructorRole
-        ? state.customerMediaStream
-        : state.instructorMediaStream),
-    customerMediaStream: (state) => state.customerMediaStream,
-    instructorMediaStream: (state) => state.instructorMediaStream,
+    partnerMediaStream: (state) => (state.instructorRole
+      ? state.customerMediaStream
+      : state.instructorMediaStream),
     isInstructorRole: (state) => state.instructorRole,
     localName: (state) => (state.instructorRole
       ? state.instructorName
@@ -336,5 +345,8 @@ export default {
       state.instructorRole
         ? state.customerName
         : state.instructorName),
+  },
+  modules: {
+    personalTrainingWebRtcEvents,
   },
 };

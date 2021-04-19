@@ -9,23 +9,25 @@ export default {
     videoSessionStatus: false,
     personalTrainingId: null,
     personalTrainingDate: null,
-
   },
   actions: {
     joinVideoSession(context) {
       context.commit('showJoinOptionsModal', false);
       context.commit('setVideoSessionStatus', true);
       context.dispatch('subscribeToACall');
-      if (context.state.peerDataConnected) {
+      if (context.getters.peerDataConnected) {
         context.dispatch('callPartner');
       }
     },
     leaveVideoSession(context) {
       context.commit('showLeaveMeetingModal', false);
       context.commit('setVideoSessionStatus', false);
-      context.dispatch('closeMediaStream');
-      context.commit('setMicEnabled', true);
-      context.commit('setCameraEnabled', true);
+      context.dispatch('closeMediaStream').then(() => {
+        context.dispatch('sendCallEndedEvent');
+        context.dispatch('sendVideoStateEvent', true);
+        context.commit('setMicEnabled', true);
+        context.commit('setCameraEnabled', true);
+      });
     },
   },
   mutations: {
