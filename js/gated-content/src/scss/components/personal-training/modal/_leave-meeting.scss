@@ -1,6 +1,8 @@
 .personal-training-page {
   .modal-leave-meeting {
     .modal-container {
+      @include median(width, 400px, null, 300px);
+
       .modal-header {
         border-bottom:  none;
         padding:        14px 15px 14px 24px;

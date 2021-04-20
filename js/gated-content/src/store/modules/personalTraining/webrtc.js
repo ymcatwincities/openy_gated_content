@@ -146,10 +146,7 @@ export default {
       context.dispatch('closeMediaConnection');
     },
     async closeMediaConnection(context) {
-      console.log('closeMediaConnection 1');
-      console.log(context.state.peerMediaConnection);
       if (context.state.peerMediaConnection !== null) {
-        console.log('closeMediaConnection 2');
         if (context.state.peerMediaConnection.close) {
           context.state.peerMediaConnection.close();
         }
@@ -198,7 +195,6 @@ export default {
         context.commit('setPeerDataConnection', dataConnection);
       });
       dataConnection.on('data', (data) => {
-        console.log(data);
         if (data.newMessage) {
           context.dispatch('receiveChatMessage', data.newMessage);
         } else if (data.videoStateEvent) {

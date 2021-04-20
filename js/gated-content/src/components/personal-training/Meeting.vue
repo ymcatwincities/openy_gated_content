@@ -4,13 +4,16 @@
   ></JoinMeeting>
   <div
     v-else
-    class="personal-training-meeting"
   >
     <Chat></Chat>
     <LeaveMeeting></LeaveMeeting>
     <ViewOptions></ViewOptions>
-    <MeetingPlayer></MeetingPlayer>
-    <ControlPanel></ControlPanel>
+    <div
+      class="personal-training-meeting"
+    >
+      <MeetingPlayer></MeetingPlayer>
+      <ControlPanel></ControlPanel>
+    </div>
   </div>
 </template>
 

@@ -4,6 +4,12 @@
     :class="{'d-none': !isShowJoinOptionsModal}"
   >
     <template #body>
+      <div class="header cachet-book-18">
+        Join Options
+        <button @click="toggleShowJoinOptionsModal">
+          &times;
+        </button>
+      </div>
       <div class="video"
         :style="{background: localMediaStream && isCameraEnabled ? 'none':''}"
       >
@@ -14,12 +20,6 @@
           autoplay="autoplay"
           muted="muted"
         ></video>
-      </div>
-      <div class="header cachet-book-18">
-        Join Options
-        <button @click="toggleShowJoinOptionsModal">
-          &times;
-        </button>
       </div>
       <div class="controls">
         <div class="mic"
@@ -49,7 +49,7 @@
           <span>Video Camera</span>
         </div>
       </div>
-      <div>
+      <div class="join">
         <div
           class="indigo-button cachet-book-20 text-white"
           @click="joinVideoSession"
