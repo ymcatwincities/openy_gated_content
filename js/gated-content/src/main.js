@@ -10,12 +10,13 @@ import router from './router';
 import store from './store';
 import filters from './filters';
 import Log from './plugins/log';
+import DayjsHelper from './plugins/DayjsHelper';
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
 Vue.use(VueCookies);
-
 Vue.use(Log);
+Vue.use(DayjsHelper);
 
 Vue.config.productionTip = false;
 
