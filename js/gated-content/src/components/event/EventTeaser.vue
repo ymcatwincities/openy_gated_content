@@ -66,20 +66,21 @@ export default {
   },
   computed: {
     date() {
-      return dayjs(this.video.attributes.date.value).format('YYYY-MM-DD');
+      return this.$dayjs.date(this.video.attributes.date.value).format('YYYY-MM-DD');
     },
     time() {
-      return dayjs(this.video.attributes.date.value).format('h:mm a');
+      return this.$dayjs.date(this.video.attributes.date.value).format('h:mm a');
     },
     duration() {
       const min = Math.floor(dayjs.duration(
-        dayjs(this.video.attributes.date.end_value) - dayjs(this.video.attributes.date.value),
+        this.$dayjs.date(this.video.attributes.date.end_value)
+        - this.$dayjs.date(this.video.attributes.date.value),
       ).asMinutes());
 
       return `${min} ${this.$options.filters.simplePluralize('minute', min)}`;
     },
     startsIn() {
-      const eventStartDate = dayjs(this.video.attributes.date.value);
+      const eventStartDate = this.$dayjs.date(this.video.attributes.date.value);
       const startsDuration = dayjs.duration(eventStartDate - dayjs());
 
       if (startsDuration.asHours() >= 48) {

@@ -152,7 +152,8 @@ function openy_gc_auth_custom_update_8008(&$sandbox) {
  * Add SkipRowIfEmailExcluded migrate process plugin to csv migration.
  */
 function openy_gc_auth_custom_update_8009(&$sandbox) {
-  $config_dir = drupal_get_path('module', 'openy_gc_auth_custom') . '/config/';
+  $config_dir = drupal_get_path('module', 'openy_gc_auth_custom');
+  $config_dir .= '/config/install/';
   // Update multiple configurations.
   $configs = [
     'openy_gc_auth.provider.custom' => [

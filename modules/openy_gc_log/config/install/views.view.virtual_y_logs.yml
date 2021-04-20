@@ -140,7 +140,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          label: Created
+          label: Date
           exclude: false
           alter:
             alter_text: false
@@ -272,7 +272,7 @@ display:
           relationship: uid
           group_type: group
           admin_label: ''
-          label: 'User Name'
+          label: Member
           exclude: false
           alter:
             alter_text: false
@@ -340,8 +340,8 @@ display:
           label: 'Event Type'
           exclude: false
           alter:
-            alter_text: false
-            text: ''
+            alter_text: true
+            text: "{% if event_type__value == 'userLoggedIn' %}\r\n  Member logged in\r\n{% elseif event_type__value == 'entityView' %}\r\n  Viewed content\r\n{% elseif event_type__value == 'videoPlaybackStarted' %}\r\n  Video started\r\n{% elseif event_type__value == 'videoPlaybackEnded' %}\r\n  Video end reached\r\n{% elseif event_type__value == 'userActivity' %}\r\n  Member activity detected\r\n{% else %}\r\n  {{ event_type__value }}\r\n{% endif %}"
             make_link: false
             path: ''
             absolute: false
@@ -402,11 +402,11 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          label: 'Entity Type'
+          label: 'Content Type'
           exclude: false
           alter:
-            alter_text: false
-            text: ''
+            alter_text: true
+            text: '{{ entity_type__value == ''node'' ? ''Ondemand'' : ''Live event'' }}'
             make_link: false
             path: ''
             absolute: false
@@ -467,11 +467,11 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          label: Bundle
+          label: 'Content Class'
           exclude: false
           alter:
-            alter_text: false
-            text: ''
+            alter_text: true
+            text: '{{ entity_bundle__value == ''gc_video'' ? ''vy_video'' : entity_bundle__value }}'
             make_link: false
             path: ''
             absolute: false
@@ -532,8 +532,8 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          label: 'Entity Id'
-          exclude: true
+          label: 'Content Drupal ID'
+          exclude: false
           alter:
             alter_text: false
             text: ''
@@ -724,7 +724,7 @@ display:
           exposed: true
           expose:
             operator_id: created_op
-            label: 'Date Start'
+            label: 'Date From'
             description: 'Format: YYYY-MM-DD HH:MM:SS'
             use_operator: false
             operator: created_op
@@ -901,23 +901,23 @@ display:
             default_group_multiple: {  }
             group_items:
               1:
-                title: userLoggedIn
+                title: 'Member logged in'
                 operator: contains
                 value: userLoggedIn
               2:
-                title: entityView
+                title: 'Viewed content'
                 operator: contains
                 value: entityView
               3:
-                title: videoPlaybackStarted
+                title: 'Video started'
                 operator: contains
                 value: videoPlaybackStarted
               4:
-                title: videoPlaybackEnded
+                title: 'Video end reached'
                 operator: contains
                 value: videoPlaybackEnded
               5:
-                title: userActivity
+                title: 'Member activity detected'
                 operator: contains
                 value: userActivity
           entity_type: log_entity
@@ -955,7 +955,7 @@ display:
             placeholder: ''
           is_grouped: true
           group_info:
-            label: 'Entity Type'
+            label: 'Content Type'
             description: ''
             identifier: entity_type
             optional: true
@@ -966,11 +966,11 @@ display:
             default_group_multiple: {  }
             group_items:
               1:
-                title: Video/Blog
+                title: Ondemand
                 operator: contains
                 value: node
               2:
-                title: 'Videoconference/Online Translation'
+                title: 'Live event'
                 operator: contains
                 value: series
               3:
@@ -1012,7 +1012,7 @@ display:
             placeholder: ''
           is_grouped: true
           group_info:
-            label: Bundle
+            label: 'Content Class'
             description: ''
             identifier: entity_bundle
             optional: true
@@ -1244,7 +1244,7 @@ display:
           relationship: uid
           group_type: group
           admin_label: ''
-          label: 'User Name'
+          label: Member
           exclude: false
           alter:
             alter_text: false
@@ -1517,7 +1517,7 @@ display:
           exposed: true
           expose:
             operator_id: uid_op
-            label: 'User Name'
+            label: Member
             description: ''
             use_operator: false
             operator: uid_op
