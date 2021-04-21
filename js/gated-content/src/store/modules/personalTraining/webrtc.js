@@ -43,9 +43,9 @@ export default {
           iceServers: [
             { url: 'stun:stun.l.google.com:19302' },
             {
-              url: 'turn:numb.viagenie.ca',
-              credential: 'muazkh',
-              username: 'webrtc@live.com',
+              url: 'turn:coturn.demo.ixm.ca',
+              username: 'user',
+              credential: 'password',
             },
           ],
         },
