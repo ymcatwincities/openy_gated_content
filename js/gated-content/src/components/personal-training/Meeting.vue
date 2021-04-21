@@ -3,6 +3,7 @@
     v-if="!isJoinedVideoSession"
   ></JoinMeeting>
   <div
+    class="personal-training-full-screen"
     v-else
   >
     <Chat></Chat>
