@@ -156,10 +156,12 @@ class Logger {
           $metadata['entity_instructor_name'] = $entity->get('field_gc_video_instructor')->value;
         }
         break;
+
       case 'eventinstance':
         $metadata['entity_title'] = $entity->get('field_ls_title')->value ?: $entity->get('title')->value;
         $metadata['entity_instructor_name'] = $entity->get('field_ls_host_name')->value ?: $entity->get('host_name')->value;
         break;
+
       case 'personal_training':
         $metadata['entity_title'] = $entity->get('title')->value;
         $instructor = $entity->get('instructor_id')->entity;
