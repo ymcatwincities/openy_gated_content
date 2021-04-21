@@ -31,7 +31,6 @@
 <script>
 import Modal from '@/components/modal/Modal.vue';
 import { mapGetters, mapActions } from 'vuex';
-import dayjs from 'dayjs';
 
 export default {
   components: { Modal },
@@ -56,7 +55,7 @@ export default {
       this.sendChatMessage(message);
     },
     formatDate(date) {
-      return dayjs(date).format('ddd, MMM D, YYYY @ h:mm a');
+      return this.$dayjs.date(date).format('ddd, MMM D, YYYY @ h:mm a');
     },
   },
 };

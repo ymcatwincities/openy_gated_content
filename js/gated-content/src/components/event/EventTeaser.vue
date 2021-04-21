@@ -50,7 +50,6 @@
 <script>
 import AddToFavorite from '@/components/AddToFavorite.vue';
 import SvgIcon from '@/components/SvgIcon.vue';
-import dayjs from 'dayjs';
 import { EventMixin } from '@/mixins/EventMixin';
 
 export default {

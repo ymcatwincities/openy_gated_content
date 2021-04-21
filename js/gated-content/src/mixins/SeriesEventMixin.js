@@ -1,4 +1,10 @@
 export const SeriesEventMixin = {
+  watch: {
+    $route: 'load',
+  },
+  async mounted() {
+    await this.load();
+  },
   computed: {
     // This values most of all from parent (series), but can be overridden by item,
     // so ve need to check this here and use correct value.

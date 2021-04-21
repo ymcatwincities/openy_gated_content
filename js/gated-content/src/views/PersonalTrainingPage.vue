@@ -165,7 +165,7 @@ export default {
             customerName: this.video.attributes.customer_id.display_name,
             customerPeerId: this.video.attributes.customer_peer_id,
             personalTrainingId: this.video.attributes.drupal_internal__id,
-            personalTrainingDate: this.video.attributes.date.end_value,
+            personalTrainingDate: this.$dayjs.date(this.video.attributes.date.end_value),
           });
         })
         .catch((error) => {

@@ -1,12 +1,6 @@
 import dayjs from 'dayjs';
 
 export const EventMixin = {
-  watch: {
-    $route: 'load',
-  },
-  async mounted() {
-    await this.load();
-  },
   computed: {
     pageUrl() {
       return window.location.href;
