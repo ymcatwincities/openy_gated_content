@@ -13,8 +13,8 @@
       .modal-body {
         display:               grid;
         margin:                0;
-
         padding:               0;
+        overflow-y:            initial;
         grid-template-columns: 1fr 1fr;
 
         @include median(grid-template-columns, 1fr 1fr, 1fr);

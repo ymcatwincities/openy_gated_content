@@ -2,8 +2,9 @@
   .modal-view-options {
     .modal-container {
       background-color: $black;
-      width:            30vw;
       color:            $white;
+
+      @include median(width, 30vw, 60vw);
 
       .modal-header {
         display:       flex;
@@ -23,15 +24,16 @@
       }
 
       .modal-body {
-        margin:  0;
-        padding: 0;
+        margin:     0;
+        padding:    0;
+        overflow-y: initial;
 
         > div {
           display:       flex;
           align-items:   center;
           border-bottom: $gray;
+          cursor:        pointer;
           padding:       15px 12px;
-          cursor: pointer;
 
           .svg-container {
             padding-right: 15px;

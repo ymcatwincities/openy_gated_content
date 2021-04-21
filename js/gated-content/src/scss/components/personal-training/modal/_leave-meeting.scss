@@ -22,8 +22,9 @@
       }
 
       .modal-body {
-        margin:      0;
-        padding:     17px 24px 24px;
+        margin:     0;
+        padding:    17px 24px 24px;
+        overflow-y: initial;
 
         .button {
           float:            left;
