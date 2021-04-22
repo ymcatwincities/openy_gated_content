@@ -40,6 +40,9 @@ function _openy_gc_log_check_files_route() {
   }
 }
 
+/**
+ * Update logs view.
+ */
 function openy_gc_log_update_8002() {
   $config_dir = drupal_get_path('module', 'openy_gc_log');
   $config_dir .= '/config/install/';
@@ -50,6 +53,9 @@ function openy_gc_log_update_8002() {
   ]);
 }
 
+/**
+ * Update entity and logs view.
+ */
 function openy_gc_log_update_8003() {
   // Update entity to add the uid field.
   $entity_type = 'log_entity';
@@ -72,6 +78,9 @@ function openy_gc_log_update_8003() {
   ]);
 }
 
+/**
+ * Update logs view.
+ */
 function openy_gc_log_update_8004() {
   // Update the logs view.
   $config_dir = drupal_get_path('module', 'openy_gc_log');
@@ -83,6 +92,9 @@ function openy_gc_log_update_8004() {
   ]);
 }
 
+/**
+ * Update logs view.
+ */
 function openy_gc_log_update_8005() {
   // Update the logs view.
   $config_dir = drupal_get_path('module', 'openy_gc_log');
@@ -94,6 +106,9 @@ function openy_gc_log_update_8005() {
   ]);
 }
 
+/**
+ * Import configs and update entity.
+ */
 function openy_gc_log_update_8006() {
   $config_dir = drupal_get_path('module', 'openy_gc_log');
   $config_dir .= '/config/install/';
@@ -117,6 +132,9 @@ function openy_gc_log_update_8006() {
   );
 }
 
+/**
+ * Update Log entity to add the event_metadata field.
+ */
 function openy_gc_log_update_8007() {
   $entity_type = 'log_entity';
   $field_name = 'event_metadata';
@@ -130,6 +148,9 @@ function openy_gc_log_update_8007() {
   );
 }
 
+/**
+ * Import logs view config.
+ */
 function openy_gc_log_update_8008() {
   $config_dir = drupal_get_path('module', 'openy_gc_log');
   $config_dir .= '/config/install/';
@@ -140,6 +161,9 @@ function openy_gc_log_update_8008() {
   ]);
 }
 
+/**
+ * Import activity logs view config.
+ */
 function openy_gc_log_update_8009() {
   $config_dir = drupal_get_path('module', 'openy_gc_log');
   $config_dir .= '/config/install/';
@@ -150,6 +174,9 @@ function openy_gc_log_update_8009() {
   ]);
 }
 
+/**
+ * Import updated logs view config.
+ */
 function openy_gc_log_update_8010() {
   $config_dir = drupal_get_path('module', 'openy_gc_log');
   $config_dir .= '/config/install/';
@@ -160,6 +187,9 @@ function openy_gc_log_update_8010() {
   ]);
 }
 
+/**
+ * Import updated logs view config.
+ */
 function openy_gc_log_update_8011() {
   $config_dir = drupal_get_path('module', 'openy_gc_log');
   $config_dir .= '/config/install/';
