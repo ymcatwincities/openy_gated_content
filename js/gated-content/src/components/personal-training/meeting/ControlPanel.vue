@@ -28,7 +28,7 @@
       <SvgIcon icon="cancel_black_24dp" class="fill-white bg-red"></SvgIcon>
       <span>Leave</span>
     </div>
-    <div class="chat ml-auto"
+    <div class="chat"
          @click="toggleShowChatModal"
     >
       <SvgIcon icon="question_answer_black_24dp" class="fill-white"></SvgIcon>

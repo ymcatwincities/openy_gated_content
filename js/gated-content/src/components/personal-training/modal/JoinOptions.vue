@@ -1,7 +1,7 @@
 <template>
   <Modal
     class="modal-join-options"
-    :class="{'d-none': !isShowJoinOptionsModal}"
+    :style="{'display': isShowJoinOptionsModal ? 'table' : 'none'}"
   >
     <template #body>
       <div class="header cachet-book-18">

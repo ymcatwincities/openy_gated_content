@@ -13,6 +13,10 @@
       @include median(display, block, none);
     }
 
+    .chat {
+      margin-left: auto;
+    }
+
     > div {
       display:        flex;
       flex-direction: column;
