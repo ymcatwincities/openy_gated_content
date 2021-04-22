@@ -43,6 +43,44 @@ class PersonalTrainingForm extends ContentEntityForm {
       ],
     ];
 
+    $groups = [
+      'info' => [
+        'title' => $this->t('Meeting info'),
+        'open' => TRUE,
+        'subitems' => [
+          'title',
+          'customer_id',
+          'instructor_id',
+          'training_type',
+          'remote_link',
+          'date',
+          'description',
+          'pt_equipment',
+        ],
+      ],
+      'metadata' => [
+        'title' => $this->t('Personal Training Metadata'),
+        'open' => FALSE,
+        'subitems' => [
+          'customer_metadata',
+          'instructor_metadata',
+          'customer_peer_id',
+        ],
+      ],
+    ];
+
+    foreach ($groups as $name => $group_info) {
+      $form[$name] = [
+        '#type' => 'details',
+        '#open' => $group_info['open'],
+        '#title' => $group_info['title'],
+      ];
+      foreach ($group_info['subitems'] as $subitem) {
+        $form[$name][$subitem] = $form[$subitem];
+        unset($form[$subitem]);
+      }
+    }
+
     return $form;
   }
 
@@ -66,7 +104,7 @@ class PersonalTrainingForm extends ContentEntityForm {
           '%label' => $entity->label(),
         ]));
     }
-    $form_state->setRedirect('entity.personal_training.canonical', ['personal_training' => $entity->id()]);
+    $form_state->setRedirect('entity.personal_training.collection');
   }
 
 }
