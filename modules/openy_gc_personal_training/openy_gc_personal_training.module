@@ -5,6 +5,10 @@
  * Contains openy_gc_personal_training.module.
  */
 
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Session\AccountInterface;
+
 /**
  * Implements hook_theme().
  */
@@ -56,4 +60,16 @@ function openy_gc_personal_training_virtual_y_app_settings_alter(&$config) {
   $config['peerjs_port'] = $moduleConfig->get('peerjs_port');
   $config['peerjs_uri'] = $moduleConfig->get('peerjs_uri');
 
+}
+
+/**
+ * Implements hook_jsonapi_entity_filter_access().
+ */
+function openy_gc_personal_training_jsonapi_entity_filter_access(EntityTypeInterface $entity_type, AccountInterface $account) {
+  if (!in_array($entity_type->id(), ['user', 'personal_training'])) {
+    return [];
+  }
+  return ([
+    JSONAPI_FILTER_AMONG_ALL => AccessResult::allowedIfHasPermission($account, 'view personal training entities'),
+  ]);
 }
