@@ -4,17 +4,27 @@
     :class="{'d-none': !isShowChatModal}"
     @close="toggleShowChatModal"
   >
-    <template #header>Chat</template>
+    <template #header><span>Chat</span></template>
     <template #body>
       <div
-        v-for="msg in chatSession"
-        :key="msg.message"
+        v-for="(msg, index) in chatSession"
+        :key="index"
+        class="message"
+        :class="{'d-right': msg.author === localName, 'd-left': msg.author !== localName}"
       >
-        <div>{{ msg.author }}</div>
-        <div>{{ formatDate(msg.date) }}</div>
-        <div>{{ msg.message }}</div>
+        <div class="user-icon">
+          <span>{{ getMsgAuthor(msg.author, true) }}</span>
+        </div>
+        <div class="message-card">
+          <div class="message-header">
+            <h4 class="message-author mb-0">{{ getMsgAuthor(msg.author) }}</h4>
+            <div class="message-time">{{ formatDate(msg.date) }}</div>
+          </div>
+          <div class="message-body">{{ msg.message }}</div>
+        </div>
       </div>
-
+    </template>
+    <template #footer>
       <input
         type="text"
         placeholder="Message"
@@ -23,18 +33,22 @@
       />
       <button
         @click="messageEnterEvent(newMessage)"
-      >Send message</button>
+        :disabled="newMessage.length === 0"
+      >
+        <SendIcon :color="'white'"></SendIcon>
+      </button>
     </template>
   </Modal>
 </template>
 
 <script>
 import Modal from '@/components/modal/Modal.vue';
+import SendIcon from '@/components/svg/SendIcon.vue';
 import { mapGetters, mapActions } from 'vuex';
 import dayjs from 'dayjs';
 
 export default {
-  components: { Modal },
+  components: { Modal, SendIcon },
   data() {
     return {
       newMessage: '',
@@ -44,7 +58,14 @@ export default {
     ...mapGetters([
       'isShowChatModal',
       'chatSession',
+      'unreadMessagesCount',
+      'localName',
+      'isInstructorRole',
+      'getAppSettings',
     ]),
+  },
+  watch: {
+    unreadMessagesCount: 'beep',
   },
   methods: {
     ...mapActions([
@@ -57,6 +78,22 @@ export default {
     },
     formatDate(date) {
       return dayjs(date).format('ddd, MMM D, YYYY @ h:mm a');
+    },
+    getMsgAuthor(author, short = false) {
+      if (author === this.localName) {
+        return 'Me';
+      }
+      if (short) {
+        return this.isInstructorRole ? 'C' : 'I';
+      }
+      // If current user instructor, his interlocutor - customer.
+      return this.isInstructorRole ? 'Client' : 'Instructor';
+    },
+    beep() {
+      if (this.unreadMessagesCount !== 0 && this.getAppSettings.newMessageSound) {
+        const snd = new Audio(this.getAppSettings.newMessageSound);
+        snd.play();
+      }
     },
   },
 };
