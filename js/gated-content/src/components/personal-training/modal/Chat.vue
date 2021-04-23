@@ -13,11 +13,11 @@
         :class="{'d-right': msg.author === localName, 'd-left': msg.author !== localName}"
       >
         <div class="user-icon">
-          <span>{{ msg.author === localName ? 'Me' : msg.author.charAt(0).toUpperCase() }}</span>
+          <span>{{ getMsgAuthor(msg.author, true) }}</span>
         </div>
         <div class="message-card">
           <div class="message-header">
-            <h4 class="message-author mb-0">{{ msg.author }}</h4>
+            <h4 class="message-author mb-0">{{ getMsgAuthor(msg.author) }}</h4>
             <div class="message-time">{{ formatDate(msg.date) }}</div>
           </div>
           <div class="message-body">{{ msg.message }}</div>
@@ -60,6 +60,7 @@ export default {
       'chatSession',
       'unreadMessagesCount',
       'localName',
+      'isInstructorRole',
       'getAppSettings',
     ]),
   },
@@ -77,6 +78,16 @@ export default {
     },
     formatDate(date) {
       return dayjs(date).format('ddd, MMM D, YYYY @ h:mm a');
+    },
+    getMsgAuthor(author, short = false) {
+      if (author === this.localName) {
+        return 'Me';
+      }
+      if (short) {
+        return this.isInstructorRole ? 'C' : 'I';
+      }
+      // If current user instructor, his interlocutor - customer.
+      return this.isInstructorRole ? 'Client' : 'Instructor';
     },
     beep() {
       if (this.unreadMessagesCount !== 0 && this.getAppSettings.newMessageSound) {
