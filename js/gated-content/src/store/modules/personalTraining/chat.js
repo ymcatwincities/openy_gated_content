@@ -1,6 +1,7 @@
 export default {
   state: {
     chatSession: [],
+    unreadMessages: 0,
   },
   actions: {
     sendChatMessage(context, message) {
@@ -14,14 +15,25 @@ export default {
     },
     async receiveChatMessage(context, msgObj) {
       context.commit('addChatMessage', msgObj);
+      if (!context.getters.isShowChatModal) {
+        // For closed chat modal increment unread messages.
+        context.commit('incUnreadMessages');
+      }
     },
   },
   mutations: {
     addChatMessage(state, message) {
       state.chatSession.push(message);
     },
+    incUnreadMessages(state) {
+      state.unreadMessages += 1;
+    },
+    resetUnreadMessages(state) {
+      state.unreadMessages = 0;
+    },
   },
   getters: {
     chatSession: (state) => state.chatSession,
+    unreadMessagesCount: (state) => state.unreadMessages,
   },
 };
