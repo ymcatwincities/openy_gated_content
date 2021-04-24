@@ -4,6 +4,7 @@ namespace Drupal\openy_gc_personal_training\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Session\AccountProxy;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -21,13 +22,26 @@ class PeerController extends ControllerBase {
   protected $entityTypeManager;
 
   /**
+   * Current User.
+   *
+   * @var \Drupal\Core\Session\AccountProxy
+   */
+  protected $currentUser;
+
+  /**
    * Constructs a new PeerController object.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   Entity Type Manager.
+   * @param \Drupal\Core\Session\AccountProxy $currentUser
+   *   Current User.
    */
-  public function __construct(EntityTypeManagerInterface $entityTypeManager) {
+  public function __construct(
+    EntityTypeManagerInterface $entityTypeManager,
+    AccountProxy $currentUser
+  ) {
     $this->entityTypeManager = $entityTypeManager;
+    $this->currentUser = $currentUser;
   }
 
   /**
@@ -35,7 +49,8 @@ class PeerController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('entity_type.manager')
+      $container->get('entity_type.manager'),
+      $container->get('current_user')
     );
   }
 
@@ -51,8 +66,6 @@ class PeerController extends ControllerBase {
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    * @throws \Drupal\Core\Entity\EntityStorageException
-   *
-   * @TODO set route permissions
    */
   public function publishCustomerPeer(Request $request) {
     $personalTrainingId = $request->get('trainingId');
@@ -70,10 +83,19 @@ class PeerController extends ControllerBase {
       return new JsonResponse('Entity not found', 500);
     }
 
-    $trainingEntity->setCustomerPeerId($peerId);
-    $trainingEntity->save();
+    if ($trainingEntity->getCustomerId() !== $this->currentUser->id()) {
+      return new JsonResponse('Access denied ' . $trainingEntity->getCustomerId() . ' ' . $this->currentUser->id(), 500);
+    }
 
-    return new JsonResponse();
+    try {
+      $trainingEntity
+        ->setCustomerPeerId($peerId)
+        ->save();
+      return new JsonResponse();
+    }
+    catch (\Exception $e) {
+      return new JsonResponse('Failed to save peer id', 500);
+    }
   }
 
   /**
@@ -87,8 +109,6 @@ class PeerController extends ControllerBase {
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
-   *
-   * @TODO set route permissions
    */
   public function loadCustomerPeer(Request $request) {
     $personalTrainingId = $request->get('trainingId');

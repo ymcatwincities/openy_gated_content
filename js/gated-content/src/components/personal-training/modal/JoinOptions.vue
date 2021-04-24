@@ -51,6 +51,7 @@
       </div>
       <div class="join">
         <div
+          v-if="localMediaStream"
           class="indigo-button cachet-book-20 text-white"
           @click="joinVideoSession"
         >Join meeting

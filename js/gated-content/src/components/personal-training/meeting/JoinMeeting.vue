@@ -8,6 +8,14 @@
       v-if="isMeetingComplete"
       class="message cachet-book-24-20"
     >Meeting Complete</div>
+    <div
+      v-else-if="!peerSignalingServerConnected"
+      class="message cachet-book-24-20"
+    >Connecting...</div>
+    <div
+      v-else-if="peerInitializationError"
+      class="message cachet-book-24-20"
+    >{{ peerInitializationError }}</div>
     <button
       v-else
       class="indigo-button cachet-book-30-24 text-white px-36-24"
@@ -25,6 +33,8 @@ export default {
   computed: {
     ...mapGetters([
       'isMeetingComplete',
+      'peerSignalingServerConnected',
+      'peerInitializationError',
     ]),
   },
   methods: {

@@ -30,4 +30,4 @@ openy_gc_personal_training.load_customer_peer:
     _title: 'Load Customer Peer'
   requirements:
     _permission: 'access content'
-    _role: 'authenticated'
+    _role: 'personal_trainer'
