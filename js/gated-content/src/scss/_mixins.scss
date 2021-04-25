@@ -6,7 +6,8 @@
   }
 
   @if $mobile != $tablet {
-    @media (max-width: 600px) {
+    @media (max-width: 500px) and (max-height: 823px),
+    (max-width: 823px) and (max-height: 500px) {
       #{$property}: $mobile;
     }
   }

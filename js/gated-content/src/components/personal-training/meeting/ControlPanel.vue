@@ -28,7 +28,7 @@
       <SvgIcon icon="cancel_black_24dp" class="fill-white bg-red"></SvgIcon>
       <span>Leave</span>
     </div>
-    <div class="chat ml-auto"
+    <div class="chat"
          :class="{'unread': unreadMessagesCount}"
          @click="toggleShowChatModal"
     >

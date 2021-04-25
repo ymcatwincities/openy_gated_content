@@ -43,7 +43,7 @@ export default {
           .then(() => context.commit('setFullScreenMode', false))
           .catch((err) => console.error(err));
       } else {
-        const elem = document.querySelector('.personal-training-meeting');
+        const elem = document.querySelector('.personal-training-full-screen');
         elem.requestFullscreen()
           .then(() => context.commit('setFullScreenMode', true))
           .catch((err) => console.error(err));

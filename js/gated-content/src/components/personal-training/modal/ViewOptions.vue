@@ -1,7 +1,7 @@
 <template>
   <Modal
     class="modal-view-options text-black"
-    :class="{'d-none': !isShowViewOptionsModal}"
+    :style="{'display': isShowViewOptionsModal ? 'table' : 'none'}"
     @close="toggleViewOptionsModal"
   >
     <template #header><div class="cachet-book-18">View Options</div></template>

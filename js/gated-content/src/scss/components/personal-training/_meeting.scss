@@ -1,12 +1,20 @@
 .personal-training-page {
   .personal-training-meeting {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 2000;
-    width: 100vw;
-    height: 100vh;
-    max-width: initial;
-    padding-top: initial;
+    display:            grid;
+    position:           fixed;
+    top:                0;
+    left:               0;
+    z-index:            2000;
+    padding-top:        initial;
+    width:              100vw;
+    max-width:          initial;
+    height:             100vh;
+    grid-template-rows: 1fr 97px;
+
+    @include median(grid-template-rows,
+      1fr 97px,
+      null,
+      1fr 44px
+    );
   }
 }

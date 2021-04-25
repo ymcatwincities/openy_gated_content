@@ -1,6 +1,8 @@
 .personal-training-page {
   .modal-leave-meeting {
     .modal-container {
+      @include median(width, 400px, null, 300px);
+
       .modal-header {
         border-bottom:  none;
         padding:        14px 15px 14px 24px;
@@ -20,8 +22,9 @@
       }
 
       .modal-body {
-        margin:      0;
-        padding:     17px 24px 24px;
+        margin:     0;
+        padding:    17px 24px 24px;
+        overflow-y: initial;
 
         .button {
           float:            left;
@@ -30,6 +33,7 @@
           background-color: $white;
           cursor:           pointer;
           padding:          9px 24px;
+          height:           initial;
           text-transform:   uppercase;
           color:            $dark-blue;
           font-family:      $cachet-book;

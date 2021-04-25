@@ -4,7 +4,6 @@ export default {
   },
   actions: {
     async callEndedEvent(context) {
-      console.log('received callEndedEvent');
       context.dispatch('closeMediaConnection');
     },
     async sendCallEndedEvent(context) {

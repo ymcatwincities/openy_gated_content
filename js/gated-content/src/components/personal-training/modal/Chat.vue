@@ -1,7 +1,7 @@
 <template>
   <Modal
     class="modal-chat text-black"
-    :class="{'d-none': !isShowChatModal}"
+    :style="{'display': isShowChatModal ? 'table' : 'none'}"
     @close="toggleShowChatModal"
   >
     <template #header><span>Chat</span></template>
