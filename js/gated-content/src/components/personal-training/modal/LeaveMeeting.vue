@@ -1,7 +1,7 @@
 <template>
   <Modal
     class="modal-leave-meeting text-black"
-    :class="{'d-none': !isShowLeaveMeetingModal}"
+    :style="{'display': isShowLeaveMeetingModal ? 'table' : 'none'}"
     @close="toggleShowLeaveMeetingModal"
   >
     <template #header>Leave meeting?</template>

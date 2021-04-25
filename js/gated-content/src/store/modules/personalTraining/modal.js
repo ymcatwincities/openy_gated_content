@@ -13,11 +13,11 @@ export default {
         context.commit('resetUnreadMessages');
       }
     },
-    toggleShowJoinOptionsModal(context) {
+    async toggleShowJoinOptionsModal(context) {
       context.commit('showJoinOptionsModal', !context.state.showJoinOptionsModal);
 
       if (context.state.showJoinOptionsModal) {
-        context.dispatch('initMediaStream');
+        await context.dispatch('initMediaStream');
       } else {
         context.dispatch('closeMediaStream');
       }
