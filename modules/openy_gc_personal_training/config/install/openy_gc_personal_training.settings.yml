@@ -1,4 +1,9 @@
-peerjs_domain: ''
+peerjs_domain: 'https://virtual-y-peerjs.herokuapp.com'
 peerjs_port: 443
 peerjs_uri: '/'
+peerjs_stun: 'stun:stun.l.google.com:19302'
+peerjs_turn_url: 'turn:coturn.demo.ixm.ca'
+peerjs_turn_credential: 'password'
+peerjs_turn_username: 'user'
+peerjs_debug: 3
 active_provider: default

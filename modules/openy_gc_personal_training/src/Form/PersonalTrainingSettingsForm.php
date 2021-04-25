@@ -86,6 +86,41 @@ class PersonalTrainingSettingsForm extends ConfigFormBase {
       '#required' => FALSE,
     ];
 
+    $form['peerjs_stun'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('PeerJS Stun server'),
+      '#default_value' => $config->get('peerjs_stun'),
+      '#required' => FALSE,
+    ];
+
+    $form['peerjs_turn_url'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('PeerJS TURN Url'),
+      '#default_value' => $config->get('peerjs_turn_url'),
+      '#required' => FALSE,
+    ];
+
+    $form['peerjs_turn_credential'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('PeerJS TURN Credential'),
+      '#default_value' => $config->get('peerjs_turn_credential'),
+      '#required' => FALSE,
+    ];
+
+    $form['peerjs_turn_username'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('PeerJS TURN Username'),
+      '#default_value' => $config->get('peerjs_turn_username'),
+      '#required' => FALSE,
+    ];
+
+    $form['peerjs_debug'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('PeerJS Debug level'),
+      '#default_value' => $config->get('peerjs_debug'),
+      '#required' => FALSE,
+    ];
+
     $form['providers'] = [
       '#type' => 'table',
       '#header' => [
@@ -155,6 +190,14 @@ class PersonalTrainingSettingsForm extends ConfigFormBase {
     $settings->set('peerjs_domain', $form_state->getValue('peerjs_domain'));
     $settings->set('peerjs_port', $form_state->getValue('peerjs_port'));
     $settings->set('peerjs_uri', $form_state->getValue('peerjs_uri'));
+
+    $settings->set('peerjs_stun', $form_state->getValue('peerjs_stun'));
+    $settings->set('peerjs_turn_url', $form_state->getValue('peerjs_turn_url'));
+    $settings->set('peerjs_turn_credential', $form_state->getValue('peerjs_turn_credential'));
+    $settings->set('peerjs_turn_username', $form_state->getValue('peerjs_turn_username'));
+
+    $settings->set('peerjs_debug', $form_state->getValue('peerjs_debug'));
+
     $settings->save();
     parent::submitForm($form, $form_state);
   }
