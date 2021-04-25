@@ -37,19 +37,27 @@ export default {
       }
 
       const config = {
-        debug: 3,
         secure: true,
-        config: {
+      };
+
+      if (context.getters.getAppSettings.peerjs_stun
+          && context.getters.getAppSettings.peerjs_stun.length > 0) {
+        config.config = {
           iceServers: [
-            { url: 'stun:stun.l.google.com:19302' },
+            { url: context.getters.getAppSettings.peerjs_stun },
             {
-              url: 'turn:numb.viagenie.ca',
-              credential: 'muazkh',
-              username: 'webrtc@live.com',
+              url: context.getters.getAppSettings.peerjs_turn_url,
+              credential: context.getters.getAppSettings.peerjs_turn_credential,
+              username: context.getters.getAppSettings.peerjs_turn_username,
             },
           ],
-        },
-      };
+        };
+      }
+
+      if (context.getters.getAppSettings.peerjs_debug
+          && context.getters.getAppSettings.peerjs_debug.length > 0) {
+        config.debug = context.getters.getAppSettings.peerjs_debug;
+      }
 
       if (context.getters.getAppSettings.peerjs_domain
         && context.getters.getAppSettings.peerjs_domain.length > 0) {
