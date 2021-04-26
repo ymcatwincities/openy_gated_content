@@ -307,6 +307,21 @@ export default {
       );
 
       await context.dispatch('handleMediaConnection', mediaConnection);
+
+      // eslint-disable-next-line no-undef
+      _.delay(() => {
+        context.dispatch('recallPartner');
+      }, 1000);
+    },
+    async recallPartner(context) {
+      if (context.getters.peerDataConnected
+        && context.getters.isJoinedVideoSession
+        && context.getters.peerMediaConnection !== null
+        && !context.getters.peerMediaConnection.open) {
+        context.getters.peerMediaConnection.close();
+        context.commit('setPeerMediaConnection', null);
+        context.dispatch('callPartner');
+      }
     },
     setPartnerPeerId(context, peerId) {
       if (context.state.instructorRole) {
@@ -377,6 +392,7 @@ export default {
     peerInitializationError: (state) => state.peerInitializationError,
     peerDataConnected: (state) => state.peerDataConnected,
     peerDataConnection: (state) => state.peerDataConnection,
+    peerMediaConnection: (state) => state.peerMediaConnection,
     partnerPeerId: (state) => (
       state.instructorRole
         ? state.customerPeerId
