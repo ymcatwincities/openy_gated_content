@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Session\AccountInterface;
 
@@ -60,6 +61,53 @@ function openy_gc_personal_training_virtual_y_app_settings_alter(&$config) {
   $config['peerjs_port'] = $moduleConfig->get('peerjs_port');
   $config['peerjs_uri'] = $moduleConfig->get('peerjs_uri');
 
+}
+
+/**
+ * Implements hook_openy_gated_content_list_events_alter().
+ */
+function openy_gc_personal_training_openy_gated_content_list_events_alter(&$results, $params) {
+  if (!in_array($params['type'], ['all', 'personal_training'])) {
+    return;
+  }
+
+  $query = \Drupal::database()->select('personal_training', 'pt');
+  $query->leftJoin('users_field_data', 'ufd', 'ufd.uid = pt.instructor_id');
+
+  $uid = \Drupal::currentUser()->id();
+  $query->condition($query->orConditionGroup()
+    ->condition('customer_id', $uid)
+    ->condition('instructor_id', $uid)
+  );
+
+  if (isset($params['start_date'])) {
+    $query->condition('date__end_value', (new DrupalDateTime($params['start_date']))->format('c'), '>=');
+  }
+
+  if (isset($params['end_date'])) {
+    $query->condition('date__value', (new DrupalDateTime($params['end_date']))->format('c'), '<=');
+  }
+
+  $query->fields('pt');
+  $query->fields('ufd', ['name']);
+  $query->orderBy('date__value');
+
+  $result = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
+
+  foreach ($result as $item) {
+    $results[] = [
+      'type' => 'personal_training',
+      'bundle' => 'personal_training',
+      'id' => $item['id'],
+      'uuid' => $item['uuid'],
+      'title' => $item['title'],
+      'host_name' => $item['name'],
+      'date' => [
+        'value' => $item['date__value'],
+        'end_value' => $item['date__end_value'],
+      ],
+    ];
+  }
 }
 
 /**
