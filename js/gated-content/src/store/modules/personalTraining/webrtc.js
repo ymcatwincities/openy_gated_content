@@ -89,11 +89,7 @@ export default {
         context.commit('setPeerSignalingServerConnected', true);
 
         if (context.state.instructorRole) {
-          if (context.state.customerPeerId) {
-            context.dispatch('connectToCustomerPeer');
-          } else {
-            context.dispatch('loadCustomerPeer');
-          }
+          context.dispatch('loadCustomerPeer');
         } else {
           context.commit('setCustomerPeerId', id);
           context.dispatch('publishCustomerPeer');
