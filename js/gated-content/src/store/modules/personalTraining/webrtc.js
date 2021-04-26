@@ -41,34 +41,39 @@ export default {
         return;
       }
 
+      let peerjsDomain; let peerjsPort; let peerjsUri; let peerjsSTUNUrl;
+      let peerjsTURNUrl; let peerjsTURNUsername; let peerjsTURNCredential;
+      let peerjsDebug;
+
+      ({
+        // eslint-disable-next-line prefer-const
+        peerjsDomain, peerjsPort, peerjsUri, peerjsSTUNUrl,
+        // eslint-disable-next-line prefer-const
+        peerjsTURNUrl, peerjsTURNUsername, peerjsTURNCredential,
+        // eslint-disable-next-line prefer-const
+        peerjsDebug,
+      } = context.getters.getAppSettings);
+
       const config = {
         secure: true,
       };
 
-      if (context.getters.getAppSettings.peerjs_stun
-          && context.getters.getAppSettings.peerjs_stun.length > 0) {
+      if (peerjsSTUNUrl !== '') {
         config.config = {
           iceServers: [
-            { url: context.getters.getAppSettings.peerjs_stun },
+            { url: peerjsSTUNUrl },
             {
-              url: context.getters.getAppSettings.peerjs_turn_url,
-              credential: context.getters.getAppSettings.peerjs_turn_credential,
-              username: context.getters.getAppSettings.peerjs_turn_username,
+              url: peerjsTURNUrl,
+              username: peerjsTURNUsername,
+              credential: peerjsTURNCredential,
             },
           ],
         };
       }
 
-      if (context.getters.getAppSettings.peerjs_debug
-          && context.getters.getAppSettings.peerjs_debug.length > 0) {
-        config.debug = context.getters.getAppSettings.peerjs_debug;
+      if (peerjsDebug !== '') {
+        config.debug = peerjsDebug;
       }
-
-      let peerjsDomain;
-      let peerjsPort;
-      let peerjsUri;
-      // eslint-disable-next-line prefer-const
-      ({ peerjsDomain, peerjsPort, peerjsUri } = context.getters.getAppSettings);
 
       if (peerjsDomain !== '') {
         config.host = peerjsDomain;
@@ -231,9 +236,6 @@ export default {
       context.dispatch('handleDataConnection', dataConnection);
     },
     async handleDataConnection(context, dataConnection) {
-      context.commit('setPeerDataConnected', true);
-      context.commit('setPeerDataConnection', dataConnection);
-
       dataConnection.on('open', () => {
         context.commit('setPeerDataConnected', true);
         context.commit('setPeerDataConnection', dataConnection);

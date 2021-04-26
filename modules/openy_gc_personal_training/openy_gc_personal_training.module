@@ -41,6 +41,11 @@ function openy_gc_personal_training_virtual_y_app_settings_alter(&$config) {
   $config['peerjsDomain'] = $moduleConfig->get('peerjs_domain');
   $config['peerjsPort'] = $moduleConfig->get('peerjs_port');
   $config['peerjsUri'] = $moduleConfig->get('peerjs_uri');
+  $config['peerjsSTUNUrl'] = $moduleConfig->get('peerjs_stun');
+  $config['peerjsTURNUrl'] = $moduleConfig->get('peerjs_turn_url');
+  $config['peerjsTURNUsername'] = $moduleConfig->get('peerjs_turn_username');
+  $config['peerjsTURNCredential'] = $moduleConfig->get('peerjs_turn_credential');
+  $config['peerjsDebug'] = $moduleConfig->get('peerjs_debug');
   $config['newMessageSound'] = drupal_get_path('module', 'openy_gc_personal_training') . '/assets/sound/new_message_sound.mp3';
 
 }
