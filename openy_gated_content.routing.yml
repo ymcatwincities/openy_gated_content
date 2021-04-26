@@ -34,7 +34,7 @@ openy_gated_content.categories.list:
     no_cache: TRUE
 
 openy_gated_content.events.list:
-  path: '/api/events'
+  path: '/virtual-y/api/events'
   defaults:
     _title: 'Virtual Y Events'
     _controller: '\Drupal\openy_gated_content\Controller\EventsController::list'

@@ -194,8 +194,8 @@ class EventsController extends ControllerBase {
         'title' => $item['field_ls_title_value'] ?: $item['title'],
         'host_name' => $item['field_ls_host_name_value'] ?: $item['esh_field_ls_host_name_value'],
         'date' => [
-          'value' => $item['date__value'],
-          'end_value' => $item['date__end_value'],
+          'value' => (new DrupalDateTime($item['date__value']))->format('c'),
+          'end_value' => (new DrupalDateTime($item['date__end_value']))->format('c'),
         ],
       ];
     }

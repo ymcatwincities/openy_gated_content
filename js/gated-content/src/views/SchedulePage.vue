@@ -148,7 +148,7 @@ export default {
       this.endDate.setTime(this.startDate.getTime() + this.oneWeek - 1);
 
       client({
-        url: '/api/events',
+        url: '/virtual-y/api/events',
         method: 'get',
         params: {
           type: 'all',
