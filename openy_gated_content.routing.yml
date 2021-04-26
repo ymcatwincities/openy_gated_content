@@ -33,6 +33,16 @@ openy_gated_content.categories.list:
   options:
     no_cache: TRUE
 
+openy_gated_content.events.list:
+  path: '/virtual-y/api/events'
+  defaults:
+    _title: 'Virtual Y Events'
+    _controller: '\Drupal\openy_gated_content\Controller\EventsController::list'
+  methods: ['GET']
+  requirements:
+    _permission: 'access content'
+    _role: 'authenticated'
+
 openy_gated_content.favorites.list:
   path: '/api/favorites'
   defaults:

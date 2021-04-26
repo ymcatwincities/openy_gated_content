@@ -5,7 +5,6 @@ namespace Drupal\openy_gc_personal_training;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityListBuilder;
 use Drupal\Core\Link;
-use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
@@ -56,7 +55,8 @@ class PersonalTrainingListBuilder extends EntityListBuilder {
    * {@inheritdoc}
    */
   public function buildHeader() {
-    $header['id'] = $this->t('Personal training ID');
+    $header['id'] = $this->t('ID');
+    $header['title'] = $this->t('Title');
     $header['customer'] = $this->t('Customer');
     $header['instructor'] = $this->t('Instructor');
     $header['training_type'] = $this->t('Training type');
@@ -68,19 +68,12 @@ class PersonalTrainingListBuilder extends EntityListBuilder {
    * {@inheritdoc}
    */
   public function buildRow(EntityInterface $entity) {
+    $row['id'] = $entity->id();
 
-    $virtualy_config = $this->configFactory
-      ->get('openy_gated_content.settings');
-
-    $url = Url::fromUserInput(
-      $virtualy_config->get('virtual_y_url')
-      . '#/personal-training/'
-      . $entity->uuid()
-    );
-
-    $row['id'] = Link::fromTextAndUrl(
-      '#' . $entity->id(),
-      $url
+    $row['title'] = Link::createFromRoute(
+      $entity->label(),
+      'entity.personal_training.canonical',
+      ['personal_training' => $entity->id()]
     );
 
     $row['customer'] = Link::createFromRoute(

@@ -12,10 +12,11 @@
           <div class="video-footer__fav pb-40-20">
             <AddToFavorite
               :id="video.attributes.drupal_internal__id"
-              :type="'eventinstance'"
-              :bundle="'virtual_meeting'"
+              :type="'personal_training'"
+              :bundle="'personal_training'"
               class="rounded-border border-concrete"
             ></AddToFavorite>
+            <AddToCalendar :event="event"></AddToCalendar>
             <div class="timer">
               Private
             </div>
@@ -65,24 +66,26 @@
 import client from '@/client';
 import AddToFavorite from '@/components/AddToFavorite.vue';
 import Spinner from '@/components/Spinner.vue';
+import AddToCalendar from '@/components/event/AddToCalendar.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
+import { EventMixin } from '@/mixins/EventMixin';
 import SvgIcon from '@/components/SvgIcon.vue';
 import Meeting from '@/components/personal-training/Meeting.vue';
-import dayjs from 'dayjs';
 import AccordionTab from '@/components/AccordionTab.vue';
 
 export default {
   name: 'PersonalTrainingPage',
-  mixins: [JsonApiCombineMixin],
+  mixins: [JsonApiCombineMixin, EventMixin],
   components: {
     AccordionTab,
     Meeting,
     SvgIcon,
     AddToFavorite,
+    AddToCalendar,
     Spinner,
   },
   props: {
-    tid: {
+    id: {
       type: String,
       required: true,
     },
@@ -110,21 +113,18 @@ export default {
     descriptionProcessed() {
       return this.video.attributes.description ? this.video.attributes.description.processed : '';
     },
+    event() {
+      return {
+        start: this.formatDate(this.video.attributes.date.value),
+        duration: [this.getDuration(this.video.attributes.date), 'hour'],
+        title: this.video.attributes.title,
+        description: `Personal training page: ${this.pageUrl}`,
+        busy: true,
+        guests: [],
+      };
+    },
     instructor() {
       return this.video.attributes.instructor_id ? this.video.attributes.instructor_id.display_name : '';
-    },
-    date() {
-      return dayjs(this.video.attributes.date.value).format('dddd, MMMM Do, YYYY');
-    },
-    time() {
-      return dayjs(this.video.attributes.date.value).format('h:mm a');
-    },
-    duration() {
-      const min = Math.floor(dayjs.duration(
-        dayjs(this.video.attributes.date.end_value) - dayjs(this.video.attributes.date.value),
-      ).asMinutes());
-
-      return `${min} ${this.$options.filters.simplePluralize('minute', min)}`;
     },
   },
   methods: {
@@ -135,7 +135,7 @@ export default {
         params.include = this.params.join(',');
       }
       client
-        .get(`jsonapi/personal_training/personal_training/${this.tid}`, { params })
+        .get(`jsonapi/personal_training/personal_training/${this.id}`, { params })
         .then((response) => {
           this.video = this.combine(response.data.data, response.data.included, this.params);
           // We need here small hack for equipment.
@@ -165,7 +165,7 @@ export default {
             customerName: this.video.attributes.customer_id.display_name,
             customerPeerId: this.video.attributes.customer_peer_id,
             personalTrainingId: this.video.attributes.drupal_internal__id,
-            personalTrainingDate: this.video.attributes.date.end_value,
+            personalTrainingDate: this.$dayjs.date(this.video.attributes.date.end_value),
           }).then(() => {
             this.$store.dispatch('initPeer');
           });

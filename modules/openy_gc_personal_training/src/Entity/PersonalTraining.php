@@ -39,6 +39,7 @@ use Drupal\link\LinkItemInterface;
  *     "id" = "id",
  *     "uuid" = "uuid",
  *     "langcode" = "langcode",
+ *     "label" = "title",
  *   },
  *   links = {
  *     "canonical" = "/virtual-y/personal_training/{personal_training}",
@@ -53,13 +54,6 @@ use Drupal\link\LinkItemInterface;
 class PersonalTraining extends ContentEntityBase implements PersonalTrainingInterface {
 
   use EntityChangedTrait;
-
-  /**
-   * {@inheritdoc}
-   */
-  public function label() {
-    return 'Personal training #' . $this->id();
-  }
 
   /**
    * {@inheritdoc}
@@ -111,20 +105,39 @@ class PersonalTraining extends ContentEntityBase implements PersonalTrainingInte
   public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
     $fields = parent::baseFieldDefinitions($entity_type);
 
+    $fields['title'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Title'))
+      ->setRequired(TRUE)
+      ->setDisplayOptions('view', [
+        'label' => 'above',
+        'type' => 'string',
+      ])
+      ->setDisplayOptions('form', [
+        'type' => 'string_textfield',
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
     $fields['customer_id'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('Customer'))
       ->setDescription(t('The user ID of client of the Personal training entity.'))
       ->setRequired(TRUE)
       ->setSetting('target_type', 'user')
       ->setSetting('handler', 'default')
+      ->setSetting('handler_settings', [
+        'filter' => [
+          'type' => 'role',
+          'role' => [
+            'virtual_y' => 'virtual_y',
+          ],
+        ],
+      ])
       ->setDisplayOptions('view', [
         'label' => 'visible',
         'type' => 'string',
-        'weight' => 0,
       ])
       ->setDisplayOptions('form', [
         'type' => 'entity_reference_autocomplete',
-        'weight' => 5,
         'settings' => [
           'match_operator' => 'CONTAINS',
           'size' => '60',
@@ -141,6 +154,14 @@ class PersonalTraining extends ContentEntityBase implements PersonalTrainingInte
       ->setRequired(TRUE)
       ->setSetting('target_type', 'user')
       ->setSetting('handler', 'default')
+      ->setSetting('handler_settings', [
+        'filter' => [
+          'type' => 'role',
+          'role' => [
+            'virtual_trainer' => 'virtual_trainer',
+          ],
+        ],
+      ])
       ->setDisplayOptions('view', [
         'label' => 'visible',
         'type' => 'author',
@@ -153,32 +174,6 @@ class PersonalTraining extends ContentEntityBase implements PersonalTrainingInte
           'autocomplete_type' => 'tags',
           'placeholder' => '',
         ],
-      ])
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE);
-
-    $fields['customer_metadata'] = BaseFieldDefinition::create('text_long')
-      ->setLabel(t('Customer metadata'))
-      ->setDescription(t('The metadata for the customer from CRM systems (It could be user id, email, or something else).'))
-      ->setRequired(FALSE)
-      ->setDisplayOptions('form', [
-        'type' => 'text_textarea',
-      ])
-      ->setDisplayOptions('view', [
-        'label' => 'above',
-      ])
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE);
-
-    $fields['instructor_metadata'] = BaseFieldDefinition::create('text_long')
-      ->setLabel(t('Instructor metadata'))
-      ->setDescription(t('The metadata for the instructor from CRM systems (It could be user id, email, or something else).'))
-      ->setRequired(FALSE)
-      ->setDisplayOptions('form', [
-        'type' => 'text_textarea',
-      ])
-      ->setDisplayOptions('view', [
-        'label' => 'above',
       ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
@@ -198,7 +193,7 @@ class PersonalTraining extends ContentEntityBase implements PersonalTrainingInte
         'type' => 'list_default',
       ])
       ->setDisplayOptions('form', [
-        'type' => 'options_select',
+        'type' => 'options_buttons',
       ])
       ->setRequired(TRUE)
       ->setDisplayConfigurable('view', TRUE)
@@ -240,19 +235,6 @@ class PersonalTraining extends ContentEntityBase implements PersonalTrainingInte
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
-    $fields['title'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('Title'))
-      ->setDefaultValue(NULL)
-      ->setDisplayOptions('view', [
-        'label' => 'above',
-        'type' => 'string',
-      ])
-      ->setDisplayOptions('form', [
-        'type' => 'string_textfield',
-      ])
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE);
-
     $fields['description'] = BaseFieldDefinition::create('text_long')
       ->setLabel(t('Description'))
       ->setDisplayOptions('view', [
@@ -264,19 +246,6 @@ class PersonalTraining extends ContentEntityBase implements PersonalTrainingInte
         'rows' => 6,
       ])
       ->setRequired(FALSE)
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE);
-
-    $fields['customer_peer_id'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('Customer Peer Id'))
-      ->setDefaultValue(NULL)
-      ->setDisplayOptions('view', [
-        'label' => 'above',
-        'type' => 'string',
-      ])
-      ->setDisplayOptions('form', [
-        'type' => 'string_textfield',
-      ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
@@ -300,6 +269,45 @@ class PersonalTraining extends ContentEntityBase implements PersonalTrainingInte
           'size' => '60',
           'placeholder' => '',
         ],
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['customer_metadata'] = BaseFieldDefinition::create('text_long')
+      ->setLabel(t('Customer metadata'))
+      ->setDescription(t('The metadata for the customer from CRM systems (It could be user id, email, or something else).'))
+      ->setRequired(FALSE)
+      ->setDisplayOptions('form', [
+        'type' => 'text_textarea',
+      ])
+      ->setDisplayOptions('view', [
+        'label' => 'above',
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['instructor_metadata'] = BaseFieldDefinition::create('text_long')
+      ->setLabel(t('Instructor metadata'))
+      ->setDescription(t('The metadata for the instructor from CRM systems (It could be user id, email, or something else).'))
+      ->setRequired(FALSE)
+      ->setDisplayOptions('form', [
+        'type' => 'text_textarea',
+      ])
+      ->setDisplayOptions('view', [
+        'label' => 'above',
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['customer_peer_id'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Customer Peer Id'))
+      ->setDefaultValue(NULL)
+      ->setDisplayOptions('view', [
+        'label' => 'above',
+        'type' => 'string',
+      ])
+      ->setDisplayOptions('form', [
+        'type' => 'string_textfield',
       ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
