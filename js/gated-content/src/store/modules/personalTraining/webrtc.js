@@ -42,7 +42,7 @@ export default {
       }
 
       const config = {
-        debug: 3,
+        debug: 2,
         secure: true,
         config: {
           iceServers: [
@@ -56,8 +56,9 @@ export default {
         },
       };
 
-      let peerjsDomain; let peerjsPort; let
-        peerjsUri;
+      let peerjsDomain;
+      let peerjsPort;
+      let peerjsUri;
       // eslint-disable-next-line prefer-const
       ({ peerjsDomain, peerjsPort, peerjsUri } = context.getters.getAppSettings);
 
@@ -107,6 +108,8 @@ export default {
       });
 
       peer.on('error', (error) => {
+        console.log('peer error', error);
+
         if (error.type === 'peer-unavailable') {
           if (context.getters.isInstructorRole) {
             context.dispatch('loadCustomerPeer');
@@ -119,7 +122,7 @@ export default {
           || error.type === 'socket-closed'
           || error.type === 'webrtc'
         ) {
-          console.log(error);
+          console.log('reinit peer');
           peer.destroy();
           context.commit('setPeer', null);
           // eslint-disable-next-line no-undef
@@ -127,7 +130,7 @@ export default {
             context.dispatch('initPeer');
           }, 1000);
         } else {
-          console.log(error);
+          console.log('unhandled peer error', error);
         }
       });
     },
@@ -148,7 +151,7 @@ export default {
           context.dispatch('setLocalMediaStream', mediaStream);
         })
         .catch((error) => {
-          console.log(error);
+          console.log('init local stream', error);
         });
     },
     async setLocalMediaStream(context, mediaStream) {
@@ -220,14 +223,14 @@ export default {
       context.dispatch('handleDataConnection', dataConnection);
     },
     async handleDataConnection(context, dataConnection) {
-      context.dispatch('setPartnerMediaStream', null);
       context.commit('setPeerDataConnected', true);
       context.commit('setPeerDataConnection', dataConnection);
-      context.dispatch('setPartnerPeerId', dataConnection.peer);
+
       dataConnection.on('open', () => {
         context.commit('setPeerDataConnected', true);
         context.commit('setPeerDataConnection', dataConnection);
       });
+
       dataConnection.on('data', (data) => {
         if (data.newMessage) {
           context.dispatch('receiveChatMessage', data.newMessage);
@@ -237,14 +240,16 @@ export default {
           context.dispatch('callEndedEvent');
         }
       });
+
       dataConnection.on('close', () => {
         context.commit('setPeerDataConnected', false);
         context.commit('setPeerDataConnection', null);
         context.dispatch('setPartnerMediaStream', null);
         if (context.state.instructorRole) {
-          context.dispatch('connectToCustomerPeer');
+          context.dispatch('loadCustomerPeer');
         }
       });
+
       dataConnection.on('error', (error) => {
         console.log('dataConnection error:', error);
         if (dataConnection.open !== true) {
@@ -253,45 +258,49 @@ export default {
           }
         }
       });
-    },
-    async subscribeToACall(context) {
-      context.state.peer.on('call', (call) => {
-        call.answer(context.getters.localMediaStream);
-        context.commit('setPeerMediaConnection', call);
-        call.on('stream', (stream) => {
-          context.dispatch('sendVideoStateEvent', context.getters.isCameraEnabled);
-          context.commit('setPeerStreamConnected', true);
-          context.dispatch('setPartnerMediaStream', stream);
+
+      context.dispatch('setPartnerMediaStream', null)
+        .then(() => {
+          context.dispatch('setPartnerPeerId', dataConnection.peer);
         });
-        call.on('close', () => {
-          context.commit('setPeerStreamConnected', false);
-          context.dispatch('setPartnerMediaStream', null);
-        });
-      });
     },
     async sendData(context, data) {
-      if (context.getters.peerDataConnection) {
+      if (context.getters.peerDataConnection
+        && context.getters.peerDataConnection.open) {
         context.getters.peerDataConnection.send(data);
       }
     },
-    async callPartner(context) {
-      const call = context.state.peer.call(
-        context.getters.partnerPeerId,
-        context.getters.localMediaStream,
-      );
-      context.commit('setPeerMediaConnection', call);
-      call.on('stream', (stream) => {
-        context.dispatch('sendVideoStateEvent', context.getters.isCameraEnabled);
+    async handleMediaConnection(context, mediaConnection) {
+      mediaConnection.on('stream', (stream) => {
         context.commit('setPeerStreamConnected', true);
         context.dispatch('setPartnerMediaStream', stream);
+        context.dispatch('sendVideoStateEvent', context.getters.isCameraEnabled);
       });
-      call.on('close', () => {
+
+      mediaConnection.on('close', () => {
         context.commit('setPeerStreamConnected', false);
         context.dispatch('setPartnerMediaStream', null);
       });
-      call.on('error', (error) => {
-        console.log(error);
+
+      mediaConnection.on('error', (error) => {
+        console.log('media connection', error);
       });
+
+      context.commit('setPeerMediaConnection', mediaConnection);
+    },
+    async subscribeToACall(context) {
+      context.state.peer.on('call', (mediaConnection) => {
+        context.dispatch('handleMediaConnection', mediaConnection);
+        mediaConnection.answer(context.getters.localMediaStream);
+      });
+    },
+    async callPartner(context) {
+      const mediaConnection = context.state.peer.call(
+        context.getters.partnerPeerId,
+        context.getters.localMediaStream,
+      );
+
+      await context.dispatch('handleMediaConnection', mediaConnection);
     },
     setPartnerPeerId(context, peerId) {
       if (context.state.instructorRole) {
