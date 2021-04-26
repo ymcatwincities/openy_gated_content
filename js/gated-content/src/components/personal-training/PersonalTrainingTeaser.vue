@@ -1,7 +1,7 @@
 <template>
   <div class="teaser event-teaser personal-training-teaser">
     <router-link
-      :to="{ name: 'PersonalTraining', params: { tid: video.id } }"
+      :to="{ name: 'PersonalTraining', params: { id: video.id } }"
     >
       <div class="title">{{ video.attributes.title }}</div>
       <div class="date">

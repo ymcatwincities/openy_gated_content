@@ -85,7 +85,7 @@ export default {
     Spinner,
   },
   props: {
-    tid: {
+    id: {
       type: String,
       required: true,
     },
@@ -135,7 +135,7 @@ export default {
         params.include = this.params.join(',');
       }
       client
-        .get(`jsonapi/personal_training/personal_training/${this.tid}`, { params })
+        .get(`jsonapi/personal_training/personal_training/${this.id}`, { params })
         .then((response) => {
           this.video = this.combine(response.data.data, response.data.included, this.params);
           // We need here small hack for equipment.

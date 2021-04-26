@@ -102,7 +102,7 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
-    path: '/personal-training/:tid',
+    path: '/personal-training/:id',
     name: 'PersonalTraining',
     component: PersonalTrainingPage,
     props: true,
