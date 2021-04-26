@@ -159,13 +159,15 @@ export default {
           if (parseInt(drupalSettings.user.uid, 10) === instructorId) {
             instructorRole = true;
           }
-          this.$store.dispatch('initPeer', {
+          this.$store.dispatch('setMeetingMetaData', {
             instructorRole,
             instructorName: this.video.attributes.instructor_id.display_name,
             customerName: this.video.attributes.customer_id.display_name,
             customerPeerId: this.video.attributes.customer_peer_id,
             personalTrainingId: this.video.attributes.drupal_internal__id,
             personalTrainingDate: this.$dayjs.date(this.video.attributes.date.end_value),
+          }).then(() => {
+            this.$store.dispatch('initPeer');
           });
         })
         .catch((error) => {

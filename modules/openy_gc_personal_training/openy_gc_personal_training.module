@@ -11,26 +11,13 @@ use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Session\AccountInterface;
 
 /**
- * Implements hook_theme().
- */
-function openy_gc_personal_training_theme() {
-  return [
-    'paragraph__personal_training' => [
-      'base hook' => 'paragraph',
-      'variables' => [
-        'app_settings' => '',
-        'headline' => '',
-      ],
-    ],
-  ];
-}
-
-/**
  * Implements hook_preprocess_html().
  *
  * Attach openy_gc_personal_training/simple_peer library.
  */
 function openy_gc_personal_training_preprocess_html(&$variables) {
+  // TODO: instead of this better to alter gated_content library
+  // and add dependency to openy_gc_personal_training/simple_peer.
   if ($node = \Drupal::routeMatch()->getParameter('node')) {
     if ($node->hasField('field_content')) {
       foreach ($node->field_content as $field_item) {
@@ -54,12 +41,12 @@ function openy_gc_personal_training_preprocess_html(&$variables) {
  * Implements hook_virtual_y_app_settings_alter().
  */
 function openy_gc_personal_training_virtual_y_app_settings_alter(&$config) {
-
   $config['personal_training_enabled'] = TRUE;
   $moduleConfig = \Drupal::config('openy_gc_personal_training.settings');
-  $config['peerjs_domain'] = $moduleConfig->get('peerjs_domain');
-  $config['peerjs_port'] = $moduleConfig->get('peerjs_port');
-  $config['peerjs_uri'] = $moduleConfig->get('peerjs_uri');
+  $config['peerjsDomain'] = $moduleConfig->get('peerjs_domain');
+  $config['peerjsPort'] = $moduleConfig->get('peerjs_port');
+  $config['peerjsUri'] = $moduleConfig->get('peerjs_uri');
+  $config['newMessageSound'] = drupal_get_path('module', 'openy_gc_personal_training') . '/assets/sound/new_message_sound.mp3';
 
 }
 

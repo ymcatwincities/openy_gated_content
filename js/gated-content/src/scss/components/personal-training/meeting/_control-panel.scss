@@ -1,25 +1,43 @@
 .personal-training-page {
   .control-panel {
-    display:    flex;
-    column-gap: 12px;
-    padding:    14px 24px;
+    display: flex;
+
+    @include median(column-gap, 12px, 12px, 0);
+    @include median(padding,
+      14px 24px,
+      null,
+      0
+    );
+
+    .full-screen {
+      @include median(display, block, none);
+    }
+
+    .chat {
+      margin-left: auto;
+    }
 
     > div {
       display:        flex;
       flex-direction: column;
       align-items:    center;
+      position: relative;
       cursor:         pointer;
 
       .svg-container {
-        border:        2px solid $white;
-        border-radius: 50%;
-        padding:       9px;
-        font-size:     26px;
+        padding:   9px;
+        font-size: 26px;
+
+        @include median(border, 2px solid $white, null, none);
+        @include median(border-radius, 50%, null, 0);
       }
 
       span:nth-child(2) {
         padding-top: 6px;
+        text-align:  center;
         font-size:   10px;
+
+        @include median(display, block, block, none);
       }
 
       &.enabled {
@@ -32,6 +50,28 @@
         .svg-container {
           padding:   12px;
           font-size: 20px;
+        }
+      }
+    }
+
+    .chat {
+      &.unread {
+        .svg-container {
+          border: 2px solid $red;
+        }
+
+        .unread-count {
+          position: absolute;
+          right: -5px;
+          top: -5px;
+          width: 24px;
+          height: 24px;
+          text-align: center;
+          background-color: red;
+          border-radius: 12px;
+          font-weight: bold;
+          font-size: 12px;
+          line-height: 20px;
         }
       }
     }

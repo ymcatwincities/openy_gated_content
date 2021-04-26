@@ -4,7 +4,8 @@ import personalTrainingWebRtcEvents from '@/store/modules/personalTraining/webrt
 export default {
   state: {
     peer: null,
-    peerOpened: false,
+    peerSignalingServerConnected: false,
+    peerInitializationError: '',
     customerPeerId: null,
     instructorPeerId: null,
     customerPeerSource: null,
@@ -19,21 +20,25 @@ export default {
     customerName: null,
   },
   actions: {
-    async initPeer(context, payload) {
-      if (context.state.peer !== null
-        || context.state.personalTrainingId === payload.personalTrainingId) {
-        return;
-      }
-
+    async setMeetingMetaData(context, payload) {
       context.commit('setInstructorRole', payload.instructorRole);
       context.commit('setPersonalTrainingId', payload.personalTrainingId);
       context.commit('setPersonalTrainingDate', payload.personalTrainingDate);
       context.commit('setInstructorName', payload.instructorName);
       context.commit('setCustomerName', payload.customerName);
+    },
+    async initPeer(context) {
+      if (context.state.peer !== null) {
+        return;
+      }
 
-      let peerId = null;
-      if (!payload.instructorRole && payload.customerPeerId) {
-        peerId = payload.customerPeerId;
+      // eslint-disable-next-line no-undef
+      if (Peer === undefined) {
+        // eslint-disable-next-line no-undef
+        _.delay(() => {
+          context.dispatch('initPeer');
+        }, 1000);
+        return;
       }
 
       const config = {
@@ -43,35 +48,31 @@ export default {
           iceServers: [
             { url: 'stun:stun.l.google.com:19302' },
             {
-              url: 'turn:numb.viagenie.ca',
-              credential: 'muazkh',
-              username: 'webrtc@live.com',
+              url: 'turn:coturn.demo.ixm.ca',
+              username: 'user',
+              credential: 'password',
             },
           ],
         },
       };
 
-      if (context.getters.getAppSettings.peerjs_domain
-        && context.getters.getAppSettings.peerjs_domain.length > 0) {
-        config.host = context.getters.getAppSettings.peerjs_domain;
-      }
+      let peerjsDomain; let peerjsPort; let
+        peerjsUri;
+      // eslint-disable-next-line prefer-const
+      ({ peerjsDomain, peerjsPort, peerjsUri } = context.getters.getAppSettings);
 
-      if (context.getters.getAppSettings.peerjs_port
-        && context.getters.getAppSettings.peerjs_port.length > 0) {
-        config.port = context.getters.getAppSettings.peerjs_port;
-      }
-
-      if (context.getters.getAppSettings.peerjs_uri
-        && context.getters.getAppSettings.peerjs_uri.length > 0) {
-        config.path = context.getters.getAppSettings.peerjs_uri;
+      if (peerjsDomain !== '') {
+        config.host = peerjsDomain;
+        config.port = peerjsPort;
+        config.path = peerjsUri;
       }
 
       // eslint-disable-next-line no-undef
-      const peer = new Peer(peerId, config);
+      const peer = new Peer(config);
       context.commit('setPeer', peer);
 
       peer.on('open', (id) => {
-        context.commit('setPeerOpened', true);
+        context.commit('setPeerSignalingServerConnected', true);
 
         if (context.state.instructorRole) {
           if (context.state.customerPeerId) {
@@ -81,18 +82,20 @@ export default {
           }
         } else {
           context.commit('setCustomerPeerId', id);
-          if (peerId === null) {
-            context.dispatch('publishCustomerPeer');
-          }
+          context.dispatch('publishCustomerPeer');
         }
       });
 
       peer.on('close', () => {
-        context.commit('setPeerOpened', false);
+        context.commit('setPeerSignalingServerConnected', false);
       });
 
       peer.on('disconnected', () => {
-        context.commit('setPeerOpened', false);
+        context.commit('setPeerSignalingServerConnected', false);
+        // eslint-disable-next-line no-undef
+        _.delay(() => {
+          peer.reconnect();
+        }, 1000);
       });
 
       peer.on('connection', (dataConnection) => {
@@ -105,12 +108,31 @@ export default {
 
       peer.on('error', (error) => {
         if (error.type === 'peer-unavailable') {
-          context.dispatch('connectToCustomerPeer');
+          if (context.getters.isInstructorRole) {
+            context.dispatch('loadCustomerPeer');
+          }
+        } else if (error.type === 'browser-incompatible') {
+          context.commit('setPeerInitializationError', 'Your browser does not support video meeting features that you are trying to use.');
+        } else if (error.type === 'network'
+          || error.type === 'server-error'
+          || error.type === 'socket-error'
+          || error.type === 'socket-closed'
+          || error.type === 'webrtc'
+        ) {
+          console.log(error);
+          peer.destroy();
+          context.commit('setPeer', null);
+          // eslint-disable-next-line no-undef
+          _.delay(() => {
+            context.dispatch('initPeer');
+          }, 1000);
+        } else {
+          console.log(error);
         }
       });
     },
     async initMediaStream(context) {
-      navigator.mediaDevices.getUserMedia({
+      await navigator.mediaDevices.getUserMedia({
         audio: {
           echoCancellation: true,
           noiseSuppression: true,
@@ -146,10 +168,7 @@ export default {
       context.dispatch('closeMediaConnection');
     },
     async closeMediaConnection(context) {
-      console.log('closeMediaConnection 1');
-      console.log(context.state.peerMediaConnection);
       if (context.state.peerMediaConnection !== null) {
-        console.log('closeMediaConnection 2');
         if (context.state.peerMediaConnection.close) {
           context.state.peerMediaConnection.close();
         }
@@ -164,6 +183,12 @@ export default {
           trainingId: context.getters.personalTrainingId,
           peerId: context.getters.customerPeerId,
         },
+      }).catch((error) => {
+        console.log(error);
+        // eslint-disable-next-line no-undef
+        _.delay(() => {
+          context.dispatch('publishCustomerPeer');
+        }, 1000);
       });
     },
     async loadCustomerPeer(context) {
@@ -182,6 +207,12 @@ export default {
             context.dispatch('loadCustomerPeer');
           }, 2000);
         }
+      }).catch((error) => {
+        console.log(error);
+        // eslint-disable-next-line no-undef
+        _.delay(() => {
+          context.dispatch('loadCustomerPeer');
+        }, 1000);
       });
     },
     async connectToCustomerPeer(context) {
@@ -198,7 +229,6 @@ export default {
         context.commit('setPeerDataConnection', dataConnection);
       });
       dataConnection.on('data', (data) => {
-        console.log(data);
         if (data.newMessage) {
           context.dispatch('receiveChatMessage', data.newMessage);
         } else if (data.videoStateEvent) {
@@ -217,6 +247,11 @@ export default {
       });
       dataConnection.on('error', (error) => {
         console.log('dataConnection error:', error);
+        if (dataConnection.open !== true) {
+          if (context.getters.isInstructorRole) {
+            context.dispatch('loadCustomerPeer');
+          }
+        }
       });
     },
     async subscribeToACall(context) {
@@ -277,6 +312,9 @@ export default {
     setPeer(state, value) {
       state.peer = value;
     },
+    setPeerInitializationError(state, value) {
+      state.peerInitializationError = value;
+    },
     setCustomerPeerId(state, peerId) {
       state.customerPeerId = peerId;
     },
@@ -286,8 +324,8 @@ export default {
     setCustomerPeerSource(state, source) {
       state.customerPeerSource = source;
     },
-    setPeerOpened(state, value) {
-      state.peerOpened = value;
+    setPeerSignalingServerConnected(state, value) {
+      state.peerSignalingServerConnected = value;
     },
     setPeerDataConnected(state, value) {
       state.peerDataConnected = value;
@@ -320,6 +358,8 @@ export default {
   },
   getters: {
     peer: (state) => state.peer,
+    peerSignalingServerConnected: (state) => state.peerSignalingServerConnected,
+    peerInitializationError: (state) => state.peerInitializationError,
     peerDataConnected: (state) => state.peerDataConnected,
     peerDataConnection: (state) => state.peerDataConnection,
     partnerPeerId: (state) => (

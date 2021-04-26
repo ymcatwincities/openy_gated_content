@@ -81,6 +81,13 @@ class PersonalTraining extends ContentEntityBase implements PersonalTrainingInte
   /**
    * {@inheritdoc}
    */
+  public function getCustomerId() {
+    return $this->get('customer_id')->entity->id();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getCustomerPeerId() {
     return $this->get('customer_peer_id')->value;
   }
