@@ -17,7 +17,8 @@ class PersonalTrainingListBuilder extends EntityListBuilder {
    * {@inheritdoc}
    */
   public function buildHeader() {
-    $header['id'] = $this->t('Personal training ID');
+    $header['id'] = $this->t('ID');
+    $header['title'] = $this->t('Title');
     $header['customer'] = $this->t('Customer');
     $header['instructor'] = $this->t('Instructor');
     $header['training_type'] = $this->t('Training type');
@@ -29,8 +30,9 @@ class PersonalTrainingListBuilder extends EntityListBuilder {
    * {@inheritdoc}
    */
   public function buildRow(EntityInterface $entity) {
-    $row['id'] = Link::createFromRoute(
-      '#' . $entity->id(),
+    $row['id'] = $entity->id();
+    $row['title'] = Link::createFromRoute(
+      $entity->label(),
       'entity.personal_training.canonical',
       ['personal_training' => $entity->id()]
     );

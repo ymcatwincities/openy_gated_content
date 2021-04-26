@@ -45,7 +45,6 @@
 import Modal from '@/components/modal/Modal.vue';
 import SendIcon from '@/components/svg/SendIcon.vue';
 import { mapGetters, mapActions } from 'vuex';
-import dayjs from 'dayjs';
 
 export default {
   components: { Modal, SendIcon },
@@ -77,7 +76,7 @@ export default {
       this.sendChatMessage(message);
     },
     formatDate(date) {
-      return dayjs(date).format('ddd, MMM D, YYYY @ h:mm a');
+      return this.$dayjs.date(date).format('ddd, MMM D, YYYY @ h:mm a');
     },
     getMsgAuthor(author, short = false) {
       if (author === this.localName) {
