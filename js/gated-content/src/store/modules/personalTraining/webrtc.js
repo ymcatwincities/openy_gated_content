@@ -42,19 +42,27 @@ export default {
       }
 
       const config = {
-        debug: 2,
         secure: true,
-        config: {
+      };
+
+      if (context.getters.getAppSettings.peerjs_stun
+          && context.getters.getAppSettings.peerjs_stun.length > 0) {
+        config.config = {
           iceServers: [
-            { url: 'stun:stun.l.google.com:19302' },
+            { url: context.getters.getAppSettings.peerjs_stun },
             {
-              url: 'turn:coturn.demo.ixm.ca',
-              username: 'user',
-              credential: 'password',
+              url: context.getters.getAppSettings.peerjs_turn_url,
+              credential: context.getters.getAppSettings.peerjs_turn_credential,
+              username: context.getters.getAppSettings.peerjs_turn_username,
             },
           ],
-        },
-      };
+        };
+      }
+
+      if (context.getters.getAppSettings.peerjs_debug
+          && context.getters.getAppSettings.peerjs_debug.length > 0) {
+        config.debug = context.getters.getAppSettings.peerjs_debug;
+      }
 
       let peerjsDomain;
       let peerjsPort;
