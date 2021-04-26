@@ -30,9 +30,8 @@
         background-color: $light-gray;
       }
       .modal-footer {
-        padding: 24px;
         justify-content: space-between;
-
+        @include median(padding, 24px, 10px, 10px);
         input {
           width: 80%;
           padding: 12px;
