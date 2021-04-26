@@ -58,8 +58,6 @@ export default {
         secure: true,
       };
 
-      console.log(context.getters.getAppSettings);
-
       if (peerjsSTUNUrl !== '') {
         config.config = {
           iceServers: [
@@ -82,8 +80,6 @@ export default {
         config.port = peerjsPort;
         config.path = peerjsUri;
       }
-
-      console.log(config);
 
       // eslint-disable-next-line no-undef
       const peer = new Peer(config);
