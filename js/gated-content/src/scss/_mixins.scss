@@ -10,10 +10,8 @@
     #{$property}: $tablet;
   }
 
-  @if $mobile != $tablet {
-    @media only screen and (max-width: 500px) and (max-height: 823px),
-    only screen and (max-width: 823px) and (max-height: 500px) {
-      #{$property}: $mobile;
-    }
+  @media only screen and (max-width: 500px) and (max-height: 823px),
+  only screen and (max-width: 823px) and (max-height: 500px) {
+    #{$property}: $mobile;
   }
 }

@@ -20,7 +20,7 @@
 
         @include median(grid-template-columns, 1fr 1fr, 1fr);
 
-        .header, .controls, .button {
+        .header, .controls, .join {
           @include median(grid-column, 2, 1);
         }
 
@@ -100,10 +100,6 @@
               }
             }
           }
-        }
-
-        .join {
-          grid-column: 2;
         }
       }
 
