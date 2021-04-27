@@ -118,6 +118,33 @@
           }
         }
       }
+
+      @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 1),
+      only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2),
+      only screen and (min-device-width: 834px) and (max-device-width: 834px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2),
+      only screen and (min-device-width: 1024px) and (max-device-width: 1024px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2),
+      only screen and (max-device-width: 800px) and (orientation: portrait),
+      only screen and (max-device-width: 800px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
+        .modal-body {
+          grid-template-columns: 1fr 1fr;
+
+          .header {
+            grid-column: 1/span2;
+          }
+
+          .controls, .join {
+            grid-column: 2;
+          }
+
+          .video {
+            grid-row: 2/span 2;
+
+            video {
+              max-height: 500px;
+            }
+          }
+        }
+      }
     }
   }
 }
