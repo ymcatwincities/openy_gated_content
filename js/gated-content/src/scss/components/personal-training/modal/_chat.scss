@@ -28,10 +28,19 @@
       .modal-body {
         margin: 0;
         background-color: $light-gray;
+        position: relative;
+        flex: 1 1 auto;
+        padding: 1rem;
       }
       .modal-footer {
-        padding: 24px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        border-top: 1px solid $silver-chalice;
+        border-bottom-right-radius: calc(0.3rem - 1px);
+        border-bottom-left-radius: calc(0.3rem - 1px);
         justify-content: space-between;
+        @include median(padding, 24px, 10px, 10px);
 
         input {
           width: 80%;

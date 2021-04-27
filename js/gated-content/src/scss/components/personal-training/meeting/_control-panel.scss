@@ -62,7 +62,6 @@
 
         .unread-count {
           position: absolute;
-          right: -5px;
           top: -5px;
           width: 24px;
           height: 24px;
@@ -72,6 +71,8 @@
           font-weight: bold;
           font-size: 12px;
           line-height: 20px;
+
+          @include median(right, -5px, -5px, 35px);
         }
       }
     }

@@ -33,11 +33,9 @@
          @click="toggleShowChatModal"
     >
       <SvgIcon icon="question_answer_black_24dp" class="fill-white"></SvgIcon>
-      <span>
-        Chat
-        <span v-if="unreadMessagesCount" class="unread-count">
-          {{ unreadMessagesCount }}
-        </span>
+      <span>Chat</span>
+      <span v-if="unreadMessagesCount" class="unread-count">
+        {{ unreadMessagesCount }}
       </span>
     </div>
     <div class="full-screen"
