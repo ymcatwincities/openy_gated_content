@@ -2,7 +2,6 @@
   .control-panel {
     display: flex;
 
-    @include median(column-gap, 12px, 12px, 0);
     @include median(padding,
       14px 24px,
       null,
@@ -23,6 +22,10 @@
       align-items:    center;
       position: relative;
       cursor:         pointer;
+
+      &:not(:last-child) {
+        @include median(margin-right, 12px, 12px, 0);
+      }
 
       .svg-container {
         padding:   9px;
