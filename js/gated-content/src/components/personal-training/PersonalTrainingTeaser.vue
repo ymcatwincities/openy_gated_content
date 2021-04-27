@@ -19,7 +19,7 @@
         <SvgIcon icon="instructor-icon"></SvgIcon>
         {{ instructor }}
       </div>
-      <div class="timer">
+      <div class="timer private">
         Private
       </div>
     </router-link>
