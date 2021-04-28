@@ -5,6 +5,7 @@
       class="partner"
       :srcObject.prop="partnerMediaStream ? partnerMediaStream : ''"
       autoplay="autoplay"
+      playsinline
       :class="{
         connected: partnerMediaStream !== null,
         'video-disabled': !remoteVideoState,
@@ -17,6 +18,7 @@
       :srcObject.prop="localMediaStream ? localMediaStream : ''"
       autoplay="autoplay"
       muted="muted"
+      playsinline
       :volume.prop="0"
     ></video>
   </div>
