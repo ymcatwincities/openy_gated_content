@@ -2,7 +2,7 @@
   <div class="meeting-player" :class="view">
     <video
       class="partner"
-      :srcObject.prop="partnerMediaStream && remoteVideoState ? partnerMediaStream : ''"
+      :srcObject.prop="partnerMediaStream ? partnerMediaStream : ''"
       autoplay="autoplay"
       :class="{
         connected: partnerMediaStream,
@@ -12,7 +12,7 @@
     <video
       class="local"
       :class="{connected: localMediaStream ? 'connected' : ''}"
-      :srcObject.prop="localMediaStream ? localMediaStream : null"
+      :srcObject.prop="localMediaStream ? localMediaStream : ''"
       autoplay="autoplay"
       muted="muted"
       :volume.prop="0"
