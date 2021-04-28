@@ -1,7 +1,7 @@
 <template>
   <div
     class="join-meeting gated-containerV2 pt-40-20 px--20-10 text-black"
-    :class="{shadow: isMeetingComplete || !peerSignalingServerConnecte || peerInitializationError}"
+    :class="{shadow: isMeetingComplete || !peerSignalingServerConnected || peerInitializationError}"
   >
     <JoinOptions></JoinOptions>
     <div

@@ -1,17 +1,19 @@
 <template>
   <div class="meeting-player" :class="view">
     <video
+      :key="partnerMediaStream === null"
       class="partner"
       :srcObject.prop="partnerMediaStream ? partnerMediaStream : ''"
       autoplay="autoplay"
       :class="{
-        connected: partnerMediaStream,
+        connected: partnerMediaStream !== null,
         'video-disabled': !remoteVideoState,
       }"
     ></video>
     <video
+      :key="localMediaStream === null"
       class="local"
-      :class="{connected: localMediaStream ? 'connected' : ''}"
+      :class="{connected: localMediaStream !== null ? 'connected' : ''}"
       :srcObject.prop="localMediaStream ? localMediaStream : ''"
       autoplay="autoplay"
       muted="muted"
