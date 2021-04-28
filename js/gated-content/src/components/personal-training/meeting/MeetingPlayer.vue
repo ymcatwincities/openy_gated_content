@@ -24,18 +24,11 @@
 import { mapGetters } from 'vuex';
 
 export default {
-  // data() {
-  //   return {
-  //     partnerVideoStyle: {
-  //       width: undefined,
-  //       background: this.partnerMediaStream ? 'black' : undefined,
-  //     },
-  //   };
-  // },
-  // updated() {
-  //   // this.partnerVideoStyle.width = this.$el.querySelector('.partner')
-  //   .clientHeight * 1.777777778;
-  // },
+  data() {
+    return {
+      intervalId: 0,
+    };
+  },
   computed: {
     ...mapGetters([
       'view',
@@ -43,6 +36,16 @@ export default {
       'partnerMediaStream',
       'remoteVideoState',
     ]),
+  },
+  mounted() {
+    this.intervalId = setInterval(() => {
+      if (this.partnerMediaStream) {
+        this.$log.trackActivity({ path: this.$route.fullPath });
+      }
+    }, 60 * 1000);
+  },
+  beforeDestroy() {
+    clearInterval(this.intervalId);
   },
 };
 </script>

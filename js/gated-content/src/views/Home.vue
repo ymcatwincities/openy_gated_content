@@ -6,6 +6,13 @@
 
     <PageHeader title="Dashboard"></PageHeader>
 
+    <PersonalTrainingListing
+      :featured="true"
+      :viewAll="true"
+      :limit="8"
+      v-if="config.personal_training_enabled"
+    />
+
     <div v-for="component in componentsOrder" :key="component">
       <VideoListing
         :featured="true"
@@ -51,6 +58,7 @@
 import BlogListing from '@/components/blog/BlogListing.vue';
 import VideoListing from '@/components/video/VideoListing.vue';
 import EventListing from '@/components/event/EventListing.vue';
+import PersonalTrainingListing from '@/components/personal-training/PersonalTrainingListing.vue';
 import ParagraphHeadline from '@/components/ParagraphHeadline.vue';
 import { SettingsMixin } from '@/mixins/SettingsMixin';
 import { FilterAndSortMixin } from '@/mixins/FilterAndSortMixin';
@@ -65,6 +73,7 @@ export default {
     BlogListing,
     VideoListing,
     EventListing,
+    PersonalTrainingListing,
     ParagraphHeadline,
   },
   computed: {
