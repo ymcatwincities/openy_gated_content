@@ -5,6 +5,7 @@
       color:            $white;
 
       @include median(width, 72vw, null, 100vw);
+      @include median(max-height, 80vh, initial);
 
       .modal-header, .modal-footer {
         display: none;
@@ -19,8 +20,8 @@
 
         @include median(grid-template-columns, 1fr 1fr, 1fr);
 
-        .header, .controls, .button {
-          grid-column: 2;
+        .header, .controls, .join {
+          @include median(grid-column, 2, 1);
         }
 
         .video {
@@ -29,11 +30,11 @@
           background-position: center;
           background-size:     77%;
           min-height:          260px;
+          grid-column:         1;
 
           @include median(margin, 24px, 12px);
           @include median(min-height, 260px, initial);
-          @include median(grid-column, 1, 2);
-          @include median(grid-row, 1/span 3, initial);
+          @include median(grid-row, 1/span 3, 2);
 
           video {
             transform: scaleX(-1);
@@ -102,7 +103,16 @@
         }
 
         .join {
-          grid-column: 2;
+          .error-message {
+            @include median(margin-top, 30px, 15px);
+          }
+          .indigo-button {
+            &.disabled {
+              border-color:     #636466;
+              background-color: #000000;
+              color:            #636466 !important;
+            }
+          }
         }
       }
 
@@ -114,10 +124,39 @@
         .modal-body {
           grid-template-columns: 1fr 200px;
 
+          .header, .controls, .join {
+            grid-column: 2;
+          }
+
           .video {
             align-self:  center;
             grid-column: 1;
             grid-row:    1/span 3;
+          }
+        }
+      }
+
+      @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 1),
+      only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2),
+      only screen and (min-device-width: 834px) and (max-device-width: 834px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2),
+      only screen and (min-device-width: 1024px) and (max-device-width: 1024px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
+        .modal-body {
+          grid-template-columns: 1fr 1fr;
+
+          .header {
+            grid-column: 1/span2;
+          }
+
+          .controls, .join {
+            grid-column: 2;
+          }
+
+          .video {
+            grid-row: 2/span 2;
+
+            video {
+              max-height: 500px;
+            }
           }
         }
       }

@@ -2,6 +2,7 @@
   .meeting-player {
     position:         relative;
     background-color: $black;
+    height:           100%;
 
     video {
       transform: scaleX(-1);
@@ -59,10 +60,10 @@
 
     &.view-vertical {
       .partner {
-        position:    absolute;
-        top:         50%;
-        transform:   translateY(-50%) scaleX(-1);
-        width:       50%;
+        position:  absolute;
+        top:       50%;
+        transform: translateY(-50%) scaleX(-1);
+        width:     50%;
       }
 
       .local {
