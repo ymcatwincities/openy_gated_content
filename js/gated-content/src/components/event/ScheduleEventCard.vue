@@ -13,6 +13,7 @@
         </template>
       </div>
       <div class="instructor" v-if="event.host_name">{{ event.host_name }}</div>
+      <div v-if="isPrivate"><div class="timer private">Private</div></div>
     </div>
     <AddToFavorite
       v-if="isUpcoming"
@@ -52,6 +53,9 @@ export default {
     },
     isUpcoming() {
       return (new Date(this.event.date.end_value)).getTime() > (new Date()).getTime();
+    },
+    isPrivate() {
+      return this.event.type === 'personal_training';
     },
   },
 };
