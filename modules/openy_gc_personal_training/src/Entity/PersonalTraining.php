@@ -137,7 +137,7 @@ class PersonalTraining extends ContentEntityBase implements PersonalTrainingInte
 
     $fields['instructor_id'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('Instructor'))
-      ->setDescription(t('The user ID of instructor of the Personal training entity.'))
+      ->setDescription(t('The user ID of instructor of the Personal training entity. This user should have Virtual Trainer role'))
       ->setRequired(TRUE)
       ->setSetting('target_type', 'user')
       ->setSetting('handler', 'default')
