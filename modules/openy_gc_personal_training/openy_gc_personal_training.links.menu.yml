@@ -1,13 +1,13 @@
 # Personal training menu items definition
 entity.personal_training.collection:
-  title: 'Personal Trainings'
+  title: '1on1 Meeting'
   route_name: entity.personal_training.collection
-  description: 'Personal Trainings list'
+  description: '1on1 Meetings list'
   parent: openy_gated_content.openy
   weight: 100
 
 personal_training.admin.settings:
   title: 'Settings'
-  description: 'Configure Personal Trainings'
+  description: 'Configure 1on1 Meeting'
   route_name: personal_training.settings
   parent: entity.personal_training.collection

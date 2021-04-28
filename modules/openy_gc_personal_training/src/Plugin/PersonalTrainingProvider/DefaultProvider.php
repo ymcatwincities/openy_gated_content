@@ -39,7 +39,7 @@ class DefaultProvider extends PersonalTrainingProviderPluginBase {
 
     $form['personal_trainer_role'] = [
       '#type' => 'select',
-      '#title' => $this->t('Personal training role'),
+      '#title' => $this->t('1on1 Meeting role'),
       '#required' => TRUE,
       '#default_value' => $config['personal_trainer_role'],
       '#options' => [],
