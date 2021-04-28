@@ -87,6 +87,7 @@ class PersonalTrainingListBuilder extends EntityListBuilder {
       $entity->label(),
       'entity.personal_training.canonical',
       ['personal_training' => $entity->id()]
+
     );
 
     $row['customer'] = Link::createFromRoute(
