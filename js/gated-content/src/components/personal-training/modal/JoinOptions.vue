@@ -51,11 +51,21 @@
       </div>
       <div class="join">
         <div
+          v-if="!localMediaStream"
+          class="text-center error-message"
+        >
+          Please, share your camera and mic, and click below
+        </div>
+        <div
           v-if="localMediaStream"
           class="indigo-button cachet-book-20 text-white"
           @click="joinVideoSession"
         >Join meeting
         </div>
+        <div
+          v-else
+          class="indigo-button cachet-book-20 disabled"
+        >Join meeting</div>
       </div>
     </template>
   </Modal>
