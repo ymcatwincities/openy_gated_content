@@ -16,9 +16,8 @@
         margin:                0;
         padding:               0;
         overflow-y:            initial;
-        grid-template-columns: 1fr 1fr;
 
-        @include median(grid-template-columns, 1fr 1fr, 1fr);
+        @include median(grid-template-columns, 1fr 0.5fr, 1fr);
 
         .header, .controls, .join {
           @include median(grid-column, 2, 1);
@@ -28,7 +27,7 @@
           background-image:    url('assets/img/join-options-video.png');
           background-repeat:   no-repeat;
           background-position: center;
-          background-size:     77%;
+          background-size:     cover;
           min-height:          260px;
           grid-column:         1;
 
