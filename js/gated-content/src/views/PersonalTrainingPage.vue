@@ -167,7 +167,7 @@ export default {
             personalTrainingId: this.video.attributes.drupal_internal__id,
             personalTrainingDate: this.$dayjs.date(this.video.attributes.date.end_value),
           }).then(() => {
-            this.$store.dispatch('initMeeting');
+            this.$store.dispatch('connectToSignalingServer');
           });
         })
         .catch((error) => {

@@ -64,53 +64,39 @@ class PersonalTrainingSettingsForm extends ConfigFormBase {
       return ['#markup' => $this->t('Personal training providers not found.')];
     }
 
-    $form['peerjs_domain'] = [
+    $form['signalingServerPRL'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('PeerJS Domain'),
-      '#default_value' => $config->get('peerjs_domain'),
-
+      '#title' => $this->t('Signaling Server PRL (Protocol-relative URL)'),
+      '#default_value' => $config->get('signalingServerPRL'),
       '#required' => FALSE,
-    ];
-
-    $form['peerjs_port'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('PeerJS Port'),
-      '#default_value' => $config->get('peerjs_port'),
-      '#required' => FALSE,
-    ];
-
-    $form['peerjs_uri'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('PeerJS Uri'),
-      '#default_value' => $config->get('peerjs_uri'),
-      '#required' => FALSE,
+      '#description' => $this->t('Used for web-socket connection.'),
     ];
 
     $form['peerjs_stun'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('PeerJS Stun server'),
+      '#title' => $this->t('STUN Server Domain'),
       '#default_value' => $config->get('peerjs_stun'),
       '#required' => FALSE,
     ];
 
     $form['peerjs_turn_url'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('PeerJS TURN Url'),
+      '#title' => $this->t('TURN Server Domain'),
       '#default_value' => $config->get('peerjs_turn_url'),
-      '#required' => FALSE,
-    ];
-
-    $form['peerjs_turn_credential'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('PeerJS TURN Credential'),
-      '#default_value' => $config->get('peerjs_turn_credential'),
       '#required' => FALSE,
     ];
 
     $form['peerjs_turn_username'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('PeerJS TURN Username'),
+      '#title' => $this->t('TURN Username'),
       '#default_value' => $config->get('peerjs_turn_username'),
+      '#required' => FALSE,
+    ];
+
+    $form['peerjs_turn_credential'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('TURN Password'),
+      '#default_value' => $config->get('peerjs_turn_credential'),
       '#required' => FALSE,
     ];
 
@@ -187,10 +173,8 @@ class PersonalTrainingSettingsForm extends ConfigFormBase {
     reset($selected);
     $settings = $this->config('openy_gc_personal_training.settings');
     $settings->set('active_provider', key($selected));
-    $settings->set('peerjs_domain', $form_state->getValue('peerjs_domain'));
-    $settings->set('peerjs_port', $form_state->getValue('peerjs_port'));
-    $settings->set('peerjs_uri', $form_state->getValue('peerjs_uri'));
 
+    $settings->set('signalingServerPRL', $form_state->getValue('signalingServerPRL'));
     $settings->set('peerjs_stun', $form_state->getValue('peerjs_stun'));
     $settings->set('peerjs_turn_url', $form_state->getValue('peerjs_turn_url'));
     $settings->set('peerjs_turn_credential', $form_state->getValue('peerjs_turn_credential'));

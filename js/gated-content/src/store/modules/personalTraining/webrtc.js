@@ -1,11 +1,10 @@
 import client from '@/client';
-import personalTrainingWebRtcEvents from '@/store/modules/personalTraining/webrtc/events';
+import events from '@/store/modules/personalTraining/webrtc/events';
+import signalingServer from '@/store/modules/personalTraining/webrtc/signalingServer';
 
 export default {
   state: {
     peer: null,
-    ws: null,
-    peerSignalingServerConnected: false,
     peerInitializationError: '',
     customerPeerId: null,
     instructorPeerId: null,
@@ -28,37 +27,6 @@ export default {
       context.commit('setInstructorName', payload.instructorName);
       context.commit('setCustomerName', payload.customerName);
     },
-    async initMeeting(context) {
-      const ws = new WebSocket('wss://coturn.demo.ixm.ca:8091/asdasd');
-
-      ws.addEventListener('message', (event) => {
-        console.log('Message from server ', event.data);
-        if (event.data === 'ready') {
-          return;
-        }
-        context.dispatch('processSignal', JSON.parse(event.data));
-      });
-
-      ws.addEventListener('open', () => {
-        context.commit('setPeerSignalingServerConnected', true);
-        console.log('on open -> init Peer');
-        context.dispatch('initPeer');
-      });
-
-      ws.addEventListener('close', () => {
-        context.commit('setPeerSignalingServerConnected', false);
-      });
-
-      context.state.ws = ws;
-      console.log(context.state.ws);
-    },
-
-    async processSignal(context, signal) {
-      console.log('on signal receive:', signal);
-      if (context.getters.peer) {
-        context.getters.peer.signal(signal);
-      }
-    },
     async initPeer(context) {
       console.log('initPeer');
       if (context.state.peer !== null) {
@@ -74,22 +42,17 @@ export default {
         return;
       }
 
-      let peerjsDomain;
-      let peerjsPort;
-      let peerjsUri;
       let peerjsSTUNUrl;
       let peerjsTURNUrl;
       let peerjsTURNUsername;
       let peerjsTURNCredential;
-      let peerjsDebug;
 
       ({
         // eslint-disable-next-line prefer-const
-        peerjsDomain, peerjsPort, peerjsUri, peerjsSTUNUrl,
+        peerjsSTUNUrl,
         // eslint-disable-next-line prefer-const
         peerjsTURNUrl, peerjsTURNUsername, peerjsTURNCredential,
         // eslint-disable-next-line prefer-const
-        peerjsDebug,
       } = context.getters.getAppSettings);
 
       const config = {
@@ -109,16 +72,6 @@ export default {
         };
       }
 
-      if (peerjsDebug !== '') {
-        config.debug = peerjsDebug;
-      }
-
-      if (peerjsDomain !== '') {
-        config.host = peerjsDomain;
-        config.port = peerjsPort;
-        config.path = peerjsUri;
-      }
-
       // eslint-disable-next-line no-undef
       const peer = new SimplePeer({
         initiator: context.getters.isInstructorRole === true,
@@ -128,8 +81,7 @@ export default {
       context.commit('setPeer', peer);
 
       peer.on('signal', (data) => {
-        console.log('peer send signal->:', data);
-        context.state.ws.send(JSON.stringify(data));
+        context.dispatch('sendSignalingMessage', data);
       });
 
       peer.on('connect', () => {
@@ -167,7 +119,7 @@ export default {
 
       peer.on('close', () => {
         console.log('peer on close');
-        context.commit('setPeerSignalingServerConnected', false);
+        context.commit('setPeerDataConnected', false);
       });
 
       //
@@ -358,7 +310,6 @@ export default {
     // async handleMediaConnection(context, mediaConnection) {
     //   console.log('handle media connection', mediaConnection);
     //   mediaConnection.on('stream', (stream) => {
-    //     console.log('stream received', stream, context.getters.partnerMediaStream, mediaConnection);
     //     context.commit('setPeerStreamConnected', true);
     //     context.dispatch('setPartnerMediaStream', stream);
     //     context.dispatch('sendVideoStateEvent', context.getters.isCameraEnabled);
@@ -438,10 +389,6 @@ export default {
     setCustomerPeerSource(state, source) {
       state.customerPeerSource = source;
     },
-    setPeerSignalingServerConnected(state, value) {
-      console.log('set signaling connected', value);
-      state.peerSignalingServerConnected = value;
-    },
     setPeerDataConnected(state, value) {
       state.peerDataConnected = value;
     },
@@ -473,7 +420,6 @@ export default {
   },
   getters: {
     peer: (state) => state.peer,
-    peerSignalingServerConnected: (state) => state.peerSignalingServerConnected,
     peerInitializationError: (state) => state.peerInitializationError,
     peerDataConnected: (state) => state.peerDataConnected,
     peerDataConnection: (state) => state.peerDataConnection,
@@ -503,6 +449,7 @@ export default {
         : state.instructorName),
   },
   modules: {
-    personalTrainingWebRtcEvents,
+    events,
+    signalingServer,
   },
 };
