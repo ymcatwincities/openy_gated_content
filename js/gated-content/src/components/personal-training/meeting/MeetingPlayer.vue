@@ -8,7 +8,6 @@
       playsinline
       :class="{
         connected: partnerMediaStream !== null,
-        'video-disabled': !remoteVideoState,
       }"
     ></video>
     <video

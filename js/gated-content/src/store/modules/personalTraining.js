@@ -16,6 +16,7 @@ export default {
       context.commit('setVideoSessionStatus', true);
       context.dispatch('subscribeToACall');
       if (context.getters.peerDataConnected) {
+        console.log('join button call partner');
         context.dispatch('callPartner');
       }
     },

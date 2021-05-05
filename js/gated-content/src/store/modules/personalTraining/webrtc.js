@@ -4,6 +4,7 @@ import personalTrainingWebRtcEvents from '@/store/modules/personalTraining/webrt
 export default {
   state: {
     peer: null,
+    ws: null,
     peerSignalingServerConnected: false,
     peerInitializationError: '',
     customerPeerId: null,
@@ -27,13 +28,45 @@ export default {
       context.commit('setInstructorName', payload.instructorName);
       context.commit('setCustomerName', payload.customerName);
     },
+    async initMeeting(context) {
+      const ws = new WebSocket('wss://coturn.demo.ixm.ca:8091/asdasd');
+
+      ws.addEventListener('message', (event) => {
+        console.log('Message from server ', event.data);
+        if (event.data === 'ready') {
+          return;
+        }
+        context.dispatch('processSignal', JSON.parse(event.data));
+      });
+
+      ws.addEventListener('open', () => {
+        context.commit('setPeerSignalingServerConnected', true);
+        console.log('on open -> init Peer');
+        context.dispatch('initPeer');
+      });
+
+      ws.addEventListener('close', () => {
+        context.commit('setPeerSignalingServerConnected', false);
+      });
+
+      context.state.ws = ws;
+      console.log(context.state.ws);
+    },
+
+    async processSignal(context, signal) {
+      console.log('on signal receive:', signal);
+      if (context.getters.peer) {
+        context.getters.peer.signal(signal);
+      }
+    },
     async initPeer(context) {
+      console.log('initPeer');
       if (context.state.peer !== null) {
         return;
       }
 
       // eslint-disable-next-line no-undef
-      if (Peer === undefined) {
+      if (SimplePeer === undefined) {
         // eslint-disable-next-line no-undef
         _.delay(() => {
           context.dispatch('initPeer');
@@ -41,8 +74,13 @@ export default {
         return;
       }
 
-      let peerjsDomain; let peerjsPort; let peerjsUri; let peerjsSTUNUrl;
-      let peerjsTURNUrl; let peerjsTURNUsername; let peerjsTURNCredential;
+      let peerjsDomain;
+      let peerjsPort;
+      let peerjsUri;
+      let peerjsSTUNUrl;
+      let peerjsTURNUrl;
+      let peerjsTURNUsername;
+      let peerjsTURNCredential;
       let peerjsDebug;
 
       ({
@@ -61,9 +99,9 @@ export default {
       if (peerjsSTUNUrl !== '') {
         config.config = {
           iceServers: [
-            { url: peerjsSTUNUrl },
+            { urls: [peerjsSTUNUrl] },
             {
-              url: peerjsTURNUrl,
+              urls: [peerjsTURNUrl],
               username: peerjsTURNUsername,
               credential: peerjsTURNCredential,
             },
@@ -82,55 +120,86 @@ export default {
       }
 
       // eslint-disable-next-line no-undef
-      const peer = new Peer(config);
+      const peer = new SimplePeer({
+        initiator: context.getters.isInstructorRole === true,
+        config,
+      });
+      console.log(peer);
       context.commit('setPeer', peer);
 
-      peer.on('open', (id) => {
-        context.commit('setPeerSignalingServerConnected', true);
+      peer.on('signal', (data) => {
+        console.log('peer send signal->:', data);
+        context.state.ws.send(JSON.stringify(data));
+      });
 
+      peer.on('connect', () => {
+        context.commit('setPeerDataConnected', true);
+        console.log('peer on connect');
         if (context.state.instructorRole) {
           context.dispatch('loadCustomerPeer');
         } else {
-          context.commit('setCustomerPeerId', id);
+          context.commit('setCustomerPeerId', '111');
           context.dispatch('publishCustomerPeer');
         }
-      });
-
-      peer.on('close', () => {
-        context.commit('setPeerSignalingServerConnected', false);
-      });
-
-      peer.on('disconnected', () => {
-        context.commit('setPeerSignalingServerConnected', false);
-        // eslint-disable-next-line no-undef
-        _.delay(() => {
-          peer.reconnect();
-        }, 1000);
-      });
-
-      peer.on('connection', (dataConnection) => {
-        context.dispatch('handleDataConnection', dataConnection);
 
         if (context.getters.isJoinedVideoSession) {
           context.dispatch('callPartner');
         }
       });
 
-      peer.on('error', (error) => {
-        console.log('peer error', error);
+      peer.on('stream', (stream) => {
+        console.log('stream received <-', stream);
+        context.commit('setPeerStreamConnected', true);
+        context.dispatch('setPartnerMediaStream', stream);
+        context.dispatch('sendVideoStateEvent', context.getters.isCameraEnabled);
+      });
 
-        if (error.type === 'peer-unavailable') {
+      peer.on('data', (data) => {
+        console.log('peer on data');
+        if (data.newMessage) {
+          context.dispatch('receiveChatMessage', data.newMessage);
+        } else if (data.videoStateEvent) {
+          context.dispatch('setRemoteVideoStateEvent', data.videoStateEvent);
+        } else if (data === 'callEndedEvent') {
+          context.dispatch('callEndedEvent');
+        }
+      });
+
+      peer.on('close', () => {
+        console.log('peer on close');
+        context.commit('setPeerSignalingServerConnected', false);
+      });
+
+      //
+      // peer.on('disconnected', () => {
+      //   console.log('peer disconnected');
+      //   context.commit('setPeerSignalingServerConnected', false);
+      //   // eslint-disable-next-line no-undef
+      //   _.delay(() => {
+      //     peer.reconnect();
+      //   }, 1000);
+      // });
+
+      // peer.on('connection', (dataConnection) => {
+      //   console.log('peer on connection', dataConnection);
+      //   context.dispatch('handleDataConnection', dataConnection);
+      //
+      //   if (context.getters.isJoinedVideoSession) {
+      //     console.log('call partner from peer connection event', dataConnection);
+      //     context.dispatch('callPartner');
+      //   }
+      // });
+
+      peer.on('error', (error) => {
+        console.log('peer error', error, error.code);
+
+        if (error.code === peer.ERR_CONNECTION_FAILURE) {
           if (context.getters.isInstructorRole) {
             context.dispatch('loadCustomerPeer');
           }
-        } else if (error.type === 'browser-incompatible') {
+        } else if (error.code === peer.ERR_WEBRTC_SUPPORT) {
           context.commit('setPeerInitializationError', 'Your browser does not support video meeting features that you are trying to use.');
-        } else if (error.type === 'network'
-          || error.type === 'server-error'
-          || error.type === 'socket-error'
-          || error.type === 'socket-closed'
-          || error.type === 'webrtc'
-        ) {
+        } else if (error.type === peer.ERR_CONNECTION_FAILURE) {
           console.log('reinit peer');
           peer.destroy();
           context.commit('setPeer', null);
@@ -180,6 +249,7 @@ export default {
       context.dispatch('closeMediaConnection');
     },
     async closeMediaConnection(context) {
+      console.log('close media connection');
       if (context.state.peerMediaConnection !== null) {
         if (context.state.peerMediaConnection.close) {
           context.state.peerMediaConnection.close();
@@ -204,6 +274,7 @@ export default {
       });
     },
     async loadCustomerPeer(context) {
+      console.log('load customer peer');
       client.get('personal-training/load-customer-peer', {
         params: {
           trainingId: context.getters.personalTrainingId,
@@ -227,102 +298,115 @@ export default {
         }, 1000);
       });
     },
-    async connectToCustomerPeer(context) {
-      const dataConnection = context.state.peer.connect(context.state.customerPeerId);
-      context.dispatch('handleDataConnection', dataConnection);
-    },
-    async handleDataConnection(context, dataConnection) {
-      dataConnection.on('open', () => {
-        context.commit('setPeerDataConnected', true);
-        context.commit('setPeerDataConnection', dataConnection);
-      });
-
-      dataConnection.on('data', (data) => {
-        if (data.newMessage) {
-          context.dispatch('receiveChatMessage', data.newMessage);
-        } else if (data.videoStateEvent) {
-          context.dispatch('setRemoteVideoStateEvent', data.videoStateEvent);
-        } else if (data === 'callEndedEvent') {
-          context.dispatch('callEndedEvent');
-        }
-      });
-
-      dataConnection.on('close', () => {
-        context.commit('setPeerDataConnected', false);
-        context.commit('setPeerDataConnection', null);
-        context.dispatch('setPartnerMediaStream', null);
-        if (context.state.instructorRole) {
-          context.dispatch('loadCustomerPeer');
-        }
-      });
-
-      dataConnection.on('error', (error) => {
-        console.log('dataConnection error:', error);
-        if (dataConnection.open !== true) {
-          if (context.getters.isInstructorRole) {
-            context.dispatch('loadCustomerPeer');
-          }
-        }
-      });
-
-      context.dispatch('setPartnerMediaStream', null)
-        .then(() => {
-          context.dispatch('setPartnerPeerId', dataConnection.peer);
-        });
-    },
+    // async connectToCustomerPeer(context) {
+    //   console.log('connect to customer peer');
+    //   // const dataConnection = context.state.peer.connect(context.state.customerPeerId);
+    //   context.dispatch('handleDataConnection', {});
+    // },
+    // async handleDataConnection(context, dataConnection) {
+    //   context.commit('setPeerDataConnected', true);
+    //   // dataConnection.on('open', () => {
+    //   //   console.log('data connection opened', dataConnection);
+    //   //   context.commit('setPeerDataConnected', true);
+    //   //   context.commit('setPeerDataConnection', dataConnection);
+    //   // });
+    //
+    //   context.state.peer.on('data', (data) => {
+    //     console.log('peer on data', data);
+    //
+    //     if (data.newMessage) {
+    //       context.dispatch('receiveChatMessage', data.newMessage);
+    //     } else if (data.videoStateEvent) {
+    //       context.dispatch('setRemoteVideoStateEvent', data.videoStateEvent);
+    //     } else if (data === 'callEndedEvent') {
+    //       context.dispatch('callEndedEvent');
+    //     }
+    //   });
+    //
+    //   // dataConnection.on('close', () => {
+    //   //   console.log('data connection closed');
+    //   //   context.dispatch('closeMediaConnection');
+    //   //   context.commit('setPeerDataConnected', false);
+    //   //   context.commit('setPeerDataConnection', null);
+    //   //   context.dispatch('setPartnerMediaStream', null);
+    //   //   if (context.state.instructorRole) {
+    //   //     context.dispatch('loadCustomerPeer');
+    //   //   }
+    //   // });
+    //
+    //   // dataConnection.on('error', (error) => {
+    //   //   console.log('dataConnection error:', error);
+    //   //   if (dataConnection.open !== true) {
+    //   //     if (context.getters.isInstructorRole) {
+    //   //       context.dispatch('loadCustomerPeer');
+    //   //     }
+    //   //   }
+    //   // });
+    //
+    //   // context.dispatch('setPartnerMediaStream', null)
+    //   //   .then(() => {
+    //   //     context.dispatch('setPartnerPeerId', dataConnection.peer);
+    //   //   });
+    // },
     async sendData(context, data) {
-      if (context.getters.peerDataConnection
-        && context.getters.peerDataConnection.open) {
-        context.getters.peerDataConnection.send(data);
-      }
+      context.state.ws.send(data);
+      // if (context.getters.peerDataConnection
+      //   && context.getters.peerDataConnection.open) {
+      //   context.getters.peerDataConnection.send(data);
+      // }
     },
-    async handleMediaConnection(context, mediaConnection) {
-      mediaConnection.on('stream', (stream) => {
-        context.commit('setPeerStreamConnected', true);
-        context.dispatch('setPartnerMediaStream', stream);
-        context.dispatch('sendVideoStateEvent', context.getters.isCameraEnabled);
-      });
-
-      mediaConnection.on('close', () => {
-        context.commit('setPeerStreamConnected', false);
-        context.dispatch('setPartnerMediaStream', null);
-      });
-
-      mediaConnection.on('error', (error) => {
-        console.log('media connection', error);
-      });
-
-      context.commit('setPeerMediaConnection', mediaConnection);
-    },
-    async subscribeToACall(context) {
-      context.state.peer.on('call', (mediaConnection) => {
-        context.dispatch('handleMediaConnection', mediaConnection);
-        mediaConnection.answer(context.getters.localMediaStream);
-      });
-    },
+    // async handleMediaConnection(context, mediaConnection) {
+    //   console.log('handle media connection', mediaConnection);
+    //   mediaConnection.on('stream', (stream) => {
+    //     console.log('stream received', stream, context.getters.partnerMediaStream, mediaConnection);
+    //     context.commit('setPeerStreamConnected', true);
+    //     context.dispatch('setPartnerMediaStream', stream);
+    //     context.dispatch('sendVideoStateEvent', context.getters.isCameraEnabled);
+    //   });
+    //
+    //   mediaConnection.on('close', () => {
+    //     context.commit('setPeerStreamConnected', false);
+    //     context.dispatch('setPartnerMediaStream', null);
+    //   });
+    //
+    //   mediaConnection.on('error', (error) => {
+    //     console.log('media connection', error);
+    //   });
+    //
+    //   context.commit('setPeerMediaConnection', mediaConnection);
+    // },
+    // async subscribeToACall(context) {
+    //   // context.state.peer.on('call', (mediaConnection) => {
+    //   //   console.log('received a call');
+    //   //   context.dispatch('handleMediaConnection', mediaConnection);
+    //   //   mediaConnection.answer(context.getters.localMediaStream);
+    //   // });
+    // },
     async callPartner(context) {
-      const mediaConnection = context.state.peer.call(
-        context.getters.partnerPeerId,
-        context.getters.localMediaStream,
-      );
+      console.log('call partner');
+      context.getters.peer.addStream(context.getters.localMediaStream);
+      // const mediaConnection = context.state.peer.call(
+      //   context.getters.partnerPeerId,
+      //   context.getters.localMediaStream,
+      // );
+      //
+      // await context.dispatch('handleMediaConnection', mediaConnection);
 
-      await context.dispatch('handleMediaConnection', mediaConnection);
-
-      // eslint-disable-next-line no-undef
-      _.delay(() => {
-        context.dispatch('recallPartner');
-      }, 1000);
+      // // eslint-disable-next-line no-undef
+      // _.delay(() => {
+      //   context.dispatch('recallPartner');
+      // }, 1000);
     },
-    async recallPartner(context) {
-      if (context.getters.peerDataConnected
-        && context.getters.isJoinedVideoSession
-        && context.getters.peerMediaConnection !== null
-        && !context.getters.peerMediaConnection.open) {
-        context.getters.peerMediaConnection.close();
-        context.commit('setPeerMediaConnection', null);
-        context.dispatch('callPartner');
-      }
-    },
+    // async recallPartner(context) {
+    //   if (context.getters.peerDataConnected
+    //     && context.getters.isJoinedVideoSession
+    //     && context.getters.peerMediaConnection !== null
+    //     && !context.getters.peerMediaConnection.open) {
+    //     context.getters.peerMediaConnection.close();
+    //     context.commit('setPeerMediaConnection', null);
+    //     context.dispatch('callPartner');
+    //   }
+    // },
     setPartnerPeerId(context, peerId) {
       if (context.state.instructorRole) {
         context.commit('setCustomerPeerId', peerId);
@@ -355,6 +439,7 @@ export default {
       state.customerPeerSource = source;
     },
     setPeerSignalingServerConnected(state, value) {
+      console.log('set signaling connected', value);
       state.peerSignalingServerConnected = value;
     },
     setPeerDataConnected(state, value) {
