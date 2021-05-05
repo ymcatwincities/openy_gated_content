@@ -49,21 +49,17 @@ export default {
         // eslint-disable-next-line prefer-const
       } = context.getters.getAppSettings);
 
-      const config = {
-        secure: true,
-      };
+      const config = {};
 
       if (peerjsSTUNUrl !== '') {
-        config.config = {
-          iceServers: [
-            { urls: [peerjsSTUNUrl] },
-            {
-              urls: [peerjsTURNUrl],
-              username: peerjsTURNUsername,
-              credential: peerjsTURNCredential,
-            },
-          ],
-        };
+        config.iceServers = [
+          { urls: [peerjsSTUNUrl] },
+          {
+            urls: [peerjsTURNUrl],
+            username: peerjsTURNUsername,
+            credential: peerjsTURNCredential,
+          },
+        ];
       }
 
       // eslint-disable-next-line no-undef
