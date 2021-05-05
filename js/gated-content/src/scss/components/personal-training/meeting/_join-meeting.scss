@@ -3,10 +3,16 @@
     display:             flex;
     align-items:         center;
     justify-content:     center;
-    background-image:    url('assets/img/background.png');
-
+    @include median(
+        background-image,
+        url('assets/img/background.png'),
+        url('assets/img/background.png'),
+        url('assets/img/background-m.png')
+    );
+    @include median(background-size, auto, cover, cover);
+    @include median(height, 400px, 400px, 360px);
     background-position: center;
-    height:              400px;
+    background-repeat: no-repeat;
 
     &.shadow {
       box-shadow: inset 0 0 0 2000px rgba($black, 0.6);
