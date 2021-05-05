@@ -1,6 +1,6 @@
-import client from '@/client';
 import events from '@/store/modules/personalTraining/webrtc/events';
 import signalingServer from '@/store/modules/personalTraining/webrtc/signalingServer';
+import peerConnection from '@/store/modules/personalTraining/webrtc/peerConnection';
 
 export default {
   state: {
@@ -11,8 +11,6 @@ export default {
     customerPeerSource: null,
     instructorMediaStream: null,
     customerMediaStream: null,
-    peerDataConnected: false,
-    peerDataConnection: null,
     peerStreamConnected: false,
     peerMediaConnection: null,
     instructorRole: false,
@@ -29,10 +27,6 @@ export default {
     },
     async initPeer(context) {
       console.log('initPeer');
-      if (context.state.peer !== null) {
-        return;
-      }
-
       // eslint-disable-next-line no-undef
       if (SimplePeer === undefined) {
         // eslint-disable-next-line no-undef
@@ -85,15 +79,8 @@ export default {
       });
 
       peer.on('connect', () => {
-        context.commit('setPeerDataConnected', true);
+        context.commit('setPeerConnected', true);
         console.log('peer on connect');
-        if (context.state.instructorRole) {
-          context.dispatch('loadCustomerPeer');
-        } else {
-          context.commit('setCustomerPeerId', '111');
-          context.dispatch('publishCustomerPeer');
-        }
-
         if (context.getters.isJoinedVideoSession) {
           context.dispatch('callPartner');
         }
@@ -106,8 +93,9 @@ export default {
         context.dispatch('sendVideoStateEvent', context.getters.isCameraEnabled);
       });
 
-      peer.on('data', (data) => {
-        console.log('peer on data');
+      peer.on('data', (dataString) => {
+        const data = JSON.parse(dataString);
+        console.log('peer on data', data);
         if (data.newMessage) {
           context.dispatch('receiveChatMessage', data.newMessage);
         } else if (data.videoStateEvent) {
@@ -119,7 +107,9 @@ export default {
 
       peer.on('close', () => {
         console.log('peer on close');
-        context.commit('setPeerDataConnected', false);
+        context.commit('setPeerConnected', false);
+        context.getters.peer.destroy();
+        context.dispatch('initPeer');
       });
 
       //
@@ -132,16 +122,6 @@ export default {
       //   }, 1000);
       // });
 
-      // peer.on('connection', (dataConnection) => {
-      //   console.log('peer on connection', dataConnection);
-      //   context.dispatch('handleDataConnection', dataConnection);
-      //
-      //   if (context.getters.isJoinedVideoSession) {
-      //     console.log('call partner from peer connection event', dataConnection);
-      //     context.dispatch('callPartner');
-      //   }
-      // });
-
       peer.on('error', (error) => {
         console.log('peer error', error, error.code);
 
@@ -151,14 +131,6 @@ export default {
           }
         } else if (error.code === peer.ERR_WEBRTC_SUPPORT) {
           context.commit('setPeerInitializationError', 'Your browser does not support video meeting features that you are trying to use.');
-        } else if (error.type === peer.ERR_CONNECTION_FAILURE) {
-          console.log('reinit peer');
-          peer.destroy();
-          context.commit('setPeer', null);
-          // eslint-disable-next-line no-undef
-          _.delay(() => {
-            context.dispatch('initPeer');
-          }, 1000);
         } else {
           console.log('unhandled peer error', error);
         }
@@ -211,101 +183,10 @@ export default {
         context.dispatch('setPartnerMediaStream', null);
       }
     },
-    async publishCustomerPeer(context) {
-      client.get('personal-training/publish-customer-peer', {
-        params: {
-          trainingId: context.getters.personalTrainingId,
-          peerId: context.getters.customerPeerId,
-        },
-      }).catch((error) => {
-        console.log(error);
-        // eslint-disable-next-line no-undef
-        _.delay(() => {
-          context.dispatch('publishCustomerPeer');
-        }, 1000);
-      });
-    },
-    async loadCustomerPeer(context) {
-      console.log('load customer peer');
-      client.get('personal-training/load-customer-peer', {
-        params: {
-          trainingId: context.getters.personalTrainingId,
-        },
-      }).then((response) => {
-        const peerId = response.data;
-        if (peerId) {
-          context.commit('setCustomerPeerId', peerId);
-          context.dispatch('connectToCustomerPeer');
-        } else {
-          // eslint-disable-next-line no-undef
-          _.delay(() => {
-            context.dispatch('loadCustomerPeer');
-          }, 2000);
-        }
-      }).catch((error) => {
-        console.log(error);
-        // eslint-disable-next-line no-undef
-        _.delay(() => {
-          context.dispatch('loadCustomerPeer');
-        }, 1000);
-      });
-    },
-    // async connectToCustomerPeer(context) {
-    //   console.log('connect to customer peer');
-    //   // const dataConnection = context.state.peer.connect(context.state.customerPeerId);
-    //   context.dispatch('handleDataConnection', {});
-    // },
-    // async handleDataConnection(context, dataConnection) {
-    //   context.commit('setPeerDataConnected', true);
-    //   // dataConnection.on('open', () => {
-    //   //   console.log('data connection opened', dataConnection);
-    //   //   context.commit('setPeerDataConnected', true);
-    //   //   context.commit('setPeerDataConnection', dataConnection);
-    //   // });
-    //
-    //   context.state.peer.on('data', (data) => {
-    //     console.log('peer on data', data);
-    //
-    //     if (data.newMessage) {
-    //       context.dispatch('receiveChatMessage', data.newMessage);
-    //     } else if (data.videoStateEvent) {
-    //       context.dispatch('setRemoteVideoStateEvent', data.videoStateEvent);
-    //     } else if (data === 'callEndedEvent') {
-    //       context.dispatch('callEndedEvent');
-    //     }
-    //   });
-    //
-    //   // dataConnection.on('close', () => {
-    //   //   console.log('data connection closed');
-    //   //   context.dispatch('closeMediaConnection');
-    //   //   context.commit('setPeerDataConnected', false);
-    //   //   context.commit('setPeerDataConnection', null);
-    //   //   context.dispatch('setPartnerMediaStream', null);
-    //   //   if (context.state.instructorRole) {
-    //   //     context.dispatch('loadCustomerPeer');
-    //   //   }
-    //   // });
-    //
-    //   // dataConnection.on('error', (error) => {
-    //   //   console.log('dataConnection error:', error);
-    //   //   if (dataConnection.open !== true) {
-    //   //     if (context.getters.isInstructorRole) {
-    //   //       context.dispatch('loadCustomerPeer');
-    //   //     }
-    //   //   }
-    //   // });
-    //
-    //   // context.dispatch('setPartnerMediaStream', null)
-    //   //   .then(() => {
-    //   //     context.dispatch('setPartnerPeerId', dataConnection.peer);
-    //   //   });
-    // },
     async sendData(context, data) {
-      context.state.ws.send(data);
-      // if (context.getters.peerDataConnection
-      //   && context.getters.peerDataConnection.open) {
-      //   context.getters.peerDataConnection.send(data);
-      // }
+      if (context.getters.peerConnected) {
+        context.state.peer.send(JSON.stringify(data));
+      }
     },
     // async handleMediaConnection(context, mediaConnection) {
     //   console.log('handle media connection', mediaConnection);
@@ -389,12 +270,6 @@ export default {
     setCustomerPeerSource(state, source) {
       state.customerPeerSource = source;
     },
-    setPeerDataConnected(state, value) {
-      state.peerDataConnected = value;
-    },
-    setPeerDataConnection(state, value) {
-      state.peerDataConnection = value;
-    },
     setPeerStreamConnected(state, value) {
       state.peerStreamConnected = value;
     },
@@ -421,8 +296,6 @@ export default {
   getters: {
     peer: (state) => state.peer,
     peerInitializationError: (state) => state.peerInitializationError,
-    peerDataConnected: (state) => state.peerDataConnected,
-    peerDataConnection: (state) => state.peerDataConnection,
     peerMediaConnection: (state) => state.peerMediaConnection,
     partnerPeerId: (state) => (
       state.instructorRole
@@ -451,5 +324,6 @@ export default {
   modules: {
     events,
     signalingServer,
+    peerConnection,
   },
 };

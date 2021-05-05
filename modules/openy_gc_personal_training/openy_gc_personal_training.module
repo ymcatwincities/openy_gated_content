@@ -16,7 +16,7 @@ use Drupal\Core\Session\AccountInterface;
  * Attach openy_gc_personal_training/simple_peer library.
  */
 function openy_gc_personal_training_preprocess_html(&$variables) {
-  // TODO: instead of this better to alter gated_content library
+  // @todo instead of this better to alter gated_content library
   // and add dependency to openy_gc_personal_training/simple_peer.
   if ($node = \Drupal::routeMatch()->getParameter('node')) {
     if ($node->hasField('field_content')) {
