@@ -28,7 +28,7 @@ export default {
       context.commit('setCustomerName', payload.customerName);
     },
     async initPeer(context) {
-      console.log('initPeer');
+      context.dispatch('debugLog', ['VY Simple Peer', 'initPeer']);
       if (context.state.peer !== null) {
         return;
       }
@@ -77,7 +77,7 @@ export default {
         initiator: context.getters.isInstructorRole === true,
         config,
       });
-      console.log(peer);
+      context.dispatch('debugLog', ['VY Simple Peer', peer]);
       context.commit('setPeer', peer);
 
       peer.on('signal', (data) => {
@@ -86,7 +86,7 @@ export default {
 
       peer.on('connect', () => {
         context.commit('setPeerDataConnected', true);
-        console.log('peer on connect');
+        context.dispatch('debugLog', ['Peer on connect']);
         if (context.state.instructorRole) {
           context.dispatch('loadCustomerPeer');
         } else {
@@ -100,14 +100,14 @@ export default {
       });
 
       peer.on('stream', (stream) => {
-        console.log('stream received <-', stream);
+        context.dispatch('debugLog', ['stream received <-', stream]);
         context.commit('setPeerStreamConnected', true);
         context.dispatch('setPartnerMediaStream', stream);
         context.dispatch('sendVideoStateEvent', context.getters.isCameraEnabled);
       });
 
       peer.on('data', (data) => {
-        console.log('peer on data');
+        context.dispatch('debugLog', ['Peer on data']);
         if (data.newMessage) {
           context.dispatch('receiveChatMessage', data.newMessage);
         } else if (data.videoStateEvent) {
@@ -118,7 +118,7 @@ export default {
       });
 
       peer.on('close', () => {
-        console.log('peer on close');
+        context.dispatch('debugLog', ['Peer on close']);
         context.commit('setPeerDataConnected', false);
       });
 
@@ -143,8 +143,7 @@ export default {
       // });
 
       peer.on('error', (error) => {
-        console.log('peer error', error, error.code);
-
+        context.dispatch('debugLog', ['Peer error:', error, error.code]);
         if (error.code === peer.ERR_CONNECTION_FAILURE) {
           if (context.getters.isInstructorRole) {
             context.dispatch('loadCustomerPeer');
@@ -152,7 +151,7 @@ export default {
         } else if (error.code === peer.ERR_WEBRTC_SUPPORT) {
           context.commit('setPeerInitializationError', 'Your browser does not support video meeting features that you are trying to use.');
         } else if (error.type === peer.ERR_CONNECTION_FAILURE) {
-          console.log('reinit peer');
+          context.dispatch('debugLog', ['Re-init peer:']);
           peer.destroy();
           context.commit('setPeer', null);
           // eslint-disable-next-line no-undef
@@ -160,7 +159,7 @@ export default {
             context.dispatch('initPeer');
           }, 1000);
         } else {
-          console.log('unhandled peer error', error);
+          context.dispatch('debugLog', ['Unhandled peer error:', error]);
         }
       });
     },
@@ -181,7 +180,7 @@ export default {
           context.dispatch('setLocalMediaStream', mediaStream);
         })
         .catch((error) => {
-          console.log('init local stream', error);
+          context.dispatch('debugLog', ['Init local stream error:', error]);
         });
     },
     async setLocalMediaStream(context, mediaStream) {
@@ -201,7 +200,7 @@ export default {
       context.dispatch('closeMediaConnection');
     },
     async closeMediaConnection(context) {
-      console.log('close media connection');
+      context.dispatch('debugLog', ['close media connection']);
       if (context.state.peerMediaConnection !== null) {
         if (context.state.peerMediaConnection.close) {
           context.state.peerMediaConnection.close();
@@ -218,7 +217,7 @@ export default {
           peerId: context.getters.customerPeerId,
         },
       }).catch((error) => {
-        console.log(error);
+        context.dispatch('debugLog', ['Publish customer peer error:', error]);
         // eslint-disable-next-line no-undef
         _.delay(() => {
           context.dispatch('publishCustomerPeer');
@@ -226,7 +225,7 @@ export default {
       });
     },
     async loadCustomerPeer(context) {
-      console.log('load customer peer');
+      context.dispatch('debugLog', ['load customer peer']);
       client.get('personal-training/load-customer-peer', {
         params: {
           trainingId: context.getters.personalTrainingId,
@@ -243,7 +242,7 @@ export default {
           }, 2000);
         }
       }).catch((error) => {
-        console.log(error);
+        context.dispatch('debugLog', ['Load customer peer error:', error]);
         // eslint-disable-next-line no-undef
         _.delay(() => {
           context.dispatch('loadCustomerPeer');
@@ -301,7 +300,7 @@ export default {
     //   //   });
     // },
     async sendData(context, data) {
-      context.state.ws.send(data);
+      context.state.peer.send(data);
       // if (context.getters.peerDataConnection
       //   && context.getters.peerDataConnection.open) {
       //   context.getters.peerDataConnection.send(data);
@@ -334,7 +333,7 @@ export default {
     //   // });
     // },
     async callPartner(context) {
-      console.log('call partner');
+      context.dispatch('debugLog', ['call partner']);
       context.getters.peer.addStream(context.getters.localMediaStream);
       // const mediaConnection = context.state.peer.call(
       //   context.getters.partnerPeerId,
