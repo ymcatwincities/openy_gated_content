@@ -23,7 +23,7 @@ export default {
           context.dispatch('setLocalMediaStream', mediaStream);
         })
         .catch((error) => {
-          console.log('init local stream', error);
+          context.dispatch('debugLog', ['Init local stream error:', error]);
         });
     },
     setPartnerMediaStream(context, value) {

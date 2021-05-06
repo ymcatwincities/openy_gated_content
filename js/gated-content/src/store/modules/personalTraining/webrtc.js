@@ -10,7 +10,7 @@ export default {
   },
   actions: {
     async initPeer(context) {
-      console.log('initPeer');
+      context.dispatch('debugLog', ['VY Simple Peer', 'initPeer']);
       // eslint-disable-next-line no-undef
       if (SimplePeer === undefined) {
         // eslint-disable-next-line no-undef
@@ -51,6 +51,7 @@ export default {
         initiator: context.getters.isInstructorRole === true,
         config,
       });
+      context.dispatch('debugLog', ['VY Simple Peer', peer]);
       context.commit('setPeer', peer);
 
       peer.on('signal', (data) => {
@@ -59,25 +60,26 @@ export default {
 
       peer.on('connect', () => {
         context.commit('setPeerConnected', true);
+        context.dispatch('debugLog', ['Peer on connect']);
         if (context.getters.isJoinedVideoSession) {
           context.dispatch('callPartner');
         }
       });
 
       peer.on('stream', (stream) => {
-        console.log('stream received <-', stream);
+        context.dispatch('debugLog', ['stream received <-', stream]);
         context.commit('setPeerStreamConnected', true);
         context.dispatch('setPartnerMediaStream', stream);
       });
 
       peer.on('data', (dataString) => {
         const data = JSON.parse(dataString);
-        console.log('receive peer data <-', data);
+        context.dispatch('debugLog', ['Peer on data', data]);
         context.dispatch(data.action, data.payload);
       });
 
       peer.on('close', () => {
-        console.log('peer on close');
+        context.dispatch('debugLog', ['Peer on close']);
         context.commit('setPeerConnected', false);
         context.dispatch('closeRemoteMediaStream');
         context.getters.peer.destroy();
@@ -88,14 +90,11 @@ export default {
       });
 
       peer.on('error', (error) => {
-        console.log('peer error', error, error.code);
-
-        if (error.code === peer.ERR_CONNECTION_FAILURE) {
-          console.log('peer connection failure');
-        } else if (error.code === peer.ERR_WEBRTC_SUPPORT) {
+        context.dispatch('debugLog', ['Peer error:', error, error.code]);
+        if (error.code === peer.ERR_WEBRTC_SUPPORT) {
           context.commit('setPeerInitializationError', 'Your browser does not support video meeting features that you are trying to use.');
         } else {
-          console.log('unhandled peer error', error);
+          context.dispatch('debugLog', ['Unhandled peer error:', error]);
         }
       });
     },
@@ -105,7 +104,7 @@ export default {
       }
     },
     async callPartner(context) {
-      console.log('call partner');
+      context.dispatch('debugLog', ['call partner']);
       context.dispatch('sendLocalCamEnabledState', context.getters.isCameraEnabled);
       context.dispatch('sendLocalMicEnabledState', context.getters.isMicEnabled);
       context.getters.peer.addStream(context.getters.localMediaStream);
@@ -114,7 +113,6 @@ export default {
       context.commit('showJoinOptionsModal', false);
       context.commit('setVideoSessionStatus', true);
       if (context.getters.peerConnected) {
-        console.log('join button call partner');
         context.dispatch('callPartner');
       }
     },
