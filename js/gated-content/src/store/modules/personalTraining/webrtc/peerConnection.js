@@ -3,9 +3,6 @@ export default {
     peerConnected: false,
     peerConnection: null,
   },
-  actions: {
-
-  },
   mutations: {
     setPeerConnected(state, value) {
       state.peerConnected = value;

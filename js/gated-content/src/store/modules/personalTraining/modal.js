@@ -19,7 +19,7 @@ export default {
       if (context.state.showJoinOptionsModal) {
         await context.dispatch('initMediaStream');
       } else {
-        context.dispatch('closeMediaStream');
+        context.dispatch('closeLocalMediaStream');
       }
     },
     toggleShowLeaveMeetingModal(context) {
