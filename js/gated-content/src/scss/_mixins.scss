@@ -1,17 +1,16 @@
 @mixin median($property, $desktop, $tablet:$desktop, $mobile:$tablet) {
   #{$property}: $desktop;
 
-  @media only screen and (min-device-width: 800px) and (max-device-width: 1280px) and (-webkit-min-device-pixel-ratio: 2),
-  only screen and (min-device-width: 800px) and (max-device-width: 1280px),
-  only screen and (min-device-width: 1024px) and (max-device-width: 1366px) and (-webkit-min-device-pixel-ratio: 2),
-  only screen and (min-device-width: 834px) and (max-device-width: 1112px) and (-webkit-min-device-pixel-ratio: 2),
-  only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 2),
-  only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 1) {
-    #{$property}: $tablet;
+  @if $tablet != $desktop {
+    @media only screen and (max-width: 991px) {
+      #{$property}: $tablet;
+    }
   }
 
-  @media only screen and (max-width: 767px) and (max-height: 823px),
-  only screen and (max-width: 823px) and (max-height: 767px) {
-    #{$property}: $mobile;
+  @if $mobile != $tablet {
+    @media only screen and (max-width: 767px),
+    only screen and (max-width: 823px) and (max-height: 500px) {
+      #{$property}: $mobile;
+    }
   }
 }
