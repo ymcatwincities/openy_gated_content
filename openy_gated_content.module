@@ -203,7 +203,6 @@ function openy_gated_content_form_alter(&$form, FormStateInterface $form_state, 
   }
 
   $gcConfig = \Drupal::config('openy_gated_content.settings')->getRawData();
-  $events_bundle = $gcConfig['permissions_entities']['eventseries'];
   $allowedForms = [];
   if (!empty($gcConfig['permissions_entities'])) {
     $permissionEnabledEntities = $gcConfig['permissions_entities'];
@@ -212,11 +211,8 @@ function openy_gated_content_form_alter(&$form, FormStateInterface $form_state, 
         $allowedForms[] = $entity_key . '_' . $bundle . '_form';
         $allowedForms[] = $entity_key . '_' . $bundle . '_edit_form';
         $allowedForms[] = $entity_key . '_' . $bundle . '_add_form';
-        // Check for eventseries bundle.
-        // Add _clone_form into allowedForms array.
-        if (in_array($bundle, $events_bundle)) {
-          $allowedForms[] = $entity_key . '_' . $bundle . '_clone_form';
-        }
+        // Adding _clone_form into allowedForms array.
+        $allowedForms[] = $entity_key . '_' . $bundle . '_clone_form';
       }
     }
   }
