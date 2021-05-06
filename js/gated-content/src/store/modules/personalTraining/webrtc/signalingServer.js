@@ -11,23 +11,30 @@ export default {
         return;
       }
 
-      const ws = new WebSocket(`wss://${serverPRL}`);
+      const { personalTrainingId, isInstructorRole } = context.getters;
+      const ws = new WebSocket(`wss://${serverPRL}?meetingId=${personalTrainingId}&isInstructorRole=${isInstructorRole}`);
 
       ws.addEventListener('message', (event) => {
         if (event.data === 'ready') {
-          return;
+          if (context.getters.isInstructorRole) {
+            context.dispatch('initPeer');
+          }
+        } else {
+          context.dispatch('receiveSignalingMessage', JSON.parse(event.data));
         }
-        context.dispatch('receiveSignalingMessage', JSON.parse(event.data));
       });
 
       ws.addEventListener('open', () => {
         context.commit('setSignalingServerConnected', true);
         context.dispatch('debugLog', ['VY Signaling Server', 'connected to signaling server. initialize webrtc..']);
-        context.dispatch('initPeer');
+        if (!context.getters.isInstructorRole) {
+          context.dispatch('initPeer');
+        }
       });
 
       ws.addEventListener('close', () => {
         context.commit('setSignalingServerConnected', false);
+        context.dispatch('setPartnerMediaStream', null);
       });
 
       context.commit('setSignalingServerConnection', ws);
