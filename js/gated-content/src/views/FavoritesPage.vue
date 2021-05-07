@@ -62,6 +62,24 @@
         <span>There is no favorite content.</span>
       </div>
 
+      <PersonalTrainingListing
+        :favorites="true"
+        :limit="viewAllContentMode ? 0 : itemsLimit"
+        :sort="sortData('personal_training')"
+        v-if="!isFavoritesTypeEmpty('personal_training', 'personal_training')
+          && config.personal_training_enabled
+          && (selectedComponent === 'personal_training' || selectedComponent === 'all')">
+        <template #filterButton>
+          <button
+            v-if="selectedComponent === 'all'"
+            type="button"
+            class="view-all"
+            @click="preSelectedComponent = 'personal_training'; applyFilters()">
+            More
+          </button>
+        </template>
+      </PersonalTrainingListing>
+
       <div v-for="component in componentsOrder" :key="component">
         <div v-if="!isFavoritesTypeEmpty('node', 'gc_video')
           && showOnCurrentIteration('gc_video', component)
@@ -182,6 +200,7 @@ import Spinner from '@/components/Spinner.vue';
 import BlogListing from '@/components/blog/BlogListing.vue';
 import VideoListing from '@/components/video/VideoListing.vue';
 import EventListing from '@/components/event/EventListing.vue';
+import PersonalTrainingListing from '@/components/personal-training/PersonalTrainingListing.vue';
 import CategoriesListing from '@/components/category/CategoriesListing.vue';
 import { SettingsMixin } from '@/mixins/SettingsMixin';
 import { FavoritesMixin } from '@/mixins/FavoritesMixin';
@@ -195,6 +214,7 @@ export default {
     BlogListing,
     VideoListing,
     EventListing,
+    PersonalTrainingListing,
     CategoriesListing,
   },
   data() {
@@ -243,6 +263,11 @@ export default {
       },
       deep: true,
     },
+  },
+  mounted() {
+    if (this.config.personal_training_enabled) {
+      this.contentTypeOptions.splice(1, 0, { value: 'personal_training', type: 'personal_training', label: 'Personal training' });
+    }
   },
 };
 </script>

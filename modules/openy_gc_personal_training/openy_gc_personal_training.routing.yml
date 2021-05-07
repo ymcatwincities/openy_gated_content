@@ -1,0 +1,33 @@
+openy_gc_personal_training.provider.edit:
+  path: '/admin/virtual-y/personal_training/settings/provider/{type}'
+  defaults:
+    _form: '\Drupal\openy_gc_personal_training\Form\PersonalTrainingProviderEditForm'
+    _title: '1on1 Meeting provider'
+  requirements:
+    _permission: 'administer gated content configuration'
+
+openy_gc_personal_training.settings:
+  path: '/admin/virtual-y/personal_training/settings'
+  defaults:
+    _form: '\Drupal\openy_gc_personal_training\Form\PersonalTrainingSettingsForm'
+    _title: 'Virtual YMCA Auth settings'
+  requirements:
+    _permission: 'administer gated content configuration'
+
+openy_gc_personal_training.publish_customer_peer:
+  path: '/personal-training/publish-customer-peer'
+  defaults:
+    _controller: '\Drupal\openy_gc_personal_training\Controller\PeerController::publishCustomerPeer'
+    _title: 'Publish Customer Peer'
+  requirements:
+    _permission: 'access content'
+    _role: 'authenticated'
+
+openy_gc_personal_training.load_customer_peer:
+  path: '/personal-training/load-customer-peer'
+  defaults:
+    _controller: '\Drupal\openy_gc_personal_training\Controller\PeerController::loadCustomerPeer'
+    _title: 'Load Customer Peer'
+  requirements:
+    _permission: 'access content'
+    _role: 'authenticated'
