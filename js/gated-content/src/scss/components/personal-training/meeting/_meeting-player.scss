@@ -8,6 +8,16 @@
       transform: scaleX(-1);
     }
 
+    .partner-media-state {
+      display:        flex;
+      position:       absolute;
+      top:            20px;
+      left:           20px;
+      flex-direction: column;
+      z-index:        1;
+      font-size:      50px;
+    }
+
     .partner {
       @include median(
           background-image,

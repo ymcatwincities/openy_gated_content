@@ -1,27 +1,13 @@
 export default {
-  state: {
-    remoteVideoState: false,
-  },
   actions: {
-    async callEndedEvent(context) {
-      context.dispatch('closeMediaConnection');
-    },
     async sendCallEndedEvent(context) {
-      context.dispatch('sendData', 'callEndedEvent');
+      context.dispatch('sendPeerData', { action: 'closeRemoteMediaStream' });
     },
-    async setRemoteVideoStateEvent(context, value) {
-      context.commit('setRemoteVideoState', value);
+    async sendLocalCamEnabledState(context, value) {
+      context.dispatch('sendPeerData', { action: 'setPartnerCamEnabled', payload: value });
     },
-    async sendVideoStateEvent(context, value) {
-      context.dispatch('sendData', { videoStateEvent: value });
+    async sendLocalMicEnabledState(context, value) {
+      context.dispatch('sendPeerData', { action: 'setPartnerMicEnabled', payload: value });
     },
-  },
-  mutations: {
-    setRemoteVideoState(state, value) {
-      state.remoteVideoState = value;
-    },
-  },
-  getters: {
-    remoteVideoState: (state) => state.remoteVideoState,
   },
 };

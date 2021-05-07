@@ -9,31 +9,31 @@ export default {
     videoSessionStatus: false,
     personalTrainingId: null,
     personalTrainingDate: null,
+    instructorRole: false,
+    instructorName: null,
+    customerName: null,
   },
   actions: {
-    joinVideoSession(context) {
-      context.commit('showJoinOptionsModal', false);
-      context.commit('setVideoSessionStatus', true);
-      context.dispatch('subscribeToACall');
-      if (context.getters.peerConnected) {
-        console.log('join button call partner');
-        context.dispatch('callPartner');
-      }
-    },
-    leaveVideoSession(context) {
-      context.commit('showLeaveMeetingModal', false);
-      context.commit('setVideoSessionStatus', false);
-      context.dispatch('closeMediaStream').then(() => {
-        context.dispatch('sendCallEndedEvent');
-        context.dispatch('sendVideoStateEvent', true);
-        context.commit('setMicEnabled', true);
-        context.commit('setCameraEnabled', true);
-      });
+    async setMeetingMetaData(context, payload) {
+      context.commit('setInstructorRole', payload.instructorRole);
+      context.commit('setPersonalTrainingId', payload.personalTrainingId);
+      context.commit('setPersonalTrainingDate', payload.personalTrainingDate);
+      context.commit('setInstructorName', payload.instructorName);
+      context.commit('setCustomerName', payload.customerName);
     },
   },
   mutations: {
     setVideoSessionStatus(state, value) {
       state.videoSessionStatus = value;
+    },
+    setInstructorRole(state, value) {
+      state.instructorRole = value;
+    },
+    setInstructorName(state, value) {
+      state.instructorName = value;
+    },
+    setCustomerName(state, value) {
+      state.customerName = value;
     },
     setPersonalTrainingId(state, value) {
       state.personalTrainingId = value;
@@ -46,6 +46,14 @@ export default {
     isJoinedVideoSession: (state) => state.videoSessionStatus,
     isMeetingComplete: (state) => dayjs().isAfter(state.personalTrainingDate),
     personalTrainingId: (state) => state.personalTrainingId,
+    isInstructorRole: (state) => state.instructorRole,
+    localName: (state) => (state.instructorRole
+      ? state.instructorName
+      : state.customerName),
+    partnerName: (state) => (
+      state.instructorRole
+        ? state.customerName
+        : state.instructorName),
   },
   modules: {
     personalTrainingChat,

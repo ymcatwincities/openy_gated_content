@@ -1,5 +1,15 @@
 <template>
   <div class="meeting-player" :class="view">
+    <div class="partner-media-state">
+      <SvgIcon
+        v-if="partnerMediaStream && !partnerMicEnabled"
+        icon="mic_off_black_24dp"
+        class="fill-white"></SvgIcon>
+      <SvgIcon
+        v-if="partnerMediaStream && !partnerCamEnabled"
+        icon="videocam_off_black_24dp"
+        class="fill-white"></SvgIcon>
+    </div>
     <video
       :key="partnerMediaStream === null"
       class="partner"
@@ -9,7 +19,8 @@
       :class="{
         connected: partnerMediaStream !== null,
       }"
-    ></video>
+    >
+    </video>
     <video
       :key="localMediaStream === null"
       class="local"
@@ -25,8 +36,10 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import SvgIcon from '@/components/SvgIcon.vue';
 
 export default {
+  components: { SvgIcon },
   data() {
     return {
       intervalId: 0,
@@ -37,7 +50,8 @@ export default {
       'view',
       'localMediaStream',
       'partnerMediaStream',
-      'remoteVideoState',
+      'partnerCamEnabled',
+      'partnerMicEnabled',
     ]),
   },
   mounted() {
