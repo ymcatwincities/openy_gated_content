@@ -19,21 +19,22 @@ export default {
       context.commit('setView', 'view-inset');
     },
     toggleMicEnabled(context) {
-      context.commit('setMicEnabled', !context.state.micEnabled);
+      context.commit('setMicEnabled', !context.getters.isMicEnabled);
+      context.dispatch('sendLocalMicEnabledState', context.getters.isMicEnabled);
       if (context.getters.localMediaStream) {
         context.getters.localMediaStream.getAudioTracks().forEach((t) => {
           // eslint-disable-next-line no-param-reassign
-          t.enabled = context.state.micEnabled;
+          t.enabled = context.getters.isMicEnabled;
         });
       }
     },
     toggleCameraEnabled(context) {
-      context.commit('setCameraEnabled', !context.state.cameraEnabled);
-      context.dispatch('sendVideoStateEvent', context.state.cameraEnabled);
+      context.commit('setCameraEnabled', !context.getters.isCameraEnabled);
+      context.dispatch('sendLocalCamEnabledState', context.getters.isCameraEnabled);
       if (context.getters.localMediaStream) {
         context.getters.localMediaStream.getVideoTracks().forEach((t) => {
           // eslint-disable-next-line no-param-reassign
-          t.enabled = context.state.cameraEnabled;
+          t.enabled = context.getters.isCameraEnabled === true;
         });
       }
     },

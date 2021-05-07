@@ -1,7 +1,7 @@
 <template>
   <div
     class="join-meeting gated-containerV2 pt-40-20 px--20-10 text-black"
-    :class="{shadow: isMeetingComplete || !peerSignalingServerConnecte || peerInitializationError}"
+    :class="{shadow: isMeetingComplete || !signalingServerConnected || peerInitializationError}"
   >
     <JoinOptions></JoinOptions>
     <div
@@ -9,7 +9,7 @@
       class="message cachet-book-24-20"
     >Meeting Complete</div>
     <div
-      v-else-if="!peerSignalingServerConnected"
+      v-else-if="!signalingServerConnected"
       class="message cachet-book-24-20"
     >Connecting...</div>
     <div
@@ -33,7 +33,7 @@ export default {
   computed: {
     ...mapGetters([
       'isMeetingComplete',
-      'peerSignalingServerConnected',
+      'signalingServerConnected',
       'peerInitializationError',
     ]),
   },

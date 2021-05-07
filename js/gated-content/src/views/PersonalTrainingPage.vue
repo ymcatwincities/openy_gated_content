@@ -163,11 +163,10 @@ export default {
             instructorRole,
             instructorName: this.video.attributes.instructor_id.display_name,
             customerName: this.video.attributes.customer_id.display_name,
-            customerPeerId: this.video.attributes.customer_peer_id,
-            personalTrainingId: this.video.attributes.drupal_internal__id,
+            personalTrainingId: this.id,
             personalTrainingDate: this.$dayjs.date(this.video.attributes.date.end_value),
           }).then(() => {
-            this.$store.dispatch('initPeer');
+            this.$store.dispatch('connectToSignalingServer');
           });
         })
         .catch((error) => {

@@ -11,7 +11,7 @@ export default {
         date: new Date(),
       };
       context.commit('addChatMessage', msgObj);
-      context.dispatch('sendData', { newMessage: msgObj });
+      context.dispatch('sendPeerData', { action: 'receiveChatMessage', payload: msgObj });
     },
     async receiveChatMessage(context, msgObj) {
       context.commit('addChatMessage', msgObj);
