@@ -7,10 +7,6 @@ export default {
   },
   actions: {
     async initMediaStream(context) {
-      console.log(
-        context.getters.chosenAudioOutputDeviceId,
-      );
-
       const constraints = {
         audio: {
           echoCancellation: true,

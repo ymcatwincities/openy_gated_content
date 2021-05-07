@@ -15,7 +15,6 @@ export default {
       // eslint-disable-next-line no-plusplus
       for (let i = 0; i !== deviceInfos.length; ++i) {
         const deviceInfo = deviceInfos[i];
-        console.log(deviceInfo);
         if (deviceInfo.kind === 'audioinput') {
           const label = deviceInfo.label || `microphone ${context.getters.audioInputDevices.length + 1}`;
           if (!context.getters.chosenAudioInputDeviceId) {
@@ -34,14 +33,8 @@ export default {
             context.commit('setChosenVideoInputDeviceId', deviceInfo.deviceId);
           }
           context.commit('addVideoInputDevice', { deviceId: deviceInfo.deviceId, label });
-        } else {
-          console.log('Some other kind of source/device: ', deviceInfo);
         }
       }
-
-      console.log(context.getters.videoInputDevices,
-        context.getters.audioInputDevices,
-        context.getters.audioOutputDevices);
     },
     setChosenVideoInputDeviceId(context, value) {
       context.commit('setChosenVideoInputDeviceId', value);
