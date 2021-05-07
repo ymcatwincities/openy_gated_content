@@ -120,7 +120,7 @@ class PersonalTraining extends ContentEntityBase implements PersonalTrainingInte
 
     $fields['customer_id'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('Customer'))
-      ->setDescription(t('The user ID of client of the Personal training entity.'))
+      ->setDescription(t('The user ID of client of the 1on1 Meeting entity.'))
       ->setRequired(TRUE)
       ->setSetting('target_type', 'user')
       ->setSetting('handler', 'default')
@@ -150,7 +150,7 @@ class PersonalTraining extends ContentEntityBase implements PersonalTrainingInte
 
     $fields['instructor_id'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('Instructor'))
-      ->setDescription(t('The user ID of instructor of the Personal training entity. This user should have Virtual Trainer role'))
+      ->setDescription(t('The user ID of instructor of the 1on1 Meeting entity. This user should have Virtual Trainer role'))
       ->setRequired(TRUE)
       ->setSetting('target_type', 'user')
       ->setSetting('handler', 'default')

@@ -1,16 +1,16 @@
 add personal training entities:
-  title: 'Create new Personal training entities'
+  title: 'Create new 1on1 Meeting entities'
 
 administer personal training entities:
-  title: 'Administer Personal training entities'
-  description: 'Allow to access the administration form to configure Personal training entities.'
+  title: 'Administer 1on1 Meeting entities'
+  description: 'Allow to access the administration form to configure 1on1 Meeting entities.'
   restrict access: true
 
 delete personal training entities:
-  title: 'Delete Personal training entities'
+  title: 'Delete 1on1 Meeting entities'
 
 edit personal training entities:
-  title: 'Edit Personal training entities'
+  title: 'Edit 1on1 Meeting entities'
 
 view personal training entities:
-  title: 'View Personal training entities'
+  title: 'View 1on1 Meeting entities'

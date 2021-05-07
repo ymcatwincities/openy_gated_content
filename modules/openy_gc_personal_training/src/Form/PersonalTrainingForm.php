@@ -45,7 +45,7 @@ class PersonalTrainingForm extends ContentEntityForm {
 
     $groups = [
       'info' => [
-        'title' => $this->t('Meeting info'),
+        'title' => $this->t('1on1 Meeting info'),
         'open' => TRUE,
         'subitems' => [
           'title',
@@ -59,7 +59,7 @@ class PersonalTrainingForm extends ContentEntityForm {
         ],
       ],
       'metadata' => [
-        'title' => $this->t('Personal Training Metadata'),
+        'title' => $this->t('1on1 Meeting Metadata'),
         'open' => FALSE,
         'subitems' => [
           'customer_metadata',
@@ -94,13 +94,13 @@ class PersonalTrainingForm extends ContentEntityForm {
 
     switch ($status) {
       case SAVED_NEW:
-        $this->messenger()->addMessage($this->t('Created the %label Personal training.', [
+        $this->messenger()->addMessage($this->t('Created the %label 1on1 Meeting.', [
           '%label' => $entity->label(),
         ]));
         break;
 
       default:
-        $this->messenger()->addMessage($this->t('Saved the %label Personal training.', [
+        $this->messenger()->addMessage($this->t('Saved the %label 1on1 Meeting.', [
           '%label' => $entity->label(),
         ]));
     }

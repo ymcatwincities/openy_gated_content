@@ -1,4 +1,4 @@
-# Virtual Y Personal training
+# Virtual Y 1on1 Meeting
 
 This module provides base implementation of Virtual Y Personal trainings.
 
@@ -8,8 +8,8 @@ This module provides base implementation of Virtual Y Personal trainings.
 
 | Field name | Field machine name | Field type | Description |
 | ---------- | ----------- | ----------- | ----------- |
-| Customer   | customer_id | entity reference | The drupal user ID of client of the Personal training entity. |
-| Instructor | instructor_id | entity reference | The drupal user ID of instructor of the Personal training entity. |
+| Customer   | customer_id | entity reference | The drupal user ID of client of the 1on1 Meeting entity. |
+| Instructor | instructor_id | entity reference | The drupal user ID of instructor of the 1on1 Meeting entity. |
 | Customer metadata | customer_metadata | text_long | The metadata for the customer from CRM systems (It could be user id, email, or something else). |
 | Instructor metadata | instructor_metadata | text_long | The metadata for the instructor from CRM systems (It could be user id, email, or something else). |
 | Training type | training_type | list_string | One to one call on the Virtual YMCA platform or link to remote platform (zoom, google meet, etc). Available options: `1-1` and `link` |
