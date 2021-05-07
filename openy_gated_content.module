@@ -216,6 +216,8 @@ function openy_gated_content_form_alter(&$form, FormStateInterface $form_state, 
         $allowedForms[] = $entity_key . '_' . $bundle . '_form';
         $allowedForms[] = $entity_key . '_' . $bundle . '_edit_form';
         $allowedForms[] = $entity_key . '_' . $bundle . '_add_form';
+        // Adding _clone_form into allowedForms array.
+        $allowedForms[] = $entity_key . '_' . $bundle . '_clone_form';
       }
     }
   }
