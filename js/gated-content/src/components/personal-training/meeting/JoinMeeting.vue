@@ -4,6 +4,7 @@
     :class="{shadow: isMeetingComplete || !signalingServerConnected || peerInitializationError}"
   >
     <JoinOptions></JoinOptions>
+    <DeviceManager></DeviceManager>
     <div
       v-if="isMeetingComplete"
       class="message cachet-book-24-20"
@@ -27,9 +28,10 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import JoinOptions from '@/components/personal-training/modal/JoinOptions.vue';
+import DeviceManager from '@/components/personal-training/modal/deviceManager.vue';
 
 export default {
-  components: { JoinOptions },
+  components: { DeviceManager, JoinOptions },
   computed: {
     ...mapGetters([
       'isMeetingComplete',

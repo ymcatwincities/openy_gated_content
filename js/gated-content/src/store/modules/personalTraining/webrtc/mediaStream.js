@@ -7,21 +7,27 @@ export default {
   },
   actions: {
     async initMediaStream(context) {
-      await navigator.mediaDevices.getUserMedia({
+      console.log(
+        context.getters.chosenAudioOutputDeviceId,
+      );
+
+      const constraints = {
         audio: {
           echoCancellation: true,
           noiseSuppression: true,
           autoGainControl: false,
+          deviceId: context.getters.chosenAudioInputDeviceId,
         },
         video: {
           width: { min: 640, ideal: 1920, max: 1920 },
           height: { min: 400, ideal: 1080 },
           aspectRatio: 1.777777778,
+          deviceId: context.getters.chosenVideoInputDeviceId,
         },
-      })
-        .then((mediaStream) => {
-          context.dispatch('setLocalMediaStream', mediaStream);
-        })
+      };
+
+      await navigator.mediaDevices.getUserMedia(constraints)
+        .then((mediaStream) => context.dispatch('setLocalMediaStream', mediaStream))
         .catch((error) => {
           context.dispatch('debugLog', ['Init local stream error:', error]);
         });

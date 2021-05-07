@@ -65,13 +65,13 @@
           align-items:     center;
           justify-content: space-around;
 
-          .mic, .cam {
+          .mic, .cam, .settings {
             display:        flex;
             flex-direction: column;
             align-items:    center;
             cursor:         pointer;
 
-            .mic-icon, .camera-icon {
+            .svg-container {
               border-radius:    50%;
               background-color: $red;
               padding:          13px;
@@ -93,9 +93,15 @@
             }
 
             &.enabled {
-              .mic-icon, .camera-icon {
+              .svg-container {
                 background-color: $camarone;
               }
+            }
+          }
+
+          .settings {
+            .svg-container {
+              background-color: $black;
             }
           }
         }

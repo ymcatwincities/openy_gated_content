@@ -3,11 +3,11 @@ export default {
     async sendCallEndedEvent(context) {
       context.dispatch('sendPeerData', { action: 'closeRemoteMediaStream' });
     },
-    async sendLocalCamEnabledState(context, value) {
-      context.dispatch('sendPeerData', { action: 'setPartnerCamEnabled', payload: value });
+    async sendLocalCamEnabledState(context, payload) {
+      context.dispatch('sendPeerData', { action: 'setPartnerCamEnabled', payload });
     },
-    async sendLocalMicEnabledState(context, value) {
-      context.dispatch('sendPeerData', { action: 'setPartnerMicEnabled', payload: value });
+    async sendLocalMicEnabledState(context, payload) {
+      context.dispatch('sendPeerData', { action: 'setPartnerMicEnabled', payload });
     },
   },
 };

@@ -26,7 +26,7 @@ export default {
 
       ws.addEventListener('open', () => {
         context.commit('setSignalingServerConnected', true);
-        context.dispatch('debugLog', ['VY Signaling Server', 'connected to signaling server. initialize webrtc..']);
+        context.dispatch('debugLog', ['VY Signaling Server connected.  initialize webrtc..']);
         if (!context.getters.isInstructorRole) {
           context.dispatch('initPeer');
         }
@@ -34,13 +34,16 @@ export default {
 
       ws.addEventListener('close', () => {
         context.commit('setSignalingServerConnected', false);
-        context.dispatch('setPartnerMediaStream', null);
+        // eslint-disable-next-line no-undef
+        _.delay(() => {
+          context.dispatch('connectToSignalingServer');
+        }, 1000);
       });
 
       context.commit('setSignalingServerConnection', ws);
     },
     async sendSignalingMessage(context, message) {
-      context.dispatch('debugLog', ['send signal ->:', message]);
+      context.dispatch('debugLog', ['signal send ->:', message]);
       context.getters.signalingServerConnection.send(JSON.stringify(message));
     },
     async receiveSignalingMessage(context, signal) {
