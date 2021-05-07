@@ -19,7 +19,12 @@
     }
 
     .partner {
-      background-image:    url('assets/img/background.png');
+      @include median(
+          background-image,
+          url('assets/img/background.png'),
+          url('assets/img/background.png'),
+          url('assets/img/background-m.png')
+      );
       background-repeat:   no-repeat;
       background-position: center;
       background-size:     cover;

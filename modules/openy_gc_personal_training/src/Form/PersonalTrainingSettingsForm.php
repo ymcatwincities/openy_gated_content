@@ -61,7 +61,7 @@ class PersonalTrainingSettingsForm extends ConfigFormBase {
     $active_provider = $this->config('openy_gc_personal_training.settings')->get('active_provider');
     $plugin_definitions = $this->personalTrainingProviderManager->getDefinitions();
     if (empty($plugin_definitions)) {
-      return ['#markup' => $this->t('Personal training providers not found.')];
+      return ['#markup' => $this->t('1on1 Meeting providers not found.')];
     }
 
     $form['signalingServerPRL'] = [
@@ -155,7 +155,7 @@ class PersonalTrainingSettingsForm extends ConfigFormBase {
       return $var['active'] == 1;
     });
     if (empty($selected)) {
-      $form_state->setErrorByName('providers', $this->t('Please select personal training provider!'));
+      $form_state->setErrorByName('providers', $this->t('Please select 1on1 Meeting provider!'));
     }
     if (count($selected) > 1) {
       $form_state->setErrorByName('providers', $this->t('There should be only one active provider!'));
