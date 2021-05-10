@@ -95,7 +95,7 @@ export default {
     },
     async sendPeerData(context, data) {
       if (context.getters.peerConnected) {
-        context.getters.send(JSON.stringify(data));
+        context.getters.peer.send(JSON.stringify(data));
       }
     },
   },
