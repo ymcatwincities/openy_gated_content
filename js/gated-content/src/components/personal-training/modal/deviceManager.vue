@@ -21,24 +21,6 @@
           </option>
         </select>
       </div>
-      <!--div
-        class="select"
-        v-if="audioOutputDevices.length > 0"
-      >
-        <label for="audioOutputDevice">Audio output destination: </label>
-        <select
-          id="audioOutputDevice"
-          :value="chosenAudioOutputDeviceId"
-          @change="setChosenAudioOutputDeviceId($event.target.value)"
-        >
-          <option
-            v-for="device in audioOutputDevices"
-            :key="device.deviceId"
-            :value="device.deviceId"
-          >{{ device.label }}
-          </option>
-        </select>
-      </div-->
       <div class="select">
         <label for="videoInputDevice">Video source: </label>
         <select
@@ -75,9 +57,6 @@ export default {
       'chosenVideoInputDeviceId',
       'chosenAudioInputDeviceId',
       'chosenAudioOutputDeviceId',
-      'chosenVideoInputDeviceName',
-      'chosenAudioOutputDeviceName',
-      'chosenAudioInputDeviceName',
     ]),
   },
   methods: {
