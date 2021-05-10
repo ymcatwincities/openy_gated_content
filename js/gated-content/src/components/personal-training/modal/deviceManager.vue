@@ -36,6 +36,12 @@
           </option>
         </select>
       </div>
+      <button
+        @click="toggleDeviceManagerModal"
+        class="gc-button"
+      >
+        Apply
+      </button>
     </template>
   </Modal>
 </template>
