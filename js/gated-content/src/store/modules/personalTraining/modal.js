@@ -4,6 +4,7 @@ export default {
     showViewOptionsModal: false,
     showChatModal: false,
     showLeaveMeetingModal: false,
+    showDeviceManagerModal: false,
   },
   actions: {
     toggleShowChatModal(context) {
@@ -17,7 +18,8 @@ export default {
       context.commit('showJoinOptionsModal', !context.state.showJoinOptionsModal);
 
       if (context.state.showJoinOptionsModal) {
-        await context.dispatch('initMediaStream');
+        context.dispatch('initMediaStream')
+          .then(() => context.dispatch('loadAndParseDeviceInfo'));
       } else {
         context.dispatch('closeLocalMediaStream');
       }
@@ -27,6 +29,9 @@ export default {
     },
     toggleViewOptionsModal(context) {
       context.commit('showViewOptionsModal', !context.state.showViewOptionsModal);
+    },
+    toggleDeviceManagerModal(context) {
+      context.commit('showDeviceManagerModal', !context.state.showDeviceManagerModal);
     },
   },
   mutations: {
@@ -42,11 +47,15 @@ export default {
     showViewOptionsModal(state, value) {
       state.showViewOptionsModal = value;
     },
+    showDeviceManagerModal(state, value) {
+      state.showDeviceManagerModal = value;
+    },
   },
   getters: {
     isShowJoinOptionsModal: (state) => state.showJoinOptionsModal,
     isShowLeaveMeetingModal: (state) => state.showLeaveMeetingModal,
     isShowViewOptionsModal: (state) => state.showViewOptionsModal,
     isShowChatModal: (state) => state.showChatModal,
+    isShowDeviceManagerModal: (state) => state.showDeviceManagerModal,
   },
 };

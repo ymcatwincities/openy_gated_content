@@ -9,6 +9,7 @@ export default {
     videoSessionStatus: false,
     personalTrainingId: null,
     personalTrainingDate: null,
+    remoteLink: '',
     instructorRole: false,
     instructorName: null,
     customerName: null,
@@ -20,6 +21,7 @@ export default {
       context.commit('setPersonalTrainingDate', payload.personalTrainingDate);
       context.commit('setInstructorName', payload.instructorName);
       context.commit('setCustomerName', payload.customerName);
+      context.commit('setRemoteLink', payload.remoteLink);
     },
   },
   mutations: {
@@ -41,12 +43,16 @@ export default {
     setPersonalTrainingDate(state, value) {
       state.personalTrainingDate = value;
     },
+    setRemoteLink(state, value) {
+      state.remoteLink = value;
+    },
   },
   getters: {
     isJoinedVideoSession: (state) => state.videoSessionStatus,
     isMeetingComplete: (state) => dayjs().isAfter(state.personalTrainingDate),
     personalTrainingId: (state) => state.personalTrainingId,
     isInstructorRole: (state) => state.instructorRole,
+    remoteLink: (state) => state.remoteLink,
     localName: (state) => (state.instructorRole
       ? state.instructorName
       : state.customerName),

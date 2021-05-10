@@ -165,6 +165,9 @@ export default {
             customerName: this.video.attributes.customer_id.display_name,
             personalTrainingId: this.id,
             personalTrainingDate: this.$dayjs.date(this.video.attributes.date.end_value),
+            remoteLink: this.video.attributes.training_type === 'link'
+                        && this.video.attributes.remote_link
+              ? this.video.attributes.remote_link.uri : '',
           }).then(() => {
             this.$store.dispatch('connectToSignalingServer');
           });
