@@ -2,10 +2,14 @@
 
 This module provides base implementation of Virtual Y 1on1 Meetings.
 
+![Virtual Y 1on1 meeting](assets/vy_14_virtual_meeting.png "Virtual Y 1on1 Meeting Demo")
+Short video demo: https://www.loom.com/share/c49ef7bb4b2a4435ac78bfc53582e2f1
+
 ## Module structure
 
 This module is consist of the 1on1 Meeting entity, additional logic that works with it and additional modules for the Virtual Y application. 
 1on1 Meeting entity is a connection between Virtual Y User, Trainer and time for virtual meeting. Every meeting, associated to client and trainer is shown at their Virtual Y calendar in the app.
+You cannot use this module without SSL at your website, since it is a webRTC requirement.
 
 ### PersonalTraining entity
 
@@ -37,6 +41,8 @@ To save data from third-party systems to PTF you should create a custom module w
 ## 1on1 Virtual Meetings server configuration.
 
 1on1 Virtual Meetings has two modes of work: native and remote link. 
+
+![Virtual Y 1on1 meeting](assets/vy_14_remote_link.png "Virtual Y 1on1 Meeting type demo")
 
 Using `remote link` mode, you can past a remote link to your Zoom, Meet, Teams, etc meetings. Use it if you have working solution already.
 
