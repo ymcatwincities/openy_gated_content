@@ -1,8 +1,11 @@
 # Virtual Y 1on1 Meeting
 
-This module provides base implementation of Virtual Y Personal trainings.
+This module provides base implementation of Virtual Y 1on1 Meetings.
 
 ## Module structure
+
+This module is consist of the 1on1 Meeting entity, additional logic that works with it and additional modules for the Virtual Y application. 
+1on1 Meeting entity is a connection between Virtual Y User, Trainer and time for virtual meeting. Every meeting, associated to client and trainer is shown at their Virtual Y calendar in the app.
 
 ### PersonalTraining entity
 
@@ -30,3 +33,19 @@ contain annotation with `id`, `label` and `config` and implements
 
 To save data from third-party systems to PTF you should create a custom module with
 `PersonalTrainingProvider` plugin instance and implement sync tool for data fetch.
+
+## 1on1 Virtual Meetings server configuration.
+
+1on1 Virtual Meetings has two modes of work: native and remote link. 
+
+Using `remote link` mode, you can past a remote link to your Zoom, Meet, Teams, etc meetings. Use it if you have working solution already.
+
+Native mode give's you ability to organuze 1-1 calls inside your Virtual Y app, using WebRTC technology.
+
+If you want to enable 1on1 Virtual Meetings module, you have to setup 3 additional services at your server or somewhere in the internet.
+- `Signaling server.` Needed for first meet of your clients and trainer app each other. Virtual Y has team developed own Noode.js server solution for Simple-Peer library. You can find source code for it here: https://github.com/open-y-subprojects/virtual_y_signaling_server. Clone this repository and install server according to Readme file inside.
+-  `Turn server`. This server is required to communicate between two WebRTC clients located in the different parts of the town/country/continent. It helps clients to find each other ips and send packages. Please use this manual to setup your own TURN server: https://nextcloud-talk.readthedocs.io/en/latest/TURN/. Please, do not use public servers, since they are not reliable. Use only your own for your production.
+
+## Debug
+
+1on1 Virtual Meetings has debugger that shows all connection information that could help in troubleshooting. Just set Debug (at this form: admin/virtual-y/personal_training/settings) to any number more than 0 and check your browser console.
