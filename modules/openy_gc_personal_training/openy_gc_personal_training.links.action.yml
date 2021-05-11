@@ -1,0 +1,5 @@
+entity.personal_training.add_form:
+  route_name: entity.personal_training.add_form
+  title: 'Add 1on1 Meeting'
+  appears_on:
+    - entity.personal_training.collection

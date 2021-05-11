@@ -1,23 +1,43 @@
 .gc-button {
-  display: block;
-  border: none;
+  display:          block;
+  margin-top:       20px;
+  margin-right:     auto;
+  margin-left:      auto;
+  outline:          none !important;
+  border:           none;
+  border-radius:    5px;
   background-color: $dark-blue;
-  color: $white;
-  text-transform: uppercase;
-  padding: 10px 20px;
-  border-radius: 5px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 20px;
-  outline: none !important;
+  padding:          10px 20px;
+  text-transform:   uppercase;
+  color:            $white;
+
   &:hover {
     color: $white;
   }
+
   &:visited {
     color: $white;
   }
+
   &:focus {
     color: $white;
+  }
+}
+
+.indigo-button {
+  border:           2px solid $white;
+  border-radius:    6px;
+  background-color: $indigo;
+  cursor:           pointer;
+  padding-top:      11px;
+  padding-bottom:   11px;
+  text-align:       center;
+  text-transform:   uppercase;
+
+  @include median(margin, 24px, 12px);
+
+  &:hover {
+    background-color: darken($indigo, 10%);
   }
 }
 

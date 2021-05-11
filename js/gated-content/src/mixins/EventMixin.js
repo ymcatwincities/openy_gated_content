@@ -1,53 +1,29 @@
 import dayjs from 'dayjs';
 
 export const EventMixin = {
-  watch: {
-    $route: 'load',
-  },
-  async mounted() {
-    await this.load();
-  },
   computed: {
     pageUrl() {
       return window.location.href;
-    },
-    // This values most of all from parent (series), but can be overridden by item,
-    // so ve need to check this here and use correct value.
-    description() {
-      return this.video.attributes.body ? this.video.attributes.body
-        : this.video.attributes.description;
-    },
-    level() {
-      return this.video.attributes.field_ls_level ? this.video.attributes.field_ls_level.name
-        : this.video.attributes.level.name;
-    },
-    category() {
-      return this.video.attributes.field_ls_category.length > 0
-        ? this.video.attributes.field_ls_category
-        : this.video.attributes.category;
-    },
-    instructor() {
-      return this.video.attributes.field_ls_host_name ? this.video.attributes.field_ls_host_name
-        : this.video.attributes.host_name;
     },
     config() {
       return this.$store.getters.getAppSettings;
     },
     date() {
-      return dayjs(this.video.attributes.date.value).format('dddd, MMMM Do, YYYY');
+      return this.$dayjs.date(this.video.attributes.date.value).format('dddd, MMMM Do, YYYY');
     },
     time() {
-      return dayjs(this.video.attributes.date.value).format('h:mm a');
+      return this.$dayjs.date(this.video.attributes.date.value).format('h:mm a');
     },
     duration() {
       const min = Math.floor(dayjs.duration(
-        dayjs(this.video.attributes.date.end_value) - dayjs(this.video.attributes.date.value),
+        this.$dayjs.date(this.video.attributes.date.end_value)
+        - this.$dayjs.date(this.video.attributes.date.value),
       ).asMinutes());
 
       return `${min} ${this.$options.filters.simplePluralize('minute', min)}`;
     },
     startsIn() {
-      const eventStartDate = dayjs(this.video.attributes.date.value);
+      const eventStartDate = this.$dayjs.date(this.video.attributes.date.value);
       const startsDuration = dayjs.duration(eventStartDate - dayjs());
 
       if (startsDuration.asHours() >= 48) {

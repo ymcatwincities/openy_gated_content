@@ -8,6 +8,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannel;
 use Drupal\openy_gc_log\Entity\LogEntity;
 use Drupal\openy_gc_log\Entity\LogEntityInterface;
+use Drupal\user\UserInterface;
 
 /**
  * Service logger.
@@ -128,7 +129,16 @@ class Logger {
    */
   public function getMetadata(LogEntityInterface $log) {
     $metadata = [];
-    $entity_type_id = $log->get('entity_type')->value === 'node' ? 'node' : 'eventinstance';
+    $entity_type = $log->get('entity_type')->value;
+    $entity_type_ids = [
+      'node' => 'node',
+      'series' => 'eventinstance',
+      'personal_training' => 'personal_training',
+    ];
+    if (!array_key_exists($entity_type, $entity_type_ids)) {
+      return $metadata;
+    }
+    $entity_type_id = $entity_type_ids[$entity_type];
     $entity_id = $log->get('entity_id')->value;
     if (empty($entity_id)) {
       return $metadata;
@@ -139,12 +149,27 @@ class Logger {
       return $metadata;
     }
 
-    $metadata['entity_title'] = $entity_type_id === 'node' ?
-      $entity->label() :
-      ($entity->get('field_ls_title')->value ?: $entity->get('title')->value);
-    $metadata['entity_instructor_name'] = $entity_type_id === 'node' ?
-      ($log->get('entity_bundle')->value === 'gc_video' ? $entity->get('field_gc_video_instructor')->value : '') :
-      ($entity->get('field_ls_host_name')->value ?: $entity->get('host_name')->value);
+    switch ($entity_type_id) {
+      case 'node':
+        $metadata['entity_title'] = $entity->label();
+        if ($log->get('entity_bundle')->value === 'gc_video') {
+          $metadata['entity_instructor_name'] = $entity->get('field_gc_video_instructor')->value;
+        }
+        break;
+
+      case 'eventinstance':
+        $metadata['entity_title'] = $entity->get('field_ls_title')->value ?: $entity->get('title')->value;
+        $metadata['entity_instructor_name'] = $entity->get('field_ls_host_name')->value ?: $entity->get('host_name')->value;
+        break;
+
+      case 'personal_training':
+        $metadata['entity_title'] = $entity->get('title')->value;
+        $instructor = $entity->get('instructor_id')->entity;
+        if ($instructor instanceof UserInterface) {
+          $metadata['entity_instructor_name'] = $instructor->getEmail();
+        }
+        break;
+    }
     $metadata['entity_created'] = date('m/d/Y - H:i:s', $entity->getCreatedTime());
 
     return $metadata;

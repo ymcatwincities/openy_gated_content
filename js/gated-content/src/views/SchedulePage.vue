@@ -89,7 +89,6 @@
 </template>
 
 <script>
-import axios from 'axios';
 import client from '@/client';
 import Spinner from '@/components/Spinner.vue';
 import ScheduleEventCard from '@/components/event/ScheduleEventCard.vue';
@@ -148,52 +147,16 @@ export default {
       this.endDate = new Date(this.startDate);
       this.endDate.setTime(this.startDate.getTime() + this.oneWeek - 1);
 
-      const params = {
-        filter: {
-          dateFilterStart: {
-            condition: {
-              path: 'date.value',
-              operator: '>=',
-              value: new Date(
-                this.startDate.getFullYear(),
-                this.startDate.getMonth(),
-                this.startDate.getDate(),
-                0,
-                0,
-                0,
-              ),
-            },
-          },
-          dateFilterEnd: {
-            condition: {
-              path: 'date.value',
-              operator: '<',
-              value: new Date(
-                this.endDate.getFullYear(),
-                this.endDate.getMonth(),
-                this.endDate.getDate(),
-                23,
-                59,
-                59,
-              ),
-            },
-          },
-          status: 1,
+      client({
+        url: '/virtual-y/api/events',
+        method: 'get',
+        params: {
+          type: 'all',
+          start_date: this.startDate,
+          end_date: this.endDate,
         },
-        sort: {
-          sortByDate: {
-            path: 'date.value',
-            direction: 'ASC',
-          },
-        },
-      };
-
-      axios
-        .all([
-          client.get('jsonapi/eventinstance/live_stream', { params }),
-          client.get('jsonapi/eventinstance/virtual_meeting', { params }),
-        ])
-        .then(axios.spread((liveStreamResponse, virtualMeetingResponse) => {
+      })
+        .then((response) => {
           this.listing = [];
           this.hours = [];
           this.collapses = [];
@@ -205,11 +168,8 @@ export default {
             this.listing[i].date.setTime(this.startDate.getTime() + i * this.oneDay);
             this.collapses[i] = true;
           }
-          [
-            ...liveStreamResponse.data.data,
-            ...virtualMeetingResponse.data.data,
-          ].forEach((event) => {
-            const start = new Date(event.attributes.date.value);
+          response.data.forEach((event) => {
+            const start = new Date(event.date.value);
             const day = start.getDay();
             const hour = start.getHours();
             if (typeof this.listing[day].hourSlots[hour] === 'undefined') {
@@ -239,7 +199,7 @@ export default {
           });
 
           this.loading = false;
-        }))
+        })
         .catch((error) => {
           this.error = true;
           this.loading = false;
@@ -260,18 +220,18 @@ export default {
         || this.currentDay(day);
     },
     backOneWeek() {
-      this.startDate = new Date(this.startDate.setTime(this.startDate.getTime() - this.oneWeek));
+      this.startDate.setTime(this.startDate.getTime() - this.oneWeek);
       this.updateRoute();
     },
     forwardOneWeek() {
-      this.startDate = new Date(this.startDate.setTime(this.startDate.getTime() + this.oneWeek));
+      this.startDate.setTime(this.startDate.getTime() + this.oneWeek);
       this.updateRoute();
     },
     upcomingEvents(day) {
       let count = 0;
       day.hourSlots.forEach((slot) => {
         slot.forEach((event) => {
-          if ((new Date(event.attributes.date.end_value)).getTime() > (new Date()).getTime()) {
+          if ((new Date(event.date.end_value)).getTime() > (new Date()).getTime()) {
             count += 1;
           }
         });
