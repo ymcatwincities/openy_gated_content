@@ -18,6 +18,7 @@
           :srcObject.prop="localMediaStream"
           :volume.prop="0"
           autoplay="autoplay"
+          playsinline
           muted="muted"
         ></video>
       </div>
