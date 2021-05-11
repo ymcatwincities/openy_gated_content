@@ -5,17 +5,17 @@
       color:            $white;
 
       @include median(width, 72vw, null, 100vw);
-      @include median(max-height, 80vh, initial);
+      @include median(max-height, 80vh, 100vh);
 
       .modal-header, .modal-footer {
         display: none;
       }
 
       .modal-body {
-        display:               grid;
-        margin:                0;
-        padding:               0;
-        overflow-y:            initial;
+        display:    grid;
+        margin:     0;
+        padding:    0;
+        overflow-y: initial;
 
         @include median(grid-template-columns, 1fr 0.5fr, 1fr);
 
@@ -110,6 +110,7 @@
           .error-message {
             @include median(margin-top, 30px, 15px);
           }
+
           .indigo-button {
             &.disabled {
               border-color:     #636466;
@@ -140,27 +141,37 @@
         }
       }
 
-      @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 1),
-      only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2),
-      only screen and (min-device-width: 834px) and (max-device-width: 834px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2),
-      only screen and (min-device-width: 1024px) and (max-device-width: 1024px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
+      @media (max-width: 500px) and (max-height: 823px) and (orientation: portrait) {
         .modal-body {
-          grid-template-columns: 1fr 1fr;
-
-          .header {
-            grid-column: 1/span2;
-          }
-
-          .controls, .join {
-            grid-column: 2;
-          }
-
           .video {
-            grid-row: 2/span 2;
-
             video {
-              max-height: 500px;
+              height: 50vh;
             }
+          }
+        }
+      }
+    }
+
+    @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 1),
+    only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2),
+    only screen and (min-device-width: 834px) and (max-device-width: 834px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2),
+    only screen and (min-device-width: 1024px) and (max-device-width: 1024px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
+      .modal-body {
+        grid-template-columns: 1fr 1fr;
+
+        .header {
+          grid-column: 1/span2;
+        }
+
+        .controls, .join {
+          grid-column: 2;
+        }
+
+        .video {
+          grid-row: 2/span 2;
+
+          video {
+            max-height: 500px;
           }
         }
       }
