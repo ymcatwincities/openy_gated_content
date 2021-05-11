@@ -54,4 +54,5 @@ If you want to enable 1on1 Virtual Meetings module, you have to setup 3 addition
 
 ## Debug
 
-1on1 Virtual Meetings has debugger that shows all connection information that could help in troubleshooting. Just set Debug (at this form: admin/virtual-y/personal_training/settings) to any number more than 0 and check your browser console.
+1on1 Virtual Meetings has debugger that shows all connection information that could help in troubleshooting. 
+Just set Debug (at this form: `admin/virtual-y/personal_training/settings`) to any number more than 0 and check your browser console.
