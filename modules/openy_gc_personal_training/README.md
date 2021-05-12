@@ -8,7 +8,9 @@ Short video demo: https://www.loom.com/share/c49ef7bb4b2a4435ac78bfc53582e2f1
 ## Module structure
 
 This module is consist of the 1on1 Meeting entity, additional logic that works with it and additional modules for the Virtual Y application. 
+
 1on1 Meeting entity is a connection between Virtual Y User, Trainer and time for virtual meeting. Every meeting, associated to client and trainer is shown at their Virtual Y calendar in the app.
+
 You cannot use this module without SSL at your website, since it is a webRTC requirement.
 
 ### PersonalTraining entity
@@ -50,9 +52,11 @@ Native mode give's you ability to organuze 1-1 calls inside your Virtual Y app, 
 
 If you want to enable 1on1 Virtual Meetings module, you have to setup 3 additional services at your server or somewhere in the internet.
 - `Signaling server.` Needed for first meet of your clients and trainer app each other. Virtual Y has team developed own Noode.js server solution for Simple-Peer library. You can find source code for it here: https://github.com/open-y-subprojects/virtual_y_signaling_server. Clone this repository and install server according to Readme file inside.
+- 
 -  `Turn server`. This server is required to communicate between two WebRTC clients located in the different parts of the town/country/continent. It helps clients to find each other ips and send packages. Please use this manual to setup your own TURN server: https://nextcloud-talk.readthedocs.io/en/latest/TURN/. Please, do not use public servers, since they are not reliable. Use only your own for your production.
 
 ## Debug
 
 1on1 Virtual Meetings has debugger that shows all connection information that could help in troubleshooting. 
+
 Just set Debug (at this form: `admin/virtual-y/personal_training/settings`) to any number more than 0 and check your browser console.
