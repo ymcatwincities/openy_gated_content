@@ -9,6 +9,7 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\File\FileSystem;
 use Drupal\Core\Logger\LoggerChannel;
 use Drupal\Core\Site\Settings;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\csv_serialization\Encoder\CsvEncoder;
 use Drupal\file\Entity\File;
 use Drupal\openy_gc_log\Entity\LogEntityInterface;
@@ -18,6 +19,8 @@ use Drupal\user\UserInterface;
  * Log Archiver service.
  */
 class LogArchiver {
+
+  use StringTranslationTrait;
 
   const WORKER_CHUNK_SIZE = 600;
 
@@ -420,7 +423,7 @@ class LogArchiver {
             $metadata = unserialize($log->get('event_metadata')->value, ['allowed_classes' => FALSE]);
           }
           foreach ([
-            'entity_title' => 'Content title',
+            'entity_title' => $this->t('Content title'),
             'entity_instructor_name' => 'Instructor name',
             'entity_created' => 'Content creation date',
           ] as $key => $export_col) {
