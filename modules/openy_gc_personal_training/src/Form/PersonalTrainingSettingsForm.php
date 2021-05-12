@@ -75,6 +75,7 @@ class PersonalTrainingSettingsForm extends ConfigFormBase {
     $form['peerjs_stun'] = [
       '#type' => 'textfield',
       '#title' => $this->t('STUN Server Domain'),
+      '#description' => $this->t('STUN server required to setup WebRTC connection.'),
       '#default_value' => $config->get('peerjs_stun'),
       '#required' => FALSE,
     ];
@@ -82,6 +83,7 @@ class PersonalTrainingSettingsForm extends ConfigFormBase {
     $form['peerjs_turn_url'] = [
       '#type' => 'textfield',
       '#title' => $this->t('TURN Server Domain'),
+      '#description' => $this->t('TURN server required to setup WebRTC connection. Please, do not use test server from the internet. Your connection might be unstable!'),
       '#default_value' => $config->get('peerjs_turn_url'),
       '#required' => FALSE,
     ];
@@ -90,6 +92,7 @@ class PersonalTrainingSettingsForm extends ConfigFormBase {
       '#type' => 'textfield',
       '#title' => $this->t('TURN Username'),
       '#default_value' => $config->get('peerjs_turn_username'),
+      '#description' => $this->t('Username from your TURN server config'),
       '#required' => FALSE,
     ];
 
@@ -97,12 +100,14 @@ class PersonalTrainingSettingsForm extends ConfigFormBase {
       '#type' => 'textfield',
       '#title' => $this->t('TURN Password'),
       '#default_value' => $config->get('peerjs_turn_credential'),
+      '#description' => $this->t('Password from your TURN server config'),
       '#required' => FALSE,
     ];
 
     $form['peerjs_debug'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('PeerJS Debug level'),
+      '#title' => $this->t('Debug level'),
+      '#description' => $this->t('Set it to any number more than 0 to enable debugging'),
       '#default_value' => $config->get('peerjs_debug'),
       '#required' => FALSE,
     ];
