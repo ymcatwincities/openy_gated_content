@@ -22,7 +22,7 @@
  *
  */
 function hook_virtual_y_app_settings_alter(array &$backend_info) {
-  $config['personal_training_enabled'] = TRUE;
+  $backend_info['personal_training_enabled'] = TRUE;
 }
 
 /**
