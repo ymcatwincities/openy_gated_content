@@ -80,11 +80,11 @@ class PeerController extends ControllerBase {
       ->load($personalTrainingId);
 
     if (!$trainingEntity) {
-      return new JsonResponse('Entity not found', 500);
+      return new JsonResponse('Entity not found', 404);
     }
 
     if ($trainingEntity->getCustomerId() !== $this->currentUser->id()) {
-      return new JsonResponse('Access denied', 500);
+      return new JsonResponse('Access denied', 403);
     }
 
     try {
@@ -121,11 +121,11 @@ class PeerController extends ControllerBase {
       ->load($personalTrainingId);
 
     if (!$trainingEntity) {
-      return new JsonResponse('Entity not found', 500);
+      return new JsonResponse('Entity not found', 404);
     }
 
     if ($trainingEntity->getInstructorId() !== $this->currentUser->id()) {
-      return new JsonResponse('Access denied', 500);
+      return new JsonResponse('Access denied', 403);
     }
 
     if ($peerId = $trainingEntity->getCustomerPeerId()) {
