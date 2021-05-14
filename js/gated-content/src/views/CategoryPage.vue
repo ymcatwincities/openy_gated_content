@@ -192,7 +192,7 @@ export default {
     EventListing,
   },
   props: {
-    cid: {
+    id: {
       type: String,
       required: true,
     },
@@ -224,7 +224,7 @@ export default {
     async load() {
       this.loading = true;
       client
-        .get(`jsonapi/taxonomy_term/gc_category/${this.cid}`)
+        .get(`jsonapi/taxonomy_term/gc_category/${this.id}`)
         .then((response) => {
           this.category = response.data.data;
           this.loading = false;

@@ -23,10 +23,7 @@
                 :key="index">
             <router-link :to="{
               name: 'Category',
-              params: {
-                cid: category_data.id,
-                type: 'blog'
-              }
+              params: { id: category_data.id }
             }">{{ blog.attributes.field_gc_video_category[index].name }}</router-link>
             <i v-if="index !== blog.attributes.field_gc_video_category.length - 1"> | </i>
           </span>
