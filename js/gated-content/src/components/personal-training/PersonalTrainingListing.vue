@@ -66,7 +66,6 @@ export default {
     return {
       loading: true,
       error: false,
-      listing: [],
       links: {},
       params: [
         'instructor_id',
@@ -79,11 +78,6 @@ export default {
   },
   async mounted() {
     await this.load();
-  },
-  computed: {
-    listingIsNotEmpty() {
-      return this.listing !== null && this.listing.length > 0;
-    },
   },
   methods: {
     async load() {
