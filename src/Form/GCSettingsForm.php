@@ -178,6 +178,13 @@ class GCSettingsForm extends ConfigFormBase {
         '#options' => array_merge($date_options[$bundles_entity_types[$id]], $title_options),
         '#default_value' => $config->get('components.' . $id . '.default_sort'),
       ];
+
+      $form['app_settings']['components'][$id]['component']['show_covers'] = [
+        '#title' => $this->t('Show cover image on teaser'),
+        '#description' => $this->t('Allows to enable or disable display of covers on the teasers.'),
+        '#type' => 'checkbox',
+        '#default_value' => $config->get('components.' . $id . '.show_covers') ?? TRUE,
+      ];
     }
 
     uasort($form['app_settings']['components'],
