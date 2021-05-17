@@ -30,7 +30,7 @@
         />
       </div>
     </template>
-    <div v-else class="empty-listing">{{ msg }}</div>
+    <div v-else class="empty-listing">{{ emptyBlockMsg }}</div>
   </div>
 </template>
 
@@ -95,9 +95,9 @@ export default {
   },
   data() {
     return {
+      component: this.eventType,
       loading: true,
       error: false,
-      listing: null,
       featuredLocal: false,
       params: [
         'field_ls_image',
@@ -125,9 +125,6 @@ export default {
     await this.load();
   },
   computed: {
-    listingIsNotEmpty() {
-      return this.listing !== null && this.listing.length > 0;
-    },
     dateFormatted() {
       const weekDay = this.date.toLocaleDateString('en', { weekday: 'long' });
       const monthName = this.date.toLocaleDateString('en', { month: 'long' });
@@ -249,7 +246,7 @@ export default {
             this.featuredLocal = false;
             this.load();
           }
-          if (this.listing === null || this.listing.length === 0) {
+          if (!this.listingIsNotEmpty) {
             // Emit that listing empty to the parent component.
             this.$emit('listing-not-empty', false);
           }
