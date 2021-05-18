@@ -2,8 +2,9 @@
   background-color: $thunder;
 
   > a {
-    flex-direction: column;
-    border:         none;
+    .info {
+      border: none;
+    }
 
     .title {
       align-self:    flex-start;
@@ -49,10 +50,6 @@
     .preview {
       position:          relative;
       align-self:        flex-start;
-      background-repeat: no-repeat;
-      background-size:   contain;
-      padding-bottom:    56.25%;
-      width:             100%;
 
       .play-button {
         position:         absolute;

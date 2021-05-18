@@ -85,7 +85,6 @@
         :excluded-video-id="video.id"
         :viewAll="true"
         :limit="8"
-        :msg="config.components.live_stream.empty_block_text"
       />
     </template>
   </div>

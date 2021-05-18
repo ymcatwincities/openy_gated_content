@@ -59,10 +59,7 @@
                     :key="category.drupal_internal__tid">
                 <router-link :to="{
                   name: 'Category',
-                  params: {
-                    cid: video.relationships.field_gc_video_category.data[index].id,
-                    type: 'video'
-                  }
+                  params: { id: video.relationships.field_gc_video_category.data[index].id }
                 }">
                   {{ category.name }}
                 </router-link>
