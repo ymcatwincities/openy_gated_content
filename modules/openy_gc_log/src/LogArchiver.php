@@ -9,6 +9,7 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\File\FileSystem;
 use Drupal\Core\Logger\LoggerChannel;
 use Drupal\Core\Site\Settings;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\csv_serialization\Encoder\CsvEncoder;
 use Drupal\file\Entity\File;
 use Drupal\openy_gc_log\Entity\LogEntityInterface;
@@ -18,6 +19,8 @@ use Drupal\user\UserInterface;
  * Log Archiver service.
  */
 class LogArchiver {
+
+  use StringTranslationTrait;
 
   const WORKER_CHUNK_SIZE = 600;
 
@@ -391,17 +394,24 @@ class LogArchiver {
       $user_data = $log->get('uid')->target_id && ($log->get('uid')->entity instanceof UserInterface) ?
       $log->get('uid')->entity->getEmail() :
       $log->get('email')->value;
+      $event_types = [
+        'userLoggedIn' => 'Member logged in',
+        'entityView' => 'Viewed content',
+        'videoPlaybackStarted' => 'Video started',
+        'videoPlaybackEnded' => 'Video end reached',
+        'userActivity' => 'Member activity detected',
+      ];
       $export_row = [
-        'created' => date('m/d/Y - H:i:s', $log->get('created')->value),
-        'user' => $user_data,
-        'event_type' => $event_type,
-        'entity_type' => $entity_type,
-        'entity_bundle' => $entity_bundle,
-        'entity_id' => $entity_id,
-        'entity_title' => '',
-        'entity_instructor_name' => '',
-        'entity_created' => '',
-        'activity_duration' => '',
+        'Date' => date('m/d/Y - H:i:s', $log->get('created')->value),
+        'Member' => $user_data,
+        'Event type' => $event_types[$event_type] ?: $event_type,
+        'Content type' => $entity_type === 'node' ? 'Ondemand' : 'Live event',
+        'Content class' => $entity_bundle === 'gc_video' ? 'vy_video' : $entity_bundle,
+        'Content Drupal ID' => $entity_id,
+        'Content title' => '',
+        'Instructor name' => '',
+        'Content creation date' => '',
+        'Activity duration' => '',
       ];
 
       switch ($event_type) {
@@ -413,19 +423,19 @@ class LogArchiver {
             $metadata = unserialize($log->get('event_metadata')->value, ['allowed_classes' => FALSE]);
           }
           foreach ([
-            'entity_title',
-            'entity_instructor_name',
-            'entity_created',
-          ] as $key) {
+            'entity_title' => $this->t('Content title'),
+            'entity_instructor_name' => 'Instructor name',
+            'entity_created' => 'Content creation date',
+          ] as $key => $export_col) {
             if (!array_key_exists($key, $metadata)) {
               continue 1;
             }
-            $export_row[$key] = $metadata[$key];
+            $export_row[$export_col] = $metadata[$key];
           }
           break;
 
         case LogEntityInterface::EVENT_TYPE_USER_ACTIVITY:
-          $export_row['activity_duration'] = $this->dateFormatter->formatDiff($log->getCreatedTime(), $log->getChangedTime());
+          $export_row['Activity duration'] = $this->dateFormatter->formatDiff($log->getCreatedTime(), $log->getChangedTime());
           break;
       }
 
@@ -467,9 +477,9 @@ class LogArchiver {
         $log->get('email')->value;
       $date = date('m/d/Y', $log->get('created')->value);
       $export_row = [
-        'created' => $date,
-        'user' => $user_data,
-        'activity_duration' => $log->getChangedTime() - $log->getCreatedTime(),
+        'Date' => $date,
+        'Member' => $user_data,
+        'Activity duration' => $log->getChangedTime() - $log->getCreatedTime(),
       ];
 
       $this->moduleHandler->alter(
@@ -490,12 +500,12 @@ class LogArchiver {
               $row = $logs_lvl4;
             }
             else {
-              $row['activity_duration'] += $logs_lvl4['activity_duration'];
+              $row['Activity duration'] += $logs_lvl4['Activity duration'];
             }
           }
           $from = new \DateTime();
-          $to = (clone $from)->add(\DateInterval::createFromDateString("{$row['activity_duration']} seconds"));
-          $row['activity_duration'] = $this->dateFormatter->formatDiff($from->getTimestamp(), $to->getTimestamp());
+          $to = (clone $from)->add(\DateInterval::createFromDateString("{$row['Activity duration']} seconds"));
+          $row['Activity duration'] = $this->dateFormatter->formatDiff($from->getTimestamp(), $to->getTimestamp());
           $this->preparedLogs[$fileName][] = $row;
         }
       }

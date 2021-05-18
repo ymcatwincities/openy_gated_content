@@ -45,6 +45,12 @@ export const FilterAndSortMixin = {
           title_asc: { path: 'name', direction: 'ASC' },
           title_desc: { path: 'name', direction: 'DESC' },
         },
+        personal_training: {
+          date_desc: { path: 'date.value', direction: 'DESC' },
+          date_asc: { path: 'date.value', direction: 'ASC' },
+          title_asc: { path: 'title', direction: 'ASC' },
+          title_desc: { path: 'title', direction: 'DESC' },
+        },
       },
     };
   },

@@ -1,0 +1,21 @@
+# Personal training routing definition
+personal_training.settings_tab:
+  route_name: personal_training.settings
+  title: 'Settings'
+  base_route: personal_training.settings
+
+entity.personal_training.canonical:
+  route_name: entity.personal_training.canonical
+  base_route: entity.personal_training.canonical
+  title: 'View'
+
+entity.personal_training.edit_form:
+  route_name: entity.personal_training.edit_form
+  base_route: entity.personal_training.canonical
+  title: 'Edit'
+
+entity.personal_training.delete_form:
+  route_name:  entity.personal_training.delete_form
+  base_route:  entity.personal_training.canonical
+  title: Delete
+  weight: 10

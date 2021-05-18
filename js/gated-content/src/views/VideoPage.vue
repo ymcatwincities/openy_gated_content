@@ -158,7 +158,7 @@ export default {
       return this.video.relationships.field_gc_video_category.data[0].id;
     },
     date() {
-      return dayjs(this.video.attributes.created).format('dddd, MMMM Do, YYYY');
+      return this.$dayjs.date(this.video.attributes.created).format('dddd, MMMM Do, YYYY');
     },
     video_length() {
       const sec = this.video.attributes.field_gc_video_duration;
