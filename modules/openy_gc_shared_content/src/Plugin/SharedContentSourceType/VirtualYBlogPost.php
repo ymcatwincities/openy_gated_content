@@ -100,7 +100,7 @@ class VirtualYBlogPost extends SharedContentSourceTypeBase {
 
     $category_data = $data['data']['relationships']['field_gc_video_category']['data'];
     foreach ($category_data as $searched_item) {
-      $categories = array_filter($data['included'], function($included) use ($searched_item) {
+      $categories = array_filter($data['included'], function ($included) use ($searched_item) {
         return $included['id'] === $searched_item['id'];
       });
       $category = reset($categories);
