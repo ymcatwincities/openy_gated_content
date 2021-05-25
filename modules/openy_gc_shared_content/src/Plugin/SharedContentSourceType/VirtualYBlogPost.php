@@ -109,7 +109,7 @@ class VirtualYBlogPost extends SharedContentSourceTypeBase {
 
     if (!empty($data['data']['relationships']['field_vy_blog_image']['data'])) {
       foreach ($data['included'] as $included) {
-        if ($included['type'] == 'file--file') {
+        if ($included['type'] === 'file--file') {
           $content['#image'] = $included['attributes']['uri']['url'];
         }
       }
