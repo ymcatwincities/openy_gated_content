@@ -305,3 +305,22 @@ function openy_gated_content_update_8015() {
     $config_updater->update($config, $config_name, "components.$id.default_sort");
   }
 }
+
+/**
+ * Add components show covers settings to openy_gated_content.settings.
+ */
+function openy_gated_content_update_8016() {
+  $config_updater = \Drupal::service('openy_upgrade_tool.param_updater');
+  $config_dir = drupal_get_path('module', 'openy_gated_content') . '/config/install/';
+  $config_name = 'openy_gated_content.settings';
+  $config = $config_dir . $config_name . '.yml';
+  $components = [
+    'gc_video',
+    'live_stream',
+    'virtual_meeting',
+    'vy_blog_post',
+  ];
+  foreach ($components as $id) {
+    $config_updater->update($config, $config_name, "components.$id.show_covers");
+  }
+}
