@@ -221,9 +221,9 @@ function openy_gc_storage_update_8011() {
 }
 
 /**
- * Reimport event and event series views.
+ * Reimport event and event series views. Skip 8012 and do not copy code.
  */
-function openy_gc_storage_update_8012() {
+function openy_gc_storage_update_8013() {
   $config_dir = drupal_get_path('module', 'openy_gc_storage');
   $config_dir .= '/config/install/';
   $config_importer = \Drupal::service('openy_upgrade_tool.importer');
@@ -233,3 +233,4 @@ function openy_gc_storage_update_8012() {
     'views.view.virtual_y_events',
   ]);
 }
+
