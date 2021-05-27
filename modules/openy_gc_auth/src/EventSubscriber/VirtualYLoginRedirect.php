@@ -2,16 +2,16 @@
 
 namespace Drupal\openy_gc_auth\EventSubscriber;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Messenger\Messenger;
 use Drupal\Core\Routing\RouteMatchInterface;
-use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Drupal\openy_gc_auth\GCAuthManager;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Drupal\openy_gc_auth\GCAuthManager;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Class VirtualYLogin Redirect.

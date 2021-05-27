@@ -10,4 +10,3 @@ If you want to enable Virtual Y autologout feature, please enable this module an
 `/admin/virtual-y/openy-gc-autologout` 
 
 page
-

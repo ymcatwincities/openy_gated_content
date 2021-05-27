@@ -2,21 +2,22 @@
 
 namespace Drupal\openy_gc_auth_personify\Controller;
 
+use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Logger\LoggerChannelFactory;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Routing\TrustedRedirectResponse;
 use Drupal\Core\Url;
+use Drupal\openy_gc_auth\GCUserAuthorizer;
+use Drupal\openy_gc_auth_personify\LogoutClient;
 use Drupal\personify\PersonifyClient;
 use Drupal\personify\PersonifySSO;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Config\ConfigFactoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Drupal\Core\Messenger\MessengerInterface;
-use Drupal\openy_gc_auth\GCUserAuthorizer;
-use Drupal\openy_gc_auth_personify\LogoutClient;
 
 /**
  * Personify controller to handle Personify SSO authentication.
@@ -80,6 +81,13 @@ class PersonifyAuthController extends ControllerBase {
   protected $logoutClient;
 
   /**
+   * The time service.
+   *
+   * @var \Drupal\Component\Datetime\TimeInterface
+   */
+  protected $time;
+
+  /**
    * PersonifyAuthController constructor.
    *
    * @param \Drupal\personify\PersonifySSO $personifySSO
@@ -98,6 +106,8 @@ class PersonifyAuthController extends ControllerBase {
    *   Event Dispatcher.
    * @param \Drupal\openy_gc_auth_personify\LogoutClient $logoutClient
    *   Logout client.
+   * @param \Drupal\Component\Datetime\TimeInterface $time
+   *   The time service.
    */
   public function __construct(
     PersonifySSO $personifySSO,
@@ -107,7 +117,8 @@ class PersonifyAuthController extends ControllerBase {
     MessengerInterface $messenger,
     GCUserAuthorizer $gcUserAuthorizer,
     ContainerAwareEventDispatcher $eventDispatcher,
-    LogoutClient $logoutClient
+    LogoutClient $logoutClient,
+    TimeInterface $time
   ) {
     $this->personifySSO = $personifySSO;
     $this->personifyClient = $personifyClient;
@@ -117,6 +128,7 @@ class PersonifyAuthController extends ControllerBase {
     $this->gcUserAuthorizer = $gcUserAuthorizer;
     $this->eventDispatcher = $eventDispatcher;
     $this->logoutClient = $logoutClient;
+    $this->time = $time;
   }
 
   /**
@@ -131,7 +143,8 @@ class PersonifyAuthController extends ControllerBase {
       $container->get('messenger'),
       $container->get('openy_gc_auth.user_authorizer'),
       $container->get('event_dispatcher'),
-      $container->get('openy_gc_auth_personify.logout_client')
+      $container->get('openy_gc_auth_personify.logout_client'),
+      $container->get('datetime.time')
     );
   }
 
@@ -157,7 +170,7 @@ class PersonifyAuthController extends ControllerBase {
           $errorMessage = NULL;
           user_cookie_save([
             'personify_authorized' => $token,
-            'personify_time' => REQUEST_TIME,
+            'personify_time' => $this->time->getRequestTime(),
           ]);
         }
         else {

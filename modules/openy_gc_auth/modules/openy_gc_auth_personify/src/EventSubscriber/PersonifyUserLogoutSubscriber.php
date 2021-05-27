@@ -4,9 +4,9 @@ namespace Drupal\openy_gc_auth_personify\EventSubscriber;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\openy_gc_auth\Event\GCUserLogoutEvent;
+use Drupal\openy_gc_auth_personify\LogoutClient;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Drupal\openy_gc_auth_personify\LogoutClient;
 
 /**
  * Class PersonifyUserLogoutSubscriber Subscriber.
