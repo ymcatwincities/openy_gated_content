@@ -15,27 +15,23 @@ const filters = [
     },
   },
   {
-    name: 'schedule',
-    execute: (date) => {
-      if (!date) return '';
-
-      const dateStart = new Date(date.value);
-      const dateEnd = new Date(date.end_value);
-      const startHours = dateStart.getHours() % 12 || 12;
-      const startMinutes = (dateStart.getMinutes() < 10 ? '0' : '') + dateStart.getMinutes();
-      const startMorning = dateStart.getHours() < 12 ? 'a.m.' : 'p.m.';
-      const endHours = dateEnd.getHours() % 12 || 12;
-      const endMinutes = (dateEnd.getMinutes() < 10 ? '0' : '') + dateEnd.getMinutes();
-      const endMorning = dateEnd.getHours() < 12 ? 'a.m.' : 'p.m.';
-      const now = new Date();
-
-      let start = `${startHours}:${startMinutes} ${startMorning} - `;
-
-      if (dateStart < now && now < dateEnd) {
-        start = 'Until ';
+    name: 'simplePluralize',
+    execute: (singular, number) => {
+      if (parseInt(number, 10) === 1) {
+        return singular;
       }
 
-      return `${start} ${endHours}:${endMinutes} ${endMorning}`;
+      return `${singular}s`;
+    },
+  },
+  {
+    name: 'prependZero',
+    execute: (number) => {
+      if (number < 10) {
+        return `0${number}`;
+      }
+
+      return number;
     },
   },
   {

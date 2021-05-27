@@ -122,6 +122,7 @@ function openy_gc_shared_content_theme($existing, $type, $theme, $path) {
     'openy_gc_shared_content__vy_blog_post' => [
       'variables' => [
         'title' => NULL,
+        'field_gc_video_category' => NULL,
         'description' => NULL,
         'image' => NULL,
         'server' => NULL,

@@ -176,7 +176,7 @@ class SegmentContentAccessCheck implements ContainerInjectionInterface {
       return FALSE;
     }
 
-    $url = $this->request->headers->get('referer');
+    $url = $this->request->headers->get('x-shared-referer');
     $token = $this->request->headers->get('authorization');
     if (!$url || !$token) {
       return FALSE;

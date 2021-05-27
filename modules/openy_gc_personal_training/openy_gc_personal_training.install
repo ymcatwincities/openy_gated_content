@@ -1,0 +1,26 @@
+<?php
+
+/**
+ * @file
+ * Installation file.
+ */
+
+use Drupal\user\Entity\Role;
+
+/**
+ * Implements hook_install().
+ */
+function openy_gc_personal_training_install() {
+  $roles = Role::loadMultiple([
+    'virtual_y',
+  ]);
+  $permissions = [
+    'view personal training entities',
+  ];
+  foreach ($permissions as $permission) {
+    foreach ($roles as $role) {
+      $role->grantPermission($permission);
+      $role->save();
+    }
+  }
+}

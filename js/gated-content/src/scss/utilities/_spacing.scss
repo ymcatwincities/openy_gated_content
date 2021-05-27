@@ -15,6 +15,8 @@
   @extend .pb-20-10;
 }
 
+
+
 .pt-40-20 {
   @include median(padding-top, 40px, 20px);
 }
@@ -57,4 +59,9 @@
 .px--20-10 {
   @include median(padding-left, null, 20px, 10px);
   @include median(padding-right, null, 20px, 10px);
+}
+
+.px-36-24 {
+  @include median(padding-left, 36px, 24px);
+  @include median(padding-right, 36px, 24px);
 }

@@ -1,0 +1,93 @@
+.personal-training-page {
+  .meeting-player {
+    position:         relative;
+    background-color: $black;
+    height:           100%;
+
+    video {
+      transform: scaleX(-1);
+    }
+
+    .partner-media-state {
+      display:        flex;
+      position:       absolute;
+      top:            20px;
+      left:           20px;
+      flex-direction: column;
+      z-index:        1;
+      font-size:      50px;
+    }
+
+    .partner {
+      @include median(
+          background-image,
+          url('assets/img/background.png'),
+          url('assets/img/background.png'),
+          url('assets/img/background-m.png')
+      );
+      background-repeat:   no-repeat;
+      background-position: center;
+      background-size:     cover;
+    }
+
+    .local {
+      background-image:    url('assets/img/join-options-video.png');
+      background-repeat:   no-repeat;
+      background-position: center;
+      background-size:     cover;
+    }
+
+    .connected {
+      background: $black;
+    }
+
+    &.view-inset {
+      .partner {
+        position: absolute;
+        width:    100%;
+        height:   100%;
+      }
+
+      .local {
+        position: absolute;
+        right:    0;
+        bottom:   0;
+        width:    20%;
+      }
+    }
+
+    &.view-horizontal {
+      .partner {
+        position:  absolute;
+        left:      50%;
+        transform: translateX(-50%) scaleX(-1);
+        height:    50%;
+      }
+
+      .local {
+        position:  absolute;
+        top:       50%;
+        left:      50%;
+        transform: translateX(-50%) scaleX(-1);
+        height:    50%;
+      }
+    }
+
+    &.view-vertical {
+      .partner {
+        position:  absolute;
+        top:       50%;
+        transform: translateY(-50%) scaleX(-1);
+        width:     50%;
+      }
+
+      .local {
+        position:  absolute;
+        top:       50%;
+        left:      50%;
+        transform: translateY(-50%) scaleX(-1);
+        width:     50%;
+      }
+    }
+  }
+}

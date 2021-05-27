@@ -56,12 +56,12 @@ class DownloadsIncrementController extends ControllerBase {
     $token = $request->get('token');
     $uuid = $request->get('uuid');
     $client_url = $request->get('client_url');
-
-    $id = reset($this->entityTypeManager
+    $ids = $this->entityTypeManager
       ->getStorage('shared_content_source')
       ->getQuery()
       ->condition('url', $client_url)
-      ->execute());
+      ->execute();
+    $id = reset($ids);
 
     if (!empty($id)) {
       $source = SharedContentSource::load($id);
@@ -73,10 +73,10 @@ class DownloadsIncrementController extends ControllerBase {
     if ($source->getToken() !== $token) {
       $status = 'error';
     }
-
-    $node = reset($this->entityTypeManager
+    $nodes = $this->entityTypeManager
       ->getStorage('node')
-      ->loadByProperties(['uuid' => $uuid]));
+      ->loadByProperties(['uuid' => $uuid]);
+    $node = reset($nodes);
 
     if (!($node instanceof NodeInterface)) {
       $status = 'error';

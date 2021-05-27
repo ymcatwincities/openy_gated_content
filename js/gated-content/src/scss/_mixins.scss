@@ -1,12 +1,15 @@
 @mixin median($property, $desktop, $tablet:$desktop, $mobile:$tablet) {
   #{$property}: $desktop;
 
-  @media (max-width: 1060px) {
-    #{$property}: $tablet;
+  @if $tablet != $desktop {
+    @media only screen and (max-width: 991px) {
+      #{$property}: $tablet;
+    }
   }
 
   @if $mobile != $tablet {
-    @media (max-width: 600px) {
+    @media only screen and (max-width: 767px),
+    only screen and (max-width: 823px) and (max-height: 500px) {
       #{$property}: $mobile;
     }
   }

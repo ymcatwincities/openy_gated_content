@@ -87,7 +87,6 @@
         :eventType="'virtual_meeting'"
         :viewAll="true"
         :limit="8"
-        :msg="'Virtual Meetings not found.'"
       />
     </template>
   </div>
@@ -101,11 +100,12 @@ import EventListing from '@/components/event/EventListing.vue';
 import AddToCalendar from '@/components/event/AddToCalendar.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
 import { EventMixin } from '@/mixins/EventMixin';
+import { SeriesEventMixin } from '@/mixins/SeriesEventMixin';
 import SvgIcon from '@/components/SvgIcon.vue';
 
 export default {
   name: 'VirtualMeetingPage',
-  mixins: [JsonApiCombineMixin, EventMixin],
+  mixins: [JsonApiCombineMixin, EventMixin, SeriesEventMixin],
   components: {
     SvgIcon,
     AddToFavorite,

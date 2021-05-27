@@ -1,0 +1,51 @@
+.personal-training-page {
+  .modal-device-manager {
+    .modal-container {
+      width:     max-content;
+      max-width: 100vw;
+
+      .modal-header {
+        border-bottom:  none;
+        padding:        14px 15px 14px 24px;
+        text-transform: uppercase;
+        color:          $gray;
+        font-family:    $cachet-book;
+        font-size:      18px;
+        font-weight:    400;
+
+        .modal-default-button {
+          margin-left:      20px;
+          border:           none;
+          background-color: initial;
+          padding:          0;
+          line-height:      24px;
+          font-size:        24px;
+        }
+      }
+
+      .modal-body {
+        margin:     0;
+        padding:    0 24px 24px;
+        overflow-y: initial;
+
+        .select {
+          display:        flex;
+          flex-direction: column;
+
+          label {
+            margin-bottom: 0;
+
+          }
+
+          &:not(:last-child) {
+            margin-bottom: 10px;
+          }
+        }
+      }
+
+      .modal-footer {
+        display: none;
+      }
+    }
+  }
+}

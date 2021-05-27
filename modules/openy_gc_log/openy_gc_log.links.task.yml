@@ -1,0 +1,9 @@
+openy_gc_log.virtual_y_logs:
+  title: 'Virtual Y Logs'
+  route_name: view.virtual_y_logs.page_1
+  base_route: view.virtual_y_logs.page_1
+
+openy_gc_log.activity_report:
+  title: 'Activity report'
+  route_name: view.virtual_y_logs.activity_report
+  base_route: view.virtual_y_logs.page_1

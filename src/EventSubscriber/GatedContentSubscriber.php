@@ -2,8 +2,11 @@
 
 namespace Drupal\openy_gated_content\EventSubscriber;
 
+use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Cache\CacheableResponseInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -81,11 +84,38 @@ class GatedContentSubscriber implements EventSubscriberInterface {
   }
 
   /**
+   * Adds a cache context for x-shared-referer header.
+   *
+   * @param \Symfony\Component\HttpKernel\Event\FilterResponseEvent $event
+   *   The event to process.
+   */
+  public function onRespond(FilterResponseEvent $event) {
+    if (!$event->isMasterRequest() || !$this->currentUser->isAnonymous()) {
+      return;
+    }
+
+    $response = $event->getResponse();
+    if (!$response instanceof CacheableResponseInterface) {
+      return;
+    }
+
+    if ($event->getRequest()->headers->has('x-shared-referer')) {
+      // We need this to avoid situations with cached JSON API response
+      // for shared content clients.
+      $context_for_anon = new CacheableMetadata();
+      $context_for_anon->setCacheContexts(['headers:x-shared-referer']);
+      $response->addCacheableDependency($context_for_anon);
+    }
+  }
+
+  /**
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
     // We need to have a priority of 31 or less to have the route available.
     $events[KernelEvents::REQUEST][] = ['accessCheck', 30];
+    // @see \Drupal\Core\EventSubscriber\AnonymousUserResponseSubscriber.
+    $events[KernelEvents::RESPONSE][] = ['onRespond', 6];
     return $events;
   }
 
