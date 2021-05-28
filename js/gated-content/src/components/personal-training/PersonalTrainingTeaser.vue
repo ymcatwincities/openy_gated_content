@@ -1,7 +1,7 @@
 <template>
   <Teaser
     class="event-teaser personal-training-teaser"
-    :routeName="PersonalTraining"
+    :routeName="'PersonalTraining'"
     :id="video.id"
   >
     <template>
