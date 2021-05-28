@@ -4,8 +4,19 @@
     background-color: $black;
     height:           100%;
 
+    .video-wrapper {
+      overflow:            hidden;
+      background-repeat:   no-repeat;
+      background-position: center;
+      background-size:     cover;
+    }
+
     video {
-      transform: scaleX(-1);
+      transform:           scaleX(-1);
+      display:             block;
+      margin:              -1px;
+      height:              calc(100% + 2px);
+      width:               calc(100% + 2px);
     }
 
     .partner-media-state {
@@ -25,16 +36,10 @@
           url('assets/img/background.png'),
           url('assets/img/background-m.png')
       );
-      background-repeat:   no-repeat;
-      background-position: center;
-      background-size:     cover;
     }
 
     .local {
-      background-image:    url('assets/img/join-options-video.png');
-      background-repeat:   no-repeat;
-      background-position: center;
-      background-size:     cover;
+      background-image: url('assets/img/join-options-video.png');
     }
 
     .connected {
@@ -46,6 +51,16 @@
         position: absolute;
         width:    100%;
         height:   100%;
+
+        &.connected {
+          width:     auto;
+          left:      50%;
+          transform: translateX(-50%);
+
+          video {
+            width: auto;
+          }
+        }
       }
 
       .local {
@@ -60,7 +75,7 @@
       .partner {
         position:  absolute;
         left:      50%;
-        transform: translateX(-50%) scaleX(-1);
+        transform: translateX(-50%);
         height:    50%;
       }
 
@@ -68,8 +83,12 @@
         position:  absolute;
         top:       50%;
         left:      50%;
-        transform: translateX(-50%) scaleX(-1);
+        transform: translateX(-50%);
         height:    50%;
+      }
+
+      video {
+        width: auto;
       }
     }
 
@@ -77,7 +96,7 @@
       .partner {
         position:  absolute;
         top:       50%;
-        transform: translateY(-50%) scaleX(-1);
+        transform: translateY(-50%);
         width:     50%;
       }
 
@@ -85,7 +104,7 @@
         position:  absolute;
         top:       50%;
         left:      50%;
-        transform: translateY(-50%) scaleX(-1);
+        transform: translateY(-50%);
         width:     50%;
       }
     }

@@ -10,27 +10,25 @@
         icon="videocam_off_black_24dp"
         class="fill-white"></SvgIcon>
     </div>
-    <video
-      :key="partnerMediaStream === null"
-      class="partner"
-      :srcObject.prop="partnerMediaStream ? partnerMediaStream : ''"
-      autoplay="autoplay"
-      playsinline
-      :class="{
-        connected: partnerMediaStream !== null,
-      }"
-    >
-    </video>
-    <video
-      :key="localMediaStream === null"
-      class="local"
-      :class="{connected: localMediaStream !== null ? 'connected' : ''}"
-      :srcObject.prop="localMediaStream ? localMediaStream : ''"
-      autoplay="autoplay"
-      muted="muted"
-      playsinline
-      :volume.prop="0"
-    ></video>
+    <div class="video-wrapper partner" :class="{connected: partnerMediaStream !== null}">
+      <video
+        :key="partnerMediaStream === null"
+        :srcObject.prop="partnerMediaStream ? partnerMediaStream : ''"
+        autoplay="autoplay"
+        playsinline
+      >
+      </video>
+    </div>
+    <div class="video-wrapper local" :class="{connected: localMediaStream !== null}">
+      <video
+        :key="localMediaStream === null"
+        :srcObject.prop="localMediaStream ? localMediaStream : ''"
+        autoplay="autoplay"
+        muted="muted"
+        playsinline
+        :volume.prop="0"
+      ></video>
+    </div>
   </div>
 </template>
 
