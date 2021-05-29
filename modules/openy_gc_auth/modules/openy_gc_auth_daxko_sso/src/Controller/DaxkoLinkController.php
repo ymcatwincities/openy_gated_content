@@ -3,15 +3,15 @@
 namespace Drupal\openy_gc_auth_daxko_sso\Controller;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Url;
-use Drupal\daxko_sso\DaxkoSSOClient;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Routing\TrustedRedirectResponse;
+use Drupal\Core\Url;
+use Drupal\daxko_sso\DaxkoSSOClient;
+use Drupal\openy_gc_auth\GCUserAuthorizer;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Drupal\openy_gc_auth\GCUserAuthorizer;
 
 /**
  * Class with controller endpoints, needed for Daxko SSO plugin.

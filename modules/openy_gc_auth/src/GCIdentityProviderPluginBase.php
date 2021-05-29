@@ -10,8 +10,8 @@ use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\openy_gated_content\GCUserService;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Defines the base plugin for GCIdentityProvider classes.

@@ -2,9 +2,9 @@
 
 namespace Drupal\openy_gc_demo\Plugin\migrate\process;
 
-use Drupal\migrate_plus\Plugin\migrate\process\EntityGenerate;
 use Drupal\migrate\MigrateExecutableInterface;
 use Drupal\migrate\Row;
+use Drupal\migrate_plus\Plugin\migrate\process\EntityGenerate;
 use Drupal\paragraphs\Entity\Paragraph;
 
 /**

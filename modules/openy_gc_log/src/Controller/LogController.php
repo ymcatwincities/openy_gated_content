@@ -6,9 +6,9 @@ use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\openy_gc_log\Entity\LogEntity;
+use Drupal\openy_gc_log\Logger;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Drupal\openy_gc_log\Logger;
 
 /**
  * Log Controller class.

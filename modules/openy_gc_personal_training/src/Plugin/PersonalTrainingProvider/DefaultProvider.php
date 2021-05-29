@@ -94,7 +94,7 @@ class DefaultProvider extends PersonalTrainingProviderPluginBase {
     $storage = $this->entityTypeManager->getStorage('personal_training');
     $ids = $storage->getQuery()
       ->condition('customer_id', $this->currentUser->id())
-      // TODO: test date conditions.
+      // @todo test date conditions.
       ->condition('date.value', $date_start, '>=')
       ->condition('date.end_value', $date_end, '<=')
       ->range(0, 50)

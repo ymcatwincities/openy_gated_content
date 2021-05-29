@@ -52,7 +52,7 @@ function openy_gc_autologout_users() {
   $autologout_timeout = \Drupal::configFactory()->get('openy_gc_autologout.settings')->get('autologout_timeout');
   // Check all users who have active sessions and logout them (except admin).
   foreach ($results as $info) {
-    if (REQUEST_TIME > ($info->timestamp + $autologout_timeout) && (int) $info->uid !== 1) {
+    if (\Drupal::time()->getRequestTime() > ($info->timestamp + $autologout_timeout) && (int) $info->uid !== 1) {
       // Delete user session.
       \Drupal::database()->delete('sessions')
         ->condition('uid', $info->uid)
