@@ -2,8 +2,8 @@
 
 namespace Drupal\openy_gc_personal_training;
 
-use Drupal\Component\Plugin\PluginInspectionInterface;
 use Drupal\Component\Plugin\ConfigurableInterface;
+use Drupal\Component\Plugin\PluginInspectionInterface;
 use Drupal\Core\Plugin\PluginFormInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\openy_gc_personal_training\Entity\PersonalTrainingInterface;

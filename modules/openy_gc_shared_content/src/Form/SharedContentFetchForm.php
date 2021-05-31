@@ -148,7 +148,7 @@ class SharedContentFetchForm extends EntityForm {
 
       foreach ($source_data['data'] as $item) {
         $form['fetched_data']['content']['#options'][$item['id']] = [
-          // TODO: maybe we can highlight existing items here.
+          // @todo maybe we can highlight existing items here.
           'name' => $instance->formatItem($item),
           'donated_by' => !empty($item['attributes']['field_gc_origin']) ? $item['attributes']['field_gc_origin'] : ' ',
           'count_of_downloads' => !empty($item['attributes']['field_share_count']) ? $item['attributes']['field_share_count'] : '0',

@@ -4,9 +4,9 @@ namespace Drupal\openy_gc_auth_example\Form;
 
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\openy_gc_auth\GCUserAuthorizer;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Drupal\openy_gc_auth\GCUserAuthorizer;
 
 /**
  * Class VirtualYExampleLogin Form.

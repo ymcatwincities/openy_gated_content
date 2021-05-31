@@ -258,7 +258,7 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
       '#size' => 25,
       '#maxlength' => 128,
     ];
-    // TODO: use select list for donated_by.
+    // @todo use select list for donated_by.
     $form['donated_by'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Donated By'),
@@ -340,7 +340,7 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
     $query_args = $this->getFullJsonApiQueryArgs();
     $data = $this->jsonApiCall($source, $query_args, $uuid);
     if (!$data) {
-      // TODO: or message with warning.
+      // @todo or message with warning.
       return FALSE;
     }
 
