@@ -2,12 +2,12 @@
 
 namespace Drupal\openy_gc_auth\Controller;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Routing\TrustedRedirectResponse;
 use Drupal\Core\Url;
 use Drupal\openy_gc_auth\Event\GCUserLogoutEvent;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Config\ConfigFactoryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 

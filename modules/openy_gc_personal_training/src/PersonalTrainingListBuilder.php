@@ -2,14 +2,14 @@
 
 namespace Drupal\openy_gc_personal_training;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityListBuilder;
+use Drupal\Core\Entity\EntityStorageInterface;
+use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Entity\EntityTypeInterface;
-use Drupal\Core\Entity\EntityStorageInterface;
-use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
  * Defines a class to build a listing of Personal training entities.

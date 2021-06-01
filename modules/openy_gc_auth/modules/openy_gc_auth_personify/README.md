@@ -126,4 +126,3 @@ The procedure will “Approve” the Ship-To Member on the order and members on 
   - Org_Unit_id: <your org Unit ID>
 - eBusiness login
   - URL to your ebusiness
-
