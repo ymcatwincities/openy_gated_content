@@ -221,20 +221,6 @@ function openy_gc_storage_update_8011() {
 }
 
 /**
- * Reimport event and event series views.
- */
-function openy_gc_storage_update_8012() {
-  $config_dir = drupal_get_path('module', 'openy_gc_storage');
-  $config_dir .= '/config/install/';
-  $config_importer = \Drupal::service('openy_upgrade_tool.importer');
-  $config_importer->setDirectory($config_dir);
-  $config_importer->importConfigs([
-    'views.view.virtual_y_event_series',
-    'views.view.virtual_y_events',
-  ]);
-}
-
-/**
  * Update image fields required.
  */
 function openy_gc_storage_update_8013() {
@@ -246,5 +232,19 @@ function openy_gc_storage_update_8013() {
   $config_importer->importConfigs([
     'field.field.eventseries.live_stream.field_ls_image',
     'field.field.eventseries.virtual_meeting.field_ls_image',
+  ]);
+}
+
+/**
+ * Reimport event and event series views. Skip 8012-13 and do not copy code.
+ */
+function openy_gc_storage_update_8014() {
+  $config_dir = drupal_get_path('module', 'openy_gc_storage');
+  $config_dir .= '/config/install/';
+  $config_importer = \Drupal::service('openy_upgrade_tool.importer');
+  $config_importer->setDirectory($config_dir);
+  $config_importer->importConfigs([
+    'views.view.virtual_y_event_series',
+    'views.view.virtual_y_events',
   ]);
 }
