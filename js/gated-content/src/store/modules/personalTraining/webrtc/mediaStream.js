@@ -89,7 +89,7 @@ export default {
     audioContext: (state) => {
       if (state.audioContext === null) {
         state.audioContext = new AudioContext();
-      }349
+      }
       return state.audioContext;
     },
   },

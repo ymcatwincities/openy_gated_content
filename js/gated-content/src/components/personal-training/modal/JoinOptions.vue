@@ -17,12 +17,7 @@
           :media-stream="localMediaStream"
           :mic-enabled="isMicEnabled"
         />
-        <div class="video-state-indicator">
-          <SvgIcon
-            v-if="localMediaStream && !isCameraEnabled"
-            icon="videocam_off_black_24dp"
-            class="fill-white"></SvgIcon>
-        </div>
+        <VideoIndicator v-if="localMediaStream" :cam-enabled="isCameraEnabled" />
         <video
           v-if="localMediaStream && isCameraEnabled"
           :srcObject.prop="localMediaStream"
@@ -87,12 +82,15 @@
 
 <script>
 import AudioIndicator from '@/components/personal-training/meeting/AudioIndicator.vue';
+import VideoIndicator from '@/components/personal-training/meeting/VideoIndicator.vue';
 import Modal from '@/components/modal/Modal.vue';
 import { mapGetters, mapActions } from 'vuex';
 import SvgIcon from '@/components/SvgIcon.vue';
 
 export default {
-  components: { AudioIndicator, SvgIcon, Modal },
+  components: {
+    AudioIndicator, VideoIndicator, SvgIcon, Modal,
+  },
   computed: {
     ...mapGetters([
       'isShowJoinOptionsModal',

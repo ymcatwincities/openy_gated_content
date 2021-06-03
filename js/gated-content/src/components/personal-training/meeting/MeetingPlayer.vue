@@ -6,12 +6,7 @@
         :media-stream="partnerMediaStream"
         :mic-enabled="partnerMicEnabled"
       />
-      <div class="video-state-indicator">
-        <SvgIcon
-          v-if="partnerMediaStream && !partnerCamEnabled"
-          icon="videocam_off_black_24dp"
-          class="fill-white"></SvgIcon>
-      </div>
+      <VideoIndicator v-if="partnerMediaStream" :cam-enabled="partnerCamEnabled" />
       <video
         :key="partnerMediaStream === null"
         :srcObject.prop="partnerMediaStream ? partnerMediaStream : ''"
@@ -22,12 +17,7 @@
     </div>
     <div class="video-wrapper local" :class="{connected: localMediaStream !== null}">
       <AudioIndicator :media-stream="localMediaStream" :mic-enabled="isMicEnabled" />
-      <div class="video-state-indicator">
-        <SvgIcon
-          v-if="localMediaStream && !isCameraEnabled"
-          icon="videocam_off_black_24dp"
-          class="fill-white"></SvgIcon>
-      </div>
+      <VideoIndicator v-if="localMediaStream" :cam-enabled="isCameraEnabled" />
       <video
         :key="localMediaStream === null"
         :srcObject.prop="localMediaStream ? localMediaStream : ''"
@@ -42,11 +32,11 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import SvgIcon from '@/components/SvgIcon.vue';
 import AudioIndicator from '@/components/personal-training/meeting/AudioIndicator.vue';
+import VideoIndicator from '@/components/personal-training/meeting/VideoIndicator.vue';
 
 export default {
-  components: { AudioIndicator, SvgIcon },
+  components: { AudioIndicator, VideoIndicator },
   data() {
     return {
       intervalId: 0,
