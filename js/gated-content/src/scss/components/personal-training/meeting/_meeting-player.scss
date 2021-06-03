@@ -19,16 +19,6 @@
       width:               calc(100% + 2px);
     }
 
-    .partner-media-state {
-      display:        flex;
-      position:       absolute;
-      top:            20px;
-      left:           20px;
-      flex-direction: column;
-      z-index:        1;
-      font-size:      50px;
-    }
-
     .partner {
       @include median(
           background-image,
@@ -53,21 +43,17 @@
         height:   100%;
 
         &.connected {
-          width:     auto;
           left:      50%;
           transform: translateX(-50%);
-
-          video {
-            width: auto;
-          }
         }
       }
 
       .local {
-        position: absolute;
-        right:    0;
-        bottom:   0;
-        width:    20%;
+        position:  absolute;
+        right:     0;
+        bottom:    0;
+        width:     20%;
+        min-width: 150px;
       }
     }
 
@@ -108,5 +94,44 @@
         width:     50%;
       }
     }
+  }
+
+  .audio-state-indicator,
+  .video-state-indicator {
+    position:           absolute;
+    bottom:             5px;
+    height:             30px;
+    width:              30px;
+    z-index:            1;
+
+    .svg-container {
+      border-radius:    50%;
+      background-color: $red;
+      padding:          6px;
+      font-size:        18px;
+    }
+  }
+
+  .audio-state-indicator {
+    left:               5px;
+
+    .indication {
+      border-radius:    50%;
+      background-color: $aquamarine;
+      position:         absolute;
+      left:             50%;
+      top:              50%;
+      transform:        translate(-50%, -50%);
+
+      &:before {
+        content:        "";
+        display:        block;
+        padding-top:    100%;
+      }
+    }
+  }
+
+  .video-state-indicator {
+    left:               40px;
   }
 }

@@ -1,5 +1,6 @@
 export default {
   state: {
+    audioContext: null,
     instructorMediaStream: null,
     customerMediaStream: null,
     partnerCamEnabled: false,
@@ -85,5 +86,11 @@ export default {
       : state.instructorMediaStream),
     partnerCamEnabled: (state) => state.partnerCamEnabled,
     partnerMicEnabled: (state) => state.partnerMicEnabled,
+    audioContext: (state) => {
+      if (state.audioContext === null) {
+        state.audioContext = new AudioContext();
+      }349
+      return state.audioContext;
+    },
   },
 };
