@@ -12,6 +12,7 @@ use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\Core\Url;
 use Drupal\openy_gc_auth\GCUserAuthorizer;
 use Drupal\openy_gc_auth\GCVerificationTrait;
+use Drupal\simple_recaptcha\SimpleReCaptchaFormManager;
 use Drupal\user\Entity\User;
 use Drupal\user\UserDataInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -76,6 +77,13 @@ class VirtualYCustomLoginForm extends FormBase {
   protected $gcUserAuthorizer;
 
   /**
+   * Form manager service from simple_recaptcha module.
+   *
+   * @var \Drupal\simple_recaptcha\SimpleReCaptchaFormManager
+   */
+  protected $reCaptchaFormManager;
+
+  /**
    * The user data service.
    *
    * @var \Drupal\user\UserDataInterface
@@ -93,6 +101,7 @@ class VirtualYCustomLoginForm extends FormBase {
     FloodInterface $flood,
     PrivateTempStoreFactory $private_temp_store,
     GCUserAuthorizer $gcUserAuthorizer,
+    SimpleReCaptchaFormManager $reCaptchaFormManager,
     UserDataInterface $user_data
   ) {
     $this->currentRequest = $requestStack->getCurrentRequest();
@@ -102,6 +111,7 @@ class VirtualYCustomLoginForm extends FormBase {
     $this->flood = $flood;
     $this->privateTempStore = $private_temp_store->get('openy_gc_auth.provider.custom');
     $this->gcUserAuthorizer = $gcUserAuthorizer;
+    $this->reCaptchaFormManager = $reCaptchaFormManager;
     $this->userData = $user_data;
   }
 
@@ -117,6 +127,7 @@ class VirtualYCustomLoginForm extends FormBase {
       $container->get('flood'),
       $container->get('tempstore.private'),
       $container->get('openy_gc_auth.user_authorizer'),
+      $container->get('simple_recaptcha.form_manager'),
       $container->get('user.data')
     );
   }
@@ -154,17 +165,13 @@ class VirtualYCustomLoginForm extends FormBase {
       '#required' => TRUE,
     ];
 
-    if ($provider_config->get('enable_recaptcha')) {
-      $form['captcha'] = [
-        '#type' => 'captcha',
-        '#captcha_type' => 'recaptcha/reCAPTCHA',
-        '#captcha_validate' => 'recaptcha_captcha_validation',
-      ];
-    }
-
     $form['actions'] = [
       '#type' => 'actions',
     ];
+
+    if ($provider_config->get('enable_recaptcha')) {
+      $this->reCaptchaFormManager->addReCaptchaCheckbox($form, $this->getFormId());
+    }
 
     $form['actions']['submit'] = [
       '#type' => 'submit',
