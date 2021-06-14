@@ -62,6 +62,7 @@ function openy_gc_personal_training_openy_gated_content_list_events_alter(&$resu
   }
 
   $query = \Drupal::database()->select('personal_training', 'pt');
+  $query->condition('pt.type', 'personal_training');
   $query->leftJoin('users_field_data', 'ufd', 'ufd.uid = pt.instructor_id');
 
   $uid = \Drupal::currentUser()->id();
