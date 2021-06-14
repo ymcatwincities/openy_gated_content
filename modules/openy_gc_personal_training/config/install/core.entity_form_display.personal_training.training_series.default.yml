@@ -1,0 +1,129 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.personal_training.training_series.field_exclusions
+    - field.field.personal_training.training_series.field_schedule
+    - openy_gc_personal_training.type.training_series
+  module:
+    - datetime_range
+    - link
+    - paragraphs
+    - text
+id: personal_training.training_series.default
+targetEntityType: personal_training
+bundle: training_series
+mode: default
+content:
+  customer_id:
+    type: entity_reference_autocomplete
+    settings:
+      match_operator: CONTAINS
+      size: 60
+      placeholder: ''
+      match_limit: 10
+    region: content
+    weight: 2
+    third_party_settings: {  }
+  customer_metadata:
+    type: text_textarea
+    region: content
+    weight: 10
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  customer_peer_id:
+    type: string_textfield
+    region: content
+    weight: 12
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  description:
+    type: text_textarea
+    rows: 6
+    region: content
+    weight: 8
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_exclusions:
+    weight: 7
+    settings: {  }
+    third_party_settings: {  }
+    type: daterange_default
+    region: content
+  field_schedule:
+    type: entity_reference_paragraphs
+    weight: 6
+    settings:
+      title: Paragraph
+      title_plural: Paragraphs
+      edit_mode: open
+      add_mode: dropdown
+      form_display_mode: default
+      default_paragraph_type: ''
+    third_party_settings: {  }
+    region: content
+  instructor_id:
+    type: entity_reference_autocomplete
+    settings:
+      match_operator: CONTAINS
+      size: 60
+      placeholder: ''
+      match_limit: 10
+    region: content
+    weight: 3
+    third_party_settings: {  }
+  instructor_metadata:
+    type: text_textarea
+    region: content
+    weight: 11
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  langcode:
+    type: language_select
+    weight: 0
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
+  pt_equipment:
+    type: entity_reference_autocomplete
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    region: content
+    weight: 9
+    third_party_settings: {  }
+  remote_link:
+    type: link_default
+    region: content
+    weight: 5
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+  title:
+    type: string_textfield
+    region: content
+    weight: 1
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  training_type:
+    type: options_buttons
+    region: content
+    weight: 4
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  date: true

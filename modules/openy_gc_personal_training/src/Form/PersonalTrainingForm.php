@@ -54,6 +54,8 @@ class PersonalTrainingForm extends ContentEntityForm {
           'training_type',
           'remote_link',
           'date',
+          'field_schedule',
+          'field_exclusions',
           'description',
           'pt_equipment',
         ],
@@ -76,6 +78,9 @@ class PersonalTrainingForm extends ContentEntityForm {
         '#title' => $group_info['title'],
       ];
       foreach ($group_info['subitems'] as $subitem) {
+        if (!isset($form[$subitem])) {
+          continue;
+        }
         $form[$name][$subitem] = $form[$subitem];
         unset($form[$subitem]);
       }
