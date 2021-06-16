@@ -9,6 +9,8 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\openy_gc_personal_training\Entity\PersonalTrainingInterface;
+use Drupal\openy_gc_personal_training\PersonalTrainingSeriesOperations;
 
 /**
  * Implements hook_preprocess_html().
@@ -111,4 +113,43 @@ function openy_gc_personal_training_jsonapi_entity_filter_access(EntityTypeInter
   return ([
     JSONAPI_FILTER_AMONG_ALL => AccessResult::allowedIfHasPermission($account, 'view personal training entities'),
   ]);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert() for personal_training entities.
+ */
+function openy_gc_personal_training_personal_training_insert(PersonalTrainingInterface $personal_training) {
+  if ($personal_training->bundle() !== 'training_series') {
+    return;
+  }
+
+  \Drupal::service('class_resolver')
+    ->getInstanceFromDefinition(PersonalTrainingSeriesOperations::class)
+    ->entityInsert($personal_training);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update() for personal_training entities.
+ */
+function openy_gc_personal_training_personal_training_update(PersonalTrainingInterface $personal_training) {
+  if ($personal_training->bundle() !== 'training_series') {
+    return;
+  }
+
+  \Drupal::service('class_resolver')
+    ->getInstanceFromDefinition(PersonalTrainingSeriesOperations::class)
+    ->entityUpdate($personal_training);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete() for personal_training entities.
+ */
+function openy_gc_personal_training_personal_training_delete(PersonalTrainingInterface $personal_training) {
+  if ($personal_training->bundle() !== 'training_series') {
+    return;
+  }
+
+  \Drupal::service('class_resolver')
+    ->getInstanceFromDefinition(PersonalTrainingSeriesOperations::class)
+    ->entityDelete($personal_training);
 }
