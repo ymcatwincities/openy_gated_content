@@ -97,17 +97,18 @@ class PersonalTrainingForm extends ContentEntityForm {
 
     $status = parent::save($form, $form_state);
 
+    $args = [
+      '%label' => $entity->label(),
+      '%type' => $entity->bundle() !== 'training_series' ? '1on1 Meeting' : '1on1 Meeting series',
+    ];
+
     switch ($status) {
       case SAVED_NEW:
-        $this->messenger()->addMessage($this->t('Created the %label 1on1 Meeting.', [
-          '%label' => $entity->label(),
-        ]));
+        $this->messenger()->addMessage($this->t('Created the %label %type.', $args));
         break;
 
       default:
-        $this->messenger()->addMessage($this->t('Saved the %label 1on1 Meeting.', [
-          '%label' => $entity->label(),
-        ]));
+        $this->messenger()->addMessage($this->t('Saved the %label %type.', $args));
     }
     $form_state->setRedirect('entity.personal_training.collection');
   }
