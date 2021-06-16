@@ -71,6 +71,7 @@ function openy_gc_personal_training_update_8002() {
     'field.field.personal_training.training_series.field_schedule',
     'core.entity_form_display.personal_training.personal_training.default',
     'core.entity_form_display.personal_training.training_series.default',
+    'views.view.personal_trainings',
   ]);
 }
 
