@@ -23,6 +23,14 @@ function openy_gc_storage_install() {
   $config->set('image_styles.gated_content_teaser', 'gated_content_teaser');
   $config->save(TRUE);
 
+  _openy_gc_storage_add_banner_image_style();
+}
+
+function _openy_gc_storage_add_banner_image_style() {
+  $config_factory = \Drupal::configFactory();
+  $config = $config_factory->getEditable('jsonapi_image_styles.settings');
+  $config->set('image_styles.carnation_banner_1920_700', 'carnation_banner_1920_700');
+  $config->save(TRUE);
 }
 
 /**
@@ -247,4 +255,11 @@ function openy_gc_storage_update_8014() {
     'views.view.virtual_y_event_series',
     'views.view.virtual_y_events',
   ]);
+}
+
+/**
+ * Add banner image style to use with the JSON:API.
+ */
+function openy_gc_storage_update_8015() {
+  _openy_gc_storage_add_banner_image_style();
 }

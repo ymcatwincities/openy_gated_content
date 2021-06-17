@@ -28,7 +28,7 @@
         v-if="level"
       >
         <SvgIcon icon="difficulty-icon-grey" :css-fill="false"></SvgIcon>
-        {{ level | capitalize }}
+        {{ level.name | capitalize }}
       </div>
       <div class="timer" :class="{live: isOnAir}">
         <template v-if="isOnAir">
@@ -74,20 +74,11 @@ export default {
       return this.$dayjs.date(this.video.attributes.date.value).format('YYYY-MM-DD');
     },
     image() {
-      if (this.video.attributes['field_ls_image.field_media_image']) {
-        return this.video.attributes['field_ls_image.field_media_image']
-          .image_style_uri[0].gated_content_teaser;
-      }
-      if (this.video.attributes['image.field_media_image']) {
-        return this.video.attributes['image.field_media_image']
-          .image_style_uri[0].gated_content_teaser;
-      }
-
-      return null;
+      return this.video.attributes['field_ls_image.field_media_image']
+        ?? this.video.attributes['image.field_media_image'];
     },
     level() {
-      return this.video.attributes.field_ls_level ? this.video.attributes.field_ls_level.name
-        : this.video.attributes.level.name;
+      return this.video.attributes.field_ls_level ?? this.video.attributes.level;
     },
     route() {
       switch (this.video.type) {
