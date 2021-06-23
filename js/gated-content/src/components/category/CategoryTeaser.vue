@@ -1,43 +1,37 @@
 <template>
-  <div class="teaser category-teaser">
-    <router-link :to="{ name: 'Category', params: { cid: category.id } }">
-        <div class="preview" v-bind:style="{
-              backgroundImage: `url(${image})`
-            }"
-        v-if="image">
-        </div>
-        <div class="title verdana-16-14">{{ category.attributes.name }}</div>
-    </router-link>
-    <AddToFavorite
-      :id="category.attributes.drupal_internal__tid"
-      :type="'taxonomy_term'"
-      :bundle="'gc_category'"
-    ></AddToFavorite>
-  </div>
+  <Teaser
+    class="category-teaser"
+    :routeName="'Category'"
+    :id="category.id"
+    :image="category.attributes['field_gc_category_media.field_media_image']"
+  >
+    <template>
+      <div class="title verdana-16-14">{{ category.attributes.name }}</div>
+    </template>
+    <template v-slot:outer>
+      <AddToFavorite
+        :id="category.attributes.drupal_internal__tid"
+        :type="'taxonomy_term'"
+        :bundle="'gc_category'"
+      />
+    </template>
+  </Teaser>
 </template>
 
 <script>
+import Teaser from '@/components/Teaser.vue';
 import AddToFavorite from '@/components/AddToFavorite.vue';
 
 export default {
   name: 'CategoryTeaser',
   components: {
+    Teaser,
     AddToFavorite,
   },
   props: {
     category: {
       type: Object,
       required: true,
-    },
-  },
-  computed: {
-    image() {
-      if (!this.category.attributes['field_gc_category_media.field_media_image']) {
-        return null;
-      }
-
-      return this.category.attributes['field_gc_category_media.field_media_image']
-        .image_style_uri[0].gated_content_teaser;
     },
   },
 };

@@ -11,7 +11,7 @@ use Drupal\openy_gc_auth\GCIdentityProviderPluginBase;
  * @GCIdentityProvider(
  *   id="daxkobarcode",
  *   label = @Translation("Daxko barcode provider"),
- *   config="openy_gc_auth.provider.daxco_barcode"
+ *   config="openy_gc_auth.provider.daxko_barcode"
  * )
  */
 class DaxkoBarcode extends GCIdentityProviderPluginBase {

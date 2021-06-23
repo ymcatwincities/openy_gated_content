@@ -1,40 +1,53 @@
 {{ attach_library('openy_gated_content/gated-content-styles') }}
 <div id="gated-content">
-  <div>
-    <div class="gated-content-video-page">
-      <div class="video-wrapper">
-        <div class="video gated-container">
-          <div>
-            <div>{{ field_gc_video_media }}</div>
-          </div>
-        </div>
+
+  <div class="gated-content-video-page">
+    <div class="video-wrapper">
+      <div class="video gated-containerV2 px--20-10 pt-40-20">
+        <div>{{ field_gc_video_media }}</div>
       </div>
-      <div class="video-footer-wrapper">
-        <div class="video-footer gated-container">
-          <div>
-            <div class="video-footer__title">{{ title }}</div>
-            <div class="video-footer__description">
-              {{ description }}
-            </div>
-          </div>
-          <div>
-            <div class="video-footer__block"> Level: {{ field_gc_video_level[0] }} </div>
-            <div class="video-footer__block"> Instructor: {{ field_gc_video_instructor }} </div>
-            <div class="video-footer__block"> Category: {{ field_gc_video_category[0] }} </div>
-            <div class="video-footer__equipment">
-              <i class="fa fa-cubes"></i> Equipment:
-              <ul>
-                {% for equipment in field_gc_video_equipment %}
-                  <li>{{ equipment }}</li>
-                {% endfor %}
-              </ul>
-            </div>
-          </div>
+    </div>
+    <div class="video-footer-wrapper bg-black">
+      <div class="video-footer gated-containerV2 text-white px--20-10 py-40-20">
+        <div class="pb-20-10 cachet-book-32-28">
+          {{ title }}
         </div>
-      </div>
-      <div class="video-category-wrapper">
-        <div class="gated-container video-category">
-          <a href="#" class=""> {{ field_gc_video_category[0] }} </a>
+        <div class="video-footer__fav pb-40-20">
+          <div class="timer"> 25 minutes </div>
+        </div>
+        <div class="verdana-14-12">
+          <div class="video-footer__block">
+            <span class="svg-container fill-white">
+              <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16" class="svg-class"> <path id="Instructor_Icon" data-name="Instructor Icon" d="M12,12A4,4,0,1,0,8,8,4,4,0,0,0,12,12Zm0,2c-2.67,0-8,1.34-8,4v2H20V18C20,15.34,14.67,14,12,14Z" transform="translate(-4 -4)"></path> </svg>
+            </span>
+            {{ field_gc_video_instructor }}
+          </div>
+          <div class="video-footer__block">
+            <span class="svg-container">
+              <svg id="Difficulty_Icon" data-name="Difficulty Icon" xmlns="http://www.w3.org/2000/svg" width="1.00em" height="1em" viewBox="0 0 18 18" class="svg-class"> <path id="Icon" d="M19,3H5A2.006,2.006,0,0,0,3,5V19a2.006,2.006,0,0,0,2,2H19a2.006,2.006,0,0,0,2-2V5A2.006,2.006,0,0,0,19,3ZM9,17H7V10H9Zm4,0H11V7h2Zm4,0H15V13h2Z" transform="translate(-3 -3)" fill="#fff"></path> </svg>
+            </span>
+            {{ field_gc_video_level[0] }}
+          </div>
+          <div class="video-footer__block video-footer__category">
+            <span class="svg-container fill-white"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="0.8333333333333334em" viewBox="0 0 24 20" class="svg-class"> <path id="Categories_Icon" data-name="Categories Icon" d="M2,6H0v5H.01L0,20a2.006,2.006,0,0,0,2,2H20V20H2ZM22,4H14L12,2H6A2,2,0,0,0,4.01,
+        4L4,16a2.006,2.006,0,0,0,2,2H22a2.006,2.006,0,0,0,2-2V6A2.006,2.006,0,0,0,22,4Z" transform="translate(0 -2)"></path> </svg>
+            </span>
+            {% for category in field_gc_video_category %}
+              {{ category }}
+            {% endfor %}
+          </div>
+          <div class="video-footer__block">
+            <span class="svg-container fill-white"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="cubes" class="svg-inline--fa fa-cubes fa-w-16 svg-class" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" height="1em" width="1em"><path d="M488.6 250.2L392 214V105.5c0-15-9.3-28.4-23.4-33.7l-100-37.5c-8.1-3.1-17.1-3.1-25.3 0l-100 37.5c-14.1 5.3-23.4 18.7-23.4 33.7V214l-96.6 36.2C9.3 255.5 0 268.9 0 283.9V394c0 13.6 7.7 26.1 19.9 32.2l100 50c10.1 5.1 22.1 5.1 32.2 0l103.9-52 103.9 52c10.1 5.1 22.1 5.1 32.2 0l100-50c12.2-6.1 19.9-18.6 19.9-32.2V283.9c0-15-9.3-28.4-23.4-33.7zM358 214.8l-85 31.9v-68.2l85-37v73.3zM154 104.1l102-38.2 102 38.2v.6l-102 41.4-102-41.4v-.6zm84 291.1l-85 42.5v-79.1l85-38.8v75.4zm0-112l-102 41.4-102-41.4v-.6l102-38.2 102 38.2v.6zm240 112l-85 42.5v-79.1l85-38.8v75.4zm0-112l-102 41.4-102-41.4v-.6l102-38.2 102 38.2v.6z"></path></svg></span>
+            Equipment:
+          </div>
+          <ul class="video-footer__equipment">
+            {% for equipment in field_gc_video_equipment %}
+              <li>{{ equipment }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        <div class="verdana-16-14">
+          {{ description }}
         </div>
       </div>
     </div>

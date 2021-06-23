@@ -5,11 +5,22 @@
       {% if image %}
         <div class="blog-page__image" style="background-image: url({{ server ~ image }});"></div>
       {% endif %}
-      <div class="blog-header gated-container">
-        <h2>{{ title }}</h2>
+      <div class="gated-containerV2 my-40-20 px--20-10 text-black">
+        <h2 class="cachet-book-32-28">{{ title }}</h2>
+        {% if field_gc_video_category|length > 0 %}
+          <div class="blog-category">
+            <b>Category: </b>
+            {% for category in field_gc_video_category %}
+              <span>{{ category }}</span>
+              {% if not loop.last %}
+              <i> | </i>
+              {% endif %}
+            {% endfor %}
+          </div>
+        {% endif %}
       </div>
-      <div class="blog-content gated-container">
-        <div class="blog-content__description">
+      <div class="gated-containerV2 my-40-20 px--20-10 text-black">
+        <div class="blog-content__description verdana-16-14">
           {{ description }}
         </div>
       </div>
