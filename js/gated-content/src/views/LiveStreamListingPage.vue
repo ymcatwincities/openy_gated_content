@@ -3,7 +3,6 @@
     <EventListing
       :title="config.components.live_stream.title"
       :withDateFilter="true"
-      :msg="'No Live streams scheduled for this date.'"
     />
   </div>
 </template>

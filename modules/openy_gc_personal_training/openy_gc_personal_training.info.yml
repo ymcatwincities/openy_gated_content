@@ -1,0 +1,6 @@
+name: Virtual Y 1on1 Meeting
+type: module
+description: 'Virtual Y 1on1 Meeting functionality'
+package: Open Y Virtual YMCA
+version: 0.1
+core_version_requirement: ^8 || ^9

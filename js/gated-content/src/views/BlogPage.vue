@@ -6,9 +6,9 @@
     <div v-else-if="error">Error loading</div>
     <template v-else>
       <div
-        v-if="blog.attributes.field_vy_blog_image !== null"
+        v-if="image !== null"
         class="blog-page__image"
-        v-bind:style="{backgroundImage: `url(${image})`}"
+        :style="{ backgroundImage: `url(${getStyledUrl(image, 'carnation_banner_1920_700')})` }"
       >
       </div>
       <div class="gated-containerV2 my-40-20 px--20-10 text-black">
@@ -23,10 +23,7 @@
                 :key="index">
             <router-link :to="{
               name: 'Category',
-              params: {
-                cid: category_data.id,
-                type: 'blog'
-              }
+              params: { id: category_data.id }
             }">{{ blog.attributes.field_gc_video_category[index].name }}</router-link>
             <i v-if="index !== blog.attributes.field_gc_video_category.length - 1"> | </i>
           </span>
@@ -66,10 +63,11 @@ import Spinner from '@/components/Spinner.vue';
 import BlogListing from '@/components/blog/BlogListing.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
 import { SettingsMixin } from '@/mixins/SettingsMixin';
+import { ImageStyleMixin } from '@/mixins/ImageStyleMixin';
 
 export default {
   name: 'BlogPage',
-  mixins: [JsonApiCombineMixin, SettingsMixin],
+  mixins: [JsonApiCombineMixin, SettingsMixin, ImageStyleMixin],
   components: {
     AddToFavorite,
     BlogListing,
@@ -96,12 +94,7 @@ export default {
   },
   computed: {
     image() {
-      if (!this.blog.attributes['field_vy_blog_image.field_media_image']) {
-        return null;
-      }
-
-      return this.blog.attributes['field_vy_blog_image.field_media_image']
-        .uri.url;
+      return this.blog.attributes['field_vy_blog_image.field_media_image'];
     },
     firstCategory() {
       if (

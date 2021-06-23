@@ -1,0 +1,18 @@
+<?php
+
+/**
+ * @file
+ * Install file for openy_gc_auth_daxko_barcode module.
+ */
+
+/**
+ * Put daxko barcode config to a proper setting.
+ */
+function openy_gc_auth_daxko_barcode_update_8001() {
+  $config_factory = \Drupal::configFactory();
+  $config_data = $config_factory->get('openy_gc_auth.provider.daxco_barcode')
+    ->getRawData();
+  $config_factory->getEditable('openy_gc_auth.provider.daxko_barcode')
+    ->setData($config_data)
+    ->save();
+}

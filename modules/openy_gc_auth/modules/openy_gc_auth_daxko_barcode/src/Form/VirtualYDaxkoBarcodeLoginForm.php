@@ -2,12 +2,12 @@
 
 namespace Drupal\openy_gc_auth_daxko_barcode\Form;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
  * Class VirtualYDaxkoBarcodeLoginForm.
@@ -63,7 +63,7 @@ class VirtualYDaxkoBarcodeLoginForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $config = $this->configFactory->get('openy_gc_auth.provider.daxco_barcode');
+    $config = $this->configFactory->get('openy_gc_auth.provider.daxko_barcode');
 
     $form['barcode'] = [
       '#title' => $config->get('form_label'),

@@ -3,7 +3,7 @@
     "description": "Open Y Virtual Y Content",
     "type": "drupal-module",
     "require": {
-        "drupal/recurring_events": "*",
+        "drupal/recurring_events": "<2.0.0-beta3",
         "ymcatwincities/daxko_sso": "*",
         "drupal/jsonapi_image_styles": "^1.0@beta",
         "drupal/csv_serialization": "^2.0",
@@ -11,5 +11,27 @@
         "ext-zlib": "*"
     },
     "license": "GPL-2.0+",
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "extra": {
+        "patches": {
+            "drupal/recurring_events": {
+                "Publishing Series Workflow Should Be Reflected in Instances [3178669]": "https://www.drupal.org/files/issues/2020-10-28/recurring_events-status_changes-3178669-5.patch",
+                "Fix WSOD upon deletion of Event Series": "https://www.drupal.org/files/issues/2021-02-01/recurring_events-entity_delete_forms-3164160-11_0.patch",
+                "Fixed titles at the deletion screen": "https://gist.githubusercontent.com/anpolimus/5443cd6e9f4552cd97ea5d1046188f7d/raw/a495654b49263004d3ec9d0cb1837a79cd8cb254/recurring_events_delete_titles.patch"
+            },
+            "drupal/search_api": {
+                "Add a \"Role-based access\" processor [2898334]": "https://www.drupal.org/files/issues/2021-01-31/2898334-30--role_based_access_check.patch"
+            },
+            "ymcatwincities/openy": {
+                "[PRODDEV-240] Display search input field for the lily theme": "https://patch-diff.githubusercontent.com/raw/ymcatwincities/openy/pull/2420.patch"
+            }
+        },
+        "patches-ignore": {
+            "ymcatwincities/openy": {
+                "drupal/search_api": {
+                    "2898334 - Add a Role-based access processor": "https://www.drupal.org/files/issues/2021-01-31/2898334-30--role_based_access_check.patch"
+                }
+            }
+        }
+    }
 }

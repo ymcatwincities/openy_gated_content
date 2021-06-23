@@ -54,5 +54,8 @@ process:
       method: row
       source: email
       message: 'Field email is missed'
+    -
+      plugin: vy_skip_row_if_email_excluded
+      source: email
 destination:
   plugin: 'entity:user'

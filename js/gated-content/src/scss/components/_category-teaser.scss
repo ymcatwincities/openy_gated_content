@@ -3,22 +3,16 @@
   min-width:       0;
 
   > a {
-    border-right:  none;
-    border-bottom: none;
-    border-left:   none;
-
-    .title {
-      @include median(padding, 10px 10px 58px, 10px 10px 53px);
-      border-right:  solid 1px #efefef;
-      border-bottom: solid 1px #efefef;
-      border-left:   solid 1px #efefef;
-    }
-
     .preview {
       background-size: cover;
       padding-bottom:  50%;
-      width:           100%;
       height:          0;
+    }
+
+    .info {
+      border: none;
+
+      @include median(padding, 10px 10px 58px, 10px 10px 53px);
     }
   }
 }

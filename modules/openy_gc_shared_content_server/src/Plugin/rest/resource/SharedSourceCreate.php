@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
  *   id = "shared_source_create",
  *   label = @Translation("Shared Source Create"),
  *   uri_paths = {
- *     "https://www.drupal.org/link-relations/create" = "/virtual-y/shared-source/generate-token"
+ *     "create" = "/virtual-y/shared-source/generate-token"
  *   }
  * )
  */

@@ -1,0 +1,113 @@
+<?php
+
+/**
+ * @file
+ * Contains openy_gc_personal_training.module.
+ */
+
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Datetime\DrupalDateTime;
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Session\AccountInterface;
+
+/**
+ * Implements hook_preprocess_html().
+ *
+ * Attach openy_gc_personal_training/simple_peer library.
+ */
+function openy_gc_personal_training_preprocess_html(&$variables) {
+  // @todo instead of this better to alter gated_content library
+  // and add dependency to openy_gc_personal_training/simple_peer.
+  if ($node = \Drupal::routeMatch()->getParameter('node')) {
+    if ($node->hasField('field_content')) {
+      foreach ($node->field_content as $field_item) {
+        if ($field_item->entity->bundle() === 'gated_content') {
+          $variables['#attached']['library'][] = 'openy_gc_personal_training/simple_peer';
+        }
+      }
+    }
+
+    if ($node->hasField('field_bottom_content')) {
+      foreach ($node->field_bottom_content as $field_item) {
+        if ($field_item->entity->bundle() === 'gated_content') {
+          $variables['#attached']['library'][] = 'openy_gc_personal_training/simple_peer';
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_virtual_y_app_settings_alter().
+ */
+function openy_gc_personal_training_virtual_y_app_settings_alter(&$config) {
+  $config['personal_training_enabled'] = TRUE;
+  $moduleConfig = \Drupal::config('openy_gc_personal_training.settings');
+  $config['signalingServerPRL'] = $moduleConfig->get('signalingServerPRL');
+  $config['peerjsSTUNUrl'] = $moduleConfig->get('peerjs_stun');
+  $config['peerjsTURNUrl'] = $moduleConfig->get('peerjs_turn_url');
+  $config['peerjsTURNUsername'] = $moduleConfig->get('peerjs_turn_username');
+  $config['peerjsTURNCredential'] = $moduleConfig->get('peerjs_turn_credential');
+  $config['peerjsDebug'] = $moduleConfig->get('peerjs_debug');
+  $config['newMessageSound'] = drupal_get_path('module', 'openy_gc_personal_training') . '/assets/sound/new_message_sound.mp3';
+
+}
+
+/**
+ * Implements hook_openy_gated_content_list_events_alter().
+ */
+function openy_gc_personal_training_openy_gated_content_list_events_alter(&$results, $params) {
+  if (!in_array($params['type'], ['all', 'personal_training'])) {
+    return;
+  }
+
+  $query = \Drupal::database()->select('personal_training', 'pt');
+  $query->leftJoin('users_field_data', 'ufd', 'ufd.uid = pt.instructor_id');
+
+  $uid = \Drupal::currentUser()->id();
+  $query->condition($query->orConditionGroup()
+    ->condition('customer_id', $uid)
+    ->condition('instructor_id', $uid)
+  );
+
+  if (isset($params['start_date'])) {
+    $query->condition('date__end_value', (new DrupalDateTime($params['start_date']))->format('c'), '>=');
+  }
+
+  if (isset($params['end_date'])) {
+    $query->condition('date__value', (new DrupalDateTime($params['end_date']))->format('c'), '<=');
+  }
+
+  $query->fields('pt');
+  $query->fields('ufd', ['name']);
+  $query->orderBy('date__value');
+
+  $result = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
+
+  foreach ($result as $item) {
+    $results[] = [
+      'type' => 'personal_training',
+      'bundle' => 'personal_training',
+      'id' => $item['id'],
+      'uuid' => $item['uuid'],
+      'title' => $item['title'],
+      'host_name' => $item['name'],
+      'date' => [
+        'value' => (new DrupalDateTime($item['date__value']))->format('c'),
+        'end_value' => (new DrupalDateTime($item['date__end_value']))->format('c'),
+      ],
+    ];
+  }
+}
+
+/**
+ * Implements hook_jsonapi_entity_filter_access().
+ */
+function openy_gc_personal_training_jsonapi_entity_filter_access(EntityTypeInterface $entity_type, AccountInterface $account) {
+  if (!in_array($entity_type->id(), ['user', 'personal_training'])) {
+    return [];
+  }
+  return ([
+    JSONAPI_FILTER_AMONG_ALL => AccessResult::allowedIfHasPermission($account, 'view personal training entities'),
+  ]);
+}

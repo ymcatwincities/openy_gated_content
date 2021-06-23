@@ -26,10 +26,13 @@ class EditUserAccountAccessCheck implements AccessInterface {
    */
   public function access(AccountInterface $user, AccountInterface $account) {
     $roles = $account->getRoles();
-    foreach ($roles as $role) {
-      if (strpos($role, 'virtual_y_') !== FALSE || $role == 'virtual_y') {
-        return AccessResult::forbidden()->cachePerUser();
-      }
+    $vy_roles = array_filter($roles, function ($role) {
+      return strpos($role, 'virtual_y_') !== FALSE || $role === 'virtual_y';
+    });
+    if (count($vy_roles) > 0 &&
+      count(array_diff($roles, array_merge([AccountInterface::AUTHENTICATED_ROLE], $vy_roles))) === 0
+    ) {
+      return AccessResult::forbidden()->cachePerUser();
     }
     return AccessResult::allowedIf($user->id() === $account->id()
       || $account->hasPermission('administer users'));

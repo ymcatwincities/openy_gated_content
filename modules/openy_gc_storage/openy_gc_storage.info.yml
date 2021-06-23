@@ -27,3 +27,4 @@ dependencies:
   - drupal:taxonomy
   - drupal:text
   - drupal:user
+  - drupal:recurring_events_views

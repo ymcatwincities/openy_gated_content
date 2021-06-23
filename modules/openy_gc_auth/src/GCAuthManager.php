@@ -2,8 +2,8 @@
 
 namespace Drupal\openy_gc_auth;
 
-use Drupal\node\NodeInterface;
 use Drupal\Core\Database\Database;
+use Drupal\node\NodeInterface;
 
 /**
  * Class GCAuthManager for common methods.

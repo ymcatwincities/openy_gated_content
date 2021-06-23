@@ -85,7 +85,6 @@
         :excluded-video-id="video.id"
         :viewAll="true"
         :limit="8"
-        :msg="'Live streams not found.'"
       />
     </template>
   </div>
@@ -100,11 +99,12 @@ import EventListing from '@/components/event/EventListing.vue';
 import AddToCalendar from '@/components/event/AddToCalendar.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
 import { EventMixin } from '@/mixins/EventMixin';
+import { SeriesEventMixin } from '@/mixins/SeriesEventMixin';
 import SvgIcon from '@/components/SvgIcon.vue';
 
 export default {
   name: 'LiveStreamPage',
-  mixins: [JsonApiCombineMixin, EventMixin],
+  mixins: [JsonApiCombineMixin, EventMixin, SeriesEventMixin],
   components: {
     SvgIcon,
     AddToFavorite,
