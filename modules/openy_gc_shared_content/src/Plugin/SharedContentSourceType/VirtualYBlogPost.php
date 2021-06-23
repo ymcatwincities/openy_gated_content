@@ -33,7 +33,7 @@ class VirtualYBlogPost extends SharedContentSourceTypeBase {
    */
   public function getFullJsonApiQueryArgs() {
     return [
-      'include' => 'field_vy_blog_image,field_vy_blog_image.field_media_image',
+      'include' => 'field_vy_blog_image,field_vy_blog_image.field_media_image,field_gc_video_category',
       'filter[status]' => 1,
       'filter[field_gc_share]' => 1,
     ];
@@ -55,6 +55,7 @@ class VirtualYBlogPost extends SharedContentSourceTypeBase {
    */
   public function getIncludedRelationships() {
     return [
+      'field_gc_video_category',
       'field_vy_blog_image',
     ];
   }
@@ -93,12 +94,22 @@ class VirtualYBlogPost extends SharedContentSourceTypeBase {
       '#theme' => 'openy_gc_shared_content__vy_blog_post',
       '#title' => $data['data']['attributes']['title'],
       '#description' => $data['data']['attributes']['field_vy_blog_description']['processed'],
-      '#image' => '',
+      '#field_gc_video_category' => [],
+      '#image' => NULL,
     ];
+
+    $category_data = $data['data']['relationships']['field_gc_video_category']['data'];
+    foreach ($category_data as $searched_item) {
+      $categories = array_filter($data['included'], function ($included) use ($searched_item) {
+        return $included['id'] === $searched_item['id'];
+      });
+      $category = reset($categories);
+      $content['#field_gc_video_category'][] = $category['attributes']['name'];
+    }
 
     if (!empty($data['data']['relationships']['field_vy_blog_image']['data'])) {
       foreach ($data['included'] as $included) {
-        if ($included['type'] == 'file--file') {
+        if ($included['type'] === 'file--file') {
           $content['#image'] = $included['attributes']['uri']['url'];
         }
       }

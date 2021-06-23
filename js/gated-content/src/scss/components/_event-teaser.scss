@@ -1,5 +1,5 @@
 .event-teaser {
-  > a {
+  > a .info {
     @include median(padding, 10px, 5px 5px 10px);
 
     .title, .date, .time, .instructor {

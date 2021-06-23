@@ -3,7 +3,6 @@
     <EventListing
       :title="config.components.live_stream.title"
       :withDateFilter="true"
-      :msg="config.components.live_stream.empty_block_text"
     />
   </div>
 </template>

@@ -149,4 +149,3 @@ apply patch to composer.json:
   }
 }
 ```
-

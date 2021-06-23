@@ -1,27 +1,31 @@
 <template>
-  <div class="teaser category-teaser">
-    <router-link :to="{ name: 'Category', params: { cid: category.id } }">
-        <div class="preview" v-bind:style="{
-              backgroundImage: `url(${image})`
-            }"
-        v-if="image">
-        </div>
-        <div class="title verdana-16-14">{{ category.attributes.name }}</div>
-    </router-link>
-    <AddToFavorite
-      :id="category.attributes.drupal_internal__tid"
-      :type="'taxonomy_term'"
-      :bundle="'gc_category'"
-    ></AddToFavorite>
-  </div>
+  <Teaser
+    class="category-teaser"
+    :routeName="'Category'"
+    :id="category.id"
+    :image="image"
+  >
+    <template>
+      <div class="title verdana-16-14">{{ category.attributes.name }}</div>
+    </template>
+    <template v-slot:outer>
+      <AddToFavorite
+        :id="category.attributes.drupal_internal__tid"
+        :type="'taxonomy_term'"
+        :bundle="'gc_category'"
+      />
+    </template>
+  </Teaser>
 </template>
 
 <script>
+import Teaser from '@/components/Teaser.vue';
 import AddToFavorite from '@/components/AddToFavorite.vue';
 
 export default {
   name: 'CategoryTeaser',
   components: {
+    Teaser,
     AddToFavorite,
   },
   props: {

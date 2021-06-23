@@ -66,7 +66,7 @@ class VirtualYUSALoginForm extends FormBase {
   /**
    * Private storage.
    *
-   * @var \Drupal\Core\TempStore\PrivateTempStoreFactory
+   * @var \Drupal\Core\TempStore\PrivateTempStore
    */
   protected $privateTempStore;
 

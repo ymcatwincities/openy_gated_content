@@ -1,12 +1,12 @@
 <template>
-  <div class="teaser event-teaser">
-    <router-link
-      :to="{ name: route, params: { id: video.id } }"
-      v-bind:class="{
-      'live-stream': route === 'LiveStream',
-      'virtual-meeting': route === 'VirtualMeeting'
-    }"
-    >
+  <Teaser
+    class="event-teaser"
+    :routeName="route"
+    :id="video.id"
+    :component="type"
+    :image="image"
+  >
+    <template>
       <div class="title">{{ video.attributes.title }}</div>
       <div class="date">
         <SvgIcon icon="date-icon"></SvgIcon>
@@ -38,16 +38,19 @@
           Starts in {{ startsIn }}
         </template>
       </div>
-    </router-link>
-    <AddToFavorite
-      :id="video.attributes.drupal_internal__id"
-      :type="'eventinstance'"
-      :bundle="type"
-    ></AddToFavorite>
-  </div>
+    </template>
+    <template v-slot:outer>
+      <AddToFavorite
+        :id="video.attributes.drupal_internal__id"
+        :type="'eventinstance'"
+        :bundle="type"
+      />
+    </template>
+  </Teaser>
 </template>
 
 <script>
+import Teaser from '@/components/Teaser.vue';
 import AddToFavorite from '@/components/AddToFavorite.vue';
 import SvgIcon from '@/components/SvgIcon.vue';
 import { EventMixin } from '@/mixins/EventMixin';
@@ -56,6 +59,7 @@ export default {
   name: 'EventTeaser',
   mixins: [EventMixin],
   components: {
+    Teaser,
     SvgIcon,
     AddToFavorite,
   },

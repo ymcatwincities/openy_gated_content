@@ -13,7 +13,7 @@ use Drupal\user\RoleInterface;
  * Implements hook_install().
  */
 function openy_gc_auth_custom_install() {
-  _update_user_permissions();
+  _openy_gc_auth_custom_update_user_permissions();
 }
 
 /**
@@ -55,13 +55,13 @@ function openy_gc_auth_custom_update_8002() {
     'views.view.virtual_y_users',
   ]);
 
-  _update_user_permissions();
+  _openy_gc_auth_custom_update_user_permissions();
 }
 
 /**
  * Set proper permissions to access the rest endpoints.
  */
-function _update_user_permissions() {
+function _openy_gc_auth_custom_update_user_permissions() {
   $roles = Role::loadMultiple([
     RoleInterface::ANONYMOUS_ID,
     RoleInterface::AUTHENTICATED_ID,

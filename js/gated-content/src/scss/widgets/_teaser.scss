@@ -10,16 +10,30 @@
   }
 
   > a {
-    display:       flex;
-    flex-wrap:     wrap;
-    border-right:  solid 1px $gallery;
-    border-bottom: solid 1px $gallery;
-    border-left:   solid 1px $gallery;
-    cursor:        pointer;
-    height:        100%;
+    display:        flex;
+    flex-wrap:      wrap;
+    flex-direction: column;
+    cursor:         pointer;
+    height:         100%;
 
     &:hover {
       text-decoration: none;
+    }
+
+    .preview {
+      background-repeat: no-repeat;
+      background-size:   contain;
+      padding-bottom:    56.25%;
+      width:             100%;
+    }
+
+    .info {
+      display:       flex;
+      flex-wrap:     wrap;
+      flex-grow:     1;
+      border-right:  solid 1px $gallery;
+      border-bottom: solid 1px $gallery;
+      border-left:   solid 1px $gallery;
     }
 
     .title {

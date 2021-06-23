@@ -258,7 +258,7 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
       '#size' => 25,
       '#maxlength' => 128,
     ];
-    // TODO: use select list for donated_by.
+    // @todo use select list for donated_by.
     $form['donated_by'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Donated By'),
@@ -336,12 +336,11 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
       ]));
       return FALSE;
     }
-    $entity = NULL;
     $resource_type = $this->resourceTypeRepository->get($this->getEntityType(), $this->getEntityBundle());
     $query_args = $this->getFullJsonApiQueryArgs();
     $data = $this->jsonApiCall($source, $query_args, $uuid);
     if (!$data) {
-      // TODO: or message with warning.
+      // @todo or message with warning.
       return FALSE;
     }
 
@@ -367,7 +366,6 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
       $included_relationships = $this->getIncludedRelationships();
       $relationships_data = [];
       foreach ($included_relationships as $rel_name) {
-        $rel_data = [];
         if (!isset($data['data']['relationships'][$rel_name]) || empty($data['data']['relationships'][$rel_name]['data'])) {
           continue;
         }
@@ -378,39 +376,40 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
         }
         else {
           // For single value save like multiple.
-          $rel_data[0] = $data['data']['relationships'][$rel_name]['data'];
+          $rel_data = [$data['data']['relationships'][$rel_name]['data']];
         }
 
-        foreach ($rel_data as $seared_item) {
+        foreach ($rel_data as $searched_item) {
           foreach ($data['included'] as $item) {
-            if (isset($item['type'], $seared_item['type'], $item['id'], $seared_item['id']) && $item['type'] == $seared_item['type'] && $item['id'] == $seared_item['id']) {
+            if (isset($item['type'], $searched_item['type'], $item['id'], $searched_item['id']) && $item['type'] == $searched_item['type'] && $item['id'] == $searched_item['id']) {
               $relationships_data[$rel_name][] = $item;
               // Exit from both foreach when we find item.
               break 2;
             }
           }
         }
+      }
 
-        foreach ($relationships_data as $field_name => $field_values) {
-          foreach ($field_values as $delta => $value) {
-            if (!isset($value['type'])) {
-              continue;
-            }
-            $entity_context = explode("--", $value['type']);
-            $entity_type = array_shift($entity_context);
-            $entity_bundle = array_shift($entity_context);
-            switch ($entity_type) {
-              case 'taxonomy_term':
-                $relationships_data[$field_name][$delta] = $this->saveTaxonomyFromSource($value, $entity_bundle);
-                break;
+      foreach ($relationships_data as $field_name => $field_values) {
+        foreach ($field_values as $delta => $value) {
+          if (!isset($value['type'])) {
+            continue;
+          }
+          $entity_context = explode("--", $value['type']);
+          $entity_type = array_shift($entity_context);
+          $entity_bundle = array_shift($entity_context);
+          switch ($entity_type) {
+            case 'taxonomy_term':
+              $relationships_data[$field_name][$delta] = $this->saveTaxonomyFromSource($value, $entity_bundle);
+              break;
 
-              case 'media':
-                $relationships_data[$field_name][$delta] = $this->saveMediaFromSource($data, $value, $entity_bundle, $url);
-                break;
-            }
+            case 'media':
+              $relationships_data[$field_name][$delta] = $this->saveMediaFromSource($data, $value, $entity_bundle, $url);
+              break;
           }
         }
       }
+
       $context = ['resource_type' => $resource_type];
       $data['data']['relationships'] = [];
 

@@ -17,6 +17,9 @@ vy_component_settings:
     status:
       type: boolean
       label: 'Enable/Disable component'
+    show_covers:
+      type: boolean
+      label: 'Show cover image on teaser'
     weight:
       type: integer
       label: 'Component order'

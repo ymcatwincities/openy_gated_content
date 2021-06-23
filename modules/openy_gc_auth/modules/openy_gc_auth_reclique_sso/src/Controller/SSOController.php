@@ -4,14 +4,14 @@ namespace Drupal\openy_gc_auth_reclique_sso\Controller;
 
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Url;
-use Drupal\openy_gc_auth_reclique_sso\SSOClient;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Routing\TrustedRedirectResponse;
+use Drupal\Core\Url;
+use Drupal\openy_gc_auth\GCUserAuthorizer;
+use Drupal\openy_gc_auth_reclique_sso\SSOClient;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Drupal\openy_gc_auth\GCUserAuthorizer;
 
 /**
  * Class with controller endpoints, needed for reclique_sso plugin.

@@ -1,13 +1,12 @@
 langcode: en
 status: true
 dependencies:
-  config:
-    - core.entity_view_mode.eventseries.list
-    - system.menu.main
   module:
     - options
     - recurring_events
     - user
+_core:
+  default_config_hash: uKX2WhfbVByQZRFZOZvhQnvFWtvjXxZ7VQyMgcoKHUw
 id: virtual_y_event_series
 label: 'Virtual Y Event Series'
 module: views
