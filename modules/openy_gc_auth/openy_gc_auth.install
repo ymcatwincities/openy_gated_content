@@ -11,7 +11,12 @@
 function openy_gc_auth_update_8001() {
   /** @var \Drupal\Core\Extension\ModuleHandlerInterface $module_handler */
   $module_handler = \Drupal::moduleHandler();
-  if ($module_handler->moduleExists('simple_recaptcha') || !$module_handler->moduleExists('recaptcha')) {
+  if (!$module_handler->moduleExists('recaptcha')) {
+    return;
+  }
+  $config_factory = Drupal::configFactory();
+  $simple_recaptcha_enabled = $module_handler->moduleExists('simple_recaptcha');
+  if ($simple_recaptcha_enabled && $config_factory->get('simple_recaptcha.config')->get('site_key') !== '') {
     return;
   }
   $modules = [
@@ -30,8 +35,9 @@ function openy_gc_auth_update_8001() {
   if (!$port_configs) {
     return;
   }
-  \Drupal::service('module_installer')->install(['simple_recaptcha']);
-  $config_factory = Drupal::configFactory();
+  if (!$simple_recaptcha_enabled) {
+    \Drupal::service('module_installer')->install(['simple_recaptcha']);
+  }
   $site_key = $config_factory->get('recaptcha.settings')->get('site_key');
   $secret_key = $config_factory->get('recaptcha.settings')->get('secret_key');
   $config_factory->getEditable('simple_recaptcha.config')
