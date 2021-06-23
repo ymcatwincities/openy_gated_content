@@ -5,9 +5,12 @@
       :player="player"
       :videoId="videoId"
       :options="{responsive: 'true', url: media.field_media_video_embed_field}"
-      @loaded="$refs.player.pause()"
+      :player-vars="handleAttributes()"
+      @loaded="setTimeCode()"
       @play="handlePlay()"
-      @ended="handlePlayerEvent('videoPlaybackEnded')"
+      @pause="handlePause()"
+      @ended="handleEnded()"
+      @ready="playerReadied($event)"
     />
   </div>
 </template>
@@ -20,6 +23,8 @@ export default {
   data() {
     return {
       playbackLogged: false,
+      playbackInProgress: false,
+      intervalId: 0,
     };
   },
   components: {
@@ -44,6 +49,10 @@ export default {
         embedObj = embedObj.match(/(\?|&)v=([^&#]+)/).pop();
         return embedObj;
       }
+      // If the video matches Vimeo's private link format, return the full url.
+      if (embedObj.match(/^https?:\/\/(www\.)?vimeo.com\/([0-9]*)(\/[a-zA-Z0-9]+)$/)) {
+        return embedObj;
+      }
       return this.media.field_media_video_id;
     },
   },
@@ -55,15 +64,67 @@ export default {
       this.$emit('playerEvent', eventType);
     },
     handlePlay() {
+      this.playbackInProgress = true;
       if (this.playbackLogged) {
         return;
       }
       this.playbackLogged = true;
       this.handlePlayerEvent('videoPlaybackStarted');
     },
+    handleAttributes() {
+      if (this.media.field_media_source === 'youtube') {
+        return {
+          rel: 0,
+        };
+      }
+      return false;
+    },
+    handlePause() {
+      this.playbackInProgress = false;
+    },
+    handleEnded() {
+      this.playbackInProgress = false;
+      this.handlePlayerEvent('videoPlaybackEnded');
+    },
+    playerReadied(player) {
+      console.log("the player is readied", player);
+      const timecode = this.media.field_media_video_embed_field.substring(
+        this.media.field_media_video_embed_field.lastIndexOf("#t=") + 3,
+        this.media.field_media_video_embed_field.lastIndexOf("s")
+      );
+      if (!isNaN(timecode)) {
+        const timecodeInSeconds = parseInt(timecode, 10);
+        player.seekTo(timecodeInSeconds, true);
+        this.$refs.player.player.pauseVideo();
+      }
+    },
+    setTimeCode() {
+      if (this.player == "vimeo") {
+        const timecode = this.media.field_media_video_embed_field.substring(
+          this.media.field_media_video_embed_field.lastIndexOf("#t=") + 3,
+          this.media.field_media_video_embed_field.lastIndexOf("s")
+        );
+        if (!isNaN(timecode)) {
+          const timecodeInSeconds = parseInt(timecode, 10);
+          this.$refs.player.player.setCurrentTime(timecodeInSeconds);
+        }
+      }
+      this.$refs.player.pause();
+    },
+  },
+  mounted() {
+    this.intervalId = setInterval(() => {
+      if (this.playbackInProgress) {
+        this.$log.trackActivity({ path: this.$route.fullPath });
+      }
+    }, 60 * 1000);
   },
   updated() {
     this.playbackLogged = false;
+    this.playbackInProgress = false;
+  },
+  beforeDestroy() {
+    clearInterval(this.intervalId);
   },
 };
 </script>
