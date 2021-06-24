@@ -4,6 +4,7 @@ namespace Drupal\openy_gc_auth_reclique\Plugin\GCIdentityProvider;
 
 use Drupal\Core\DependencyInjection\DependencySerializationTrait;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
 use Drupal\openy_gc_auth\GCIdentityProviderPluginBase;
 
 /**
@@ -120,6 +121,24 @@ class ReClique extends GCIdentityProviderPluginBase {
       '#description' => $this->t('Set to TRUE if you want ReCaptcha validation on login form.'),
       '#type' => 'checkbox',
       '#default_value' => $config['enable_recaptcha'],
+    ];
+
+    $form['require_recaptcha_configuration'] = [
+      '#type' => 'container',
+      'message' => [
+        '#type' => 'markup',
+        '#markup' => $this->t('Please, verify the <a href="@recaptcha_settings_link">Simple Recaptcha</a> has the Site key and Secret key configured for the chosen reCaptcha type.', [
+          '@recaptcha_settings_link' => Url::fromRoute('simple_recaptcha.settings')->toString(),
+        ]),
+      ],
+      '#attributes' => [
+        'class' => ['messages', 'messages--warning'],
+      ],
+      '#states' => [
+        'visible' => [
+          ':input[name="enable_recaptcha"]' => ['checked' => TRUE],
+        ],
+      ],
     ];
 
     $form['verification'] = [
