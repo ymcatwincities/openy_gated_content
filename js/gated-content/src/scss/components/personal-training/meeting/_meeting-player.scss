@@ -58,6 +58,10 @@
     }
 
     &.view-horizontal {
+      .video-wrapper {
+        width: 100%;
+      }
+
       .partner {
         position:  absolute;
         left:      50%;
