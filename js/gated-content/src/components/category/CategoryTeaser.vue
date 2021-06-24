@@ -3,7 +3,7 @@
     class="category-teaser"
     :routeName="'Category'"
     :id="category.id"
-    :image="image"
+    :image="category.attributes['field_gc_category_media.field_media_image']"
   >
     <template>
       <div class="title verdana-16-14">{{ category.attributes.name }}</div>
@@ -32,16 +32,6 @@ export default {
     category: {
       type: Object,
       required: true,
-    },
-  },
-  computed: {
-    image() {
-      if (!this.category.attributes['field_gc_category_media.field_media_image']) {
-        return null;
-      }
-
-      return this.category.attributes['field_gc_category_media.field_media_image']
-        .image_style_uri[0].gated_content_teaser;
     },
   },
 };
