@@ -88,7 +88,7 @@ export default {
     partnerMicEnabled: (state) => state.partnerMicEnabled,
     audioContext: (state) => {
       if (state.audioContext === null) {
-        var AudioContext = window.AudioContext || window.webkitAudioContext;
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
         state.audioContext = new AudioContext();
       }
       return state.audioContext;
