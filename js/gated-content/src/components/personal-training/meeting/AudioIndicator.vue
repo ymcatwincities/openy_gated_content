@@ -42,9 +42,7 @@ export default {
   mounted() {
     this.intervalId = setInterval(() => {
       if (this.localAnalyser === null && this.mediaStream !== null) {
-        this.mediaStreamSource = new MediaStreamAudioSourceNode(this.audioContext, {
-          mediaStream: this.mediaStream,
-        });
+        this.mediaStreamSource = this.audioContext.createMediaStreamSource(this.mediaStream);
 
         this.localAnalyser = this.audioContext.createAnalyser();
         this.localAnalyser.smoothingTimeConstant = 0.1;
