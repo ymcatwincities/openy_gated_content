@@ -122,6 +122,10 @@ class GCSettingsForm extends ConfigFormBase {
       'title_asc' => 'By Title (A-Z)',
       'title_desc' => 'By Title (Z-A)',
     ];
+    $video_components = [
+      'gc_video',
+      'live_stream',
+    ];
 
     foreach ($components as $id => $title) {
       $form['app_settings']['components'][$id] = [
@@ -185,6 +189,15 @@ class GCSettingsForm extends ConfigFormBase {
         '#type' => 'checkbox',
         '#default_value' => $config->get('components.' . $id . '.show_covers') ?? TRUE,
       ];
+
+      if (in_array($id, $video_components)) {
+        $form['app_settings']['components'][$id]['component']['autoplay_videos'] = [
+          '#title' => $this->t('Start videos playback automaitcally'),
+          '#description' => $this->t('Videos will be autoplayed on the page load'),
+          '#type' => 'checkbox',
+          '#default_value' => $config->get('components.' . $id . '.autoplay_videos') ?? TRUE,
+        ];
+      }
     }
 
     uasort($form['app_settings']['components'],

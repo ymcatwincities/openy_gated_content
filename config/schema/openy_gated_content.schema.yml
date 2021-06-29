@@ -20,6 +20,9 @@ vy_component_settings:
     show_covers:
       type: boolean
       label: 'Show cover image on teaser'
+    autoplay_videos:
+      type: boolean
+      label: 'Videos will be autoplayed on the page load'
     weight:
       type: integer
       label: 'Component order'
