@@ -8,6 +8,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
+use Drupal\Core\Url;
 use Drupal\openy_gated_content\GCUserService;
 use Drupal\openy_gc_auth\GCIdentityProviderPluginBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -94,6 +95,24 @@ class Custom extends GCIdentityProviderPluginBase {
       '#description' => $this->t('Set to TRUE if you want ReCaptcha validation on login form.'),
       '#type' => 'checkbox',
       '#default_value' => $config['enable_recaptcha'],
+    ];
+
+    $form['require_recaptcha_configuration'] = [
+      '#type' => 'container',
+      'message' => [
+        '#type' => 'markup',
+        '#markup' => $this->t('Please, verify the <a href="@recaptcha_settings_link">Simple Recaptcha</a> has the Site key and Secret key configured for the chosen reCaptcha type.', [
+          '@recaptcha_settings_link' => Url::fromRoute('simple_recaptcha.settings')->toString(),
+        ]),
+      ],
+      '#attributes' => [
+        'class' => ['messages', 'messages--warning'],
+      ],
+      '#states' => [
+        'visible' => [
+          ':input[name="enable_recaptcha"]' => ['checked' => TRUE],
+        ],
+      ],
     ];
 
     $form['verification'] = [
