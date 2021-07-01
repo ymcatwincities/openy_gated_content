@@ -153,3 +153,14 @@ function openy_gc_personal_training_personal_training_delete(PersonalTrainingInt
     ->getInstanceFromDefinition(PersonalTrainingSeriesOperations::class)
     ->entityDelete($personal_training);
 }
+
+/**
+ * Implements hook_theme().
+ */
+function openy_gc_personal_training_theme($existing, $type, $theme, $path) {
+  return [
+    'vy_training_series_date_recur_modular_alpha_widget' => [
+      'render element' => 'widget',
+    ],
+  ];
+}

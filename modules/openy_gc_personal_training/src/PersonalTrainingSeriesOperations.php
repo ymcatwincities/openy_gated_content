@@ -84,11 +84,18 @@ class PersonalTrainingSeriesOperations implements ContainerInjectionInterface {
    * @see hook_node_update()
    */
   public function entityUpdate(PersonalTrainingInterface $training_series) {
-    // Rebuild all series instances if series was changed.
-    $this->personalTrainingSeriesManager->buildBatch($training_series->id(), [
-      'deleteItemsOfSeries',
-      'generateItemsForSeries',
-    ]);
+    if ($training_series->original->field_schedule->equals($training_series->field_schedule) &&
+      $training_series->original->field_exclusions->equals($training_series->field_exclusions)) {
+      $this->personalTrainingSeriesManager->buildBatch($training_series->id(), [
+        'updateItemsOfSeries',
+      ]);
+    }
+    else {
+      $this->personalTrainingSeriesManager->buildBatch($training_series->id(), [
+        'deleteItemsOfSeries',
+        'generateItemsForSeries',
+      ]);
+    }
   }
 
   /**

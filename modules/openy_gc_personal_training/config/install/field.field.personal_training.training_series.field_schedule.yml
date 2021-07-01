@@ -1,14 +1,12 @@
-uuid: 2fe5b325-6c68-44ca-b1e4-b1fafeeed80b
 langcode: en
 status: true
 dependencies:
   config:
     - field.storage.personal_training.field_schedule
     - openy_gc_personal_training.type.training_series
-    - paragraphs.paragraphs_type.session_time
   module:
     - datalayer
-    - entity_reference_revisions
+    - date_recur
 third_party_settings:
   datalayer:
     expose: 0
@@ -24,9 +22,15 @@ translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'default:paragraph'
-  handler_settings:
-    negate: 0
-    target_bundles:
-      session_time: session_time
-field_type: entity_reference_revisions
+  precreate: P2Y
+  parts:
+    all: true
+    frequencies:
+      SECONDLY: {  }
+      MINUTELY: {  }
+      HOURLY: {  }
+      DAILY: {  }
+      WEEKLY: {  }
+      MONTHLY: {  }
+      YEARLY: {  }
+field_type: date_recur

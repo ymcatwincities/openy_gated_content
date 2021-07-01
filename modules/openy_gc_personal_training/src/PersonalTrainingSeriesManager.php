@@ -112,53 +112,35 @@ class PersonalTrainingSeriesManager implements PersonalTrainingSeriesManagerInte
 
     $exclusions = $this->getExclusionsDateRanges($series);
 
-    $schedules = $series->field_schedule->referencedEntities();
-    foreach ($schedules as $schedule) {
-      if (empty($schedule) || $schedule->field_session_time_days->isEmpty() || $schedule->field_session_time_date->isEmpty()) {
+    foreach ($series->field_schedule as $schedule) {
+      $occurrences = $schedule->getHelper()->getOccurrences();
+      if (empty($occurrences)) {
         continue;
       }
-      /** @var \Drupal\Core\Datetime\DrupalDateTime $schedule_end */
-      $schedule_end = $schedule->field_session_time_date->end_date;
-      if ($schedule_end->getTimestamp() < time()) {
-        continue;
-      }
-      $schedule_end->setTimezone($timezone);
-      /** @var \Drupal\Core\Datetime\DrupalDateTime $schedule_start */
-      $schedule_start = $schedule->field_session_time_date->start_date;
-      if ($schedule_start->getTimestamp() < time()) {
-        $new_start = DrupalDateTime::createFromTimestamp(time());
-        $new_start->setTime($schedule_start->format('H'), $schedule_start->format('i'), $schedule_start->format('s'));
-        $schedule_start = $new_start;
-      }
-      $schedule_start->setTimezone($timezone);
-
-      $days = array_column($schedule->field_session_time_days->getValue(), 'value');
-
-      foreach ($days as $day) {
-        $start = clone $schedule_start;
-        while (strtolower($start->format('l')) !== $day) {
-          $start->modify('+1 day');
+      foreach ($occurrences as $occurrence) {
+        /** @var \DateTimeInterface $end */
+        $end = $occurrence->getEnd();
+        $end->setTimezone($timezone);
+        if ($end->getTimestamp() < time()) {
+          continue;
         }
-        while ($start->getTimestamp() < $schedule_end->getTimestamp()) {
-          $end = clone $start;
-          $end->setTime($schedule_end->format('H'), $schedule_end->format('i'), $schedule_end->format('s'));
+        /** @var \DateTimeInterface $start */
+        $start = $occurrence->getStart();
+        $start->setTimezone($timezone);
 
-          $exclude = FALSE;
-          foreach ($exclusions as $exclusion) {
-            if ($start->getTimestamp() <= $exclusion['end'] && $end->getTimestamp() >= $exclusion['start']) {
-              $exclude = TRUE;
-              break;
-            }
+        $exclude = FALSE;
+        foreach ($exclusions as $exclusion) {
+          if ($start->getTimestamp() <= $exclusion['end'] && $end->getTimestamp() >= $exclusion['start']) {
+            $exclude = TRUE;
+            break;
           }
+        }
 
-          if (!$exclude) {
-            $date_ranges[] = [
-              'start' => clone $start,
-              'end' => $end,
-            ];
-          }
-
-          $start->modify('+1 week');
+        if (!$exclude) {
+          $date_ranges[] = [
+            'start' => $start,
+            'end' => $end,
+          ];
         }
       }
     }

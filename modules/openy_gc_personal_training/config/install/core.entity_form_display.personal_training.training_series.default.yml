@@ -6,9 +6,9 @@ dependencies:
     - field.field.personal_training.training_series.field_schedule
     - openy_gc_personal_training.type.training_series
   module:
+    - date_recur_modular
     - datetime_range
     - link
-    - paragraphs
     - text
 id: personal_training.training_series.default
 targetEntityType: personal_training
@@ -51,22 +51,16 @@ content:
       placeholder: ''
     third_party_settings: {  }
   field_exclusions:
+    type: daterange_default
     weight: 7
+    region: content
     settings: {  }
     third_party_settings: {  }
-    type: daterange_default
-    region: content
   field_schedule:
-    type: entity_reference_paragraphs
     weight: 6
-    settings:
-      title: Paragraph
-      title_plural: Paragraphs
-      edit_mode: open
-      add_mode: dropdown
-      form_display_mode: default
-      default_paragraph_type: ''
+    settings: {  }
     third_party_settings: {  }
+    type: date_recur_modular_alpha
     region: content
   instructor_id:
     type: entity_reference_autocomplete
