@@ -9,6 +9,7 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\openy_gated_content\VyFavoriteItemsManager;
 use Drupal\openy_gc_personal_training\Entity\PersonalTrainingInterface;
 use Drupal\openy_gc_personal_training\PersonalTrainingSeriesOperations;
 
@@ -145,13 +146,16 @@ function openy_gc_personal_training_personal_training_update(PersonalTrainingInt
  * Implements hook_ENTITY_TYPE_delete() for personal_training entities.
  */
 function openy_gc_personal_training_personal_training_delete(PersonalTrainingInterface $personal_training) {
-  if ($personal_training->bundle() !== 'training_series') {
-    return;
+  if ($personal_training->bundle() === 'personal_training') {
+    \Drupal::service('class_resolver')
+      ->getInstanceFromDefinition(VyFavoriteItemsManager::class)
+      ->deleteRelatedFavoriteItems($personal_training);
   }
-
-  \Drupal::service('class_resolver')
-    ->getInstanceFromDefinition(PersonalTrainingSeriesOperations::class)
-    ->entityDelete($personal_training);
+  elseif ($personal_training->bundle() === 'training_series') {
+    \Drupal::service('class_resolver')
+      ->getInstanceFromDefinition(PersonalTrainingSeriesOperations::class)
+      ->entityDelete($personal_training);
+  }
 }
 
 /**

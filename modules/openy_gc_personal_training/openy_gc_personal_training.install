@@ -54,7 +54,6 @@ function openy_gc_personal_training_update_8001() {
  * Import types, fields and forms configs.
  */
 function openy_gc_personal_training_update_8002() {
-  \Drupal::service('module_installer')->install(['openy_node_session']);
   $config_dir = drupal_get_path('module', 'openy_gc_personal_training');
   $config_dir .= '/config/install/';
   // Import new configuration.
