@@ -127,7 +127,6 @@ class PersonalTrainingForm extends ContentEntityForm {
 
       $element['ends_date']['ends_date']['#date_time_element'] = 'none';
 
-      $element['ends_mode']['#default_value'] = 'date';
       unset($element['ends_mode']['#options']['infinite']);
     }
 
