@@ -6,6 +6,7 @@ use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\ContentEntityForm;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
+use Drupal\date_recur_modular\DateRecurModularWidgetOptions;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -102,8 +103,6 @@ class PersonalTrainingForm extends ContentEntityForm {
       $element['#element_validate'] = [[static::class, 'validateModularWidget']] + $element['#element_validate'];
       $element['#theme'] = 'vy_training_series_date_recur_modular_alpha_widget';
 
-      $element['mode']['#default_value'] = 'weekly';
-
       $element = [
         'start_date' => [
           '#type' => 'datetime',
@@ -128,6 +127,9 @@ class PersonalTrainingForm extends ContentEntityForm {
       $element['ends_date']['ends_date']['#date_time_element'] = 'none';
 
       unset($element['ends_mode']['#options']['infinite']);
+      if ($element['ends_mode']['#default_value'] === DateRecurModularWidgetOptions::ENDS_MODE_INFINITE) {
+        $element['ends_mode']['#default_value'] = 'count';
+      }
     }
 
     return $form;
@@ -185,9 +187,15 @@ class PersonalTrainingForm extends ContentEntityForm {
     /** @var \Drupal\Core\Datetime\DrupalDateTime|array|null $startDate */
     $startDate = $form_state->getValue(array_merge($element['#parents'], ['start_date']));
 
+    $mode = $form_state->getValue(array_merge($element['#parents'], ['mode']));
     $endsMode = $form_state->getValue(array_merge($element['#parents'], ['ends_mode']));
-    if ($startDate instanceof DrupalDateTime && $endsMode === 'date' && !$endsDate instanceof DrupalDateTime) {
-      $form_state->setError($element['ends_date'], \t('Ends before date must be provided.'));
+    $end_date_sensitive_modes = [
+      'weekly',
+      'fortnightly',
+      'monthly',
+    ];
+    if (!$endsDate instanceof DrupalDateTime && $endsMode === DateRecurModularWidgetOptions::ENDS_MODE_ON_DATE && in_array($mode, $end_date_sensitive_modes)) {
+      $form_state->setError($element['ends_date'], \t('Ends before date must be provided for this mode.'));
     }
 
     if ($startDate instanceof DrupalDateTime && $start instanceof DrupalDateTime) {
