@@ -391,7 +391,7 @@ function openy_gated_content_entity_access(EntityInterface $entity, $operation, 
 /**
  * Implements hook_entity_delete().
  */
-function openy_gated_content_entity_delete(ContentEntityInterface $entity) {
+function openy_gated_content_entity_delete(EntityInterface $entity) {
   $vy_entity_types = [
     'node' => [
       'vy_blog_post',
