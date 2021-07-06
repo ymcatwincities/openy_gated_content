@@ -2,3 +2,10 @@ services:
   plugin.manager.personal_training_provider:
     class: Drupal\openy_gc_personal_training\PersonalTrainingProviderManager
     parent: default_plugin_manager
+
+  personal_training_series.manager:
+    class: Drupal\openy_gc_personal_training\PersonalTrainingSeriesManager
+    arguments:
+      - '@entity_type.manager'
+      - '@messenger'
+      - '@config.factory'

@@ -3,7 +3,7 @@
     <router-link :to="{ name: routeName, params: { id: id } }">
       <div v-if="showImage"
            class="preview"
-           :style="{backgroundImage: `url(${image})`}"
+           :style="{ backgroundImage: `url(${getStyledUrl(image, 'gated_content_teaser')})` }"
       >
         <slot name="overlay" />
       </div>
@@ -17,10 +17,11 @@
 
 <script>
 import { SettingsMixin } from '@/mixins/SettingsMixin';
+import { ImageStyleMixin } from '@/mixins/ImageStyleMixin';
 
 export default {
   name: 'Teaser',
-  mixins: [SettingsMixin],
+  mixins: [SettingsMixin, ImageStyleMixin],
   props: {
     routeName: {
       type: String,
@@ -34,7 +35,7 @@ export default {
       type: String,
     },
     image: {
-      type: String,
+      type: Object,
       default: null,
     },
   },

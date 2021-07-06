@@ -9,6 +9,7 @@
         <div class="video gated-containerV2 px--20-10 pt-40-20">
           <MediaPlayer
             :media="video.attributes.field_gc_video_media"
+            :autoplay="config.components.gc_video.autoplay_videos"
             @playerEvent="logPlaybackEvent($event)"
           />
         </div>

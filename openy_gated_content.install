@@ -324,3 +324,20 @@ function openy_gated_content_update_8016() {
     $config_updater->update($config, $config_name, "components.$id.show_covers");
   }
 }
+
+/**
+ * Add components autoplay settings to openy_gated_content.settings.
+ */
+function openy_gated_content_update_8017() {
+  $config_updater = \Drupal::service('openy_upgrade_tool.param_updater');
+  $config_dir = drupal_get_path('module', 'openy_gated_content') . '/config/install/';
+  $config_name = 'openy_gated_content.settings';
+  $config = $config_dir . $config_name . '.yml';
+  $components = [
+    'gc_video',
+    'live_stream',
+  ];
+  foreach ($components as $id) {
+    $config_updater->update($config, $config_name, "components.$id.autoplay_videos");
+  }
+}

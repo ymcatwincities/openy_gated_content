@@ -8,6 +8,7 @@ components:
     empty_block_text: 'No videos found.'
     default_sort: 'date_desc'
     show_covers: 1
+    autoplay_videos: 0
     weight: 0
   live_stream:
     status: true
@@ -16,6 +17,7 @@ components:
     empty_block_text: 'No Live streams scheduled for this date.'
     default_sort: 'date_asc'
     show_covers: 0
+    autoplay_videos: 1
     weight: 1
   virtual_meeting:
     status: true
