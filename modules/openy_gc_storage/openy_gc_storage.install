@@ -23,6 +23,14 @@ function openy_gc_storage_install() {
   $config->set('image_styles.gated_content_teaser', 'gated_content_teaser');
   $config->save(TRUE);
 
+  _openy_gc_storage_add_banner_image_style();
+}
+
+function _openy_gc_storage_add_banner_image_style() {
+  $config_factory = \Drupal::configFactory();
+  $config = $config_factory->getEditable('jsonapi_image_styles.settings');
+  $config->set('image_styles.carnation_banner_1920_700', 'carnation_banner_1920_700');
+  $config->save(TRUE);
 }
 
 /**
@@ -221,9 +229,24 @@ function openy_gc_storage_update_8011() {
 }
 
 /**
- * Reimport event and event series views.
+ * Update image fields required.
  */
-function openy_gc_storage_update_8012() {
+function openy_gc_storage_update_8013() {
+  $config_dir = drupal_get_path('module', 'openy_gc_storage');
+  $config_dir .= '/config/install/';
+  // Import new configuration.
+  $config_importer = \Drupal::service('openy_upgrade_tool.importer');
+  $config_importer->setDirectory($config_dir);
+  $config_importer->importConfigs([
+    'field.field.eventseries.live_stream.field_ls_image',
+    'field.field.eventseries.virtual_meeting.field_ls_image',
+  ]);
+}
+
+/**
+ * Reimport event and event series views. Skip 8012-13 and do not copy code.
+ */
+function openy_gc_storage_update_8014() {
   $config_dir = drupal_get_path('module', 'openy_gc_storage');
   $config_dir .= '/config/install/';
   $config_importer = \Drupal::service('openy_upgrade_tool.importer');
@@ -232,4 +255,11 @@ function openy_gc_storage_update_8012() {
     'views.view.virtual_y_event_series',
     'views.view.virtual_y_events',
   ]);
+}
+
+/**
+ * Add banner image style to use with the JSON:API.
+ */
+function openy_gc_storage_update_8015() {
+  _openy_gc_storage_add_banner_image_style();
 }

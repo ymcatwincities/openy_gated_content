@@ -9,6 +9,7 @@
         <div class="video gated-containerV2 px--20-10 pt-40-20">
           <MediaPlayer
             :media="media"
+            :autoplay="config.components.live_stream.autoplay_videos"
             @playerEvent="logPlaybackEvent($event)"
           />
         </div>
@@ -85,7 +86,6 @@
         :excluded-video-id="video.id"
         :viewAll="true"
         :limit="8"
-        :msg="config.components.live_stream.empty_block_text"
       />
     </template>
   </div>

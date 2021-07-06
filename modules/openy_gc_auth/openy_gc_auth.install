@@ -1,0 +1,49 @@
+<?php
+
+/**
+ * @file
+ * Installation file.
+ */
+
+/**
+ * Port configs from recaptcha module if needed and possible.
+ */
+function openy_gc_auth_update_8001() {
+  /** @var \Drupal\Core\Extension\ModuleHandlerInterface $module_handler */
+  $module_handler = \Drupal::moduleHandler();
+  if (!$module_handler->moduleExists('recaptcha')) {
+    return;
+  }
+  $config_factory = Drupal::configFactory();
+  $simple_recaptcha_enabled = $module_handler->moduleExists('simple_recaptcha');
+  if ($simple_recaptcha_enabled && $config_factory->get('simple_recaptcha.config')->get('site_key') !== '') {
+    return;
+  }
+  $modules = [
+    'openy_gc_auth_custom',
+    'openy_gc_auth_yusa',
+    'openy_gc_auth_reclique',
+    'openy_gc_auth_daxko_barcode',
+  ];
+  $port_configs = FALSE;
+  foreach ($modules as $module) {
+    if (!$module_handler->moduleExists($module)) {
+      continue;
+    }
+    $port_configs = TRUE;
+  }
+  if (!$port_configs) {
+    return;
+  }
+  if (!$simple_recaptcha_enabled) {
+    \Drupal::service('module_installer')->install(['simple_recaptcha']);
+  }
+  $site_key = $config_factory->get('recaptcha.settings')->get('site_key');
+  $secret_key = $config_factory->get('recaptcha.settings')->get('secret_key');
+  $config_factory->getEditable('simple_recaptcha.config')
+    ->set('form_ids', '')
+    ->set('recaptcha_type', 'v2')
+    ->set('site_key', $site_key)
+    ->set('secret_key', $secret_key)
+    ->save();
+}

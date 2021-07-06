@@ -17,7 +17,7 @@ entity_type: eventseries
 bundle: live_stream
 label: Image
 description: 'Teaser image'
-required: true
+required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''

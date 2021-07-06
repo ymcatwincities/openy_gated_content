@@ -5,12 +5,14 @@
  * The openy_gated_content module routines.
  */
 
+use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\openy_gated_content\VyFavoriteItemsManager;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Drupal\openy_gated_content\SegmentContentAccessCheck;
 use Drupal\Core\Entity\EntityInterface;
@@ -384,4 +386,33 @@ function openy_gated_content_entity_access(EntityInterface $entity, $operation, 
     ->getInstanceFromDefinition(SegmentContentAccessCheck::class)
     ->checkAccess($entity, $operation, $account);
 
+}
+
+/**
+ * Implements hook_entity_delete().
+ */
+function openy_gated_content_entity_delete(EntityInterface $entity) {
+  $vy_entity_types = [
+    'node' => [
+      'vy_blog_post',
+      'gc_video',
+    ],
+    'eventinstance' => [
+      'live_stream',
+      'virtual_meeting',
+    ],
+    'taxonomy_term' => [
+      'gc_category',
+    ],
+  ];
+  $is_vy_entity = FALSE;
+  foreach ($vy_entity_types as $entity_type => $bundles) {
+    $is_vy_entity |= $entity->getEntityTypeId() === $entity_type && in_array($entity->bundle(), $bundles);
+  }
+  if (!$is_vy_entity) {
+    return;
+  }
+  \Drupal::service('class_resolver')
+    ->getInstanceFromDefinition(VyFavoriteItemsManager::class)
+    ->deleteRelatedFavoriteItems($entity);
 }

@@ -2,15 +2,15 @@
 
 namespace Drupal\openy_gated_content\Plugin\Field\FieldWidget;
 
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Field\FieldDefinitionInterface;
+use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\WidgetBase;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\Core\Field\FieldItemListInterface;
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\openy_gated_content\VirtualYAccessTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Field\FieldDefinitionInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 
 /**
  * Plugin implementation of the Gated Content permissions widget.

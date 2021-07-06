@@ -1,12 +1,16 @@
 <template>
-  <div class="teaser video-teaser">
-    <router-link
-      :to="{ name: 'Video', params: { id: video.id } }">
-      <div class="preview" v-bind:style="{
-              backgroundImage: `url(${image})`
-            }">
-        <div class="play-button"></div>
-      </div>
+  <Teaser
+    class="video-teaser"
+    :routeName="'Video'"
+    :id="video.id"
+    :component="'gc_video'"
+    :image="image"
+    :title="video.attributes.title"
+  >
+    <template v-slot:overlay>
+      <div class="play-button"></div>
+    </template>
+    <template>
       <div class="title">{{ video.attributes.title }}</div>
       <div
         class="instructor"
@@ -26,17 +30,20 @@
         .attributes.field_gc_video_duration ? 'visible': 'hidden'}">
         {{ duration }}
       </div>
-    </router-link>
-    <AddToFavorite
-      :id="video.attributes.drupal_internal__nid"
-      :type="'node'"
-      :bundle="'gc_video'"
-      class="white"
-    ></AddToFavorite>
-  </div>
+    </template>
+    <template v-slot:outer>
+      <AddToFavorite
+        :id="video.attributes.drupal_internal__nid"
+        :type="'node'"
+        :bundle="'gc_video'"
+        class="white"
+      />
+    </template>
+  </Teaser>
 </template>
 
 <script>
+import Teaser from '@/components/Teaser.vue';
 import AddToFavorite from '@/components/AddToFavorite.vue';
 import SvgIcon from '@/components/SvgIcon.vue';
 import dayjs from 'dayjs';
@@ -44,6 +51,7 @@ import dayjs from 'dayjs';
 export default {
   name: 'VideoTeaser',
   components: {
+    Teaser,
     SvgIcon,
     AddToFavorite,
   },
@@ -55,16 +63,8 @@ export default {
   },
   computed: {
     image() {
-      if (this.video.attributes['field_gc_video_image.field_media_image']) {
-        return this.video.attributes['field_gc_video_image.field_media_image']
-          .image_style_uri[0].gated_content_teaser;
-      }
-
-      if (!this.video.attributes['field_gc_video_media.thumbnail']) {
-        return null;
-      }
-
-      return this.video.attributes['field_gc_video_media.thumbnail'].image_style_uri[0].gated_content_teaser;
+      return this.video.attributes['field_gc_video_image.field_media_image']
+        ?? this.video.attributes['field_gc_video_media.thumbnail'];
     },
     duration() {
       const sec = this.video.attributes.field_gc_video_duration;

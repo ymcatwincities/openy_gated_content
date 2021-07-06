@@ -9,6 +9,7 @@
         <div class="video gated-containerV2 px--20-10 pt-40-20">
           <MediaPlayer
             :media="video.attributes.field_gc_video_media"
+            :autoplay="config.components.gc_video.autoplay_videos"
             @playerEvent="logPlaybackEvent($event)"
           />
         </div>
@@ -59,10 +60,7 @@
                     :key="category.drupal_internal__tid">
                 <router-link :to="{
                   name: 'Category',
-                  params: {
-                    cid: video.relationships.field_gc_video_category.data[index].id,
-                    type: 'video'
-                  }
+                  params: { id: video.relationships.field_gc_video_category.data[index].id }
                 }">
                   {{ category.name }}
                 </router-link>

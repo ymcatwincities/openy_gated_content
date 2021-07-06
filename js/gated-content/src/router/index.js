@@ -31,7 +31,7 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
-    path: '/category/:cid',
+    path: '/category/:id',
     name: 'Category',
     component: CategoryPage,
     props: true,

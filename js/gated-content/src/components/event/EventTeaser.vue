@@ -1,12 +1,12 @@
 <template>
-  <div class="teaser event-teaser">
-    <router-link
-      :to="{ name: route, params: { id: video.id } }"
-      v-bind:class="{
-      'live-stream': route === 'LiveStream',
-      'virtual-meeting': route === 'VirtualMeeting'
-    }"
-    >
+  <Teaser
+    class="event-teaser"
+    :routeName="route"
+    :id="video.id"
+    :component="type"
+    :image="image"
+  >
+    <template>
       <div class="title">{{ video.attributes.title }}</div>
       <div class="date">
         <SvgIcon icon="date-icon"></SvgIcon>
@@ -28,7 +28,7 @@
         v-if="level"
       >
         <SvgIcon icon="difficulty-icon-grey" :css-fill="false"></SvgIcon>
-        {{ level | capitalize }}
+        {{ level.name | capitalize }}
       </div>
       <div class="timer" :class="{live: isOnAir}">
         <template v-if="isOnAir">
@@ -38,16 +38,19 @@
           Starts in {{ startsIn }}
         </template>
       </div>
-    </router-link>
-    <AddToFavorite
-      :id="video.attributes.drupal_internal__id"
-      :type="'eventinstance'"
-      :bundle="type"
-    ></AddToFavorite>
-  </div>
+    </template>
+    <template v-slot:outer>
+      <AddToFavorite
+        :id="video.attributes.drupal_internal__id"
+        :type="'eventinstance'"
+        :bundle="type"
+      />
+    </template>
+  </Teaser>
 </template>
 
 <script>
+import Teaser from '@/components/Teaser.vue';
 import AddToFavorite from '@/components/AddToFavorite.vue';
 import SvgIcon from '@/components/SvgIcon.vue';
 import { EventMixin } from '@/mixins/EventMixin';
@@ -56,6 +59,7 @@ export default {
   name: 'EventTeaser',
   mixins: [EventMixin],
   components: {
+    Teaser,
     SvgIcon,
     AddToFavorite,
   },
@@ -70,20 +74,11 @@ export default {
       return this.$dayjs.date(this.video.attributes.date.value).format('YYYY-MM-DD');
     },
     image() {
-      if (this.video.attributes['field_ls_image.field_media_image']) {
-        return this.video.attributes['field_ls_image.field_media_image']
-          .image_style_uri[0].gated_content_teaser;
-      }
-      if (this.video.attributes['image.field_media_image']) {
-        return this.video.attributes['image.field_media_image']
-          .image_style_uri[0].gated_content_teaser;
-      }
-
-      return null;
+      return this.video.attributes['field_ls_image.field_media_image']
+        ?? this.video.attributes['image.field_media_image'];
     },
     level() {
-      return this.video.attributes.field_ls_level ? this.video.attributes.field_ls_level.name
-        : this.video.attributes.level.name;
+      return this.video.attributes.field_ls_level ?? this.video.attributes.level;
     },
     route() {
       switch (this.video.type) {

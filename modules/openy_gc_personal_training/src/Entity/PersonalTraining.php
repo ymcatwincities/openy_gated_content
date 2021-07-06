@@ -2,10 +2,10 @@
 
 namespace Drupal\openy_gc_personal_training\Entity;
 
-use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityChangedTrait;
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\link\LinkItemInterface;
 
 /**
@@ -16,6 +16,7 @@ use Drupal\link\LinkItemInterface;
  * @ContentEntityType(
  *   id = "personal_training",
  *   label = @Translation("Personal training"),
+ *   bundle_label = @Translation("Personal training type"),
  *   handlers = {
  *     "view_builder" = "Drupal\Core\Entity\EntityViewBuilder",
  *     "list_builder" = "Drupal\openy_gc_personal_training\PersonalTrainingListBuilder",
@@ -34,16 +35,18 @@ use Drupal\link\LinkItemInterface;
  *   },
  *   base_table = "personal_training",
  *   translatable = FALSE,
+ *   bundle_entity_type = "personal_training_type",
  *   admin_permission = "administer personal training entities",
  *   entity_keys = {
  *     "id" = "id",
+ *     "bundle" = "type",
  *     "uuid" = "uuid",
  *     "langcode" = "langcode",
  *     "label" = "title",
  *   },
  *   links = {
  *     "canonical" = "/virtual-y/personal_training/{personal_training}",
- *     "add-form" = "/admin/virtual-y/personal_training/add",
+ *     "add-form" = "/admin/virtual-y/personal_training/add/{personal_training_type}",
  *     "edit-form" = "/admin/virtual-y/personal_training/{personal_training}/edit",
  *     "delete-form" = "/admin/virtual-y/personal_training/{personal_training}/delete",
  *     "collection" = "/admin/virtual-y/personal_training",
@@ -319,6 +322,13 @@ class PersonalTraining extends ContentEntityBase implements PersonalTrainingInte
     $fields['changed'] = BaseFieldDefinition::create('changed')
       ->setLabel(t('Changed'))
       ->setDescription(t('The time that the entity was last edited.'));
+
+    $fields['type'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Personal training type'))
+      ->setSetting('target_type', 'personal_training_type')
+      ->setRequired(TRUE)
+      ->setReadOnly(TRUE)
+      ->setDefaultValue('personal_training');
 
     return $fields;
   }

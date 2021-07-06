@@ -16,7 +16,7 @@
     </div>
     <template v-else-if="listingIsNotEmpty">
       <div v-if="error">Error loading</div>
-      <div v-else class="four-columns">
+      <div v-else :class="layoutClass">
         <VideoTeaser
           v-for="video in listing"
           :key="video.id"
@@ -40,12 +40,12 @@ import VideoTeaser from '@/components/video/VideoTeaser.vue';
 import Spinner from '@/components/Spinner.vue';
 import Pagination from '@/components/Pagination.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
-import { SettingsMixin } from '@/mixins/SettingsMixin';
 import { FavoritesMixin } from '@/mixins/FavoritesMixin';
+import { ListingMixin } from '@/mixins/ListingMixin';
 
 export default {
   name: 'VideoListing',
-  mixins: [JsonApiCombineMixin, SettingsMixin, FavoritesMixin],
+  mixins: [JsonApiCombineMixin, FavoritesMixin, ListingMixin],
   components: {
     VideoTeaser,
     Spinner,
@@ -93,9 +93,9 @@ export default {
   },
   data() {
     return {
+      component: 'gc_video',
       loading: true,
       error: false,
-      listing: [],
       links: {},
       featuredLocal: false,
       params: [
@@ -118,17 +118,6 @@ export default {
     this.$emit('listing-not-empty', true);
     this.featuredLocal = this.featured;
     await this.load();
-  },
-  computed: {
-    listingIsNotEmpty() {
-      return this.listing !== null && this.listing.length > 0;
-    },
-    emptyBlockMsg() {
-      if (this.config.components.gc_video.empty_block_text !== '') {
-        return this.config.components.gc_video.empty_block_text;
-      }
-      return this.msg;
-    },
   },
   methods: {
     async load() {
@@ -201,7 +190,7 @@ export default {
             this.featuredLocal = false;
             this.load();
           }
-          if (this.listing === null || this.listing.length === 0) {
+          if (!this.listingIsNotEmpty) {
             // Emit that listing empty to the parent component.
             this.$emit('listing-not-empty', false);
           }

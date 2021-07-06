@@ -7,10 +7,6 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
 /**
  * Defines the Shared Content Source server entity.
  *
- * TODO:
- * - create menu items in Virtual Y section.
- * - create content page with dynamic tabs (for each source new tab).
- *
  * @ConfigEntityType(
  *   id = "shared_content_source_server",
  *   label = @Translation("Shared Content Source Server"),

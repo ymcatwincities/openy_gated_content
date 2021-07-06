@@ -5,19 +5,15 @@
  * Installation file.
  */
 
+use Drupal\Core\Config\Entity\ConfigEntityType;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\user\Entity\Role;
 
 /**
  * Implements hook_install().
  */
 function openy_gc_personal_training_install() {
-  _update_user_permissions();
-}
-
-/**
- * Set proper permissions to access the personal_training entities.
- */
-function _update_user_permissions() {
   $roles = Role::loadMultiple([
     'virtual_y',
   ]);
@@ -30,4 +26,77 @@ function _update_user_permissions() {
       $role->save();
     }
   }
+}
+
+/**
+ * Introduce the Personal training type.
+ */
+function openy_gc_personal_training_update_8001() {
+  \Drupal::entityDefinitionUpdateManager()
+    ->installEntityType(new ConfigEntityType([
+      'id' => 'personal_training_type',
+      'label' => new TranslatableMarkup('Personal training type'),
+      'admin_permission' => 'administer gated content configuration',
+      'config_prefix' => 'type',
+      'bundle_of' => 'personal_training',
+      'entity_keys' => [
+        'id' => 'id',
+        'label' => 'label',
+      ],
+      'config_export' => [
+        'id',
+        'label',
+      ],
+    ]));
+}
+
+/**
+ * Import types, fields and forms configs.
+ */
+function openy_gc_personal_training_update_8002() {
+  $config_dir = drupal_get_path('module', 'openy_gc_personal_training');
+  $config_dir .= '/config/install/';
+  // Import new configuration.
+  $config_importer = \Drupal::service('openy_upgrade_tool.importer');
+  $config_importer->setDirectory($config_dir);
+  $config_importer->importConfigs([
+    'openy_gc_personal_training.type.personal_training',
+    'openy_gc_personal_training.type.training_series',
+    'field.storage.personal_training.field_parent',
+    'field.storage.personal_training.field_exclusions',
+    'field.storage.personal_training.field_schedule',
+    'field.field.personal_training.personal_training.field_parent',
+    'field.field.personal_training.training_series.field_exclusions',
+    'field.field.personal_training.training_series.field_schedule',
+    'core.entity_form_display.personal_training.personal_training.default',
+    'core.entity_form_display.personal_training.training_series.default',
+    'views.view.personal_trainings',
+  ]);
+}
+
+/**
+ * Update definition for Personal training entity.
+ */
+function openy_gc_personal_training_update_8003() {
+  $updates = \Drupal::entityDefinitionUpdateManager();
+  $entity_type_id = 'personal_training';
+  $bundle_type = 'personal_training_type';
+  $bundle_label = new TranslatableMarkup('Personal training type');
+  $definition = BaseFieldDefinition::create('entity_reference')
+    ->setLabel($bundle_label)
+    ->setSetting('target_type', $bundle_type)
+    ->setRequired(TRUE)
+    ->setReadOnly(TRUE)
+    ->setDefaultValue('personal_training');
+  $updates->installFieldStorageDefinition('type', $entity_type_id, 'openy_gc_personal_training', $definition);
+  $type = $updates->getEntityType($entity_type_id);
+  $keys = $type->getKeys();
+  $keys['bundle'] = 'type';
+  $type->set('entity_keys', $keys);
+  $type->set('bundle_label', $bundle_label);
+  $type->set('bundle_entity_type', $bundle_type);
+  $links = $type->getLinkTemplates();
+  $links['add-form'] = '/admin/virtual-y/personal_training/add/{personal_training_type}';
+  $type->set('links', $links);
+  $updates->updateEntityType($type);
 }

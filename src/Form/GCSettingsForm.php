@@ -122,6 +122,10 @@ class GCSettingsForm extends ConfigFormBase {
       'title_asc' => 'By Title (A-Z)',
       'title_desc' => 'By Title (Z-A)',
     ];
+    $video_components = [
+      'gc_video',
+      'live_stream',
+    ];
 
     foreach ($components as $id => $title) {
       $form['app_settings']['components'][$id] = [
@@ -178,6 +182,22 @@ class GCSettingsForm extends ConfigFormBase {
         '#options' => array_merge($date_options[$bundles_entity_types[$id]], $title_options),
         '#default_value' => $config->get('components.' . $id . '.default_sort'),
       ];
+
+      $form['app_settings']['components'][$id]['component']['show_covers'] = [
+        '#title' => $this->t('Show cover image on teaser'),
+        '#description' => $this->t('Allows to enable or disable display of covers on the teasers.'),
+        '#type' => 'checkbox',
+        '#default_value' => $config->get('components.' . $id . '.show_covers') ?? TRUE,
+      ];
+
+      if (in_array($id, $video_components)) {
+        $form['app_settings']['components'][$id]['component']['autoplay_videos'] = [
+          '#title' => $this->t('Start videos playback automaitcally'),
+          '#description' => $this->t('Videos will be autoplayed on the page load'),
+          '#type' => 'checkbox',
+          '#default_value' => $config->get('components.' . $id . '.autoplay_videos') ?? TRUE,
+        ];
+      }
     }
 
     uasort($form['app_settings']['components'],

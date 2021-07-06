@@ -50,7 +50,7 @@ class VimeoEvent extends ProviderPluginBase {
    */
   public function getRemoteThumbnailUrl() {
     $data = $this->oEmbedData();
-    // TODO: maybe better to use custom image instead vimeo default.
+    // @todo maybe better to use custom image instead vimeo default.
     return isset($data['thumbnail_url']) ? $data['thumbnail_url'] : 'https://i.vimeocdn.com/video/default_852x480.jpeg';
   }
 

@@ -74,7 +74,6 @@
             v-if="selectedComponent === 'live_stream' || selectedComponent === 'all'"
             :title="config.components.live_stream.title"
             :category="category.id"
-            :msg="config.components.live_stream.empty_block_text"
             :sort="sortData('eventinstance', 'live_stream')"
             :pagination="selectedComponent === 'live_stream'"
             :limit="viewAllContentMode ? 50 : itemsLimit"
@@ -99,7 +98,6 @@
             :title="config.components.virtual_meeting.title"
             :category="category.id"
             :eventType="'virtual_meeting'"
-            :msg="config.components.virtual_meeting.empty_block_text"
             :sort="sortData('eventinstance', 'virtual_meeting')"
             :pagination="selectedComponent === 'virtual_meeting'"
             :limit="viewAllContentMode ? 50 : itemsLimit"
@@ -192,7 +190,7 @@ export default {
     EventListing,
   },
   props: {
-    cid: {
+    id: {
       type: String,
       required: true,
     },
@@ -224,7 +222,7 @@ export default {
     async load() {
       this.loading = true;
       client
-        .get(`jsonapi/taxonomy_term/gc_category/${this.cid}`)
+        .get(`jsonapi/taxonomy_term/gc_category/${this.id}`)
         .then((response) => {
           this.category = response.data.data;
           this.loading = false;

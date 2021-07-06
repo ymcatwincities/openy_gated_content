@@ -6,9 +6,9 @@ use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountProxyInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Drupal\openy_gc_auth\GCIdentityProviderManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Provides a 'Virtual Y login' block.

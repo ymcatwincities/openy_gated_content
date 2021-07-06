@@ -26,7 +26,6 @@
         :featured="true"
         :viewAll="true"
         :limit="8"
-        :msg="config.components.live_stream.empty_block_text"
         :title="config.components.live_stream.title"
         :sort="sortData('eventinstance', 'live_stream')"
         v-if="isActive('live_stream') && showOnCurrentIteration('live_stream', component)"
@@ -37,7 +36,6 @@
         :viewAll="true"
         :limit="8"
         :eventType="'virtual_meeting'"
-        :msg="config.components.virtual_meeting.empty_block_text"
         :sort="sortData('eventinstance', 'virtual_meeting')"
         v-if="isActive('virtual_meeting') && showOnCurrentIteration('virtual_meeting', component)"
       />

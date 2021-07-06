@@ -1,8 +1,10 @@
 <template>
-  <div class="teaser event-teaser personal-training-teaser">
-    <router-link
-      :to="{ name: 'PersonalTraining', params: { id: video.id } }"
-    >
+  <Teaser
+    class="event-teaser personal-training-teaser"
+    :routeName="'PersonalTraining'"
+    :id="video.id"
+  >
+    <template>
       <div class="title">{{ video.attributes.title }}</div>
       <div class="date">
         <SvgIcon icon="date-icon"></SvgIcon>
@@ -22,16 +24,19 @@
       <div class="timer private">
         Private
       </div>
-    </router-link>
-    <AddToFavorite
-      :id="video.attributes.drupal_internal__id"
-      :type="'personal_training'"
-      :bundle="'personal_training'"
-    ></AddToFavorite>
-  </div>
+    </template>
+    <template v-slot:outer>
+      <AddToFavorite
+        :id="video.attributes.drupal_internal__id"
+        :type="'personal_training'"
+        :bundle="'personal_training'"
+      ></AddToFavorite>
+    </template>
+  </Teaser>
 </template>
 
 <script>
+import Teaser from '@/components/Teaser.vue';
 import AddToFavorite from '@/components/AddToFavorite.vue';
 import SvgIcon from '@/components/SvgIcon.vue';
 import { EventMixin } from '@/mixins/EventMixin';
@@ -40,6 +45,7 @@ export default {
   name: 'PersonalTrainingTeaser',
   mixins: [EventMixin],
   components: {
+    Teaser,
     SvgIcon,
     AddToFavorite,
   },
