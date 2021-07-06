@@ -13,6 +13,11 @@
       <div class="video"
         :style="{background: localMediaStream && isCameraEnabled ? 'none':''}"
       >
+        <AudioIndicator
+          :media-stream="localMediaStream"
+          :mic-enabled="isMicEnabled"
+        />
+        <VideoIndicator v-if="localMediaStream" :cam-enabled="isCameraEnabled" />
         <video
           v-if="localMediaStream && isCameraEnabled"
           :srcObject.prop="localMediaStream"
@@ -76,12 +81,16 @@
 </template>
 
 <script>
+import AudioIndicator from '@/components/personal-training/meeting/AudioIndicator.vue';
+import VideoIndicator from '@/components/personal-training/meeting/VideoIndicator.vue';
 import Modal from '@/components/modal/Modal.vue';
 import { mapGetters, mapActions } from 'vuex';
 import SvgIcon from '@/components/SvgIcon.vue';
 
 export default {
-  components: { SvgIcon, Modal },
+  components: {
+    AudioIndicator, VideoIndicator, SvgIcon, Modal,
+  },
   computed: {
     ...mapGetters([
       'isShowJoinOptionsModal',
