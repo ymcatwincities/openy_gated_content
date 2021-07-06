@@ -70,6 +70,13 @@ export default {
     handlePlayerEvent(eventType) {
       this.$emit('playerEvent', eventType);
     },
+    logPlaybackStarted() {
+      if (this.playbackLogged) {
+        return;
+      }
+      this.playbackLogged = true;
+      this.handlePlayerEvent('videoPlaybackStarted');
+    },
     handleLoaded() {
       if (!this.autoplay) {
         this.$refs.player.pause();
@@ -82,21 +89,10 @@ export default {
     },
     handlePlay() {
       this.playbackInProgress = true;
-      if (this.playbackLogged) {
-        return;
-      }
       if (this.logStartedEventImmediately) {
-        this.playbackLogged = true;
-        this.handlePlayerEvent('videoPlaybackStarted');
-      } else if (this.playbackTimeout === 0) {
-        this.playbackTimeout = setTimeout(() => {
-          if (!this.playbackInProgress) {
-            this.logStartedEventImmediately = true;
-            return;
-          }
-          this.playbackLogged = true;
-          this.handlePlayerEvent('videoPlaybackStarted');
-        }, 60 * 1000);
+        this.logPlaybackStarted();
+      } else {
+        this.playbackTimeout = setTimeout(() => this.logPlaybackStarted(), 60 * 1000);
       }
     },
     handleAttributes() {
@@ -110,6 +106,8 @@ export default {
     },
     handlePause() {
       this.playbackInProgress = false;
+      this.logStartedEventImmediately = true;
+      clearTimeout(this.playbackTimeout);
     },
     handleEnded() {
       this.playbackInProgress = false;
