@@ -13,6 +13,7 @@ export default {
     instructorRole: false,
     instructorName: null,
     customerName: null,
+    localName: null,
   },
   actions: {
     async setMeetingMetaData(context, payload) {
@@ -22,6 +23,9 @@ export default {
       context.commit('setInstructorName', payload.instructorName);
       context.commit('setCustomerName', payload.customerName);
       context.commit('setRemoteLink', payload.remoteLink);
+    },
+    updateLocalName(context, payload) {
+      context.commit('setLocalName', payload);
     },
   },
   mutations: {
@@ -46,6 +50,9 @@ export default {
     setRemoteLink(state, value) {
       state.remoteLink = value;
     },
+    setLocalName(state, value) {
+      state.localName = value;
+    },
   },
   getters: {
     isJoinedVideoSession: (state) => state.videoSessionStatus,
@@ -53,7 +60,8 @@ export default {
     personalTrainingId: (state) => state.personalTrainingId,
     isInstructorRole: (state) => state.instructorRole,
     remoteLink: (state) => state.remoteLink,
-    localName: (state) => (state.instructorRole
+    localName: (state) => state.localName,
+    systemName: (state) => (state.instructorRole
       ? state.instructorName
       : state.customerName),
     partnerName: (state) => (
