@@ -1,0 +1,9 @@
+name: Avocado Virtual YMCA integration
+type: module
+description: 'Avocado integration for Virtual YMCA'
+package: Open Y Virtual YMCA
+version: 0.1
+core: 8.x
+core_version_requirement: ^8 || ^9
+dependencies:
+  - drupal:openy_gc_auth
