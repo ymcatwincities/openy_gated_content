@@ -49,22 +49,26 @@
               <SvgIcon icon="difficulty-icon-white" :css-fill="false"></SvgIcon>
               {{ video.attributes.field_gc_video_level.name | capitalize }}
             </div>
-            <div
-              v-if="video.attributes.field_gc_video_category &&
-              video.attributes.field_gc_video_category.length > 0"
-              class="video-footer__block video-footer__category">
+            <div v-if="videoCategories" class="video-footer__block video-footer__category">
               <SvgIcon icon="categories"
                        class="fill-white"
                        :growByHeight=false></SvgIcon>
-              <span v-for="(category, index) in video.attributes.field_gc_video_category"
-                    :key="category.drupal_internal__tid">
-                <router-link :to="{
-                  name: 'Category',
-                  params: { id: video.relationships.field_gc_video_category.data[index].id }
-                }">
-                  {{ category.name }}
-                </router-link>
-              </span>
+              <ul>
+                <li
+                  v-for="tid in videoCategories"
+                  class="video-footer__category-list-item"
+                  :key="tid"
+                >
+                  <ul>
+                    <li v-for="category in $store.getters.getAncestors(tid)" :key="category.tid">
+                      <router-link :to="{
+                        name: 'Category',
+                        params: { id: category.uuid }
+                      }">{{ category.label }}</router-link>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
             </div>
             <div
               v-if="video.attributes.field_gc_video_equipment.length > 0"
@@ -87,10 +91,10 @@
         </div>
       </div>
       <VideoListing
-        v-if="firstCategory"
+        v-if="videoCategories"
         :title="config.components.gc_video.up_next_title"
         :excluded-video-id="video.id"
-        :category="firstCategory"
+        :categories="videoCategories"
         :viewAll="true"
         :limit="8"
       />
@@ -146,14 +150,12 @@ export default {
     await this.load();
   },
   computed: {
-    firstCategory() {
-      if (
-        !this.video.relationships.field_gc_video_category.data
-        || this.video.relationships.field_gc_video_category.data.length === 0
-      ) {
+    videoCategories() {
+      const fieldValues = this.video.attributes.field_gc_video_category;
+      if (!fieldValues || fieldValues.length === 0) {
         return null;
       }
-      return this.video.relationships.field_gc_video_category.data[0].id;
+      return fieldValues.map((category) => category.drupal_internal__tid);
     },
     date() {
       return this.$dayjs.date(this.video.attributes.created).format('dddd, MMMM Do, YYYY');

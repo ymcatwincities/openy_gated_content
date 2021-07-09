@@ -6,6 +6,23 @@
     padding:             30% 0 0 0;
   }
 
+  .blog-page__categories {
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+  }
+
+    .blog-page__category {
+      li {
+        display: inline;
+
+        &:not(:last-of-type):after {
+          content: ' > ';
+        }
+      }
+  }
+
   .add-to-favorite {
     overflow: hidden;
     background-size: 20px 20px;

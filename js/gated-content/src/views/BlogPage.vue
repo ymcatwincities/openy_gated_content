@@ -13,20 +13,21 @@
       </div>
       <div class="gated-containerV2 my-40-20 px--20-10 text-black">
         <h2 class="cachet-book-32-28">{{ blog.attributes.title }}</h2>
-        <div
-          v-if="blog.attributes.field_gc_video_category &&
-            blog.attributes.field_gc_video_category.length > 0"
-          class="blog-category"
-        >
-          <b>Category: </b>
-          <span v-for="(category_data, index) in blog.relationships.field_gc_video_category.data"
-                :key="index">
-            <router-link :to="{
-              name: 'Category',
-              params: { id: category_data.id }
-            }">{{ blog.attributes.field_gc_video_category[index].name }}</router-link>
-            <i v-if="index !== blog.attributes.field_gc_video_category.length - 1"> | </i>
-          </span>
+        <div v-if="blogCategories" class="blog-page__categories">
+          <b v-if="blogCategories.length === 1">Category: </b>
+          <b v-else>Categories: </b>
+          <ul>
+            <li class="blog-page__category" v-for="tid in blogCategories" :key="tid">
+              <ul>
+                <li v-for="category in $store.getters.getAncestors(tid)" :key="category.tid">
+                  <router-link :to="{
+                  name: 'Category',
+                  params: { id: category.uuid }
+                }">{{ category.label }}</router-link>
+                </li>
+              </ul>
+            </li>
+          </ul>
         </div>
         <AddToFavorite
           :id="blog.attributes.drupal_internal__nid"
@@ -44,10 +45,10 @@
       </div>
 
       <BlogListing
-        v-if="firstCategory"
+        v-if="blogCategories"
         :title="config.components.vy_blog_post.up_next_title"
         :excluded-id="blog.id"
-        :category="firstCategory"
+        :categories="blogCategories"
         :viewAll="true"
         :limit="8"
         class="my-40-20"
@@ -96,14 +97,12 @@ export default {
     image() {
       return this.blog.attributes['field_vy_blog_image.field_media_image'];
     },
-    firstCategory() {
-      if (
-        !this.blog.relationships.field_gc_video_category.data
-        || this.blog.relationships.field_gc_video_category.data.length === 0
-      ) {
+    blogCategories() {
+      const fieldValues = this.blog.attributes.field_gc_video_category;
+      if (!fieldValues || fieldValues.length === 0) {
         return null;
       }
-      return this.blog.relationships.field_gc_video_category.data[0].id;
+      return fieldValues.map((category) => category.drupal_internal__tid);
     },
   },
   watch: {

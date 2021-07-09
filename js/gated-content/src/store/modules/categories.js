@@ -2,7 +2,7 @@ import client from '@/client';
 
 export default {
   state: {
-    categoriesTree: [],
+    categoriesTree: null,
   },
   actions: {
     async loadCategoriesTree(context) {
@@ -23,6 +23,7 @@ export default {
     },
   },
   getters: {
+    isCategoriesLoaded: (state) => state.categoriesTree !== null,
     getCategoriesTree: (state) => state.categoriesTree,
     getCategoriesByBundle: (state) => (bundle, categoriesData = state.categoriesTree) => (
       categoriesData.filter((category) => category.bundles.some((value) => value === bundle))

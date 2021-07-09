@@ -57,8 +57,22 @@
             <div class="video-footer__block video-footer__category"
                  v-if="category && category.length > 0">
               <SvgIcon icon="categories" class="fill-gray" :growByHeight=false></SvgIcon>
-              <span v-for="(category_data, index) in category"
-                    :key="index">{{ category_data.name }}</span>
+              <ul>
+                <li
+                  v-for="tid in category.map(item => item.drupal_internal__tid)"
+                  class="video-footer__category-list-item"
+                  :key="tid"
+                >
+                  <ul>
+                    <li v-for="category in $store.getters.getAncestors(tid)" :key="category.tid">
+                      <router-link :to="{
+                        name: 'Category',
+                        params: { id: category.uuid }
+                      }">{{ category.label }}</router-link>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
             </div>
             <div
               v-if="video.attributes.equipment.length > 0"
