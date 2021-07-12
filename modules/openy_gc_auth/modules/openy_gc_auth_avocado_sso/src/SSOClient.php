@@ -2,12 +2,11 @@
 
 namespace Drupal\openy_gc_auth_avocado_sso;
 
-use Drupal\Core\Access\CsrfTokenGenerator;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
-use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\Core\Url;
 use GuzzleHttp\Client as GuzzleHttpClient;
+use GuzzleHttp\Exception\GuzzleException;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -17,17 +16,15 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class SSOClient {
 
-  const CSRF_TOKEN_VALUE = 'openy_gc_auth_avocado_sso';
-
   const ENDPOINT_AUTHORIZE = '/services/oauth2/authorize';
 
   const ENDPOINT_ACCESS_TOKEN = '/services/oauth2/token';
 
   const ENDPOINT_USER_ACCOUNT_INFO = '/services/oauth2/userinfo';
 
-  const ENDPOINT_USER_MEMBERSHIP_INFO = '/services/apexrest/{YMCA_EXTENSION}/PrivateAvoApi/communityLogin';
+  const ENDPOINT_USER_MEMBERSHIP_INFO = '/services/apexrest/{YMCA_EXTENSION}/AvoAPI/communityLogin';
 
-  const ENDPOINT_COMMUNITY_EVENT_LOG = '/services/apexrest/{YMCA_EXTENSION}/PrivateAvoApi/communityEventLog';
+  const ENDPOINT_COMMUNITY_EVENT_LOG = '/services/apexrest/{YMCA_EXTENSION}/AvoAPI/communityEventLog';
 
   /**
    * Logger Factory.
@@ -58,18 +55,20 @@ class SSOClient {
   protected $httpClient;
 
   /**
-   * CsrfToken service.
+   * Authentication token taken from external Avocado service.
    *
-   * @var \Drupal\Core\Access\CsrfTokenGenerator
+   * @var string
    */
-  protected $csrfToken;
+  protected $authenticationToken;
 
   /**
-   * Tempstore.
+   * Authentication code retrieved from request made in buildAuthenticationUrl().
    *
-   * @var \Drupal\Core\TempStore\PrivateTempStore
+   * @var string
+   *
+   * @see \Drupal\openy_gc_auth_avocado_sso\SSOClient::buildAuthenticationUrl()
    */
-  private $tempStore;
+  protected $authenticationCode;
 
   /**
    * Avocado SSOClient constructor.
@@ -80,24 +79,16 @@ class SSOClient {
    *   ConfigFactoryInterface instance.
    * @param \GuzzleHttp\Client $client
    *   Guzzle client.
-   * @param \Drupal\Core\Access\CsrfTokenGenerator $csrfToken
-   *   CsrfToken service.
-   * @param \Drupal\Core\TempStore\PrivateTempStoreFactory $temp_store_factory
-   *   TempStore service.
    */
   public function __construct(
     LoggerChannelFactory $loggerFactory,
     ConfigFactoryInterface $configFactory,
-    GuzzleHttpClient $client,
-    CsrfTokenGenerator $csrfToken,
-    PrivateTempStoreFactory $temp_store_factory
+    GuzzleHttpClient $client
   ) {
     $this->logger = $loggerFactory->get('openy_gc_auth_avocado_sso');
     $this->configFactory = $configFactory;
     $this->configAvocadoSSO = $configFactory->get('openy_gc_auth.provider.avocado_sso');
     $this->httpClient = $client;
-    $this->csrfToken = $csrfToken;
-    $this->tempStore = $temp_store_factory->get('openy_gc_auth_avocado_sso');
   }
 
   /**
@@ -112,6 +103,7 @@ class SSOClient {
   public function buildAuthenticationUrl(Request $request) {
     $callbackUrl = Url::fromRoute('openy_gc_auth_avocado_sso.authorization_callback', [], [
       'absolute' => TRUE,
+      'https' => TRUE,
     ])->toString(TRUE)->getGeneratedUrl();
 
     return Url::fromUri(
@@ -125,19 +117,6 @@ class SSOClient {
         ],
       ]
     )->toString(TRUE)->getGeneratedUrl();
-  }
-
-  /**
-   * Validate csrf token.
-   *
-   * @param string $state
-   *   CSRF State.
-   *
-   * @return bool
-   *   Returns TRUE if scrf token is valid.
-   */
-  public function validateCsrfToken($state) {
-    return $this->csrfToken->validate($state, self::CSRF_TOKEN_VALUE);
   }
 
   /**
@@ -181,17 +160,22 @@ class SSOClient {
   }
 
   /**
-   * Retrieve authentication token.
-   *
-   * @param string $code
-   *   Authentication code retrieved from request made in buildAuthenticationUrl().
+   * Retrieve authentication token from Avocado.
    *
    * @return string
    *   Authentication token.
    *
    * @see \Drupal\openy_gc_auth_avocado_sso\SSOClient::buildAuthenticationUrl()
    */
-  public function retrieveAuthenticationToken($code) {
+  public function retrieveAuthenticationToken() {
+    $code = $this->getAuthenticationCode();
+
+    if (empty($code)) {
+      $this->logger->error('Authentication code is missing.');
+
+      return '';
+    }
+
     try {
       $response = $this->httpClient->request(
         'POST',
@@ -204,58 +188,57 @@ class SSOClient {
             'client_secret' => $this->configAvocadoSSO->get('client_secret'),
             'redirect_uri' => Url::fromRoute('openy_gc_auth_avocado_sso.authorization_callback', [], [
               'absolute' => TRUE,
+              'https' => TRUE,
             ])->toString(TRUE)->getGeneratedUrl(),
           ],
         ]);
 
       return json_decode((string) $response->getBody(), FALSE)->access_token;
     }
-    catch (\Exception $e) {
+    catch (GuzzleException $e) {
       $this->logger->error($e->getMessage());
+
+      return '';
     }
   }
 
   /**
    * Request user data from Avocado.
    *
-   * @param string $authentication_token
-   *   Authentication token retrieved from retrieveAuthenticationToken.
-   *
    * @return array|mixed
    *   User Data.
-   *
-   * @see \Drupal\openy_gc_auth_avocado_sso\SSOClient::retrieveAuthenticationToken()
    */
-  public function requestUserData(string $authentication_token) {
+  public function requestUserData() {
     try {
       $response = $this->httpClient->request(
         'GET',
         $this->configAvocadoSSO->get('authentication_server') . self::ENDPOINT_USER_ACCOUNT_INFO,
         [
           'query' => [
-            'oauth_token' => $authentication_token
+            'oauth_token' => $this->getAuthenticationToken()
           ],
         ]);
       return json_decode((string) $response->getBody(), FALSE);
     }
-    catch (\Exception $e) {
+    catch (GuzzleException $e) {
       $this->logger->error($e->getMessage());
+
+      return [];
     }
   }
 
   /**
-   * @param string $authentication_token
    * @param string $user_email
    * @return mixed
    */
-  public function requestUserMembershipData(string $authentication_token, string $user_email) {
+  public function requestUserMembershipData(string $user_email) {
     try {
       $response = $this->httpClient->request(
         'GET',
         $this->configAvocadoSSO->get('authentication_server') . str_replace('{YMCA_EXTENSION}', $this->configAvocadoSSO->get('ymca_extension'),self::ENDPOINT_USER_MEMBERSHIP_INFO),
         [
           'headers' => [
-            'Authorization' => "Bearer " . $authentication_token,
+            'Authorization' => "Bearer " . $this->getAuthenticationToken(),
           ],
           'query' => [
             'username' => $user_email,
@@ -263,12 +246,18 @@ class SSOClient {
         ]);
       return json_decode((string) $response->getBody(), FALSE);
     }
-    catch (\Exception $e) {
+    catch (GuzzleException $e) {
       $this->logger->error($e->getMessage());
+
+      return [];
     }
   }
 
-  public function createUserLoggedInEvent(string $authentication_token, string $member_barcode) {
+  /**
+   * @param string $member_barcode
+   * @return false|mixed
+   */
+  public function createUserLoggedInEvent(string $member_barcode) {
     try {
       $request_uri = $this->configAvocadoSSO->get('authentication_server') .
         str_replace('{YMCA_EXTENSION}', $this->configAvocadoSSO->get('ymca_extension'),self::ENDPOINT_COMMUNITY_EVENT_LOG);
@@ -278,7 +267,7 @@ class SSOClient {
         $request_uri,
         [
           'headers' => [
-            'Authorization' => "Bearer " . $authentication_token,
+            'Authorization' => "Bearer " . $this->getAuthenticationToken(),
           ],
           'form_params' => [
             'memberBarcode' => $member_barcode,
@@ -288,9 +277,65 @@ class SSOClient {
 
       return json_decode((string) $response->getBody(), FALSE);
     }
-    catch (\Exception $e) {
+    catch (GuzzleException $e) {
       $this->logger->error($e->getMessage());
+
+      return FALSE;
     }
+  }
+
+  /**
+   * Getter for Authentication token property.
+   *
+   * @return string
+   *   Authentication token.
+   */
+  public function getAuthenticationToken():string {
+    if (empty($this->authenticationToken)) {
+      $this->setAuthenticationToken($this->retrieveAuthenticationToken());
+    }
+
+    return $this->authenticationToken;
+  }
+
+  /**
+   * Setter for Authentication token property.
+   *
+   * @param string $authentication_token
+   *   Authentication token
+   * @return $this
+   */
+  public function setAuthenticationToken(string $authentication_token) {
+    $this->authenticationToken = $authentication_token;
+
+    return $this;
+  }
+
+  /**
+   * Getter for Authentication code property.
+   *
+   * @return string
+   *   Authentication code.
+   */
+  public function getAuthenticationCode():string {
+    return $this->authenticationCode;
+  }
+
+  /**
+   * Setter for Authentication code property.
+   *
+   * @param string $authentication_code
+   *   Authentication code retrieved from request made in buildAuthenticationUrl().
+   *
+   * @return $this
+   *   Current object.
+   *
+   * @see \Drupal\openy_gc_auth_avocado_sso\SSOClient::buildAuthenticationUrl()
+   */
+  public function setAuthenticationCode(string $authentication_code) {
+    $this->authenticationCode = $authentication_code;
+
+    return $this;
   }
 
 }
