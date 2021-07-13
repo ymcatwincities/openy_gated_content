@@ -9,9 +9,9 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 use Drupal\openy_gated_content\VyFavoriteItemsManager;
 use Drupal\openy_gc_personal_training\Entity\PersonalTrainingInterface;
+use Drupal\openy_gc_personal_training\PersonalTrainingItemsOperations;
 use Drupal\openy_gc_personal_training\PersonalTrainingSeriesOperations;
 
 /**
@@ -149,10 +149,13 @@ function openy_gc_personal_training_personal_training_update(PersonalTrainingInt
 function openy_gc_personal_training_personal_training_delete(PersonalTrainingInterface $personal_training) {
   if ($personal_training->bundle() === 'personal_training') {
     \Drupal::service('class_resolver')
+      ->getInstanceFromDefinition(PersonalTrainingItemsOperations::class)
+      ->entityDelete($personal_training);
+
+    \Drupal::service('class_resolver')
       ->getInstanceFromDefinition(VyFavoriteItemsManager::class)
       ->deleteRelatedFavoriteItems($personal_training);
 
-    _openy_gc_personal_training_send_notification($personal_training);
   }
   elseif ($personal_training->bundle() === 'training_series') {
     \Drupal::service('class_resolver')
@@ -170,44 +173,6 @@ function openy_gc_personal_training_theme($existing, $type, $theme, $path) {
       'render element' => 'widget',
     ],
   ];
-}
-
-/**
- * Helper function to send email notifications.
- *
- * TODO: move to event subscriber and handle not only delete event
- * (eg moderation workflow too).
- */
-function _openy_gc_personal_training_send_notification(PersonalTrainingInterface $personal_training) {
-  $virtual_y_config = \Drupal::config('openy_gc_auth.settings');
-  $active_provider = $virtual_y_config->get('active_provider');
-  $gc_identity_provider = \Drupal::service('plugin.manager.gc_identity_provider');
-  $plugin_definition = $gc_identity_provider
-    ->getDefinition($virtual_y_config->get('active_provider'), FALSE);
-  if (!$plugin_definition) {
-    throw new Exception('GCIdentityProvider plugin instance missed.');
-  }
-
-  $plugin_instance = $gc_identity_provider->createInstance($active_provider);
-  $to = $plugin_instance->getMemberNotificationEmail($personal_training->getCustomerId());
-  $mail_manager = \Drupal::service('plugin.manager.mail');
-  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-  $timezone = date_default_timezone_get();
-  $startDt = DrupalDateTime::createFromFormat(
-    DateTimeItemInterface::DATETIME_STORAGE_FORMAT,
-    $personal_training->get('date')->value,
-    DateTimeItemInterface::STORAGE_TIMEZONE
-  );
-  $startDt->setTimezone(timezone_open($timezone));
-  $personal_training_settings = \Drupal::config('openy_gc_personal_training.settings');
-  $params = [
-    'subject' => $personal_training_settings->get('meeting_delete_subject'),
-    'message' => $personal_training_settings->get('meeting_delete_message'),
-    'meeting_title' => $personal_training->get('title')->value,
-    'meeting_start_date' => $startDt->format('r'),
-  ];
-
-  $mail_manager->mail('openy_gc_personal_training', 'openy_gc_personal_training_notify', $to, $langcode, $params);
 }
 
 /**
