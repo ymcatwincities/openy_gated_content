@@ -17,7 +17,7 @@
     </div>
     <AddToFavorite
       v-if="isUpcoming"
-      :id="event.id"
+      :id="parseInt(event.id, 10)"
       :type="event.type"
       :bundle="event.bundle"
     ></AddToFavorite>
