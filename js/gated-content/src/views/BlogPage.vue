@@ -18,14 +18,7 @@
           <b v-else>Categories: </b>
           <ul>
             <li class="blog-page__category" v-for="tid in blogCategories" :key="tid">
-              <ul>
-                <li v-for="category in $store.getters.getAncestors(tid)" :key="category.tid">
-                  <router-link :to="{
-                  name: 'Category',
-                  params: { id: category.uuid }
-                }">{{ category.label }}</router-link>
-                </li>
-              </ul>
+              <CategoryLinks :tid="tid" />
             </li>
           </ul>
         </div>
@@ -62,6 +55,7 @@ import client from '@/client';
 import AddToFavorite from '@/components/AddToFavorite.vue';
 import Spinner from '@/components/Spinner.vue';
 import BlogListing from '@/components/blog/BlogListing.vue';
+import CategoryLinks from '@/components/category/CategoryLinks.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
 import { SettingsMixin } from '@/mixins/SettingsMixin';
 import { ImageStyleMixin } from '@/mixins/ImageStyleMixin';
@@ -73,6 +67,7 @@ export default {
     AddToFavorite,
     BlogListing,
     Spinner,
+    CategoryLinks,
   },
   props: {
     id: {

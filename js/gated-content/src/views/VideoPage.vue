@@ -59,14 +59,7 @@
                   class="video-footer__category-list-item"
                   :key="tid"
                 >
-                  <ul>
-                    <li v-for="category in $store.getters.getAncestors(tid)" :key="category.tid">
-                      <router-link :to="{
-                        name: 'Category',
-                        params: { id: category.uuid }
-                      }">{{ category.label }}</router-link>
-                    </li>
-                  </ul>
+                  <CategoryLinks :tid="tid" />
                 </li>
               </ul>
             </div>
@@ -111,6 +104,7 @@ import MediaPlayer from '@/components/MediaPlayer.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
 import { SettingsMixin } from '@/mixins/SettingsMixin';
 import SvgIcon from '@/components/SvgIcon.vue';
+import CategoryLinks from '@/components/category/CategoryLinks.vue';
 import dayjs from 'dayjs';
 
 export default {
@@ -122,6 +116,7 @@ export default {
     VideoListing,
     Spinner,
     AddToFavorite,
+    CategoryLinks,
   },
   props: {
     id: {

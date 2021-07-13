@@ -64,14 +64,7 @@
                   class="video-footer__category-list-item"
                   :key="tid"
                 >
-                  <ul>
-                    <li v-for="category in $store.getters.getAncestors(tid)" :key="category.tid">
-                      <router-link :to="{
-                        name: 'Category',
-                        params: { id: category.uuid }
-                      }">{{ category.label }}</router-link>
-                    </li>
-                  </ul>
+                  <CategoryLinks :tid="tid" />
                 </li>
               </ul>
             </div>
@@ -112,6 +105,7 @@ import AddToFavorite from '@/components/AddToFavorite.vue';
 import Spinner from '@/components/Spinner.vue';
 import EventListing from '@/components/event/EventListing.vue';
 import AddToCalendar from '@/components/event/AddToCalendar.vue';
+import CategoryLinks from '@/components/category/CategoryLinks.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
 import { EventMixin } from '@/mixins/EventMixin';
 import { SeriesEventMixin } from '@/mixins/SeriesEventMixin';
@@ -127,6 +121,7 @@ export default {
     EventListing,
     AddToCalendar,
     Spinner,
+    CategoryLinks,
   },
   props: {
     id: {
