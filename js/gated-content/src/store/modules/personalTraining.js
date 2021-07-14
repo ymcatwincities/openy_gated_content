@@ -2,6 +2,7 @@ import personalTrainingChat from '@/store/modules/personalTraining/chat';
 import personalTrainingModal from '@/store/modules/personalTraining/modal';
 import personalTrainingWebRtc from '@/store/modules/personalTraining/webrtc';
 import personalTrainingControls from '@/store/modules/personalTraining/controls';
+import client from '@/client';
 import dayjs from 'dayjs';
 
 export default {
@@ -24,8 +25,20 @@ export default {
       context.commit('setCustomerName', payload.customerName);
       context.commit('setRemoteLink', payload.remoteLink);
     },
-    updateLocalName(context, payload) {
-      context.commit('setLocalName', payload);
+    async updateLocalName(context, payload) {
+      return client({
+        url: 'personal-training/update-user-name',
+        method: 'post',
+        params: {
+          _format: 'json',
+        },
+        data: {
+          name: payload,
+        },
+      })
+        .then(() => {
+          context.commit('setLocalName', payload);
+        });
     },
   },
   mutations: {
