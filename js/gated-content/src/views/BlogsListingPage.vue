@@ -55,7 +55,7 @@
     <BlogListing
       :title="'none'"
       :pagination="true"
-      :category="selectedComponent === 'all' ? '' : selectedComponent"
+      :categories="selectedComponent === 'all' ? null : [selectedComponent]"
       :sort="sortData('node', 'vy_blog_post')"
       class="mb-40-20"
     />
@@ -63,10 +63,10 @@
 </template>
 
 <script>
-import client from '@/client';
 import BlogListing from '@/components/blog/BlogListing.vue';
 import { SettingsMixin } from '@/mixins/SettingsMixin';
 import { FilterAndSortMixin } from '@/mixins/FilterAndSortMixin';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'BlogsListingPage',
@@ -74,55 +74,35 @@ export default {
   components: { BlogListing },
   data() {
     return {
-      defaultTypeOptions: [
-        { value: 'all', label: 'Show All' },
-      ],
+      defaultTypeOptions: { value: 'all', label: 'Show All' },
       contentTypeOptions: [],
     };
   },
   created() {
-    this.initSelectedFilters();
     this.loadCategories();
+    this.initSelectedFilters();
+  },
+  watch: {
+    isCategoriesLoaded: 'loadCategories',
+  },
+  computed: {
+    ...mapGetters([
+      'isCategoriesLoaded',
+    ]),
   },
   methods: {
     loadCategories() {
-      const params = {
-        sort: { sortBy: { path: 'name', direction: 'ASC' } },
-      };
-      client({
-        url: '/api/categories-list',
-        method: 'get',
-        params: { type: 'node', bundle: 'vy_blog_post' },
-      })
-        .then((response) => {
-          params.filter = {};
-          if (response.data.length > 0) {
-            params.filter.excludeSelf = {
-              condition: { path: 'id', operator: 'IN', value: response.data },
-            };
-
-            client
-              .get('jsonapi/taxonomy_term/gc_category', { params })
-              .then((response2) => {
-                if (response2.data.data) {
-                  const options = [];
-                  response2.data.data.forEach((category) => {
-                    options.push({
-                      value: category.id,
-                      label: category.attributes.name,
-                    });
-                  });
-                  this.contentTypeOptions = [...this.defaultTypeOptions, ...options];
-                }
-              })
-              .catch((error) => {
-                console.error(error);
-              });
-          }
+      const options = this.$store.getters.getCategoriesByBundle('vy_blog_post')
+        .sort((a, b) => {
+          if (a.label < b.label) return -1;
+          if (a.label > b.label) return 1;
+          return 0;
         })
-        .catch((error) => {
-          console.error(error);
-        });
+        .map((category) => ({
+          value: category.tid,
+          label: category.label,
+        }));
+      this.contentTypeOptions = [this.defaultTypeOptions, ...options];
     },
   },
 };

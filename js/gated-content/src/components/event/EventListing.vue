@@ -41,6 +41,7 @@ import Spinner from '@/components/Spinner.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
 import { FavoritesMixin } from '@/mixins/FavoritesMixin';
 import { ListingMixin } from '@/mixins/ListingMixin';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'EventListing',
@@ -74,9 +75,9 @@ export default {
       type: Boolean,
       default: false,
     },
-    category: {
-      type: String,
-      default: '',
+    categories: {
+      type: Array,
+      default: null,
     },
     sort: {
       type: Object,
@@ -117,6 +118,11 @@ export default {
     date: 'load',
     eventType: 'load',
     sort: 'load',
+    isCategoriesLoaded() {
+      if (this.categories !== null) {
+        this.load();
+      }
+    },
   },
   async mounted() {
     // By default emit that listing not empty to the parent component.
@@ -125,6 +131,9 @@ export default {
     await this.load();
   },
   computed: {
+    ...mapGetters([
+      'isCategoriesLoaded',
+    ]),
     dateFormatted() {
       const weekDay = this.date.toLocaleDateString('en', { weekday: 'long' });
       const monthName = this.date.toLocaleDateString('en', { month: 'long' });
@@ -224,15 +233,31 @@ export default {
         params.filter.field_ls_featured = 1;
       }
 
-      if (this.category) {
-        params.filter['eventseries_id.field_ls_category.id'] = this.category;
-      }
-
       params.filter.status = 1;
       params.sort = {
         sortBy: this.sort,
       };
 
+      if (this.categories !== null) {
+        if (!this.isCategoriesLoaded) {
+          return;
+        }
+        const termsIds = [];
+        this.categories.forEach((tid) => {
+          const subcategories = this.$store.getters.getSubcategories(tid);
+          termsIds.push(tid, ...this.$store.getters.getNestedTids(subcategories));
+        });
+        params.filter.in = {
+          condition: {
+            path: 'eventseries_id.field_ls_category.entity.tid',
+            operator: 'IN',
+            value: termsIds,
+          },
+        };
+      }
+      this.loadFromJsonApi(params);
+    },
+    loadFromJsonApi(params) {
       client
         .get(`jsonapi/eventinstance/${this.eventType}`, { params })
         .then((response) => {

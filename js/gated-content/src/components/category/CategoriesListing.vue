@@ -1,14 +1,14 @@
 <template>
-  <div v-if="loading" class="text-center">
-    <Spinner></Spinner>
-  </div>
-  <div v-else-if="error" class="text-center">Error loading</div>
-  <div v-else-if="showlisting" class="gated-containerV2 my-40-20 px--20-10">
-    <div class="listing-header">
+  <div class="gated-containerV2 my-40-20 px--20-10">
+    <div v-if="loading || listingIsNotEmpty" class="listing-header">
       <h2 class="title text-gray cachet-book-24-20" v-if="title !== 'none'">{{ title }}</h2>
       <slot name="filterButton"></slot>
     </div>
-    <div class="four-columns">
+    <div v-if="loading" class="text-center">
+      <Spinner></Spinner>
+    </div>
+    <div v-else-if="error" class="text-center">Error loading</div>
+    <div v-else class="four-columns">
       <CategoryTeaser
         v-for="category in listing"
         :key="category.id"
@@ -24,10 +24,12 @@ import CategoryTeaser from '@/components/category/CategoryTeaser.vue';
 import Spinner from '@/components/Spinner.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
 import { FavoritesMixin } from '@/mixins/FavoritesMixin';
+import { ListingMixin } from '@/mixins/ListingMixin';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'CategoriesListing',
-  mixins: [JsonApiCombineMixin, FavoritesMixin],
+  mixins: [JsonApiCombineMixin, FavoritesMixin, ListingMixin],
   components: {
     CategoryTeaser,
     Spinner,
@@ -37,9 +39,9 @@ export default {
       type: String,
       default: 'Categories',
     },
-    type: {
+    parent: {
       type: String,
-      default: 'all',
+      default: null,
     },
     bundle: {
       type: String,
@@ -62,7 +64,6 @@ export default {
       loading: true,
       error: false,
       listing: null,
-      showlisting: false,
       params: [
         'field_gc_category_media',
         // Sub-relationship should be after parent field.
@@ -77,17 +78,22 @@ export default {
   watch: {
     sort: 'load',
     limit: 'load',
-    type: 'load',
     bundle: 'load',
     '$route.query': function $routeQuery(newQuery, oldQuery) {
       if (newQuery !== oldQuery) {
         this.load();
       }
     },
+    isCategoriesLoaded: 'load',
+  },
+  computed: {
+    ...mapGetters([
+      'isCategoriesLoaded',
+      'getCategoriesTree',
+    ]),
   },
   methods: {
     async load() {
-      this.showlisting = false;
       this.listing = [];
       this.loading = true;
       const params = {};
@@ -105,12 +111,12 @@ export default {
         };
       }
 
+      params.filter = {};
       if (this.favorites) {
         if (this.isFavoritesTypeEmpty('taxonomy_term', 'gc_category')) {
           this.loading = false;
           return;
         }
-        params.filter = {};
         params.filter.includeFavorites = {
           condition: {
             path: 'drupal_internal__tid',
@@ -119,65 +125,44 @@ export default {
           },
         };
 
-        client
-          .get('jsonapi/taxonomy_term/gc_category', { params })
-          .then((response) => {
-            this.listing = this.combineMultiple(
-              response.data.data,
-              response.data.included,
-              this.params,
-            );
-            this.showlisting = true;
-            this.loading = false;
-          })
-          .catch((error) => {
-            this.error = true;
-            this.loading = false;
-            console.error(error);
-            throw error;
-          });
+        this.loadFromJsonApi(params);
         return;
       }
 
-      client({
-        url: '/api/categories-list',
-        method: 'get',
-        params: {
-          type: this.type,
-          bundle: this.bundle,
+      if (!this.isCategoriesLoaded) {
+        return;
+      }
+      let categories = this.getCategoriesTree;
+      if (this.parent !== null) {
+        categories = this.$store.getters.getSubcategories(this.parent);
+      }
+      if (this.bundle !== '') {
+        categories = this.$store.getters.getCategoriesByBundle(this.bundle, categories);
+      }
+      const tids = categories.map((categoryData) => categoryData.tid);
+      if (tids.length === 0) {
+        this.loading = false;
+        return;
+      }
+      params.filter.in = {
+        condition: {
+          path: 'drupal_internal__tid',
+          operator: 'IN',
+          value: tids,
         },
-      })
-        .then((response) => {
-          params.filter = {};
-          if (response.data.length > 0) {
-            params.filter.excludeSelf = {
-              condition: {
-                path: 'id',
-                operator: 'IN',
-                value: response.data,
-              },
-            };
-
-            client
-              .get('jsonapi/taxonomy_term/gc_category', { params })
-              .then((response2) => {
-                this.listing = this.combineMultiple(
-                  response2.data.data,
-                  response2.data.included,
-                  this.params,
-                );
-                this.showlisting = true;
-                this.loading = false;
-              })
-              .catch((error) => {
-                this.error = true;
-                this.loading = false;
-                console.error(error);
-                throw error;
-              });
-          } else {
-            this.loading = false;
-          }
+      };
+      this.loadFromJsonApi(params);
+    },
+    loadFromJsonApi(params) {
+      client
+        .get('jsonapi/taxonomy_term/gc_category', { params })
+        .then((response2) => {
+          this.listing = this.combineMultiple(
+            response2.data.data,
+            response2.data.included,
+            this.params,
+          );
+          this.loading = false;
         })
         .catch((error) => {
           this.error = true;

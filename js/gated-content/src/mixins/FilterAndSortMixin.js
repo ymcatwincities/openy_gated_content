@@ -64,6 +64,11 @@ export const FilterAndSortMixin = {
   created() {
     this.initSelectedFilters();
   },
+  computed: {
+    selectedBundle() {
+      return this.selectedComponent === 'all' ? '' : this.selectedComponent;
+    },
+  },
   methods: {
     initSelectedFilters() {
       this.selectedComponent = this.$route.query.type || this.DEFAULT_SELECT;
