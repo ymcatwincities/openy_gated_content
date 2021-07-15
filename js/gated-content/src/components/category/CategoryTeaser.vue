@@ -7,6 +7,17 @@
   >
     <template>
       <div class="title verdana-16-14">{{ category.attributes.name }}</div>
+      <div class="sub-categories" v-if="subcategories.length > 0">
+        <div class="sub-categories__title">Includes:</div>
+        <ul class="sub-categories__items">
+          <li
+            v-for="subcategory in subcategories.slice(0, 3)"
+            class="sub-categories__item"
+            :key="subcategory.tid"
+          >{{ subcategory.label }}</li>
+          <li v-if="subcategories.length > 3" class="sub-categories__item">more...</li>
+        </ul>
+      </div>
     </template>
     <template v-slot:outer>
       <AddToFavorite
@@ -32,6 +43,11 @@ export default {
     category: {
       type: Object,
       required: true,
+    },
+  },
+  computed: {
+    subcategories() {
+      return this.$store.getters.getSubcategories(this.category.attributes.drupal_internal__tid);
     },
   },
 };

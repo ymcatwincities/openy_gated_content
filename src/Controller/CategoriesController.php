@@ -2,19 +2,16 @@
 
 namespace Drupal\openy_gated_content\Controller;
 
-use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Database\Connection;
-use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\openy_gated_content\VirtualYAccessTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class CategoriesResource Controller.
  */
-class CategoriesController extends ControllerBase implements ContainerInjectionInterface {
+class CategoriesController extends ControllerBase {
 
   use VirtualYAccessTrait;
 
@@ -45,63 +42,51 @@ class CategoriesController extends ControllerBase implements ContainerInjectionI
   }
 
   /**
-   * Categories list with filters by content type/bundle.
-   *
-   * Provides a list of categories uuid's that contains
-   * videos for specific bundle.
-   *
-   * @param \Symfony\Component\HttpFoundation\Request $request
-   *   The request.
+   * Categories tree.
    *
    * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   Json Array with taxonomy uuid's.
+   *   Json Object with taxonomy tree data.
    */
-  public function list(Request $request): JsonResponse {
-    $request_data = UrlHelper::parse($request->getUri());
-    if (empty($request_data['query']) || !isset($request_data['query']['type'])) {
-      return new JsonResponse(['message' => 'Missed "type" query param.'], 400);
-    }
-
-    if ($request_data['query']['type'] !== 'all' && !isset($request_data['query']['bundle'])) {
-      return new JsonResponse(['message' => 'For specified "type" should be "bundle" query param.'], 400);
-    }
+  public function list(): JsonResponse {
+    $bundles_entity_types = [
+      'gc_video' => 'node',
+      'live_stream' => 'eventinstance',
+      'virtual_meeting' => 'eventinstance',
+      'vy_blog_post' => 'node',
+    ];
 
     $result = [];
-    switch ($request_data['query']['type']) {
-      case 'all':
-        $data1 = $this->getNodeCategories(['gc_video', 'vy_blog_post']);
-        $data2 = $this->getEventCategories(['live_stream', 'virtual_meeting']);
-        $result = array_unique(array_merge($data1, $data2));
-        break;
+    foreach ($bundles_entity_types as $bundle => $type) {
+      switch ($type) {
+        case 'node':
+          $result[$bundle] = $this->getNodeCategories($bundle);
+          break;
 
-      case 'node':
-        $result = $this->getNodeCategories([$request_data['query']['bundle']]);
-        break;
-
-      case 'eventinstance':
-        $result = $this->getEventCategories([$request_data['query']['bundle']]);
-        break;
+        case 'eventinstance':
+          $result[$bundle] = $this->getEventCategories($bundle);
+          break;
+      }
     }
 
-    return new JsonResponse(array_values($result));
+    return new JsonResponse($this->buildCategoriesTree($result));
   }
 
   /**
-   * Categories list filtered by node content and bundle.
+   * Categories list filtered by node's bundle.
    *
-   * @param array $bundles
-   *   Node types for filtering results.
+   * @param string $bundle
+   *   Node type for filtering results.
    *
    * @return array
-   *   Array with taxonomy uuid's.
+   *   Array with taxonomy id's.
    */
-  protected function getNodeCategories(array $bundles): array {
+  protected function getNodeCategories(string $bundle): array {
     $y_roles = $this->getVirtualYmcaRoles();
 
     $query = $this->database->select('node__field_gc_video_category', 'n');
     $query->leftJoin('taxonomy_term_data', 't', 't.tid = n.field_gc_video_category_target_id');
     $query->leftJoin('taxonomy_term_field_data', 'tf', 't.tid = tf.tid');
-    $query->condition('n.bundle', $bundles, 'IN');
+    $query->condition('n.bundle', $bundle);
     $query->condition('t.vid', 'gc_category');
     $query->condition('tf.status', 1);
 
@@ -116,21 +101,21 @@ class CategoriesController extends ControllerBase implements ContainerInjectionI
       $query->condition($or_group);
     }
 
-    $query->fields('t', ['uuid']);
+    $query->fields('t', ['tid']);
     $query->distinct(TRUE);
     return $query->execute()->fetchCol();
   }
 
   /**
-   * Categories list filtered by eventinstance content and bundle.
+   * Categories list filtered by event instance's bundle.
    *
-   * @param array $bundles
-   *   Event instance types for filtering results.
+   * @param string $bundle
+   *   Event instance type for filtering results.
    *
    * @return array
-   *   Array with taxonomy uuid's.
+   *   Array with taxonomy id's.
    */
-  protected function getEventCategories(array $bundles): array {
+  protected function getEventCategories(string $bundle): array {
     $y_roles = $this->getVirtualYmcaRoles();
     $result = [];
     $event_tables = [
@@ -142,7 +127,7 @@ class CategoriesController extends ControllerBase implements ContainerInjectionI
       $query = $this->database->select($field_category_table, 'es');
       $query->leftJoin('taxonomy_term_data', 't', 't.tid = es.field_ls_category_target_id');
       $query->leftJoin('taxonomy_term_field_data', 'tf', 't.tid = tf.tid');
-      $query->condition('es.bundle', $bundles, 'IN');
+      $query->condition('es.bundle', $bundle);
       $query->condition('t.vid', 'gc_category');
       $query->condition('tf.status', 1);
 
@@ -157,7 +142,7 @@ class CategoriesController extends ControllerBase implements ContainerInjectionI
         $query->condition($or_group);
       }
 
-      $query->fields('t', ['uuid']);
+      $query->fields('t', ['tid']);
       $query->distinct(TRUE);
       $result = array_merge($result, $query->execute()->fetchCol());
     }
@@ -175,9 +160,54 @@ class CategoriesController extends ControllerBase implements ContainerInjectionI
     $user = $this->currentUser();
     $pattern = 'virtual_y';
     // Get list of vy roles for current user.
-    return array_filter($user->getRoles(), function ($role) use ($pattern) {
+    return array_filter($user->getRoles(TRUE), static function ($role) use ($pattern) {
       return strpos($role, $pattern) !== FALSE;
     });
+  }
+
+  /**
+   * Builds tree of categories, having all the specified categories as leaves.
+   *
+   * @param array $categories_data
+   *   Categories data to include to the tree.
+   *
+   * @return array
+   *   Resulting tree, including parents of the categories.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   */
+  private function buildCategoriesTree(array $categories_data): array {
+    $categories_tree = [];
+    /** @var \Drupal\taxonomy\TermStorageInterface $storage */
+    $storage = $this->entityTypeManager()->getStorage('taxonomy_term');
+    foreach ($categories_data as $bundle => $categories) {
+      foreach ($categories as $category) {
+        $terms_tree_branch = array_reverse($storage->loadAllParents($category));
+        $current_node = &$categories_tree;
+        foreach ($terms_tree_branch as $term) {
+          $tid = $term->id();
+          $key = array_search($tid, array_column($current_node, 'tid'));
+          if ($key === FALSE) {
+            $current_node[] = [
+              'tid' => $tid,
+              'label' => $term->label(),
+              'uuid' => $term->uuid(),
+              'weight' => $term->getWeight(),
+              'bundles' => [],
+              'children' => [],
+            ];
+            end($current_node);
+            $key = key($current_node);
+          }
+          if (!in_array($bundle, $current_node[$key]['bundles'])) {
+            $current_node[$key]['bundles'][] = $bundle;
+          }
+          $current_node = &$current_node[$key]['children'];
+        }
+      }
+    }
+    return $categories_tree;
   }
 
 }

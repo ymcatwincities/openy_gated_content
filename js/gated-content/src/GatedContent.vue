@@ -39,6 +39,7 @@ export default {
     await this.$store.dispatch('setSettings', JSON.parse(this.settings));
     await this.$store.dispatch('setHeadline', JSON.parse(this.headline));
     await this.$store.dispatch('loadFavorites');
+    await this.$store.dispatch('loadCategoriesTree');
   },
 };
 </script>
