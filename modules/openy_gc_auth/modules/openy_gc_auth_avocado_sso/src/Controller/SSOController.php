@@ -129,8 +129,7 @@ class SSOController extends ControllerBase {
     // Do not continue if barcode does not exist.
     if (
       !$user_membership_data
-      || $user_membership_data->message !== "Success"
-      || $user_membership_data->data[0]->Barcode === null
+      || $user_membership_data->Barcode === null
     ) {
       return new RedirectResponse(
         URL::fromUserInput(
@@ -140,8 +139,7 @@ class SSOController extends ControllerBase {
       );
     }
 
-    // @TODO: Confirm the member barcode can be accessed like this.
-    $result = $this->avocadoSSOClient->createUserLoggedInEvent($user_membership_data->data[0]->Barcode);
+    $result = $this->avocadoSSOClient->createUserLoggedInEvent($user_membership_data->Barcode);
 
     // @TODO: Confirm condition for user subscription validation works.
     if ($this->avocadoSSOClient->validateUserSubscription($result)) {

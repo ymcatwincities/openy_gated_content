@@ -244,7 +244,11 @@ class SSOClient {
             'username' => $user_email,
           ],
         ]);
-      return json_decode((string) $response->getBody(), FALSE);
+      $body = json_decode((string) $response->getBody(), FALSE);
+      if ($body->message !== "Success") {
+        return [];
+      }
+      return $body->data[0];
     }
     catch (GuzzleException $e) {
       $this->logger->error($e->getMessage());
