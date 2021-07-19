@@ -126,8 +126,12 @@ class SSOController extends ControllerBase {
     }
 
     $user_membership_data = $this->avocadoSSOClient->requestUserMembershipData($user_data->email);
-    // @TODO: Check if barcode exists.
-    if (!$user_membership_data) {
+    // Do not continue if barcode does not exist.
+    if (
+      !$user_membership_data
+      || $user_membership_data->message !== "Success"
+      || $user_membership_data->data[0]->Barcode === null
+    ) {
       return new RedirectResponse(
         URL::fromUserInput(
           $this->configOpenyGatedContent->get('virtual_y_login_url'),
@@ -137,7 +141,7 @@ class SSOController extends ControllerBase {
     }
 
     // @TODO: Confirm the member barcode can be accessed like this.
-    $result = $this->avocadoSSOClient->createUserLoggedInEvent($user_membership_data->memberBarcode);
+    $result = $this->avocadoSSOClient->createUserLoggedInEvent($user_membership_data->data[0]->Barcode);
 
     // @TODO: Confirm condition for user subscription validation works.
     if ($this->avocadoSSOClient->validateUserSubscription($result)) {

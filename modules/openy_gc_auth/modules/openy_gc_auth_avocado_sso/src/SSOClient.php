@@ -22,9 +22,9 @@ class SSOClient {
 
   const ENDPOINT_USER_ACCOUNT_INFO = '/services/oauth2/userinfo';
 
-  const ENDPOINT_USER_MEMBERSHIP_INFO = '/services/apexrest/{YMCA_EXTENSION}/AvoAPI/communityLogin';
+  const ENDPOINT_USER_MEMBERSHIP_INFO = '/services/apexrest/{YMCA_EXTENSION}/PrivateAvoAPI/v1/communityLogin';
 
-  const ENDPOINT_COMMUNITY_EVENT_LOG = '/services/apexrest/{YMCA_EXTENSION}/AvoAPI/communityEventLog';
+  const ENDPOINT_COMMUNITY_EVENT_LOG = '/services/apexrest/{YMCA_EXTENSION}/PrivateAvoAPI/v1/communityEventLog';
 
   /**
    * Logger Factory.
@@ -55,11 +55,11 @@ class SSOClient {
   protected $httpClient;
 
   /**
-   * Authentication token taken from external Avocado service.
+   * Access token taken from external Avocado service.
    *
    * @var string
    */
-  protected $authenticationToken;
+  protected $accessToken;
 
   /**
    * Authentication code retrieved from request made in buildAuthenticationUrl().
@@ -160,14 +160,14 @@ class SSOClient {
   }
 
   /**
-   * Retrieve authentication token from Avocado.
+   * Retrieve access token from Avocado.
    *
    * @return string
    *   Authentication token.
    *
    * @see \Drupal\openy_gc_auth_avocado_sso\SSOClient::buildAuthenticationUrl()
    */
-  public function retrieveAuthenticationToken() {
+  public function retrieveAccessToken() {
     $code = $this->getAuthenticationCode();
 
     if (empty($code)) {
@@ -215,7 +215,7 @@ class SSOClient {
         $this->configAvocadoSSO->get('authentication_server') . self::ENDPOINT_USER_ACCOUNT_INFO,
         [
           'query' => [
-            'oauth_token' => $this->getAuthenticationToken()
+            'oauth_token' => $this->getAccessToken()
           ],
         ]);
       return json_decode((string) $response->getBody(), FALSE);
@@ -238,7 +238,7 @@ class SSOClient {
         $this->configAvocadoSSO->get('authentication_server') . str_replace('{YMCA_EXTENSION}', $this->configAvocadoSSO->get('ymca_extension'),self::ENDPOINT_USER_MEMBERSHIP_INFO),
         [
           'headers' => [
-            'Authorization' => "Bearer " . $this->getAuthenticationToken(),
+            'Authorization' => "Bearer " . $this->getAccessToken(),
           ],
           'query' => [
             'username' => $user_email,
@@ -267,7 +267,7 @@ class SSOClient {
         $request_uri,
         [
           'headers' => [
-            'Authorization' => "Bearer " . $this->getAuthenticationToken(),
+            'Authorization' => "Bearer " . $this->getAccessToken(),
           ],
           'form_params' => [
             'memberBarcode' => $member_barcode,
@@ -285,28 +285,28 @@ class SSOClient {
   }
 
   /**
-   * Getter for Authentication token property.
+   * Getter for Access token property.
    *
    * @return string
    *   Authentication token.
    */
-  public function getAuthenticationToken():string {
-    if (empty($this->authenticationToken)) {
-      $this->setAuthenticationToken($this->retrieveAuthenticationToken());
+  public function getAccessToken():string {
+    if (empty($this->accessToken)) {
+      $this->setAccessToken($this->retrieveAccessToken());
     }
 
-    return $this->authenticationToken;
+    return $this->accessToken;
   }
 
   /**
-   * Setter for Authentication token property.
+   * Setter for Access token property.
    *
-   * @param string $authentication_token
-   *   Authentication token
+   * @param string $access_token
+   *   Access token
    * @return $this
    */
-  public function setAuthenticationToken(string $authentication_token) {
-    $this->authenticationToken = $authentication_token;
+  public function setAccessToken(string $access_token) {
+    $this->accessToken = $access_token;
 
     return $this;
   }
