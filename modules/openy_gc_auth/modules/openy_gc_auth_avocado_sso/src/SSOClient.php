@@ -246,6 +246,7 @@ class SSOClient {
         ]);
       $body = json_decode((string) $response->getBody(), FALSE);
       if ($body->message !== "Success") {
+        $this->logger->error('The request for user membership data has not been successful.');
         return [];
       }
       return $body->data[0];
