@@ -9,8 +9,9 @@
       <div class="select">
         <input
           type="text"
-          class="w-100"
-          v-model='name'
+          class="form-control w-100"
+          id="meetingUserNameInput"
+          v-model="name"
         >
         <span v-if="error" class="text-red verdana-14-12">{{ error }}</span>
       </div>
