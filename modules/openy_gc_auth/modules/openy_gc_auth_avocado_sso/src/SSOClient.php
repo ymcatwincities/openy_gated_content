@@ -62,7 +62,9 @@ class SSOClient {
   protected $accessToken;
 
   /**
-   * Authentication code retrieved from request made in buildAuthenticationUrl().
+   * Authentication code.
+   *
+   * The code retrieved from request made in buildAuthenticationUrl().
    *
    * @var string
    *
@@ -122,11 +124,10 @@ class SSOClient {
   /**
    * Check if user subscription is active.
    *
-   * This can be achieved by checking the result of the community event
-   * creation, done in the createUserLoggedInEvent method.
+   * This can be achieved by checking the result of the community event log
+   * creation, done in the createUserLogEvent method.
    *
-   * @param object $community_event_result
-   *   User membership data.
+   * @param string $community_event_log_result
    *   Possible values:
    *     - 'Success': This occurs if the user does not have any account
    *       exceptions blocking access, the user has access levels and the event
@@ -136,12 +137,12 @@ class SSOClient {
    *       when creating the event log.
    *
    * @return bool
-   *   Returns TRUE if the community_event_result is 'Success'.
+   *   Returns TRUE if the community_event_log_result is 'Success'.
    *
-   * @see \Drupal\openy_gc_auth_avocado_sso\SSOClient::createUserLoggedInEvent()
+   * @see \Drupal\openy_gc_auth_avocado_sso\SSOClient::createUserLogEvent()
    */
-  public function validateUserSubscription($community_event_result) {
-    return $community_event_result === 'Success';
+  public function validateUserSubscription($community_event_log_result) {
+    return $community_event_log_result === 'Success';
   }
 
   /**
@@ -154,9 +155,8 @@ class SSOClient {
    *   Returns name and email.
    */
   public function prepareUserNameAndEmail($user_data) {
-    $name = "{$user_data->member->FirstName} {$user_data->member->LastName} {$user_data->member->ID}";
-    $email = "avocado_sso-{$user_data->member->ID}@virtualy.openy.org";
-    return [$name, $email];
+    $name = "{$user_data->given_name} {$user_data->family_name}";
+    return [$name, $user_data->email];
   }
 
   /**
@@ -192,8 +192,14 @@ class SSOClient {
             ])->toString(TRUE)->getGeneratedUrl(),
           ],
         ]);
+      $body = json_decode((string) $response->getBody(), FALSE);
+      if (isset($body->error)) {
+        $this->logger->error($body->error_description);
 
-      return json_decode((string) $response->getBody(), FALSE)->access_token;
+        return '';
+      }
+
+      return $body->access_token;
     }
     catch (GuzzleException $e) {
       $this->logger->error($e->getMessage());
@@ -203,19 +209,19 @@ class SSOClient {
   }
 
   /**
-   * Request user data from Avocado.
+   * Request user account info from Avocado.
    *
    * @return array|mixed
-   *   User Data.
+   *   User account information array.
    */
-  public function requestUserData() {
+  public function requestUserAccountInfo() {
     try {
       $response = $this->httpClient->request(
         'GET',
         $this->configAvocadoSSO->get('authentication_server') . self::ENDPOINT_USER_ACCOUNT_INFO,
         [
           'query' => [
-            'oauth_token' => $this->getAccessToken()
+            'oauth_token' => $this->getAccessToken(),
           ],
         ]);
       return json_decode((string) $response->getBody(), FALSE);
@@ -228,14 +234,25 @@ class SSOClient {
   }
 
   /**
+   * Request user membership information.
+   *
    * @param string $user_email
-   * @return mixed
+   *   User email used to retrieve user membership information.
+   *
+   * @return object
+   *   Object with membership information, including barcode. Empty object if
+   *   any error happened during request.
    */
-  public function requestUserMembershipData(string $user_email) {
+  public function requestUserMembershipInfo(string $user_email) {
     try {
       $response = $this->httpClient->request(
         'GET',
-        $this->configAvocadoSSO->get('authentication_server') . str_replace('{YMCA_EXTENSION}', $this->configAvocadoSSO->get('ymca_extension'),self::ENDPOINT_USER_MEMBERSHIP_INFO),
+        $this->configAvocadoSSO->get('authentication_server') .
+        str_replace(
+          '{YMCA_EXTENSION}',
+          $this->configAvocadoSSO->get('ymca_extension'),
+          self::ENDPOINT_USER_MEMBERSHIP_INFO
+        ),
         [
           'headers' => [
             'Authorization' => "Bearer " . $this->getAccessToken(),
@@ -247,25 +264,35 @@ class SSOClient {
       $body = json_decode((string) $response->getBody(), FALSE);
       if ($body->message !== "Success") {
         $this->logger->error('The request for user membership data has not been successful.');
-        return [];
+        return new \stdClass();
       }
       return $body->data[0];
     }
     catch (GuzzleException $e) {
       $this->logger->error($e->getMessage());
 
-      return [];
+      return new \stdClass();
     }
   }
 
   /**
-   * @param string $member_barcode
-   * @return false|mixed
+   * Perform a request to create community user log event on Avocado side.
+   *
+   * @param string $membership_barcode
+   *   User membership barcode, required to perform a request.
+   *
+   * @return string|bool
+   *   Event log message if request was successful.
+   *   FALSE otherwise.
    */
-  public function createUserLoggedInEvent(string $member_barcode) {
+  public function createUserLogEvent(string $membership_barcode) {
     try {
       $request_uri = $this->configAvocadoSSO->get('authentication_server') .
-        str_replace('{YMCA_EXTENSION}', $this->configAvocadoSSO->get('ymca_extension'),self::ENDPOINT_COMMUNITY_EVENT_LOG);
+        str_replace(
+          '{YMCA_EXTENSION}',
+          $this->configAvocadoSSO->get('ymca_extension'),
+          self::ENDPOINT_COMMUNITY_EVENT_LOG
+        );
 
       $response = $this->httpClient->request(
         'POST',
@@ -275,12 +302,23 @@ class SSOClient {
             'Authorization' => "Bearer " . $this->getAccessToken(),
           ],
           'form_params' => [
-            'memberBarcode' => $member_barcode,
+            'memberBarcode' => $membership_barcode,
             'locationCode' => $this->configAvocadoSSO->get('location_code'),
           ],
         ]);
 
-      return json_decode((string) $response->getBody(), FALSE);
+      $body = json_decode((string) $response->getBody(), FALSE);
+      if (
+        !isset($body->data)
+        || $body->data->eventLogMessage !== "Success"
+      ) {
+        $error_message = isset($body->data->eventLogMessage) ?? $body->message;
+        $this->logger->error("Error happened during create user log process: $error_message");
+
+        return FALSE;
+      }
+
+      return $body->data->eventLogMessage;
     }
     catch (GuzzleException $e) {
       $this->logger->error($e->getMessage());
@@ -307,8 +345,10 @@ class SSOClient {
    * Setter for Access token property.
    *
    * @param string $access_token
-   *   Access token
+   *   Access token.
+   *
    * @return $this
+   *   Current object.
    */
   public function setAccessToken(string $access_token) {
     $this->accessToken = $access_token;
@@ -330,7 +370,8 @@ class SSOClient {
    * Setter for Authentication code property.
    *
    * @param string $authentication_code
-   *   Authentication code retrieved from request made in buildAuthenticationUrl().
+   *   Authentication code retrieved from request made in
+   *   buildAuthenticationUrl().
    *
    * @return $this
    *   Current object.

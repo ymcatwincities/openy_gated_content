@@ -99,7 +99,12 @@ class SSOController extends ControllerBase {
   }
 
   /**
-   * Perform authentication token validation, load user data & authorize the user.
+   * Perform authorization tasks.
+   *
+   * The tasks are as follows:
+   *   - authentication token validation;
+   *   - load user data;
+   *   - authorize the user.
    *
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   Current request object.
@@ -110,7 +115,7 @@ class SSOController extends ControllerBase {
   public function authorizationCallback(Request $request) {
     $user_data = $this->avocadoSSOClient
       ->setAuthenticationCode($request->query->get('code'))
-      ->requestUserData();
+      ->requestUserAccountInfo();
 
     if (
       !$user_data
@@ -125,11 +130,11 @@ class SSOController extends ControllerBase {
       );
     }
 
-    $user_membership_data = $this->avocadoSSOClient->requestUserMembershipData($user_data->email);
+    $user_membership_data = $this->avocadoSSOClient->requestUserMembershipInfo($user_data->email);
     // Do not continue if barcode does not exist.
     if (
       !$user_membership_data
-      || $user_membership_data->Barcode === null
+      || $user_membership_data->Barcode === NULL
     ) {
       return new RedirectResponse(
         URL::fromUserInput(
@@ -139,9 +144,7 @@ class SSOController extends ControllerBase {
       );
     }
 
-    $result = $this->avocadoSSOClient->createUserLoggedInEvent($user_membership_data->Barcode);
-
-    // @TODO: Confirm condition for user subscription validation works.
+    $result = $this->avocadoSSOClient->createUserLogEvent($user_membership_data->Barcode);
     if ($this->avocadoSSOClient->validateUserSubscription($result)) {
       [$name, $email] = $this->avocadoSSOClient
         ->prepareUserNameAndEmail($user_data);

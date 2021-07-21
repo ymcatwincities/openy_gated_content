@@ -107,9 +107,9 @@ class AvocadoSSO extends GCIdentityProviderPluginBase {
     $form['authentication_server'] = [
       '#type' => 'url',
       '#required' => TRUE,
-      '#title' => $this->t('Authorization server'),
+      '#title' => $this->t('Authentication server'),
       '#default_value' => $config['authentication_server'],
-      '#description' => $this->t('Hostname of the avocado authorization server. For example, https://avocado-dev-6-developer-edition.eu30.force.com/'),
+      '#description' => $this->t('Hostname of the avocado authentication server. For example, https://avocado-dev-6-developer-edition.eu30.force.com/'),
     ];
 
     $form['client_id'] = [
