@@ -79,14 +79,10 @@ export default {
       return this.$dayjs.date(date).format('ddd, MMM D, YYYY @ h:mm a');
     },
     getMsgAuthor(author, short = false) {
-      if (author === this.localName) {
-        return 'Me';
-      }
       if (short) {
-        return this.isInstructorRole ? 'C' : 'I';
+        return author.slice(0, 1);
       }
-      // If current user instructor, his interlocutor - customer.
-      return this.isInstructorRole ? 'Client' : 'Instructor';
+      return author === this.localName ? 'Me' : author;
     },
     beep() {
       if (this.unreadMessagesCount !== 0 && this.getAppSettings.newMessageSound) {
