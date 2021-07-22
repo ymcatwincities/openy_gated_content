@@ -90,17 +90,17 @@ class PersonalTrainingListBuilder extends EntityListBuilder {
 
     );
 
-    $row['customer'] = Link::createFromRoute(
+    $row['customer'] = $entity->customer_id->entity ? Link::createFromRoute(
       $entity->customer_id->entity->label(),
       'entity.user.canonical',
       ['user' => $entity->customer_id->entity->id()]
-    );
+    ) : '';
 
-    $row['instructor'] = Link::createFromRoute(
+    $row['instructor'] = $entity->instructor_id->entity ? Link::createFromRoute(
       $entity->instructor_id->entity->label(),
       'entity.user.canonical',
       ['user' => $entity->instructor_id->entity->id()]
-    );
+    ) : '';
 
     $row['training_type'] = $entity->get('training_type')->value;
     $row['date'] = $entity->get('date')->value;

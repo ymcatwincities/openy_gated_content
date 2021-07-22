@@ -1,5 +1,6 @@
 export default {
   state: {
+    userNameModal: false,
     showJoinOptionsModal: false,
     showViewOptionsModal: false,
     showChatModal: false,
@@ -24,6 +25,9 @@ export default {
         context.dispatch('closeLocalMediaStream');
       }
     },
+    toggleShowUserNameModal(context) {
+      context.commit('showUserNameModal', !context.state.userNameModal);
+    },
     toggleShowLeaveMeetingModal(context) {
       context.commit('showLeaveMeetingModal', !context.state.showLeaveMeetingModal);
     },
@@ -35,6 +39,9 @@ export default {
     },
   },
   mutations: {
+    showUserNameModal(state, value) {
+      state.userNameModal = value;
+    },
     showChatModal(state, value) {
       state.showChatModal = value;
     },
@@ -52,6 +59,7 @@ export default {
     },
   },
   getters: {
+    isShowUserNameModal: (state) => state.userNameModal,
     isShowJoinOptionsModal: (state) => state.showJoinOptionsModal,
     isShowLeaveMeetingModal: (state) => state.showLeaveMeetingModal,
     isShowViewOptionsModal: (state) => state.showViewOptionsModal,
