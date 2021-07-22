@@ -60,11 +60,18 @@ class PersonalTrainingSettingsForm extends ConfigFormBase {
     $config = $this->config('openy_gc_personal_training.settings');
     $active_provider = $this->config('openy_gc_personal_training.settings')->get('active_provider');
     $plugin_definitions = $this->personalTrainingProviderManager->getDefinitions();
+    $form['#tree'] = FALSE;
     if (empty($plugin_definitions)) {
       return ['#markup' => $this->t('1on1 Meeting providers not found.')];
     }
 
-    $form['signalingServerPRL'] = [
+    $form['peer_settings'] = [
+      '#type' => 'details',
+      '#open' => TRUE,
+      '#title' => $this->t('Peer server settings'),
+    ];
+
+    $form['peer_settings']['signalingServerPRL'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Signaling Server PRL (Protocol-relative URL)'),
       '#default_value' => $config->get('signalingServerPRL'),
@@ -72,7 +79,7 @@ class PersonalTrainingSettingsForm extends ConfigFormBase {
       '#description' => $this->t('Used for web-socket connection.'),
     ];
 
-    $form['peerjs_stun'] = [
+    $form['peer_settings']['peerjs_stun'] = [
       '#type' => 'textfield',
       '#title' => $this->t('STUN Server Domain'),
       '#description' => $this->t('STUN server required to setup WebRTC connection.'),
@@ -80,7 +87,7 @@ class PersonalTrainingSettingsForm extends ConfigFormBase {
       '#required' => FALSE,
     ];
 
-    $form['peerjs_turn_url'] = [
+    $form['peer_settings']['peerjs_turn_url'] = [
       '#type' => 'textfield',
       '#title' => $this->t('TURN Server Domain'),
       '#description' => $this->t('TURN server required to setup WebRTC connection. Please, do not use test server from the internet. Your connection might be unstable!'),
@@ -88,7 +95,7 @@ class PersonalTrainingSettingsForm extends ConfigFormBase {
       '#required' => FALSE,
     ];
 
-    $form['peerjs_turn_username'] = [
+    $form['peer_settings']['peerjs_turn_username'] = [
       '#type' => 'textfield',
       '#title' => $this->t('TURN Username'),
       '#default_value' => $config->get('peerjs_turn_username'),
@@ -96,7 +103,7 @@ class PersonalTrainingSettingsForm extends ConfigFormBase {
       '#required' => FALSE,
     ];
 
-    $form['peerjs_turn_credential'] = [
+    $form['peer_settings']['peerjs_turn_credential'] = [
       '#type' => 'textfield',
       '#title' => $this->t('TURN Password'),
       '#default_value' => $config->get('peerjs_turn_credential'),
@@ -104,7 +111,7 @@ class PersonalTrainingSettingsForm extends ConfigFormBase {
       '#required' => FALSE,
     ];
 
-    $form['peerjs_debug'] = [
+    $form['peer_settings']['peerjs_debug'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Debug level'),
       '#description' => $this->t('Set it to any number more than 0 to enable debugging'),
@@ -112,7 +119,7 @@ class PersonalTrainingSettingsForm extends ConfigFormBase {
       '#required' => FALSE,
     ];
 
-    $form['providers'] = [
+    $form['peer_settings']['providers'] = [
       '#type' => 'table',
       '#header' => [
         $this->t('Active'),
@@ -122,14 +129,14 @@ class PersonalTrainingSettingsForm extends ConfigFormBase {
     ];
 
     foreach ($plugin_definitions as $name => $definition) {
-      $form['providers'][$name]['active'] = [
+      $form['peer_settings']['providers'][$name]['active'] = [
         '#type' => 'checkbox',
         '#default_value' => $name == $active_provider,
       ];
-      $form['providers'][$name]['name'] = [
+      $form['peer_settings']['providers'][$name]['name'] = [
         '#markup' => $definition['label'],
       ];
-      $form['providers'][$name]['action'] = [
+      $form['peer_settings']['providers'][$name]['action'] = [
         '#title' => $this->t('Edit'),
         '#type' => 'link',
         '#url' => Url::fromRoute('openy_gc_personal_training.provider.edit', [
@@ -140,6 +147,32 @@ class PersonalTrainingSettingsForm extends ConfigFormBase {
         ],
       ];
     }
+
+    $form['notifications_settings'] = [
+      '#type' => 'details',
+      '#open' => TRUE,
+      '#title' => $this->t('Notifications settings'),
+    ];
+
+    $form['notifications_settings']['delete'] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('Meeting delete'),
+    ];
+
+    $form['notifications_settings']['delete']['meeting_delete_subject'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Email subject'),
+      '#default_value' => $config->get('meeting_delete_subject'),
+      '#required' => TRUE,
+    ];
+
+    $form['notifications_settings']['delete']['meeting_delete_message'] = [
+      '#type' => 'text_format',
+      '#title' => $this->t('Email message'),
+      '#description' => $this->t('Available tokens: %meeting_title%, %meeting_start_date%'),
+      '#default_value' => $config->get('meeting_delete_message'),
+      '#required' => TRUE,
+    ];
 
     $form['actions']['#type'] = 'actions';
     $form['actions']['submit'] = [
@@ -186,6 +219,8 @@ class PersonalTrainingSettingsForm extends ConfigFormBase {
     $settings->set('peerjs_turn_username', $form_state->getValue('peerjs_turn_username'));
 
     $settings->set('peerjs_debug', $form_state->getValue('peerjs_debug'));
+    $settings->set('meeting_delete_subject', $form_state->getValue('meeting_delete_subject'));
+    $settings->set('meeting_delete_message', $form_state->getValue('meeting_delete_message')['value']);
 
     $settings->save();
     parent::submitForm($form, $form_state);

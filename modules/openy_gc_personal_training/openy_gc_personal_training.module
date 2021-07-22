@@ -11,6 +11,7 @@ use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\openy_gated_content\VyFavoriteItemsManager;
 use Drupal\openy_gc_personal_training\Entity\PersonalTrainingInterface;
+use Drupal\openy_gc_personal_training\PersonalTrainingItemsOperations;
 use Drupal\openy_gc_personal_training\PersonalTrainingSeriesOperations;
 
 /**
@@ -148,8 +149,13 @@ function openy_gc_personal_training_personal_training_update(PersonalTrainingInt
 function openy_gc_personal_training_personal_training_delete(PersonalTrainingInterface $personal_training) {
   if ($personal_training->bundle() === 'personal_training') {
     \Drupal::service('class_resolver')
+      ->getInstanceFromDefinition(PersonalTrainingItemsOperations::class)
+      ->entityDelete($personal_training);
+
+    \Drupal::service('class_resolver')
       ->getInstanceFromDefinition(VyFavoriteItemsManager::class)
       ->deleteRelatedFavoriteItems($personal_training);
+
   }
   elseif ($personal_training->bundle() === 'training_series') {
     \Drupal::service('class_resolver')
@@ -167,4 +173,21 @@ function openy_gc_personal_training_theme($existing, $type, $theme, $path) {
       'render element' => 'widget',
     ],
   ];
+}
+
+/**
+ * Implements hook_mail().
+ */
+function openy_gc_personal_training_mail($key, &$message, $params) {
+  switch ($key) {
+    case 'openy_gc_personal_training_notify':
+      $message['from'] = \Drupal::config('system.site')->get('mail');
+      $message['subject'] = $params['subject'];
+      $map = [
+        '%meeting_title%' => $params['meeting_title'],
+        '%meeting_start_date%' => $params['meeting_start_date'],
+      ];
+      $message['body'][] = str_replace(array_keys($map), array_values($map), $params['message']);
+      break;
+  }
 }

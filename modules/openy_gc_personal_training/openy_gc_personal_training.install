@@ -100,3 +100,25 @@ function openy_gc_personal_training_update_8003() {
   $type->set('links', $links);
   $updates->updateEntityType($type);
 }
+
+/**
+ * Add email settings.
+ */
+function openy_gc_personal_training_update_8004(&$sandbox) {
+  $config_dir = drupal_get_path('module', 'openy_gc_personal_training');
+  $config_dir .= '/config/install/';
+  $configs = [
+    'openy_gc_personal_training.settings' => [
+      'meeting_delete_subject',
+      'meeting_delete_message',
+    ],
+  ];
+
+  $config_updater = \Drupal::service('openy_upgrade_tool.param_updater');
+  foreach ($configs as $config_name => $params) {
+    $config = $config_dir . $config_name . '.yml';
+    foreach ($params as $param) {
+      $config_updater->update($config, $config_name, $param);
+    }
+  }
+}
