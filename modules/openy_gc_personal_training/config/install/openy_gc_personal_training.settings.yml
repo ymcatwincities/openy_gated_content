@@ -5,3 +5,5 @@ peerjs_turn_credential: 'password'
 peerjs_turn_username: 'user'
 peerjs_debug: 3
 active_provider: default
+meeting_delete_message: "<p>Hi there!</p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p>Your personal training \"%meeting_title%\" on the %meeting_start_date% was declined.<br />\r\nPlease get in touch with your instructor for more details.</p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p>Thank you.</p>\r\n"
+meeting_delete_subject: 'Personal training was declined'
