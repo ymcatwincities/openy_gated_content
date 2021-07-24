@@ -19,10 +19,10 @@
   </div>
 </template>
 <script>
-import VueVideoWrapper from "vue-video-wrapper";
+import VueVideoWrapper from 'vue-video-wrapper';
 
 export default {
-  name: "MediaPlayer",
+  name: 'MediaPlayer',
   data() {
     return {
       playbackLogged: false,
@@ -40,17 +40,17 @@ export default {
     },
   },
   watch: {
-    media: "reload",
+    media: 'reload',
   },
   computed: {
     player() {
-      return this.media.field_media_source.startsWith("youtube")
-        ? "youtube"
-        : "vimeo";
+      return this.media.field_media_source.startsWith('youtube')
+        ? 'youtube'
+        : 'vimeo';
     },
     videoId() {
       let embedObj = this.media.field_media_video_embed_field;
-      if (this.media.field_media_source === "youtube_playlist") {
+      if (this.media.field_media_source === 'youtube_playlist') {
         embedObj = embedObj.match(/(\?|&)v=([^&#]+)/).pop();
         return embedObj;
       }
@@ -70,7 +70,7 @@ export default {
       this.$forceUpdate();
     },
     handlePlayerEvent(eventType) {
-      this.$emit("playerEvent", eventType);
+      this.$emit('playerEvent', eventType);
     },
     handlePlay() {
       this.playbackInProgress = true;
@@ -78,10 +78,10 @@ export default {
         return;
       }
       this.playbackLogged = true;
-      this.handlePlayerEvent("videoPlaybackStarted");
+      this.handlePlayerEvent('videoPlaybackStarted');
     },
     handleAttributes() {
-      if (this.media.field_media_source === "youtube") {
+      if (this.media.field_media_source === 'youtube') {
         return {
           rel: 0,
         };
@@ -93,12 +93,12 @@ export default {
     },
     handleEnded() {
       this.playbackInProgress = false;
-      this.handlePlayerEvent("videoPlaybackEnded");
+      this.handlePlayerEvent('videoPlaybackEnded');
     },
     playerReadied(player) {
       const timecode = this.media.field_media_video_embed_field.substring(
-        this.media.field_media_video_embed_field.lastIndexOf("#t=") + 3,
-        this.media.field_media_video_embed_field.lastIndexOf("s")
+        this.media.field_media_video_embed_field.lastIndexOf('#t=') + 3,
+        this.media.field_media_video_embed_field.lastIndexOf('s')
       );
       if (!Number.isNaN(timecode)) {
         const timecodeInSeconds = parseInt(timecode, 10);
@@ -107,10 +107,10 @@ export default {
       }
     },
     setTimeCode() {
-      if (this.player === "vimeo") {
+      if (this.player === 'vimeo') {
         const timecode = this.media.field_media_video_embed_field.substring(
-          this.media.field_media_video_embed_field.lastIndexOf("#t=") + 3,
-          this.media.field_media_video_embed_field.lastIndexOf("s")
+          this.media.field_media_video_embed_field.lastIndexOf('#t=') + 3,
+          this.media.field_media_video_embed_field.lastIndexOf('s')
         );
         if (!Number.isNaN(timecode)) {
           const timecodeInSeconds = parseInt(timecode, 10);
