@@ -57,7 +57,7 @@ export default {
       // If the video matches Vimeo's private link format, return the full url.
       if (
         embedObj.match(
-          /^https?:\/\/(www\.)?vimeo.com\/([0-9]*)(\/[a-zA-Z0-9]+)$/
+          /^https?:\/\/(www\.)?vimeo.com\/([0-9]*)(\/[a-zA-Z0-9]+)$/,
         )
       ) {
         return embedObj;
@@ -98,7 +98,7 @@ export default {
     playerReadied(player) {
       const timecode = this.media.field_media_video_embed_field.substring(
         this.media.field_media_video_embed_field.lastIndexOf('#t=') + 3,
-        this.media.field_media_video_embed_field.lastIndexOf('s')
+        this.media.field_media_video_embed_field.lastIndexOf('s'),
       );
       if (!Number.isNaN(timecode)) {
         const timecodeInSeconds = parseInt(timecode, 10);
@@ -110,7 +110,7 @@ export default {
       if (this.player === 'vimeo') {
         const timecode = this.media.field_media_video_embed_field.substring(
           this.media.field_media_video_embed_field.lastIndexOf('#t=') + 3,
-          this.media.field_media_video_embed_field.lastIndexOf('s')
+          this.media.field_media_video_embed_field.lastIndexOf('s'),
         );
         if (!Number.isNaN(timecode)) {
           const timecodeInSeconds = parseInt(timecode, 10);
