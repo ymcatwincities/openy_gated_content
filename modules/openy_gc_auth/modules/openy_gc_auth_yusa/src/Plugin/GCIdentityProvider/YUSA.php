@@ -163,6 +163,24 @@ class YUSA extends GCIdentityProviderPluginBase {
       '#default_value' => $config['enable_recaptcha'],
     ];
 
+    $form['require_recaptcha_configuration'] = [
+      '#type' => 'container',
+      'message' => [
+        '#type' => 'markup',
+        '#markup' => $this->t('Please, verify the <a href="@recaptcha_settings_link">Simple Recaptcha</a> has the Site key and Secret key configured for the chosen reCaptcha type.', [
+          '@recaptcha_settings_link' => Url::fromRoute('simple_recaptcha.settings')->toString(),
+        ]),
+      ],
+      '#attributes' => [
+        'class' => ['messages', 'messages--warning'],
+      ],
+      '#states' => [
+        'visible' => [
+          ':input[name="enable_recaptcha"]' => ['checked' => TRUE],
+        ],
+      ],
+    ];
+
     $form['verification'] = [
       '#type' => 'details',
       '#title' => $this->t('Email verification'),

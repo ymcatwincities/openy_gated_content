@@ -9,6 +9,7 @@
         <div class="video gated-containerV2 px--20-10 pt-40-20">
           <MediaPlayer
             :media="media"
+            :autoplay="config.components.live_stream.autoplay_videos"
             @playerEvent="logPlaybackEvent($event)"
           />
         </div>
@@ -56,8 +57,15 @@
             <div class="video-footer__block video-footer__category"
                  v-if="category && category.length > 0">
               <SvgIcon icon="categories" class="fill-gray" :growByHeight=false></SvgIcon>
-              <span v-for="(category_data, index) in category"
-                    :key="index">{{ category_data.name }}</span>
+              <ul>
+                <li
+                  v-for="tid in category.map(item => item.drupal_internal__tid)"
+                  class="video-footer__category-list-item"
+                  :key="tid"
+                >
+                  <CategoryLinks :tid="tid" />
+                </li>
+              </ul>
             </div>
             <div
               v-if="video.attributes.equipment.length > 0"
@@ -97,6 +105,7 @@ import Spinner from '@/components/Spinner.vue';
 import MediaPlayer from '@/components/MediaPlayer.vue';
 import EventListing from '@/components/event/EventListing.vue';
 import AddToCalendar from '@/components/event/AddToCalendar.vue';
+import CategoryLinks from '@/components/category/CategoryLinks.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
 import { EventMixin } from '@/mixins/EventMixin';
 import { SeriesEventMixin } from '@/mixins/SeriesEventMixin';
@@ -112,6 +121,7 @@ export default {
     EventListing,
     AddToCalendar,
     Spinner,
+    CategoryLinks,
   },
   props: {
     id: {

@@ -27,8 +27,10 @@
     <button
       v-else
       class="indigo-button cachet-book-30-24 text-white px-36-24"
-      @click="toggleShowJoinOptionsModal"
+      @click="toggleShowUserNameModal"
     >Join meeting</button>
+
+    <UserName></UserName>
   </div>
 </template>
 
@@ -36,9 +38,10 @@
 import { mapActions, mapGetters } from 'vuex';
 import JoinOptions from '@/components/personal-training/modal/JoinOptions.vue';
 import DeviceManager from '@/components/personal-training/modal/deviceManager.vue';
+import UserName from '@/components/personal-training/modal/UserName.vue';
 
 export default {
-  components: { DeviceManager, JoinOptions },
+  components: { DeviceManager, JoinOptions, UserName },
   computed: {
     ...mapGetters([
       'isMeetingComplete',
@@ -49,7 +52,7 @@ export default {
   },
   methods: {
     ...mapActions([
-      'toggleShowJoinOptionsModal',
+      'toggleShowUserNameModal',
     ]),
   },
 };

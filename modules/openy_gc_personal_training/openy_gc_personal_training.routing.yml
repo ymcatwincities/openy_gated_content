@@ -6,7 +6,7 @@ openy_gc_personal_training.provider.edit:
   requirements:
     _permission: 'administer gated content configuration'
 
-openy_gc_personal_training.settings:
+personal_training.settings:
   path: '/admin/virtual-y/personal_training/settings'
   defaults:
     _form: '\Drupal\openy_gc_personal_training\Form\PersonalTrainingSettingsForm'
@@ -29,5 +29,29 @@ openy_gc_personal_training.load_customer_peer:
     _controller: '\Drupal\openy_gc_personal_training\Controller\PeerController::loadCustomerPeer'
     _title: 'Load Customer Peer'
   requirements:
+    _permission: 'access content'
+    _role: 'authenticated'
+
+openy_gc_personal_training.get_user_name:
+  path: '/personal-training/get-user-name'
+  methods: [GET]
+  defaults:
+    _controller: '\Drupal\openy_gc_personal_training\Controller\UserController::getName'
+    _title: 'Get user name'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+    _format: 'json'
+    _permission: 'access content'
+    _role: 'authenticated'
+
+openy_gc_personal_training.update_user_name:
+  path: '/personal-training/update-user-name'
+  methods: [POST]
+  defaults:
+    _controller: '\Drupal\openy_gc_personal_training\Controller\UserController::updateName'
+    _title: 'Update user name'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+    _format: 'json'
     _permission: 'access content'
     _role: 'authenticated'

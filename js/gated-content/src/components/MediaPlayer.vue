@@ -9,15 +9,15 @@
         url: media.field_media_video_embed_field,
       }"
       :player-vars="handleAttributes()"
-      @loaded="setTimeCode()"
+      :autoplay="autoplay"
+      @loaded="handleLoaded()"
+      @ready="handleReady()"
       @play="handlePlay()"
       @pause="handlePause()"
       @ended="handleEnded()"
-      @ready="playerReadied($event)"
     />
   </div>
 </template>
-
 <script>
 import VueVideoWrapper from "vue-video-wrapper";
 

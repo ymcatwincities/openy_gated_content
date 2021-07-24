@@ -1,16 +1,12 @@
 <template>
   <div class="meeting-player" :class="view">
-    <div class="partner-media-state">
-      <SvgIcon
-        v-if="partnerMediaStream && !partnerMicEnabled"
-        icon="mic_off_black_24dp"
-        class="fill-white"></SvgIcon>
-      <SvgIcon
-        v-if="partnerMediaStream && !partnerCamEnabled"
-        icon="videocam_off_black_24dp"
-        class="fill-white"></SvgIcon>
-    </div>
     <div class="video-wrapper partner" :class="{connected: partnerMediaStream !== null}">
+      <AudioIndicator
+        v-if="partnerMediaStream"
+        :media-stream="partnerMediaStream"
+        :mic-enabled="partnerMicEnabled"
+      />
+      <VideoIndicator v-if="partnerMediaStream" :cam-enabled="partnerCamEnabled" />
       <video
         :key="partnerMediaStream === null"
         :srcObject.prop="partnerMediaStream ? partnerMediaStream : ''"
@@ -20,6 +16,8 @@
       </video>
     </div>
     <div class="video-wrapper local" :class="{connected: localMediaStream !== null}">
+      <AudioIndicator :media-stream="localMediaStream" :mic-enabled="isMicEnabled" />
+      <VideoIndicator v-if="localMediaStream" :cam-enabled="isCameraEnabled" />
       <video
         :key="localMediaStream === null"
         :srcObject.prop="localMediaStream ? localMediaStream : ''"
@@ -34,10 +32,11 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import SvgIcon from '@/components/SvgIcon.vue';
+import AudioIndicator from '@/components/personal-training/meeting/AudioIndicator.vue';
+import VideoIndicator from '@/components/personal-training/meeting/VideoIndicator.vue';
 
 export default {
-  components: { SvgIcon },
+  components: { AudioIndicator, VideoIndicator },
   data() {
     return {
       intervalId: 0,
@@ -46,6 +45,8 @@ export default {
   computed: {
     ...mapGetters([
       'view',
+      'isMicEnabled',
+      'isCameraEnabled',
       'localMediaStream',
       'partnerMediaStream',
       'partnerCamEnabled',

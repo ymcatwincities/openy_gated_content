@@ -12,6 +12,7 @@ use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\Core\Url;
 use Drupal\openy_gc_auth\GCUserAuthorizer;
 use Drupal\openy_gc_auth_reclique\RecliqueClientService;
+use Drupal\simple_recaptcha\SimpleReCaptchaFormManager;
 use Drupal\user\Entity\User;
 use GuzzleHttp\Client;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -81,6 +82,13 @@ class VirtualYReCliqueLoginForm extends FormBase {
   protected $gcUserAuthorizer;
 
   /**
+   * Form manager service from simple_recaptcha module.
+   *
+   * @var \Drupal\simple_recaptcha\SimpleReCaptchaFormManager
+   */
+  protected $reCaptchaFormManager;
+
+  /**
    * RecliqueClientService client service.
    *
    * @var \Drupal\openy_gc_auth_reclique\RecliqueClientService
@@ -99,6 +107,7 @@ class VirtualYReCliqueLoginForm extends FormBase {
     PrivateTempStoreFactory $private_temp_store,
     Client $client,
     GCUserAuthorizer $gcUserAuthorizer,
+    SimpleReCaptchaFormManager $reCaptchaFormManager,
     RecliqueClientService $recliqueClientService
   ) {
     $this->currentRequest = $requestStack->getCurrentRequest();
@@ -109,6 +118,7 @@ class VirtualYReCliqueLoginForm extends FormBase {
     $this->privateTempStore = $private_temp_store->get('openy_gc_auth.provider.reclique');
     $this->client = $client;
     $this->gcUserAuthorizer = $gcUserAuthorizer;
+    $this->reCaptchaFormManager = $reCaptchaFormManager;
     $this->recliqueClientService = $recliqueClientService;
   }
 
@@ -125,6 +135,7 @@ class VirtualYReCliqueLoginForm extends FormBase {
       $container->get('tempstore.private'),
       $container->get('http_client'),
       $container->get('openy_gc_auth.user_authorizer'),
+      $container->get('simple_recaptcha.form_manager'),
       $container->get('openy_gc_auth_reclique_client')
     );
   }
@@ -162,17 +173,13 @@ class VirtualYReCliqueLoginForm extends FormBase {
       '#required' => TRUE,
     ];
 
-    if ($provider_config->get('enable_recaptcha')) {
-      $form['captcha'] = [
-        '#type' => 'captcha',
-        '#captcha_type' => 'recaptcha/reCAPTCHA',
-        '#captcha_validate' => 'recaptcha_captcha_validation',
-      ];
-    }
-
     $form['actions'] = [
       '#type' => 'actions',
     ];
+
+    if ($provider_config->get('enable_recaptcha')) {
+      $this->reCaptchaFormManager->addReCaptchaCheckbox($form, $this->getFormId());
+    }
 
     $form['actions']['submit'] = [
       '#type' => 'submit',

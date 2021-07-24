@@ -1,0 +1,25 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.personal_training.field_exclusions
+    - openy_gc_personal_training.type.training_series
+  module:
+    - datalayer
+    - datetime_range
+third_party_settings:
+  datalayer:
+    expose: 0
+    label: field_exclusions
+id: personal_training.training_series.field_exclusions
+field_name: field_exclusions
+entity_type: personal_training
+bundle: training_series
+label: Exclusions
+description: 'A field that identifies dates that would normally have an instance of the session but won’t. Supports multiple values.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: daterange
