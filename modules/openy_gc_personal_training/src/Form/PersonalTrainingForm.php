@@ -45,6 +45,8 @@ class PersonalTrainingForm extends ContentEntityForm {
         ':input[name="training_type"]' => ['value' => 'link'],
       ],
     ];
+    $result = \Drupal::entityTypeManager()->getDefinitions();
+    $i=0;
 
     $groups = [
       'info' => [

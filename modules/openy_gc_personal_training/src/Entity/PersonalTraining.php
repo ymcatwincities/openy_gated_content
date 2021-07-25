@@ -330,6 +330,19 @@ class PersonalTraining extends ContentEntityBase implements PersonalTrainingInte
       ->setReadOnly(TRUE)
       ->setDefaultValue('personal_training');
 
+    $fields['state'] = BaseFieldDefinition::create('state')
+      ->setLabel(t('State'))
+      ->setDescription(t('The personal training state.'))
+      ->setRequired(TRUE)
+      ->setSetting('max_length', 255)
+      ->setSetting('workflow', 'personal_training_default')
+      ->setDefaultValue('planned')
+      ->setDisplayOptions('form', [
+        'type' => 'options_select',
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
     return $fields;
   }
 

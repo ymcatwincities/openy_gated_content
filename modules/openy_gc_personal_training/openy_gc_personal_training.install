@@ -122,3 +122,29 @@ function openy_gc_personal_training_update_8004(&$sandbox) {
     }
   }
 }
+
+/**
+ * Add "State" field to "Personal Training" entity.
+ */
+function openy_gc_personal_training_update_8005($sandbox) {
+  $state_field_storage_definition = BaseFieldDefinition::create('state')
+    ->setLabel(t('State'))
+    ->setDescription(t('The personal training state.'))
+    ->setRequired(TRUE)
+    ->setSetting('max_length', 255)
+    ->setSetting('workflow', 'personal_training_default')
+    ->setDefaultValue('planned')
+    ->setDisplayOptions('form', [
+      'type' => 'options_select',
+    ])
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayConfigurable('view', TRUE);
+
+  \Drupal::entityDefinitionUpdateManager()
+    ->installFieldStorageDefinition(
+      'state',
+      'personal_training',
+      'personal_training',
+      $state_field_storage_definition
+    );
+}
