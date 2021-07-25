@@ -148,3 +148,17 @@ function openy_gc_personal_training_update_8005($sandbox) {
       $state_field_storage_definition
     );
 }
+
+/**
+ * Revoke permission "delete personal training entities" from virtual trainer.
+ */
+function openy_gc_personal_training_update_8006(&$sandbox) {
+  $configuration = \Drupal::configFactory()->getEditable('user.role.virtual_trainer');
+  $permissions = $configuration->get('permissions');
+
+  $index = array_search('delete personal training entities', $permissions, TRUE);
+  if ($index !== FALSE) {
+    unset($permissions[$index]);
+    $configuration->set('permissions', $permissions)->save();
+  }
+}
