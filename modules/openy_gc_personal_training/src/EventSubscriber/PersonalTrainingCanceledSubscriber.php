@@ -105,9 +105,19 @@ class PersonalTrainingCanceledSubscriber implements EventSubscriberInterface {
   public function onPersonalTrainingCanceledTransition(WorkflowTransitionEvent $event) {
     /** @var \Drupal\openy_gc_personal_training\Entity\PersonalTrainingInterface $personal_training */
     $personal_training = $event->getEntity();
+
+    // @TODO: Check if personal training has field_parent. Notify customer only
+    // when it has no parent. Otherwise multiple notifications are going to be
+    // sent.
     $this->notifyCustomer($personal_training);
-    // @todo: cancel all related personal trainings when training series is
-    // canceled.
+
+    if ($personal_training->bundle() === 'training_series') {
+      /* @see \Drupal\openy_gc_personal_training\PersonalTrainingSeriesOperations::trainingCancel() */
+      $this->personalTrainingSeriesManager->buildBatch(
+        $personal_training->id(),
+        ['cancelItemsOfSeries']
+      );
+    }
   }
 
   /**
@@ -178,8 +188,7 @@ class PersonalTrainingCanceledSubscriber implements EventSubscriberInterface {
     $timezone = date_default_timezone_get();
 
     $meeting_start_date = '';
-    // @todo: Consider taking start date - end date from training series bundle.
-    if ($personal_training->bundle() == 'personal_training') {
+    if ($personal_training->bundle() === 'personal_training') {
       $startDt = DrupalDateTime::createFromFormat(
         DateTimeItemInterface::DATETIME_STORAGE_FORMAT,
         $personal_training->get('date')->value,
@@ -187,6 +196,12 @@ class PersonalTrainingCanceledSubscriber implements EventSubscriberInterface {
       );
       $startDt->setTimezone(timezone_open($timezone));
       $meeting_start_date = $startDt->format('r');
+    }
+    elseif ($personal_training->bundle() === 'training_series') {
+      $dates = $this->personalTrainingSeriesManager->getTrainingsDates($personal_training);
+      $formatted_start_date = $dates['start']->format('r');
+      $formatted_end_date = $dates['end']->format('r');
+      $meeting_start_date = "$formatted_start_date - $formatted_end_date";
     }
 
     $personal_training_settings = $this->configFactory->get('openy_gc_personal_training.settings');
