@@ -105,6 +105,13 @@ class PersonalTraining extends ContentEntityBase implements PersonalTrainingInte
   /**
    * {@inheritdoc}
    */
+  public function getState() {
+    return $this->get('state')->first();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
     $fields = parent::baseFieldDefinitions($entity_type);
 
