@@ -3,9 +3,9 @@
 namespace Drupal\openy_gc_personal_training\EventSubscriber;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\openy_gc_auth\GCIdentityProviderManager;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Mail\MailManagerInterface;
-use Drupal\openy_gc_auth\GCIdentityProviderManager;
 use Drupal\openy_gc_personal_training\Entity\PersonalTrainingInterface;
 use Drupal\openy_gc_personal_training\PersonalTrainingSeriesManagerInterface;
 use Drupal\state_machine\Event\WorkflowTransitionEvent;
