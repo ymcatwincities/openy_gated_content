@@ -110,7 +110,8 @@ function openy_gated_content_preprocess_paragraph(&$variables) {
  * if gated_content paragraph is used on page.
  */
 function openy_gated_content_preprocess_html(&$variables) {
-  if ($node = \Drupal::routeMatch()->getParameter('node')) {
+  $node = \Drupal::routeMatch()->getParameter('node');
+  if ($node instanceof \Drupal\node\NodeInterface) {
     if ($node->hasField('field_content')) {
       foreach ($node->field_content as $field_item) {
         if ($field_item->entity->bundle() === 'gated_content') {
