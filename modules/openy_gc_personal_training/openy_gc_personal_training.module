@@ -9,10 +9,11 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\openy_gated_content\VyFavoriteItemsManager;
+use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 use Drupal\openy_gc_personal_training\Entity\PersonalTrainingInterface;
-use Drupal\openy_gc_personal_training\PersonalTrainingItemsOperations;
 use Drupal\openy_gc_personal_training\PersonalTrainingSeriesOperations;
+use Drupal\Core\Render\BubbleableMetadata;
+use Drupal\user\UserInterface;
 
 /**
  * Implements hook_preprocess_html().
@@ -161,12 +162,151 @@ function openy_gc_personal_training_mail($key, &$message, $params) {
   switch ($key) {
     case 'openy_gc_personal_training_notify':
       $message['from'] = \Drupal::config('system.site')->get('mail');
-      $message['subject'] = $params['subject'];
-      $map = [
-        '%meeting_title%' => $params['meeting_title'],
-        '%meeting_start_date%' => $params['meeting_start_date'],
-      ];
-      $message['body'][] = str_replace(array_keys($map), array_values($map), $params['message']);
+
+      if (
+        isset($params['personal_training'])
+        && $params['personal_training'] instanceof PersonalTrainingInterface
+      ) {
+        $token = \Drupal::token();
+        $personal_training = $params['personal_training'];
+        $instructor = $personal_training->get('instructor_id')->entity;
+        $customer = $personal_training->get('customer_id')->entity;
+
+        $data = [
+          'personal_training' => $params['personal_training'],
+          'personal_training_instructor' => $instructor,
+          'personal_training_customer' => $customer,
+        ];
+        $message['subject'] = $token->replace($params['subject'], $data);
+        $message['body'][] = $token->replace($params['message'], $data);
+      }
       break;
   }
+}
+
+/**
+ * Implements hook_token_info().
+ */
+function openy_gc_personal_training_token_info() {
+  $info = [];
+
+  $info['types'] = [
+    'personal-training' => [
+      'name' => t('Personal Training'),
+      'description' => t('Tokens taken from personal training entity.'),
+      'needs-data' => ['personal_training'],
+    ],
+    'personal-training-instructor' => [
+      'name' => t('Personal Training Instructor'),
+      'description' => t('Tokens taken from personal training instructor.'),
+      'needs-data' => ['personal_training_instructor'],
+    ],
+    'personal-training-customer' => [
+      'name' => t('Personal Training Customer'),
+      'description' => t('Tokens taken from personal training customer.'),
+      'needs-data' => ['personal_training_customer'],
+    ],
+  ];
+
+  $info['tokens'] = [
+    'personal-training' => [
+      'title' => [
+        'name' => t('Personal Training title'),
+        'description' => t('Title of the personal training'),
+      ],
+      'start-date' => [
+        'name' => t('Personal Training start date'),
+        'description' => t('Date when the personal training begins, format is RFC-2822; Example: Thu, 21 Dec 2000 16:01:07 +0200'),
+      ],
+    ],
+    'personal-training-instructor' => [
+      'name' => [
+        'name' => t('Instructor name'),
+        'description' => t('Name of the instructor conducting the personal training.'),
+      ],
+    ],
+    'personal-training-customer' => [
+      'name' => [
+        'name' => t('Customer name'),
+        'description' => t('Name of the customer of the personal training.'),
+      ],
+    ],
+  ];
+
+  return $info;
+}
+
+/**
+ * Implements hook_tokens().
+ */
+function openy_gc_personal_training_tokens($type, $tokens, array $data, array $options, BubbleableMetadata $bubbleable_metadata) {
+  $replacements = [];
+
+  if (
+    $type === 'personal-training'
+    && !empty($data['personal_training'])
+    && $data['personal_training'] instanceof PersonalTrainingInterface
+  ) {
+    foreach ($tokens as $name => $original) {
+      switch ($name) {
+        case 'title':
+          $replacements[$original] = $data['personal_training']->get('title')->value;
+          break;
+
+        case 'start-date':
+          $personal_training = $data['personal_training'];
+          $timezone = date_default_timezone_get();
+
+          $meeting_start_date = '';
+          if ($personal_training->bundle() === 'personal_training') {
+            $startDt = DrupalDateTime::createFromFormat(
+              DateTimeItemInterface::DATETIME_STORAGE_FORMAT,
+              $personal_training->get('date')->value,
+              DateTimeItemInterface::STORAGE_TIMEZONE
+            );
+            $startDt->setTimezone(timezone_open($timezone));
+            $meeting_start_date = $startDt->format('r');
+          }
+          elseif ($personal_training->bundle() === 'training_series') {
+            $dates = \Drupal::service('personal_training_series.manager')->getTrainingsDates($personal_training);
+            $formatted_start_date = $dates['start']->format('r');
+            $formatted_end_date = $dates['end']->format('r');
+            $meeting_start_date = "$formatted_start_date - $formatted_end_date";
+          }
+
+          $replacements[$original] = $meeting_start_date;
+          break;
+      }
+    }
+  }
+
+  if (
+    $type === 'personal-training-instructor'
+    && !empty($data['personal_training_instructor'])
+    && $data['personal_training_instructor'] instanceof UserInterface
+  ) {
+    foreach ($tokens as $name => $original) {
+      switch ($name) {
+        case 'name':
+          $replacements[$original] = $data['personal_training_instructor']->getDisplayName();
+          break;
+      }
+    }
+  }
+
+  if (
+    $type === 'personal-training-customer'
+    && !empty($data['personal_training_customer'])
+    && $data['personal_training_customer'] instanceof UserInterface
+  ) {
+    foreach ($tokens as $name => $original) {
+      switch ($name) {
+        case 'name':
+          $replacements[$original] = $data['personal_training_customer']->getDisplayName();
+          break;
+      }
+    }
+  }
+
+  return $replacements;
 }

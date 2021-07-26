@@ -156,7 +156,7 @@ class PersonalTrainingSettingsForm extends ConfigFormBase {
 
     $form['notifications_settings']['delete'] = [
       '#type' => 'fieldset',
-      '#title' => $this->t('Meeting delete'),
+      '#title' => $this->t('Meeting canceled'),
     ];
 
     $form['notifications_settings']['delete']['meeting_delete_subject'] = [
@@ -169,7 +169,16 @@ class PersonalTrainingSettingsForm extends ConfigFormBase {
     $form['notifications_settings']['delete']['meeting_delete_message'] = [
       '#type' => 'text_format',
       '#title' => $this->t('Email message'),
-      '#description' => $this->t('Available tokens: %meeting_title%, %meeting_start_date%'),
+      '#description' => [
+        '#theme'       => 'token_tree_link',
+        '#text'        => $this->t('Browse available tokens'),
+        '#token_types' => [
+          'personal-training',
+          'personal-training-instructor',
+          'personal-training-customer',
+        ],
+        '#element_validate' => ['token_element_validate'],
+      ],
       '#default_value' => $config->get('meeting_delete_message'),
       '#required' => TRUE,
     ];

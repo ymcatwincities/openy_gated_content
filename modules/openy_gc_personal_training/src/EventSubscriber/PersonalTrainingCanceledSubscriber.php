@@ -11,6 +11,7 @@ use Drupal\openy_gc_auth\GCIdentityProviderManager;
 use Drupal\openy_gc_personal_training\Entity\PersonalTrainingInterface;
 use Drupal\openy_gc_personal_training\PersonalTrainingSeriesManagerInterface;
 use Drupal\state_machine\Event\WorkflowTransitionEvent;
+use Drupal\Core\Utility\Token;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -152,6 +153,7 @@ class PersonalTrainingCanceledSubscriber implements EventSubscriberInterface {
     $virtual_y_config = $this->configFactory->get('openy_gc_auth.settings');
     $active_provider = $virtual_y_config->get('active_provider');
     $this->authManager->getDefinition($virtual_y_config->get('active_provider'), TRUE);
+    /** @var \Drupal\openy_gc_auth\GCIdentityProviderPluginBase $plugin_instance */
     $plugin_instance = $this->authManager->createInstance($active_provider);
     return $plugin_instance->getMemberNotificationEmail($uid);
   }
@@ -181,36 +183,15 @@ class PersonalTrainingCanceledSubscriber implements EventSubscriberInterface {
    *   Prepared array of parameters used for email to be sent. The keys are:
    *     - subject: email subject;
    *     - message: the actual mail message;
-   *     - meeting_title: title of the personal training entity canceled;
-   *     - meeting_start_date: date of the personal training canceled.
+   *     - personal_training: Personal Training entity;
    */
   protected function prepareMailParams(PersonalTrainingInterface $personal_training) {
-    $timezone = date_default_timezone_get();
-
-    $meeting_start_date = '';
-    if ($personal_training->bundle() === 'personal_training') {
-      $startDt = DrupalDateTime::createFromFormat(
-        DateTimeItemInterface::DATETIME_STORAGE_FORMAT,
-        $personal_training->get('date')->value,
-        DateTimeItemInterface::STORAGE_TIMEZONE
-      );
-      $startDt->setTimezone(timezone_open($timezone));
-      $meeting_start_date = $startDt->format('r');
-    }
-    elseif ($personal_training->bundle() === 'training_series') {
-      $dates = $this->personalTrainingSeriesManager->getTrainingsDates($personal_training);
-      $formatted_start_date = $dates['start']->format('r');
-      $formatted_end_date = $dates['end']->format('r');
-      $meeting_start_date = "$formatted_start_date - $formatted_end_date";
-    }
-
     $personal_training_settings = $this->configFactory->get('openy_gc_personal_training.settings');
 
     return [
       'subject' => $personal_training_settings->get('meeting_delete_subject'),
       'message' => $personal_training_settings->get('meeting_delete_message'),
-      'meeting_title' => $personal_training->get('title')->value,
-      'meeting_start_date' => $meeting_start_date,
+      'personal_training' => $personal_training,
     ];
   }
 
