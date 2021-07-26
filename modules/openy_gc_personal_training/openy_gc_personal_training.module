@@ -144,17 +144,6 @@ function openy_gc_personal_training_personal_training_update(PersonalTrainingInt
 }
 
 /**
- * Implements hook_ENTITY_TYPE_delete() for personal_training entities.
- */
-function openy_gc_personal_training_personal_training_delete(PersonalTrainingInterface $personal_training) {
-  if ($personal_training->bundle() === 'training_series') {
-    \Drupal::service('class_resolver')
-      ->getInstanceFromDefinition(PersonalTrainingSeriesOperations::class)
-      ->entityDelete($personal_training);
-  }
-}
-
-/**
  * Implements hook_theme().
  */
 function openy_gc_personal_training_theme($existing, $type, $theme, $path) {

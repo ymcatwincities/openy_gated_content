@@ -86,7 +86,7 @@ class PersonalTrainingCanceledSubscriber implements EventSubscriberInterface {
    */
   public static function getSubscribedEvents() {
     return [
-      'personal_training.canceled.post_transition' => 'onPersonalTrainingCanceledTransition',
+      'personal_training.cancel.post_transition' => 'onPersonalTrainingCancelTransition',
     ];
   }
 
@@ -102,7 +102,7 @@ class PersonalTrainingCanceledSubscriber implements EventSubscriberInterface {
    * @throws \Drupal\Component\Plugin\Exception\PluginException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function onPersonalTrainingCanceledTransition(WorkflowTransitionEvent $event) {
+  public function onPersonalTrainingCancelTransition(WorkflowTransitionEvent $event) {
     /** @var \Drupal\openy_gc_personal_training\Entity\PersonalTrainingInterface $personal_training */
     $personal_training = $event->getEntity();
 

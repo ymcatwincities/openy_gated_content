@@ -1,6 +1,6 @@
 personal_training_default:
   id: personal_training_default
-  label: "Default"
+  label: Default
   group: personal_training
   states:
     planned:
