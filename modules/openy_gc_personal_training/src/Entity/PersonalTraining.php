@@ -341,7 +341,6 @@ class PersonalTraining extends ContentEntityBase implements PersonalTrainingInte
       ->setLabel(t('State'))
       ->setDescription(t('The personal training state.'))
       ->setRequired(TRUE)
-      ->setSetting('max_length', 255)
       ->setSetting('workflow', 'personal_training_default')
       ->setDefaultValue('planned')
       ->setDisplayOptions('form', [

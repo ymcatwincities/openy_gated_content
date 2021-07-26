@@ -14,7 +14,7 @@ personal_training_default:
     schedule:
       label: Schedule
       from: [planned]
-      to:   scheduled
+      to: scheduled
     reschedule:
       label: Reschedule
       from: [canceled]
@@ -22,4 +22,4 @@ personal_training_default:
     cancel:
       label: Cancel
       from: [planned, scheduled]
-      to:   canceled
+      to: canceled
