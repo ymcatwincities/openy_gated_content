@@ -189,8 +189,8 @@ class PersonalTrainingCanceledSubscriber implements EventSubscriberInterface {
     $personal_training_settings = $this->configFactory->get('openy_gc_personal_training.settings');
 
     return [
-      'subject' => $personal_training_settings->get('meeting_delete_subject'),
-      'message' => $personal_training_settings->get('meeting_delete_message'),
+      'subject' => $personal_training_settings->get('meeting_cancel_subject'),
+      'message' => $personal_training_settings->get('meeting_cancel_message'),
       'personal_training' => $personal_training,
     ];
   }
