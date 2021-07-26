@@ -162,6 +162,7 @@ class PersonalTrainingSettingsForm extends ConfigFormBase {
     $form['notifications_settings']['delete']['meeting_cancel_subject'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Email subject'),
+      '#description' => $this->t('This field supports tokens. Please, refer to the "Browse available tokens" link below.'),
       '#default_value' => $config->get('meeting_cancel_subject'),
       '#required' => TRUE,
     ];
