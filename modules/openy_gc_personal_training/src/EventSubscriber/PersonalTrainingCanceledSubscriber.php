@@ -3,15 +3,12 @@
 namespace Drupal\openy_gc_personal_training\EventSubscriber;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Language\LanguageManagerInterface;
-use Drupal\Core\Mail\MailManagerInterface;
-use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 use Drupal\openy_gc_auth\GCIdentityProviderManager;
+use Drupal\Core\Mail\MailManagerInterface;
 use Drupal\openy_gc_personal_training\Entity\PersonalTrainingInterface;
 use Drupal\openy_gc_personal_training\PersonalTrainingSeriesManagerInterface;
 use Drupal\state_machine\Event\WorkflowTransitionEvent;
-use Drupal\Core\Utility\Token;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -107,7 +104,7 @@ class PersonalTrainingCanceledSubscriber implements EventSubscriberInterface {
     /** @var \Drupal\openy_gc_personal_training\Entity\PersonalTrainingInterface $personal_training */
     $personal_training = $event->getEntity();
 
-    // @TODO: Check if personal training has field_parent. Notify customer only
+    // @todo Check if personal training has field_parent. Notify customer only
     // when it has no parent. Otherwise multiple notifications are going to be
     // sent.
     $this->notifyCustomer($personal_training);
