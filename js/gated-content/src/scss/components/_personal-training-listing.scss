@@ -1,6 +1,13 @@
 .personal-training-teaser {
-  >a .info {
-    .private {
+  > a .info {
+    .canceled {
+      @extend .private;
+      margin-left:      15px;
+      border-color:     $red;
+      background-color: $red;
+    }
+
+    .private, .canceled {
       color: $white;
     }
   }
