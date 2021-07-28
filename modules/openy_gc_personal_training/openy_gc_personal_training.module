@@ -12,7 +12,6 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 use Drupal\openy_gated_content\VyFavoriteItemsManager;
 use Drupal\openy_gc_personal_training\Entity\PersonalTrainingInterface;
-use Drupal\openy_gc_personal_training\PersonalTrainingItemsOperations;
 use Drupal\openy_gc_personal_training\PersonalTrainingSeriesOperations;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\user\UserInterface;
@@ -153,13 +152,8 @@ function openy_gc_personal_training_personal_training_update(PersonalTrainingInt
 function openy_gc_personal_training_personal_training_delete(PersonalTrainingInterface $personal_training) {
   if ($personal_training->bundle() === 'personal_training') {
     \Drupal::service('class_resolver')
-      ->getInstanceFromDefinition(PersonalTrainingItemsOperations::class)
-      ->entityDelete($personal_training);
-
-    \Drupal::service('class_resolver')
       ->getInstanceFromDefinition(VyFavoriteItemsManager::class)
       ->deleteRelatedFavoriteItems($personal_training);
-
   }
   elseif ($personal_training->bundle() === 'training_series') {
     \Drupal::service('class_resolver')
