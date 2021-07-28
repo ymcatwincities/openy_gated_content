@@ -94,6 +94,7 @@ function openy_gc_personal_training_openy_gated_content_list_events_alter(&$resu
     $results[] = [
       'type' => 'personal_training',
       'bundle' => 'personal_training',
+      'state' => $item['state'],
       'id' => $item['id'],
       'uuid' => $item['uuid'],
       'title' => $item['title'],
