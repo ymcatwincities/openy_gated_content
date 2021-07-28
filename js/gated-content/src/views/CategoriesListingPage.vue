@@ -54,7 +54,6 @@
 
     <CategoriesListing
       :title="'none'"
-      :type="selectedType"
       :bundle="selectedBundle"
       :sort="sortData('taxonomy_term')"
       :limit="50"
@@ -83,21 +82,6 @@ export default {
     };
   },
   computed: {
-    selectedType() {
-      switch (this.selectedComponent) {
-        case 'gc_video':
-        case 'vy_blog_post':
-          return 'node';
-        case 'live_stream':
-        case 'virtual_meeting':
-          return 'eventinstance';
-        default:
-          return 'all';
-      }
-    },
-    selectedBundle() {
-      return this.selectedComponent === 'all' ? '' : this.selectedComponent;
-    },
     title() {
       if (this.selectedComponent === 'all' || typeof this.config.components[this.selectedComponent] === 'undefined') {
         return 'Categories';

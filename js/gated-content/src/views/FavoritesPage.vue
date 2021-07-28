@@ -174,7 +174,6 @@
         && (selectedComponent === 'gc_category' || selectedComponent === 'all')">
         <CategoriesListing
           :favorites="true"
-          :type="'all'"
           :sort="sortData('taxonomy_term')"
           :limit="viewAllContentMode ? 50 : itemsLimit"
         >
