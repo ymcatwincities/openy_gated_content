@@ -156,7 +156,6 @@ class PersonalTrainingSettingsForm extends ConfigFormBase {
 
     $form['notifications_settings']['delete'] = [
       '#type' => 'fieldset',
-
       '#title' => $this->t('Meeting canceled'),
     ];
 
