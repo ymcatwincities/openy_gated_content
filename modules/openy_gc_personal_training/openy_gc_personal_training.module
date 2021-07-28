@@ -265,12 +265,12 @@ function openy_gc_personal_training_tokens($type, $tokens, array $data, array $o
               DateTimeItemInterface::STORAGE_TIMEZONE
             );
             $startDt->setTimezone(timezone_open($timezone));
-            $meeting_start_date = $startDt->format('r');
+            $meeting_start_date = $startDt->format('D, d M Y H:i:s');
           }
           elseif ($personal_training->bundle() === 'training_series') {
             $dates = \Drupal::service('personal_training_series.manager')->getTrainingsDates($personal_training);
-            $formatted_start_date = $dates['start']->format('r');
-            $formatted_end_date = $dates['end']->format('r');
+            $formatted_start_date = $dates['start']->format('D, d M Y H:i:s');
+            $formatted_end_date = $dates['end']->format('D, d M Y H:i:s');
             $meeting_start_date = "$formatted_start_date - $formatted_end_date";
           }
 
