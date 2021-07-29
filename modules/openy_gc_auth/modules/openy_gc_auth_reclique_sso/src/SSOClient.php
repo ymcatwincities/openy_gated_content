@@ -179,8 +179,7 @@ class SSOClient {
    */
   public function prepareUserNameAndEmail($userData) {
     $name = "{$userData->member->FirstName} {$userData->member->LastName} {$userData->member->ID}";
-    $email = "reclique_sso-{$userData->member->ID}@virtualy.openy.org";
-    return [$name, $email];
+    return [$name, $userData->member->Email];
   }
 
   /**

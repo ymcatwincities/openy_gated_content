@@ -100,4 +100,14 @@ class PersonalTrainingSeriesOperations implements ContainerInjectionInterface {
     $this->personalTrainingSeriesManager->buildBatch($training_series->id(), ['deleteItemsOfSeries']);
   }
 
+  /**
+   * Prepare batch for canceling personal_training instances.
+   *
+   * @param \Drupal\openy_gc_personal_training\Entity\PersonalTrainingInterface $training_series
+   *   Personal training series whose instances have to be canceled.
+   */
+  public function trainingCancel(PersonalTrainingInterface $training_series) {
+    $this->personalTrainingSeriesManager->buildBatch($training_series->id(), ['cancelItemsOfSeries']);
+  }
+
 }

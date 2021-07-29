@@ -156,21 +156,31 @@ class PersonalTrainingSettingsForm extends ConfigFormBase {
 
     $form['notifications_settings']['delete'] = [
       '#type' => 'fieldset',
-      '#title' => $this->t('Meeting delete'),
+      '#title' => $this->t('Meeting canceled'),
     ];
 
-    $form['notifications_settings']['delete']['meeting_delete_subject'] = [
+    $form['notifications_settings']['delete']['meeting_cancel_subject'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Email subject'),
-      '#default_value' => $config->get('meeting_delete_subject'),
+      '#description' => $this->t('This field supports tokens. Please, refer to the "Browse available tokens" link below.'),
+      '#default_value' => $config->get('meeting_cancel_subject'),
       '#required' => TRUE,
     ];
 
-    $form['notifications_settings']['delete']['meeting_delete_message'] = [
+    $form['notifications_settings']['delete']['meeting_cancel_message'] = [
       '#type' => 'text_format',
       '#title' => $this->t('Email message'),
-      '#description' => $this->t('Available tokens: %meeting_title%, %meeting_start_date%'),
-      '#default_value' => $config->get('meeting_delete_message'),
+      '#description' => [
+        '#theme'       => 'token_tree_link',
+        '#text'        => $this->t('Browse available tokens'),
+        '#token_types' => [
+          'personal-training',
+          'personal-training-instructor',
+          'personal-training-customer',
+        ],
+        '#element_validate' => ['token_element_validate'],
+      ],
+      '#default_value' => $config->get('meeting_cancel_message'),
       '#required' => TRUE,
     ];
 
@@ -219,8 +229,8 @@ class PersonalTrainingSettingsForm extends ConfigFormBase {
     $settings->set('peerjs_turn_username', $form_state->getValue('peerjs_turn_username'));
 
     $settings->set('peerjs_debug', $form_state->getValue('peerjs_debug'));
-    $settings->set('meeting_delete_subject', $form_state->getValue('meeting_delete_subject'));
-    $settings->set('meeting_delete_message', $form_state->getValue('meeting_delete_message')['value']);
+    $settings->set('meeting_cancel_subject', $form_state->getValue('meeting_cancel_subject'));
+    $settings->set('meeting_cancel_message', $form_state->getValue('meeting_cancel_message')['value']);
 
     $settings->save();
     parent::submitForm($form, $form_state);
