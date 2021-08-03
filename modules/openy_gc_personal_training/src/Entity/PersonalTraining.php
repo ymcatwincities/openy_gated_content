@@ -105,6 +105,13 @@ class PersonalTraining extends ContentEntityBase implements PersonalTrainingInte
   /**
    * {@inheritdoc}
    */
+  public function getState() {
+    return $this->get('state')->first();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
     $fields = parent::baseFieldDefinitions($entity_type);
 
@@ -329,6 +336,18 @@ class PersonalTraining extends ContentEntityBase implements PersonalTrainingInte
       ->setRequired(TRUE)
       ->setReadOnly(TRUE)
       ->setDefaultValue('personal_training');
+
+    $fields['state'] = BaseFieldDefinition::create('state')
+      ->setLabel(t('State'))
+      ->setDescription(t('The personal training state.'))
+      ->setRequired(TRUE)
+      ->setSetting('workflow', 'personal_training_default')
+      ->setDefaultValue('planned')
+      ->setDisplayOptions('form', [
+        'type' => 'options_select',
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
 
     return $fields;
   }
