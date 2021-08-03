@@ -19,9 +19,10 @@
   </div>
 </template>
 <script>
-import VueVideoWrapper from "vue-video-wrapper";
+import VueVideoWrapper from 'vue-video-wrapper';
+
 export default {
-  name: "MediaPlayer",
+  name: 'MediaPlayer',
   data() {
     return {
       playbackLogged: false,
@@ -62,7 +63,7 @@ export default {
       // If the video matches Vimeo's private link format, return the full url.
       if (
         embedObj.match(
-          /^https?:\/\/(www\.)?vimeo.com\/([0-9]*)(\/[a-zA-Z0-9]+)$/
+          /^https?:\/\/(www\.)?vimeo.com\/([0-9]*)(\/[a-zA-Z0-9]+)$/,
         )
       ) {
         return embedObj;
@@ -103,7 +104,7 @@ export default {
       } else {
         this.playbackTimeout = setTimeout(
           () => this.logPlaybackStarted(),
-          60 * 1000
+          60 * 1000,
         );
       }
     },
