@@ -19,15 +19,16 @@
   </div>
 </template>
 <script>
-import VueVideoWrapper from 'vue-video-wrapper';
-
+import VueVideoWrapper from "vue-video-wrapper";
 export default {
-  name: 'MediaPlayer',
+  name: "MediaPlayer",
   data() {
     return {
       playbackLogged: false,
       playbackInProgress: false,
-      intervalId: 0,
+      logStartedEventImmediately: true,
+      activityIntervalId: 0,
+      playbackTimeout: 0,
     };
   },
   components: {
@@ -37,6 +38,10 @@ export default {
     media: {
       type: Object,
       required: true,
+    },
+    autoplay: {
+      type: Boolean,
+      default: false,
     },
   },
   watch: {
@@ -57,7 +62,7 @@ export default {
       // If the video matches Vimeo's private link format, return the full url.
       if (
         embedObj.match(
-          /^https?:\/\/(www\.)?vimeo.com\/([0-9]*)(\/[a-zA-Z0-9]+)$/,
+          /^https?:\/\/(www\.)?vimeo.com\/([0-9]*)(\/[a-zA-Z0-9]+)$/
         )
       ) {
         return embedObj;
@@ -72,56 +77,79 @@ export default {
     handlePlayerEvent(eventType) {
       this.$emit('playerEvent', eventType);
     },
-    handlePlay() {
-      this.playbackInProgress = true;
+    logPlaybackStarted() {
       if (this.playbackLogged) {
         return;
       }
       this.playbackLogged = true;
       this.handlePlayerEvent('videoPlaybackStarted');
     },
+    handleLoaded() {
+      this.setTimeCode();
+      if (!this.autoplay) {
+        this.$refs.player.pause();
+      }
+    },
+    handleReady() {
+      this.setTimeCode();
+      if (!this.autoplay) {
+        this.$refs.player.player.pauseVideo();
+      }
+    },
+    handlePlay() {
+      this.playbackInProgress = true;
+      if (this.logStartedEventImmediately) {
+        this.logPlaybackStarted();
+      } else {
+        this.playbackTimeout = setTimeout(
+          () => this.logPlaybackStarted(),
+          60 * 1000
+        );
+      }
+    },
     handleAttributes() {
       if (this.media.field_media_source === 'youtube') {
         return {
           rel: 0,
+          autoplay: this.autoplay,
         };
       }
       return false;
     },
     handlePause() {
       this.playbackInProgress = false;
+      this.logStartedEventImmediately = true;
+      clearTimeout(this.playbackTimeout);
     },
     handleEnded() {
       this.playbackInProgress = false;
       this.handlePlayerEvent('videoPlaybackEnded');
     },
-    playerReadied(player) {
-      const timecode = this.media.field_media_video_embed_field.substring(
-        this.media.field_media_video_embed_field.lastIndexOf('#t=') + 3,
-        this.media.field_media_video_embed_field.lastIndexOf('s'),
-      );
-      if (!Number.isNaN(timecode)) {
-        const timecodeInSeconds = parseInt(timecode, 10);
-        player.seekTo(timecodeInSeconds, true);
-        this.$refs.player.player.pauseVideo();
-      }
-    },
-    setTimeCode() {
-      if (this.player === 'vimeo') {
+    setTimeCode(player) {
+      if (this.player == 'vimeo') {
         const timecode = this.media.field_media_video_embed_field.substring(
           this.media.field_media_video_embed_field.lastIndexOf('#t=') + 3,
-          this.media.field_media_video_embed_field.lastIndexOf('s'),
+          this.media.field_media_video_embed_field.lastIndexOf('s')
         );
-        if (!Number.isNaN(timecode)) {
+        if (!isNaN(timecode)) {
           const timecodeInSeconds = parseInt(timecode, 10);
           this.$refs.player.player.setCurrentTime(timecodeInSeconds);
         }
+      } else {
+        const timecode = this.media.field_media_video_embed_field.substring(
+          this.media.field_media_video_embed_field.lastIndexOf('#t=') + 3,
+          this.media.field_media_video_embed_field.lastIndexOf('s')
+        );
+        if (!isNaN(timecode)) {
+          const timecodeInSeconds = parseInt(timecode, 10);
+          this.$refs.player.player.seekTo(timecodeInSeconds, true);
+        }
       }
-      this.$refs.player.pause();
     },
   },
   mounted() {
-    this.intervalId = setInterval(() => {
+    this.logStartedEventImmediately = !this.autoplay;
+    this.activityIntervalId = setInterval(() => {
       if (this.playbackInProgress) {
         this.$log.trackActivity({ path: this.$route.fullPath });
       }
@@ -132,7 +160,8 @@ export default {
     this.playbackInProgress = false;
   },
   beforeDestroy() {
-    clearInterval(this.intervalId);
+    clearInterval(this.activityIntervalId);
+    clearTimeout(this.playbackTimeout);
   },
 };
 </script>
