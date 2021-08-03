@@ -126,22 +126,22 @@ export default {
       this.playbackInProgress = false;
       this.handlePlayerEvent('videoPlaybackEnded');
     },
-    setTimeCode(player) {
-      if (this.player == 'vimeo') {
+    setTimeCode() {
+      if (this.player === 'vimeo') {
         const timecode = this.media.field_media_video_embed_field.substring(
           this.media.field_media_video_embed_field.lastIndexOf('#t=') + 3,
-          this.media.field_media_video_embed_field.lastIndexOf('s')
+          this.media.field_media_video_embed_field.lastIndexOf('s'),
         );
-        if (!isNaN(timecode)) {
+        if (!Number.isNaN(timecode)) {
           const timecodeInSeconds = parseInt(timecode, 10);
           this.$refs.player.player.setCurrentTime(timecodeInSeconds);
         }
       } else {
         const timecode = this.media.field_media_video_embed_field.substring(
           this.media.field_media_video_embed_field.lastIndexOf('#t=') + 3,
-          this.media.field_media_video_embed_field.lastIndexOf('s')
+          this.media.field_media_video_embed_field.lastIndexOf('s'),
         );
-        if (!isNaN(timecode)) {
+        if (!Number.isNaN(timecode)) {
           const timecodeInSeconds = parseInt(timecode, 10);
           this.$refs.player.player.seekTo(timecodeInSeconds, true);
         }
