@@ -14,6 +14,7 @@
         :style="{background: localMediaStream && isCameraEnabled ? 'none':''}"
       >
         <AudioIndicator
+          v-if="localMediaStream"
           :media-stream="localMediaStream"
           :mic-enabled="isMicEnabled"
         />
@@ -29,22 +30,20 @@
       </div>
       <div class="controls">
         <div class="mic"
-             :class="{enabled: isMicEnabled}"
+             :class="{enabled: localMediaStream && isMicEnabled}"
              @click="toggleMicEnabled"
         >
           <div>
-            <SvgIcon :icon="isMicEnabled ? 'mic_black_24dp':'mic_off_black_24dp'"
-                     class="fill-white"></SvgIcon>
+            <SvgIcon :icon="micIcon" class="fill-white"></SvgIcon>
           </div>
           <span>Microphone</span>
         </div>
         <div class="cam"
-             :class="{enabled: isCameraEnabled}"
+             :class="{enabled: localMediaStream && isCameraEnabled}"
              @click="toggleCameraEnabled"
         >
           <div>
-            <SvgIcon :icon="isCameraEnabled ? 'videocam_black_24dp':'videocam_off_black_24dp'"
-                     class="fill-white"></SvgIcon>
+            <SvgIcon :icon="cameraIcon" class="fill-white"></SvgIcon>
           </div>
           <span>Video Camera</span>
         </div>
@@ -98,6 +97,12 @@ export default {
       'isCameraEnabled',
       'localMediaStream',
     ]),
+    micIcon() {
+      return this.localMediaStream && this.isMicEnabled ? 'mic_black_24dp' : 'mic_off_black_24dp';
+    },
+    cameraIcon() {
+      return this.localMediaStream && this.isCameraEnabled ? 'videocam_black_24dp' : 'videocam_off_black_24dp';
+    },
   },
   methods: {
     ...mapActions([
