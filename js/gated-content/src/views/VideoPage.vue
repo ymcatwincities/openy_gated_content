@@ -96,6 +96,7 @@
 </template>
 
 <script>
+import dayjs from 'dayjs';
 import client from '@/client';
 import AddToFavorite from '@/components/AddToFavorite.vue';
 import Spinner from '@/components/Spinner.vue';
@@ -105,7 +106,6 @@ import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
 import { SettingsMixin } from '@/mixins/SettingsMixin';
 import SvgIcon from '@/components/SvgIcon.vue';
 import CategoryLinks from '@/components/category/CategoryLinks.vue';
-import dayjs from 'dayjs';
 
 export default {
   name: 'VideoPage',
