@@ -63,10 +63,10 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import BlogListing from '@/components/blog/BlogListing.vue';
 import { SettingsMixin } from '@/mixins/SettingsMixin';
 import { FilterAndSortMixin } from '@/mixins/FilterAndSortMixin';
-import { mapGetters } from 'vuex';
 
 export default {
   name: 'BlogsListingPage',

@@ -43,10 +43,10 @@
 </template>
 
 <script>
+import dayjs from 'dayjs';
 import Teaser from '@/components/Teaser.vue';
 import AddToFavorite from '@/components/AddToFavorite.vue';
 import SvgIcon from '@/components/SvgIcon.vue';
-import dayjs from 'dayjs';
 
 export default {
   name: 'VideoTeaser',

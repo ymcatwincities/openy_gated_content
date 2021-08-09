@@ -190,6 +190,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import client from '@/client';
 import Spinner from '@/components/Spinner.vue';
 import AddToFavorite from '@/components/AddToFavorite.vue';
@@ -200,7 +201,6 @@ import EventListing from '@/components/event/EventListing.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
 import { FilterAndSortMixin } from '@/mixins/FilterAndSortMixin';
 import { SettingsMixin } from '@/mixins/SettingsMixin';
-import { mapGetters } from 'vuex';
 
 export default {
   name: 'CategoryPage',

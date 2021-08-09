@@ -80,10 +80,10 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex';
 import AudioIndicator from '@/components/personal-training/meeting/AudioIndicator.vue';
 import VideoIndicator from '@/components/personal-training/meeting/VideoIndicator.vue';
 import Modal from '@/components/modal/Modal.vue';
-import { mapGetters, mapActions } from 'vuex';
 import SvgIcon from '@/components/SvgIcon.vue';
 
 export default {
