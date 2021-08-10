@@ -255,14 +255,14 @@ class SSOClient {
         ),
         [
           'headers' => [
-            'Authorization' => "Bearer " . $this->getAccessToken(),
+            'Authorization' => 'Bearer ' . $this->getAccessToken(),
           ],
           'query' => [
             'username' => $user_email,
           ],
         ]);
       $body = json_decode((string) $response->getBody(), FALSE);
-      if ($body->message !== "Success") {
+      if ($body->message !== 'Success') {
         $this->logger->error('The request for user membership data has not been successful.');
         return new \stdClass();
       }
@@ -299,7 +299,7 @@ class SSOClient {
         $request_uri,
         [
           'headers' => [
-            'Authorization' => "Bearer " . $this->getAccessToken(),
+            'Authorization' => 'Bearer ' . $this->getAccessToken(),
           ],
           'form_params' => [
             'memberBarcode' => $membership_barcode,
@@ -310,7 +310,7 @@ class SSOClient {
       $body = json_decode((string) $response->getBody(), FALSE);
       if (
         !isset($body->data)
-        || $body->data->eventLogMessage !== "Success"
+        || $body->data->eventLogMessage !== 'Success'
       ) {
         $this->logger->error(
           "Error happened during user log creation process. The response is: %response", [
