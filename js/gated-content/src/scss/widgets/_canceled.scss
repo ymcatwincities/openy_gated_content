@@ -1,0 +1,7 @@
+.canceled {
+  @extend .private;
+  display:          block;
+  width:            fit-content;
+  border-color:     $red;
+  background-color: $red;
+}

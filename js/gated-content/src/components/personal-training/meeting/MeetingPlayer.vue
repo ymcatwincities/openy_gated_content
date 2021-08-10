@@ -16,7 +16,11 @@
       </video>
     </div>
     <div class="video-wrapper local" :class="{connected: localMediaStream !== null}">
-      <AudioIndicator :media-stream="localMediaStream" :mic-enabled="isMicEnabled" />
+      <AudioIndicator
+        v-if="localMediaStream"
+        :media-stream="localMediaStream"
+        :mic-enabled="isMicEnabled"
+      />
       <VideoIndicator v-if="localMediaStream" :cam-enabled="isCameraEnabled" />
       <video
         :key="localMediaStream === null"

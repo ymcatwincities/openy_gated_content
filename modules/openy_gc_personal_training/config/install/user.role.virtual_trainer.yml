@@ -18,7 +18,6 @@ permissions:
   - 'create image media'
   - 'create media'
   - 'delete media'
-  - 'delete personal training entities'
   - 'edit own image media'
   - 'edit personal training entities'
   - 'restful get alerts_rest_resource'

@@ -8,6 +8,7 @@ administer personal training entities:
 
 delete personal training entities:
   title: 'Delete 1on1 Meeting entities'
+  restrict access: true
 
 edit personal training entities:
   title: 'Edit 1on1 Meeting entities'

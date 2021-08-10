@@ -10,10 +10,10 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import Spinner from '@/components/Spinner.vue';
 import TopMenu from '@/components/TopMenu.vue';
 import ScrollToTop from '@/components/ScrollToTop.vue';
-import { mapGetters } from 'vuex';
 
 export default {
   name: 'GatedContent',

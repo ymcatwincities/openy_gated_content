@@ -6,6 +6,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Messenger\MessengerTrait;
 use Drupal\Core\Url;
 use Drupal\daxko_sso\DaxkoSSOClient;
@@ -63,6 +64,13 @@ class DaxkoSSO extends GCIdentityProviderPluginBase {
   protected $formBuilder;
 
   /**
+   * Daxko logger channel.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected $daxkoLoggerChannel;
+
+  /**
    * {@inheritdoc}
    */
   public function defaultConfiguration():array {
@@ -83,11 +91,13 @@ class DaxkoSSO extends GCIdentityProviderPluginBase {
     EntityTypeManagerInterface $entity_type_manager,
     DaxkoSSOClient $daxkoSSOClient,
     RequestStack $requestStack,
-    FormBuilderInterface $form_builder
+    FormBuilderInterface $form_builder,
+    LoggerChannelInterface $daxko_logger_channel
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $config, $entity_type_manager, $form_builder);
     $this->daxkoClient = $daxkoSSOClient;
     $this->request = $requestStack->getCurrentRequest();
+    $this->daxkoLoggerChannel = $daxko_logger_channel;
   }
 
   /**
@@ -102,7 +112,8 @@ class DaxkoSSO extends GCIdentityProviderPluginBase {
       $container->get('entity_type.manager'),
       $container->get('daxko_sso.client'),
       $container->get('request_stack'),
-      $container->get('form_builder')
+      $container->get('form_builder'),
+      $container->get('logger.factory')->get('daxko_sso')
     );
   }
 
@@ -191,6 +202,44 @@ class DaxkoSSO extends GCIdentityProviderPluginBase {
       $headers
     );
     $response->send();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getMemberNotificationEmail(int $uid): string {
+    /** @var \Drupal\user\UserInterface $user */
+    $user = $this->entityTypeManager->getStorage('user')->load($uid);
+    $daxko_email = $user->getEmail();
+
+    if (strpos($daxko_email, "daxko-") === FALSE) {
+      $this->daxkoLoggerChannel->error("User with id: \"{$uid}\" was not created using Daxko SSO.");
+      return '';
+    }
+
+    // Retrieve the member id from email, that has the following format:
+    // "daxko-{$userData->member_id}@virtualy.openy.org".
+    /* @see \Drupal\openy_gc_auth_daxko_sso\Controller\DaxkoLinkController::backlink() */
+    $member_id = substr($daxko_email, 6, -19);
+
+    if ($member_id === FALSE || empty($member_id)) {
+      $this->daxkoLoggerChannel->error("There was an error extracting member id from email: \"{$daxko_email}\" of user with id: \"{$uid}\".");
+      return '';
+    }
+
+    $user_data = $this->daxkoClient->getRequest("members/{$member_id}");
+    // Taking the first email from the emails array.
+    $first_email_item = reset($user_data->emails);
+
+    if (empty($first_email_item) || !isset($first_email_item->email)) {
+      $this->daxkoLoggerChannel->error(
+        "Emails for user with member id \"{$member_id}\" received from Daxko are invalid: %emails.",
+        ['%emails' => print_r($user_data->emails, TRUE)]
+      );
+      return '';
+    }
+
+    return $first_email_item->email;
   }
 
 }
