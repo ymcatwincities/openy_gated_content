@@ -312,8 +312,13 @@ class SSOClient {
         !isset($body->data)
         || $body->data->eventLogMessage !== "Success"
       ) {
+        $this->logger->debug(print_r($body, TRUE));
         $error_message = isset($body->data->eventLogMessage) ?? $body->message;
-        $this->logger->error("Error happened during create user log process: $error_message");
+        $this->logger->error(
+          "Error happened during create user log process: %error_message", [
+            '%error_message' => print_r($error_message, TRUE),
+          ]
+        );
 
         return FALSE;
       }
