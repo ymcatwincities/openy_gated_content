@@ -10,9 +10,32 @@
     }
 
     .info {
+      flex-grow: 0;
       border: none;
 
       @include median(padding, 10px 10px 58px, 10px 10px 53px);
+
+      .sub-categories {
+        margin-top: 10px;
+        color: $thunder;
+
+        &__title {
+        }
+
+        &__items {
+          padding: 0;
+          margin: 0;
+          list-style: none;
+        }
+
+        &__item {
+          display: inline;
+
+          &:not(:last-of-type):after {
+            content: ', ';
+          }
+        }
+      }
     }
   }
 }

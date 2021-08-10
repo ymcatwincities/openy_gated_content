@@ -1,0 +1,19 @@
+openy_gc_auth_avocado_sso.authentication_redirect:
+  path: '/openy-gc-auth-avocado-sso/authentication-redirect'
+  defaults:
+    _controller: '\Drupal\openy_gc_auth_avocado_sso\Controller\SSOController::authenticationRedirect'
+    _title: 'Avocado SSO OAuth2 authentication redirect'
+  requirements:
+    _permission: 'access content'
+  options:
+    no_cache: 'TRUE'
+
+openy_gc_auth_avocado_sso.authorization_callback:
+  path: '/openy-gc-auth-avocado-sso/authorization-callback'
+  defaults:
+    _controller: '\Drupal\openy_gc_auth_avocado_sso\Controller\SSOController::authorizationCallback'
+    _title: 'Avocado SSO OAuth2 authorization callback'
+  requirements:
+    _permission: 'access content'
+  options:
+    no_cache: 'TRUE'

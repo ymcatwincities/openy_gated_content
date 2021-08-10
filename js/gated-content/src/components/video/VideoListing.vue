@@ -3,7 +3,7 @@
     <div class="listing-header">
       <h2 class="title text-gray" v-if="title !== 'none'">{{ title }}</h2>
       <router-link
-        :to="{ name: 'VideoListing', query: { type: category } }"
+        :to="{ name: 'VideoListing', query: { type: categories ? categories[0] : 'all' } }"
         v-if="viewAll && listingIsNotEmpty"
         class="view-all"
       >
@@ -35,6 +35,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import client from '@/client';
 import VideoTeaser from '@/components/video/VideoTeaser.vue';
 import Spinner from '@/components/Spinner.vue';
@@ -64,9 +65,9 @@ export default {
       type: String,
       default: 'No videos found.',
     },
-    category: {
-      type: String,
-      default: '',
+    categories: {
+      type: Array,
+      default: null,
     },
     featured: {
       type: Boolean,
@@ -112,6 +113,16 @@ export default {
     $route: 'load',
     excludedVideoId: 'load',
     sort: 'load',
+    isCategoriesLoaded() {
+      if (this.categories !== null) {
+        this.load();
+      }
+    },
+  },
+  computed: {
+    ...mapGetters([
+      'isCategoriesLoaded',
+    ]),
   },
   async mounted() {
     // By default emit that listing not empty to the parent component.
@@ -156,10 +167,6 @@ export default {
         };
       }
 
-      if (this.category.length > 0) {
-        params.filter['field_gc_video_category.id'] = this.category;
-      }
-
       if (this.featuredLocal) {
         params.filter.field_gc_video_featured = 1;
       }
@@ -176,6 +183,26 @@ export default {
         };
       }
 
+      if (this.categories !== null) {
+        if (!this.isCategoriesLoaded) {
+          return;
+        }
+        const termsIds = [];
+        this.categories.forEach((tid) => {
+          const subcategories = this.$store.getters.getSubcategories(tid);
+          termsIds.push(tid, ...this.$store.getters.getNestedTids(subcategories));
+        });
+        params.filter.in = {
+          condition: {
+            path: 'field_gc_video_category.entity.tid',
+            operator: 'IN',
+            value: termsIds,
+          },
+        };
+      }
+      this.loadFromJsonApi(params);
+    },
+    loadFromJsonApi(params) {
       client
         .get('jsonapi/node/gc_video', { params })
         .then((response) => {

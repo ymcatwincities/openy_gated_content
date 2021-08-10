@@ -54,9 +54,22 @@
 
       <div class="gated-containerV2 my-40-20 px--20-10 title-wrapper">
         <div>
-          <div class="title title-inline cachet-book-32-28 text-gray">
-            {{ category.attributes.name }}
-          </div>
+          <ul v-if="isCategoriesLoaded" class="title-inline cachet-book-32-28">
+            <li
+              v-for="categoryData in getAncestors"
+              :key="categoryData.tid"
+            >
+              <router-link
+                v-if="categoryData.uuid !== id"
+                :to="{
+                  name: 'Category',
+                  params: { id: categoryData.uuid }
+                }" class="text-thunder">{{ categoryData.label }}</router-link>
+              <span v-else class="text-gray">
+                {{ categoryData.label }}
+              </span>
+            </li>
+          </ul>
           <AddToFavorite
             :id="category.attributes.drupal_internal__tid"
             :type="'taxonomy_term'"
@@ -67,13 +80,21 @@
                 class="adjust-button" @click="showModal = true">Filter</button>
       </div>
 
+      <CategoriesListing
+        :title="'Subcategories'"
+        :parent="category.attributes.drupal_internal__tid"
+        :bundle="selectedBundle"
+        :sort="sortData('taxonomy_term')"
+        :limit="50"
+      />
+
       <div v-for="component in componentsOrder" :key="component">
         <div class="live-stream-wrapper" v-if="showComponent.live_stream
           && showOnCurrentIteration('live_stream', component)">
           <EventListing
             v-if="selectedComponent === 'live_stream' || selectedComponent === 'all'"
             :title="config.components.live_stream.title"
-            :category="category.id"
+            :categories="[category.attributes.drupal_internal__tid]"
             :sort="sortData('eventinstance', 'live_stream')"
             :pagination="selectedComponent === 'live_stream'"
             :limit="viewAllContentMode ? 50 : itemsLimit"
@@ -96,7 +117,7 @@
           <EventListing
             v-if="selectedComponent === 'virtual_meeting' || selectedComponent === 'all'"
             :title="config.components.virtual_meeting.title"
-            :category="category.id"
+            :categories="[category.attributes.drupal_internal__tid]"
             :eventType="'virtual_meeting'"
             :sort="sortData('eventinstance', 'virtual_meeting')"
             :pagination="selectedComponent === 'virtual_meeting'"
@@ -120,7 +141,7 @@
           <VideoListing
             v-if="selectedComponent === 'gc_video' || selectedComponent === 'all'"
             :title="config.components.gc_video.title"
-            :category="category.id"
+            :categories="[category.attributes.drupal_internal__tid]"
             :pagination="selectedComponent === 'gc_video'"
             :viewAll="false"
             :sort="sortData('node', 'gc_video')"
@@ -144,7 +165,7 @@
           <BlogListing
             v-if="selectedComponent === 'vy_blog_post' || selectedComponent === 'all'"
             :title="config.components.vy_blog_post.title"
-            :category="category.id"
+            :categories="[category.attributes.drupal_internal__tid]"
             :viewAll="false"
             :sort="sortData('node', 'vy_blog_post')"
             :pagination="selectedComponent === 'vy_blog_post'"
@@ -169,9 +190,11 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import client from '@/client';
 import Spinner from '@/components/Spinner.vue';
 import AddToFavorite from '@/components/AddToFavorite.vue';
+import CategoriesListing from '@/components/category/CategoriesListing.vue';
 import VideoListing from '@/components/video/VideoListing.vue';
 import BlogListing from '@/components/blog/BlogListing.vue';
 import EventListing from '@/components/event/EventListing.vue';
@@ -185,6 +208,7 @@ export default {
   components: {
     AddToFavorite,
     Spinner,
+    CategoriesListing,
     VideoListing,
     BlogListing,
     EventListing,
@@ -213,7 +237,8 @@ export default {
     };
   },
   watch: {
-    $route: 'load',
+    id: 'reload',
+    '$route.query': 'load',
   },
   async mounted() {
     await this.load();
@@ -237,11 +262,26 @@ export default {
     listingIsNotEmpty(component, notEmpty) {
       this.showComponent[component] = notEmpty;
     },
+    reload() {
+      this.showComponent = {
+        gc_video: true,
+        vy_blog_post: true,
+        live_stream: true,
+        virtual_meeting: true,
+      };
+      this.load();
+    },
   },
   computed: {
+    ...mapGetters([
+      'isCategoriesLoaded',
+    ]),
     viewAllContentMode() {
       // Enable viewAllContentMode only when we filter by content.
       return this.selectedComponent !== 'all';
+    },
+    getAncestors() {
+      return this.$store.getters.getAncestors(this.category.attributes.drupal_internal__tid);
     },
   },
 };

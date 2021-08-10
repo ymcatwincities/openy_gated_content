@@ -1,16 +1,16 @@
 .gated-content-category-page {
-  > a, .category-details {
-    padding: 30px 40px 0;
-  }
+  .title-wrapper {
+    ul {
+      padding: 0;
+      margin: 0;
 
-  .category-details {
-    background-color: $mine-shaft;
-    color: $white;
-  }
-  .back-to-categories-wrapper {
-    background-color: $dark-blue;
-    a {
-      color: $white;
+      > li {
+        display: inline;
+
+        &:not(:last-of-type):after {
+          content: ' > ';
+        }
+      }
     }
   }
 }

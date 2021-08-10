@@ -9,3 +9,14 @@ services:
       - '@entity_type.manager'
       - '@messenger'
       - '@config.factory'
+
+  personal_training_canceled.subscriber:
+    class: Drupal\openy_gc_personal_training\EventSubscriber\PersonalTrainingCanceledSubscriber
+    arguments:
+      - '@plugin.manager.gc_identity_provider'
+      - '@plugin.manager.mail'
+      - '@config.factory'
+      - '@language_manager'
+      - '@personal_training_series.manager'
+    tags:
+      - { name: 'event_subscriber' }

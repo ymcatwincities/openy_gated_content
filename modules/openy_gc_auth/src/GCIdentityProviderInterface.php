@@ -38,4 +38,18 @@ interface GCIdentityProviderInterface extends PluginInspectionInterface, Configu
    */
   public function getLoginForm();
 
+  /**
+   * Get real user email.
+   *
+   * Some providers can store fake email in system, in this case method
+   * should implement logic with getting real user email.
+   *
+   * @param int $uid
+   *   User ID.
+   *
+   * @return string
+   *   User email.
+   */
+  public function getMemberNotificationEmail(int $uid): string;
+
 }

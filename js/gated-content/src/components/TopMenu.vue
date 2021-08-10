@@ -63,11 +63,11 @@
 </template>
 
 <script>
+import { mapGetters, mapState } from 'vuex';
 import ScheduleIcon from '@/components/svg/ScheduleIcon.vue';
 import FavoritesIcon from '@/components/svg/FavoritesIcon.vue';
 import CategoriesIcon from '@/components/svg/CategoriesIcon.vue';
 import LogoutIcon from '@/components/svg/LogoutIcon.vue';
-import { mapGetters, mapState } from 'vuex';
 import MenuIcon from '@/components/svg/MenuIcon.vue';
 import CloseIcon from '@/components/svg/CloseIcon.vue';
 
