@@ -92,7 +92,10 @@ class AvocadoSSO extends GCIdentityProviderPluginBase {
     return [
       'authentication_server' => 'https://avocado-dev-6-developer-edition.eu30.force.com/',
       'ymca_extension' => 'ts_avo',
+      'client_id' => '',
+      'client_secret' => '',
       'location_code' => 'LOC-002427',
+      'error_accompanying_message' => 'Please contact us if You have any questions.',
       'login_mode' => 'present_login_button',
     ];
   }
