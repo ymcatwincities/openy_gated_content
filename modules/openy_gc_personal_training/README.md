@@ -7,8 +7,8 @@ Short video demo: https://www.loom.com/share/c49ef7bb4b2a4435ac78bfc53582e2f1
 
 ## Requirements
 
-This module requires [State Machine](drupal.org/project/state_machine) contrib project. It is absent in the Virtual Y composer.json since we dont want to install unneeded modules to all VY projects.
-Please add it to your project if you want to use this module.
+This module requires [State Machine](drupal.org/project/state_machine) contrib project. 
+It will be automatically installed by Composer. Enable it in case if you need Cancel session feature.
 
 ## Module structure
 
@@ -20,7 +20,7 @@ You cannot use this module without SSL at your website, since it is a webRTC req
 
 ## 1on1 Meeting Series
 
-You can create training of series for your clients if they could be grouped by a data range, recurrency and other rules that could be applied to the Date recurrency field. If you change recurrency patterns, module will automatically update/recreate all singe 1on1 Meeetings in your series.
+You can create training series for your clients using the Date Recurrency field. If you change recurrence patterns, the module will automatically update all 1on1 meetings in your series.
 
 ## 1on1 Meeting entity
 
@@ -70,12 +70,12 @@ If you want to enable 1on1 Virtual Meetings module, you have to setup 3 addition
 
 Just set Debug (at this form: `admin/virtual-y/personal_training/settings`) to any number more than 0 and check your browser console.
 
-## Cancel Session Notifications
+## Session Cancellation Notifications
 
-This module allows sending cancel sessions notification messages to the client (client reference field exists on the 1on1 Meeting entity). 
+This module allows sending cancel session notification messages to the client (client reference field exists on the 1on1 Meeting entity). 
 It happens when admin user changes the state of the 1on1 Meeting entity or 1on1 Meeting series to `Cancelled`
 
-**Please, check your mail system befoure using this feature.** 
+**Please, check your mail system before using this feature.** 
 
 This module uses default Drupal mail sending functions to send emails.
 
