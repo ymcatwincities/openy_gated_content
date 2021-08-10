@@ -56,6 +56,8 @@ If you want to enable 1on1 Virtual Meetings module, you have to setup 3 addition
 - `STUN server` - Google runs STUN servers as a free service, but with no SLA. They come preconfigured and should be reliable enough to use for most Virtual Y sites.
 -  `TURN server` - This server is required to communicate between two WebRTC clients located in the different parts of the town/country/continent. It helps clients to find each other ips and send packages. Please use this manual to setup your own TURN server: https://nextcloud-talk.readthedocs.io/en/latest/TURN/. Please, do not use public servers, since they are not reliable. Use only your own for your production.
 
+![Virtual Y webrtc](https://user-images.githubusercontent.com/238201/128903503-f27e2eb9-fc06-4073-8457-bf53d82415c7.png)
+
 ## Debug
 
 1on1 Virtual Meetings has debugger that shows all connection information that could help in troubleshooting. 
