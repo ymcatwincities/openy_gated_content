@@ -32,7 +32,7 @@
           position:            relative;
 
           @include median(margin, 24px, 12px);
-          @include median(min-height, 307px, initial);
+          @include median(min-height, 307px, 100px);
           @include median(grid-row, 1/span 3, 2);
 
           video {

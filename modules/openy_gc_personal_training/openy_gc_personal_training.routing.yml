@@ -10,7 +10,7 @@ personal_training.settings:
   path: '/admin/virtual-y/personal_training/settings'
   defaults:
     _form: '\Drupal\openy_gc_personal_training\Form\PersonalTrainingSettingsForm'
-    _title: 'Virtual YMCA Auth settings'
+    _title: 'Virtual YMCA 1on1 settings'
   requirements:
     _permission: 'administer gated content configuration'
 

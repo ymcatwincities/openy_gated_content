@@ -5,7 +5,6 @@
  * The openy_gated_content module routines.
  */
 
-use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Session\AccountInterface;
@@ -19,6 +18,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\taxonomy\TermStorageInterface;
+use Drupal\node\NodeInterface;
 
 /**
  * Implements hook_theme().
@@ -110,7 +110,8 @@ function openy_gated_content_preprocess_paragraph(&$variables) {
  * if gated_content paragraph is used on page.
  */
 function openy_gated_content_preprocess_html(&$variables) {
-  if ($node = \Drupal::routeMatch()->getParameter('node')) {
+  $node = \Drupal::routeMatch()->getParameter('node');
+  if ($node instanceof NodeInterface) {
     if ($node->hasField('field_content')) {
       foreach ($node->field_content as $field_item) {
         if ($field_item->entity->bundle() === 'gated_content') {

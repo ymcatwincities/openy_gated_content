@@ -53,6 +53,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import BlogListing from '@/components/blog/BlogListing.vue';
 import VideoListing from '@/components/video/VideoListing.vue';
 import EventListing from '@/components/event/EventListing.vue';
@@ -60,7 +61,6 @@ import PersonalTrainingListing from '@/components/personal-training/PersonalTrai
 import ParagraphHeadline from '@/components/ParagraphHeadline.vue';
 import { SettingsMixin } from '@/mixins/SettingsMixin';
 import { FilterAndSortMixin } from '@/mixins/FilterAndSortMixin';
-import { mapGetters } from 'vuex';
 import PageHeader from '@/components/PageHeader.vue';
 
 export default {

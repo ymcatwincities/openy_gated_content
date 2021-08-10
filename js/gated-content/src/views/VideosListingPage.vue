@@ -62,10 +62,10 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import VideoListing from '@/components/video/VideoListing.vue';
 import { SettingsMixin } from '@/mixins/SettingsMixin';
 import { FilterAndSortMixin } from '@/mixins/FilterAndSortMixin';
-import { mapGetters } from 'vuex';
 
 export default {
   name: 'VideosListingPage',

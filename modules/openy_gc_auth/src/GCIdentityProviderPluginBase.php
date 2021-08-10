@@ -167,4 +167,15 @@ abstract class GCIdentityProviderPluginBase extends PluginBase implements GCIden
     }
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getMemberNotificationEmail(int $uid): string {
+    // Basic implementation of this method returns just drupal user email.
+    // Override this method in case your provider store fake emails on
+    // the Drupal side.
+    $user = $this->entityTypeManager->getStorage('user')->load($uid);
+    return $user->getEmail();
+  }
+
 }

@@ -42,9 +42,9 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex';
 import Modal from '@/components/modal/Modal.vue';
 import SendIcon from '@/components/svg/SendIcon.vue';
-import { mapGetters, mapActions } from 'vuex';
 
 export default {
   components: { Modal, SendIcon },
