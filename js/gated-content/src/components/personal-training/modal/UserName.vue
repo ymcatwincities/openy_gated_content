@@ -26,9 +26,9 @@
   </Modal>
 </template>
 <script>
+import { mapGetters, mapActions } from 'vuex';
 import Modal from '@/components/modal/Modal.vue';
 import client from '@/client';
-import { mapGetters, mapActions } from 'vuex';
 
 export default {
   components: { Modal },

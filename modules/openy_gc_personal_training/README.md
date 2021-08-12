@@ -5,6 +5,11 @@ This module provides base implementation of Virtual Y 1on1 Meetings.
 ![Virtual Y 1on1 meeting](assets/vy_14_virtual_meeting.png "Virtual Y 1on1 Meeting Demo")
 Short video demo: https://www.loom.com/share/c49ef7bb4b2a4435ac78bfc53582e2f1
 
+## Requirements
+
+This module requires [State Machine](drupal.org/project/state_machine) contrib project. 
+It will be automatically installed by Composer. Enable it in case if you need Cancel session feature.
+
 ## Module structure
 
 This module is consist of the 1on1 Meeting entity, additional logic that works with it and additional modules for the Virtual Y application. 
@@ -13,7 +18,11 @@ This module is consist of the 1on1 Meeting entity, additional logic that works w
 
 You cannot use this module without SSL at your website, since it is a webRTC requirement.
 
-### PersonalTraining entity
+## 1on1 Meeting Series
+
+You can create training series for your clients using the Date Recurrency field. If you change recurrence patterns, the module will automatically update all 1on1 meetings in your series.
+
+## 1on1 Meeting entity
 
 | Field name | Field machine name | Field type | Description |
 | ---------- | ----------- | ----------- | ----------- |
@@ -27,7 +36,7 @@ You cannot use this module without SSL at your website, since it is a webRTC req
 | Created | created | created | The time that the Training was created.|
 | Changed | changed | changed | The time that the Training was last edited. |
 
-### PersonalTrainingProvider plugin
+## PersonalTrainingProvider plugin
 
 This module implements `PersonalTrainingProvider` annotation. You can find example
 of plugin implementation in `src/Plugin/PersonalTrainingProvider`. Plugin should
@@ -60,3 +69,14 @@ If you want to enable 1on1 Virtual Meetings module, you have to setup 3 addition
 1on1 Virtual Meetings has debugger that shows all connection information that could help in troubleshooting. 
 
 Just set Debug (at this form: `admin/virtual-y/personal_training/settings`) to any number more than 0 and check your browser console.
+
+## Session Cancellation Notifications
+
+This module allows sending cancel session notification messages to the client (client reference field exists on the 1on1 Meeting entity). 
+It happens when admin user changes the state of the 1on1 Meeting entity or 1on1 Meeting series to `Cancelled`
+
+**Please, check your mail system before using this feature.** 
+
+This module uses default Drupal mail sending functions to send emails.
+
+You can enable this feature or change message template at 1on1 Meeting setting form at this URI: `/admin/virtual-y/personal_training/settings`

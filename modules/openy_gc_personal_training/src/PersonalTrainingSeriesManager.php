@@ -106,7 +106,7 @@ class PersonalTrainingSeriesManager implements PersonalTrainingSeriesManagerInte
    * @return array
    *   Array of the date ranges.
    */
-  protected function getTrainingsDates(PersonalTrainingInterface $series): array {
+  public function getTrainingsDates(PersonalTrainingInterface $series): array {
     $date_ranges = [];
     $timezone = new \DateTimeZone($this->config->get('system.date')->get('timezone')['default']);
 
@@ -317,6 +317,49 @@ class PersonalTrainingSeriesManager implements PersonalTrainingSeriesManagerInte
       $item->delete();
       $context['sandbox']['progress']++;
       $context['message'] = $this->t('Deleting PTs :progress of :count', [
+        ':progress' => $context['sandbox']['progress'],
+        ':count' => $context['sandbox']['max'],
+      ]);
+      $context['results']['processed'] = $context['sandbox']['progress'];
+    }
+
+    $context['finished'] = empty($context['sandbox']['max']) ? 1 : ($context['sandbox']['progress'] / $context['sandbox']['max']);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function cancelItemsOfSeries(int $series_id, array &$context): void {
+    $storage = $this->entityTypeManager->getStorage('personal_training');
+    if (!isset($context['sandbox']['progress'])) {
+      $context['sandbox']['progress'] = 0;
+      $context['sandbox']['current'] = 0;
+      $context['sandbox']['max'] = $storage->getQuery()
+        ->condition('type', 'personal_training')
+        ->condition('field_parent', $series_id)
+        ->count()
+        ->execute();
+      $context['results']['op'] = $this->t('deleted');
+    }
+
+    $ids = $storage->getQuery()
+      ->condition('type', 'personal_training')
+      ->condition('field_parent', $series_id)
+      ->condition('id', $context['sandbox']['current'], '>')
+      ->range(0, self::BATCH_LIMIT)
+      ->sort('id')
+      ->execute();
+    if (!$ids) {
+      return;
+    }
+    $items = $storage->loadMultiple($ids);
+    /** @var \Drupal\openy_gc_personal_training\Entity\PersonalTrainingInterface $item */
+    foreach ($items as $item) {
+      $context['sandbox']['current'] = $item->id();
+      $context['sandbox']['progress']++;
+      $item->getState()->applyTransitionById('cancel');
+      $item->save();
+      $context['message'] = $this->t('Canceling PTs :progress of :count', [
         ':progress' => $context['sandbox']['progress'],
         ':count' => $context['sandbox']['max'],
       ]);

@@ -46,8 +46,8 @@
   </Modal>
 </template>
 <script>
-import Modal from '@/components/modal/Modal.vue';
 import { mapGetters, mapActions } from 'vuex';
+import Modal from '@/components/modal/Modal.vue';
 
 export default {
   components: { Modal },

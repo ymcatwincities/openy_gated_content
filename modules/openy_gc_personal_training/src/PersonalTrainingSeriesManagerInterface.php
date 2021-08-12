@@ -64,4 +64,18 @@ interface PersonalTrainingSeriesManagerInterface {
    */
   public function batchFinished($success, $results, $operations): void;
 
+  /**
+   * Cancel all personal_training instances related to given training series.
+   *
+   * @param int $series_id
+   *   Personal Trainings Series ID.
+   * @param array $context
+   *   Context array, changing during processing.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   */
+  public function cancelItemsOfSeries(int $series_id, array &$context): void;
+
 }
