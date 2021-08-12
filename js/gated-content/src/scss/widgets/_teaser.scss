@@ -1,7 +1,7 @@
 .teaser {
   position:   relative;
   transform:  scale(1);
-
+  transition: All 0.1s;
   border-top: solid 5px $indigo;
 
   &:hover {
