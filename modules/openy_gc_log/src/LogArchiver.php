@@ -423,7 +423,7 @@ class LogArchiver {
             $metadata = unserialize($log->get('event_metadata')->value, ['allowed_classes' => FALSE]);
           }
           foreach ([
-            'entity_title' => $this->t('Content title'),
+            'entity_title' => 'Content title',
             'entity_instructor_name' => 'Instructor name',
             'entity_created' => 'Content creation date',
           ] as $key => $export_col) {
