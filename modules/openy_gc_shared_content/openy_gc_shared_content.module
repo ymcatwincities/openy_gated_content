@@ -89,12 +89,16 @@ function openy_gc_shared_content_entity_bundle_field_info(EntityTypeInterface $e
     $plugins_info[$instance->getEntityType()][] = $instance->getEntityBundle();
   }
 
-  if (($managed_bundles = $plugins_info[$entity_type->id()]) && !in_array($bundle, $managed_bundles)) {
+  if (!isset($plugins_info[$entity_type->id()])) {
+    return [];
+  }
+  $managed_bundles = $plugins_info[$entity_type->id()];
+  if (!in_array($bundle, $managed_bundles)) {
     return [];
   }
   $fields = [];
   foreach (openy_gc_shared_content_entity_field_storage_info($entity_type) as $name => $definition) {
-    $fields[$name] = BaseFieldDefinition::createFromFieldStorageDefinition($definition);
+    $fields[$name] = $definition;
   }
   return $fields;
 }
