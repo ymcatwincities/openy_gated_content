@@ -19,7 +19,9 @@
     "extra": {
         "patches": {
             "drupal/recurring_events": {
-                "Event edit and clone issue if the authored user is deleted. https://www.drupal.org/i/3229674": "https://git.drupalcode.org/project/recurring_events/-/commit/53177212e980eb3ef5b73d683d1ae2f3e51cd314.patch"
+                "Event edit and clone issue if the authored user is deleted. https://www.drupal.org/i/3229674": "https://git.drupalcode.org/project/recurring_events/-/commit/53177212e980eb3ef5b73d683d1ae2f3e51cd314.patch",
+                "Event instances created by migration may not be structured correctly. https://www.drupal.org/i/3206960": "https://git.drupalcode.org/project/recurring_events/-/commit/c0abc6a754f2b048e9b49568b33929378bb31492.patch",
+                "Disable custom event series destination migrate plugin": "https://gist.githubusercontent.com/NightHunterSV/528da326b854f5b5ecc57bb37cba75f6/raw/4301ee75cbfdc61058f52cc8589ed883c4f35153/disable_custom_event_series_destination_migrate_plugin.patch"
             },
             "drupal/search_api": {
                 "Add a \"Role-based access\" processor [2898334]": "https://www.drupal.org/files/issues/2021-01-31/2898334-30--role_based_access_check.patch"
