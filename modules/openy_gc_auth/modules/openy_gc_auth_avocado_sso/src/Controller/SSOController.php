@@ -144,7 +144,7 @@ class SSOController extends ControllerBase {
       );
     }
 
-//    $result = $this->avocadoSSOClient->createUserLogEvent($user_membership_data->Barcode);
+    // $result = $this->avocadoSSOClient->createUserLogEvent($user_membership_data->Barcode);
     if ($this->avocadoSSOClient->temporaryValidateUserSubscription($user_membership_data)) {
       [$name, $email] = $this->avocadoSSOClient
         ->prepareUserNameAndEmail($user_data);
