@@ -3,10 +3,10 @@
     class="category-teaser"
     :routeName="'Category'"
     :id="category.id"
+    :title="category.attributes.name"
     :image="category.attributes['field_gc_category_media.field_media_image']"
   >
     <template>
-      <div class="title verdana-16-14">{{ category.attributes.name }}</div>
       <div class="sub-categories" v-if="subcategories.length > 0">
         <div class="sub-categories__title">Includes:</div>
         <ul class="sub-categories__items">
