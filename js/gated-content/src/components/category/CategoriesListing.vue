@@ -19,13 +19,13 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import client from '@/client';
 import CategoryTeaser from '@/components/category/CategoryTeaser.vue';
 import Spinner from '@/components/Spinner.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
 import { FavoritesMixin } from '@/mixins/FavoritesMixin';
 import { ListingMixin } from '@/mixins/ListingMixin';
-import { mapGetters } from 'vuex';
 
 export default {
   name: 'CategoriesListing',

@@ -1,0 +1,4 @@
+services:
+  openy_gc_auth.avocado_sso_client:
+    class: Drupal\openy_gc_auth_avocado_sso\SSOClient
+    arguments: ['@logger.factory', '@config.factory', '@http_client' ]

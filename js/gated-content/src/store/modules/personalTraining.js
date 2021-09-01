@@ -1,9 +1,9 @@
+import dayjs from 'dayjs';
 import personalTrainingChat from '@/store/modules/personalTraining/chat';
 import personalTrainingModal from '@/store/modules/personalTraining/modal';
 import personalTrainingWebRtc from '@/store/modules/personalTraining/webrtc';
 import personalTrainingControls from '@/store/modules/personalTraining/controls';
 import client from '@/client';
-import dayjs from 'dayjs';
 
 export default {
   state: {

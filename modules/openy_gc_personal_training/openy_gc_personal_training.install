@@ -29,6 +29,27 @@ function openy_gc_personal_training_install() {
 }
 
 /**
+ * Implements hook_requirements().
+ */
+function openy_gc_personal_training_requirements($phase) {
+  $requirements = [];
+
+  if ($phase === 'update') {
+    $module_handler = \Drupal::moduleHandler();
+    if (!$module_handler->moduleExists('state_machine')) {
+      $requirements['openy_gc_personal_training'] = [
+        'title' => t('State Machine Module'),
+        'value' => t('Module is not installed.'),
+        'description' => t('It is required for openy_gc_personal_training_update_8005. As state is being introduced to the Personal Training entity.'),
+        'severity' => REQUIREMENT_ERROR,
+      ];
+    }
+  }
+
+  return $requirements;
+}
+
+/**
  * Introduce the Personal training type.
  */
 function openy_gc_personal_training_update_8001() {
@@ -121,4 +142,59 @@ function openy_gc_personal_training_update_8004(&$sandbox) {
       $config_updater->update($config, $config_name, $param);
     }
   }
+}
+
+/**
+ * Add "State" field to "Personal Training" entity.
+ */
+function openy_gc_personal_training_update_8005($sandbox) {
+  $state_field_storage_definition = BaseFieldDefinition::create('state')
+    ->setLabel(t('State'))
+    ->setDescription(t('The personal training state.'))
+    ->setRequired(TRUE)
+    ->setSetting('workflow', 'personal_training_default')
+    ->setDefaultValue('planned')
+    ->setDisplayOptions('form', [
+      'type' => 'options_select',
+    ])
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayConfigurable('view', TRUE);
+
+  \Drupal::entityDefinitionUpdateManager()
+    ->installFieldStorageDefinition(
+      'state',
+      'personal_training',
+      'personal_training',
+      $state_field_storage_definition
+    );
+}
+
+/**
+ * Revoke permission "delete personal training entities" from virtual trainer.
+ */
+function openy_gc_personal_training_update_8006(&$sandbox) {
+  $configuration = \Drupal::configFactory()->getEditable('user.role.virtual_trainer');
+  $permissions = $configuration->get('permissions');
+
+  $index = array_search('delete personal training entities', $permissions, TRUE);
+  if ($index !== FALSE) {
+    unset($permissions[$index]);
+    $configuration->set('permissions', $permissions)->save();
+  }
+}
+
+/**
+ * Move meeting_delete_* params to meeting_cancel_*.
+ */
+function openy_gc_personal_training_update_8007(&$sandbox) {
+  $configuration = \Drupal::configFactory()->getEditable('openy_gc_personal_training.settings');
+
+  $meeting_delete_message = $configuration->get('meeting_delete_message');
+  $meeting_delete_subject = $configuration->get('meeting_delete_subject');
+  $configuration->clear('meeting_delete_message');
+  $configuration->clear('meeting_delete_subject');
+
+  $configuration->set('meeting_cancel_subject', $meeting_delete_subject);
+  $configuration->set('meeting_cancel_message', $meeting_delete_message);
+  $configuration->save();
 }

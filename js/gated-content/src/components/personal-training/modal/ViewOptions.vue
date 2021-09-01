@@ -32,8 +32,8 @@
 </template>
 
 <script>
-import Modal from '@/components/modal/Modal.vue';
 import { mapGetters, mapActions } from 'vuex';
+import Modal from '@/components/modal/Modal.vue';
 import SvgIcon from '@/components/SvgIcon.vue';
 
 export default {

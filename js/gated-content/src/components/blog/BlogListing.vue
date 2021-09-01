@@ -35,6 +35,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import client from '@/client';
 import BlogTeaser from '@/components/blog/BlogTeaser.vue';
 import Spinner from '@/components/Spinner.vue';
@@ -42,7 +43,6 @@ import Pagination from '@/components/Pagination.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
 import { FavoritesMixin } from '@/mixins/FavoritesMixin';
 import { ListingMixin } from '@/mixins/ListingMixin';
-import { mapGetters } from 'vuex';
 
 export default {
   name: 'BlogListing',

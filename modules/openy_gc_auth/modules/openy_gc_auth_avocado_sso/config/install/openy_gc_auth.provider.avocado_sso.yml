@@ -1,0 +1,7 @@
+authentication_server: 'https://<yourdomain>.force.com/'
+ymca_extension: 'ts_avo'
+client_id: ''
+client_secret: ''
+location_code: 'LOC-XXXXXX'
+error_accompanying_message: 'Please contact us if You have any questions.'
+login_mode: 'present_login_button'
