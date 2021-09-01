@@ -10,6 +10,7 @@
         "drupal/simple_recaptcha": "^1.0",
         "drupal/date_recur": "^2.0|^3.0",
         "drupal/date_recur_modular": "^2.0|^3.0",
+        "drupal/state_machine": "^1.4",
         "ext-json": "*",
         "ext-zlib": "*"
     },

@@ -24,6 +24,9 @@
       <div class="timer private">
         Private
       </div>
+      <div class="timer canceled" v-if="video.attributes.state === 'canceled'">
+        Canceled
+      </div>
     </template>
     <template v-slot:outer>
       <AddToFavorite
