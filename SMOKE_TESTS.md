@@ -112,4 +112,3 @@ Administrator / Anonymous
 ### Expected results
 
 After entering email user gets access to gated content
-
