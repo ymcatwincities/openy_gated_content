@@ -4,14 +4,13 @@
     :routeName="'Video'"
     :id="video.id"
     :component="'gc_video'"
-    :image="image"
     :title="video.attributes.title"
+    :image="image"
   >
     <template v-slot:overlay>
       <div class="play-button"></div>
     </template>
     <template>
-      <div class="title">{{ video.attributes.title }}</div>
       <div
         class="instructor"
         v-if="this.video.attributes.field_gc_video_instructor"
