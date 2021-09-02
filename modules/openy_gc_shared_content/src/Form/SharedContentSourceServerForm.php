@@ -108,6 +108,7 @@ class SharedContentSourceServerForm extends EntityForm {
     $form['url'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Source URL'),
+      '#description' => $this->t('Shared content server (without trailing slash at the end).'),
       '#maxlength' => 255,
       '#default_value' => $entity->getUrl(),
       '#required' => TRUE,
