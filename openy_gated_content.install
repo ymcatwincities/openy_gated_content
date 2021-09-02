@@ -10,31 +10,25 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\openy_gated_content\Entity\VyFavoriteItem;
 
 /**
  * Virtual Y install.
  */
 function openy_gated_content_install() {
-  $field_permission = BaseFieldDefinition::create('string')
-    ->setLabel(t('Virtual Y Access Group'))
-    ->setSetting('max_length', 255)
-    ->setDefaultValue('virtual_y,virtual_y_premium')
-    ->setRequired(FALSE)
-    ->setRevisionable(FALSE)
-    ->setTranslatable(FALSE)
-    ->setDisplayConfigurable('view', FALSE)
-    ->setDisplayConfigurable('form', TRUE)
-    ->setDisplayOptions('form', [
-      'type' => 'virtual_y_roles_select',
-      'settings' => [
-        'size' => '255',
-      ],
-    ]);
-
   $definition_manager = \Drupal::entityDefinitionUpdateManager();
-  $definition_manager->installFieldStorageDefinition('field_vy_permission', 'node', 'openy_gated_content', $field_permission);
-  $definition_manager->installFieldStorageDefinition('field_vy_permission', 'eventseries', 'openy_gated_content', $field_permission);
-  $definition_manager->installFieldStorageDefinition('field_vy_permission', 'eventinstance', 'openy_gated_content', $field_permission);
+
+  $field_name = 'field_vy_permission';
+  $entity_type_ids = [
+    'node',
+    'eventseries',
+    'eventinstance',
+  ];
+  foreach ($entity_type_ids as $entity_type_id) {
+    $entity_type = $definition_manager->getEntityType($entity_type_id);
+    $definitions = openy_gated_content_entity_field_storage_info($entity_type);
+    $definition_manager->installFieldStorageDefinition($field_name, $entity_type_id, 'openy_gated_content', $definitions[$field_name]);
+  }
 }
 
 /**
@@ -339,5 +333,72 @@ function openy_gated_content_update_8017() {
   ];
   foreach ($components as $id) {
     $config_updater->update($config, $config_name, "components.$id.autoplay_videos");
+  }
+}
+
+/**
+ * Install/update vy_favorite_item entity type fields' definitions.
+ */
+function openy_gated_content_update_8018() {
+  $definition_manager = \Drupal::entityDefinitionUpdateManager();
+
+  $entity_type_id = 'vy_favorite_item';
+  $entity_type = $definition_manager->getEntityType($entity_type_id);
+  $entity_type->setClass(VyFavoriteItem::class);
+  $definitions = VyFavoriteItem::baseFieldDefinitions($entity_type);
+  foreach ($definitions as $name => $definition) {
+    if ($definition_manager->getFieldStorageDefinition($name, $entity_type_id)) {
+      $definition_manager->updateFieldStorageDefinition($definition);
+    }
+    else {
+      $definition_manager->installFieldStorageDefinition($name, $entity_type_id, 'openy_gated_content', $definition);
+    }
+  }
+}
+
+/**
+ * Update field_vy_permission fields' definitions for VY-related entity types.
+ */
+function openy_gated_content_update_8019() {
+  $definition_manager = \Drupal::entityDefinitionUpdateManager();
+  $database = \Drupal::database();
+
+  $field_name = 'field_vy_permission';
+  $entity_type_ids = [
+    'node',
+    'eventseries',
+    'eventinstance',
+  ];
+  foreach ($entity_type_ids as $entity_type_id) {
+    $entity_type = $definition_manager->getEntityType($entity_type_id);
+    $definitions = openy_gated_content_entity_field_storage_info($entity_type);
+    if (!$definition_manager->getFieldStorageDefinition($field_name, $entity_type_id)) {
+      $definition_manager->installFieldStorageDefinition($field_name, $entity_type_id, 'openy_gated_content', $definitions[$field_name]);
+      continue;
+    }
+
+    $table_name = $entity_type_id . '_field_data';
+    // Retrieve existing field data.
+    $id_field_name = $entity_type->getKey('id');
+    $permission_values = $database->select($table_name, 'et')
+      ->fields('et', [$id_field_name, $field_name])
+      ->execute()
+      ->fetchAllKeyed();
+
+    // Remove data from the storage.
+    $database->update($table_name)
+      ->fields([$field_name => NULL])
+      ->execute();
+
+    // Update definitions and schema.
+    $definition_manager->updateFieldStorageDefinition($definitions[$field_name]);
+
+    // Restore entity data in the new schema.
+    foreach ($permission_values as $id => $permission_value) {
+      $database->update($table_name)
+        ->fields([$field_name => $permission_value])
+        ->condition($id_field_name, $id)
+        ->execute();
+    }
   }
 }
