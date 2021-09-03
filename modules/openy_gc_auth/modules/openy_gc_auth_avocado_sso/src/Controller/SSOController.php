@@ -134,6 +134,7 @@ class SSOController extends ControllerBase {
     // Do not continue if barcode does not exist.
     if (
       !$user_membership_data
+      || !isset($user_membership_data->Barcode)
       || $user_membership_data->Barcode === NULL
     ) {
       return new RedirectResponse(
@@ -144,8 +145,8 @@ class SSOController extends ControllerBase {
       );
     }
 
-    $result = $this->avocadoSSOClient->createUserLogEvent($user_membership_data->Barcode);
-    if ($this->avocadoSSOClient->validateUserSubscription($result)) {
+    // $result = $this->avocadoSSOClient->createUserLogEvent($user_membership_data->Barcode);
+    if ($this->avocadoSSOClient->temporaryValidateUserSubscription($user_membership_data)) {
       [$name, $email] = $this->avocadoSSOClient
         ->prepareUserNameAndEmail($user_data);
 
@@ -155,7 +156,7 @@ class SSOController extends ControllerBase {
       return new RedirectResponse($this->configOpenyGatedContent->get('virtual_y_url'));
     }
 
-    // Redirect back to Virual Y login page.
+    // Redirect back to Virtual Y login page.
     return new RedirectResponse(
       URL::fromUserInput(
         $this->configOpenyGatedContent->get('virtual_y_login_url'),
