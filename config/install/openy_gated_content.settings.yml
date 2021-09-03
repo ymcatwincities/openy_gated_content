@@ -1,6 +1,23 @@
 event_add_to_calendar: true
 pager_limit: 12
+switch_legacy_view: false
 components:
+  categories:
+    status: true
+    title: 'Categories'
+    weight: 0
+  instructors:
+    status: true
+    title: 'Instructors'
+    weight: 1
+  duration:
+    status: true
+    title: 'Duration'
+    weight: 2
+  latest_content:
+    status: true
+    title: 'Latest Content'
+    weight: 3
   gc_video:
     status: true
     title: 'Videos'
