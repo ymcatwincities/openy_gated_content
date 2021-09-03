@@ -134,6 +134,7 @@ class SSOController extends ControllerBase {
     // Do not continue if barcode does not exist.
     if (
       !$user_membership_data
+      || !isset($user_membership_data->Barcode)
       || $user_membership_data->Barcode === NULL
     ) {
       return new RedirectResponse(
