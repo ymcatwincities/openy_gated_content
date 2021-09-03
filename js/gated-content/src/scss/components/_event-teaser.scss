@@ -9,7 +9,6 @@
     .date, .time, .instructor, .level {
       display:     flex;
       align-items: center;
-      width:       100%;
       color:       $thunder;
 
       @include median(font-size, 12px, 10px);
@@ -26,7 +25,7 @@
     }
 
     .timer {
-      display:       inline-block;
+      align-self:    flex-start;
       margin-top:    11px;
       border:        1px solid $gray;
       border-radius: 12px;

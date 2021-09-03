@@ -4,11 +4,9 @@
     :routeName="'BlogPage'"
     :id="blog.id"
     :component="'vy_blog_post'"
+    :title="blog.attributes.title"
     :image="blog.attributes['field_vy_blog_image.field_media_image']"
   >
-    <template>
-      <div class="title">{{ blog.attributes.title }}</div>
-    </template>
     <template v-slot:outer>
       <AddToFavorite
         :id="blog.attributes.drupal_internal__nid"

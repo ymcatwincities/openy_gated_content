@@ -8,7 +8,8 @@
         <slot name="overlay" />
       </div>
       <div class="info">
-        <slot />
+        <div class="title">{{ title }}</div>
+        <slot class="extra-fields" />
       </div>
     </router-link>
     <slot name="outer" />
@@ -33,6 +34,10 @@ export default {
     },
     component: {
       type: String,
+    },
+    title: {
+      type: String,
+      required: true,
     },
     image: {
       type: Object,

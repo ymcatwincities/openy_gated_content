@@ -12,6 +12,8 @@ use Drupal\migrate_tools\MigrateBatchExecutable as MigrateBatchExecutableBase;
  *
  * This is copy of Drupal\migrate_tools\MigrateBatchExecutable with
  * few fixes for sync option support in import from UI.
+ *
+ * Note: this code based on the migrate_tools 8.x-5.0 version.
  */
 class MigrateBatchExecutable extends MigrateBatchExecutableBase {
 
