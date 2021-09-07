@@ -3,9 +3,9 @@
     class="event-teaser personal-training-teaser"
     :routeName="'PersonalTraining'"
     :id="video.id"
+    :title="video.attributes.title"
   >
     <template>
-      <div class="title">{{ video.attributes.title }}</div>
       <div class="date">
         <SvgIcon icon="date-icon"></SvgIcon>
         {{ date }}
@@ -21,11 +21,13 @@
         <SvgIcon icon="instructor-icon"></SvgIcon>
         {{ instructor }}
       </div>
-      <div class="timer private">
-        Private
-      </div>
-      <div class="timer canceled" v-if="video.attributes.state === 'canceled'">
-        Canceled
+      <div class="timers-wrapper">
+        <div class="timer private">
+          Private
+        </div>
+        <div class="timer canceled" v-if="video.attributes.state === 'canceled'">
+          Canceled
+        </div>
       </div>
     </template>
     <template v-slot:outer>
