@@ -305,8 +305,16 @@ class GCSettingsForm extends ConfigFormBase {
    *   - fields: (Optional) Array of fields arrays, used by the component. Each
    *     field array is keyed by field id and contains form element keys with
    *     appropriate values.
-   *   Example components array looks like the following below.
+   * @param \Drupal\Core\StringTranslation\TranslatableMarkup $title
+   *   Title for the Components section.
+   * @param \Drupal\Core\Config\Config $config
+   *   Virtual Y settings configuration object.
+   *
+   * @return array
+   *   Prepared array of components form elements.
+   *
    * @code
+   * // Example components array.
    *   $components = [
    *     'gc_auth' => [
    *       'title' => $this->t('Virtual Y video'),
@@ -339,13 +347,6 @@ class GCSettingsForm extends ConfigFormBase {
    *     ],
    *   ];
    * @endcode
-   * @param \Drupal\Core\StringTranslation\TranslatableMarkup $title
-   *   Title for the Components section.
-   * @param \Drupal\Core\Config\Config $config
-   *   Vitual Y settings configuration object.
-   *
-   * @return array
-   *   Prepared array of components form elements.
    */
   protected function prepareComponentsFormElements(array $components, TranslatableMarkup $title, Config $config) {
     $form = [
