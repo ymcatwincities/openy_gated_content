@@ -2,7 +2,9 @@
   <div class="gated-containerV2 my-40-20 px--20-10">
     <div v-if="loading || listingIsNotEmpty" class="listing-header">
       <h2 class="title text-gray cachet-book-24-20" v-if="title !== 'none'">{{ title }}</h2>
-      <slot name="filterButton"></slot>
+      <template v-if="hasMoreItems">
+        <slot name="filterButton"></slot>
+      </template>
     </div>
     <div v-if="loading" class="text-center">
       <Spinner></Spinner>
@@ -53,10 +55,6 @@ export default {
         return { path: 'weight', direction: 'ASC' };
       },
     },
-    limit: {
-      type: Number,
-      default: 0,
-    },
     msg: String,
   },
   data() {
@@ -105,11 +103,7 @@ export default {
         sortBy: this.sort,
       };
 
-      if (this.limit !== 0) {
-        params.page = {
-          limit: this.limit,
-        };
-      }
+      params.page = this.getPageParam;
 
       params.filter = {};
       if (this.favorites) {
@@ -157,6 +151,7 @@ export default {
       client
         .get('jsonapi/taxonomy_term/gc_category', { params })
         .then((response2) => {
+          this.links = response2.data.links;
           this.listing = this.combineMultiple(
             response2.data.data,
             response2.data.included,

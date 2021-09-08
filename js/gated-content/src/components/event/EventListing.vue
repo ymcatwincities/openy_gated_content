@@ -12,10 +12,12 @@
         <button v-on:click.stop="forwardOneDay" class="right"
                 role="button" aria-label="next date"><i class="fa fa-angle-right"></i></button>
       </h2>
-      <router-link :to="{ name: 'Schedule' }" v-if="viewAll" class="view-all">
-        More
-      </router-link>
-      <slot name="filterButton"></slot>
+      <template v-if="hasMoreItems">
+        <router-link :to="{ name: 'Schedule' }" v-if="viewAll" class="view-all">
+          More
+        </router-link>
+        <slot name="filterButton"></slot>
+      </template>
     </div>
     <div v-if="loading" class="text-center">
       <Spinner></Spinner>
@@ -31,6 +33,10 @@
       </div>
     </template>
     <div v-else class="empty-listing">{{ emptyBlockMsg }}</div>
+    <Pagination
+      v-if="pagination"
+      :links="links"
+    ></Pagination>
   </div>
 </template>
 
@@ -39,6 +45,7 @@ import { mapGetters } from 'vuex';
 import client from '@/client';
 import EventTeaser from '@/components/event/EventTeaser.vue';
 import Spinner from '@/components/Spinner.vue';
+import Pagination from '@/components/Pagination.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
 import { FavoritesMixin } from '@/mixins/FavoritesMixin';
 import { ListingMixin } from '@/mixins/ListingMixin';
@@ -49,6 +56,7 @@ export default {
   components: {
     EventTeaser,
     Spinner,
+    Pagination,
   },
   props: {
     title: {
@@ -84,10 +92,6 @@ export default {
       default() {
         return { path: 'date.value', direction: 'ASC' };
       },
-    },
-    limit: {
-      type: Number,
-      default: 0,
     },
     msg: {
       String,
@@ -223,11 +227,7 @@ export default {
         };
       }
 
-      if (this.limit !== 0) {
-        params.page = {
-          limit: this.limit,
-        };
-      }
+      params.page = this.getPageParam;
 
       if (this.featuredLocal) {
         params.filter.field_ls_featured = 1;
@@ -261,6 +261,7 @@ export default {
       client
         .get(`jsonapi/eventinstance/${this.eventType}`, { params })
         .then((response) => {
+          this.links = response.data.links;
           this.listing = this.combineMultiple(
             response.data.data,
             response.data.included,

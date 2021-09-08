@@ -2,14 +2,16 @@
   <div class="gated-containerV2 my-40-20 px--20-10">
     <div class="listing-header">
       <h2 class="title text-gray" v-if="title !== 'none'">{{ title }}</h2>
-      <router-link
-        :to="{ name: 'VideoListing', query: { type: categories ? categories[0] : 'all' } }"
-        v-if="viewAll && listingIsNotEmpty"
-        class="view-all"
-      >
-        More
-      </router-link>
-      <slot name="filterButton"></slot>
+      <template v-if="hasMoreItems">
+        <router-link
+          :to="{ name: 'VideoListing', query: { type: categories ? categories[0] : 'all' } }"
+          v-if="viewAll && listingIsNotEmpty"
+          class="view-all"
+        >
+          More
+        </router-link>
+        <slot name="filterButton"></slot>
+      </template>
     </div>
     <div v-if="loading" class="text-center">
       <Spinner></Spinner>
@@ -83,21 +85,12 @@ export default {
         return { path: 'created', direction: 'DESC' };
       },
     },
-    limit: {
-      type: Number,
-      default: 0,
-    },
-    pagination: {
-      type: Boolean,
-      default: false,
-    },
   },
   data() {
     return {
       component: 'gc_video',
       loading: true,
       error: false,
-      links: {},
       featuredLocal: false,
       params: [
         'field_gc_video_media',
@@ -171,17 +164,8 @@ export default {
         params.filter.field_gc_video_featured = 1;
       }
       params.filter.status = 1;
-      if (this.pagination) {
-        const currentPage = parseInt(this.$route.query.page, 10) || 0;
-        params.page = {
-          limit: this.config.pager_limit,
-          offset: currentPage * this.config.pager_limit,
-        };
-      } else if (this.limit !== 0) {
-        params.page = {
-          limit: this.limit,
-        };
-      }
+
+      params.page = this.getPageParam;
 
       if (this.categories !== null) {
         if (!this.isCategoriesLoaded) {

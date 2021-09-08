@@ -109,8 +109,9 @@
           <EventListing
             :title="config.components.live_stream.title"
             :favorites="true"
+            :pagination="viewAllContentMode"
             :sort="sortData('eventinstance', 'live_stream')"
-            :limit="viewAllContentMode ? 50 : itemsLimit"
+            :limit="viewAllContentMode ? 0 : itemsLimit"
           >
             <template #filterButton>
               <button
@@ -131,8 +132,9 @@
             :title="config.components.virtual_meeting.title"
             :eventType="'virtual_meeting'"
             :favorites="true"
+            :pagination="viewAllContentMode"
             :sort="sortData('eventinstance', 'virtual_meeting')"
-            :limit="viewAllContentMode ? 50 : itemsLimit"
+            :limit="viewAllContentMode ? 0 : itemsLimit"
           >
             <template #filterButton>
               <button
@@ -175,7 +177,7 @@
         <CategoriesListing
           :favorites="true"
           :sort="sortData('taxonomy_term')"
-          :limit="viewAllContentMode ? 50 : itemsLimit"
+          :limit="viewAllContentMode ? 0 : itemsLimit"
         >
           <template #filterButton>
             <button
