@@ -422,8 +422,5 @@ function openy_gated_content_update_8020() {
     $config_updater->update($config, $config_name, "components.$id");
   }
 
-  // We have to make sure legacy view is set to enabled for all existing virtual y
-  // projects.
-  $openy_gated_content_settings_config = \Drupal::configFactory()->getEditable('openy_gated_content.settings');
-  $openy_gated_content_settings_config->set('switch_legacy_view', TRUE);
+  $config_updater->update($config, $config_name, "switch_legacy_view");
 }
