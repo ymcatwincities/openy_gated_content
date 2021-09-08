@@ -7,6 +7,7 @@ use Drupal\Component\Utility\SortArray;
 use Drupal\Core\Config\Config;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -83,13 +84,61 @@ class GCSettingsForm extends ConfigFormBase {
 
     $form['app_settings']['switch_legacy_view'] = [
       '#title' => $this->t('Switch to Legacy View'),
-      '#description' => $this->t('Legacy View has the following components: Virtual Y Video, Live streams, Virtual meetings, Blog posts.'),
+      '#description' => $this->t('Legacy View has the following components on the Home page: Virtual Y Video, Live streams, Virtual meetings, Blog posts.'),
       '#type' => 'checkbox',
       '#default_value' => $config->get('switch_legacy_view') ?? FALSE,
     ];
 
-    $this->prepareComponents($form, $config);
-    $this->prepareLegacyView($form, $config);
+    // We are wrapping components into container, as it is not currently
+    // possible to hide tabledrag element for table with states.
+    $form['app_settings']['components_container'] = [
+      '#type' => 'details',
+      '#open' => TRUE,
+      '#title' => $this->t('Components settings'),
+      '#states' => [
+        'visible' => [
+          ':input[id="edit-app-settings-switch-legacy-view"]' => ['checked' => FALSE],
+        ],
+      ],
+    ];
+
+    $components = [
+      'categories' => [
+        'title' => $this->t('Categories'),
+      ],
+      'instructors' => [
+        'title' => $this->t('Instructors'),
+      ],
+      'duration' => [
+        'title' => $this->t('Duration'),
+      ],
+      'latest_content' => [
+        'title' => $this->t('Latest Content'),
+      ],
+    ];
+    $form['app_settings']['components_container']['components'] = $this->prepareComponentsFormElements(
+      $components,
+      $this->t('Components settings'),
+      $config
+    );
+
+    // We are wrapping components into container, as it is not currently
+    // possible to hide tabledrag element for table with states.
+    $form['app_settings']['legacy_view_container'] = [
+      '#type' => 'details',
+      '#open' => TRUE,
+      '#title' => $this->t('Legacy View'),
+      '#states' => [
+        'visible' => [
+          ':input[id="edit-app-settings-switch-legacy-view"]' => ['checked' => TRUE],
+        ],
+      ],
+    ];
+    $form['app_settings']['legacy_view_container']['legacy_view'] = $this->prepareComponentsFormElements(
+      $this->prepareLegacyComponents(),
+      $this->t('Legacy View'),
+      $config
+    );
 
     $form['app_settings']['virtual_y_url'] = [
       '#type' => 'textfield',
@@ -161,135 +210,15 @@ class GCSettingsForm extends ConfigFormBase {
   }
 
   /**
-   * Helper method that adds form elements for Virtual Y Components.
+   * Helper method to prepare array of fields configurations for Legacy View.
    *
-   * @param array $form
-   *   Array of the form configuration to attach the form elements to.
-   * @param \Drupal\Core\Config\Config $config
-   *   Virtual Y config object.
-   */
-  protected function prepareComponents(array &$form, Config $config) {
-    // We are wrapping components into container, as it is not currently
-    // possible to hide tabledrag element for table with states.
-    $form['app_settings']['components_container'] = [
-      '#type' => 'details',
-      '#open' => TRUE,
-      '#title' => $this->t('Components settings'),
-      '#states' => [
-        'visible' => [
-          ':input[id="edit-app-settings-switch-legacy-view"]' => ['checked' => FALSE],
-        ],
-      ],
-    ];
-
-    $form['app_settings']['components_container']['components'] = [
-      '#type' => 'table',
-      '#title' => $this->t('Components settings'),
-      '#header' => [
-        $this->t('Components settings'),
-        $this->t('Weight'),
-      ],
-      '#tabledrag' => [
-        [
-          'action' => 'order',
-          'relationship' => 'sibling',
-          'group' => 'weight',
-        ],
-      ],
-    ];
-
-    $components = [
-      'categories' => $this->t('Categories'),
-      'instructors' => $this->t('Instructors'),
-      'duration' => $this->t('Duration'),
-      'latest_content' => $this->t('Latest Content'),
-    ];
-
-    foreach ($components as $id => $title) {
-      $form['app_settings']['components_container']['components'][$id] = [
-        '#attributes' => [
-          'class' => ['draggable'],
-        ],
-        '#weight' => $config->get('components.' . $id . '.weight'),
-        'component' => [
-          '#type' => 'details',
-          '#open' => FALSE,
-          '#title' => $title,
-        ],
-        'weight' => [
-          '#type' => 'weight',
-          '#default_value' => $config->get('components.' . $id . '.weight'),
-          '#attributes' => [
-            'class' => ['weight'],
-          ],
-        ],
-      ];
-
-      $form['app_settings']['components_container']['components'][$id]['component']['status'] = [
-        '#title' => $this->t('Show on the VY home page'),
-        '#description' => $this->t('Enable/Disable "@name" component.', [
-          '@name' => $title,
-        ]),
-        '#type' => 'checkbox',
-        '#default_value' => $config->get('components.' . $id . '.status') ?? TRUE,
-      ];
-
-      $form['app_settings']['components_container']['components'][$id]['component']['title'] = [
-        '#type' => 'textfield',
-        '#title' => $this->t('Block title'),
-        '#required' => TRUE,
-        '#default_value' => $config->get('components.' . $id . '.title'),
-      ];
-    }
-
-    uasort($form['app_settings']['components_container']['components'],
-      [SortArray::class, 'sortByWeightProperty']);
-  }
-
-  /**
-   * Helper method that adds form elements for Legacy View components.
+   * @return array[]
+   *   An array of fields configurations to be passed to
+   *   prepareComponentsFormElements method.
    *
-   * @param array $form
-   *   Array of the form configuration to attach the form elements to.
-   * @param \Drupal\Core\Config\Config $config
-   *   Virtual Y config object.
+   * @see \Drupal\openy_gated_content\Form\GCSettingsForm::prepareComponentsFormElements()
    */
-  protected function prepareLegacyView(array &$form, Config $config) {
-    // We are wrapping components into container, as it is not currently
-    // possible to hide tabledrag element for table with states.
-    $form['app_settings']['legacy_view_container'] = [
-      '#type' => 'details',
-      '#open' => TRUE,
-      '#title' => $this->t('Legacy View'),
-      '#states' => [
-        'visible' => [
-          ':input[id="edit-app-settings-switch-legacy-view"]' => ['checked' => TRUE],
-        ],
-      ],
-    ];
-
-    $form['app_settings']['legacy_view_container']['legacy_view'] = [
-      '#type' => 'table',
-      '#title' => $this->t('Legacy View'),
-      '#header' => [
-        $this->t('Components settings'),
-        $this->t('Weight'),
-      ],
-      '#tabledrag' => [
-        [
-          'action' => 'order',
-          'relationship' => 'sibling',
-          'group' => 'weight',
-        ],
-      ],
-    ];
-
-    $legacy_components = [
-      'gc_video' => $this->t('Virtual Y video'),
-      'live_stream' => $this->t('Live streams'),
-      'virtual_meeting' => $this->t('Virtual meetings'),
-      'vy_blog_post' => $this->t('Blog posts'),
-    ];
+  protected function prepareLegacyComponents() {
     $bundles_entity_types = [
       'gc_video' => 'node',
       'live_stream' => 'eventinstance',
@@ -315,81 +244,176 @@ class GCSettingsForm extends ConfigFormBase {
       'live_stream',
     ];
 
-    foreach ($legacy_components as $legacy_component_id => $legacy_component_title) {
-      $form['app_settings']['legacy_view_container']['legacy_view'][$legacy_component_id] = [
+    $legacy_components = [
+      'gc_video' => [
+        'title' => $this->t('Virtual Y video'),
+      ],
+      'live_stream' => [
+        'title' => $this->t('Live streams'),
+      ],
+      'virtual_meeting' => [
+        'title' => $this->t('Virtual meetings'),
+      ],
+      'vy_blog_post' => [
+        'title' => $this->t('Blog posts'),
+      ],
+    ];
+
+    foreach ($legacy_components as $legacy_component_id => &$legacy_component_settings) {
+      $legacy_component_settings['fields'] = [
+        'up_next_title' => [
+          'type' => 'textfield',
+          'title' => $this->t('Up next block title'),
+          'required' => TRUE,
+        ],
+        'empty_block_text' => [
+          'type' => 'textfield',
+          'title' => $this->t('Text for empty block'),
+        ],
+        'default_sort' => [
+          'type' => 'select',
+          'title' => $this->t('Default view order'),
+          'options' => array_merge($date_options[$bundles_entity_types[$legacy_component_id]], $title_options),
+        ],
+        'show_covers' => [
+          'type' => 'checkbox',
+          'title' => $this->t('Show cover image on teaser'),
+          'description' => $this->t('Allows to enable or disable display of covers on the teasers.'),
+        ],
+      ];
+
+      if (in_array($legacy_component_id, $video_components)) {
+        $legacy_component_settings['fields']['autoplay_videos'] = [
+          'type' => 'checkbox',
+          'title' => $this->t('Start videos playback automatically'),
+          'description' => $this->t('Videos will be autoplayed on the page load'),
+        ];
+      }
+    }
+
+    return $legacy_components;
+  }
+
+  /**
+   * Helper method to prepare form elements from components array.
+   *
+   * @param array $components
+   *   Array of settings for components form elements. Each settings array is
+   *   keyed by component id and has the following keys:
+   *   - title: TranslatableMarkup object, representing a display title of the
+   *     component;
+   *   - fields: (Optional) Array of fields arrays, used by the component. Each
+   *     field array is keyed by field id and contains form element keys with
+   *     appropriate values.
+   *   Example components array looks like the following below.
+   * @code
+   *   $components = [
+   *     'gc_auth' => [
+   *       'title' => $this->t('Virtual Y video'),
+   *       'fields' => [
+   *         'up_next_title' => [
+   *           'type' => 'textfield',
+   *           'title' => $this->t('Up next block title'),
+   *           'required' => TRUE,
+   *         ],
+   *         'empty_block_text' => [
+   *           'type' => 'textfield',
+   *           'title' => $this->t('Text for empty block'),
+   *         ],
+   *       ],
+   *     ],
+   *     'virtual_meeting' => [
+   *       'title' => $this->t('Virtual meetings'),
+   *       'fields' => [
+   *         'default_sort' => [
+   *           'type' => 'select',
+   *           'title' => $this->t('Default view order'),
+   *           'options' => $options,
+   *         ],
+   *         'show_covers' => [
+   *           'type' => 'checkbox',
+   *           'title' => $this->t('Text for empty block'),
+   *           'description' => $this->t('Allows to enable or disable display of covers on the teasers.'),
+   *         ],
+   *       ],
+   *     ],
+   *   ];
+   * @endcode
+   * @param \Drupal\Core\StringTranslation\TranslatableMarkup $title
+   *   Title for the Components section.
+   * @param \Drupal\Core\Config\Config $config
+   *   Vitual Y settings configuration object.
+   *
+   * @return array
+   *   Prepared array of components form elements.
+   */
+  protected function prepareComponentsFormElements(array $components, TranslatableMarkup $title, Config $config) {
+    $form = [
+      '#type' => 'table',
+      '#title' => $title,
+      '#header' => [
+        $this->t('Components settings'),
+        $this->t('Weight'),
+      ],
+      '#tabledrag' => [
+        [
+          'action' => 'order',
+          'relationship' => 'sibling',
+          'group' => 'weight',
+        ],
+      ],
+    ];
+
+    foreach ($components as $id => $settings) {
+      $form[$id] = [
         '#attributes' => [
           'class' => ['draggable'],
         ],
-        '#weight' => $config->get('components.' . $legacy_component_id . '.weight'),
+        '#weight' => $config->get('components.' . $id . '.weight'),
         'component' => [
           '#type' => 'details',
           '#open' => FALSE,
-          '#title' => $legacy_component_title,
+          '#title' => $settings['title'],
         ],
         'weight' => [
           '#type' => 'weight',
-          '#default_value' => $config->get('components.' . $legacy_component_id . '.weight'),
+          '#default_value' => $config->get('components.' . $id . '.weight'),
           '#attributes' => [
             'class' => ['weight'],
           ],
         ],
       ];
 
-      $form['app_settings']['legacy_view_container']['legacy_view'][$legacy_component_id]['component']['status'] = [
+      $form[$id]['component']['status'] = [
         '#title' => $this->t('Show on the VY home page'),
         '#description' => $this->t('Enable/Disable "@name" component.', [
-          '@name' => $legacy_component_title,
+          '@name' => $settings['title'],
         ]),
         '#type' => 'checkbox',
-        '#default_value' => $config->get('components.' . $legacy_component_id . '.status') ?? TRUE,
+        '#default_value' => $config->get('components.' . $id . '.status') ?? TRUE,
       ];
 
-      $form['app_settings']['legacy_view_container']['legacy_view'][$legacy_component_id]['component']['title'] = [
+      $form[$id]['component']['title'] = [
         '#type' => 'textfield',
         '#title' => $this->t('Block title'),
         '#required' => TRUE,
-        '#default_value' => $config->get('components.' . $legacy_component_id . '.title') ?? '',
+        '#default_value' => $config->get('components.' . $id . '.title'),
       ];
 
-      $form['app_settings']['legacy_view_container']['legacy_view'][$legacy_component_id]['component']['up_next_title'] = [
-        '#type' => 'textfield',
-        '#title' => $this->t('Up next block title'),
-        '#required' => TRUE,
-        '#default_value' => $config->get('components.' . $legacy_component_id . '.up_next_title') ?? '',
-      ];
-
-      $form['app_settings']['legacy_view_container']['legacy_view'][$legacy_component_id]['component']['empty_block_text'] = [
-        '#type' => 'textfield',
-        '#title' => $this->t('Text for empty block'),
-        '#default_value' => $config->get('components.' . $legacy_component_id . '.empty_block_text') ?? '',
-      ];
-
-      $form['app_settings']['legacy_view_container']['legacy_view'][$legacy_component_id]['component']['default_sort'] = [
-        '#type' => 'select',
-        '#title' => $this->t('Default view order'),
-        '#options' => array_merge($date_options[$bundles_entity_types[$legacy_component_id]], $title_options),
-        '#default_value' => $config->get('components.' . $legacy_component_id . '.default_sort'),
-      ];
-
-      $form['app_settings']['legacy_view_container']['legacy_view'][$legacy_component_id]['component']['show_covers'] = [
-        '#title' => $this->t('Show cover image on teaser'),
-        '#description' => $this->t('Allows to enable or disable display of covers on the teasers.'),
-        '#type' => 'checkbox',
-        '#default_value' => $config->get('components.' . $legacy_component_id . '.show_covers') ?? TRUE,
-      ];
-
-      if (in_array($legacy_component_id, $video_components)) {
-        $form['app_settings']['legacy_view_container']['legacy_view'][$legacy_component_id]['component']['autoplay_videos'] = [
-          '#title' => $this->t('Start videos playback automaitcally'),
-          '#description' => $this->t('Videos will be autoplayed on the page load'),
-          '#type' => 'checkbox',
-          '#default_value' => $config->get('components.' . $legacy_component_id . '.autoplay_videos') ?? TRUE,
+      foreach ($settings['fields'] as $field_id => $field_config) {
+        $form[$id]['component'][$field_id] = [
+          '#default_value' => $config->get('components.' . $id . '.' . $field_id) ?? '',
         ];
+        foreach ($field_config as $attribute => $value) {
+          $form[$id]['component'][$field_id]["#$attribute"] = $value;
+        }
       }
     }
 
-    uasort($form['app_settings']['legacy_view_container']['legacy_view'],
+    uasort($form,
       [SortArray::class, 'sortByWeightProperty']);
+
+    return $form;
   }
 
   /**
