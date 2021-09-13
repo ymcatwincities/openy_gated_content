@@ -7,7 +7,6 @@
     <PageHeader title="Dashboard"></PageHeader>
 
     <PersonalTrainingListing
-      :featured="true"
       :viewAll="true"
       :limit="8"
       v-if="config.personal_training_enabled"

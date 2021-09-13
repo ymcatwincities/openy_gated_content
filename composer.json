@@ -6,16 +6,18 @@
         "ymcatwincities/openy": "*",
         "drupal/recurring_events": "^2.0@beta",
         "ymcatwincities/daxko_sso": "*",
-        "drupal/jsonapi_image_styles": "^1.0@beta",
+        "drupal/jsonapi_image_styles": "^2.0.0",
         "drupal/csv_serialization": "^2.0",
         "drupal/simple_recaptcha": "^1.0",
         "drupal/date_recur": "^2.0|^3.0",
         "drupal/date_recur_modular": "^2.0|^3.0",
+        "drupal/state_machine": "^1.4",
         "ext-json": "*",
         "ext-zlib": "*"
     },
     "license": "GPL-2.0+",
     "minimum-stability": "dev",
+    "prefer-stable": true,
     "extra": {
         "patches": {
             "drupal/recurring_events": {
@@ -28,6 +30,10 @@
             },
             "ymcatwincities/openy": {
                 "[PRODDEV-240] Display search input field for the lily theme": "https://patch-diff.githubusercontent.com/raw/ymcatwincities/openy/pull/2420.patch"
+            },
+            "drupal/jsonapi_image_styles": {
+                "ParseError: syntax error, unexpected 'EntityTypeManagerInterface' (3229668)": "https://www.drupal.org/files/issues/2021-08-24/3229668-2.patch",
+                "TypeError: Argument 1 passed to Drupal\\jsonapi_image_styles\\EventSubscriber\\ConfigSubscriber::onResponse() must be an instance of Symfony\\Component\\HttpKernel\\Event\\ResponseEvent (3229545)": "https://git.drupalcode.org/project/jsonapi_image_styles/-/merge_requests/2/diffs.patch"
             }
         },
         "patches-ignore": {
