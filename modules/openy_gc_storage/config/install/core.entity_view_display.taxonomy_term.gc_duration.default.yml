@@ -1,0 +1,26 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.gc_duration.field_gc_duration_max
+    - field.field.taxonomy_term.gc_duration.field_gc_duration_min
+    - taxonomy.vocabulary.gc_duration
+  module:
+    - text
+id: taxonomy_term.gc_duration.default
+targetEntityType: taxonomy_term
+bundle: gc_duration
+mode: default
+content:
+  description:
+    label: hidden
+    type: text_default
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  field_gc_duration_max: true
+  field_gc_duration_min: true
+  langcode: true
+  search_api_excerpt: true

@@ -95,6 +95,15 @@ openy_gated_content.categories:
   parent: openy_gated_content.taxonomy
   weight: 1
 
+openy_gated_content.duration:
+  title: 'Duration'
+  route_name: entity.taxonomy_vocabulary.overview_form
+  route_parameters:
+    taxonomy_vocabulary: gc_duration
+  description: 'Virtual YMCA duration.'
+  parent: openy_gated_content.taxonomy
+  weight: 2
+
 openy_gated_content.equipment:
   title: 'Equipment'
   route_name: entity.taxonomy_vocabulary.overview_form
@@ -102,7 +111,7 @@ openy_gated_content.equipment:
     taxonomy_vocabulary: gc_equipment
   description: 'Virtual YMCA equipment.'
   parent: openy_gated_content.taxonomy
-  weight: 2
+  weight: 3
 
 openy_gated_content.level:
   title: 'Levels'
@@ -111,4 +120,4 @@ openy_gated_content.level:
     taxonomy_vocabulary: gc_level
   description: 'Virtual YMCA level.'
   parent: openy_gated_content.taxonomy
-  weight: 3
+  weight: 4

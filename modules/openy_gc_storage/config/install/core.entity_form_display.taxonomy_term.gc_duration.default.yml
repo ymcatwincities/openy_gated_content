@@ -1,0 +1,45 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.gc_duration.field_gc_duration_max
+    - field.field.taxonomy_term.gc_duration.field_gc_duration_min
+    - taxonomy.vocabulary.gc_duration
+id: taxonomy_term.gc_duration.default
+targetEntityType: taxonomy_term
+bundle: gc_duration
+mode: default
+content:
+  field_gc_duration_max:
+    weight: 2
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+    type: number
+    region: content
+  field_gc_duration_min:
+    weight: 1
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+    type: number
+    region: content
+  name:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    settings:
+      display_label: true
+    weight: 3
+    region: content
+    third_party_settings: {  }
+hidden:
+  description: true
+  langcode: true
+  path: true

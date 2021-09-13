@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 'Virtual YMCA Duration'
+vid: gc_duration
+description: 'Videos Duration of Open Y Virtual YMCA'
+weight: 0

@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_gc_duration_max
+    - taxonomy.vocabulary.gc_duration
+  module:
+    - datalayer
+third_party_settings:
+  datalayer:
+    expose: 0
+    label: field_gc_duration_max
+id: taxonomy_term.gc_duration.field_gc_duration_max
+field_name: field_gc_duration_max
+entity_type: taxonomy_term
+bundle: gc_duration
+label: 'Maximum Duration'
+description: 'Maximum duration of the video that can reference this term.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: minute|minutes
+field_type: integer
