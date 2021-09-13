@@ -85,7 +85,6 @@
         :parent="category.attributes.drupal_internal__tid"
         :bundle="selectedBundle"
         :sort="sortData('taxonomy_term')"
-        :limit="50"
       />
 
       <div v-for="component in componentsOrder" :key="component">
@@ -97,7 +96,7 @@
             :categories="[category.attributes.drupal_internal__tid]"
             :sort="sortData('eventinstance', 'live_stream')"
             :pagination="selectedComponent === 'live_stream'"
-            :limit="viewAllContentMode ? 50 : itemsLimit"
+            :limit="viewAllContentMode ? 0 : itemsLimit"
             @listing-not-empty="listingIsNotEmpty('live_stream', ...arguments)"
           >
             <template #filterButton>
@@ -121,7 +120,7 @@
             :eventType="'virtual_meeting'"
             :sort="sortData('eventinstance', 'virtual_meeting')"
             :pagination="selectedComponent === 'virtual_meeting'"
-            :limit="viewAllContentMode ? 50 : itemsLimit"
+            :limit="viewAllContentMode ? 0 : itemsLimit"
             @listing-not-empty="listingIsNotEmpty('virtual_meeting', ...arguments)"
           >
             <template #filterButton>
@@ -145,7 +144,7 @@
             :pagination="selectedComponent === 'gc_video'"
             :viewAll="false"
             :sort="sortData('node', 'gc_video')"
-            :limit="itemsLimit"
+            :limit="viewAllContentMode ? 0 : itemsLimit"
             @listing-not-empty="listingIsNotEmpty('gc_video', ...arguments)"
           >
             <template #filterButton>
@@ -166,10 +165,9 @@
             v-if="selectedComponent === 'vy_blog_post' || selectedComponent === 'all'"
             :title="config.components.vy_blog_post.title"
             :categories="[category.attributes.drupal_internal__tid]"
-            :viewAll="false"
             :sort="sortData('node', 'vy_blog_post')"
             :pagination="selectedComponent === 'vy_blog_post'"
-            :limit="itemsLimit"
+            :limit="viewAllContentMode ? 0 : itemsLimit"
             @listing-not-empty="listingIsNotEmpty('vy_blog_post', ...arguments)"
             class="my-40-20"
           >
