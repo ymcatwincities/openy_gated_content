@@ -103,7 +103,6 @@ export default {
       component: this.eventType,
       loading: true,
       error: false,
-      featuredLocal: false,
       params: [
         'field_ls_image',
         'field_ls_image.field_media_image',
@@ -131,7 +130,6 @@ export default {
   async mounted() {
     // By default emit that listing not empty to the parent component.
     this.$emit('listing-not-empty', true);
-    this.featuredLocal = this.featured;
     await this.load();
   },
   computed: {
@@ -229,14 +227,12 @@ export default {
 
       params.page = this.getPageParam;
 
-      if (this.featuredLocal) {
-        params.filter.field_ls_featured = 1;
-      }
-
       params.filter.status = 1;
-      params.sort = {
-        sortBy: this.sort,
-      };
+
+      params.sort = this.featured
+        ? { featured: { path: 'field_ls_featured', direction: 'DESC' } }
+        : {};
+      params.sort.sortBy = this.sort;
 
       if (this.categories !== null) {
         if (!this.isCategoriesLoaded) {
@@ -267,11 +263,6 @@ export default {
             response.data.included,
             this.params,
           );
-          if (this.featuredLocal === true && this.listing.length === 0) {
-            // Load one more time without featured filter.
-            this.featuredLocal = false;
-            this.load();
-          }
           if (!this.listingIsNotEmpty) {
             // Emit that listing empty to the parent component.
             this.$emit('listing-not-empty', false);

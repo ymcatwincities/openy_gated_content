@@ -91,7 +91,6 @@ export default {
       component: 'gc_video',
       loading: true,
       error: false,
-      featuredLocal: false,
       params: [
         'field_gc_video_media',
         'field_gc_video_media.thumbnail',
@@ -120,7 +119,6 @@ export default {
   async mounted() {
     // By default emit that listing not empty to the parent component.
     this.$emit('listing-not-empty', true);
-    this.featuredLocal = this.featured;
     await this.load();
   },
   methods: {
@@ -131,9 +129,10 @@ export default {
         params.include = this.params.join(',');
       }
 
-      params.sort = {
-        sortBy: this.sort,
-      };
+      params.sort = this.featured
+        ? { featured: { path: 'field_gc_video_featured', direction: 'DESC' } }
+        : {};
+      params.sort.sortBy = this.sort;
 
       params.filter = {};
       if (this.excludedVideoId.length > 0) {
@@ -160,9 +159,6 @@ export default {
         };
       }
 
-      if (this.featuredLocal) {
-        params.filter.field_gc_video_featured = 1;
-      }
       params.filter.status = 1;
 
       params.page = this.getPageParam;
@@ -196,11 +192,6 @@ export default {
             response.data.included,
             this.params,
           );
-          if (this.featuredLocal === true && this.listing.length === 0) {
-            // Load one more time without featured filter.
-            this.featuredLocal = false;
-            this.load();
-          }
           if (!this.listingIsNotEmpty) {
             // Emit that listing empty to the parent component.
             this.$emit('listing-not-empty', false);
