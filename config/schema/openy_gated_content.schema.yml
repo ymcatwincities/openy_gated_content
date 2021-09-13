@@ -37,6 +37,9 @@ openy_gated_content.settings:
     pager_limit:
       type: integer
       label: 'Pager limit'
+    switch_legacy_view:
+      type: boolean
+      label: 'Switch to Legacy View'
     virtual_y_url:
       type: string
       label: 'Virtual Y Landing Page url'
@@ -50,6 +53,18 @@ openy_gated_content.settings:
       type: mapping
       label: 'Components settings'
       mapping:
+        categories:
+          type: vy_component_settings
+          label: 'Categories'
+        instructors:
+          type: vy_component_settings
+          label: 'Instructors'
+        duration:
+          type: vy_component_settings
+          label: 'Duration'
+        latest_content:
+          type: vy_component_settings
+          label: 'Latest Content'
         gc_video:
           type: vy_component_settings
           label: 'Virtual Y video'
