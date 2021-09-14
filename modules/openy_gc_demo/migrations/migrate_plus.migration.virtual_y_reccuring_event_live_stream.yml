@@ -21,7 +21,7 @@ source:
         We invite all levels of yoga experience to grow, strengthen, connect,
         and inspire. Expect an invigorating flow that builds strength and
         vitality while focusing on alignment and breath.
-      instructor: 'Linda Myers'
+      instructor: 8
       media: 16
       image: 7
       category: 6
@@ -38,7 +38,7 @@ source:
         breath and movement to propel you through the practice. This Yoga
         Class is 45 min during the week. This Yoga class will help ground
         your mind and body, develop your respiratory system, and sup
-      instructor: 'Linda Myers'
+      instructor: 8
       media: 17
       image: 6
       category: 6
@@ -66,7 +66,11 @@ process:
     default_value: 1
   title: title
   body: description
-  field_ls_host_name: instructor
+  field_gc_instructor_reference:
+    -
+      plugin: migration_lookup
+      migration: virtual_y_gc_instructor
+      source: instructor
   field_vy_permission:
     plugin: default_value
     default_value: virtual_y,virtual_y_premium
@@ -130,4 +134,5 @@ migration_dependencies:
     - virtual_y_gc_category
     - virtual_y_gc_equipment
     - virtual_y_gc_level
+    - virtual_y_gc_instructor
   optional: {}

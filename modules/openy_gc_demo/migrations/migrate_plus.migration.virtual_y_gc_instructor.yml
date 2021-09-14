@@ -1,0 +1,121 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - openy_gc_demo
+id: virtual_y_gc_instructor
+migration_tags:
+  - openy_complete_installation
+migration_group: virtual_y
+label: 'GC Instructor'
+source:
+  plugin: embedded_data
+  data_rows:
+    -
+      tid: 1
+      name: 'Jennifer'
+      image: 0
+      category:
+        - 1
+        - 9
+        - 10
+        - 5
+        - 6
+      level: 3
+    -
+      tid: 2
+      name: 'Robin'
+      image: 0
+      category: 9
+      level: 4
+    -
+      tid: 3
+      name: 'Amy'
+      image: 0
+      category:
+        - 10
+        - 2
+      level: 3
+    -
+      tid: 4
+      name: 'Jen'
+      image: 0
+      category: 2
+      level: 3
+    -
+      tid: 5
+      name: 'Sarah'
+      image: 0
+      category:
+        - 9
+        - 10
+      level: 3
+    -
+      tid: 6
+      name: 'Chance'
+      image: 0
+      category: 11
+      level: 3
+    -
+      tid: 7
+      name: 'Sally'
+      image: 0
+      category:
+        - 11
+        - 8
+      level: 2
+    -
+      tid: 8
+      name: 'Linda Myers'
+      image: 0
+      category: 6
+      level: 3
+    -
+      tid: 9
+      name: 'Jessica Myers'
+      image: 0
+      category: 3
+      level: 4
+  ids:
+    tid:
+      type: integer
+process:
+  langcode:
+    plugin: default_value
+    source: language
+    default_value: en
+  status:
+    plugin: default_value
+    default_value: 1
+  name: name
+  weight: tid
+  field_gc_instructor_photo:
+    -
+      plugin: skip_on_empty
+      method: process
+      source: image
+    -
+      plugin: migration_lookup
+      migration: virtual_y_media_image
+      source: image
+  field_gc_instructor_categories:
+    -
+      plugin: migration_lookup
+      migration: virtual_y_gc_category
+      source: category
+  field_gc_instructor_difficulty:
+    -
+      plugin: migration_lookup
+      migration: virtual_y_gc_level
+      source: level
+destination:
+  plugin: entity:taxonomy_term
+  default_bundle: gc_instructor
+
+migration_dependencies:
+  required:
+    - virtual_y_media_image
+    - virtual_y_gc_level
+    - virtual_y_gc_category
+  optional: {  }
