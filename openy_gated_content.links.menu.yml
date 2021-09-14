@@ -112,3 +112,12 @@ openy_gated_content.level:
   description: 'Virtual YMCA level.'
   parent: openy_gated_content.taxonomy
   weight: 3
+
+openy_gated_content.instructor:
+  title: 'Instructors'
+  route_name: entity.taxonomy_vocabulary.overview_form
+  route_parameters:
+    taxonomy_vocabulary: gc_instructor
+  description: 'Virtual YMCA instructor.'
+  parent: openy_gated_content.taxonomy
+  weight: 4

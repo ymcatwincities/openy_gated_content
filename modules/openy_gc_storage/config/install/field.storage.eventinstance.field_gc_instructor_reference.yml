@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - recurring_events
+    - taxonomy
+id: eventinstance.field_gc_instructor_reference
+field_name: field_gc_instructor_reference
+entity_type: eventinstance
+type: entity_reference
+settings:
+  target_type: taxonomy_term
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: true
+custom_storage: false
