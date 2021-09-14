@@ -3,6 +3,7 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.teaser
+    - field.field.node.gc_video.field_gc_duration_term
     - field.field.node.gc_video.field_gc_video_category
     - field.field.node.gc_video.field_gc_video_description
     - field.field.node.gc_video.field_gc_video_duration
@@ -26,6 +27,7 @@ content:
     third_party_settings: {  }
     region: content
 hidden:
+  field_gc_duration_term: true
   field_gc_video_category: true
   field_gc_video_description: true
   field_gc_video_duration: true
@@ -36,3 +38,4 @@ hidden:
   field_gc_video_level: true
   field_gc_video_media: true
   langcode: true
+  search_api_excerpt: true
