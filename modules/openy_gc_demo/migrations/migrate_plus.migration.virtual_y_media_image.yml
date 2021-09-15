@@ -107,6 +107,18 @@ source:
       id: 24
       name: 'Lino Lakes Group Fitness Mat Pilates'
       file: 24
+    -
+      id: 25
+      name: 'Emanuel D.'
+      file: 25
+    -
+      id: 26
+      name: 'Molly R.'
+      file: 26
+    -
+      id: 27
+      name: 'Olivia P.'
+      file: 27
   ids:
     id:
       type: integer
