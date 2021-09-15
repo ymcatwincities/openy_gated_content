@@ -3,8 +3,11 @@ status: true
 dependencies:
   config:
     - field.field.taxonomy_term.gc_duration.field_gc_duration_max
+    - field.field.taxonomy_term.gc_duration.field_gc_duration_media
     - field.field.taxonomy_term.gc_duration.field_gc_duration_min
     - taxonomy.vocabulary.gc_duration
+  module:
+    - media_library
 id: taxonomy_term.gc_duration.default
 targetEntityType: taxonomy_term
 bundle: gc_duration
@@ -16,6 +19,13 @@ content:
       placeholder: ''
     third_party_settings: {  }
     type: number
+    region: content
+  field_gc_duration_media:
+    type: media_library_widget
+    weight: 4
+    settings:
+      media_types: {  }
+    third_party_settings: {  }
     region: content
   field_gc_duration_min:
     weight: 1

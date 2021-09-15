@@ -3,6 +3,7 @@ status: true
 dependencies:
   config:
     - field.field.taxonomy_term.gc_duration.field_gc_duration_max
+    - field.field.taxonomy_term.gc_duration.field_gc_duration_media
     - field.field.taxonomy_term.gc_duration.field_gc_duration_min
     - taxonomy.vocabulary.gc_duration
   module:
@@ -19,6 +20,15 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
+  field_gc_duration_media:
+    type: entity_reference_entity_view
+    weight: 1
+    label: above
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    region: content
 hidden:
   field_gc_duration_max: true
   field_gc_duration_min: true
