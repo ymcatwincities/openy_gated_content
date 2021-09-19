@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies: {  }
+id: eventinstance_virtual_meeting_instructor_reference
+label: Instructor
+type: fallback
+sourceEntityType: eventseries
+destinationEntityType: eventinstance
+sourceEntityBundle: virtual_meeting
+destinationEntityBundle: virtual_meeting
+sourceField: field_gc_instructor_reference
+destinationField: field_gc_instructor_reference
+plugin: default_inheritance

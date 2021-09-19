@@ -4,6 +4,7 @@ dependencies:
   config:
     - entity_browser.browser.videos_library
     - field.field.node.gc_video.field_gc_duration_term
+    - field.field.node.gc_video.field_gc_instructor_reference
     - field.field.node.gc_video.field_gc_video_category
     - field.field.node.gc_video.field_gc_video_description
     - field.field.node.gc_video.field_gc_video_duration
@@ -32,12 +33,22 @@ content:
     settings: {  }
     third_party_settings: {  }
   field_gc_duration_term:
-    weight: 9
+    weight: 24
     settings:
       match_operator: CONTAINS
       match_limit: 10
       size: 60
-      placeholder: '10 minutes or less'
+    placeholder: '10 minutes or less'
+    third_party_settings: { }
+    type: entity_reference_autocomplete
+    region: content
+  field_gc_instructor_reference:
+    weight: 5
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
     type: entity_reference_autocomplete
     region: content
@@ -97,14 +108,6 @@ content:
       field_widget_replace: false
       open: false
     third_party_settings: {  }
-    region: content
-  field_gc_video_instructor:
-    weight: 5
-    settings:
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-    type: string_textfield
     region: content
   field_gc_video_level:
     weight: 4
@@ -204,4 +207,5 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-hidden: {  }
+hidden:
+  field_gc_video_instructor: true

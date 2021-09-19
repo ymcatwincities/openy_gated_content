@@ -84,6 +84,15 @@ source:
     -
       id: 24
       name: Lino-Lakes-Group-Fitness-Mat-Pilates0147.jpg
+    -
+      id: 25
+      name: Emanuel-D.jpg
+    -
+      id: 26
+      name: Molly-R.jpg
+    -
+      id: 27
+      name: Olivia-P.jpg
   ids:
     id:
       type: integer

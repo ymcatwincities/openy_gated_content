@@ -3,6 +3,7 @@ status: true
 dependencies:
   config:
     - field.field.node.gc_video.field_gc_duration_term
+    - field.field.node.gc_video.field_gc_instructor_reference
     - field.field.node.gc_video.field_gc_video_category
     - field.field.node.gc_video.field_gc_video_description
     - field.field.node.gc_video.field_gc_video_duration
@@ -23,6 +24,14 @@ mode: default
 content:
   field_gc_duration_term:
     weight: 110
+    label: above
+    settings:
+      link: true
+    third_party_settings: { }
+    type: entity_reference_label
+    region: content
+  field_gc_instructor_reference:
+    weight: 104
     label: above
     settings:
       link: true
@@ -80,14 +89,6 @@ content:
       link: false
     third_party_settings: {  }
     region: content
-  field_gc_video_instructor:
-    weight: 104
-    label: above
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    type: string
-    region: content
   field_gc_video_level:
     weight: 106
     label: above
@@ -111,5 +112,6 @@ content:
     settings: {  }
     third_party_settings: {  }
 hidden:
+  field_gc_video_instructor: true
   langcode: true
   search_api_excerpt: true
