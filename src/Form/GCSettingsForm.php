@@ -238,7 +238,13 @@ class GCSettingsForm extends ConfigFormBase {
         '#type' => 'textfield',
         '#title' => $this->t('Block title'),
         '#required' => TRUE,
-        '#default_value' => $config->get('components.' . $id . '.title'),
+        '#default_value' => $config->get('components.' . $id . '.title') ?? '',
+      ];
+
+      $form['app_settings']['components_container']['components'][$id]['component']['empty_block_text'] = [
+        '#type' => 'textfield',
+        '#title' => $this->t('Text for empty block'),
+        '#default_value' => $config->get('components.' . $id . '.empty_block_text') ?? '',
       ];
     }
 
