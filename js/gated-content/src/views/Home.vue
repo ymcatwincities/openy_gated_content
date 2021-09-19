@@ -13,13 +13,12 @@
     />
 
     <div v-for="component in componentsOrder" :key="component">
-      <VideoListing
+      <DurationsListing
         :featured="true"
         :viewAll="true"
-        :limit="8"
-        :title="config.components.gc_video.title"
-        :sort="sortData('node', 'gc_video')"
-        v-if="isActive('gc_video') && showOnCurrentIteration('gc_video', component)"
+        :limit="4"
+        :title="config.components.duration.title"
+        v-if="isActive('duration') && showOnCurrentIteration('duration', component)"
       />
       <EventListing
         :featured="true"
@@ -54,13 +53,13 @@
 <script>
 import { mapGetters } from 'vuex';
 import BlogListing from '@/components/blog/BlogListing.vue';
-import VideoListing from '@/components/video/VideoListing.vue';
 import EventListing from '@/components/event/EventListing.vue';
 import PersonalTrainingListing from '@/components/personal-training/PersonalTrainingListing.vue';
 import ParagraphHeadline from '@/components/ParagraphHeadline.vue';
 import { SettingsMixin } from '@/mixins/SettingsMixin';
 import { FilterAndSortMixin } from '@/mixins/FilterAndSortMixin';
 import PageHeader from '@/components/PageHeader.vue';
+import DurationsListing from '@/components/duration/DurationsListing.vue';
 
 export default {
   name: 'Home',
@@ -68,7 +67,7 @@ export default {
   components: {
     PageHeader,
     BlogListing,
-    VideoListing,
+    DurationsListing,
     EventListing,
     PersonalTrainingListing,
     ParagraphHeadline,

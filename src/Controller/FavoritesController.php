@@ -92,6 +92,7 @@ class FavoritesController extends ControllerBase {
       ],
       'taxonomy_term' => [
         'gc_category' => [],
+        'gc_duration' => [],
       ],
       'personal_training' => [
         'personal_training' => [],
