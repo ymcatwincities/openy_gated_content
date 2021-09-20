@@ -111,7 +111,7 @@ openy_gated_content.instructor:
     taxonomy_vocabulary: gc_instructor
   description: 'Virtual YMCA instructor.'
   parent: openy_gated_content.taxonomy
-weight: 3
+  weight: 3
 
 openy_gated_content.equipment:
   title: 'Equipment'
