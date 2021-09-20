@@ -309,3 +309,31 @@ function openy_gc_storage_update_8016() {
     'core.entity_view_display.node.gc_video.teaser',
   ]);
 }
+
+/**
+ * Update/create configs related to Duration reference field.
+ */
+function openy_gc_storage_update_8017() {
+  $config_dir = drupal_get_path('module', 'openy_gc_storage');
+  $config_dir .= '/config/install/';
+  // Update configuration.
+  $config_importer = \Drupal::service('openy_upgrade_tool.importer');
+  $config_importer->setDirectory($config_dir);
+  $config_importer->importConfigs([
+    'taxonomy.vocabulary.gc_duration',
+    'language.content_settings.taxonomy_term.gc_duration',
+    'field.storage.taxonomy_term.field_gc_duration_max.yml',
+    'field.storage.taxonomy_term.field_gc_duration_min.yml',
+    'field.storage.taxonomy_term.field_gc_duration_media.yml',
+    'field.storage.node.field_gc_duration_reference.yml',
+    'field.field.taxonomy_term.gc_duration.field_gc_duration_max.yml',
+    'field.field.taxonomy_term.gc_duration.field_gc_duration_min.yml',
+    'field.field.taxonomy_term.gc_duration.field_gc_duration_media.yml',
+    'field.field.node.gc_video.field_gc_duration_reference.yml',
+    'core.entity_form_display.taxonomy_term.gc_duration.default.yml',
+    'core.entity_form_display.node.gc_video.default.yml',
+    'core.entity_view_display.taxonomy_term.gc_duration.default.yml',
+    'core.entity_view_display.node.gc_video.default.yml',
+    'core.entity_view_display.node.gc_video.teaser.yml',
+  ]);
+}
