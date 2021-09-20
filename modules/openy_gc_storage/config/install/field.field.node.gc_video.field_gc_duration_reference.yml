@@ -2,7 +2,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_gc_duration_term
+    - field.storage.node.field_gc_duration_reference
     - node.type.gc_video
     - taxonomy.vocabulary.gc_duration
   module:
@@ -10,13 +10,13 @@ dependencies:
 third_party_settings:
   datalayer:
     expose: 0
-    label: field_gc_duration_term
-id: node.gc_video.field_gc_duration_term
-field_name: field_gc_duration_term
+    label: field_gc_duration_reference
+id: node.gc_video.field_gc_duration_reference
+field_name: field_gc_duration_reference
 entity_type: node
 bundle: gc_video
-label: 'Duration term'
-description: 'Term of the video duration, e.g. "10 minutes or less".'
+label: 'Duration reference'
+description: 'Reference to the taxonomy term of the video duration, e.g. "10 minutes or less".'
 required: false
 translatable: false
 default_value: {  }

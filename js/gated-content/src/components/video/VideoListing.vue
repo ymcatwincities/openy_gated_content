@@ -100,7 +100,7 @@ export default {
         'field_gc_video_media.thumbnail',
         'field_gc_video_level',
         'field_gc_video_category',
-        'field_gc_duration_term',
+        'field_gc_duration_reference',
         'field_gc_video_image',
         'field_gc_video_image.field_media_image',
       ],
@@ -189,7 +189,7 @@ export default {
       if (this.duration) {
         params.filter.duration = {
           condition: {
-            path: 'field_gc_duration_term.entity.tid',
+            path: 'field_gc_duration_reference.entity.tid',
             operator: '=',
             value: this.duration,
           },

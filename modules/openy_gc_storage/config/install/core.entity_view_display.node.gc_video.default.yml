@@ -2,7 +2,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.node.gc_video.field_gc_duration_term
+    - field.field.node.gc_video.field_gc_duration_reference
     - field.field.node.gc_video.field_gc_instructor_reference
     - field.field.node.gc_video.field_gc_video_category
     - field.field.node.gc_video.field_gc_video_description
@@ -22,16 +22,8 @@ targetEntityType: node
 bundle: gc_video
 mode: default
 content:
-  field_gc_duration_term:
-    weight: 110
-    label: above
-    settings:
-      link: true
-    third_party_settings: { }
-    type: entity_reference_label
-    region: content
   field_gc_instructor_reference:
-    weight: 104
+    weight: 5
     label: above
     settings:
       link: true
@@ -39,7 +31,7 @@ content:
     type: entity_reference_label
     region: content
   field_gc_video_category:
-    weight: 102
+    weight: 3
     label: above
     settings:
       link: true
@@ -47,14 +39,14 @@ content:
     type: entity_reference_label
     region: content
   field_gc_video_description:
-    weight: 101
+    weight: 2
     label: above
     settings: {  }
     third_party_settings: {  }
     type: text_default
     region: content
   field_gc_video_duration:
-    weight: 107
+    weight: 8
     label: above
     settings:
       thousand_separator: ''
@@ -63,7 +55,7 @@ content:
     type: number_integer
     region: content
   field_gc_video_equipment:
-    weight: 105
+    weight: 6
     label: above
     settings:
       link: true
@@ -71,7 +63,7 @@ content:
     type: entity_reference_label
     region: content
   field_gc_video_featured:
-    weight: 108
+    weight: 9
     label: above
     settings:
       format: default
@@ -82,7 +74,7 @@ content:
     region: content
   field_gc_video_image:
     type: entity_reference_entity_view
-    weight: 109
+    weight: 10
     label: above
     settings:
       view_mode: default
@@ -90,7 +82,7 @@ content:
     third_party_settings: {  }
     region: content
   field_gc_video_level:
-    weight: 106
+    weight: 7
     label: above
     settings:
       link: true
@@ -99,7 +91,7 @@ content:
     region: content
   field_gc_video_media:
     type: entity_reference_entity_view
-    weight: 103
+    weight: 4
     label: above
     settings:
       view_mode: default
@@ -107,11 +99,12 @@ content:
     third_party_settings: {  }
     region: content
   links:
-    weight: 100
+    weight: 1
     region: content
     settings: {  }
     third_party_settings: {  }
 hidden:
+  field_gc_duration_reference: true
   field_gc_video_instructor: true
   langcode: true
   search_api_excerpt: true

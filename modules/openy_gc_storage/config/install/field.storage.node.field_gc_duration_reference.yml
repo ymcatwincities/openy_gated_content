@@ -4,8 +4,8 @@ dependencies:
   module:
     - node
     - taxonomy
-id: node.field_gc_duration_term
-field_name: field_gc_duration_term
+id: node.field_gc_duration_reference
+field_name: field_gc_duration_reference
 entity_type: node
 type: entity_reference
 settings:

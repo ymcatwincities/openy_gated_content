@@ -3,7 +3,7 @@ status: true
 dependencies:
   config:
     - entity_browser.browser.videos_library
-    - field.field.node.gc_video.field_gc_duration_term
+    - field.field.node.gc_video.field_gc_duration_reference
     - field.field.node.gc_video.field_gc_instructor_reference
     - field.field.node.gc_video.field_gc_video_category
     - field.field.node.gc_video.field_gc_video_description
@@ -32,14 +32,14 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-  field_gc_duration_term:
-    weight: 24
+  field_gc_duration_reference:
+    weight: 9
     settings:
       match_operator: CONTAINS
       match_limit: 10
       size: 60
-    placeholder: '10 minutes or less'
-    third_party_settings: { }
+      placeholder: '10 minutes or less'
+    third_party_settings: {  }
     type: entity_reference_autocomplete
     region: content
   field_gc_instructor_reference:
@@ -130,6 +130,12 @@ content:
       open: false
     third_party_settings: {  }
     region: content
+  field_vy_permission:
+    type: virtual_y_roles_select
+    settings: {  }
+    region: content
+    weight: 24
+    third_party_settings: {  }
   langcode:
     type: language_select
     weight: 11
@@ -158,11 +164,16 @@ content:
     third_party_settings: {  }
   redirect:
     type: string_textfield
-    weight: 20
+    weight: 21
     region: content
     settings:
       size: 60
       placeholder: ''
+    third_party_settings: {  }
+  scheduler_settings:
+    weight: 20
+    region: content
+    settings: {  }
     third_party_settings: {  }
   status:
     type: boolean_checkbox
@@ -203,7 +214,7 @@ content:
     settings: {  }
     third_party_settings: {  }
   url_redirects:
-    weight: 21
+    weight: 22
     region: content
     settings: {  }
     third_party_settings: {  }
