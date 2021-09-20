@@ -51,8 +51,6 @@ import client from '@/client';
 import Spinner from '@/components/Spinner.vue';
 import AddToFavorite from '@/components/AddToFavorite.vue';
 import VideoListing from '@/components/video/VideoListing.vue';
-import BlogListing from '@/components/blog/BlogListing.vue';
-import EventListing from '@/components/event/EventListing.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
 import { FilterAndSortMixin } from '@/mixins/FilterAndSortMixin';
 import { SettingsMixin } from '@/mixins/SettingsMixin';
