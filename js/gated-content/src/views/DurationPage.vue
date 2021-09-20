@@ -5,53 +5,6 @@
     </div>
     <div v-else-if="error">Error loading</div>
     <template v-else>
-      <Modal v-if="showModal" @close="showModal = false" class="adjust-modal">
-        <template v-slot:header>
-          <h3>Filter</h3>
-        </template>
-        <template v-slot:body>
-          <div class="filter">
-            <h4>Content types</h4>
-            <div class="form-check" v-for="option in contentTypeOptions" v-bind:key="option.value">
-              <label :for="option.value">
-                <input
-                  type="radio"
-                  :id="option.value"
-                  :value="option.value"
-                  :disabled="option.value !== 'all' && !showComponent[option.value]"
-                  autocomplete="off"
-                  v-model="preSelectedComponent"
-                >
-                <span class="checkmark"></span>
-                <span class="caption">{{ option.label }}</span>
-              </label>
-            </div>
-          </div>
-          <div class="sort">
-            <h4>Sort order</h4>
-            <div class="form-check" v-for="option in filterOptions" v-bind:key="option.value">
-              <label :for="option.value">
-                <input
-                  type="radio"
-                  :id="option.value"
-                  :value="option.value"
-                  autocomplete="off"
-                  v-model="preSelectedSort"
-                >
-                <span class="checkmark"></span>
-                <span class="caption">{{ option.label }}</span>
-              </label>
-            </div>
-          </div>
-        </template>
-        <template v-slot:footer>
-          <button type="button" class="btn btn-outline-primary" @click="showModal = false">
-            Cancel
-          </button>
-          <button type="button" class="btn btn-primary" @click="applyFilters">Apply</button>
-        </template>
-      </Modal>
-
       <div class="gated-containerV2 my-40-20 px--20-10 title-wrapper">
         <div>
           <div class="title-inline cachet-book-32-28">{{ duration.attributes.name }}</div>
@@ -61,56 +14,9 @@
             :bundle="'gc_duration'"
           ></AddToFavorite>
         </div>
-        <button type="button"
-                class="adjust-button" @click="showModal = true">Filter</button>
       </div>
 
       <div v-for="component in componentsOrder" :key="component">
-        <div class="live-stream-wrapper" v-if="showComponent.live_stream
-          && showOnCurrentIteration('live_stream', component)">
-          <EventListing
-            v-if="selectedComponent === 'live_stream' || selectedComponent === 'all'"
-            :title="config.components.live_stream.title"
-            :sort="sortData('eventinstance', 'live_stream')"
-            :pagination="selectedComponent === 'live_stream'"
-            :limit="viewAllContentMode ? 0 : itemsLimit"
-            @listing-not-empty="listingIsNotEmpty('live_stream', ...arguments)"
-          >
-            <template #filterButton>
-              <button
-                v-if="selectedComponent === 'all'"
-                type="button"
-                class="view-all"
-                @click="preSelectedComponent = 'live_stream'; applyFilters()">
-                More
-              </button>
-            </template>
-          </EventListing>
-        </div>
-
-        <div class="virtual-meeting-wrapper" v-if="showComponent.virtual_meeting
-          && showOnCurrentIteration('virtual_meeting', component)">
-          <EventListing
-            v-if="selectedComponent === 'virtual_meeting' || selectedComponent === 'all'"
-            :title="config.components.virtual_meeting.title"
-            :eventType="'virtual_meeting'"
-            :sort="sortData('eventinstance', 'virtual_meeting')"
-            :pagination="selectedComponent === 'virtual_meeting'"
-            :limit="viewAllContentMode ? 0 : itemsLimit"
-            @listing-not-empty="listingIsNotEmpty('virtual_meeting', ...arguments)"
-          >
-            <template #filterButton>
-              <button
-                v-if="selectedComponent === 'all'"
-                type="button"
-                class="view-all"
-                @click="preSelectedComponent = 'virtual_meeting'; applyFilters()">
-                More
-              </button>
-            </template>
-          </EventListing>
-        </div>
-
         <div class="videos-wrapper" v-if="showComponent.gc_video
           && showOnCurrentIteration('gc_video', component)">
           <VideoListing
@@ -133,29 +39,6 @@
               </button>
             </template>
           </VideoListing>
-        </div>
-
-        <div class="blogs-wrapper" v-if="showComponent.vy_blog_post
-          && showOnCurrentIteration('vy_blog_post', component)">
-          <BlogListing
-            v-if="selectedComponent === 'vy_blog_post' || selectedComponent === 'all'"
-            :title="config.components.vy_blog_post.title"
-            :sort="sortData('node', 'vy_blog_post')"
-            :pagination="selectedComponent === 'vy_blog_post'"
-            :limit="viewAllContentMode ? 0 : itemsLimit"
-            @listing-not-empty="listingIsNotEmpty('vy_blog_post', ...arguments)"
-            class="my-40-20"
-          >
-            <template #filterButton>
-              <button
-                v-if="selectedComponent === 'all'"
-                type="button"
-                class="view-all"
-                @click="preSelectedComponent = 'vy_blog_post'; applyFilters()">
-                More
-              </button>
-            </template>
-          </BlogListing>
         </div>
       </div>
     </template>
@@ -181,8 +64,6 @@ export default {
     AddToFavorite,
     Spinner,
     VideoListing,
-    BlogListing,
-    EventListing,
   },
   props: {
     id: {
