@@ -20,31 +20,13 @@
         :title="config.components.duration.title"
         v-if="isActive('duration') && showOnCurrentIteration('duration', component)"
       />
-      <EventListing
+      <VideoListing
         :featured="true"
         :viewAll="true"
-        :limit="8"
-        :title="config.components.live_stream.title"
-        :sort="sortData('eventinstance', 'live_stream')"
-        v-if="isActive('live_stream') && showOnCurrentIteration('live_stream', component)"
-      />
-      <EventListing
-        :title="config.components.virtual_meeting.title"
-        :featured="true"
-        :viewAll="true"
-        :limit="8"
-        :eventType="'virtual_meeting'"
-        :sort="sortData('eventinstance', 'virtual_meeting')"
-        v-if="isActive('virtual_meeting') && showOnCurrentIteration('virtual_meeting', component)"
-      />
-      <BlogListing
-        :featured="false"
-        :viewAll="true"
-        :limit="8"
-        :title="config.components.vy_blog_post.title"
-        :sort="sortData('node', 'vy_blog_post')"
-        v-if="isActive('vy_blog_post') && showOnCurrentIteration('vy_blog_post', component)"
-        class="my-40-20"
+        :limit="4"
+        :title="config.components.gc_video.title"
+        :sort="sortData('node', 'gc_video')"
+        v-if="isActive('gc_video') && showOnCurrentIteration('gc_video', component)"
       />
     </div>
   </div>
@@ -52,8 +34,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import BlogListing from '@/components/blog/BlogListing.vue';
-import EventListing from '@/components/event/EventListing.vue';
+import VideoListing from '@/components/video/VideoListing.vue';
 import PersonalTrainingListing from '@/components/personal-training/PersonalTrainingListing.vue';
 import ParagraphHeadline from '@/components/ParagraphHeadline.vue';
 import { SettingsMixin } from '@/mixins/SettingsMixin';
@@ -66,9 +47,8 @@ export default {
   mixins: [SettingsMixin, FilterAndSortMixin],
   components: {
     PageHeader,
-    BlogListing,
+    VideoListing,
     DurationsListing,
-    EventListing,
     PersonalTrainingListing,
     ParagraphHeadline,
   },

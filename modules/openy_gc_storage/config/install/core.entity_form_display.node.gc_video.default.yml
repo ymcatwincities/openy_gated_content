@@ -130,12 +130,6 @@ content:
       open: false
     third_party_settings: {  }
     region: content
-  field_vy_permission:
-    type: virtual_y_roles_select
-    settings: {  }
-    region: content
-    weight: 24
-    third_party_settings: {  }
   langcode:
     type: language_select
     weight: 11
@@ -169,11 +163,6 @@ content:
     settings:
       size: 60
       placeholder: ''
-    third_party_settings: {  }
-  scheduler_settings:
-    weight: 20
-    region: content
-    settings: {  }
     third_party_settings: {  }
   status:
     type: boolean_checkbox

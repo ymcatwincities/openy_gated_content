@@ -19,10 +19,5 @@ export default {
     Home,
     HomeLegacy,
   },
-  methods: {
-    showLegacyComponents() {
-      return this.config.switch_legacy_view;
-    },
-  },
 };
 </script>

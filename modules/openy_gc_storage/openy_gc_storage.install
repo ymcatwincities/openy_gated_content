@@ -300,13 +300,10 @@ function openy_gc_storage_update_8016() {
     'core.entity_form_display.eventinstance.virtual_meeting.default',
     'core.entity_form_display.eventseries.live_stream.default',
     'core.entity_form_display.eventseries.virtual_meeting.default',
-    'core.entity_form_display.node.gc_video.default',
     'core.entity_view_display.eventinstance.live_stream.default',
     'core.entity_view_display.eventinstance.virtual_meeting.default',
     'core.entity_view_display.eventseries.live_stream.default',
     'core.entity_view_display.eventseries.virtual_meeting.default',
-    'core.entity_view_display.node.gc_video.default',
-    'core.entity_view_display.node.gc_video.teaser',
   ]);
 }
 

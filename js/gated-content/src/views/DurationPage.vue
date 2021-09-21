@@ -16,10 +16,8 @@
         </div>
       </div>
 
-      <div v-for="component in componentsOrder" :key="component">
-        <div class="videos-wrapper" v-if="showComponent.gc_video
-          && showOnCurrentIteration('gc_video', component)">
-          <VideoListing
+      <div class="videos-wrapper" v-if="showComponent.gc_video">
+        <VideoListing
             v-if="selectedComponent === 'gc_video' || selectedComponent === 'all'"
             :title="config.components.gc_video.title"
             :pagination="selectedComponent === 'gc_video'"
@@ -28,18 +26,17 @@
             :sort="sortData('node', 'gc_video')"
             :limit="viewAllContentMode ? 0 : itemsLimit"
             @listing-not-empty="listingIsNotEmpty('gc_video', ...arguments)"
-          >
-            <template #filterButton>
-              <button
+        >
+          <template #filterButton>
+            <button
                 v-if="selectedComponent === 'all'"
                 type="button"
                 class="view-all"
                 @click="preSelectedComponent = 'gc_video'; applyFilters()">
-                More
-              </button>
-            </template>
-          </VideoListing>
-        </div>
+              More
+            </button>
+          </template>
+        </VideoListing>
       </div>
     </template>
   </div>
@@ -73,17 +70,9 @@ export default {
     return {
       loading: true,
       error: false,
-      duration: null,
-      itemsLimit: 8,
-      DEFAULT_SORT: 'date_asc',
       showComponent: {
         gc_video: true,
-        virtual_meeting: true,
-        live_stream: true,
-        vy_blog_post: true,
       },
-      showLiveStreamViewAll: false,
-      showVirtualMeetingViewAll: false,
     };
   },
   watch: {
