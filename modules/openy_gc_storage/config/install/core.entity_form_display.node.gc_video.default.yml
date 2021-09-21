@@ -17,7 +17,6 @@ dependencies:
     - node.type.gc_video
   module:
     - entity_browser
-    - openy_gated_content
     - path
     - scheduler
     - text
