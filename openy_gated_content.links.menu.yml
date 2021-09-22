@@ -104,6 +104,13 @@ openy_gated_content.duration:
   parent: openy_gated_content.taxonomy
   weight: 2
 
+openy_gated_content.duration.rebuild:
+  title: 'Rebuild Durations'
+  route_name: openy_gated_content.duration.rebuild
+  description: 'Perform rebuild of the durations references'
+  parent: openy_gated_content.duration
+  weight: 1
+
 openy_gated_content.instructor:
   title: 'Instructors'
   route_name: entity.taxonomy_vocabulary.overview_form
