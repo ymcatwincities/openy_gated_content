@@ -300,11 +300,36 @@ function openy_gc_storage_update_8016() {
     'core.entity_form_display.eventinstance.virtual_meeting.default',
     'core.entity_form_display.eventseries.live_stream.default',
     'core.entity_form_display.eventseries.virtual_meeting.default',
-    'core.entity_form_display.node.gc_video.default',
     'core.entity_view_display.eventinstance.live_stream.default',
     'core.entity_view_display.eventinstance.virtual_meeting.default',
     'core.entity_view_display.eventseries.live_stream.default',
     'core.entity_view_display.eventseries.virtual_meeting.default',
+  ]);
+}
+
+/**
+ * Update/create configs related to Duration reference field.
+ */
+function openy_gc_storage_update_8017() {
+  $config_dir = drupal_get_path('module', 'openy_gc_storage');
+  $config_dir .= '/config/install/';
+  // Update configuration.
+  $config_importer = \Drupal::service('openy_upgrade_tool.importer');
+  $config_importer->setDirectory($config_dir);
+  $config_importer->importConfigs([
+    'taxonomy.vocabulary.gc_duration',
+    'language.content_settings.taxonomy_term.gc_duration',
+    'field.storage.taxonomy_term.field_gc_duration_max',
+    'field.storage.taxonomy_term.field_gc_duration_min',
+    'field.storage.taxonomy_term.field_gc_duration_media',
+    'field.storage.node.field_gc_duration_reference',
+    'field.field.taxonomy_term.gc_duration.field_gc_duration_max',
+    'field.field.taxonomy_term.gc_duration.field_gc_duration_min',
+    'field.field.taxonomy_term.gc_duration.field_gc_duration_media',
+    'field.field.node.gc_video.field_gc_duration_reference',
+    'core.entity_form_display.taxonomy_term.gc_duration.default',
+    'core.entity_form_display.node.gc_video.default',
+    'core.entity_view_display.taxonomy_term.gc_duration.default',
     'core.entity_view_display.node.gc_video.default',
     'core.entity_view_display.node.gc_video.teaser',
   ]);

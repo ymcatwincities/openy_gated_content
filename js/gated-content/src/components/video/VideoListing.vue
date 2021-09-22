@@ -71,6 +71,10 @@ export default {
       type: Array,
       default: null,
     },
+    duration: {
+      type: String,
+      default: '',
+    },
     featured: {
       type: Boolean,
       default: false,
@@ -96,6 +100,7 @@ export default {
         'field_gc_video_media.thumbnail',
         'field_gc_video_level',
         'field_gc_video_category',
+        'field_gc_duration_reference',
         'field_gc_video_image',
         'field_gc_video_image.field_media_image',
       ],
@@ -177,6 +182,16 @@ export default {
             path: 'field_gc_video_category.entity.tid',
             operator: 'IN',
             value: termsIds,
+          },
+        };
+      }
+
+      if (this.duration) {
+        params.filter.duration = {
+          condition: {
+            path: 'field_gc_duration_reference.entity.tid',
+            operator: '=',
+            value: this.duration,
           },
         };
       }

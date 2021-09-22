@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Home from '@/views/Home.vue';
+import HomeWrapper from '@/views/HomeWrapper.vue';
 import NotFound from '@/views/NotFound.vue';
 import VideoPage from '@/views/VideoPage.vue';
 import BlogPage from '@/views/BlogPage.vue';
@@ -13,14 +13,16 @@ import BlogsListingPage from '@/views/BlogsListingPage.vue';
 import VideosListingPage from '@/views/VideosListingPage.vue';
 import FavoritesPage from '@/views/FavoritesPage.vue';
 import PersonalTrainingPage from '@/views/PersonalTrainingPage.vue';
+import DurationsListingPage from '@/views/DurationsListingPage.vue';
+import DurationPage from '@/views/DurationPage.vue';
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home,
+    name: 'HomeWrapper',
+    component: HomeWrapper,
     meta: { requiresAuth: true, darkMenu: true },
   },
   {
@@ -31,9 +33,23 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
+    path: '/durations',
+    name: 'DurationsListingPage',
+    component: DurationsListingPage,
+    props: true,
+    meta: { requiresAuth: true },
+  },
+  {
     path: '/category/:id',
     name: 'Category',
     component: CategoryPage,
+    props: true,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/duration/:id',
+    name: 'Duration',
+    component: DurationPage,
     props: true,
     meta: { requiresAuth: true },
   },

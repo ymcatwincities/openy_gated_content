@@ -190,6 +190,25 @@
           </template>
         </CategoriesListing>
       </div>
+
+      <div v-if="!isFavoritesTypeEmpty('taxonomy_term', 'gc_duration')
+        && (selectedComponent === 'gc_duration' || selectedComponent === 'all')">
+        <DurationsListing
+            :favorites="true"
+            :sort="sortData('taxonomy_term')"
+            :limit="viewAllContentMode ? 0 : itemsLimit"
+        >
+          <template #filterButton>
+            <button
+                v-if="selectedComponent === 'all'"
+                type="button"
+                class="view-all"
+                @click="preSelectedComponent = 'gc_duration'; applyFilters()">
+              More
+            </button>
+          </template>
+        </DurationsListing>
+      </div>
     </div>
   </div>
 </template>
@@ -201,6 +220,7 @@ import VideoListing from '@/components/video/VideoListing.vue';
 import EventListing from '@/components/event/EventListing.vue';
 import PersonalTrainingListing from '@/components/personal-training/PersonalTrainingListing.vue';
 import CategoriesListing from '@/components/category/CategoriesListing.vue';
+import DurationsListing from '@/components/duration/DurationsListing.vue';
 import { SettingsMixin } from '@/mixins/SettingsMixin';
 import { FavoritesMixin } from '@/mixins/FavoritesMixin';
 import { FilterAndSortMixin } from '@/mixins/FilterAndSortMixin';
@@ -215,6 +235,7 @@ export default {
     EventListing,
     PersonalTrainingListing,
     CategoriesListing,
+    DurationsListing,
   },
   data() {
     return {
@@ -227,6 +248,7 @@ export default {
         { value: 'virtual_meeting', type: 'eventinstance', label: 'Virtual meeting' },
         { value: 'vy_blog_post', type: 'node', label: 'Blog' },
         { value: 'gc_category', type: 'taxonomy_term', label: 'Categories' },
+        { value: 'gc_duration', type: 'taxonomy_term', label: 'Durations' },
       ],
     };
   },
