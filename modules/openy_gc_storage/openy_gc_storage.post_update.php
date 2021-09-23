@@ -95,76 +95,64 @@ function openy_gc_storage_post_update_migrate_eventinstance_instructors(&$sandbo
  * Create terms for Virtual Y Duration.
  */
 function openy_gc_storage_post_update_create_durations(&$sandbox) {
-  if (!isset($sandbox['durations'])) {
-    $sandbox['durations'] = [
-      [
-        'title' => '10 minutes or less',
-        'low' => 1,
-        'high' => 659,
-      ],
-      [
-        'title' => '15 minutes',
-        'low' => 660,
-        'high' => 1080,
-      ],
-      [
-        'title' => '20 minutes',
-        'low' => 1081,
-        'high' => 1319,
-      ],
-      [
-        'title' => '30 minutes',
-        'low' => 1320,
-        'high' => 1919,
-      ],
-      [
-        'title' => '45 minutes',
-        'low' => 1920,
-        'high' => 2819,
-      ],
-      [
-        'title' => '60 minutes',
-        'low' => 2820,
-        'high' => 3899,
-      ],
-      [
-        'title' => '90 minutes',
-        'low' => 3900,
-        'high' => 5700,
-      ],
-      [
-        'title' => 'Undefined',
-        'low' => 0,
-        'high' => 0,
-      ],
-    ];
-
-    $sandbox['processed'] = 0;
-    $sandbox['max'] = count($sandbox['durations']);
-  }
+  $durations = [
+    [
+      'title' => '10 minutes or less',
+      'low' => 1,
+      'high' => 659,
+    ],
+    [
+      'title' => '15 minutes',
+      'low' => 660,
+      'high' => 1080,
+    ],
+    [
+      'title' => '20 minutes',
+      'low' => 1081,
+      'high' => 1319,
+    ],
+    [
+      'title' => '30 minutes',
+      'low' => 1320,
+      'high' => 1919,
+    ],
+    [
+      'title' => '45 minutes',
+      'low' => 1920,
+      'high' => 2819,
+    ],
+    [
+      'title' => '60 minutes',
+      'low' => 2820,
+      'high' => 3899,
+    ],
+    [
+      'title' => '90 minutes',
+      'low' => 3900,
+      'high' => 5700,
+    ],
+    [
+      'title' => 'Undefined',
+      'low' => 0,
+      'high' => 0,
+    ],
+  ];
 
   $term_storage = \Drupal::entityTypeManager()
     ->getStorage('taxonomy_term');
 
-  // Process 5 durations per run.
-  for ($i = 0; $i < 5; $i++) {
-    if (!empty($sandbox['durations'])) {
-      $duration = array_shift($sandbox['durations']);
-      $term = $term_storage->create([
-        'vid'                   => 'gc_duration',
-        'name'                  => $duration['title'],
-        'field_gc_duration_min' => $duration['low'],
-        'field_gc_duration_max' => $duration['high'],
-      ]);
-      $term->save();
-      $sandbox['processed']++;
-    }
+  foreach ($durations as $duration) {
+    $term = $term_storage->create([
+      'vid'                   => 'gc_duration',
+      'name'                  => $duration['title'],
+      'field_gc_duration_min' => $duration['low'],
+      'field_gc_duration_max' => $duration['high'],
+    ]);
+    $term->save();
   }
 
-  $sandbox['#finished'] = empty($sandbox['durations']) ? TRUE : $sandbox['processed'] / $sandbox['max'];
-  if ($sandbox['#finished'] === TRUE) {
-    return t('The Duration terms have been created.');
-  }
+  $sandbox['#finished'] = 1;
+  return t('The Duration terms have been created.');
 }
 
 /**
