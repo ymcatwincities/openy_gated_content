@@ -67,10 +67,6 @@ export default {
       type: String,
       default: 'No blog posts found.',
     },
-    viewAll: {
-      type: Boolean,
-      default: false,
-    },
     featured: {
       type: Boolean,
       default: false,

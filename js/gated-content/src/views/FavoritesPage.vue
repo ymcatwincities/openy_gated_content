@@ -194,7 +194,6 @@
       <div v-if="!isFavoritesTypeEmpty('taxonomy_term', 'gc_duration')
         && (selectedComponent === 'gc_duration' || selectedComponent === 'all')">
         <DurationsListing
-            :favorites="true"
             :sort="sortData('taxonomy_term')"
             :limit="viewAllContentMode ? 0 : itemsLimit"
         >
@@ -209,6 +208,24 @@
           </template>
         </DurationsListing>
       </div>
+
+      <div v-if="!isFavoritesTypeEmpty('taxonomy_term', 'gc_instructor')
+        && (selectedComponent === 'gc_instructor' || selectedComponent === 'all')">
+        <InstructorsListing
+            :sort="sortData('taxonomy_term')"
+            :limit="viewAllContentMode ? 0 : itemsLimit"
+        >
+          <template #filterButton>
+            <button
+                v-if="selectedComponent === 'all'"
+                type="button"
+                class="view-all"
+                @click="preSelectedComponent = 'gc_instructor'; applyFilters()">
+              More
+            </button>
+          </template>
+        </InstructorsListing>
+      </div>
     </div>
   </div>
 </template>
@@ -221,6 +238,7 @@ import EventListing from '@/components/event/EventListing.vue';
 import PersonalTrainingListing from '@/components/personal-training/PersonalTrainingListing.vue';
 import CategoriesListing from '@/components/category/CategoriesListing.vue';
 import DurationsListing from '@/components/duration/DurationsListing.vue';
+import InstructorsListing from '@/components/instructor/InstructorsListing.vue';
 import { SettingsMixin } from '@/mixins/SettingsMixin';
 import { FavoritesMixin } from '@/mixins/FavoritesMixin';
 import { FilterAndSortMixin } from '@/mixins/FilterAndSortMixin';
@@ -236,6 +254,7 @@ export default {
     PersonalTrainingListing,
     CategoriesListing,
     DurationsListing,
+    InstructorsListing,
   },
   data() {
     return {
@@ -249,6 +268,7 @@ export default {
         { value: 'vy_blog_post', type: 'node', label: 'Blog' },
         { value: 'gc_category', type: 'taxonomy_term', label: 'Categories' },
         { value: 'gc_duration', type: 'taxonomy_term', label: 'Durations' },
+        { value: 'gc_instructor', type: 'taxonomy_term', label: 'Instructors' },
       ],
     };
   },

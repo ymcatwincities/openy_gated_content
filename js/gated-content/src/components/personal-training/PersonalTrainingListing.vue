@@ -49,10 +49,6 @@ export default {
       type: String,
       default: 'No personal trainings found.',
     },
-    viewAll: {
-      type: Boolean,
-      default: false,
-    },
     sort: {
       type: Object,
       default() {

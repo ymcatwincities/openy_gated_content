@@ -3,7 +3,7 @@
     <div v-if="loading || listingIsNotEmpty" class="listing-header">
       <h2 class="title text-gray cachet-book-24-20" v-if="title !== 'none'">{{ title }}</h2>
       <template v-if="hasMoreItems">
-        <router-link :to="{ name: 'CategoryListing' }" v-if="viewAll" class="view-all">
+        <router-link :to="{ name: 'InstructorsListingPage' }" v-if="viewAll" class="view-all">
           More
         </router-link>
         <slot name="filterButton"></slot>
@@ -13,44 +13,40 @@
       <Spinner></Spinner>
     </div>
     <div v-else-if="error" class="text-center">Error loading</div>
-    <div v-else class="four-columns">
-      <CategoryTeaser
-        v-for="category in listing"
-        :key="category.id"
-        :category="category"
-      />
+    <div v-else-if="listingIsNotEmpty">
+      <div class="four-columns">
+        <InstructorTeaser
+            v-for="instructor in listing"
+            :key="instructor.id"
+            :instructor="instructor"
+        />
+      </div>
+    </div>
+    <div v-else class="empty-listing">
+      {{ emptyBlockMsg }}
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
 import client from '@/client';
-import CategoryTeaser from '@/components/category/CategoryTeaser.vue';
+import InstructorTeaser from '@/components/instructor/InstructorTeaser.vue';
 import Spinner from '@/components/Spinner.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
 import { FavoritesMixin } from '@/mixins/FavoritesMixin';
 import { ListingMixin } from '@/mixins/ListingMixin';
 
 export default {
-  name: 'CategoriesListing',
+  name: 'InstructorsListing',
   mixins: [JsonApiCombineMixin, FavoritesMixin, ListingMixin],
   components: {
-    CategoryTeaser,
+    InstructorTeaser,
     Spinner,
   },
   props: {
     title: {
       type: String,
-      default: 'Categories',
-    },
-    parent: {
-      type: String,
-      default: null,
-    },
-    bundle: {
-      type: String,
-      default: '',
+      default: 'Instructors',
     },
     sort: {
       type: Object,
@@ -65,10 +61,10 @@ export default {
       error: false,
       listing: null,
       params: [
-        'field_gc_category_media',
+        'field_gc_instructor_photo',
         // Sub-relationship should be after parent field.
         // @see JsonApiCombineMixin
-        'field_gc_category_media.field_media_image',
+        'field_gc_instructor_photo.field_media_image',
       ],
     };
   },
@@ -84,13 +80,6 @@ export default {
         this.load();
       }
     },
-    isCategoriesLoaded: 'load',
-  },
-  computed: {
-    ...mapGetters([
-      'isCategoriesLoaded',
-      'getCategoriesTree',
-    ]),
   },
   methods: {
     async load() {
@@ -108,8 +97,9 @@ export default {
       params.page = this.getPageParam;
 
       params.filter = {};
+
       if (this.favorites) {
-        if (this.isFavoritesTypeEmpty('taxonomy_term', 'gc_category')) {
+        if (this.isFavoritesTypeEmpty('taxonomy_term', 'gc_instructor')) {
           this.loading = false;
           return;
         }
@@ -117,46 +107,21 @@ export default {
           condition: {
             path: 'drupal_internal__tid',
             operator: 'IN',
-            value: this.getFavoritesTypeIds('taxonomy_term', 'gc_category'),
+            value: this.getFavoritesTypeIds('taxonomy_term', 'gc_instructor'),
           },
         };
-
-        this.loadFromJsonApi(params);
-        return;
       }
 
-      if (!this.isCategoriesLoaded) {
-        return;
-      }
-      let categories = this.getCategoriesTree;
-      if (this.parent !== null) {
-        categories = this.$store.getters.getSubcategories(this.parent);
-      }
-      if (this.bundle !== '') {
-        categories = this.$store.getters.getCategoriesByBundle(this.bundle, categories);
-      }
-      const tids = categories.map((categoryData) => categoryData.tid);
-      if (tids.length === 0) {
-        this.loading = false;
-        return;
-      }
-      params.filter.in = {
-        condition: {
-          path: 'drupal_internal__tid',
-          operator: 'IN',
-          value: tids,
-        },
-      };
       this.loadFromJsonApi(params);
     },
     loadFromJsonApi(params) {
       client
-        .get('jsonapi/taxonomy_term/gc_category', { params })
-        .then((response2) => {
-          this.links = response2.data.links;
+        .get('jsonapi/taxonomy_term/gc_instructor', { params })
+        .then((response) => {
+          this.links = response.data.links;
           this.listing = this.combineMultiple(
-            response2.data.data,
-            response2.data.included,
+            response.data.data,
+            response.data.included,
             this.params,
           );
           this.loading = false;
