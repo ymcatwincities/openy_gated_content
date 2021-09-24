@@ -166,17 +166,25 @@ function _openy_gc_storage_build_duration_references(&$sandbox) {
       ->execute();
 
     // By default we'll set reference to 'Undefined' duration term.
-    $sandbox['sandbox']['default_duration_term'] = \Drupal::entityQuery('taxonomy_term')
-      ->condition('vid', 'gc_duration')
-      ->condition('field_gc_duration_min', 0)
-      ->condition('field_gc_duration_max', 0)
-      ->range(0, 1)
-      ->execute();
-    if (!empty($sandbox['sandbox']['default_duration_term'])) {
-      $sandbox['sandbox']['default_duration_term'] = reset($sandbox['sandbox']['default_duration_term']);
-    }
-    else {
-      $sandbox['sandbox']['default_duration_term'] = '';
+    $sandbox['sandbox']['default_duation_term'] = '';
+
+    $duration_terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadByProperties(['vid' => 'gc_duration']);
+    /**
+     * @var int $duration_id
+     * @var \Drupal\taxonomy\TermInterface $duration_term
+     */
+    foreach ($duration_terms as $duration_id => $duration_term) {
+      $min = $duration_term->get('field_gc_duration_min')->getString();
+      $max = $duration_term->get('field_gc_duration_max')->getString();
+      if ($min === '0' && $max === '0') {
+        $sandbox['sandbox']['default_duration_term'] = $duration_id;
+        continue;
+      }
+
+      $sandbox['sandbox']['durations'][$duration_id] = [
+        'min' => $min,
+        'max' => $max,
+      ];
     }
 
     $sandbox['sandbox']['max'] = count($sandbox['sandbox']['ids']);
@@ -200,17 +208,14 @@ function _openy_gc_storage_build_duration_references(&$sandbox) {
     // the duration of the given video.
     if (!$duration_field->isEmpty()) {
       $duration_value = $duration_field->getString();
-      $duration_term = \Drupal::entityQuery('taxonomy_term')
-        ->condition('vid', 'gc_duration')
-        ->condition('field_gc_duration_min', $duration_value, '<')
-        ->condition('field_gc_duration_max', $duration_value, '>=')
-        ->accessCheck(FALSE)
-        // Let's select only first taxonomy that fits the criteria.
-        ->range(0, 1)
-        ->sort('tid')
-        ->execute();
-      if (!empty($duration_term)) {
-        $duration_term_tid = reset($duration_term);
+      foreach ($sandbox['sandbox']['durations'] as $duration_id => $duration_range) {
+        if (
+          $duration_range['min'] < $duration_value
+          && $duration_range['max'] >= $duration_value
+        ) {
+          $duration_term_tid = $duration_id;
+          break;
+        }
       }
     }
 
