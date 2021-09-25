@@ -129,7 +129,12 @@ function openy_gc_storage_post_update_create_durations(&$sandbox) {
     [
       'title' => '90 minutes',
       'low' => 3900,
-      'high' => 5700,
+      'high' => 5699,
+    ],
+    [
+      'title' => '90 minutes or more',
+      'low' => 5700,
+      'high' => 0,
     ],
     [
       'title' => 'Undefined',
@@ -206,12 +211,17 @@ function _openy_gc_storage_build_duration_references(&$sandbox) {
     // Let's find id of the duration term that has minimal value less than the
     // duration of the given video & has maximum value bigger than or equal to
     // the duration of the given video.
+    // If term has '0' as a maximum range, then we assign it to the given node
+    // provided the minimum range is satisfiable.
     if (!$duration_field->isEmpty()) {
       $duration_value = $duration_field->getString();
       foreach ($sandbox['sandbox']['durations'] as $duration_id => $duration_range) {
         if (
           $duration_range['min'] < $duration_value
-          && $duration_range['max'] >= $duration_value
+          && (
+            $duration_range['max'] === '0'
+            || $duration_range['max'] >= $duration_value
+          )
         ) {
           $duration_term_tid = $duration_id;
           break;
