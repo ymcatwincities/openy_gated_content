@@ -173,7 +173,14 @@ function _openy_gc_storage_build_duration_references(&$sandbox) {
     // By default we'll set reference to 'Undefined' duration term.
     $sandbox['sandbox']['default_duation_term'] = '';
 
-    $duration_terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadByProperties(['vid' => 'gc_duration']);
+    // Collect all duration terms, sorted by minimum duration value.
+    $taxonomy_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+    $query = $taxonomy_storage->getQuery();
+    $query->condition('vid', 'gc_duration')
+      ->sort('field_gc_duration_min', 'ASC');
+    $duration_terms_ids = $query->execute();
+
+    $duration_terms = $taxonomy_storage->loadMultiple($duration_terms_ids);
     /**
      * @var int $duration_id
      * @var \Drupal\taxonomy\TermInterface $duration_term
