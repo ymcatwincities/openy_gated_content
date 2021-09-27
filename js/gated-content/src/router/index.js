@@ -15,6 +15,8 @@ import FavoritesPage from '@/views/FavoritesPage.vue';
 import PersonalTrainingPage from '@/views/PersonalTrainingPage.vue';
 import DurationsListingPage from '@/views/DurationsListingPage.vue';
 import DurationPage from '@/views/DurationPage.vue';
+import InstructorsListingPage from '@/views/InstructorsListingPage.vue';
+import InstructorPage from '@/views/InstructorPage.vue';
 
 Vue.use(VueRouter);
 
@@ -33,13 +35,6 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
-    path: '/durations',
-    name: 'DurationsListingPage',
-    component: DurationsListingPage,
-    props: true,
-    meta: { requiresAuth: true },
-  },
-  {
     path: '/category/:id',
     name: 'Category',
     component: CategoryPage,
@@ -47,9 +42,30 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
+    path: '/durations',
+    name: 'DurationsListingPage',
+    component: DurationsListingPage,
+    props: true,
+    meta: { requiresAuth: true },
+  },
+  {
     path: '/duration/:id',
     name: 'Duration',
     component: DurationPage,
+    props: true,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/instructors',
+    name: 'InstructorsListingPage',
+    component: InstructorsListingPage,
+    props: true,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/instructor/:id',
+    name: 'Instructor',
+    component: InstructorPage,
     props: true,
     meta: { requiresAuth: true },
   },

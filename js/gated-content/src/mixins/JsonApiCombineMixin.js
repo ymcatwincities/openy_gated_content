@@ -25,7 +25,7 @@ export const JsonApiCombineMixin = {
             const includedItem = included
               .find((obj) => obj.type === relItem.type && obj.id === relItem.id);
             if (includedItem) {
-              item.attributes[field].push(includedItem.attributes);
+              item.attributes[field].push({ ...includedItem.attributes, uuid: includedItem.id });
 
               if (subRel.length > 0) {
                 // In case this field contains sub-relationship add this relationship to parent.
@@ -43,7 +43,7 @@ export const JsonApiCombineMixin = {
           const includedItem = included
             .find((obj) => obj.type === rel.type && obj.id === rel.id);
           if (includedItem) {
-            item.attributes[field] = includedItem.attributes;
+            item.attributes[field] = { ...includedItem.attributes, uuid: includedItem.id };
 
             if (subRel.length > 0) {
               // In case this field contains sub-relationship add this relationship to parent.

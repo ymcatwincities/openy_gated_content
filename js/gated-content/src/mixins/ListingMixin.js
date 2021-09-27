@@ -3,6 +3,10 @@ import { SettingsMixin } from '@/mixins/SettingsMixin';
 export const ListingMixin = {
   mixins: [SettingsMixin],
   props: {
+    viewAll: {
+      type: Boolean,
+      default: false,
+    },
     pagination: {
       type: Boolean,
       default: false,
@@ -11,6 +15,7 @@ export const ListingMixin = {
       type: Number,
       default: 0,
     },
+    msg: String,
   },
   data() {
     return {

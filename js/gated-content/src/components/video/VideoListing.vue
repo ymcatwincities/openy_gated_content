@@ -75,11 +75,11 @@ export default {
       type: String,
       default: '',
     },
-    featured: {
-      type: Boolean,
-      default: false,
+    instructor: {
+      type: String,
+      default: '',
     },
-    viewAll: {
+    featured: {
       type: Boolean,
       default: false,
     },
@@ -101,6 +101,7 @@ export default {
         'field_gc_video_level',
         'field_gc_video_category',
         'field_gc_duration_reference',
+        'field_gc_instructor_reference',
         'field_gc_video_image',
         'field_gc_video_image.field_media_image',
       ],
@@ -192,6 +193,16 @@ export default {
             path: 'field_gc_duration_reference.entity.tid',
             operator: '=',
             value: this.duration,
+          },
+        };
+      }
+
+      if (this.instructor) {
+        params.filter.instructor = {
+          condition: {
+            path: 'field_gc_instructor_reference.entity.tid',
+            operator: '=',
+            value: this.instructor,
           },
         };
       }

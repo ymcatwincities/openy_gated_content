@@ -84,15 +84,15 @@
         &:first-child {
           padding-top: 0;
         }
-      }
 
-      .video-footer__category {
         ul {
           list-style: none;
           padding: 0;
           margin: 0;
         }
+      }
 
+      .video-footer__category {
         .video-footer__category-list-item {
           li {
             display: inline;
@@ -117,7 +117,7 @@
     }
 
     &.bg-black {
-      .video-footer__category {
+      .video-footer__block {
         a {
           color: $white;
 

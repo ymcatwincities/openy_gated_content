@@ -44,9 +44,15 @@
               <SvgIcon icon="clock-regular" class="fill-gray" :growByHeight=false></SvgIcon>
               {{ time }} ({{ duration }})
             </div>
-            <div class="video-footer__block" v-if="instructor">
+            <div class="video-footer__block" v-if="instructors && instructors.length > 0">
               <SvgIcon icon="instructor-icon" class="fill-gray" :growByHeight=false></SvgIcon>
-              {{ instructor }}
+              <ul>
+                <li v-for="instructor in instructors" :key="instructor.drupal_internal__tid">
+                  <router-link :to="{ name: 'Instructor', params: { id: instructor.uuid }}">
+                    {{ instructor.name }}
+                  </router-link>
+                </li>
+              </ul>
             </div>
             <div
               class="video-footer__block"
@@ -140,12 +146,14 @@ export default {
         'field_ls_level',
         'field_ls_image',
         'field_ls_image.field_media_image',
+        'field_gc_instructor_reference',
         // Data from parent (series).
         'category',
         'level',
         'equipment',
         'image',
         'image.field_media_image',
+        'instructor_reference',
       ],
     };
   },
@@ -203,21 +211,7 @@ export default {
         .get(`jsonapi/eventinstance/virtual_meeting/${this.id}`, { params })
         .then((response) => {
           this.video = this.combine(response.data.data, response.data.included, this.params);
-          // We need here small hack for equipment.
-          // In included we have all referenced items, but in relationship only one.
-          // So we need manually pass this items to this.video.attributes.equipment.
-          this.video.attributes.equipment = [];
-          this.video.attributes.category = [];
-          if (response.data.included.length > 0) {
-            response.data.included.forEach((ref) => {
-              if (ref.type === 'taxonomy_term--gc_equipment') {
-                this.video.attributes.equipment.push(ref.attributes);
-              }
-              if (ref.type === 'taxonomy_term--gc_category') {
-                this.video.attributes.category.push(ref.attributes);
-              }
-            });
-          }
+          this.multipleReferencesWorkaround(response);
           this.loading = false;
         }).then(() => {
           this.$log.trackEvent('entityView', 'series', 'virtual_meeting', this.video.attributes.drupal_internal__id);

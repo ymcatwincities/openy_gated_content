@@ -6,6 +6,7 @@
         <router-link :to="{ name: 'DurationsListingPage' }" v-if="viewAll" class="view-all">
           More
         </router-link>
+        <slot name="filterButton"></slot>
       </template>
     </div>
     <div v-if="loading" class="text-center">
@@ -47,29 +48,12 @@ export default {
       type: String,
       default: 'Duration',
     },
-    parent: {
-      type: String,
-      default: null,
-    },
-    viewAll: {
-      type: Boolean,
-      default: false,
-    },
-    featured: {
-      type: Boolean,
-      default: false,
-    },
-    bundle: {
-      type: String,
-      default: '',
-    },
     sort: {
       type: Object,
       default() {
         return { path: 'weight', direction: 'ASC' };
       },
     },
-    msg: String,
   },
   data() {
     return {
@@ -90,7 +74,6 @@ export default {
   watch: {
     sort: 'load',
     limit: 'load',
-    bundle: 'load',
     '$route.query': function $routeQuery(newQuery, oldQuery) {
       if (newQuery !== oldQuery) {
         this.load();
@@ -113,6 +96,7 @@ export default {
       params.page = this.getPageParam;
 
       params.filter = {};
+
       if (this.favorites) {
         if (this.isFavoritesTypeEmpty('taxonomy_term', 'gc_duration')) {
           this.loading = false;
@@ -125,9 +109,6 @@ export default {
             value: this.getFavoritesTypeIds('taxonomy_term', 'gc_duration'),
           },
         };
-
-        this.loadFromJsonApi(params);
-        return;
       }
 
       this.loadFromJsonApi(params);
@@ -135,11 +116,11 @@ export default {
     loadFromJsonApi(params) {
       client
         .get('jsonapi/taxonomy_term/gc_duration', { params })
-        .then((response2) => {
-          this.links = response2.data.links;
+        .then((response) => {
+          this.links = response.data.links;
           this.listing = this.combineMultiple(
-            response2.data.data,
-            response2.data.included,
+            response.data.data,
+            response.data.included,
             this.params,
           );
           this.loading = false;

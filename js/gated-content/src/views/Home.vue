@@ -13,20 +13,32 @@
     />
 
     <div v-for="component in componentsOrder" :key="component">
-      <DurationsListing
-        :featured="true"
+      <CategoriesListing
         :viewAll="true"
-        :limit="4"
+        :title="config.components.categories.title"
+        :sort="sortData('taxonomy_term')"
+        :limit="8"
+        v-if="isActive('categories') && showOnCurrentIteration('categories', component)"
+      />
+      <DurationsListing
+        :viewAll="true"
+        :limit="8"
         :title="config.components.duration.title"
         v-if="isActive('duration') && showOnCurrentIteration('duration', component)"
+      />
+      <InstructorsListing
+        :viewAll="true"
+        :limit="8"
+        :title="config.components.instructors.title"
+        v-if="isActive('instructors') && showOnCurrentIteration('instructors', component)"
       />
       <VideoListing
         :featured="true"
         :viewAll="true"
-        :limit="4"
-        :title="config.components.gc_video.title"
+        :limit="8"
+        :title="config.components.latest_content.title"
         :sort="sortData('node', 'gc_video')"
-        v-if="isActive('gc_video') && showOnCurrentIteration('gc_video', component)"
+        v-if="isActive('latest_content') && showOnCurrentIteration('latest_content', component)"
       />
     </div>
   </div>
@@ -40,7 +52,9 @@ import ParagraphHeadline from '@/components/ParagraphHeadline.vue';
 import { SettingsMixin } from '@/mixins/SettingsMixin';
 import { FilterAndSortMixin } from '@/mixins/FilterAndSortMixin';
 import PageHeader from '@/components/PageHeader.vue';
+import CategoriesListing from '@/components/category/CategoriesListing.vue';
 import DurationsListing from '@/components/duration/DurationsListing.vue';
+import InstructorsListing from '@/components/instructor/InstructorsListing.vue';
 
 export default {
   name: 'Home',
@@ -49,6 +63,8 @@ export default {
     PageHeader,
     VideoListing,
     DurationsListing,
+    InstructorsListing,
+    CategoriesListing,
     PersonalTrainingListing,
     ParagraphHeadline,
   },

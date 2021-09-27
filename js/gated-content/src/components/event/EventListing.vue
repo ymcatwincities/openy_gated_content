@@ -71,10 +71,6 @@ export default {
       type: String,
       default: '',
     },
-    viewAll: {
-      type: Boolean,
-      default: false,
-    },
     withDateFilter: {
       type: Boolean,
       default: false,
@@ -86,6 +82,10 @@ export default {
     categories: {
       type: Array,
       default: null,
+    },
+    instructor: {
+      type: String,
+      default: '',
     },
     sort: {
       type: Object,
@@ -248,6 +248,30 @@ export default {
             path: 'eventseries_id.field_ls_category.entity.tid',
             operator: 'IN',
             value: termsIds,
+          },
+        };
+      }
+
+      if (this.instructor) {
+        params.filter.orGroup = {
+          group: {
+            conjunction: 'OR',
+          },
+        };
+        params.filter.instructor = {
+          condition: {
+            path: 'field_gc_instructor_reference.entity.tid',
+            operator: '=',
+            value: this.instructor,
+            memberOf: 'orGroup',
+          },
+        };
+        params.filter.parentInstructor = {
+          condition: {
+            path: 'eventseries_id.field_gc_instructor_reference.entity.tid',
+            operator: '=',
+            value: this.instructor,
+            memberOf: 'orGroup',
           },
         };
       }
