@@ -72,3 +72,11 @@ openy_gated_content.favorites.delete:
   requirements:
     _permission: 'access content'
     _role: 'authenticated'
+
+openy_gated_content.duration.rebuild:
+  path: '/admin/virtual-y/rebuild-durations'
+  defaults:
+    _form: '\Drupal\openy_gated_content\Form\RebuildDurationsForm'
+    _title: 'Rebuild Duration references'
+  requirements:
+    _permission: 'edit any gc_video content'
