@@ -347,8 +347,8 @@ function openy_gated_content_update_8018() {
   $entity_type->setClass(VyFavoriteItem::class);
   $definitions = VyFavoriteItem::baseFieldDefinitions($entity_type);
   foreach ($definitions as $name => $definition) {
-    if ($definition_manager->getFieldStorageDefinition($name, $entity_type_id)) {
-      $definition_manager->updateFieldStorageDefinition($definition);
+    if ($original = $definition_manager->getFieldStorageDefinition($name, $entity_type_id)) {
+      $definition_manager->updateFieldStorageDefinition($original);
     }
     else {
       $definition_manager->installFieldStorageDefinition($name, $entity_type_id, 'openy_gated_content', $definition);
