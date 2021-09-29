@@ -22,7 +22,7 @@ class GCLogDayField extends FieldPluginBase {
     // Add the field.
     $params = $this->options['group_type'] !== 'group' ? ['function' => $this->options['group_type']] : [];
 
-    $formula = $this->query->getDateFormat("FROM_UNIXTIME($this->tableAlias.$this->realField)", 'D, d/m/Y');
+    $formula = $this->query->getDateFormat("FROM_UNIXTIME($this->tableAlias.$this->realField)", 'D, m/d/Y');
 
     $this->field_alias = $this->query->addField(NULL, $formula, "{$this->tableAlias}_{$this->realField}", $params);
     $this->query->addGroupBy($this->field_alias);
