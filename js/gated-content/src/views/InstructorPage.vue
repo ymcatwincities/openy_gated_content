@@ -56,7 +56,7 @@
         <div>
           <div class="title-inline cachet-book-32-28">{{ instructor.attributes.name }}</div>
           <AddToFavorite
-            :id="instructor.id"
+            :id="instructor.attributes.drupal_internal__tid"
             :type="'taxonomy_term'"
             :bundle="'gc_instructor'"
           ></AddToFavorite>
