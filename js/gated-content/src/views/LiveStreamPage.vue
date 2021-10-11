@@ -9,7 +9,7 @@
         <div class="video gated-containerV2 px--20-10 pt-40-20">
           <MediaPlayer
             :media="media"
-            :autoplay="config.components.live_stream.autoplay_videos"
+            :autoplay="!!config.components.live_stream.autoplay_videos"
             @playerEvent="logPlaybackEvent($event)"
           />
         </div>
