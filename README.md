@@ -47,6 +47,29 @@ See also the [video version of these instructions](https://youtu.be/vlqv4ly3iak)
 - Visit the landing page you created, click to log in, and observe your new
  Virtual Y.
 
+## Upgrade path
+
+### Known issues
+
+If you facing with
+```sh
+ [error]  Configuration <em class="placeholder">user.role.anonymous</em> depends on configuration (<em class="placeholder">rest.resource.openy_gc_auth_custom, rest.resource.openy_gc_auth_custom_confirm</em>) that will not exist after import.
+```
+It’s looks like that previous updates were failed.
+If you dont use Custom auth provider - disable that module and it should help.
+If you use it - try manually delete that config and try again
+```sh
+drush cdel rest.resource.openy_gc_auth_custom_confirm
+```
+
+Another one
+```
+Drupal\Component\Plugin\Exception\PluginNotFoundException while adding Views handlers for field Parts of day on index Default: The "" plugin does not exist. Valid plugin IDs for Drupal\search_api\DataType\DataTypePluginManager are: boolean, date, integer, decimal, string, text in 
+```
+This error was because one of the service lived in a custom folder.
+Try to analyse what service is broken and fix it.
+
+
 ## Development
 
 In development purposes, you might want a set of modules to be enabled. Use
