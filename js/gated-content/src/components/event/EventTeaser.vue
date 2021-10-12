@@ -4,10 +4,10 @@
     :routeName="route"
     :id="video.id"
     :component="type"
+    :title="video.attributes.title"
     :image="image"
   >
     <template>
-      <div class="title">{{ video.attributes.title }}</div>
       <div class="date">
         <SvgIcon icon="date-icon"></SvgIcon>
         {{ date }}

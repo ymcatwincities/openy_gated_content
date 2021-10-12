@@ -185,6 +185,7 @@ class EventsController extends ControllerBase {
     $result = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
 
     $instances = [];
+    $timezone = new \DateTimeZone('UTC');
     foreach ($result as $item) {
       $instances[] = [
         'type' => 'eventinstance',
@@ -194,8 +195,8 @@ class EventsController extends ControllerBase {
         'title' => $item['field_ls_title_value'] ?: $item['title'],
         'host_name' => $item['field_ls_host_name_value'] ?: $item['esh_field_ls_host_name_value'],
         'date' => [
-          'value' => (new DrupalDateTime($item['date__value']))->format('c'),
-          'end_value' => (new DrupalDateTime($item['date__end_value']))->format('c'),
+          'value' => (new DrupalDateTime($item['date__value'], $timezone))->format('c'),
+          'end_value' => (new DrupalDateTime($item['date__end_value'], $timezone))->format('c'),
         ],
       ];
     }
