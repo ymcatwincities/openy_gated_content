@@ -29,7 +29,7 @@ function openy_gc_shared_content_help($route_name, RouteMatchInterface $route_ma
 /**
  * Implements hook_entity_field_storage_info().
  */
-function openy_gc_shared_content_entity_field_storage_info(EntityTypeInterface $entity_type) {
+function openy_gc_shared_content_entity_base_field_info(EntityTypeInterface $entity_type) {
   $shareable_entity_types = [
     'node',
     'eventseries',
@@ -97,7 +97,7 @@ function openy_gc_shared_content_entity_bundle_field_info(EntityTypeInterface $e
     return [];
   }
   $fields = [];
-  foreach (openy_gc_shared_content_entity_field_storage_info($entity_type) as $name => $definition) {
+  foreach (openy_gc_shared_content_entity_base_field_info($entity_type) as $name => $definition) {
     $fields[$name] = $definition;
   }
   return $fields;

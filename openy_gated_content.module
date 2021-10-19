@@ -385,7 +385,7 @@ function openy_gated_content_taxonomy_gc_category_overview_terms_validation(arra
 /**
  * Implements hook_entity_field_storage_info().
  */
-function openy_gated_content_entity_field_storage_info(EntityTypeInterface $entity_type) {
+function openy_gated_content_entity_base_field_info(EntityTypeInterface $entity_type) {
   $manageable_entity_types = [
     'node',
     'eventseries',
@@ -435,7 +435,7 @@ function openy_gated_content_entity_bundle_field_info(EntityTypeInterface $entit
     return [];
   }
   $fields = [];
-  foreach (openy_gated_content_entity_field_storage_info($entity_type) as $name => $definition) {
+  foreach (openy_gated_content_entity_base_field_info($entity_type) as $name => $definition) {
     $fields[$name] = $definition;
   }
   return $fields;
