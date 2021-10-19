@@ -15,7 +15,7 @@ source:
     -
       tid: 1
       name: 'Meghan K'
-      image: 0
+      image: 33
       category:
         - 1
         - 9
@@ -32,7 +32,7 @@ source:
     -
       tid: 3
       name: 'Desiree G'
-      image: 0
+      image: 28
       category:
         - 10
         - 2
@@ -40,13 +40,13 @@ source:
     -
       tid: 4
       name: 'Tamara C'
-      image: 0
+      image: 34
       category: 2
       level: 3
     -
       tid: 5
       name: 'Donnie J'
-      image: 0
+      image: 29
       category:
         - 9
         - 10
@@ -54,13 +54,13 @@ source:
     -
       tid: 6
       name: 'Heather B'
-      image: 0
+      image: 31
       category: 11
       level: 3
     -
       tid: 7
       name: 'Erick S'
-      image: 0
+      image: 30
       category:
         - 11
         - 8
@@ -76,6 +76,12 @@ source:
       name: 'Olivia P'
       image: 27
       category: 3
+      level: 4
+    -
+      tid: 10
+      name: 'Jake J'
+      image: 32
+      category: 6
       level: 4
   ids:
     tid:
