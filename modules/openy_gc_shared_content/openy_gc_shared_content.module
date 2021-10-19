@@ -27,7 +27,7 @@ function openy_gc_shared_content_help($route_name, RouteMatchInterface $route_ma
 }
 
 /**
- * Implements hook_entity_field_storage_info().
+ * Implements hook_entity_base_field_info().
  */
 function openy_gc_shared_content_entity_base_field_info(EntityTypeInterface $entity_type) {
   $shareable_entity_types = [
