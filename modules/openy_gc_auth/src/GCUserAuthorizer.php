@@ -51,6 +51,13 @@ class GCUserAuthorizer {
 
     // Create drupal user if it doesn't exist and login it.
     $account = user_load_by_mail($email);
+
+    if (!$account) {
+      $account = user_load_by_name($name);
+      $account->setEmail($email);
+      $account->save();
+    }
+
     if (!$account) {
       $user = $this->userStorage->create();
       $user->setPassword(user_password());
