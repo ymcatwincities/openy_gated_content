@@ -230,7 +230,7 @@ class VirtualYUSALoginForm extends FormBase {
             'membership_id',
           ])) {
           $name = 'y-usa+' . $id;
-          $email = $name . '@virtualy.org';
+          $email = $result['Email'];
         }
       }
       if (!empty($name) && !empty($email)) {
