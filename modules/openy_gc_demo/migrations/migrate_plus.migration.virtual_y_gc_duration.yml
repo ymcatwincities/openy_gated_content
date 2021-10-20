@@ -1,0 +1,81 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - openy_gc_demo
+id: virtual_y_gc_duration
+migration_tags:
+  - openy_complete_installation
+migration_group: virtual_y
+label: 'GC Duration'
+source:
+  plugin: embedded_data
+  data_rows:
+    -
+      tid: 1
+      name: '10 Minutes or Less'
+      min: 1
+      max: 659
+    -
+      tid: 2
+      name: '15 Minutes'
+      min: 660
+      max: 1080
+    -
+      tid: 3
+      name: '20 Minutes'
+      min: 1081
+      max: 1319
+    -
+      tid: 4
+      name: '30 Minutes'
+      min: 1320
+      max: 1919
+    -
+      tid: 5
+      name: '45 Minutes'
+      min: 1920
+      max: 2819
+    -
+      tid: 6
+      name: '60 Minutes'
+      min: 2820
+      max: 3899
+    -
+      tid: 7
+      name: '90 Minutes'
+      min: 3900
+      max: 5699
+    -
+      tid: 8
+      name: '90 Minutes or More'
+      min: 5700
+      max: 0
+    -
+      tid: 9
+      name: 'Undefined'
+      min: 0
+      max: 0
+  ids:
+    tid:
+      type: integer
+process:
+  langcode:
+    plugin: default_value
+    source: language
+    default_value: en
+  status:
+    plugin: default_value
+    default_value: 1
+  name: name
+  weight: tid
+  field_gc_duration_min: min
+  field_gc_duration_max: max
+destination:
+  plugin: entity:taxonomy_term
+  default_bundle: gc_duration
+
+migration_dependencies:
+  required: {  }
+  optional: {  }
