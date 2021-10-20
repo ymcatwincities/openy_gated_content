@@ -39,11 +39,16 @@ export default {
       'audioContext',
     ]),
   },
+  watch: {
+    mediaStream(newValue) {
+      if (newValue === null) {
+        this.mediaStreamSource = null;
+      }
+    },
+  },
   mounted() {
     this.intervalId = setInterval(() => {
-      if (this.localAnalyser === null && this.mediaStream !== null) {
-        this.mediaStreamSource = this.audioContext.createMediaStreamSource(this.mediaStream);
-
+      if (this.localAnalyser === null) {
         this.localAnalyser = this.audioContext.createAnalyser();
         this.localAnalyser.smoothingTimeConstant = 0.1;
         this.localAnalyser.fftSize = 32;
@@ -51,24 +56,23 @@ export default {
         this.gainNode = this.audioContext.createGain();
         this.gainNode.gain.value = 0;
 
-        this.mediaStreamSource.connect(this.localAnalyser);
         this.localAnalyser.connect(this.gainNode);
         this.gainNode.connect(this.audioContext.destination);
       }
-      if (this.localAnalyser !== null) {
-        const bFrequencyData = new Uint8Array(this.localAnalyser.frequencyBinCount);
-        this.localAnalyser.getByteFrequencyData(bFrequencyData);
-
-        let values = 0;
-        const { length } = bFrequencyData;
-        for (let i = 0; i < length; i += 1) {
-          values += bFrequencyData[i];
-        }
-
-        this.width = 20 + 80 * ((values / length) / 256);
-      } else {
-        this.width = 20;
+      if (this.mediaStreamSource === null && this.mediaStream !== null) {
+        this.mediaStreamSource = this.audioContext.createMediaStreamSource(this.mediaStream);
+        this.mediaStreamSource.connect(this.localAnalyser);
       }
+      const bFrequencyData = new Uint8Array(this.localAnalyser.frequencyBinCount);
+      this.localAnalyser.getByteFrequencyData(bFrequencyData);
+
+      let values = 0;
+      const { length } = bFrequencyData;
+      for (let i = 0; i < length; i += 1) {
+        values += bFrequencyData[i];
+      }
+
+      this.width = 20 + 80 * ((values / length) / 256);
     }, 100);
   },
   beforeDestroy() {
