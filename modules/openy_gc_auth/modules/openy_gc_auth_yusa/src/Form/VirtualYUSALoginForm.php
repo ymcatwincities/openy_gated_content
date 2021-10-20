@@ -219,6 +219,20 @@ class VirtualYUSALoginForm extends FormBase {
         $name = $result['FirstName'] . ' ' . $result['LastName'];
         $email = $result['Email'];
       }
+      // 4. Case when user name already exist in the system.
+      $users = $this->entityTypeManager
+        ->getStorage('user')
+        ->loadByProperties(['name' => $name]);
+      $user = reset($users);
+      if ($user) {
+        if (in_array($provider_config->get('verification_type'),
+          ['barcode',
+            'membership_id',
+          ])) {
+          $name = 'y-usa+' . $id;
+          $email = $name . '@virtualy.org';
+        }
+      }
       if (!empty($name) && !empty($email)) {
         // Check if user already created.
         $users = $this->entityTypeManager
