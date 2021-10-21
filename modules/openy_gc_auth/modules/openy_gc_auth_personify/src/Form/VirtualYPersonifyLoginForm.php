@@ -26,8 +26,18 @@ class VirtualYPersonifyLoginForm extends FormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
 
     $form['submit'] = [
-      '#type' => 'submit',
-      '#value' => $this->t('Enter Virtual Y'),
+      '#type' => 'link',
+      '#url' => Url::fromRoute('openy_gc_auth_personify.personify_check'),
+      '#title' => $this->t('Enter Virtual Y'),
+      '#attributes' => [
+        'class' => [
+          'gc-button',
+        ],
+      ],
+    ];
+
+    $form['#attributes'] = [
+      'class' => 'text-center',
     ];
 
     return $form;
