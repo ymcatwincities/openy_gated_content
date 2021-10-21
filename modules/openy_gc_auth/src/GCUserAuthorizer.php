@@ -44,20 +44,18 @@ class GCUserAuthorizer {
    * {@inheritdoc}
    */
   public function authorizeUser($name, $email, array $extra_data = []) {
-
     if (empty($name) || empty($email)) {
       return;
     }
 
-    // Create drupal user if it doesn't exist and login it.
+    // Try to find the user by an email, if not -- then re-search by name.
     $account = user_load_by_mail($email);
-
-    if (!$account) {
-      $account = user_load_by_name($name);
+    if (!$account && ($account = user_load_by_name($name))) {
       $account->setEmail($email);
       $account->save();
     }
 
+    // Create drupal user if it doesn't exist and login it.
     if (!$account) {
       $user = $this->userStorage->create();
       $user->setPassword(user_password());
@@ -85,7 +83,6 @@ class GCUserAuthorizer {
     $this->eventDispatcher->dispatch(GCUserLoginEvent::EVENT_NAME, $event);
 
     user_login_finalize($account);
-
   }
 
   /**
