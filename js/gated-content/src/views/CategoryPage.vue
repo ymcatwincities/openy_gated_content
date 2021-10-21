@@ -82,7 +82,7 @@
 
       <CategoriesListing
         :title="'Subcategories'"
-        :parent="category.attributes.drupal_internal__tid"
+        :parent="category.attributes.drupal_internal__tid.toString(10)"
         :bundle="selectedBundle"
         :sort="sortData('taxonomy_term')"
       />

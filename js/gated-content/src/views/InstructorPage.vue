@@ -56,7 +56,7 @@
         <div>
           <div class="title-inline cachet-book-32-28">{{ instructor.attributes.name }}</div>
           <AddToFavorite
-            :id="instructor.id"
+            :id="instructor.attributes.drupal_internal__tid"
             :type="'taxonomy_term'"
             :bundle="'gc_instructor'"
           ></AddToFavorite>
@@ -69,7 +69,7 @@
           <EventListing
             v-if="selectedComponent === 'live_stream' || selectedComponent === 'all'"
             :title="config.components.live_stream.title"
-            :instructor="instructor.attributes.drupal_internal__tid"
+            :instructor="instructor.attributes.drupal_internal__tid.toString(10)"
             :sort="sortData('eventinstance', 'live_stream')"
             :pagination="selectedComponent === 'live_stream'"
             :limit="viewAllContentMode ? 0 : itemsLimit"
@@ -92,7 +92,7 @@
           <EventListing
             v-if="selectedComponent === 'virtual_meeting' || selectedComponent === 'all'"
             :title="config.components.virtual_meeting.title"
-            :instructor="instructor.attributes.drupal_internal__tid"
+            :instructor="instructor.attributes.drupal_internal__tid.toString(10)"
             :eventType="'virtual_meeting'"
             :sort="sortData('eventinstance', 'virtual_meeting')"
             :pagination="selectedComponent === 'virtual_meeting'"
@@ -117,7 +117,7 @@
             v-if="selectedComponent === 'gc_video' || selectedComponent === 'all'"
             :title="config.components.gc_video.title"
             :pagination="selectedComponent === 'gc_video'"
-            :instructor="instructor.attributes.drupal_internal__tid"
+            :instructor="instructor.attributes.drupal_internal__tid.toString(10)"
             :sort="sortData('node', 'gc_video')"
             :limit="viewAllContentMode ? 0 : itemsLimit"
             @listing-not-empty="listingIsNotEmpty('gc_video', ...arguments)"

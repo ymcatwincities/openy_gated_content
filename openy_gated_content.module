@@ -185,6 +185,22 @@ function openy_gated_content_jsonapi_eventseries_filter_access(EntityTypeInterfa
 }
 
 /**
+ * Implements hook_jsonapi_ENTITY_TYPE_filter_access().
+ *
+ * Without this hook there no access to filter by instructor in
+ * JSON API for eventinstance.
+ *
+ * @see https://www.drupal.org/project/jsonapi/issues/3037519
+ */
+function openy_gated_content_jsonapi_taxonomy_term_filter_access(EntityTypeInterface $entity_type, AccountInterface $account) {
+  return ([
+    JSONAPI_FILTER_AMONG_ALL => AccessResult::allowedIfHasPermission($account, 'access content'),
+    JSONAPI_FILTER_AMONG_PUBLISHED => AccessResult::allowedIfHasPermission($account, 'access content'),
+    JSONAPI_FILTER_AMONG_OWN => AccessResult::allowedIfHasPermission($account, 'access content'),
+  ]);
+}
+
+/**
  * Implements hook_form_alter().
  */
 function openy_gated_content_form_alter(&$form, FormStateInterface $form_state, $form_id) {

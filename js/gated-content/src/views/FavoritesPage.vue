@@ -213,6 +213,7 @@
         && (selectedComponent === 'gc_instructor' || selectedComponent === 'all')">
         <InstructorsListing
             :sort="sortData('taxonomy_term')"
+            :favorites="true"
             :limit="viewAllContentMode ? 0 : itemsLimit"
         >
           <template #filterButton>
