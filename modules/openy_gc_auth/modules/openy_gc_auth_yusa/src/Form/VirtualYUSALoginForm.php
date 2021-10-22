@@ -219,7 +219,7 @@ class VirtualYUSALoginForm extends FormBase {
         $name = $result['FirstName'] . ' ' . $result['LastName'];
         $email = $result['Email'];
       }
-      // 4. Case when user name already exist in the system.
+      // 4. Case when user name already exist in the site.
       $users = $this->entityTypeManager
         ->getStorage('user')
         ->loadByProperties(['name' => $name]);
