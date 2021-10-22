@@ -371,7 +371,7 @@ function openy_gated_content_update_8019() {
   ];
   foreach ($entity_type_ids as $entity_type_id) {
     $entity_type = $definition_manager->getEntityType($entity_type_id);
-    $definitions = openy_gated_content_entity_field_storage_info($entity_type);
+    $definitions = openy_gated_content_entity_base_field_info($entity_type);
     if (!$definition_manager->getFieldStorageDefinition($field_name, $entity_type_id)) {
       $definition_manager->installFieldStorageDefinition($field_name, $entity_type_id, 'openy_gated_content', $definitions[$field_name]);
       continue;
