@@ -146,6 +146,19 @@ class SSOClient {
   }
 
   /**
+   * Temporary function to check if user has a valid subscription.
+   *
+   * @param object $user_membership_data
+   *   Object with user membership data. Should contain 'MembershipStatus' prop.
+   *
+   * @return bool
+   *   TRUE if MembershipStatus key exists & equal to 'Active'. FALSE otherwise.
+   */
+  public function temporaryValidateUserSubscription($user_membership_data):bool {
+    return isset($user_membership_data->MembershipStatus) && !empty($user_membership_data->MembershipStatus) && $user_membership_data->MembershipStatus === 'Active';
+  }
+
+  /**
    * Prepare user name and email.
    *
    * @param object $user_data
