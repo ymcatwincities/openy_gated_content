@@ -8,6 +8,7 @@
 use Drupal\Core\Config\Entity\ConfigEntityType;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\openy_gc_personal_training\Entity\PersonalTraining;
 use Drupal\user\Entity\Role;
 
 /**
@@ -197,4 +198,39 @@ function openy_gc_personal_training_update_8007(&$sandbox) {
   $configuration->set('meeting_cancel_subject', $meeting_delete_subject);
   $configuration->set('meeting_cancel_message', $meeting_delete_message);
   $configuration->save();
+}
+
+/**
+ * Add needed permissions for the virtual_trainer role.
+ */
+function openy_gc_personal_training_update_8008() {
+  $permissions = [
+    'administer personal training entities',
+    'delete personal training entities',
+  ];
+  $role = Role::load('virtual_trainer');
+  if (!$role) {
+    return;
+  }
+  foreach ($permissions as $permission) {
+    $role->grantPermission($permission);
+  }
+  $role->save();
+}
+
+/**
+ * Update definition for Personal training entity.
+ */
+function openy_gc_personal_training_update_8009() {
+  $updates = \Drupal::entityDefinitionUpdateManager();
+  $entity_type_id = 'personal_training';
+  $type = $updates->getEntityType($entity_type_id);
+  $keys = $type->getKeys();
+  $key = 'uid';
+  $keys['uid'] = $keys['owner'] = $key;
+  $type->set('entity_keys', $keys);
+  $updates->updateEntityType($type);
+  $fields = PersonalTraining::ownerBaseFieldDefinitions($type);
+  $fields[$key]->setInitialValue(1);
+  $updates->installFieldStorageDefinition($key, $entity_type_id, 'openy_gc_personal_training', $fields[$key]);
 }
