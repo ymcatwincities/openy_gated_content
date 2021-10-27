@@ -9,7 +9,7 @@
         <div>
           <div class="title-inline cachet-book-32-28">{{ duration.attributes.name }}</div>
           <AddToFavorite
-            :id="duration.id"
+            :id="duration.attributes.drupal_internal__tid"
             :type="'taxonomy_term'"
             :bundle="'gc_duration'"
           ></AddToFavorite>
