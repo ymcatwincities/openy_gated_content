@@ -30,11 +30,12 @@
         />
       </div>
     </template>
-    <div v-else class="empty-listing">{{ msg }}</div>
+    <div v-else class="empty-listing">{{ emptyBlockMsg }}</div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import client from '@/client';
 import EventTeaser from '@/components/event/EventTeaser.vue';
 import Spinner from '@/components/Spinner.vue';
@@ -74,9 +75,9 @@ export default {
       type: Boolean,
       default: false,
     },
-    category: {
-      type: String,
-      default: '',
+    categories: {
+      type: Array,
+      default: null,
     },
     sort: {
       type: Object,
@@ -95,9 +96,9 @@ export default {
   },
   data() {
     return {
+      component: this.eventType,
       loading: true,
       error: false,
-      listing: null,
       featuredLocal: false,
       params: [
         'field_ls_image',
@@ -117,6 +118,11 @@ export default {
     date: 'load',
     eventType: 'load',
     sort: 'load',
+    isCategoriesLoaded() {
+      if (this.categories !== null) {
+        this.load();
+      }
+    },
   },
   async mounted() {
     // By default emit that listing not empty to the parent component.
@@ -125,9 +131,9 @@ export default {
     await this.load();
   },
   computed: {
-    listingIsNotEmpty() {
-      return this.listing !== null && this.listing.length > 0;
-    },
+    ...mapGetters([
+      'isCategoriesLoaded',
+    ]),
     dateFormatted() {
       const weekDay = this.date.toLocaleDateString('en', { weekday: 'long' });
       const monthName = this.date.toLocaleDateString('en', { month: 'long' });
@@ -227,15 +233,31 @@ export default {
         params.filter.field_ls_featured = 1;
       }
 
-      if (this.category) {
-        params.filter['eventseries_id.field_ls_category.id'] = this.category;
-      }
-
       params.filter.status = 1;
       params.sort = {
         sortBy: this.sort,
       };
 
+      if (this.categories !== null) {
+        if (!this.isCategoriesLoaded) {
+          return;
+        }
+        const termsIds = [];
+        this.categories.forEach((tid) => {
+          const subcategories = this.$store.getters.getSubcategories(tid);
+          termsIds.push(tid, ...this.$store.getters.getNestedTids(subcategories));
+        });
+        params.filter.in = {
+          condition: {
+            path: 'eventseries_id.field_ls_category.entity.tid',
+            operator: 'IN',
+            value: termsIds,
+          },
+        };
+      }
+      this.loadFromJsonApi(params);
+    },
+    loadFromJsonApi(params) {
       client
         .get(`jsonapi/eventinstance/${this.eventType}`, { params })
         .then((response) => {
@@ -249,7 +271,7 @@ export default {
             this.featuredLocal = false;
             this.load();
           }
-          if (this.listing === null || this.listing.length === 0) {
+          if (!this.listingIsNotEmpty) {
             // Emit that listing empty to the parent component.
             this.$emit('listing-not-empty', false);
           }

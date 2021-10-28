@@ -10,8 +10,8 @@ use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\openy_gated_content\GCUserService;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Defines the base plugin for GCIdentityProvider classes.
@@ -165,6 +165,17 @@ abstract class GCIdentityProviderPluginBase extends PluginBase implements GCIden
       $configuration->setData($this->configuration);
       $configuration->save();
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getMemberNotificationEmail(int $uid): string {
+    // Basic implementation of this method returns just drupal user email.
+    // Override this method in case your provider store fake emails on
+    // the Drupal side.
+    $user = $this->entityTypeManager->getStorage('user')->load($uid);
+    return $user->getEmail();
   }
 
 }

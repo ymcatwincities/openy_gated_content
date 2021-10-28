@@ -14,6 +14,9 @@ export default {
       taxonomy_term: {
         gc_category: [],
       },
+      personal_training: {
+        personal_training: [],
+      },
     },
   },
   actions: {

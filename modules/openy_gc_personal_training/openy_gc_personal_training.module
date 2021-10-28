@@ -1,0 +1,330 @@
+<?php
+
+/**
+ * @file
+ * Contains openy_gc_personal_training.module.
+ */
+
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Datetime\DrupalDateTime;
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
+use Drupal\openy_gated_content\VyFavoriteItemsManager;
+use Drupal\openy_gc_personal_training\Entity\PersonalTrainingInterface;
+use Drupal\openy_gc_personal_training\PersonalTrainingSeriesOperations;
+use Drupal\Core\Render\BubbleableMetadata;
+use Drupal\user\UserInterface;
+
+/**
+ * Implements hook_preprocess_html().
+ *
+ * Attach openy_gc_personal_training/simple_peer library.
+ */
+function openy_gc_personal_training_preprocess_html(&$variables) {
+  // @todo instead of this better to alter gated_content library
+  // and add dependency to openy_gc_personal_training/simple_peer.
+  if ($node = \Drupal::routeMatch()->getParameter('node')) {
+    if ($node->hasField('field_content')) {
+      foreach ($node->field_content as $field_item) {
+        if ($field_item->entity->bundle() === 'gated_content') {
+          $variables['#attached']['library'][] = 'openy_gc_personal_training/simple_peer';
+        }
+      }
+    }
+
+    if ($node->hasField('field_bottom_content')) {
+      foreach ($node->field_bottom_content as $field_item) {
+        if ($field_item->entity->bundle() === 'gated_content') {
+          $variables['#attached']['library'][] = 'openy_gc_personal_training/simple_peer';
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_virtual_y_app_settings_alter().
+ */
+function openy_gc_personal_training_virtual_y_app_settings_alter(&$config) {
+  $config['personal_training_enabled'] = TRUE;
+  $moduleConfig = \Drupal::config('openy_gc_personal_training.settings');
+  $config['signalingServerPRL'] = $moduleConfig->get('signalingServerPRL');
+  $config['peerjsSTUNUrl'] = $moduleConfig->get('peerjs_stun');
+  $config['peerjsTURNUrl'] = $moduleConfig->get('peerjs_turn_url');
+  $config['peerjsTURNUsername'] = $moduleConfig->get('peerjs_turn_username');
+  $config['peerjsTURNCredential'] = $moduleConfig->get('peerjs_turn_credential');
+  $config['peerjsDebug'] = $moduleConfig->get('peerjs_debug');
+  $config['newMessageSound'] = drupal_get_path('module', 'openy_gc_personal_training') . '/assets/sound/new_message_sound.mp3';
+
+}
+
+/**
+ * Implements hook_openy_gated_content_list_events_alter().
+ */
+function openy_gc_personal_training_openy_gated_content_list_events_alter(&$results, $params) {
+  if (!in_array($params['type'], ['all', 'personal_training'])) {
+    return;
+  }
+
+  $query = \Drupal::database()->select('personal_training', 'pt');
+  $query->condition('pt.type', 'personal_training');
+  $query->leftJoin('users_field_data', 'ufd', 'ufd.uid = pt.instructor_id');
+
+  $uid = \Drupal::currentUser()->id();
+  $query->condition($query->orConditionGroup()
+    ->condition('customer_id', $uid)
+    ->condition('instructor_id', $uid)
+  );
+
+  if (isset($params['start_date'])) {
+    $query->condition('date__end_value', (new DrupalDateTime($params['start_date']))->format('c'), '>=');
+  }
+
+  if (isset($params['end_date'])) {
+    $query->condition('date__value', (new DrupalDateTime($params['end_date']))->format('c'), '<=');
+  }
+
+  $query->fields('pt');
+  $query->fields('ufd', ['name']);
+  $query->orderBy('date__value');
+
+  $result = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
+
+  foreach ($result as $item) {
+    $results[] = [
+      'type' => 'personal_training',
+      'bundle' => 'personal_training',
+      'state' => $item['state'],
+      'id' => $item['id'],
+      'uuid' => $item['uuid'],
+      'title' => $item['title'],
+      'host_name' => $item['name'],
+      'date' => [
+        'value' => (new DrupalDateTime($item['date__value']))->format('c'),
+        'end_value' => (new DrupalDateTime($item['date__end_value']))->format('c'),
+      ],
+    ];
+  }
+}
+
+/**
+ * Implements hook_jsonapi_entity_filter_access().
+ */
+function openy_gc_personal_training_jsonapi_entity_filter_access(EntityTypeInterface $entity_type, AccountInterface $account) {
+  if (!in_array($entity_type->id(), ['user', 'personal_training'])) {
+    return [];
+  }
+  return ([
+    JSONAPI_FILTER_AMONG_ALL => AccessResult::allowedIfHasPermission($account, 'view personal training entities'),
+  ]);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert() for personal_training entities.
+ */
+function openy_gc_personal_training_personal_training_insert(PersonalTrainingInterface $personal_training) {
+  if ($personal_training->bundle() !== 'training_series') {
+    return;
+  }
+
+  \Drupal::service('class_resolver')
+    ->getInstanceFromDefinition(PersonalTrainingSeriesOperations::class)
+    ->entityInsert($personal_training);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update() for personal_training entities.
+ */
+function openy_gc_personal_training_personal_training_update(PersonalTrainingInterface $personal_training) {
+  if ($personal_training->bundle() !== 'training_series') {
+    return;
+  }
+
+  \Drupal::service('class_resolver')
+    ->getInstanceFromDefinition(PersonalTrainingSeriesOperations::class)
+    ->entityUpdate($personal_training);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete() for personal_training entities.
+ */
+function openy_gc_personal_training_personal_training_delete(PersonalTrainingInterface $personal_training) {
+  if ($personal_training->bundle() === 'personal_training') {
+    \Drupal::service('class_resolver')
+      ->getInstanceFromDefinition(VyFavoriteItemsManager::class)
+      ->deleteRelatedFavoriteItems($personal_training);
+  }
+  elseif ($personal_training->bundle() === 'training_series') {
+    \Drupal::service('class_resolver')
+      ->getInstanceFromDefinition(PersonalTrainingSeriesOperations::class)
+      ->entityDelete($personal_training);
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function openy_gc_personal_training_theme($existing, $type, $theme, $path) {
+  return [
+    'vy_training_series_date_recur_modular_alpha_widget' => [
+      'render element' => 'widget',
+    ],
+  ];
+}
+
+/**
+ * Implements hook_mail().
+ */
+function openy_gc_personal_training_mail($key, &$message, $params) {
+  switch ($key) {
+    case 'openy_gc_personal_training_notify':
+      $message['from'] = \Drupal::config('system.site')->get('mail');
+
+      if (
+        isset($params['personal_training'])
+        && $params['personal_training'] instanceof PersonalTrainingInterface
+      ) {
+        $token = \Drupal::token();
+        $personal_training = $params['personal_training'];
+        $instructor = $personal_training->get('instructor_id')->entity;
+        $customer = $personal_training->get('customer_id')->entity;
+
+        $data = [
+          'personal_training' => $params['personal_training'],
+          'personal_training_instructor' => $instructor,
+          'personal_training_customer' => $customer,
+        ];
+        $message['subject'] = $token->replace($params['subject'], $data);
+        $message['body'][] = $token->replace($params['message'], $data);
+      }
+      break;
+  }
+}
+
+/**
+ * Implements hook_token_info().
+ */
+function openy_gc_personal_training_token_info() {
+  $info = [];
+
+  $info['types'] = [
+    'personal-training' => [
+      'name' => t('Personal Training'),
+      'description' => t('Tokens taken from personal training entity.'),
+      'needs-data' => ['personal_training'],
+    ],
+    'personal-training-instructor' => [
+      'name' => t('Personal Training Instructor'),
+      'description' => t('Tokens taken from personal training instructor.'),
+      'needs-data' => ['personal_training_instructor'],
+    ],
+    'personal-training-customer' => [
+      'name' => t('Personal Training Customer'),
+      'description' => t('Tokens taken from personal training customer.'),
+      'needs-data' => ['personal_training_customer'],
+    ],
+  ];
+
+  $info['tokens'] = [
+    'personal-training' => [
+      'title' => [
+        'name' => t('Personal Training title'),
+        'description' => t('Title of the personal training'),
+      ],
+      'start-date' => [
+        'name' => t('Personal Training start date'),
+        'description' => t('Date when the personal training begins, format is RFC-2822; Example: Thu, 21 Dec 2000 16:01:07 +0200'),
+      ],
+    ],
+    'personal-training-instructor' => [
+      'name' => [
+        'name' => t('Instructor name'),
+        'description' => t('Name of the instructor conducting the personal training.'),
+      ],
+    ],
+    'personal-training-customer' => [
+      'name' => [
+        'name' => t('Customer name'),
+        'description' => t('Name of the customer of the personal training.'),
+      ],
+    ],
+  ];
+
+  return $info;
+}
+
+/**
+ * Implements hook_tokens().
+ */
+function openy_gc_personal_training_tokens($type, $tokens, array $data, array $options, BubbleableMetadata $bubbleable_metadata) {
+  $replacements = [];
+
+  if (
+    $type === 'personal-training'
+    && !empty($data['personal_training'])
+    && $data['personal_training'] instanceof PersonalTrainingInterface
+  ) {
+    foreach ($tokens as $name => $original) {
+      switch ($name) {
+        case 'title':
+          $replacements[$original] = $data['personal_training']->get('title')->value;
+          break;
+
+        case 'start-date':
+          $personal_training = $data['personal_training'];
+          $timezone = date_default_timezone_get();
+
+          $meeting_start_date = '';
+          if ($personal_training->bundle() === 'personal_training') {
+            $startDt = DrupalDateTime::createFromFormat(
+              DateTimeItemInterface::DATETIME_STORAGE_FORMAT,
+              $personal_training->get('date')->value,
+              DateTimeItemInterface::STORAGE_TIMEZONE
+            );
+            $startDt->setTimezone(timezone_open($timezone));
+            $meeting_start_date = $startDt->format('D, d M Y H:i:s');
+          }
+          elseif ($personal_training->bundle() === 'training_series') {
+            $dates = \Drupal::service('personal_training_series.manager')->getTrainingsDates($personal_training);
+            $formatted_start_date = $dates['start']->format('D, d M Y H:i:s');
+            $formatted_end_date = $dates['end']->format('D, d M Y H:i:s');
+            $meeting_start_date = "$formatted_start_date - $formatted_end_date";
+          }
+
+          $replacements[$original] = $meeting_start_date;
+          break;
+      }
+    }
+  }
+
+  if (
+    $type === 'personal-training-instructor'
+    && !empty($data['personal_training_instructor'])
+    && $data['personal_training_instructor'] instanceof UserInterface
+  ) {
+    foreach ($tokens as $name => $original) {
+      switch ($name) {
+        case 'name':
+          $replacements[$original] = $data['personal_training_instructor']->getDisplayName();
+          break;
+      }
+    }
+  }
+
+  if (
+    $type === 'personal-training-customer'
+    && !empty($data['personal_training_customer'])
+    && $data['personal_training_customer'] instanceof UserInterface
+  ) {
+    foreach ($tokens as $name => $original) {
+      switch ($name) {
+        case 'name':
+          $replacements[$original] = $data['personal_training_customer']->getDisplayName();
+          break;
+      }
+    }
+  }
+
+  return $replacements;
+}

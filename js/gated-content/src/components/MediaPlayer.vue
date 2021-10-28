@@ -5,9 +5,13 @@
       :player="player"
       :videoId="videoId"
       :options="{responsive: 'true', url: media.field_media_video_embed_field}"
-      @loaded="$refs.player.pause()"
+      :player-vars="handleAttributes()"
+      :autoplay="autoplay"
+      @loaded="handleLoaded()"
+      @ready="handleReady()"
       @play="handlePlay()"
-      @ended="handlePlayerEvent('videoPlaybackEnded')"
+      @pause="handlePause()"
+      @ended="handleEnded()"
     />
   </div>
 </template>
@@ -20,6 +24,10 @@ export default {
   data() {
     return {
       playbackLogged: false,
+      playbackInProgress: false,
+      logStartedEventImmediately: true,
+      activityIntervalId: 0,
+      playbackTimeout: 0,
     };
   },
   components: {
@@ -29,6 +37,10 @@ export default {
     media: {
       type: Object,
       required: true,
+    },
+    autoplay: {
+      type: Boolean,
+      default: false,
     },
   },
   watch: {
@@ -44,6 +56,10 @@ export default {
         embedObj = embedObj.match(/(\?|&)v=([^&#]+)/).pop();
         return embedObj;
       }
+      // If the video matches Vimeo's private link format, return the full url.
+      if (embedObj.match(/^https?:\/\/(www\.)?vimeo.com\/([0-9]*)(\/[a-zA-Z0-9]+)$/)) {
+        return embedObj;
+      }
       return this.media.field_media_video_id;
     },
   },
@@ -54,16 +70,65 @@ export default {
     handlePlayerEvent(eventType) {
       this.$emit('playerEvent', eventType);
     },
-    handlePlay() {
+    logPlaybackStarted() {
       if (this.playbackLogged) {
         return;
       }
       this.playbackLogged = true;
       this.handlePlayerEvent('videoPlaybackStarted');
     },
+    handleLoaded() {
+      if (!this.autoplay) {
+        this.$refs.player.pause();
+      }
+    },
+    handleReady() {
+      if (!this.autoplay) {
+        this.$refs.player.player.pauseVideo();
+      }
+    },
+    handlePlay() {
+      this.playbackInProgress = true;
+      if (this.logStartedEventImmediately) {
+        this.logPlaybackStarted();
+      } else {
+        this.playbackTimeout = setTimeout(() => this.logPlaybackStarted(), 60 * 1000);
+      }
+    },
+    handleAttributes() {
+      if (this.media.field_media_source === 'youtube') {
+        return {
+          rel: 0,
+          autoplay: this.autoplay,
+        };
+      }
+      return false;
+    },
+    handlePause() {
+      this.playbackInProgress = false;
+      this.logStartedEventImmediately = true;
+      clearTimeout(this.playbackTimeout);
+    },
+    handleEnded() {
+      this.playbackInProgress = false;
+      this.handlePlayerEvent('videoPlaybackEnded');
+    },
+  },
+  mounted() {
+    this.logStartedEventImmediately = !this.autoplay;
+    this.activityIntervalId = setInterval(() => {
+      if (this.playbackInProgress) {
+        this.$log.trackActivity({ path: this.$route.fullPath });
+      }
+    }, 60 * 1000);
   },
   updated() {
     this.playbackLogged = false;
+    this.playbackInProgress = false;
+  },
+  beforeDestroy() {
+    clearInterval(this.activityIntervalId);
+    clearTimeout(this.playbackTimeout);
   },
 };
 </script>

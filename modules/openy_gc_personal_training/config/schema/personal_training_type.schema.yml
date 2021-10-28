@@ -1,0 +1,10 @@
+personal_training.type.*:
+  type: config_entity
+  label: 'Personal training type config'
+  mapping:
+    id:
+      type: string
+      label: 'ID'
+    label:
+      type: label
+      label: 'Name'

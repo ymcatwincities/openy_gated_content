@@ -1,13 +1,16 @@
 <template>
-  <div class="teaser video-teaser">
-    <router-link
-      :to="{ name: 'Video', params: { id: video.id } }">
-      <div class="preview" v-bind:style="{
-              backgroundImage: `url(${image})`
-            }">
-        <div class="play-button"></div>
-      </div>
-      <div class="title">{{ video.attributes.title }}</div>
+  <Teaser
+    class="video-teaser"
+    :routeName="'Video'"
+    :id="video.id"
+    :component="'gc_video'"
+    :title="video.attributes.title"
+    :image="image"
+  >
+    <template v-slot:overlay>
+      <div class="play-button"></div>
+    </template>
+    <template>
       <div
         class="instructor"
         v-if="this.video.attributes.field_gc_video_instructor"
@@ -22,29 +25,32 @@
         <SvgIcon icon="difficulty-icon-white" :css-fill="false"></SvgIcon>
         {{ video.attributes.field_gc_video_level.name | capitalize }}
       </div>
-      <div class="timer">
+      <div class="timer" :style="{ visibility: this.video
+        .attributes.field_gc_video_duration ? 'visible': 'hidden'}">
         {{ duration }}
       </div>
-    </router-link>
-    <AddToFavorite
-      :id="video.attributes.drupal_internal__nid"
-      :type="'node'"
-      :bundle="'gc_video'"
-      class="white"
-    ></AddToFavorite>
-  </div>
+    </template>
+    <template v-slot:outer>
+      <AddToFavorite
+        :id="video.attributes.drupal_internal__nid"
+        :type="'node'"
+        :bundle="'gc_video'"
+        class="white"
+      />
+    </template>
+  </Teaser>
 </template>
 
 <script>
+import dayjs from 'dayjs';
+import Teaser from '@/components/Teaser.vue';
 import AddToFavorite from '@/components/AddToFavorite.vue';
 import SvgIcon from '@/components/SvgIcon.vue';
-import moment from 'moment';
-// eslint-disable-next-line no-unused-vars
-import momentDurationFormatSetup from 'moment-duration-format';
 
 export default {
   name: 'VideoTeaser',
   components: {
+    Teaser,
     SvgIcon,
     AddToFavorite,
   },
@@ -56,19 +62,17 @@ export default {
   },
   computed: {
     image() {
-      if (this.video.attributes['field_gc_video_image.field_media_image']) {
-        return this.video.attributes['field_gc_video_image.field_media_image']
-          .image_style_uri[0].gated_content_teaser;
-      }
-
-      if (!this.video.attributes['field_gc_video_media.thumbnail']) {
-        return null;
-      }
-
-      return this.video.attributes['field_gc_video_media.thumbnail'].image_style_uri[0].gated_content_teaser;
+      return this.video.attributes['field_gc_video_image.field_media_image']
+        ?? this.video.attributes['field_gc_video_media.thumbnail'];
     },
     duration() {
-      return moment.duration(this.video.attributes.field_gc_video_duration, 'seconds').format('m [minute]');
+      const sec = this.video.attributes.field_gc_video_duration;
+      if (sec > 0 && sec < 60) {
+        return `${sec} ${this.$options.filters.simplePluralize('second', sec)}`;
+      }
+
+      const min = Math.floor(dayjs.duration(sec, 'seconds').asMinutes());
+      return `${min} ${this.$options.filters.simplePluralize('minute', min)}`;
     },
   },
 };

@@ -133,6 +133,7 @@ class RecliqueSSO extends GCIdentityProviderPluginBase {
 
     $form['login_mode'] = [
       '#title' => $this->t('Login mode'),
+      '#description' => $this->t('When "Redirect immediately" mode used, it is not possible to redirect user after login to his initially requested VY route.'),
       '#type' => 'radios',
       '#default_value' => $config['login_mode'],
       '#required' => TRUE,

@@ -2,12 +2,11 @@
   background-color: $thunder;
 
   > a {
-    flex-direction: column;
-    border:         none;
+    .info {
+      border: none;
+    }
 
     .title {
-      align-self:    flex-start;
-      margin-bottom: auto;
       color:         $white;
 
       @include median(padding, 10px, 5px);
@@ -16,8 +15,6 @@
     .instructor, .level {
       display:     flex;
       align-items: center;
-      align-self:  flex-end;
-      width:       100%;
       color:       $white;
 
       @include median(padding, 0 10px 10px, 0 5px 5px);
@@ -31,10 +28,7 @@
     }
 
     .timer {
-      display:          inline-block;
-      flex-grow:        0;
       align-self:       flex-start;
-      margin-top:       11px;
       border:           1px solid $gray;
       border-radius:    12px;
       background-color: $white;
@@ -49,10 +43,6 @@
     .preview {
       position:          relative;
       align-self:        flex-start;
-      background-repeat: no-repeat;
-      background-size:   contain;
-      padding-bottom:    56.25%;
-      width:             100%;
 
       .play-button {
         position:         absolute;

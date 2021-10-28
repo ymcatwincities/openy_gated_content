@@ -7,6 +7,7 @@ use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\openy_gated_content\VyFavoriteItemInterface;
+use Drupal\user\EntityOwnerInterface;
 use Drupal\user\EntityOwnerTrait;
 
 /**
@@ -30,7 +31,7 @@ use Drupal\user\EntityOwnerTrait;
  *   admin_permission = "administer gated content favorite items"
  * )
  */
-class VyFavoriteItem extends ContentEntityBase implements VyFavoriteItemInterface {
+class VyFavoriteItem extends ContentEntityBase implements VyFavoriteItemInterface, EntityOwnerInterface {
 
   use EntityOwnerTrait;
 

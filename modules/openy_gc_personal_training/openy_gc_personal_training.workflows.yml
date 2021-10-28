@@ -1,0 +1,25 @@
+personal_training_default:
+  id: personal_training_default
+  label: Default
+  group: personal_training
+  states:
+    planned:
+      label: Planned
+    scheduled:
+      label: Scheduled
+      published: true
+    canceled:
+      label: Canceled
+  transitions:
+    schedule:
+      label: Schedule
+      from: [planned]
+      to: scheduled
+    reschedule:
+      label: Reschedule
+      from: [canceled]
+      to: planned
+    cancel:
+      label: Cancel
+      from: [planned, scheduled]
+      to: canceled

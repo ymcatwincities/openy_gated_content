@@ -3,7 +3,7 @@
     <div class="listing-header">
       <h2 class="title text-gray" v-if="title !== 'none'">{{ title }}</h2>
       <router-link
-        :to="{ name: 'VideoListing', query: { type: category } }"
+        :to="{ name: 'VideoListing', query: { type: categories ? categories[0] : 'all' } }"
         v-if="viewAll && listingIsNotEmpty"
         class="view-all"
       >
@@ -16,7 +16,7 @@
     </div>
     <template v-else-if="listingIsNotEmpty">
       <div v-if="error">Error loading</div>
-      <div v-else class="four-columns">
+      <div v-else :class="layoutClass">
         <VideoTeaser
           v-for="video in listing"
           :key="video.id"
@@ -25,7 +25,7 @@
       </div>
     </template>
     <div v-else class="empty-listing">
-      Videos not found.
+      {{ emptyBlockMsg }}
     </div>
     <Pagination
       v-if="pagination"
@@ -35,17 +35,18 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import client from '@/client';
 import VideoTeaser from '@/components/video/VideoTeaser.vue';
 import Spinner from '@/components/Spinner.vue';
 import Pagination from '@/components/Pagination.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
-import { SettingsMixin } from '@/mixins/SettingsMixin';
 import { FavoritesMixin } from '@/mixins/FavoritesMixin';
+import { ListingMixin } from '@/mixins/ListingMixin';
 
 export default {
   name: 'VideoListing',
-  mixins: [JsonApiCombineMixin, SettingsMixin, FavoritesMixin],
+  mixins: [JsonApiCombineMixin, FavoritesMixin, ListingMixin],
   components: {
     VideoTeaser,
     Spinner,
@@ -60,10 +61,13 @@ export default {
       type: String,
       default: '',
     },
-    msg: String,
-    category: {
+    msg: {
       type: String,
-      default: '',
+      default: 'No videos found.',
+    },
+    categories: {
+      type: Array,
+      default: null,
     },
     featured: {
       type: Boolean,
@@ -90,9 +94,9 @@ export default {
   },
   data() {
     return {
+      component: 'gc_video',
       loading: true,
       error: false,
-      listing: [],
       links: {},
       featuredLocal: false,
       params: [
@@ -109,17 +113,22 @@ export default {
     $route: 'load',
     excludedVideoId: 'load',
     sort: 'load',
+    isCategoriesLoaded() {
+      if (this.categories !== null) {
+        this.load();
+      }
+    },
+  },
+  computed: {
+    ...mapGetters([
+      'isCategoriesLoaded',
+    ]),
   },
   async mounted() {
     // By default emit that listing not empty to the parent component.
     this.$emit('listing-not-empty', true);
     this.featuredLocal = this.featured;
     await this.load();
-  },
-  computed: {
-    listingIsNotEmpty() {
-      return this.listing !== null && this.listing.length > 0;
-    },
   },
   methods: {
     async load() {
@@ -158,10 +167,6 @@ export default {
         };
       }
 
-      if (this.category.length > 0) {
-        params.filter['field_gc_video_category.id'] = this.category;
-      }
-
       if (this.featuredLocal) {
         params.filter.field_gc_video_featured = 1;
       }
@@ -178,6 +183,26 @@ export default {
         };
       }
 
+      if (this.categories !== null) {
+        if (!this.isCategoriesLoaded) {
+          return;
+        }
+        const termsIds = [];
+        this.categories.forEach((tid) => {
+          const subcategories = this.$store.getters.getSubcategories(tid);
+          termsIds.push(tid, ...this.$store.getters.getNestedTids(subcategories));
+        });
+        params.filter.in = {
+          condition: {
+            path: 'field_gc_video_category.entity.tid',
+            operator: 'IN',
+            value: termsIds,
+          },
+        };
+      }
+      this.loadFromJsonApi(params);
+    },
+    loadFromJsonApi(params) {
       client
         .get('jsonapi/node/gc_video', { params })
         .then((response) => {
@@ -192,7 +217,7 @@ export default {
             this.featuredLocal = false;
             this.load();
           }
-          if (this.listing === null || this.listing.length === 0) {
+          if (!this.listingIsNotEmpty) {
             // Emit that listing empty to the parent component.
             this.$emit('listing-not-empty', false);
           }

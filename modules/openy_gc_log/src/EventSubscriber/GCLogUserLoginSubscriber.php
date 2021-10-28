@@ -3,6 +3,7 @@
 namespace Drupal\openy_gc_log\EventSubscriber;
 
 use Drupal\openy_gc_auth\Event\GCUserLoginEvent;
+use Drupal\openy_gc_log\Entity\LogEntityInterface;
 use Drupal\openy_gc_log\Logger;
 use Drupal\user\Entity\User;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -53,7 +54,7 @@ class GCLogUserLoginSubscriber implements EventSubscriberInterface {
       $this->gcLogger->addLog([
         'email' => $event->account->getEmail(),
         'uid' => $event->account->id(),
-        'event_type' => 'userLoggedIn',
+        'event_type' => LogEntityInterface::EVENT_TYPE_LOGIN,
       ]);
     }
   }

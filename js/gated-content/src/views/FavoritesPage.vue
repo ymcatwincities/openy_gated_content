@@ -62,97 +62,118 @@
         <span>There is no favorite content.</span>
       </div>
 
-      <div v-if="!isFavoritesTypeEmpty('node', 'gc_video')
-        && (selectedComponent === 'gc_video' || selectedComponent === 'all')">
-        <VideoListing
-          :title="config.components.gc_video.title"
-          :favorites="true"
-          :pagination="viewAllContentMode"
-          :sort="sortData('node')"
-          :limit="viewAllContentMode ? 0 : itemsLimit"
-        >
-          <template #filterButton>
-            <button
-              v-if="selectedComponent === 'all'"
-              type="button"
-              class="view-all"
-              @click="preSelectedComponent = 'gc_video'; applyFilters()">
-              More
-            </button>
-          </template>
-        </VideoListing>
-      </div>
+      <PersonalTrainingListing
+        :favorites="true"
+        :limit="viewAllContentMode ? 0 : itemsLimit"
+        :sort="sortData('personal_training')"
+        v-if="!isFavoritesTypeEmpty('personal_training', 'personal_training')
+          && config.personal_training_enabled
+          && (selectedComponent === 'personal_training' || selectedComponent === 'all')">
+        <template #filterButton>
+          <button
+            v-if="selectedComponent === 'all'"
+            type="button"
+            class="view-all"
+            @click="preSelectedComponent = 'personal_training'; applyFilters()">
+            More
+          </button>
+        </template>
+      </PersonalTrainingListing>
 
-      <div v-if="!isFavoritesTypeEmpty('eventinstance', 'live_stream')
-        && (selectedComponent === 'live_stream' || selectedComponent === 'all')">
-        <EventListing
-          :title="config.components.live_stream.title"
-          :msg="'Live streams not found.'"
-          :favorites="true"
-          :sort="sortData('eventinstance')"
-          :limit="viewAllContentMode ? 50 : itemsLimit"
-        >
-          <template #filterButton>
-            <button
-              v-if="selectedComponent === 'all'"
-              type="button"
-              class="view-all"
-              @click="preSelectedComponent = 'live_stream'; applyFilters()">
-              More
-            </button>
-          </template>
-        </EventListing>
-      </div>
+      <div v-for="component in componentsOrder" :key="component">
+        <div v-if="!isFavoritesTypeEmpty('node', 'gc_video')
+          && showOnCurrentIteration('gc_video', component)
+          && (selectedComponent === 'gc_video' || selectedComponent === 'all')">
+          <VideoListing
+            :title="config.components.gc_video.title"
+            :favorites="true"
+            :pagination="viewAllContentMode"
+            :sort="sortData('node', 'gc_video')"
+            :limit="viewAllContentMode ? 0 : itemsLimit"
+          >
+            <template #filterButton>
+              <button
+                v-if="selectedComponent === 'all'"
+                type="button"
+                class="view-all"
+                @click="preSelectedComponent = 'gc_video'; applyFilters()">
+                More
+              </button>
+            </template>
+          </VideoListing>
+        </div>
 
-      <div v-if="!isFavoritesTypeEmpty('eventinstance', 'virtual_meeting')
-        && (selectedComponent === 'virtual_meeting' || selectedComponent === 'all')">
-        <EventListing
-          :title="config.components.virtual_meeting.title"
-          :eventType="'virtual_meeting'"
-          :msg="'Virtual Meetings not found.'"
-          :favorites="true"
-          :sort="sortData('eventinstance')"
-          :limit="viewAllContentMode ? 50 : itemsLimit"
-        >
-          <template #filterButton>
-            <button
-              v-if="selectedComponent === 'all'"
-              type="button"
-              class="view-all"
-              @click="preSelectedComponent = 'virtual_meeting'; applyFilters()">
-              More
-            </button>
-          </template>
-        </EventListing>
-      </div>
+        <div v-if="!isFavoritesTypeEmpty('eventinstance', 'live_stream')
+          && showOnCurrentIteration('live_stream', component)
+          && (selectedComponent === 'live_stream' || selectedComponent === 'all')">
+          <EventListing
+            :title="config.components.live_stream.title"
+            :favorites="true"
+            :sort="sortData('eventinstance', 'live_stream')"
+            :limit="viewAllContentMode ? 50 : itemsLimit"
+          >
+            <template #filterButton>
+              <button
+                v-if="selectedComponent === 'all'"
+                type="button"
+                class="view-all"
+                @click="preSelectedComponent = 'live_stream'; applyFilters()">
+                More
+              </button>
+            </template>
+          </EventListing>
+        </div>
 
-      <div v-if="!isFavoritesTypeEmpty('node', 'vy_blog_post')
-        && (selectedComponent === 'vy_blog_post' || selectedComponent === 'all')">
-        <BlogListing
-          :title="config.components.vy_blog_post.title"
-          :favorites="true"
-          :pagination="viewAllContentMode"
-          :sort="sortData('node')"
-          :limit="viewAllContentMode ? 0 : itemsLimit"
-          class="my-40-20"
-        >
-          <template #filterButton>
-            <button
-              v-if="selectedComponent === 'all'"
-              type="button"
-              class="view-all"
-              @click="preSelectedComponent = 'vy_blog_post'; applyFilters()">
-              More
-            </button>
-          </template>
-        </BlogListing>
+        <div v-if="!isFavoritesTypeEmpty('eventinstance', 'virtual_meeting')
+          && showOnCurrentIteration('virtual_meeting', component)
+          && (selectedComponent === 'virtual_meeting' || selectedComponent === 'all')">
+          <EventListing
+            :title="config.components.virtual_meeting.title"
+            :eventType="'virtual_meeting'"
+            :favorites="true"
+            :sort="sortData('eventinstance', 'virtual_meeting')"
+            :limit="viewAllContentMode ? 50 : itemsLimit"
+          >
+            <template #filterButton>
+              <button
+                v-if="selectedComponent === 'all'"
+                type="button"
+                class="view-all"
+                @click="preSelectedComponent = 'virtual_meeting'; applyFilters()">
+                More
+              </button>
+            </template>
+          </EventListing>
+        </div>
+
+        <div v-if="!isFavoritesTypeEmpty('node', 'vy_blog_post')
+          && showOnCurrentIteration('vy_blog_post', component)
+          && (selectedComponent === 'vy_blog_post' || selectedComponent === 'all')">
+          <BlogListing
+            :title="config.components.vy_blog_post.title"
+            :favorites="true"
+            :pagination="viewAllContentMode"
+            :sort="sortData('node', 'vy_blog_post')"
+            :limit="viewAllContentMode ? 0 : itemsLimit"
+            class="my-40-20"
+          >
+            <template #filterButton>
+              <button
+                v-if="selectedComponent === 'all'"
+                type="button"
+                class="view-all"
+                @click="preSelectedComponent = 'vy_blog_post'; applyFilters()">
+                More
+              </button>
+            </template>
+          </BlogListing>
+        </div>
       </div>
 
       <div v-if="!isFavoritesTypeEmpty('taxonomy_term', 'gc_category')
         && (selectedComponent === 'gc_category' || selectedComponent === 'all')">
         <CategoriesListing
           :favorites="true"
-          :type="'all'"
           :sort="sortData('taxonomy_term')"
           :limit="viewAllContentMode ? 50 : itemsLimit"
         >
@@ -176,6 +197,7 @@ import Spinner from '@/components/Spinner.vue';
 import BlogListing from '@/components/blog/BlogListing.vue';
 import VideoListing from '@/components/video/VideoListing.vue';
 import EventListing from '@/components/event/EventListing.vue';
+import PersonalTrainingListing from '@/components/personal-training/PersonalTrainingListing.vue';
 import CategoriesListing from '@/components/category/CategoriesListing.vue';
 import { SettingsMixin } from '@/mixins/SettingsMixin';
 import { FavoritesMixin } from '@/mixins/FavoritesMixin';
@@ -189,6 +211,7 @@ export default {
     BlogListing,
     VideoListing,
     EventListing,
+    PersonalTrainingListing,
     CategoriesListing,
   },
   data() {
@@ -203,26 +226,6 @@ export default {
         { value: 'vy_blog_post', type: 'node', label: 'Blog' },
         { value: 'gc_category', type: 'taxonomy_term', label: 'Categories' },
       ],
-      filterQueryByTypes: {
-        node: {
-          // date_desc: { path: 'created', direction: 'DESC' },
-          // date_asc: { path: 'created', direction: 'ASC' },
-          title_asc: { path: 'title', direction: 'ASC' },
-          title_desc: { path: 'title', direction: 'DESC' },
-        },
-        eventinstance: {
-          date_desc: { path: 'date.value', direction: 'DESC' },
-          date_asc: { path: 'date.value', direction: 'ASC' },
-          title_asc: { path: 'eventseries_id.title', direction: 'ASC' },
-          title_desc: { path: 'eventseries_id.title', direction: 'DESC' },
-        },
-        taxonomy_term: {
-          date_desc: { path: 'weight', direction: 'DESC' },
-          date_asc: { path: 'weight', direction: 'ASC' },
-          title_asc: { path: 'name', direction: 'ASC' },
-          title_desc: { path: 'name', direction: 'DESC' },
-        },
-      },
     };
   },
   computed: {
@@ -258,10 +261,10 @@ export default {
       deep: true,
     },
   },
-  methods: {
-    sortData(type) {
-      return this.filterQueryByTypes[type][this.selectedSort];
-    },
+  mounted() {
+    if (this.config.personal_training_enabled) {
+      this.contentTypeOptions.splice(1, 0, { value: 'personal_training', type: 'personal_training', label: 'Personal training' });
+    }
   },
 };
 </script>

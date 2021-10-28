@@ -43,7 +43,7 @@ entity.shared_content_source_server.fetch_form:
   defaults:
     _entity_form: 'shared_content_source_server.fetch'
     _title: 'Fetch shared content'
-    type: 'vy_blog_post'
+    type: 'gc_video'
   requirements:
     _permission: 'administer gated content configuration'
   options:

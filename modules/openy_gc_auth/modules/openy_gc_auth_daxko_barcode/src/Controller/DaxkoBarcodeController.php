@@ -3,16 +3,16 @@
 namespace Drupal\openy_gc_auth_daxko_barcode\Controller;
 
 use Drupal\Component\Utility\UrlHelper;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\openy_gc_auth\GCUserAuthorizer;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Config\ConfigFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Drupal\openy_gc_auth\GCUserAuthorizer;
 
 /**
  * Personify controller to handle Personify SSO authentication.
@@ -109,7 +109,7 @@ class DaxkoBarcodeController extends ControllerBase {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function validate(Request $request, $barcode) {
-    $config = $this->configFactory->get('openy_gc_auth.provider.daxco_barcode');
+    $config = $this->configFactory->get('openy_gc_auth.provider.daxko_barcode');
 
     // First make sure we have barcode in $request.
     if (empty($barcode)) {

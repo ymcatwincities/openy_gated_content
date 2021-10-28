@@ -7,7 +7,7 @@
     <template v-else>
       <div
         class="virtual-meeting-page__image"
-        v-bind:style="{ backgroundImage: `url(${image})` }"
+        :style="coverStyle"
       >
         <div class="virtual-meeting-page__link">
           <a :href="meetingLink.uri" target="_blank" class="btn btn-lg btn-primary">
@@ -58,8 +58,15 @@
             <div class="video-footer__block video-footer__category"
                  v-if="category && category.length > 0">
               <SvgIcon icon="categories" class="fill-gray" :growByHeight=false></SvgIcon>
-              <span v-for="(category_data, index) in category"
-                    :key="index">{{ category_data.name }}</span>
+              <ul>
+                <li
+                  v-for="tid in category.map(item => item.drupal_internal__tid)"
+                  class="video-footer__category-list-item"
+                  :key="tid"
+                >
+                  <CategoryLinks :tid="tid" />
+                </li>
+              </ul>
             </div>
             <div
               v-if="video.attributes.equipment.length > 0"
@@ -87,7 +94,6 @@
         :eventType="'virtual_meeting'"
         :viewAll="true"
         :limit="8"
-        :msg="'Virtual Meetings not found.'"
       />
     </template>
   </div>
@@ -99,19 +105,23 @@ import AddToFavorite from '@/components/AddToFavorite.vue';
 import Spinner from '@/components/Spinner.vue';
 import EventListing from '@/components/event/EventListing.vue';
 import AddToCalendar from '@/components/event/AddToCalendar.vue';
+import CategoryLinks from '@/components/category/CategoryLinks.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
 import { EventMixin } from '@/mixins/EventMixin';
+import { SeriesEventMixin } from '@/mixins/SeriesEventMixin';
+import { ImageStyleMixin } from '@/mixins/ImageStyleMixin';
 import SvgIcon from '@/components/SvgIcon.vue';
 
 export default {
   name: 'VirtualMeetingPage',
-  mixins: [JsonApiCombineMixin, EventMixin],
+  mixins: [JsonApiCombineMixin, EventMixin, SeriesEventMixin, ImageStyleMixin],
   components: {
     SvgIcon,
     AddToFavorite,
     EventListing,
     AddToCalendar,
     Spinner,
+    CategoryLinks,
   },
   props: {
     id: {
@@ -143,13 +153,12 @@ export default {
     // This values most of all from parent (series), but can be overridden by item,
     // so ve need to check this here and use correct value.
     image() {
-      if (this.video.attributes['field_ls_image.field_media_image']) {
-        return this.video.attributes['field_ls_image.field_media_image'].uri.url;
-      }
-      if (this.video.attributes['image.field_media_image']) {
-        return this.video.attributes['image.field_media_image'].uri.url;
-      }
-      return null;
+      return this.video.attributes['field_ls_image.field_media_image']
+        ?? this.video.attributes['image.field_media_image'];
+    },
+    coverStyle() {
+      if (!this.image) { return null; }
+      return { backgroundImage: `url(${this.getStyledUrl(this.image, 'carnation_banner_1920_700')})` };
     },
     meetingLink() {
       const link = {

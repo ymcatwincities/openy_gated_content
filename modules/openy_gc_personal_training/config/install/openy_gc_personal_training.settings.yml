@@ -1,0 +1,9 @@
+signalingServerPRL: 'coturn.demo.ixm.ca:8091'
+peerjs_stun: 'stun:stun.l.google.com:19302'
+peerjs_turn_url: 'turn:coturn.demo.ixm.ca'
+peerjs_turn_credential: 'password'
+peerjs_turn_username: 'user'
+peerjs_debug: 3
+active_provider: default
+meeting_cancel_message: "<p>Hello [personal-training-customer:name],</p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p>This message is to notify you that your upcoming virtual appointment on&nbsp;[personal-training:start-date]&nbsp;has been cancelled by [personal-training-instructor:name].&nbsp;Please reach out to your trainer with any questions or to reschedule.</p>\r\n\r\n<p>We look forward to serving you again soon!</p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p>Thank you,</p>\r\n\r\n<p>[site:name]</p>\r\n"
+meeting_cancel_subject: 'Virtual Appointment Cancellation Notification'

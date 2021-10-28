@@ -27,51 +27,80 @@ function openy_gc_shared_content_help($route_name, RouteMatchInterface $route_ma
 }
 
 /**
- * Implements hook_entity_base_field_info().
+ * Implements hook_entity_field_storage_info().
  */
-function openy_gc_shared_content_entity_base_field_info(EntityTypeInterface $entity_type) {
-  $allowed_entity_types = [];
+function openy_gc_shared_content_entity_field_storage_info(EntityTypeInterface $entity_type) {
+  $shareable_entity_types = [
+    'node',
+    'eventseries',
+    'eventinstance',
+  ];
+  if (!in_array($entity_type->id(), $shareable_entity_types)) {
+    return [];
+  }
+  $fields = [];
+  $fields['field_gc_share'] = BaseFieldDefinition::create('boolean')
+    ->setLabel(t('Available to share'))
+    ->setCustomStorage(FALSE)
+    ->setCardinality(1)
+    ->setProvider('openy_gc_shared_content')
+    ->setTargetEntityTypeId($entity_type->id())
+    ->setName('field_gc_share')
+    ->setRequired(FALSE)
+    ->setRevisionable(FALSE)
+    ->setTranslatable(FALSE)
+    ->setDisplayConfigurable('view', FALSE)
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayOptions('form', [
+      'type' => 'boolean_checkbox',
+      'settings' => [
+        'display_label' => TRUE,
+      ],
+    ]);
+  $fields['field_gc_origin'] = BaseFieldDefinition::create('string')
+    ->setLabel(t('Origin'))
+    ->setCustomStorage(FALSE)
+    ->setCardinality(1)
+    ->setProvider('openy_gc_shared_content')
+    ->setName('field_gc_origin')
+    ->setTargetEntityTypeId($entity_type->id())
+    ->setRequired(FALSE)
+    ->setRevisionable(FALSE)
+    ->setTranslatable(FALSE)
+    ->setDisplayConfigurable('view', FALSE)
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayOptions('form', [
+      'type' => 'string_textfield',
+      'settings' => [
+        'size' => '255',
+      ],
+    ]);
+  return $fields;
+}
+
+/**
+ * Implements hook_entity_bundle_field_info().
+ */
+function openy_gc_shared_content_entity_bundle_field_info(EntityTypeInterface $entity_type, $bundle) {
+  $plugins_info = [];
   $shared_content_manager = \Drupal::service('plugin.manager.shared_content_source_type');
   foreach ($shared_content_manager->getDefinitions() as $plugin_id => $plugin) {
     $instance = $shared_content_manager->createInstance($plugin_id);
-    $allowed_entity_types[] = $instance->getEntityType();
+    $plugins_info[$instance->getEntityType()][] = $instance->getEntityBundle();
   }
-  if (in_array($entity_type->id(), $allowed_entity_types)) {
-    $fields = [];
-    $fields['field_gc_share'] = BaseFieldDefinition::create('boolean')
-      ->setLabel(t('Available to share'))
-      ->setCustomStorage(FALSE)
-      ->setCardinality(1)
-      ->setProvider('openy_gc_shared_content')
-      ->setRequired(FALSE)
-      ->setRevisionable(FALSE)
-      ->setTranslatable(FALSE)
-      ->setDisplayConfigurable('view', FALSE)
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayOptions('form', [
-        'type' => 'boolean_checkbox',
-        'settings' => [
-          'display_label' => TRUE,
-        ],
-      ]);
-    $fields['field_gc_origin'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('Origin'))
-      ->setCustomStorage(FALSE)
-      ->setCardinality(1)
-      ->setProvider('openy_gc_shared_content')
-      ->setRequired(FALSE)
-      ->setRevisionable(FALSE)
-      ->setTranslatable(FALSE)
-      ->setDisplayConfigurable('view', FALSE)
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayOptions('form', [
-        'type' => 'string_textfield',
-        'settings' => [
-          'size' => '255',
-        ],
-      ]);
-    return $fields;
+
+  if (!isset($plugins_info[$entity_type->id()])) {
+    return [];
   }
+  $managed_bundles = $plugins_info[$entity_type->id()];
+  if (!in_array($bundle, $managed_bundles)) {
+    return [];
+  }
+  $fields = [];
+  foreach (openy_gc_shared_content_entity_field_storage_info($entity_type) as $name => $definition) {
+    $fields[$name] = $definition;
+  }
+  return $fields;
 }
 
 /**
@@ -80,7 +109,7 @@ function openy_gc_shared_content_entity_base_field_info(EntityTypeInterface $ent
  * Move field_alert_belongs field to sidebar details in advanced section.
  */
 function openy_gc_shared_content_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  if (!isset($form['field_gc_share']) || !isset($form['field_gc_origin'])) {
+  if (!isset($form['field_gc_share'], $form['field_gc_origin'])) {
     return;
   }
 
@@ -107,7 +136,7 @@ function openy_gc_shared_content_form_alter(&$form, FormStateInterface $form_sta
   $form['field_gc_origin']['widget'][0]['value']['#attributes']['disabled'] = TRUE;
 
   if (!in_array($form_id, $allowed_forms_list)) {
-    // Close access to shared_content_settings if there no plugin for
+    // Close access to shared_content_settings if there is no plugin for
     // entity bundle.
     $form['shared_content_settings']['#access'] = FALSE;
     return;
@@ -122,6 +151,7 @@ function openy_gc_shared_content_theme($existing, $type, $theme, $path) {
     'openy_gc_shared_content__vy_blog_post' => [
       'variables' => [
         'title' => NULL,
+        'field_gc_video_category' => NULL,
         'description' => NULL,
         'image' => NULL,
         'server' => NULL,

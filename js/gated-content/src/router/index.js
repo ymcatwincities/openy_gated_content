@@ -12,6 +12,7 @@ import VirtualMeetingPage from '@/views/VirtualMeetingPage.vue';
 import BlogsListingPage from '@/views/BlogsListingPage.vue';
 import VideosListingPage from '@/views/VideosListingPage.vue';
 import FavoritesPage from '@/views/FavoritesPage.vue';
+import PersonalTrainingPage from '@/views/PersonalTrainingPage.vue';
 
 Vue.use(VueRouter);
 
@@ -30,7 +31,7 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
-    path: '/category/:cid',
+    path: '/category/:id',
     name: 'Category',
     component: CategoryPage,
     props: true,
@@ -97,6 +98,13 @@ const routes = [
     path: '/schedule',
     name: 'Schedule',
     component: SchedulePage,
+    props: true,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/personal-training/:id',
+    name: 'PersonalTraining',
+    component: PersonalTrainingPage,
     props: true,
     meta: { requiresAuth: true },
   },

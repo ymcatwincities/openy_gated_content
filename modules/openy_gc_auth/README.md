@@ -44,9 +44,14 @@ Lightweight check for Daxko based on user entered barcode.
 
 Virtual Y user could enter Virtual Y using Personify SSO.
 
-## [Reclique](https://github.com/ymcatwincities/openy_gated_content/tree/master/modules/openy_gc_auth/modules/openy_gc_auth_reclique)
+## [Reclique SSO](https://github.com/ymcatwincities/openy_gated_content/tree/master/modules/openy_gc_auth/modules/openy_gc_auth_reclique_sso)
 
-Reclique CRM authentication. This is not a SSO solution. It is similar to Custom auth provider.
+Reclique CRM authentication. Users can log in into Virtual Y using their Reclique credentials
+
+## [Avocado SSO](https://github.com/ymcatwincities/openy_gated_content/tree/master/modules/openy_gc_auth/modules/openy_gc_auth_avocado_sso)
+
+Avocado CRM authentication. Users can log in into Virtual Y using their Avocado credentials.
+***Avocado CRM have issues with blocked users authentication. Please check it before using at production***
 
 ## [Y-USA](https://github.com/ymcatwincities/openy_gated_content/tree/master/modules/openy_gc_auth/modules/openy_gc_auth_yusa)
 
