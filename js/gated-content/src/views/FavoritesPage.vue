@@ -194,8 +194,9 @@
       <div v-if="!isFavoritesTypeEmpty('taxonomy_term', 'gc_duration')
         && (selectedComponent === 'gc_duration' || selectedComponent === 'all')">
         <DurationsListing
-            :sort="sortData('taxonomy_term')"
-            :limit="viewAllContentMode ? 0 : itemsLimit"
+          :favorites="true"
+          :sort="sortData('taxonomy_term')"
+          :limit="viewAllContentMode ? 0 : itemsLimit"
         >
           <template #filterButton>
             <button
