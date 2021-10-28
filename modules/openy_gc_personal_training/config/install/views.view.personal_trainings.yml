@@ -1,6 +1,10 @@
 langcode: en
 status: true
 dependencies:
+  config:
+    - user.role.administrator
+    - user.role.virtual_trainer
+    - user.role.virtual_ymca_editor
   module:
     - datetime_range
     - openy_gc_personal_training
@@ -21,9 +25,12 @@ display:
     position: 0
     display_options:
       access:
-        type: perm
+        type: role
         options:
-          perm: 'administer personal training entities'
+          role:
+            virtual_ymca_editor: virtual_ymca_editor
+            administrator: administrator
+            virtual_trainer: virtual_trainer
       cache:
         type: tag
         options: {  }
@@ -715,7 +722,7 @@ display:
         - 'languages:language_interface'
         - url
         - url.query_args
-        - user.permissions
+        - user.roles
       tags: {  }
   listing:
     display_plugin: page
@@ -732,5 +739,5 @@ display:
         - 'languages:language_interface'
         - url
         - url.query_args
-        - user.permissions
+        - user.roles
       tags: {  }

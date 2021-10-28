@@ -205,7 +205,6 @@ function openy_gc_personal_training_update_8007(&$sandbox) {
  */
 function openy_gc_personal_training_update_8008() {
   $permissions = [
-    'administer personal training entities',
     'delete personal training entities',
   ];
   $role = Role::load('virtual_trainer');
@@ -233,4 +232,18 @@ function openy_gc_personal_training_update_8009() {
   $fields = PersonalTraining::ownerBaseFieldDefinitions($type);
   $fields[$key]->setInitialValue(1);
   $updates->installFieldStorageDefinition($key, $entity_type_id, 'openy_gc_personal_training', $fields[$key]);
+}
+
+/**
+ * Import view config.
+ */
+function openy_gc_personal_training_update_8010() {
+  $config_dir = drupal_get_path('module', 'openy_gc_personal_training');
+  $config_dir .= '/config/install/';
+  // Import new configuration.
+  $config_importer = \Drupal::service('openy_upgrade_tool.importer');
+  $config_importer->setDirectory($config_dir);
+  $config_importer->importConfigs([
+    'views.view.personal_trainings',
+  ]);
 }

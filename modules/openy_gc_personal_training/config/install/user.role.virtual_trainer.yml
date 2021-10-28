@@ -15,7 +15,6 @@ permissions:
   - 'access videos_library entity browser pages'
   - 'access videos_library_embed entity browser pages'
   - 'add personal training entities'
-  - 'administer personal training entities'
   - 'create image media'
   - 'create media'
   - 'delete media'
