@@ -402,3 +402,37 @@ function openy_gated_content_update_8019() {
     }
   }
 }
+
+/**
+ * Add field_vy_permission info to the bundles map.
+ */
+function openy_gated_content_update_8020() {
+  $gc_config = \Drupal::config('openy_gated_content.settings')->getRawData();
+  if (!empty($gc_config['permissions_entities'])) {
+    $permissions_entities = $gc_config['permissions_entities'];
+  }
+  $field_name = 'field_vy_permission';
+  $entity_type_ids = [
+    'node',
+    'eventseries',
+    'eventinstance',
+  ];
+  $persistent_map = \Drupal::keyValue('entity.definitions.bundle_field_map');
+  $map = $persistent_map->getAll();
+  $entity_field_manager = \Drupal::service('entity_field.manager');
+  foreach ($entity_type_ids as $entity_type_id) {
+    if (!isset($permissions_entities[$entity_type_id])) {
+      continue;
+    }
+    $managed_bundles = $permissions_entities[$entity_type_id];
+    foreach ($managed_bundles as $bundle) {
+      $field_definitions = $entity_field_manager->getFieldDefinitions($entity_type_id, $bundle);
+      $map[$entity_type_id][$field_name]['type'] = $field_definitions[$field_name]->getType();
+      $map[$entity_type_id][$field_name]['bundles'][$bundle] = $bundle;
+    }
+  }
+  // Delete former incorrect map.
+  $persistent_map->deleteAll();
+  // Add a recent map.
+  $persistent_map->setMultiple($map);
+}

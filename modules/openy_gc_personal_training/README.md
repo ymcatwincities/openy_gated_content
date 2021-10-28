@@ -9,6 +9,7 @@ Short video demo: https://www.loom.com/share/c49ef7bb4b2a4435ac78bfc53582e2f1
 
 This module requires [State Machine](drupal.org/project/state_machine) contrib project. 
 It will be automatically installed by Composer. Enable it in case if you need Cancel session feature.
+This module requires [Date Recur](https://www.drupal.org/project/date_recur) and [Date Recur Modular](https://www.drupal.org/project/date_recur_modular) contrib modules to be added to your project. They are not in global composer yet.
 
 ## Module structure
 
