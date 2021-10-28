@@ -243,6 +243,7 @@ class PersonalTrainingSeriesManager implements PersonalTrainingSeriesManagerInte
       'field_exclusions',
       'type',
       'date',
+      'uid',
     ];
     $values = array_diff_key($values, array_flip($keys_to_exclude));
 
