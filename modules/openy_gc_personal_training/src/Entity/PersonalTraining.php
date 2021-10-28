@@ -7,6 +7,7 @@ use Drupal\Core\Entity\EntityChangedTrait;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\link\LinkItemInterface;
+use Drupal\user\EntityOwnerTrait;
 
 /**
  * Defines the Personal training entity.
@@ -43,6 +44,8 @@ use Drupal\link\LinkItemInterface;
  *     "uuid" = "uuid",
  *     "langcode" = "langcode",
  *     "label" = "title",
+ *     "uid" = "uid",
+ *     "owner" = "uid",
  *   },
  *   links = {
  *     "canonical" = "/virtual-y/personal_training/{personal_training}",
@@ -57,6 +60,7 @@ use Drupal\link\LinkItemInterface;
 class PersonalTraining extends ContentEntityBase implements PersonalTrainingInterface {
 
   use EntityChangedTrait;
+  use EntityOwnerTrait;
 
   /**
    * {@inheritdoc}
@@ -114,6 +118,7 @@ class PersonalTraining extends ContentEntityBase implements PersonalTrainingInte
    */
   public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
     $fields = parent::baseFieldDefinitions($entity_type);
+    $fields += static::ownerBaseFieldDefinitions($entity_type);
 
     $fields['title'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Title'))
