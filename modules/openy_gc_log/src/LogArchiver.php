@@ -92,9 +92,9 @@ class LogArchiver {
   private $config;
 
   /**
-   * FileSystem.
+   * FileSystemInterface.
    *
-   * @var \Drupal\Core\File\FileSystem
+   * @var \Drupal\Core\File\FileSystemInterface
    */
   protected $fileSystem;
 
