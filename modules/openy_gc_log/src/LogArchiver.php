@@ -135,8 +135,8 @@ class LogArchiver {
    *   LoggerChannel.
    * @param \Drupal\Core\Config\ConfigFactory $configFactory
    *   ConfigFactory.
-   * @param \Drupal\Core\File\FileSystem $fileSystem
-   *   FileSystem.
+   * @param \Drupal\Core\File\FileSystemInterface $fileSystem
+   *   FileSystemInterface.
    * @param \Drupal\Core\Site\Settings $settings
    *   Settings.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
@@ -150,7 +150,7 @@ class LogArchiver {
     EntityTypeManager $entityTypeManager,
     LoggerChannel $logger,
     ConfigFactory $configFactory,
-    FileSystem $fileSystem,
+    FileSystemInterface $fileSystem,
     Settings $settings,
     ModuleHandlerInterface $module_handler,
     DateFormatterInterface $date_formatter,
