@@ -89,6 +89,7 @@
 </template>
 
 <script>
+import dayjs from 'dayjs';
 import client from '@/client';
 import Spinner from '@/components/Spinner.vue';
 import ScheduleEventCard from '@/components/event/ScheduleEventCard.vue';
@@ -134,26 +135,21 @@ export default {
       return count === 0;
     },
     disablePrevDateButton() {
-      const today = new Date();
-      return (
-        this.startDate.getTime() <= today.getTime()
-        && today.getTime() < this.endDate.getTime()
-      );
+      return this.startDate.isBefore(dayjs());
     },
   },
   methods: {
     async load() {
       this.loading = true;
-      this.endDate = new Date(this.startDate);
-      this.endDate.setTime(this.startDate.getTime() + this.oneWeek - 1);
+      this.endDate = this.startDate.endOf('week');
 
       client({
         url: '/virtual-y/api/events',
         method: 'get',
         params: {
           type: 'all',
-          start_date: this.startDate,
-          end_date: this.endDate,
+          start_date: this.startDate.toISOString(),
+          end_date: this.endDate.toISOString(),
         },
       })
         .then((response) => {
@@ -162,16 +158,15 @@ export default {
           this.collapses = [];
           for (let i = 0; i < 7; i += 1) {
             this.listing[i] = {
-              date: new Date(this.startDate),
+              date: this.startDate.add(i, 'day'),
               hourSlots: [],
             };
-            this.listing[i].date.setTime(this.startDate.getTime() + i * this.oneDay);
             this.collapses[i] = true;
           }
           response.data.forEach((event) => {
-            const start = new Date(event.date.value);
-            const day = start.getDay();
-            const hour = start.getHours();
+            const start = this.$dayjs.date(event.date.value);
+            const day = start.day();
+            const hour = start.hour();
             if (typeof this.listing[day].hourSlots[hour] === 'undefined') {
               this.listing[day].hourSlots[hour] = [];
             }
@@ -207,31 +202,26 @@ export default {
         });
     },
     currentDay(date) {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      return today.getTime() === date.getTime();
+      return dayjs().startOf('day').isSame(date, 'day');
     },
     outputHours(index) {
-      const sunday = new Date();
-      sunday.setHours(0, 0, 0, 0);
-      sunday.setDate(sunday.getDate() - sunday.getDay());
+      const endOfWeek = dayjs().endOf('week');
       const day = this.listing[index].date;
-      return (day.getTime() >= sunday.getTime() + this.oneWeek && index === 3)
-        || this.currentDay(day);
+      return (day.isAfter(endOfWeek) && index === 3) || this.currentDay(day);
     },
     backOneWeek() {
-      this.startDate.setTime(this.startDate.getTime() - this.oneWeek);
+      this.startDate = this.startDate.subtract(1, 'week');
       this.updateRoute();
     },
     forwardOneWeek() {
-      this.startDate.setTime(this.startDate.getTime() + this.oneWeek);
+      this.startDate = this.startDate.add(1, 'week');
       this.updateRoute();
     },
     upcomingEvents(day) {
       let count = 0;
       day.hourSlots.forEach((slot) => {
         slot.forEach((event) => {
-          if ((new Date(event.date.end_value)).getTime() > (new Date()).getTime()) {
+          if (this.$dayjs.date(event.date.end_value).isAfter(dayjs())) {
             count += 1;
           }
         });
@@ -243,21 +233,19 @@ export default {
       this.$forceUpdate();
     },
     initStartDate() {
-      const sunday = new Date();
-      if (this.$route.query.startDate && this.$route.query.startDate > sunday.getTime()) {
-        sunday.setTime(this.$route.query.startDate);
+      let date = dayjs();
+      if (this.$route.query.startDate && date.isBefore(dayjs.unix(this.$route.query.startDate))) {
+        date = dayjs.unix(this.$route.query.startDate);
       }
-      sunday.setHours(0, 0, 0, 0);
-      sunday.setDate(sunday.getDate() - sunday.getDay());
-      this.startDate = sunday;
+      this.startDate = date.startOf('week');
       this.updateRoute();
     },
     updateRoute() {
       const query = {
         ...this.$route.query,
-        startDate: this.startDate.getTime(),
+        startDate: this.startDate.unix(),
       };
-      if ((new Date()).getTime() >= this.startDate.getTime()) {
+      if (this.startDate.isBefore(dayjs())) {
         delete query.startDate;
       }
       if (Object.entries(this.$route.query).toString() !== Object.entries(query).toString()) {
