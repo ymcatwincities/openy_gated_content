@@ -115,8 +115,6 @@ export default {
       collapses: null,
       startDate: null,
       endDate: null,
-      oneDay: 86400 * 1000,
-      oneWeek: 7 * 86400 * 1000,
     };
   },
   watch: {
