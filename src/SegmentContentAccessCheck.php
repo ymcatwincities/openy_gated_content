@@ -10,6 +10,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\recurring_events\Entity\EventInstance;
+use Drupal\recurring_events\Entity\EventSeries;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -139,11 +140,13 @@ class SegmentContentAccessCheck implements ContainerInjectionInterface {
     // For Eventinstance we have to check parent as well.
     if (($entity instanceof EventInstance) && empty($content_access_mask)) {
       $eventSeriesEntity = $entity->getEventSeries();
-      $content_access_mask = $eventSeriesEntity->get('field_vy_permission')
-        ->getValue();
+      if ($eventSeriesEntity instanceof EventSeries) {
+        $content_access_mask = $eventSeriesEntity->get('field_vy_permission')
+          ->getValue();
+      }
     }
 
-    // Deny access if editor didnt set up permission field value.
+    // Deny access if editor haven't set up permission field value.
     if (empty($content_access_mask)) {
       return AccessResult::forbidden();
     }

@@ -11,8 +11,8 @@
 function openy_gc_personal_training_post_update_personal_trainings(&$sandbox) {
   $entity_type = 'personal_training';
   $storage = \Drupal::entityTypeManager()->getStorage($entity_type);
-  if (!isset($sandbox['progress'])) {
-    $query = $storage->getQuery($entity_type)->notExists('type');
+  if (!isset($sandbox['max'])) {
+    $query = $storage->getQuery()->notExists('type');
     $sandbox['ids'] = $query->execute();
     $sandbox['max'] = $query->count()->execute();
   }

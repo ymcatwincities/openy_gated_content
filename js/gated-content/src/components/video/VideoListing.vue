@@ -2,14 +2,16 @@
   <div class="gated-containerV2 my-40-20 px--20-10">
     <div class="listing-header">
       <h2 class="title text-gray" v-if="title !== 'none'">{{ title }}</h2>
-      <router-link
-        :to="{ name: 'VideoListing', query: { type: categories ? categories[0] : 'all' } }"
-        v-if="viewAll && listingIsNotEmpty"
-        class="view-all"
-      >
-        More
-      </router-link>
-      <slot name="filterButton"></slot>
+      <template v-if="hasMoreItems">
+        <router-link
+          :to="{ name: 'VideoListing', query: { type: categories ? categories[0] : 'all' } }"
+          v-if="viewAll && listingIsNotEmpty"
+          class="view-all"
+        >
+          More
+        </router-link>
+        <slot name="filterButton"></slot>
+      </template>
     </div>
     <div v-if="loading" class="text-center">
       <Spinner></Spinner>
@@ -69,11 +71,15 @@ export default {
       type: Array,
       default: null,
     },
-    featured: {
-      type: Boolean,
-      default: false,
+    duration: {
+      type: String,
+      default: '',
     },
-    viewAll: {
+    instructor: {
+      type: String,
+      default: '',
+    },
+    featured: {
       type: Boolean,
       default: false,
     },
@@ -83,27 +89,19 @@ export default {
         return { path: 'created', direction: 'DESC' };
       },
     },
-    limit: {
-      type: Number,
-      default: 0,
-    },
-    pagination: {
-      type: Boolean,
-      default: false,
-    },
   },
   data() {
     return {
       component: 'gc_video',
       loading: true,
       error: false,
-      links: {},
-      featuredLocal: false,
       params: [
         'field_gc_video_media',
         'field_gc_video_media.thumbnail',
         'field_gc_video_level',
         'field_gc_video_category',
+        'field_gc_duration_reference',
+        'field_gc_instructor_reference',
         'field_gc_video_image',
         'field_gc_video_image.field_media_image',
       ],
@@ -127,7 +125,6 @@ export default {
   async mounted() {
     // By default emit that listing not empty to the parent component.
     this.$emit('listing-not-empty', true);
-    this.featuredLocal = this.featured;
     await this.load();
   },
   methods: {
@@ -138,9 +135,10 @@ export default {
         params.include = this.params.join(',');
       }
 
-      params.sort = {
-        sortBy: this.sort,
-      };
+      params.sort = this.featured
+        ? { featured: { path: 'field_gc_video_featured', direction: 'DESC' } }
+        : {};
+      params.sort.sortBy = this.sort;
 
       params.filter = {};
       if (this.excludedVideoId.length > 0) {
@@ -167,21 +165,9 @@ export default {
         };
       }
 
-      if (this.featuredLocal) {
-        params.filter.field_gc_video_featured = 1;
-      }
       params.filter.status = 1;
-      if (this.pagination) {
-        const currentPage = parseInt(this.$route.query.page, 10) || 0;
-        params.page = {
-          limit: this.config.pager_limit,
-          offset: currentPage * this.config.pager_limit,
-        };
-      } else if (this.limit !== 0) {
-        params.page = {
-          limit: this.limit,
-        };
-      }
+
+      params.page = this.getPageParam;
 
       if (this.categories !== null) {
         if (!this.isCategoriesLoaded) {
@@ -200,6 +186,26 @@ export default {
           },
         };
       }
+
+      if (this.duration) {
+        params.filter.duration = {
+          condition: {
+            path: 'field_gc_duration_reference.entity.tid',
+            operator: '=',
+            value: this.duration,
+          },
+        };
+      }
+
+      if (this.instructor) {
+        params.filter.instructor = {
+          condition: {
+            path: 'field_gc_instructor_reference.entity.tid',
+            operator: '=',
+            value: this.instructor,
+          },
+        };
+      }
       this.loadFromJsonApi(params);
     },
     loadFromJsonApi(params) {
@@ -212,11 +218,6 @@ export default {
             response.data.included,
             this.params,
           );
-          if (this.featuredLocal === true && this.listing.length === 0) {
-            // Load one more time without featured filter.
-            this.featuredLocal = false;
-            this.load();
-          }
           if (!this.listingIsNotEmpty) {
             // Emit that listing empty to the parent component.
             this.$emit('listing-not-empty', false);

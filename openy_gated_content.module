@@ -185,6 +185,22 @@ function openy_gated_content_jsonapi_eventseries_filter_access(EntityTypeInterfa
 }
 
 /**
+ * Implements hook_jsonapi_ENTITY_TYPE_filter_access().
+ *
+ * Without this hook there no access to filter by instructor in
+ * JSON API for eventinstance.
+ *
+ * @see https://www.drupal.org/project/jsonapi/issues/3037519
+ */
+function openy_gated_content_jsonapi_taxonomy_term_filter_access(EntityTypeInterface $entity_type, AccountInterface $account) {
+  return ([
+    JSONAPI_FILTER_AMONG_ALL => AccessResult::allowedIfHasPermission($account, 'access content'),
+    JSONAPI_FILTER_AMONG_PUBLISHED => AccessResult::allowedIfHasPermission($account, 'access content'),
+    JSONAPI_FILTER_AMONG_OWN => AccessResult::allowedIfHasPermission($account, 'access content'),
+  ]);
+}
+
+/**
  * Implements hook_form_alter().
  */
 function openy_gated_content_form_alter(&$form, FormStateInterface $form_state, $form_id) {
@@ -294,6 +310,13 @@ function openy_gated_content_form_taxonomy_term_gc_category_form_alter(&$form, F
 /**
  * Implements hook_form_FORM_ID_alter().
  */
+function openy_gated_content_form_taxonomy_term_gc_duration_form_alter(&$form, FormStateInterface $form_state) {
+  $form['#validate'][] = 'openy_gated_content_taxonomy_term_gc_duration_validation';
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
 function openy_gated_content_form_taxonomy_overview_terms_alter(&$form, FormStateInterface $form_state) {
   $build_info = $form_state->getBuildInfo();
   if (isset($build_info['args'][0]) && $build_info['args'][0] instanceof Vocabulary) {
@@ -365,6 +388,55 @@ function openy_gated_content_taxonomy_term_gc_category_validation(array &$form, 
       $form_state->setErrorByName('parent', "You are not allowed to have more than 2 levels of Categories terms. Please, adjust current term parent accordingly.");
       break;
     }
+  }
+}
+
+/**
+ * Do not allow duration ranges overlapping.
+ */
+function openy_gated_content_taxonomy_term_gc_duration_validation(array &$form, FormStateInterface $form_state) {
+  $taxonomy_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+  $entity_id = 0;
+
+  /** @var EntityInterface $entity */
+  $entity = $form_state->getFormObject()->getEntity();
+  if (!$entity->isNew()) {
+    $entity_id = $entity->id();
+  }
+
+  // We have to make sure there are no overlapping duration terms. In order to
+  // do that, let's request all of the duration terms that satisfy the following
+  // criteria: "start-1" <= "end-2" && "start-2" <= "end-1".
+  // "start-1"
+  $min = $form_state->getValue('field_gc_duration_min', [['value' => '']]);
+  // "end-1"
+  $max = $form_state->getValue('field_gc_duration_max', [['value' => '']]);
+
+  $query = $taxonomy_storage->getQuery()
+    ->condition('vid', 'gc_duration')
+    ->range(0, 1)
+    // "start-2"
+    ->condition('field_gc_duration_min', $max[0]['value'], '<=')
+    // "end-2"
+    ->condition('field_gc_duration_max', $min[0]['value'], '>=');
+
+  // Exclude current duration term.
+  if ($entity_id !== 0) {
+    $query->condition('tid', $entity_id, '<>');
+  }
+
+  $intersection_term_id = $query->execute();
+
+  if (!empty($intersection_term_id)) {
+    $intersection_term_id = reset($intersection_term_id);
+    $intersection_term = $taxonomy_storage->load($intersection_term_id);
+
+    $form_state->setErrorByName('field_gc_duration_min', t(
+      'Given range intersects with the range of the Duration term @link. Please, make sure the newly created Duration range does not overlap existing duration ranges.',
+      [
+        '@link' => $intersection_term->toLink(NULL, 'edit-form')->toString(),
+      ]
+    ));
   }
 }
 

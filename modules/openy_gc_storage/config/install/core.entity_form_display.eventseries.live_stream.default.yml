@@ -3,6 +3,7 @@ status: true
 dependencies:
   config:
     - entity_browser.browser.videos_library
+    - field.field.eventseries.live_stream.field_gc_instructor_reference
     - field.field.eventseries.live_stream.field_ls_category
     - field.field.eventseries.live_stream.field_ls_equipment
     - field.field.eventseries.live_stream.field_ls_host_name
@@ -52,6 +53,16 @@ content:
     settings: {  }
     region: content
     third_party_settings: {  }
+  field_gc_instructor_reference:
+    weight: 1
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: entity_reference_autocomplete
+    region: content
   field_ls_category:
     type: entity_reference_autocomplete
     weight: 2
@@ -72,14 +83,6 @@ content:
     third_party_settings: {  }
     type: entity_reference_autocomplete
     region: content
-  field_ls_host_name:
-    type: string_textfield
-    weight: 1
-    region: content
-    settings:
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
   field_ls_image:
     type: entity_browser_entity_reference
     weight: 4
@@ -165,4 +168,5 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-hidden: {  }
+hidden:
+  field_ls_host_name: true

@@ -1,0 +1,33 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_gc_instructor_photo
+    - media.type.image
+    - taxonomy.vocabulary.gc_instructor
+  module:
+    - datalayer
+third_party_settings:
+  datalayer:
+    expose: 0
+    label: field_gc_instructor_photo
+id: taxonomy_term.gc_instructor.field_gc_instructor_photo
+field_name: field_gc_instructor_photo
+entity_type: taxonomy_term
+bundle: gc_instructor
+label: Photo
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:media'
+  handler_settings:
+    target_bundles:
+      image: image
+    sort:
+      field: _none
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference
