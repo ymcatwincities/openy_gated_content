@@ -499,17 +499,26 @@ function openy_gated_content_entity_bundle_field_info(EntityTypeInterface $entit
   if (!empty($gc_config['permissions_entities'])) {
     $permissions_entities = $gc_config['permissions_entities'];
   }
-  if (!isset($permissions_entities[$entity_type->id()])) {
+  $entity_type_id = $entity_type->id();
+  if (!isset($permissions_entities[$entity_type_id])) {
     return [];
   }
-  $managed_bundles = $permissions_entities[$entity_type->id()];
+  $managed_bundles = $permissions_entities[$entity_type_id];
   if (!in_array($bundle, $managed_bundles)) {
     return [];
   }
   $fields = [];
+  $persistent_map = \Drupal::keyValue('entity.definitions.bundle_field_map');
+  $map = $persistent_map->getAll();
   foreach (openy_gated_content_entity_field_storage_info($entity_type) as $name => $definition) {
     $fields[$name] = $definition;
+    $map[$entity_type_id][$name]['type'] = $definition->getType();
+    $map[$entity_type_id][$name]['bundles'][$bundle] = $bundle;
   }
+  // Delete former incorrect map.
+  $persistent_map->deleteAll();
+  // Add a recent map.
+  $persistent_map->setMultiple($map);
   return $fields;
 }
 
