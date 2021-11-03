@@ -9,7 +9,7 @@
         <div class="video gated-containerV2 px--20-10 pt-40-20">
           <MediaPlayer
             :media="video.attributes.field_gc_video_media"
-            :autoplay="config.components.gc_video.autoplay_videos"
+            :autoplay="!!config.components.gc_video.autoplay_videos"
             @playerEvent="logPlaybackEvent($event)"
           />
         </div>
@@ -35,12 +35,19 @@
               {{ date }}
             </div>
             <div
-              v-if="video.attributes.field_gc_video_instructor"
+              v-if="video.attributes.field_gc_instructor_reference.length > 0"
               class="video-footer__block">
               <SvgIcon icon="instructor-icon"
                        class="fill-white"
                        :growByHeight=false></SvgIcon>
-              {{ video.attributes.field_gc_video_instructor }}
+              <ul>
+                <li v-for="instructor in video.attributes.field_gc_instructor_reference"
+                    :key="instructor.drupal_internal__tid">
+                  <router-link :to="{ name: 'Instructor', params: { id: instructor.uuid }}">
+                    {{ instructor.name }}
+                  </router-link>
+                </li>
+              </ul>
             </div>
             <div
               class="video-footer__block"
@@ -135,6 +142,7 @@ export default {
         'field_gc_video_media',
         'field_gc_video_equipment',
         'field_gc_video_level',
+        'field_gc_instructor_reference',
       ],
     };
   },
