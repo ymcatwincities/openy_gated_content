@@ -6,10 +6,10 @@
       :videoId="videoId"
       :options="{
         responsive: 'true',
-        url: media.field_media_video_embed_field,
+        url: mediaUrl,
       }"
       :player-vars="handleAttributes()"
-      :autoplay="autoplay"
+      :autoplay="autoplay ? 1 : 0"
       @loaded="handleLoaded()"
       @ready="handleReady()"
       @play="handlePlay()"
@@ -55,20 +55,37 @@ export default {
         : 'vimeo';
     },
     videoId() {
-      let embedObj = this.media.field_media_video_embed_field;
       if (this.media.field_media_source === 'youtube_playlist') {
-        embedObj = embedObj.match(/(\?|&)v=([^&#]+)/).pop();
-        return embedObj;
+        return this.mediaUrl.match(/(\?|&)v=([^&#]+)/).pop();
       }
       // If the video matches Vimeo's private link format, return the full url.
       if (
-        embedObj.match(
+        this.mediaUrl.match(
           /^https?:\/\/(www\.)?vimeo.com\/([0-9]*)(\/[a-zA-Z0-9]+)$/,
         )
       ) {
-        return embedObj;
+        return this.mediaUrl;
       }
       return this.media.field_media_video_id;
+    },
+    mediaUrl() {
+      return this.media.field_media_video_embed_field;
+    },
+    timecode() {
+      const matches = this.mediaUrl.match(/[&?#]t=((\d+)h)?((\d+)m)?(\d+)s?/);
+      if (!matches) {
+        return 0;
+      }
+      const groups = {
+        hours: 2,
+        minutes: 4,
+        seconds: 5,
+      };
+      const hours = matches[groups.hours] ?? 0;
+      const minutes = matches[groups.minutes] ?? 0;
+      const seconds = matches[groups.seconds] ?? 0;
+
+      return hours * 3600 + minutes * 60 + seconds;
     },
   },
   methods: {
@@ -86,13 +103,12 @@ export default {
       this.handlePlayerEvent('videoPlaybackStarted');
     },
     handleLoaded() {
-      this.setTimeCode();
+      this.$refs.player.player.setCurrentTime(this.timecode);
       if (!this.autoplay) {
         this.$refs.player.pause();
       }
     },
     handleReady() {
-      this.setTimeCode();
       if (!this.autoplay) {
         this.$refs.player.player.pauseVideo();
       }
@@ -109,13 +125,15 @@ export default {
       }
     },
     handleAttributes() {
+      let attributes = false;
       if (this.media.field_media_source === 'youtube') {
-        return {
+        attributes = {
           rel: 0,
-          autoplay: this.autoplay,
+          autoplay: this.autoplay ? 1 : 0,
+          start: this.timecode,
         };
       }
-      return false;
+      return attributes;
     },
     handlePause() {
       this.playbackInProgress = false;
@@ -125,27 +143,6 @@ export default {
     handleEnded() {
       this.playbackInProgress = false;
       this.handlePlayerEvent('videoPlaybackEnded');
-    },
-    setTimeCode() {
-      if (this.player === 'vimeo') {
-        const timecode = this.media.field_media_video_embed_field.substring(
-          this.media.field_media_video_embed_field.lastIndexOf('#t=') + 3,
-          this.media.field_media_video_embed_field.lastIndexOf('s'),
-        );
-        if (!Number.isNaN(timecode)) {
-          const timecodeInSeconds = parseInt(timecode, 10);
-          this.$refs.player.player.setCurrentTime(timecodeInSeconds);
-        }
-      } else {
-        const timecode = this.media.field_media_video_embed_field.substring(
-          this.media.field_media_video_embed_field.lastIndexOf('#t=') + 3,
-          this.media.field_media_video_embed_field.lastIndexOf('s'),
-        );
-        if (!Number.isNaN(timecode)) {
-          const timecodeInSeconds = parseInt(timecode, 10);
-          this.$refs.player.player.seekTo(timecodeInSeconds, true);
-        }
-      }
     },
   },
   mounted() {
