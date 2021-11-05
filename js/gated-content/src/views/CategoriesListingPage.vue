@@ -56,7 +56,6 @@
       :title="'none'"
       :bundle="selectedBundle"
       :sort="sortData('taxonomy_term')"
-      :limit="50"
     />
   </div>
 </template>

@@ -58,4 +58,53 @@ function openy_gc_shared_content_install() {
     'views.view.event_series',
     'views.view.events',
   ]);
+
+  _openy_gc_shared_content_add_definitions_to_bundle_map();
+}
+
+/**
+ * Add definitions to the bundles map.
+ */
+function openy_gc_shared_content_update_8001() {
+  _openy_gc_shared_content_add_definitions_to_bundle_map();
+}
+
+/**
+ * Add field_gc_origin and field_gc_origin info to the bundles map.
+ */
+function _openy_gc_shared_content_add_definitions_to_bundle_map() {
+  $field_names = [
+    'field_gc_share',
+    'field_gc_origin',
+  ];
+  $entity_type_ids = [
+    'node',
+    'eventseries',
+    'eventinstance',
+  ];
+  $shared_content_manager = \Drupal::service('plugin.manager.shared_content_source_type');
+  foreach ($shared_content_manager->getDefinitions() as $plugin_id => $plugin) {
+    $instance = $shared_content_manager->createInstance($plugin_id);
+    $plugins_info[$instance->getEntityType()][] = $instance->getEntityBundle();
+  }
+  $persistent_map = \Drupal::keyValue('entity.definitions.bundle_field_map');
+  $map = $persistent_map->getAll();
+  $entity_field_manager = \Drupal::service('entity_field.manager');
+  foreach ($entity_type_ids as $entity_type_id) {
+    if (!isset($plugins_info[$entity_type_id])) {
+      continue;
+    }
+    $managed_bundles = $plugins_info[$entity_type_id];
+    foreach ($managed_bundles as $bundle) {
+      $field_definitions = $entity_field_manager->getFieldDefinitions($entity_type_id, $bundle);
+      foreach ($field_names as $field_name) {
+        $map[$entity_type_id][$field_name]['type'] = $field_definitions[$field_name]->getType();
+        $map[$entity_type_id][$field_name]['bundles'][$bundle] = $bundle;
+      }
+    }
+  }
+  // Delete former incorrect map.
+  $persistent_map->deleteAll();
+  // Add a recent map.
+  $persistent_map->setMultiple($map);
 }

@@ -1,0 +1,5 @@
+@import "category-teaser";
+
+.instructor-teaser {
+  @extend .category-teaser;
+}

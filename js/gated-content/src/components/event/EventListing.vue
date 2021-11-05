@@ -12,10 +12,12 @@
         <button v-on:click.stop="forwardOneDay" class="right"
                 role="button" aria-label="next date"><i class="fa fa-angle-right"></i></button>
       </h2>
-      <router-link :to="{ name: 'Schedule' }" v-if="viewAll" class="view-all">
-        More
-      </router-link>
-      <slot name="filterButton"></slot>
+      <template v-if="hasMoreItems">
+        <router-link :to="{ name: 'Schedule' }" v-if="viewAll" class="view-all">
+          More
+        </router-link>
+        <slot name="filterButton"></slot>
+      </template>
     </div>
     <div v-if="loading" class="text-center">
       <Spinner></Spinner>
@@ -31,6 +33,10 @@
       </div>
     </template>
     <div v-else class="empty-listing">{{ emptyBlockMsg }}</div>
+    <Pagination
+      v-if="pagination"
+      :links="links"
+    ></Pagination>
   </div>
 </template>
 
@@ -39,6 +45,7 @@ import { mapGetters } from 'vuex';
 import client from '@/client';
 import EventTeaser from '@/components/event/EventTeaser.vue';
 import Spinner from '@/components/Spinner.vue';
+import Pagination from '@/components/Pagination.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
 import { FavoritesMixin } from '@/mixins/FavoritesMixin';
 import { ListingMixin } from '@/mixins/ListingMixin';
@@ -49,6 +56,7 @@ export default {
   components: {
     EventTeaser,
     Spinner,
+    Pagination,
   },
   props: {
     title: {
@@ -63,10 +71,6 @@ export default {
       type: String,
       default: '',
     },
-    viewAll: {
-      type: Boolean,
-      default: false,
-    },
     withDateFilter: {
       type: Boolean,
       default: false,
@@ -79,15 +83,15 @@ export default {
       type: Array,
       default: null,
     },
+    instructor: {
+      type: String,
+      default: '',
+    },
     sort: {
       type: Object,
       default() {
         return { path: 'date.value', direction: 'ASC' };
       },
-    },
-    limit: {
-      type: Number,
-      default: 0,
     },
     msg: {
       String,
@@ -99,7 +103,6 @@ export default {
       component: this.eventType,
       loading: true,
       error: false,
-      featuredLocal: false,
       params: [
         'field_ls_image',
         'field_ls_image.field_media_image',
@@ -127,7 +130,6 @@ export default {
   async mounted() {
     // By default emit that listing not empty to the parent component.
     this.$emit('listing-not-empty', true);
-    this.featuredLocal = this.featured;
     await this.load();
   },
   computed: {
@@ -223,20 +225,14 @@ export default {
         };
       }
 
-      if (this.limit !== 0) {
-        params.page = {
-          limit: this.limit,
-        };
-      }
-
-      if (this.featuredLocal) {
-        params.filter.field_ls_featured = 1;
-      }
+      params.page = this.getPageParam;
 
       params.filter.status = 1;
-      params.sort = {
-        sortBy: this.sort,
-      };
+
+      params.sort = this.featured
+        ? { featured: { path: 'field_ls_featured', direction: 'DESC' } }
+        : {};
+      params.sort.sortBy = this.sort;
 
       if (this.categories !== null) {
         if (!this.isCategoriesLoaded) {
@@ -255,22 +251,42 @@ export default {
           },
         };
       }
+
+      if (this.instructor) {
+        params.filter.orGroup = {
+          group: {
+            conjunction: 'OR',
+          },
+        };
+        params.filter.instructor = {
+          condition: {
+            path: 'field_gc_instructor_reference.entity.tid',
+            operator: '=',
+            value: this.instructor,
+            memberOf: 'orGroup',
+          },
+        };
+        params.filter.parentInstructor = {
+          condition: {
+            path: 'eventseries_id.field_gc_instructor_reference.entity.tid',
+            operator: '=',
+            value: this.instructor,
+            memberOf: 'orGroup',
+          },
+        };
+      }
       this.loadFromJsonApi(params);
     },
     loadFromJsonApi(params) {
       client
         .get(`jsonapi/eventinstance/${this.eventType}`, { params })
         .then((response) => {
+          this.links = response.data.links;
           this.listing = this.combineMultiple(
             response.data.data,
             response.data.included,
             this.params,
           );
-          if (this.featuredLocal === true && this.listing.length === 0) {
-            // Load one more time without featured filter.
-            this.featuredLocal = false;
-            this.load();
-          }
           if (!this.listingIsNotEmpty) {
             // Emit that listing empty to the parent component.
             this.$emit('listing-not-empty', false);

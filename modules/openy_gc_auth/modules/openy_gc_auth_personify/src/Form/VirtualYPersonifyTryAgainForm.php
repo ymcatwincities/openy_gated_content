@@ -5,6 +5,7 @@ namespace Drupal\openy_gc_auth_personify\Form;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -64,8 +65,18 @@ class VirtualYPersonifyTryAgainForm extends FormBase {
     $form['#prefix'] = '<h4 class="text-center">' . $this->t('You were not able to login') . '</h4>';
 
     $form['submit'] = [
-      '#type' => 'submit',
-      '#value' => $this->t('Try Again'),
+      '#type' => 'link',
+      '#url' => Url::fromRoute('openy_gc_auth_personify.personify_check'),
+      '#title' => $this->t('Try again'),
+      '#attributes' => [
+        'class' => [
+          'gc-button',
+        ],
+      ],
+    ];
+
+    $form['#attributes'] = [
+      'class' => 'text-center',
     ];
 
     $form['#suffix'] = '<div class="alert alert-info text-center">' . $this->configFactory->get('openy_gc_auth.provider.personify')->get('error_accompanying_message') . '</div>';
