@@ -1,0 +1,77 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - entity_browser.browser.images_library
+    - field.field.taxonomy_term.gc_instructor.field_gc_instructor_categories
+    - field.field.taxonomy_term.gc_instructor.field_gc_instructor_difficulty
+    - field.field.taxonomy_term.gc_instructor.field_gc_instructor_photo
+    - taxonomy.vocabulary.gc_instructor
+  module:
+    - entity_browser
+    - path
+id: taxonomy_term.gc_instructor.default
+targetEntityType: taxonomy_term
+bundle: gc_instructor
+mode: default
+content:
+  field_gc_instructor_categories:
+    weight: 2
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: entity_reference_autocomplete
+    region: content
+  field_gc_instructor_difficulty:
+    weight: 3
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
+  field_gc_instructor_photo:
+    type: entity_browser_entity_reference
+    weight: 1
+    settings:
+      entity_browser: images_library
+      field_widget_display: label
+      field_widget_edit: true
+      field_widget_remove: true
+      selection_mode: selection_append
+      field_widget_replace: false
+      open: false
+      field_widget_display_settings: {  }
+    third_party_settings: {  }
+    region: content
+  langcode:
+    type: language_select
+    weight: 4
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
+  name:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  path:
+    type: path
+    weight: 5
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    settings:
+      display_label: true
+    weight: 6
+    region: content
+    third_party_settings: {  }
+hidden:
+  description: true

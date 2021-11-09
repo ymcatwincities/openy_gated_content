@@ -165,7 +165,7 @@ class SSOClient {
    *   Returns TRUE if user has active subscription.
    */
   public function validateUserSubscription($userData) {
-    return $userData->member->Status === 'Active';
+    return ($userData->member instanceof \stdClass) && $userData->member->Status === 'Active';
   }
 
   /**

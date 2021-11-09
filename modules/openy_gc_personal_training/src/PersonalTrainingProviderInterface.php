@@ -5,7 +5,7 @@ namespace Drupal\openy_gc_personal_training;
 use Drupal\Component\Plugin\ConfigurableInterface;
 use Drupal\Component\Plugin\PluginInspectionInterface;
 use Drupal\Core\Plugin\PluginFormInterface;
-use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\openy_gc_personal_training\Entity\PersonalTrainingInterface;
 
 /**
@@ -35,12 +35,12 @@ interface PersonalTrainingProviderInterface extends PluginInspectionInterface, C
   /**
    * Get plugin configuration.
    */
-  public function getConfiguration():array;
+  public function getConfiguration(): array;
 
   /**
    * Check personal training access.
    *
-   * @param \Drupal\Core\Session\AccountProxyInterface $user
+   * @param \Drupal\Core\Session\AccountInterface $user
    *   User account.
    * @param \Drupal\openy_gc_personal_training\Entity\PersonalTrainingInterface $personal_training
    *   Personal Training entity.
@@ -48,12 +48,36 @@ interface PersonalTrainingProviderInterface extends PluginInspectionInterface, C
    * @return bool
    *   TRUE if user has access.
    */
-  public function checkPersonalTrainingAccess(AccountProxyInterface $user, PersonalTrainingInterface $personal_training):bool;
+  public function checkPersonalTrainingAccess(AccountInterface $user, PersonalTrainingInterface $personal_training): bool;
+
+  /**
+   * Check personal training CRUD access.
+   *
+   * @param \Drupal\Core\Session\AccountInterface $user
+   *   User account.
+   * @param \Drupal\openy_gc_personal_training\Entity\PersonalTrainingInterface $personal_training
+   *   Personal Training entity.
+   *
+   * @return bool
+   *   TRUE if user has access to manage entity.
+   */
+  public function checkPersonalTrainingModifyAccess(AccountInterface $user, PersonalTrainingInterface $personal_training): bool;
+
+  /**
+   * Alters a query when personal_training access is required.
+   *
+   * @param mixed $query
+   *   Query that is being altered.
+   * @param \Drupal\Core\Session\AccountInterface $account
+   *   A user object representing the user for whom the operation is to be
+   *   performed.
+   */
+  public function alterQuery($query, AccountInterface $account);
 
   /**
    * Get user personal trainings.
    *
-   * @param \Drupal\Core\Session\AccountProxyInterface $user
+   * @param \Drupal\Core\Session\AccountInterface $user
    *   User account.
    * @param string $date_start
    *   Training start time.
@@ -63,6 +87,6 @@ interface PersonalTrainingProviderInterface extends PluginInspectionInterface, C
    * @return array
    *   List with personal trainings for account.
    */
-  public function getUserPersonalTrainings(AccountProxyInterface $user, string $date_start, string $date_end): array;
+  public function getUserPersonalTrainings(AccountInterface $user, string $date_start, string $date_end): array;
 
 }

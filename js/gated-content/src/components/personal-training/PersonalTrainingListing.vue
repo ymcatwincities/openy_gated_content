@@ -2,10 +2,12 @@
   <div class="gated-containerV2 my-40-20 px--20-10" v-if="listingIsNotEmpty">
     <div class="listing-header">
       <h2 class="title text-gray">{{ title }}</h2>
-      <router-link :to="{ name: 'Schedule' }" v-if="viewAll" class="view-all">
-        More
-      </router-link>
-      <slot name="filterButton"></slot>
+      <template v-if="hasMoreItems">
+        <router-link :to="{ name: 'Schedule' }" v-if="viewAll" class="view-all">
+          More
+        </router-link>
+        <slot name="filterButton"></slot>
+      </template>
     </div>
     <div v-if="loading" class="text-center">
       <Spinner></Spinner>
@@ -47,26 +49,17 @@ export default {
       type: String,
       default: 'No personal trainings found.',
     },
-    viewAll: {
-      type: Boolean,
-      default: false,
-    },
     sort: {
       type: Object,
       default() {
         return { path: 'date.value', direction: 'ASC' };
       },
     },
-    limit: {
-      type: Number,
-      default: 0,
-    },
   },
   data() {
     return {
       loading: true,
       error: false,
-      links: {},
       params: [
         'instructor_id',
       ],
@@ -136,15 +129,12 @@ export default {
         };
       }
 
-      if (this.limit !== 0) {
-        params.page = {
-          limit: this.limit,
-        };
-      }
+      params.page = this.getPageParam;
 
       client
         .get('jsonapi/personal_training/personal_training', { params })
         .then((response) => {
+          this.links = response.data.links;
           this.listing = this.combineMultiple(
             response.data.data,
             response.data.included,

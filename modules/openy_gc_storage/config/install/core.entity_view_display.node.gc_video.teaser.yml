@@ -3,6 +3,8 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.teaser
+    - field.field.node.gc_video.field_gc_duration_reference
+    - field.field.node.gc_video.field_gc_instructor_reference
     - field.field.node.gc_video.field_gc_video_category
     - field.field.node.gc_video.field_gc_video_description
     - field.field.node.gc_video.field_gc_video_duration
@@ -21,11 +23,13 @@ bundle: gc_video
 mode: teaser
 content:
   links:
-    weight: 100
+    weight: 0
+    region: content
     settings: {  }
     third_party_settings: {  }
-    region: content
 hidden:
+  field_gc_duration_reference: true
+  field_gc_instructor_reference: true
   field_gc_video_category: true
   field_gc_video_description: true
   field_gc_video_duration: true
@@ -36,3 +40,4 @@ hidden:
   field_gc_video_level: true
   field_gc_video_media: true
   langcode: true
+  search_api_excerpt: true

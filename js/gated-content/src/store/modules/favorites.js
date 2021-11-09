@@ -13,6 +13,8 @@ export default {
       },
       taxonomy_term: {
         gc_category: [],
+        gc_duration: [],
+        gc_instructor: [],
       },
       personal_training: {
         personal_training: [],

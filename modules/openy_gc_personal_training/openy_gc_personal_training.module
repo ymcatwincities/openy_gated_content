@@ -6,12 +6,15 @@
  */
 
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Database\Query\AlterableInterface;
+use Drupal\Core\Database\Query\SelectInterface;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 use Drupal\openy_gated_content\VyFavoriteItemsManager;
 use Drupal\openy_gc_personal_training\Entity\PersonalTrainingInterface;
+use Drupal\openy_gc_personal_training\PersonalTrainingProviderInterface;
 use Drupal\openy_gc_personal_training\PersonalTrainingSeriesOperations;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\user\UserInterface;
@@ -327,4 +330,19 @@ function openy_gc_personal_training_tokens($type, $tokens, array $data, array $o
   }
 
   return $replacements;
+}
+
+/**
+ * Implements hook_query_TAG_alter().
+ *
+ */
+function openy_gc_personal_training_query_personal_training_access_alter(AlterableInterface $query) {
+  if (!($query instanceof SelectInterface)) {
+    return;
+  }
+  $account = \Drupal::currentUser();
+  $active_provider = \Drupal::config('openy_gc_personal_training.settings')->get('active_provider');
+  /** @var PersonalTrainingProviderInterface $plugin_instance */
+  $plugin_instance = \Drupal::service('plugin.manager.personal_training_provider')->createInstance($active_provider);
+  $plugin_instance->alterQuery($query, $account);
 }

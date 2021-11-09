@@ -402,3 +402,60 @@ function openy_gated_content_update_8019() {
     }
   }
 }
+
+/**
+ * Include new components to the Virtual Y configuration.
+ */
+function openy_gated_content_update_8020() {
+  /** @var \Drupal\openy_upgrade_tool\ConfigParamUpgradeTool $config_updater */
+  $config_updater = \Drupal::service('openy_upgrade_tool.param_updater');
+  $config_dir = drupal_get_path('module', 'openy_gated_content') . '/config/install/';
+  $config_name = 'openy_gated_content.settings';
+  $config = $config_dir . $config_name . '.yml';
+  $components = [
+    'categories',
+    'instructors',
+    'duration',
+    'latest_content',
+  ];
+  foreach ($components as $id) {
+    $config_updater->update($config, $config_name, "components.$id");
+  }
+
+  $config_updater->update($config, $config_name, "switch_legacy_view");
+}
+
+/*
+ * Add field_vy_permission info to the bundles map.
+ */
+function openy_gated_content_update_8021() {
+  $gc_config = \Drupal::config('openy_gated_content.settings')->getRawData();
+  if (!empty($gc_config['permissions_entities'])) {
+    $permissions_entities = $gc_config['permissions_entities'];
+  }
+  $field_name = 'field_vy_permission';
+  $entity_type_ids = [
+    'node',
+    'eventseries',
+    'eventinstance',
+  ];
+  $persistent_map = \Drupal::keyValue('entity.definitions.bundle_field_map');
+  $map = $persistent_map->getAll();
+  $entity_field_manager = \Drupal::service('entity_field.manager');
+  foreach ($entity_type_ids as $entity_type_id) {
+    if (!isset($permissions_entities[$entity_type_id])) {
+      continue;
+    }
+    $managed_bundles = $permissions_entities[$entity_type_id];
+    foreach ($managed_bundles as $bundle) {
+      $field_definitions = $entity_field_manager->getFieldDefinitions($entity_type_id, $bundle);
+      $map[$entity_type_id][$field_name]['type'] = $field_definitions[$field_name]->getType();
+      $map[$entity_type_id][$field_name]['bundles'][$bundle] = $bundle;
+    }
+  }
+  // Delete former incorrect map.
+  $persistent_map->deleteAll();
+  // Add a recent map.
+  $persistent_map->setMultiple($map);
+
+}
