@@ -5,6 +5,7 @@ namespace Drupal\openy_gc_auth;
 use Drupal\Component\Plugin\ConfigurableInterface;
 use Drupal\Component\Plugin\PluginInspectionInterface;
 use Drupal\Core\Plugin\PluginFormInterface;
+use Drupal\Core\Session\AccountInterface;
 
 /**
  * Defines the common interface for all GCIdentityProvider plugins.
@@ -51,5 +52,16 @@ interface GCIdentityProviderInterface extends PluginInspectionInterface, Configu
    *   User email.
    */
   public function getMemberNotificationEmail(int $uid): string;
+
+  /**
+   * Sends welcome email if enabled.
+   *
+   * Some providers can store fake email in system, in this case method
+   * should implement other logic.
+   *
+   * @param \Drupal\Core\Session\AccountInterface $user
+   *   The account of user that should receive an email.
+   */
+  public function sendWelcomeEmail(AccountInterface $user);
 
 }

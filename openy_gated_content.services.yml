@@ -6,9 +6,14 @@ services:
       - { name: 'event_subscriber' }
   openy_gated_content.user_service:
     class: '\Drupal\openy_gated_content\GCUserService'
-    arguments: ['@entity_type.manager']
+    arguments: ['@entity_type.manager', '@plugin.manager.mail', '@language_manager']
   openy_gated_content.route_subscriber:
     class: '\Drupal\openy_gated_content\EventSubscriber\RouteSubscriber'
+    tags:
+      - { name: event_subscriber }
+  openy_gated_content.user_login_subscriber:
+    class: '\Drupal\openy_gated_content\EventSubscriber\GCUserLoginSubscriber'
+    arguments: ['@openy_gated_content.user_service', '@config.factory', '@plugin.manager.gc_identity_provider']
     tags:
       - { name: event_subscriber }
   # Custom cache bin for favorites controller.

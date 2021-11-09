@@ -1,0 +1,9 @@
+openy_gated_content.settings:
+  title: 'Virtual YMCA Settings'
+  route_name: openy_gated_content.settings
+  base_route: openy_gated_content.settings
+openy_gated_content.welcome_email_settings:
+  title: 'Welcome email settings'
+  route_name: openy_gated_content.welcome_email_settings
+  base_route: openy_gated_content.settings
+  weight: 100

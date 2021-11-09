@@ -459,3 +459,16 @@ function openy_gated_content_update_8021() {
   $persistent_map->setMultiple($map);
 
 }
+
+/**
+ * Install initial settings for the welcome email.
+ */
+function openy_gated_content_update_8022() {
+  $config_dir = drupal_get_path('module', 'openy_gated_content');
+  $config_dir .= '/config/install/';
+  $config_importer = \Drupal::service('openy_upgrade_tool.importer');
+  $config_importer->setDirectory($config_dir);
+  $config_importer->importConfigs([
+    'openy_gated_content.welcome_email_settings',
+  ]);
+}
