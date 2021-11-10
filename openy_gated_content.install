@@ -461,9 +461,26 @@ function openy_gated_content_update_8021() {
 }
 
 /**
- * Install initial settings for the welcome email.
+ * Enable views_data_export.
  */
 function openy_gated_content_update_8022() {
+  \Drupal::service('module_installer')->install(['views_data_export'], TRUE);
+}
+
+/**
+ * Add Virtual Y User logs views.
+ */
+function openy_gated_content_update_8023() {
+  $path = drupal_get_path('module', 'openy_gated_content') . '/config/install/';
+  $config_importer = \Drupal::service('config_import.importer');
+  $config_importer->setDirectory($path);
+  $config_importer->importConfigs(['views.view.virtual_y_users_log']);
+}
+
+/**
+ * Install initial settings for the welcome email.
+ */
+function openy_gated_content_update_8024() {
   $config_dir = drupal_get_path('module', 'openy_gated_content');
   $config_dir .= '/config/install/';
   $config_importer = \Drupal::service('openy_upgrade_tool.importer');
