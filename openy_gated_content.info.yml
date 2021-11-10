@@ -10,3 +10,4 @@ dependencies:
   - drupal:openy_gc_auth
   - drupal:jsonapi
   - drupal:openy_gc_storage
+  - drupal:views_data_export
