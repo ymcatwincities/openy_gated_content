@@ -459,3 +459,20 @@ function openy_gated_content_update_8021() {
   $persistent_map->setMultiple($map);
 
 }
+
+/**
+ * Enable views_data_export.
+ */
+function openy_gated_content_update_8022() {
+  \Drupal::service('module_installer')->install(['views_data_export'], TRUE);
+}
+
+/**
+ * Add Virtual Y User logs views.
+ */
+function openy_gated_content_update_8023() {
+  $path = drupal_get_path('module', 'openy_gated_content') . '/config/install/';
+  $config_importer = \Drupal::service('config_import.importer');
+  $config_importer->setDirectory($path);
+  $config_importer->importConfigs(['views.view.virtual_y_users_log']);
+}
