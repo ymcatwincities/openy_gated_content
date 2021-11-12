@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_gc_duration_min
+    - taxonomy.vocabulary.gc_duration
+  module:
+    - datalayer
+third_party_settings:
+  datalayer:
+    expose: 0
+    label: field_gc_duration_min
+id: taxonomy_term.gc_duration.field_gc_duration_min
+field_name: field_gc_duration_min
+entity_type: taxonomy_term
+bundle: gc_duration
+label: 'Minimum Duration'
+description: 'Minimum duration of the video (in seconds) that can reference this term.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: second|seconds
+field_type: integer

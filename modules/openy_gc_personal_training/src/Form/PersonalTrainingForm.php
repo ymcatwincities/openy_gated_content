@@ -7,6 +7,7 @@ use Drupal\Core\Entity\ContentEntityForm;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\date_recur_modular\DateRecurModularWidgetOptions;
+use Drupal\openy_gated_content\VirtualYAccessTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -15,6 +16,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @ingroup openy_gc_personal_training
  */
 class PersonalTrainingForm extends ContentEntityForm {
+
+  use VirtualYAccessTrait;
 
   /**
    * The current user account.
@@ -45,6 +48,18 @@ class PersonalTrainingForm extends ContentEntityForm {
         ':input[name="training_type"]' => ['value' => 'link'],
       ],
     ];
+
+    $widget = &$form['instructor_id']['widget'];
+    $widget[0]['target_id']['#default_value'] = $this->entityTypeManager
+      ->getStorage('user')
+      ->load($this->account->id());
+
+    $roles = $this->account->getRoles(TRUE);
+    $allowed_roles = [
+      'administrator',
+      self::$virtualYAccessEditorRole,
+    ];
+    $widget['#disabled'] = empty(array_intersect($allowed_roles, $roles));
 
     $groups = [
       'info' => [

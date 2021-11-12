@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies: {  }
+id: eventinstance_live_stream_instructor_reference
+label: Instructor
+type: fallback
+sourceEntityType: eventseries
+destinationEntityType: eventinstance
+sourceEntityBundle: live_stream
+destinationEntityBundle: live_stream
+sourceField: field_gc_instructor_reference
+destinationField: field_gc_instructor_reference
+plugin: default_inheritance

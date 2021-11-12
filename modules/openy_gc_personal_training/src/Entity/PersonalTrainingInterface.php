@@ -4,13 +4,14 @@ namespace Drupal\openy_gc_personal_training\Entity;
 
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityChangedInterface;
+use Drupal\user\EntityOwnerInterface;
 
 /**
  * Provides an interface for defining Personal training entities.
  *
  * @ingroup openy_gc_personal_training
  */
-interface PersonalTrainingInterface extends ContentEntityInterface, EntityChangedInterface {
+interface PersonalTrainingInterface extends ContentEntityInterface, EntityChangedInterface, EntityOwnerInterface {
 
   /**
    * Gets the Personal training creation timestamp.

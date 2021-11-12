@@ -3,6 +3,7 @@ status: true
 dependencies:
   config:
     - entity_browser.browser.images_library
+    - field.field.eventinstance.virtual_meeting.field_gc_instructor_reference
     - field.field.eventinstance.virtual_meeting.field_ls_category
     - field.field.eventinstance.virtual_meeting.field_ls_equipment
     - field.field.eventinstance.virtual_meeting.field_ls_featured
@@ -36,6 +37,16 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
+  field_gc_instructor_reference:
+    weight: 2
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: entity_reference_autocomplete
+    region: content
   field_ls_category:
     weight: 6
     settings:
@@ -62,14 +73,6 @@ content:
       display_label: true
     third_party_settings: {  }
     type: boolean_checkbox
-    region: content
-  field_ls_host_name:
-    weight: 2
-    settings:
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-    type: string_textfield
     region: content
   field_ls_image:
     weight: 4
@@ -125,4 +128,5 @@ content:
       match_limit: 10
     region: content
     third_party_settings: {  }
-hidden: {  }
+hidden:
+  field_ls_host_name: true
