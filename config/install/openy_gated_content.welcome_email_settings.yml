@@ -3,8 +3,6 @@ email_subject: 'Welcome to Virtual Y!'
 email_body: |
   <p>Explore your favorite YMCA programs from home or on the go!</p>
 
-  <p>Dear [user:display-name],</p>
-
   <p>Thanks for joining our Virtual Y community. We are excited to have you here. With Virtual Y, you can:</p>
 
   <ul>
