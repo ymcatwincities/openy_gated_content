@@ -32,6 +32,20 @@ function openy_gated_content_install() {
 }
 
 /**
+ * Implements hook_update_dependencies().
+ */
+function openy_gated_content_update_dependencies() {
+  // Run openy_gated_content_update_8022 after colorapi enabled.
+  $dependencies['openy_gated_content'] = [
+    8022 => [
+      'openy_txnm_color' => 8005,
+    ],
+  ];
+
+  return $dependencies;
+}
+
+/**
  * Add virtual_ymca_editor user role.
  */
 function openy_gated_content_update_8001() {
