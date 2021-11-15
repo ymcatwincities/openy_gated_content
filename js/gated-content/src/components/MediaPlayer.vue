@@ -4,9 +4,12 @@
       ref="player"
       :player="player"
       :videoId="videoId"
-      :options="{responsive: 'true', url: media.field_media_video_embed_field}"
+      :options="{
+        responsive: 'true',
+        url: mediaUrl,
+      }"
       :player-vars="handleAttributes()"
-      :autoplay="autoplay"
+      :autoplay="autoplay ? 1 : 0"
       @loaded="handleLoaded()"
       @ready="handleReady()"
       @play="handlePlay()"
@@ -15,7 +18,6 @@
     />
   </div>
 </template>
-
 <script>
 import VueVideoWrapper from 'vue-video-wrapper';
 
@@ -48,19 +50,42 @@ export default {
   },
   computed: {
     player() {
-      return this.media.field_media_source.startsWith('youtube') ? 'youtube' : 'vimeo';
+      return this.media.field_media_source.startsWith('youtube')
+        ? 'youtube'
+        : 'vimeo';
     },
     videoId() {
-      let embedObj = this.media.field_media_video_embed_field;
       if (this.media.field_media_source === 'youtube_playlist') {
-        embedObj = embedObj.match(/(\?|&)v=([^&#]+)/).pop();
-        return embedObj;
+        return this.mediaUrl.match(/(\?|&)v=([^&#]+)/).pop();
       }
       // If the video matches Vimeo's private link format, return the full url.
-      if (embedObj.match(/^https?:\/\/(www\.)?vimeo.com\/([0-9]*)(\/[a-zA-Z0-9]+)$/)) {
-        return embedObj;
+      if (
+        this.mediaUrl.match(
+          /^https?:\/\/(www\.)?vimeo.com\/([0-9]*)(\/[a-zA-Z0-9]+)$/,
+        )
+      ) {
+        return this.mediaUrl;
       }
       return this.media.field_media_video_id;
+    },
+    mediaUrl() {
+      return this.media.field_media_video_embed_field;
+    },
+    timecode() {
+      const matches = this.mediaUrl.match(/[&?#]t=((\d+)h)?((\d+)m)?(\d+)s?/);
+      if (!matches) {
+        return 0;
+      }
+      const groups = {
+        hours: 2,
+        minutes: 4,
+        seconds: 5,
+      };
+      const hours = matches[groups.hours] ?? 0;
+      const minutes = matches[groups.minutes] ?? 0;
+      const seconds = matches[groups.seconds] ?? 0;
+
+      return hours * 3600 + minutes * 60 + seconds;
     },
   },
   methods: {
@@ -78,6 +103,7 @@ export default {
       this.handlePlayerEvent('videoPlaybackStarted');
     },
     handleLoaded() {
+      this.$refs.player.player.setCurrentTime(this.timecode);
       if (!this.autoplay) {
         this.$refs.player.pause();
       }
@@ -92,17 +118,22 @@ export default {
       if (this.logStartedEventImmediately) {
         this.logPlaybackStarted();
       } else {
-        this.playbackTimeout = setTimeout(() => this.logPlaybackStarted(), 60 * 1000);
+        this.playbackTimeout = setTimeout(
+          () => this.logPlaybackStarted(),
+          60 * 1000,
+        );
       }
     },
     handleAttributes() {
+      let attributes = false;
       if (this.media.field_media_source === 'youtube') {
-        return {
+        attributes = {
           rel: 0,
-          autoplay: this.autoplay,
+          autoplay: this.autoplay ? 1 : 0,
+          start: this.timecode,
         };
       }
-      return false;
+      return attributes;
     },
     handlePause() {
       this.playbackInProgress = false;
