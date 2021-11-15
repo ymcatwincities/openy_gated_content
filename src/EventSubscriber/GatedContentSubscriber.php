@@ -6,8 +6,8 @@ use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Cache\CacheableResponseInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
 
@@ -36,10 +36,10 @@ class GatedContentSubscriber implements EventSubscriberInterface {
   /**
    * Check Access to Virtual Y contend entities pages.
    *
-   * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
-   *   The GetResponseEvent to process.
+   * @param \Symfony\Component\HttpKernel\Event\RequestEvent $event
+   *   The RequestEvent to process.
    */
-  public function accessCheck(GetResponseEvent $event) {
+  public function accessCheck(RequestEvent $event) {
     $request = $event->getRequest();
     $route_name = $request->get('_route');
     $protected_routes = [
@@ -86,10 +86,10 @@ class GatedContentSubscriber implements EventSubscriberInterface {
   /**
    * Adds a cache context for x-shared-referer header.
    *
-   * @param \Symfony\Component\HttpKernel\Event\FilterResponseEvent $event
+   * @param \Symfony\Component\HttpKernel\Event\ResponseEvent $event
    *   The event to process.
    */
-  public function onRespond(FilterResponseEvent $event) {
+  public function onRespond(ResponseEvent $event) {
     if (!$event->isMasterRequest() || !$this->currentUser->isAnonymous()) {
       return;
     }

@@ -9,9 +9,9 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\openy_gc_auth\GCAuthManager;
-use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * Class VirtualYLogin Redirect.
@@ -95,7 +95,7 @@ class VirtualYLoginRedirect implements EventSubscriberInterface {
   /**
    * A method to be called whenever a kernel.response event is dispatched.
    *
-   * @param \Symfony\Component\EventDispatcher\Event $event
+   * @param \Symfony\Contracts\EventDispatcher\Event $event
    *   The event triggered by the response.
    */
   public function checkForRedirect(Event $event) {
