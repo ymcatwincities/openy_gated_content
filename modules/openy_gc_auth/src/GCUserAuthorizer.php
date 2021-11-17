@@ -91,7 +91,7 @@ class GCUserAuthorizer {
     // Instantiate GC login user event.
     $event = new GCUserLoginEvent($account, $extra_data);
     // Dispatch the event.
-    $this->eventDispatcher->dispatch(GCUserLoginEvent::EVENT_NAME, $event);
+    $this->eventDispatcher->dispatch($event, GCUserLoginEvent::EVENT_NAME);
 
     user_login_finalize($account);
   }
