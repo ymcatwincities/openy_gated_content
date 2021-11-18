@@ -68,7 +68,7 @@ class GCAuthController extends ControllerBase {
     // Instantiate GC logout user event.
     $event = new GCUserLogoutEvent();
     // Dispatch the event.
-    $this->eventDispatcher->dispatch(GCUserLogoutEvent::EVENT_NAME, $event);
+    $this->eventDispatcher->dispatch($event, GCUserLogoutEvent::EVENT_NAME);
     // Logout user from Drupal.
     user_logout();
     // Optionally redirect user after logout.

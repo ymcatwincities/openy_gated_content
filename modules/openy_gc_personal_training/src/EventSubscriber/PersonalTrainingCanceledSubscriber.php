@@ -149,8 +149,8 @@ class PersonalTrainingCanceledSubscriber implements EventSubscriberInterface {
   public function getUserEmail(int $uid) {
     $virtual_y_config = $this->configFactory->get('openy_gc_auth.settings');
     $active_provider = $virtual_y_config->get('active_provider');
-    $this->authManager->getDefinition($virtual_y_config->get('active_provider'), TRUE);
-    /** @var \Drupal\openy_gc_auth\GCIdentityProviderPluginBase $plugin_instance */
+    $this->authManager->getDefinition($active_provider, TRUE);
+    /** @var \Drupal\openy_gc_auth\GCIdentityProviderInterface $plugin_instance */
     $plugin_instance = $this->authManager->createInstance($active_provider);
     return $plugin_instance->getMemberNotificationEmail($uid);
   }

@@ -9,9 +9,9 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\openy_gc_auth\GCAuthManager;
-use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpKernel\Event\KernelEvent;
 
 /**
  * Class VirtualYLogin Redirect.
@@ -95,10 +95,10 @@ class VirtualYLoginRedirect implements EventSubscriberInterface {
   /**
    * A method to be called whenever a kernel.response event is dispatched.
    *
-   * @param \Symfony\Component\EventDispatcher\Event $event
+   * @param \Symfony\Component\HttpKernel\Event\KernelEvent $event
    *   The event triggered by the response.
    */
-  public function checkForRedirect(Event $event) {
+  public function checkForRedirect(KernelEvent $event) {
 
     $route_name = $this->currentRouteMatch->getRouteName();
     $config = $this->configFactory->get('openy_gated_content.settings');
