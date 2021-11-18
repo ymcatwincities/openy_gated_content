@@ -22,6 +22,22 @@ openy_gated_content.settings:
   requirements:
     _permission: 'administer gated content configuration'
 
+openy_gated_content.welcome_email_settings:
+  path: '/admin/openy/virtual-ymca/welcome-email-settings'
+  defaults:
+    _form: '\Drupal\openy_gated_content\Form\WelcomeEmailSettingsForm'
+    _title: 'Virtual Y welcome email settings'
+  requirements:
+    _permission: 'administer gated content configuration'
+
+openy_gated_content.test_welcome_email:
+  path: '/admin/openy/virtual-ymca/welcome-email-settings/test'
+  defaults:
+    _form: '\Drupal\openy_gated_content\Form\TestWelcomeEmail'
+    _title: 'Test Virtual Y welcome email'
+  requirements:
+    _permission: 'administer gated content configuration'
+
 openy_gated_content.categories.list:
   path: '/api/categories-list'
   defaults:

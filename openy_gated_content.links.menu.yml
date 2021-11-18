@@ -79,6 +79,13 @@ openy_gated_content.settings:
   parent: openy_gated_content.openy
   weight: 20
 
+openy_gated_content.welcome_email_settings:
+  title: 'Welcome email settings'
+  route_name: openy_gated_content.welcome_email_settings
+  description: 'Virtual YMCA welcome email settings form.'
+  parent: openy_gated_content.settings
+  weight: 30
+
 openy_gated_content.taxonomy:
   title: 'Taxonomy'
   route_name: openy_gated_content.taxonomy_config

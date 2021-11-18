@@ -5,7 +5,7 @@ Virtual Y is a package for Open Y and consists of features, needed to organize g
 Active development is currently happening at [fivejars/openy_gated_content](https://github.com/fivejars/openy_gated_content). Pull requests should be submitted there. They will be pulled into this repo as they are reviewed and released.
 
 ## Server requirements
-In order to work Virtual Y requires HTTP server to allow 
+In order to work Virtual Y requires HTTP server to allow
 - GET
 - POST
 - DELETE
@@ -56,7 +56,7 @@ If you facing with
  [error]  Configuration <em class="placeholder">user.role.anonymous</em> depends on configuration (<em class="placeholder">rest.resource.openy_gc_auth_custom, rest.resource.openy_gc_auth_custom_confirm</em>) that will not exist after import.
 ```
 It’s looks like that previous updates were failed.
-If you dont use Custom auth provider - disable that module and it should help.
+If you don't use Custom auth provider - disable that module, and it should help.
 If you use it - try manually delete that config and try again
 ```sh
 drush cdel rest.resource.openy_gc_auth_custom_confirm
@@ -64,7 +64,7 @@ drush cdel rest.resource.openy_gc_auth_custom_confirm
 
 Another one
 ```
-Drupal\Component\Plugin\Exception\PluginNotFoundException while adding Views handlers for field Parts of day on index Default: The "" plugin does not exist. Valid plugin IDs for Drupal\search_api\DataType\DataTypePluginManager are: boolean, date, integer, decimal, string, text in 
+Drupal\Component\Plugin\Exception\PluginNotFoundException while adding Views handlers for field Parts of day on index Default: The "" plugin does not exist. Valid plugin IDs for Drupal\search_api\DataType\DataTypePluginManager are: boolean, date, integer, decimal, string, text in
 ```
 This error was because one of the service lived in a custom folder.
 Try to analyse what service is broken and fix it.

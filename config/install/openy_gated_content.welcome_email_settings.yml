@@ -1,0 +1,16 @@
+enabled: 1
+email_subject: 'Welcome to Virtual Y!'
+email_body: |
+  <p>Explore your favorite YMCA programs from home or on the go!</p>
+
+  <p>Thanks for joining our Virtual Y community. We are excited to have you here. With Virtual Y, you can:</p>
+
+  <ul>
+  	<li>check out our latest fitness content, updated weekly</li>
+  	<li>join live events to connect with other members, virtually</li>
+  	<li>save your favorite classes, instructors, and content for easy reference next time.</li>
+  </ul>
+
+  <p>See you online!</p>
+
+  <p>Your YMCA team</p>

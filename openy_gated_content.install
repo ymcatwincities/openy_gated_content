@@ -32,6 +32,20 @@ function openy_gated_content_install() {
 }
 
 /**
+ * Implements hook_update_dependencies().
+ */
+function openy_gated_content_update_dependencies() {
+  // Run openy_gated_content_update_8022 after colorapi enabled.
+  $dependencies['openy_gated_content'] = [
+    8022 => [
+      'openy_txnm_color' => 8005,
+    ],
+  ];
+
+  return $dependencies;
+}
+
+/**
  * Add virtual_ymca_editor user role.
  */
 function openy_gated_content_update_8001() {
@@ -475,4 +489,17 @@ function openy_gated_content_update_8023() {
   $config_importer = \Drupal::service('config_import.importer');
   $config_importer->setDirectory($path);
   $config_importer->importConfigs(['views.view.virtual_y_users_log']);
+}
+
+/**
+ * Install initial settings for the welcome email.
+ */
+function openy_gated_content_update_8024() {
+  $config_dir = drupal_get_path('module', 'openy_gated_content');
+  $config_dir .= '/config/install/';
+  $config_importer = \Drupal::service('openy_upgrade_tool.importer');
+  $config_importer->setDirectory($config_dir);
+  $config_importer->importConfigs([
+    'openy_gated_content.welcome_email_settings',
+  ]);
 }
