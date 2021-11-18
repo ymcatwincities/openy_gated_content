@@ -5,12 +5,12 @@ Shared content admins should approve that your request is valid and give you acc
 
 # Reset of the Shared Content Server connection
 
-Sometimes your Virtual Y site may stop communicating with the share content server. This may be due to the secret key for your site becoming out of sync with the server. In this case a complete reset of the connection could help fix this problem.
+Sometimes your Virtual Y site may stop communicating with the shared content server. This may be due to the secret key for your site becoming out of sync with the server. In this case a complete reset of the connection could help fix this problem.
 
 Steps to reset the connection.
 
 1. Go to `/admin/virtual-y/shared-content/server`.
-2. Delete the existing connection to the Open Y Shared Server.
+2. Delete the existing connection to the Open Y Shared Content Server.
 3. Create a new connection at `/admin/virtual-y/shared-content/server/add`. 
 4. Use `https://shared.openy.org` as connection domain.
 5. Use any name as label.
