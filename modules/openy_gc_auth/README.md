@@ -68,6 +68,8 @@ authentication providers which aren't storing the user's email (Daxko Barcode, Y
 
 This module uses default Drupal mail sending functions to send emails.
 
+**The welcome email feature is disabled by default.**
+
 You can enable this feature or change message template at setting form at this URI: `/admin/openy/virtual-ymca/welcome-email-settings`
 
 Editing message settings, keep in mind that the user's data you can use in the templates will reflect the data stored
