@@ -54,7 +54,7 @@ use Drupal\user\EntityOwnerTrait;
  *     "delete-form" = "/admin/virtual-y/personal_training/{personal_training}/delete",
  *     "collection" = "/admin/virtual-y/personal_training",
  *   },
- *   field_ui_base_route = "personal_training.settings"
+ *   field_ui_base_route = "entity.personal_training_type.edit_form",
  * )
  */
 class PersonalTraining extends ContentEntityBase implements PersonalTrainingInterface {

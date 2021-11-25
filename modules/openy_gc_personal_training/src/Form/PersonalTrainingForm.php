@@ -76,6 +76,7 @@ class PersonalTrainingForm extends ContentEntityForm {
           'field_exclusions',
           'description',
           'pt_equipment',
+          'field_image'
         ],
       ],
       'metadata' => [
