@@ -12,6 +12,15 @@ use Drupal\openy_gc_personal_training\Entity\PersonalTraining;
 use Drupal\user\Entity\Role;
 
 /**
+ * Add permission to virtual trainer.
+ */
+function _openy_gc_personal_training_update_virtual_trainer() {
+  $role_object = Role::load('virtual_trainer');
+  $role_object->grantPermission('use text format full_html');
+  $role_object->save();
+}
+
+/**
  * Implements hook_install().
  */
 function openy_gc_personal_training_install() {
@@ -27,6 +36,7 @@ function openy_gc_personal_training_install() {
       $role->save();
     }
   }
+  _openy_gc_personal_training_update_virtual_trainer();
 }
 
 /**
@@ -246,4 +256,11 @@ function openy_gc_personal_training_update_8010() {
   $config_importer->importConfigs([
     'views.view.personal_trainings',
   ]);
+}
+
+/**
+ * Allow Virtual trainer to use full html.
+ */
+function openy_gc_personal_training_update_8011() {
+  _openy_gc_personal_training_update_virtual_trainer();
 }
