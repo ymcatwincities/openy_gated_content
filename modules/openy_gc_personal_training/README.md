@@ -3,7 +3,7 @@
 This module provides a base implementation of Virtual Y 1on1 Meetings.
 
 ![Virtual Y 1on1 meeting](assets/vy_14_virtual_meeting.png "Virtual Y 1on1 Meeting Demo")
-<!--Short video demo: https://www.loom.com/share/c49ef7bb4b2a4435ac78bfc53582e2f1-->
+TODO: Record a new demo video.
 
 ## Requirements
 
