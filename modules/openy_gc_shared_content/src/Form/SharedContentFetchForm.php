@@ -4,6 +4,7 @@ namespace Drupal\openy_gc_shared_content\Form;
 
 use Drupal\Component\Plugin\PluginManagerInterface;
 use Drupal\Core\Batch\BatchBuilder;
+use Drupal\Core\Entity\EntityRepository;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Pager\PagerManagerInterface;
@@ -19,6 +20,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class SharedContentFetchForm extends EntityForm {
 
   const PAGE_LIMIT = 20;
+
+  /**
+   * The Entity Repository.
+   *
+   * @var \Drupal\Core\Entity\EntityRepository
+   */
+  protected $entityRepository;
 
   /**
    * The plugin manager for SharedContentSourceType classes.
@@ -44,7 +52,8 @@ class SharedContentFetchForm extends EntityForm {
   /**
    * {@inheritdoc}
    */
-  public function __construct(PluginManagerInterface $manager, PagerManagerInterface $pager_manager) {
+  public function __construct(EntityRepository $entity_repository, PluginManagerInterface $manager, PagerManagerInterface $pager_manager) {
+    $this->entityRepository = $entity_repository;
     $this->sharedSourceTypeManager = $manager;
     $this->pagerManager = $pager_manager;
     $this->batchBuilder = new BatchBuilder();
@@ -55,6 +64,7 @@ class SharedContentFetchForm extends EntityForm {
    */
   public static function create(ContainerInterface $container) {
     return new static(
+      $container->get('entity.repository'),
       $container->get('plugin.manager.shared_content_source_type'),
       $container->get('pager.manager')
     );
@@ -147,6 +157,10 @@ class SharedContentFetchForm extends EntityForm {
       ];
 
       foreach ($source_data['data'] as $item) {
+        $item_exists = $this->entityRepository->loadEntityByUuid('node', $item['id']) ? TRUE : FALSE;
+        $classes = ['use-ajax', 'button'];
+        $classes[] = !$item_exists ?: 'is-disabled';
+
         $form['fetched_data']['content']['#options'][$item['id']] = [
           // @todo maybe we can highlight existing items here.
           'name' => $instance->formatItem($item),
@@ -155,14 +169,14 @@ class SharedContentFetchForm extends EntityForm {
           'operations' => [
             'data' => [
               '#type' => 'link',
-              '#title' => $this->t('Preview'),
+              '#title' => $item_exists ? $this->t('Added') : $this->t('Preview'),
               '#url' => Url::fromRoute('entity.shared_content_source_server.preview', [
                 'shared_content_source_server' => $entity->id(),
                 'type' => $type,
                 'uuid' => $item['id'],
               ]),
               '#attributes' => [
-                'class' => ['use-ajax', 'button'],
+                'class' => $classes,
               ],
             ],
           ],

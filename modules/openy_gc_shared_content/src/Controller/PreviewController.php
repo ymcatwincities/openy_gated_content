@@ -6,6 +6,7 @@ use Drupal\Component\Plugin\PluginManagerInterface;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\OpenModalDialogCommand;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Form\FormBuilder;
 use Drupal\openy_gc_shared_content\Entity\SharedContentSourceServerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,6 +15,13 @@ use Symfony\Component\HttpFoundation\Request;
  * Preview Controller for SharedContentFetchForm.
  */
 class PreviewController extends ControllerBase {
+
+  /**
+   * The form builder.
+   *
+   * @var \Drupal\Core\Form\FormBuilder
+   */
+  protected $formBuilder;
 
   /**
    * The plugin manager for SharedContentSourceType classes.
@@ -25,7 +33,8 @@ class PreviewController extends ControllerBase {
   /**
    * {@inheritdoc}
    */
-  public function __construct(PluginManagerInterface $manager) {
+  public function __construct(FormBuilder $formBuilder, PluginManagerInterface $manager) {
+    $this->formBuilder = $formBuilder;
     $this->sharedSourceTypeManager = $manager;
   }
 
@@ -34,6 +43,7 @@ class PreviewController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
+      $container->get('form_builder'),
       $container->get('plugin.manager.shared_content_source_type')
     );
   }
@@ -48,8 +58,8 @@ class PreviewController extends ControllerBase {
     $data = $instance->jsonApiCall($shared_content_source_server, $query_args, $uuid);
     $content = $instance->formatItem($data, FALSE);
     $content['#server'] = $shared_content_source_server->getUrl();
-    $response->addCommand(new OpenModalDialogCommand('Preview', $content, ['width' => '900']));
-
+    $form = $this->formBuilder->getForm('Drupal\openy_gc_shared_content\Form\SharedContentPreviewForm', $content, $type, $uuid);
+    $response->addCommand(new OpenModalDialogCommand('Preview', [$content, $form], ['width' => '900']));
     return $response;
   }
 
