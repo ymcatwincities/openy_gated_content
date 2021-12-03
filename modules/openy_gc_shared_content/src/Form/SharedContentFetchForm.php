@@ -163,6 +163,7 @@ class SharedContentFetchForm extends EntityForm {
 
         $form['fetched_data']['content']['#options'][$item['id']] = [
           // @todo maybe we can highlight existing items here.
+          '#disabled' => $item_exists,
           'name' => $instance->formatItem($item),
           'donated_by' => !empty($item['attributes']['field_gc_origin']) ? $item['attributes']['field_gc_origin'] : ' ',
           'count_of_downloads' => !empty($item['attributes']['field_share_count']) ? $item['attributes']['field_share_count'] : '0',
