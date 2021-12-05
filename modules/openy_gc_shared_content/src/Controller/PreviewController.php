@@ -52,14 +52,25 @@ class PreviewController extends ControllerBase {
    * Callback for opening the modal form.
    */
   public function openPreviewModal(Request $request, SharedContentSourceServerInterface $shared_content_source_server, string $type, string $uuid) {
+    // Prepare AjaxResponse.
     $response = new AjaxResponse();
+
+    // Prepare preview in $content.
     $instance = $this->sharedSourceTypeManager->createInstance($type);
     $query_args = $instance->getFullJsonApiQueryArgs();
     $data = $instance->jsonApiCall($shared_content_source_server, $query_args, $uuid);
     $content = $instance->formatItem($data, FALSE);
     $content['#server'] = $shared_content_source_server->getUrl();
+
+    // Prepare the form and send everything we need as extra arguments.
     $form = $this->formBuilder->getForm('Drupal\openy_gc_shared_content\Form\SharedContentPreviewForm', $content, $type, $uuid);
-    $response->addCommand(new OpenModalDialogCommand('Preview', [$content, $form], ['width' => '900']));
+
+    // Open the modal with the content preview and the "fetch" form.
+    $response->addCommand(new OpenModalDialogCommand(
+      'Preview',
+      [$content, $form],
+      ['width' => '900']
+    ));
     return $response;
   }
 

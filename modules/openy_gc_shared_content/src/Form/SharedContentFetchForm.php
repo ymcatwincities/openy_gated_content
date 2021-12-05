@@ -142,6 +142,12 @@ class SharedContentFetchForm extends EntityForm {
       ];
     }
     else {
+      // Duplicate the form actions into the action container in the header.
+      $form['fetched_data']['actions'] = parent::actions($form, $form_state);
+      unset($form['fetched_data']['actions']['delete']);
+      $form['fetched_data']['actions']['submit']['#value'] = $this->t('Fetch to my site');
+      $form['fetched_data']['actions']['submit']['#attributes']['class'][] = 'button--primary';
+
       $form['fetched_data']['content'] = [
         '#title' => $this->t('Select content to import'),
         '#type' => 'tableselect',
