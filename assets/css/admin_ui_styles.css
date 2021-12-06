@@ -10,3 +10,7 @@
   float: left;
   width: calc(100% - 40px);
 }
+
+#fetched-data tr.new-item {
+    font-weight: bold;
+}

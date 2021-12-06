@@ -2,6 +2,7 @@
 
 namespace Drupal\openy_gc_shared_content\Form;
 
+use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Component\Plugin\PluginManagerInterface;
 use Drupal\Core\Batch\BatchBuilder;
 use Drupal\Core\Datetime\DateFormatter;
@@ -10,7 +11,9 @@ use Drupal\Core\Entity\EntityRepository;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Pager\PagerManagerInterface;
 use Drupal\Core\Render\Element;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
+use Drupal\user\UserDataInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -58,14 +61,46 @@ class SharedContentFetchForm extends EntityForm {
   protected $batchBuilder;
 
   /**
+   * Account interface for getting current user.
+   *
+   * @var \Drupal\Core\Session\AccountInterface
+   */
+  protected $currentUser;
+
+  /**
+   * The user data interface.
+   *
+   * @var \Drupal\user\UserDataInterface
+   */
+  protected $userData;
+
+  /**
+   * The time interface.
+   *
+   * @var \Drupal\Component\Datetime\TimeInterface
+   */
+  protected $time;
+
+  /**
    * {@inheritdoc}
    */
-  public function __construct(DateFormatter $date_formatter, EntityRepository $entity_repository, PluginManagerInterface $manager, PagerManagerInterface $pager_manager) {
+  public function __construct(
+      DateFormatter $date_formatter,
+      EntityRepository $entity_repository,
+      PluginManagerInterface $manager,
+      PagerManagerInterface $pager_manager,
+      AccountInterface $current_user,
+      UserDataInterface $user_data,
+      TimeInterface $time
+    ) {
     $this->dateFormatter = $date_formatter;
     $this->entityRepository = $entity_repository;
     $this->sharedSourceTypeManager = $manager;
     $this->pagerManager = $pager_manager;
     $this->batchBuilder = new BatchBuilder();
+    $this->currentUser = $current_user;
+    $this->userData = $user_data;
+    $this->time = $time;
   }
 
   /**
@@ -76,7 +111,10 @@ class SharedContentFetchForm extends EntityForm {
       $container->get('date.formatter'),
       $container->get('entity.repository'),
       $container->get('plugin.manager.shared_content_source_type'),
-      $container->get('pager.manager')
+      $container->get('pager.manager'),
+      $container->get('current_user'),
+      $container->get('user.data'),
+      $container->get('datetime.time')
     );
   }
 
@@ -100,6 +138,14 @@ class SharedContentFetchForm extends EntityForm {
 
       return $form;
     }
+
+    // Get the current user and the current request,
+    // then write `last_fetched_{server}` to the user data.
+    $user = $this->currentUser;
+    $user_data = $this->userData;
+    $request_time = $this->time->getRequestTime();
+    $last_fetched = $user_data->get('openy_gc_shared_content', $user->id(), 'last_fetched_' . $entity->id());
+    $user_data->set('openy_gc_shared_content', $user->id(), 'last_fetched_' . $entity->id(), $request_time);
 
     $form['label'] = [
       '#type' => 'markup',
@@ -175,21 +221,30 @@ class SharedContentFetchForm extends EntityForm {
 
       foreach ($source_data['data'] as $item) {
         $item_exists = $this->entityRepository->loadEntityByUuid('node', $item['id']) ? TRUE : FALSE;
-        $classes = ['use-ajax', 'button'];
-        $classes[] = !$item_exists ?: 'is-disabled';
+        $ops_classes = ['use-ajax', 'button'];
+        $ops_classes[] = !$item_exists ?: 'is-disabled';
+        $row_classes = [];
 
-        // Fetch the last modified date and format it.
-        $donated_date = '';
+        $donated_date_formatted = '';
+        $item_is_new = FALSE;
         if (!empty($item['attributes']['changed'])) {
-          $date_string = strtotime($item['attributes']['changed']);
-          $donated_date = $this->dateFormatter->format($date_string, 'short');
+          // Fetch the last modified date and format it.
+          $changed = strtotime($item['attributes']['changed']);
+          $donated_date_formatted = $this->dateFormatter->format($changed, 'short');
+
+          // If the item is new then give the row the respective class.
+          $item_is_new = $changed > $last_fetched;
+          $row_classes[] = !$item_is_new ?: 'new-item';
         }
 
         $form['fetched_data']['content']['#options'][$item['id']] = [
           // @todo maybe we can highlight existing items here.
           '#disabled' => $item_exists,
+          '#attributes' => [
+            'class' => $row_classes,
+          ],
           'name' => $instance->formatItem($item),
-          'donated_date' => $donated_date,
+          'donated_date' => $donated_date_formatted,
           'donated_by' => !empty($item['attributes']['field_gc_origin']) ? $item['attributes']['field_gc_origin'] : ' ',
           'count_of_downloads' => !empty($item['attributes']['field_share_count']) ? $item['attributes']['field_share_count'] : '0',
           'operations' => [
@@ -202,7 +257,7 @@ class SharedContentFetchForm extends EntityForm {
                 'uuid' => $item['id'],
               ]),
               '#attributes' => [
-                'class' => $classes,
+                'class' => $ops_classes,
               ],
             ],
           ],
