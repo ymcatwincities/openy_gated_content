@@ -4,6 +4,7 @@ namespace Drupal\openy_gc_shared_content\Form;
 
 use Drupal\Component\Plugin\PluginManagerInterface;
 use Drupal\Core\Batch\BatchBuilder;
+use Drupal\Core\Datetime\DateFormatter;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Entity\EntityRepository;
 use Drupal\Core\Form\FormStateInterface;
@@ -20,6 +21,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class SharedContentFetchForm extends EntityForm {
 
   const PAGE_LIMIT = 20;
+
+  /**
+   * The date formatter.
+   *
+   * @var \Drupal\Core\Datetime\DateFormatter
+   */
+  protected $dateFormatter;
 
   /**
    * The Entity Repository.
@@ -52,7 +60,8 @@ class SharedContentFetchForm extends EntityForm {
   /**
    * {@inheritdoc}
    */
-  public function __construct(EntityRepository $entity_repository, PluginManagerInterface $manager, PagerManagerInterface $pager_manager) {
+  public function __construct(DateFormatter $date_formatter, EntityRepository $entity_repository, PluginManagerInterface $manager, PagerManagerInterface $pager_manager) {
+    $this->dateFormatter = $date_formatter;
     $this->entityRepository = $entity_repository;
     $this->sharedSourceTypeManager = $manager;
     $this->pagerManager = $pager_manager;
@@ -64,6 +73,7 @@ class SharedContentFetchForm extends EntityForm {
    */
   public static function create(ContainerInterface $container) {
     return new static(
+      $container->get('date.formatter'),
       $container->get('entity.repository'),
       $container->get('plugin.manager.shared_content_source_type'),
       $container->get('pager.manager')
@@ -153,6 +163,7 @@ class SharedContentFetchForm extends EntityForm {
         '#type' => 'tableselect',
         '#header' => [
           'name' => $this->t('Name'),
+          'donated_date' => $this->t('Date Added'),
           'donated_by' => $this->t('Donated By'),
           'count_of_downloads' => $this->t('YMCAS using content'),
           'operations' => [
@@ -167,10 +178,18 @@ class SharedContentFetchForm extends EntityForm {
         $classes = ['use-ajax', 'button'];
         $classes[] = !$item_exists ?: 'is-disabled';
 
+        // Fetch the last modified date and format it.
+        $donated_date = '';
+        if (!empty($item['attributes']['changed'])) {
+          $date_string = strtotime($item['attributes']['changed']);
+          $donated_date = $this->dateFormatter->format($date_string, 'short');
+        }
+
         $form['fetched_data']['content']['#options'][$item['id']] = [
           // @todo maybe we can highlight existing items here.
           '#disabled' => $item_exists,
           'name' => $instance->formatItem($item),
+          'donated_date' => $donated_date,
           'donated_by' => !empty($item['attributes']['field_gc_origin']) ? $item['attributes']['field_gc_origin'] : ' ',
           'count_of_downloads' => !empty($item['attributes']['field_share_count']) ? $item['attributes']['field_share_count'] : '0',
           'operations' => [
