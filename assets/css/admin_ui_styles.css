@@ -14,3 +14,7 @@
 #fetched-data tr.new-item {
     font-weight: bold;
 }
+
+#fetched-data tr.disabled {
+  opacity: 0.76;
+}
