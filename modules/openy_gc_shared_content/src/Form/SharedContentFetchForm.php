@@ -241,7 +241,7 @@ class SharedContentFetchForm extends EntityForm {
         '#type' => 'tableselect',
         '#header' => [
           'name' => $this->t('Name'),
-          'donated_date' => $this->t('Date Added'),
+          'donated_date' => $this->t('Donated On'),
           'donated_by' => $this->t('Donated By'),
           'count_of_downloads' => $this->t('YMCAS using content'),
           'operations' => [
