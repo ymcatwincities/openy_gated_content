@@ -144,9 +144,18 @@ class SharedContentFetchForm extends EntityForm {
     $session_opened = $this->userStorage->load($user->id())->getLastLoginTime();
     $request_time = $this->time->getRequestTime();
 
-    // Save the first and last fetched time (or NULL for the first session).
-    $last_fetched = $user_data->get('openy_gc_shared_content', $user->id(), 'last_fetched_' . $entity->id());
-    $first_fetched = $user_data->get('openy_gc_shared_content', $user->id(), 'first_fetched_' . $entity->id());
+    // Content is new when:
+    // 1) the changed date > last time user fetched on their last session
+    // 2) we're on our first session
+    //
+    // In order to understand this we have three stored values:
+    // - $first_fetched is set once and is used to validate the first session.
+    // - $last_fetched is reset on every fetch.
+    // - $last_session is reset on the first fetch of a new session and stores
+    // the previous value of $last_fetched.
+    $first_fetched = $user_data->get('openy_gc_shared_content', $user->id(), $entity->id() . '_first_fetched');
+    $last_fetched = $user_data->get('openy_gc_shared_content', $user->id(), $entity->id() . '_last_fetched');
+    $last_session = $user_data->get('openy_gc_shared_content', $user->id(), $entity->id() . '_last_session');
 
     // There are two cases that could mean we're on our first session:
     // 1) first_fetch is not set, OR
@@ -155,11 +164,20 @@ class SharedContentFetchForm extends EntityForm {
 
     // Set the first_fetched_{server} the first time but then don't touch it.
     if (!$first_fetched) {
-      $user_data->set('openy_gc_shared_content', $user->id(), 'first_fetched_' . $entity->id(), $session_opened);
+      $user_data->set('openy_gc_shared_content', $user->id(), $entity->id() . '_first_fetched', $session_opened);
     }
 
     // Set last_fetched_{server} each time we load the form.
-    $user_data->set('openy_gc_shared_content', $user->id(), 'last_fetched_' . $entity->id(), $request_time);
+    $user_data->set('openy_gc_shared_content', $user->id(), $entity->id() . '_last_fetched', $request_time);
+
+    // Update the last session if last login > last fetch.
+    // This will be what we check against the updated time later.
+    if ($session_opened > $last_fetched) {
+      // Need to do this to ensure we're not setting the value to NULL.
+      $new_last_session = $last_fetched ?: 0;
+      $user_data->set('openy_gc_shared_content', $user->id(), $entity->id() . '_last_session', $new_last_session);
+      $last_session = $last_fetched;
+    }
 
     $form['label'] = [
       '#type' => 'markup',
@@ -247,7 +265,7 @@ class SharedContentFetchForm extends EntityForm {
           $donated_date_formatted = $this->dateFormatter->format($changed, 'short');
 
           // If the item is new then give the row the respective class.
-          $item_is_new = ($changed > $last_fetched) || $first_session;
+          $item_is_new = ($changed > $last_session) || $first_session;
           // Add the class if the item is new AND it's not fetched yet.
           $row_classes[] = $item_is_new && !$item_exists ? 'new-item' : [];
         }
