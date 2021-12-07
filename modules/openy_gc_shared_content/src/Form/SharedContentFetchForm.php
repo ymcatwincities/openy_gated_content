@@ -145,8 +145,9 @@ class SharedContentFetchForm extends EntityForm {
     $request_time = $this->time->getRequestTime();
 
     // Content is new when:
-    // 1) the changed date > last time user fetched on their last session
-    // 2) we're on our first session
+    // 1) the changed date > last time user fetched on their last session.
+    // 2) we're on our first session.
+    // 3) it hasn't already been previewed this session.
     //
     // In order to understand this we have three stored values:
     // - $first_fetched is set once and is used to validate the first session.
@@ -156,6 +157,7 @@ class SharedContentFetchForm extends EntityForm {
     $first_fetched = $user_data->get('openy_gc_shared_content', $user->id(), $entity->id() . '_first_fetched');
     $last_fetched = $user_data->get('openy_gc_shared_content', $user->id(), $entity->id() . '_last_fetched');
     $last_session = $user_data->get('openy_gc_shared_content', $user->id(), $entity->id() . '_last_session');
+    $previewed = $user_data->get('openy_gc_shared_content', $user->id(), $entity->id() . '_previewed');
 
     // There are two cases that could mean we're on our first session:
     // 1) first_fetch is not set, OR
@@ -170,13 +172,20 @@ class SharedContentFetchForm extends EntityForm {
     // Set last_fetched_{server} each time we load the form.
     $user_data->set('openy_gc_shared_content', $user->id(), $entity->id() . '_last_fetched', $request_time);
 
-    // Update the last session if last login > last fetch.
+    // Update the last session if we're starting a new session.
     // This will be what we check against the updated time later.
     if ($session_opened > $last_fetched) {
       // Need to do this to ensure we're not setting the value to NULL.
       $new_last_session = $last_fetched ?: 0;
       $user_data->set('openy_gc_shared_content', $user->id(), $entity->id() . '_last_session', $new_last_session);
       $last_session = $last_fetched;
+
+      // Also reset the previewed array.
+      $user_data->delete('openy_gc_shared_content',
+        $user->id(),
+        $entity->id() . '_previewed'
+      );
+      $previewed = [];
     }
 
     $form['label'] = [
@@ -265,7 +274,7 @@ class SharedContentFetchForm extends EntityForm {
           $donated_date_formatted = $this->dateFormatter->format($changed, 'short');
 
           // If the item is new then give the row the respective class.
-          $item_is_new = ($changed > $last_session) || $first_session;
+          $item_is_new = (($changed > $last_session) || $first_session) && !in_array($item['id'], $previewed);
           // Add the class if the item is new AND it's not fetched yet.
           $row_classes[] = $item_is_new && !$item_exists ? 'new-item' : [];
         }
