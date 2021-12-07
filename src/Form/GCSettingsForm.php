@@ -191,7 +191,7 @@ class GCSettingsForm extends ConfigFormBase {
         '#description' => $this->t("If checked 'Categories' menu item won't be visible."),
         '#type' => 'checkbox',
         '#default_value' => $config->get('menu_config.categories') ?? FALSE,
-      ]
+      ],
     ];
   }
 
