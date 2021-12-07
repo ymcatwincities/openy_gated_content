@@ -11,9 +11,9 @@ use Drupal\Core\Entity\EntityRepository;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Pager\PagerManagerInterface;
 use Drupal\Core\Render\Element;
-use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\user\UserDataInterface;
+use Drupal\user\UserStorageInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -61,11 +61,11 @@ class SharedContentFetchForm extends EntityForm {
   protected $batchBuilder;
 
   /**
-   * Account interface for getting current user.
+   * The user storage interface.
    *
-   * @var \Drupal\Core\Session\AccountInterface
+   * @var \Drupal\user\UserStorageInterface
    */
-  protected $currentUser;
+  protected $userStorage;
 
   /**
    * The user data interface.
@@ -89,7 +89,7 @@ class SharedContentFetchForm extends EntityForm {
       EntityRepository $entity_repository,
       PluginManagerInterface $manager,
       PagerManagerInterface $pager_manager,
-      AccountInterface $current_user,
+      UserStorageInterface $user_storage,
       UserDataInterface $user_data,
       TimeInterface $time
     ) {
@@ -98,7 +98,7 @@ class SharedContentFetchForm extends EntityForm {
     $this->sharedSourceTypeManager = $manager;
     $this->pagerManager = $pager_manager;
     $this->batchBuilder = new BatchBuilder();
-    $this->currentUser = $current_user;
+    $this->userStorage = $user_storage;
     $this->userData = $user_data;
     $this->time = $time;
   }
@@ -112,7 +112,7 @@ class SharedContentFetchForm extends EntityForm {
       $container->get('entity.repository'),
       $container->get('plugin.manager.shared_content_source_type'),
       $container->get('pager.manager'),
-      $container->get('current_user'),
+      $container->get('entity_type.manager')->getStorage('user'),
       $container->get('user.data'),
       $container->get('datetime.time')
     );
@@ -139,12 +139,26 @@ class SharedContentFetchForm extends EntityForm {
       return $form;
     }
 
-    // Get the current user and the current request,
-    // then write `last_fetched_{server}` to the user data.
-    $user = $this->currentUser;
+    $user = $this->currentUser();
     $user_data = $this->userData;
+    $session_opened = $this->userStorage->load($user->id())->getLastLoginTime();
     $request_time = $this->time->getRequestTime();
+
+    // Save the first and last fetched time (or NULL for the first session).
     $last_fetched = $user_data->get('openy_gc_shared_content', $user->id(), 'last_fetched_' . $entity->id());
+    $first_fetched = $user_data->get('openy_gc_shared_content', $user->id(), 'first_fetched_' . $entity->id());
+
+    // There are two cases that could mean we're on our first session:
+    // 1) first_fetch is not set, OR
+    // 2) first_fetch is the same session we're currently in.
+    $first_session = !$first_fetched || $session_opened == $first_fetched;
+
+    // Set the first_fetched_{server} the first time but then don't touch it.
+    if (!$first_fetched) {
+      $user_data->set('openy_gc_shared_content', $user->id(), 'first_fetched_' . $entity->id(), $session_opened);
+    }
+
+    // Set last_fetched_{server} each time we load the form.
     $user_data->set('openy_gc_shared_content', $user->id(), 'last_fetched_' . $entity->id(), $request_time);
 
     $form['label'] = [
@@ -233,8 +247,9 @@ class SharedContentFetchForm extends EntityForm {
           $donated_date_formatted = $this->dateFormatter->format($changed, 'short');
 
           // If the item is new then give the row the respective class.
-          $item_is_new = $changed > $last_fetched;
-          $row_classes[] = !$item_is_new ?: 'new-item';
+          $item_is_new = ($changed > $last_fetched) || $first_session;
+          // Add the class if the item is new AND it's not fetched yet.
+          $row_classes[] = $item_is_new && !$item_exists ? 'new-item' : [];
         }
 
         $form['fetched_data']['content']['#options'][$item['id']] = [
