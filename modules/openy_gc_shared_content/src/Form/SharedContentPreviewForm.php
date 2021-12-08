@@ -121,10 +121,7 @@ class SharedContentPreviewForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    // Fetch the item using the arguments passed in $form_state.
-    if ($form_state->getTriggeringElement()['#value']->__toString() !== 'Close') {
-      $this->fetchItem($form_state);
-    }
+    // Do nothing here. All actions are in ajaxSubmitForm.
   }
 
   /**
@@ -145,6 +142,7 @@ class SharedContentPreviewForm extends FormBase {
 
     if ($form_state->getTriggeringElement()['#value']->__toString() == 'Close') {
       $response->addCommand(new CloseModalDialogCommand());
+      // @todo It would be better to reload the parent form with ajax.
       $response
         ->addCommand(new RedirectCommand($this->requestStack->getCurrentRequest()->server->get('HTTP_REFERER')));
       return $response;
