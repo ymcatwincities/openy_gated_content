@@ -91,10 +91,14 @@ class PreviewController extends ControllerBase {
     $form = $this->formBuilder->getForm('Drupal\openy_gc_shared_content\Form\SharedContentPreviewForm', $content, $type, $uuid);
 
     // Open the modal with the content preview and the "fetch" form.
+    // Hide the regular close button to force users to use ours.
     $response->addCommand(new OpenModalDialogCommand(
       'Preview',
       [$content, $form],
-      ['width' => '900']
+      [
+        'width' => '900',
+        'classes' => ['ui-dialog-titlebar-close' => 'no-close'],
+      ]
     ));
     return $response;
   }

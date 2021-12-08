@@ -18,3 +18,7 @@
 #fetched-data tr.disabled {
   opacity: 0.76;
 }
+
+.ui-dialog .ui-dialog-titlebar-close.no-close {
+    display: none;
+}
