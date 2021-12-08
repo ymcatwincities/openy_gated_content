@@ -280,7 +280,6 @@ class SharedContentFetchForm extends EntityForm {
         }
 
         $form['fetched_data']['content']['#options'][$item['id']] = [
-          // @todo maybe we can highlight existing items here.
           '#disabled' => $item_exists,
           '#attributes' => [
             'class' => $row_classes,

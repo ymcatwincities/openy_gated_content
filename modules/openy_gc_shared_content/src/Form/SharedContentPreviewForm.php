@@ -14,15 +14,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Implements the ModalForm form controller.
+ * Implements the SharedContentPreviewForm form controller.
  *
- * This example demonstrates implementation of a form that is designed to be
- * used as a modal form.  To properly display the modal the link presented by
- * the \Drupal\form_api_example\Controller\Page page controller loads the Drupal
- * dialog and ajax libraries.  The submit handler in this class returns ajax
- * commands to replace text in the calling page after submission .
- *
- * @see \Drupal\Core\Form\FormBase
+ * @internal
  */
 class SharedContentPreviewForm extends FormBase {
 
