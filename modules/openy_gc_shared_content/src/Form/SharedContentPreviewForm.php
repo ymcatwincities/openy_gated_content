@@ -5,9 +5,11 @@ namespace Drupal\openy_gc_shared_content\Form;
 use Drupal\Component\Plugin\PluginManagerInterface;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\CloseModalDialogCommand;
-use Drupal\Core\Ajax\RedirectCommand;
+use Drupal\Core\Ajax\InvokeCommand;
+use Drupal\Core\Ajax\OpenModalDialogCommand;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element\StatusMessages;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -139,12 +141,12 @@ class SharedContentPreviewForm extends FormBase {
 
     // We begin building a new ajax response.
     $response = new AjaxResponse();
+    $uuid = $form_state->getBuildInfo()['args'][2];
 
     if ($form_state->getTriggeringElement()['#value']->__toString() == 'Close') {
+      // Close the modal and remove the new class if it exists.
       $response->addCommand(new CloseModalDialogCommand());
-      // @todo It would be better to reload the parent form with ajax.
-      $response
-        ->addCommand(new RedirectCommand($this->requestStack->getCurrentRequest()->server->get('HTTP_REFERER')));
+      $response->addCommand(new InvokeCommand("tr[data-uuid='$uuid']", 'removeClass', ['new-item']));
       return $response;
     }
     else {
@@ -157,10 +159,26 @@ class SharedContentPreviewForm extends FormBase {
       // Fetch the item using the arguments passed in $form_state.
       $this->fetchItem($form_state);
 
-      // Redirect to the parent page.
-      // @todo It would be better to reload the parent form with ajax.
-      $response
-        ->addCommand(new RedirectCommand($this->requestStack->getCurrentRequest()->server->get('HTTP_REFERER')));
+      // Render messages and update options to remove the `no-close` class.
+      $messages = StatusMessages::renderMessages();
+      $options = array_merge(static::getDataDialogOptions(), ['classes' => ['ui-dialog-titlebar-close' => '']]);
+
+      // Update the parent form.
+      $response->addCommand(new InvokeCommand(
+        "tr[data-uuid='$uuid']", 'addClass', ['disabled']));
+      $response->addCommand(new InvokeCommand(
+        "tr[data-uuid='$uuid']", 'removeClass', ['new-item']));
+      $response->addCommand(new InvokeCommand(
+        "tr[data-uuid='$uuid'] input[type=checkbox]",
+        'attr',
+        ['disabled', 'true']
+      ));
+      $response->addCommand(new InvokeCommand(
+        "tr[data-uuid='$uuid'] a.button", 'addClass', ['is-disabled']));
+      $response->addCommand(new InvokeCommand(
+        "tr[data-uuid='$uuid'] a.button", 'text', [$this->t('Added')]));
+      $response->addCommand(new OpenModalDialogCommand(
+        'Fetched', $messages, $options));
     }
 
     // Finally return our response.

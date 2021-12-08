@@ -284,6 +284,7 @@ class SharedContentFetchForm extends EntityForm {
           '#disabled' => $item_exists,
           '#attributes' => [
             'class' => $row_classes,
+            'data-uuid' => $item['id'],
           ],
           'name' => $instance->formatItem($item),
           'donated_date' => $donated_date_formatted,
