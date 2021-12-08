@@ -21,7 +21,7 @@ class VirtualYVideo extends SharedContentSourceTypeBase {
    */
   public function getTeaserJsonApiQueryArgs() {
     return [
-      'sort[sortByDate][path]' => 'changed',
+      'sort[sortByDate][path]' => 'created',
       'sort[sortByDate][direction]' => 'DESC',
       'filter[status]' => 1,
       'filter[field_gc_share]' => 1,

@@ -145,7 +145,7 @@ class SharedContentFetchForm extends EntityForm {
     $request_time = $this->time->getRequestTime();
 
     // Content is new when:
-    // 1) the changed date > last time user fetched on their last session.
+    // 1) the created date > last time user fetched on their last session.
     // 2) we're on our first session.
     // 3) it hasn't already been previewed this session.
     //
@@ -268,13 +268,13 @@ class SharedContentFetchForm extends EntityForm {
 
         $donated_date_formatted = '';
         $item_is_new = FALSE;
-        if (!empty($item['attributes']['changed'])) {
+        if (!empty($item['attributes']['created'])) {
           // Fetch the last modified date and format it.
-          $changed = strtotime($item['attributes']['changed']);
-          $donated_date_formatted = $this->dateFormatter->format($changed, 'short');
+          $created = strtotime($item['attributes']['created']);
+          $donated_date_formatted = $this->dateFormatter->format($created, 'short');
 
           // If the item is new then give the row the respective class.
-          $item_is_new = (($changed > $last_session) || $first_session) && !in_array($item['id'], $previewed);
+          $item_is_new = (($created > $last_session) || $first_session) && !in_array($item['id'], $previewed);
           // Add the class if the item is new AND it's not fetched yet.
           $row_classes[] = $item_is_new && !$item_exists ? 'new-item' : [];
         }
