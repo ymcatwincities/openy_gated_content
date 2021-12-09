@@ -80,8 +80,7 @@ class SharedContentPreviewForm extends FormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
 
-    // Add the core AJAX library.
-    $form['#attached']['library'][] = 'core/drupal.ajax';
+    
 
     // Group submit handlers in an actions element with a key of "actions" so
     // that it gets styled correctly, and so that other modules may add actions
