@@ -157,7 +157,7 @@ class SharedContentFetchForm extends EntityForm {
     $first_fetched = $user_data->get('openy_gc_shared_content', $user->id(), $entity->id() . '_first_fetched');
     $last_fetched = $user_data->get('openy_gc_shared_content', $user->id(), $entity->id() . '_last_fetched');
     $last_session = $user_data->get('openy_gc_shared_content', $user->id(), $entity->id() . '_last_session');
-    $previewed = $user_data->get('openy_gc_shared_content', $user->id(), $entity->id() . '_previewed');
+    $previewed = $user_data->get('openy_gc_shared_content', $user->id(), $entity->id() . '_previewed') ?: [];
 
     // There are two cases that could mean we're on our first session:
     // 1) first_fetch is not set, OR
