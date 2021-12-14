@@ -111,8 +111,10 @@ function openy_gated_content_update_8004() {
  * Remove field_link_to_gated_content_app completely.
  */
 function openy_gated_content_update_8005() {
-  FieldConfig::loadByName('paragraph', 'gated_content_login', 'field_link_to_gated_content_app')->delete();
-  FieldStorageConfig::loadByName('paragraph', 'field_link_to_gated_content_app')->delete();
+  FieldConfig::loadByName('paragraph', 'gated_content_login', 'field_link_to_gated_content_app')
+    ->delete();
+  FieldStorageConfig::loadByName('paragraph', 'field_link_to_gated_content_app')
+    ->delete();
 }
 
 /**
@@ -502,4 +504,23 @@ function openy_gated_content_update_8024() {
   $config_importer->importConfigs([
     'openy_gated_content.welcome_email_settings',
   ]);
+}
+
+/**
+ * Set Top Items Visibility Default Settings.
+ */
+function openy_gated_content_update_8025() {
+  $config_updater = \Drupal::service('openy_upgrade_tool.param_updater');
+  $config_dir = drupal_get_path('module', 'openy_gated_content') . '/config/install/';
+  $config_name = 'openy_gated_content.settings';
+  $config = $config_dir . $config_name . '.yml';
+  $config_updater->update($config, $config_name, 'menu_config');
+  $components = [
+    'schedule',
+    'favorites',
+    'categories',
+  ];
+  foreach ($components as $id) {
+    $config_updater->update($config, $config_name, "menu_config.$id");
+  }
 }
