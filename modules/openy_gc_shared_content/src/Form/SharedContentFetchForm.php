@@ -2,13 +2,18 @@
 
 namespace Drupal\openy_gc_shared_content\Form;
 
+use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Component\Plugin\PluginManagerInterface;
 use Drupal\Core\Batch\BatchBuilder;
+use Drupal\Core\Datetime\DateFormatter;
 use Drupal\Core\Entity\EntityForm;
+use Drupal\Core\Entity\EntityRepository;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Pager\PagerManagerInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Url;
+use Drupal\user\UserDataInterface;
+use Drupal\user\UserStorageInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -19,6 +24,20 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class SharedContentFetchForm extends EntityForm {
 
   const PAGE_LIMIT = 20;
+
+  /**
+   * The date formatter.
+   *
+   * @var \Drupal\Core\Datetime\DateFormatter
+   */
+  protected $dateFormatter;
+
+  /**
+   * The Entity Repository.
+   *
+   * @var \Drupal\Core\Entity\EntityRepository
+   */
+  protected $entityRepository;
 
   /**
    * The plugin manager for SharedContentSourceType classes.
@@ -42,12 +61,46 @@ class SharedContentFetchForm extends EntityForm {
   protected $batchBuilder;
 
   /**
+   * The user storage interface.
+   *
+   * @var \Drupal\user\UserStorageInterface
+   */
+  protected $userStorage;
+
+  /**
+   * The user data interface.
+   *
+   * @var \Drupal\user\UserDataInterface
+   */
+  protected $userData;
+
+  /**
+   * The time interface.
+   *
+   * @var \Drupal\Component\Datetime\TimeInterface
+   */
+  protected $time;
+
+  /**
    * {@inheritdoc}
    */
-  public function __construct(PluginManagerInterface $manager, PagerManagerInterface $pager_manager) {
+  public function __construct(
+      DateFormatter $date_formatter,
+      EntityRepository $entity_repository,
+      PluginManagerInterface $manager,
+      PagerManagerInterface $pager_manager,
+      UserStorageInterface $user_storage,
+      UserDataInterface $user_data,
+      TimeInterface $time
+    ) {
+    $this->dateFormatter = $date_formatter;
+    $this->entityRepository = $entity_repository;
     $this->sharedSourceTypeManager = $manager;
     $this->pagerManager = $pager_manager;
     $this->batchBuilder = new BatchBuilder();
+    $this->userStorage = $user_storage;
+    $this->userData = $user_data;
+    $this->time = $time;
   }
 
   /**
@@ -55,8 +108,13 @@ class SharedContentFetchForm extends EntityForm {
    */
   public static function create(ContainerInterface $container) {
     return new static(
+      $container->get('date.formatter'),
+      $container->get('entity.repository'),
       $container->get('plugin.manager.shared_content_source_type'),
-      $container->get('pager.manager')
+      $container->get('pager.manager'),
+      $container->get('entity_type.manager')->getStorage('user'),
+      $container->get('user.data'),
+      $container->get('datetime.time')
     );
   }
 
@@ -79,6 +137,55 @@ class SharedContentFetchForm extends EntityForm {
       ];
 
       return $form;
+    }
+
+    $user = $this->currentUser();
+    $user_data = $this->userData;
+    $session_opened = $this->userStorage->load($user->id())->getLastLoginTime();
+    $request_time = $this->time->getRequestTime();
+
+    // Content is new when:
+    // 1) the created date > last time user fetched on their last session.
+    // 2) we're on our first session.
+    // 3) it hasn't already been previewed this session.
+    //
+    // In order to understand this we have three stored values:
+    // - $first_fetched is set once and is used to validate the first session.
+    // - $last_fetched is reset on every fetch.
+    // - $last_session is reset on the first fetch of a new session and stores
+    // the previous value of $last_fetched.
+    $first_fetched = $user_data->get('openy_gc_shared_content', $user->id(), $entity->id() . '_first_fetched');
+    $last_fetched = $user_data->get('openy_gc_shared_content', $user->id(), $entity->id() . '_last_fetched');
+    $last_session = $user_data->get('openy_gc_shared_content', $user->id(), $entity->id() . '_last_session');
+    $previewed = $user_data->get('openy_gc_shared_content', $user->id(), $entity->id() . '_previewed') ?: [];
+
+    // There are two cases that could mean we're on our first session:
+    // 1) first_fetch is not set, OR
+    // 2) first_fetch is the same session we're currently in.
+    $first_session = !$first_fetched || $session_opened == $first_fetched;
+
+    // Set the first_fetched_{server} the first time but then don't touch it.
+    if (!$first_fetched) {
+      $user_data->set('openy_gc_shared_content', $user->id(), $entity->id() . '_first_fetched', $session_opened);
+    }
+
+    // Set last_fetched_{server} each time we load the form.
+    $user_data->set('openy_gc_shared_content', $user->id(), $entity->id() . '_last_fetched', $request_time);
+
+    // Update the last session if we're starting a new session.
+    // This will be what we check against the updated time later.
+    if ($session_opened > $last_fetched) {
+      // Need to do this to ensure we're not setting the value to NULL.
+      $new_last_session = $last_fetched ?: 0;
+      $user_data->set('openy_gc_shared_content', $user->id(), $entity->id() . '_last_session', $new_last_session);
+      $last_session = $last_fetched;
+
+      // Also reset the previewed array.
+      $user_data->delete('openy_gc_shared_content',
+        $user->id(),
+        $entity->id() . '_previewed'
+      );
+      $previewed = [];
     }
 
     $form['label'] = [
@@ -132,13 +239,20 @@ class SharedContentFetchForm extends EntityForm {
       ];
     }
     else {
+      // Duplicate the form actions into the action container in the header.
+      $form['fetched_data']['actions'] = parent::actions($form, $form_state);
+      unset($form['fetched_data']['actions']['delete']);
+      $form['fetched_data']['actions']['submit']['#value'] = $this->t('Fetch to my site');
+      $form['fetched_data']['actions']['submit']['#attributes']['class'][] = 'button--primary';
+
       $form['fetched_data']['content'] = [
         '#title' => $this->t('Select content to import'),
         '#type' => 'tableselect',
         '#header' => [
           'name' => $this->t('Name'),
-          'donated_by' => $this->t('Donated By'),
-          'count_of_downloads' => $this->t('YMCAS using content'),
+          'donated_date' => $this->t('Donated on'),
+          'donated_by' => $this->t('Donated by'),
+          'count_of_downloads' => $this->t('YMCAs using content'),
           'operations' => [
             'data' => $this->t('Operations'),
           ],
@@ -147,22 +261,45 @@ class SharedContentFetchForm extends EntityForm {
       ];
 
       foreach ($source_data['data'] as $item) {
+        $item_exists = $this->entityRepository->loadEntityByUuid('node', $item['id']) ? TRUE : FALSE;
+        $ops_classes = ['use-ajax', 'button'];
+        $ops_classes[] = !$item_exists ?: 'is-disabled';
+        $row_classes = [];
+
+        $donated_date_formatted = '';
+        $item_is_new = FALSE;
+        if (!empty($item['attributes']['created'])) {
+          // Fetch the last modified date and format it.
+          $created = strtotime($item['attributes']['created']);
+          $donated_date_formatted = $this->dateFormatter->format($created, 'short');
+
+          // If the item is new then give the row the respective class.
+          $item_is_new = (($created > $last_session) || $first_session) && !in_array($item['id'], $previewed);
+          // Add the class if the item is new AND it's not fetched yet.
+          $row_classes[] = $item_is_new && !$item_exists ? 'new-item' : [];
+        }
+
         $form['fetched_data']['content']['#options'][$item['id']] = [
-          // @todo maybe we can highlight existing items here.
+          '#disabled' => $item_exists,
+          '#attributes' => [
+            'class' => $row_classes,
+            'data-uuid' => $item['id'],
+          ],
           'name' => $instance->formatItem($item),
+          'donated_date' => $donated_date_formatted,
           'donated_by' => !empty($item['attributes']['field_gc_origin']) ? $item['attributes']['field_gc_origin'] : ' ',
           'count_of_downloads' => !empty($item['attributes']['field_share_count']) ? $item['attributes']['field_share_count'] : '0',
           'operations' => [
             'data' => [
               '#type' => 'link',
-              '#title' => $this->t('Preview'),
+              '#title' => $item_exists ? $this->t('Added') : $this->t('Preview'),
               '#url' => Url::fromRoute('entity.shared_content_source_server.preview', [
                 'shared_content_source_server' => $entity->id(),
                 'type' => $type,
                 'uuid' => $item['id'],
               ]),
               '#attributes' => [
-                'class' => ['use-ajax', 'button'],
+                'class' => $ops_classes,
               ],
             ],
           ],
