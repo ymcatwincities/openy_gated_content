@@ -32,7 +32,7 @@ display:
             administrator: administrator
             virtual_trainer: virtual_trainer
       cache:
-        type: tag
+        type: none
         options: {  }
       query:
         type: views_query
