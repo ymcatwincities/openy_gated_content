@@ -37,6 +37,7 @@
                 "TypeError: Argument 1 passed to Drupal\\jsonapi_image_styles\\EventSubscriber\\ConfigSubscriber::onResponse() must be an instance of Symfony\\Component\\HttpKernel\\Event\\ResponseEvent (3229545)": "https://git.drupalcode.org/project/jsonapi_image_styles/-/merge_requests/2/diffs.patch"
             },
             "drupal/core": {
+                "Enable disabling tableselect element options https://www.drupal.org/i/2895352": "https://www.drupal.org/files/issues/2019-12-03/2895352-42-8.8.x.patch",
                 "[PRODDEV-484] An error occurs after admin indexes the data https://dgo.to/3138528": "https://www.drupal.org/files/issues/2020-05-21/getentitiestoview_change_the_interface_of_the_first_argument_3138528_3.patch"
             },
             "drupal/blazy": {

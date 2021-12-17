@@ -423,9 +423,8 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
       $entity->set('field_gc_origin', $url);
       $entity->save();
 
-      $this->messenger()->addStatus($this->t('Entity {@type:@bundle} "@title" was fetched to site.', [
-        '@type' => $this->getEntityType(),
-        '@bundle' => $this->getEntityBundle(),
+      $this->messenger()->addStatus($this->t('The @label "@title" was fetched to the site.', [
+        '@label' => $this->getLabel(),
         '@title' => $entity->get('title')->value,
       ]));
       return TRUE;

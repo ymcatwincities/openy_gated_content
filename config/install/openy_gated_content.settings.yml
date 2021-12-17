@@ -70,3 +70,7 @@ top_menu:
   background_color_light: '#F2F2F2'
   links_color_dark: '#ffffff'
   background_color_dark: 'black'
+menu_config:
+  schedule: false
+  favorites: false
+  categories: false
