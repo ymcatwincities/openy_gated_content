@@ -1,3 +1,6 @@
+Do not merge PR, only review it and approve/request changes.
+Merge is allowed by QA Engineer only.
+
 **Related Issue/Ticket:**
 
 **PLEASE CHECK BASE BRANCH FOR YOUR PR**

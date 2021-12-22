@@ -150,6 +150,8 @@ class GCSettingsForm extends ConfigFormBase {
       ],
     ];
 
+    $this->menuVisibilitySettings($form, $config);
+
     $form['actions']['#type'] = 'actions';
     $form['actions']['submit'] = [
       '#type' => 'submit',
@@ -158,6 +160,39 @@ class GCSettingsForm extends ConfigFormBase {
     ];
 
     return $form;
+  }
+
+  /**
+   * Helper method to add menu configs.
+   *
+   * @param array $form
+   *   Array of the form configuration to attach the form elements to.
+   * @param \Drupal\Core\Config\Config $config
+   *   Virtual Y config object.
+   */
+  protected function menuVisibilitySettings(array &$form, Config $config) {
+    $form['app_settings']['menu_config'] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('Top Items Visibility Settings'),
+      'schedule' => [
+        '#title' => $this->t('Hide Schedule'),
+        '#description' => $this->t("If checked 'Schedule' menu item won't be visible."),
+        '#type' => 'checkbox',
+        '#default_value' => $config->get('menu_config.schedule') ?? FALSE,
+      ],
+      'favorites' => [
+        '#title' => $this->t('Hide Favorites'),
+        '#description' => $this->t("If checked 'Favorites' menu item won't be visible."),
+        '#type' => 'checkbox',
+        '#default_value' => $config->get('menu_config.favorites') ?? FALSE,
+      ],
+      'categories' => [
+        '#title' => $this->t('Hide Categories'),
+        '#description' => $this->t("If checked 'Categories' menu item won't be visible."),
+        '#type' => 'checkbox',
+        '#default_value' => $config->get('menu_config.categories') ?? FALSE,
+      ],
+    ];
   }
 
   /**

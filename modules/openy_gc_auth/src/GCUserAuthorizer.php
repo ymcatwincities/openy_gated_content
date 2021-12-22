@@ -3,6 +3,7 @@
 namespace Drupal\openy_gc_auth;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Password\PasswordGeneratorInterface;
 use Drupal\openy_gc_auth\Event\GCUserLoginEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -28,16 +29,26 @@ class GCUserAuthorizer {
   protected $eventDispatcher;
 
   /**
+   * The service for generating passwords.
+   *
+   * @var \Drupal\Core\Password\PasswordGeneratorInterface
+   */
+  protected $passwordGenerator;
+
+  /**
    * GCUserAuthorizer constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   Entity Type Manager.
    * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher
    *   Event dispatcher.
+   * @param \Drupal\Core\Password\PasswordGeneratorInterface $password_generator
+   *   Service for generating passwords.
    */
-  public function __construct(EntityTypeManagerInterface $entityTypeManager, EventDispatcherInterface $event_dispatcher) {
+  public function __construct(EntityTypeManagerInterface $entityTypeManager, EventDispatcherInterface $event_dispatcher, PasswordGeneratorInterface $password_generator) {
     $this->userStorage = $entityTypeManager->getStorage('user');
     $this->eventDispatcher = $event_dispatcher;
+    $this->passwordGenerator = $password_generator;
   }
 
   /**
@@ -58,7 +69,7 @@ class GCUserAuthorizer {
     // Create drupal user if it doesn't exist and login it.
     if (!$account) {
       $user = $this->userStorage->create();
-      $user->setPassword(user_password());
+      $user->setPassword($this->passwordGenerator->generate());
       $user->enforceIsNew();
       $user->setEmail($email);
       $user->setUsername($name);
@@ -73,14 +84,14 @@ class GCUserAuthorizer {
       // Activate user if it's not.
       if (!$account->isActive()) {
         $account->activate();
-        $account->setPassword(user_password());
+        $account->setPassword($this->passwordGenerator->generate());
         $account->save();
       }
     }
     // Instantiate GC login user event.
     $event = new GCUserLoginEvent($account, $extra_data);
     // Dispatch the event.
-    $this->eventDispatcher->dispatch(GCUserLoginEvent::EVENT_NAME, $event);
+    $this->eventDispatcher->dispatch($event, GCUserLoginEvent::EVENT_NAME);
 
     user_login_finalize($account);
   }
@@ -97,7 +108,7 @@ class GCUserAuthorizer {
 
     if (!$account) {
       $user = $this->userStorage->create();
-      $user->setPassword(user_password());
+      $user->setPassword($this->passwordGenerator->generate());
       $user->enforceIsNew();
       $user->setEmail($email);
       $user->setUsername($name);

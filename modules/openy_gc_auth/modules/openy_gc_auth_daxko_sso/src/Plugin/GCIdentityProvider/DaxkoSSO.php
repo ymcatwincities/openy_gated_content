@@ -29,20 +29,6 @@ class DaxkoSSO extends GCIdentityProviderPluginBase {
   use MessengerTrait;
 
   /**
-   * The configuration factory.
-   *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
-   */
-  protected $configFactory;
-
-  /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
    * Daxko Client service instance.
    *
    * @var \Drupal\daxko_sso\DaxkoSSOClient
@@ -55,13 +41,6 @@ class DaxkoSSO extends GCIdentityProviderPluginBase {
    * @var \Symfony\Component\HttpFoundation\Request|null
    */
   protected $request;
-
-  /**
-   * The form builder service.
-   *
-   * @var \Drupal\Core\Form\FormBuilderInterface
-   */
-  protected $formBuilder;
 
   /**
    * Daxko logger channel.
@@ -209,7 +188,7 @@ class DaxkoSSO extends GCIdentityProviderPluginBase {
    */
   public function getMemberNotificationEmail(int $uid): string {
     /** @var \Drupal\user\UserInterface $user */
-    $user = $this->entityTypeManager->getStorage('user')->load($uid);
+    $user = $this->userStorage->load($uid);
     $daxko_email = $user->getEmail();
 
     if (strpos($daxko_email, "daxko-") === FALSE) {

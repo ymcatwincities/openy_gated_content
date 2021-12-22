@@ -40,6 +40,7 @@ source:
       level: 4
       image: 0
       created: '-1 day'
+      duration_entity: 4
     -
       id: 2
       title: 'Senior Fitness Workout from Home!'
@@ -65,6 +66,7 @@ source:
       level: 2
       image: 0
       created: '-2 days'
+      duration_entity: 4
     -
       id: 3
       title: 'Bodyweight Bootcamp with Jen - Four by Five, it’s Good to be Alive!'
@@ -84,6 +86,7 @@ source:
       level: 3
       image: 0
       created: '-3 days'
+      duration_entity: 5
     -
       id: 4
       title: 'Strength Turkey Burner with Sarah at the Y!'
@@ -115,6 +118,7 @@ source:
       level: 3
       image: 0
       created: '-4 days'
+      duration_entity: 5
     -
       id: 5
       title: 'Bodyweight Bootcamp Workout to Burn off the Holiday Weight!'
@@ -136,6 +140,7 @@ source:
       level: 3
       image: 0
       created: '-5 days'
+      duration_entity: 4
     -
       id: 6
       title: 'Barre Fusion Class with Jennifer!'
@@ -153,6 +158,7 @@ source:
       level: 3
       image: 0
       created: '-6 days'
+      duration_entity: 3
     -
       id: 7
       title: 'Senior Fitness! A ForeverWell Combo Workout with Jennifer!'
@@ -175,6 +181,7 @@ source:
       level: 3
       image: 0
       created: '-7 days'
+      duration_entity: 4
     -
       id: 8
       title: 'Cardio Workout with Jennifer'
@@ -193,6 +200,7 @@ source:
       level: 3
       image: 0
       created: '-8 days'
+      duration_entity: 4
     -
       id: 9
       title: 'Yoga Flow on Gratitude'
@@ -224,6 +232,7 @@ source:
       level: 3
       image: 0
       created: '-9 days'
+      duration_entity: 4
     -
       id: 10
       title: 'Daily Meditation: Discomfort and the Necessity to Grow'
@@ -251,6 +260,7 @@ source:
       level: 3
       image: 0
       created: '-10 days'
+      duration_entity: 2
     -
       id: 11
       title: 'Daily Meditation with Chance - Show up with your "A" Game!'
@@ -281,6 +291,7 @@ source:
       level: 3
       image: 0
       created: '-11 days'
+      duration_entity: 2
     -
       id: 12
       title: 'Meditation with Chance York "You are Light"'
@@ -307,6 +318,7 @@ source:
       level: 2
       image: 0
       created: '-12 days'
+      duration_entity: 2
     -
       id: 13
       title: 'Yoga with Jen - "Creating Space for What You Need!"'
@@ -329,6 +341,7 @@ source:
       level: 3
       image: 0
       created: '-13 days'
+      duration_entity: 5
     -
       id: 14
       title: 'THE BEST Blueberry Banana Smoothie for a Healthy Day'
@@ -364,6 +377,7 @@ source:
       level: 1
       image: 0
       created: '-14 days'
+      duration_entity: 1
     -
       id: 15
       title: 'Joy Guided Meditation'
@@ -384,6 +398,7 @@ source:
       level: 2
       image: 0
       created: '-15 days'
+      duration_entity: 4
   ids:
     id:
       type: integer
@@ -472,6 +487,11 @@ process:
       plugin: callback
       callable: strtotime
       source: created
+  field_gc_duration_reference:
+    -
+      plugin: migration_lookup
+      migration: virtual_y_gc_duration
+      source: duration_entity
 destination:
   plugin: 'entity:node'
   default_bundle: gc_video

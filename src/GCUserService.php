@@ -2,16 +2,16 @@
 
 namespace Drupal\openy_gated_content;
 
-use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Mail\MailManagerInterface;
 
 /**
- * Class SegmentContentAccessCheck.
+ * Common service for GC related user stuff.
  *
  * @package Drupal\openy_gated_content
  */
-class GCUserService implements ContainerInjectionInterface {
+class GCUserService {
 
   use VirtualYAccessTrait;
 
@@ -23,22 +23,33 @@ class GCUserService implements ContainerInjectionInterface {
   protected $entityTypeManager;
 
   /**
+   * Mail manager service.
+   *
+   * @var \Drupal\Core\Mail\MailManagerInterface
+   */
+  protected $mailManager;
+
+  /**
+   * The language manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
    * GCUserService constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
+   * @param \Drupal\Core\Mail\MailManagerInterface $mail_manager
+   *   Mail manager service.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   The language manager.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, MailManagerInterface $mail_manager, LanguageManagerInterface $language_manager) {
     $this->entityTypeManager = $entity_type_manager;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('entity_type.manager')
-    );
+    $this->mailManager = $mail_manager;
+    $this->languageManager = $language_manager;
   }
 
   /**
@@ -52,6 +63,29 @@ class GCUserService implements ContainerInjectionInterface {
       }
     }
     return $roles;
+  }
+
+  /**
+   * Send welcome email.
+   *
+   * @param string $key
+   *   A key to identify the email sent.
+   * @param string $to
+   *   The email address or addresses where the message will be sent to.
+   * @param array $params
+   *   Parameters to build the email.
+   *
+   * @return array
+   *   The $message array structure containing all details of the message.
+   */
+  public function sendEmail(string $key, string $to, array $params = []): array {
+    return $this->mailManager->mail(
+      'openy_gated_content',
+      $key,
+      $to,
+      $this->languageManager->getDefaultLanguage()->getId(),
+      $params
+    );
   }
 
 }

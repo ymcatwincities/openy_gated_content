@@ -3,7 +3,7 @@
     "description": "Open Y Virtual Y Content",
     "type": "drupal-module",
     "require": {
-        "ymcatwincities/openy": "*",
+        "ymcatwincities/openy": "9.*",
         "drupal/recurring_events": "^2.0@beta",
         "ymcatwincities/daxko_sso": "*",
         "drupal/jsonapi_image_styles": "^2.0.0",
@@ -12,6 +12,7 @@
         "drupal/date_recur": "^2.0|^3.0",
         "drupal/date_recur_modular": "^2.0|^3.0",
         "drupal/state_machine": "^1.4",
+        "drupal/views_data_export": "^1.0",
         "ext-json": "*",
         "ext-zlib": "*"
     },
@@ -34,6 +35,13 @@
             "drupal/jsonapi_image_styles": {
                 "ParseError: syntax error, unexpected 'EntityTypeManagerInterface' (3229668)": "https://www.drupal.org/files/issues/2021-08-24/3229668-2.patch",
                 "TypeError: Argument 1 passed to Drupal\\jsonapi_image_styles\\EventSubscriber\\ConfigSubscriber::onResponse() must be an instance of Symfony\\Component\\HttpKernel\\Event\\ResponseEvent (3229545)": "https://git.drupalcode.org/project/jsonapi_image_styles/-/merge_requests/2/diffs.patch"
+            },
+            "drupal/core": {
+                "Enable disabling tableselect element options https://www.drupal.org/i/2895352": "https://www.drupal.org/files/issues/2019-12-03/2895352-42-8.8.x.patch",
+                "[PRODDEV-484] An error occurs after admin indexes the data https://dgo.to/3138528": "https://www.drupal.org/files/issues/2020-05-21/getentitiestoview_change_the_interface_of_the_first_argument_3138528_3.patch"
+            },
+            "drupal/blazy": {
+                "[PRODDEV-484] An error occurs after admin indexes the data https://dgo.to/3252140": "https://git.drupalcode.org/project/blazy/-/merge_requests/6.diff"
             }
         },
         "patches-ignore": {

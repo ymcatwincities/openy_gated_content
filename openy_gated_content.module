@@ -367,6 +367,21 @@ function openy_gated_content_user_pass_validation(array &$form, FormStateInterfa
 }
 
 /**
+ * Implements hook_mail().
+ */
+function openy_gated_content_mail($key, &$message, $params) {
+  switch ($key) {
+    case 'welcome_email':
+      $token = \Drupal::token();
+      $config = \Drupal::config('openy_gated_content.welcome_email_settings');
+      $message['from'] = \Drupal::config('system.site')->get('mail');
+      $message['subject'] = $token->replace($config->get('email_subject'), $params);
+      $message['body'][] = $token->replace($config->get('email_body'), $params);
+      break;
+  }
+}
+
+/**
  * Make sure the terms do not have 2nd level of hierarchy.
  */
 function openy_gated_content_taxonomy_term_gc_category_validation(array &$form, FormStateInterface $form_state) {

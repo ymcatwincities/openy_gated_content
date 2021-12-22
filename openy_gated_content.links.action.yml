@@ -1,0 +1,5 @@
+openy_gated_content.test_welcome_email:
+  route_name: openy_gated_content.test_welcome_email
+  title: 'Test welcome email'
+  appears_on:
+    - openy_gated_content.welcome_email_settings

@@ -12,6 +12,15 @@ use Drupal\openy_gc_personal_training\Entity\PersonalTraining;
 use Drupal\user\Entity\Role;
 
 /**
+ * Add permission to virtual trainer.
+ */
+function _openy_gc_personal_training_update_virtual_trainer() {
+  $role_object = Role::load('virtual_trainer');
+  $role_object->grantPermission('use text format full_html');
+  $role_object->save();
+}
+
+/**
  * Implements hook_install().
  */
 function openy_gc_personal_training_install() {
@@ -27,6 +36,7 @@ function openy_gc_personal_training_install() {
       $role->save();
     }
   }
+  _openy_gc_personal_training_update_virtual_trainer();
 }
 
 /**
@@ -238,6 +248,27 @@ function openy_gc_personal_training_update_8009() {
  * Import view config.
  */
 function openy_gc_personal_training_update_8010() {
+  $config_dir = drupal_get_path('module', 'openy_gc_personal_training');
+  $config_dir .= '/config/install/';
+  // Import new configuration.
+  $config_importer = \Drupal::service('openy_upgrade_tool.importer');
+  $config_importer->setDirectory($config_dir);
+  $config_importer->importConfigs([
+    'views.view.personal_trainings',
+  ]);
+}
+
+/**
+ * Allow Virtual trainer to use full html.
+ */
+function openy_gc_personal_training_update_8011() {
+  _openy_gc_personal_training_update_virtual_trainer();
+}
+
+/**
+ * Updated views with personal_trainings.
+ */
+function openy_gc_personal_training_update_8013() {
   $config_dir = drupal_get_path('module', 'openy_gc_personal_training');
   $config_dir .= '/config/install/';
   // Import new configuration.

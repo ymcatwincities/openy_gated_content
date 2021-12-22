@@ -23,7 +23,7 @@
           :color="fontColor"
         ></CloseIcon>
       </button>
-      <div @click="menuOpen=false">
+      <div @click="menuOpen=false" v-if="!hideMenuItem('schedule')">
         <router-link
           :to="{ name: 'Schedule' }"
           :style="fontStyleObject"
@@ -32,7 +32,7 @@
           <ScheduleIcon :color="fontColor"></ScheduleIcon>Schedule
         </router-link>
       </div>
-      <div @click="menuOpen=false">
+      <div @click="menuOpen=false" v-if="!hideMenuItem('favorites')">
         <router-link
           :to="{ name: 'Favorites' }"
           :style="fontStyleObject"
@@ -41,7 +41,7 @@
           <FavoritesIcon :color="fontColor"></FavoritesIcon>Favorites
         </router-link>
       </div>
-      <div @click="menuOpen=false">
+      <div @click="menuOpen=false" v-if="!hideMenuItem('categories')">
         <router-link
           :to="{ name: 'CategoryListing', params: { type: 'video' } }"
           :style="fontStyleObject"
@@ -118,6 +118,14 @@ export default {
           ? this.getAppSettings.top_menu.background_color_dark
           : this.getAppSettings.top_menu.background_color_light,
       };
+    },
+  },
+  methods: {
+    hideMenuItem(item) {
+      if (!this.getAppSettings || !this.getAppSettings.menu_config[item]) {
+        return false;
+      }
+      return this.getAppSettings.menu_config[item];
     },
   },
 };
