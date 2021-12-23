@@ -5,7 +5,6 @@ namespace Drupal\openy_gc_shared_content\Controller;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Datetime\DateFormatter;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\media\Plugin\media\Source\Image;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -69,7 +68,7 @@ class SharedContentController extends ControllerBase {
       $this->getData($type) + [
         'method' => 'GET',
         'status' => 200,
-    ]);
+      ]);
   }
 
   /**
@@ -84,19 +83,27 @@ class SharedContentController extends ControllerBase {
 
     $result = [];
     $included = [];
+    $meta = [];
+    $access_denied = FALSE;
 
     // Fetch all nodes of $type that are published and shared.
     $query = $node_storage->getQuery()
       ->condition('type', $type)
       ->condition('field_gc_share', 1)
       ->condition('status', 1)
-      ->sort('created', 'DESC');
+      ->sort('created', 'DESC')
+      ->accessCheck(TRUE);
     $nodes_ids = $query->execute();
 
     if ($nodes_ids) {
       foreach ($nodes_ids as $node_id) {
         /** @var Drupal\node\Entity\Node $node */
         $node = $node_storage->load($node_id);
+
+        if (!$node->access('view')) {
+          $access_denied = TRUE;
+          break;
+        }
 
         // Load each node then normalize it into a JSON-formatted array.
         $result[] = $serializer->normalize($node, 'json', ['plugin_id' => 'entity']);
@@ -140,7 +147,12 @@ class SharedContentController extends ControllerBase {
       }
 
     }
-    return ['data' => $result, 'included' => $included_loaded];
+
+    if ($access_denied) {
+      $meta = ['omitted' => ["detail" => $this->t("Some resources have been omitted because of insufficient authorization.")]];
+    }
+
+    return ['data' => $result, 'included' => $included_loaded, 'meta' => $meta];
   }
 
   /**
@@ -153,7 +165,8 @@ class SharedContentController extends ControllerBase {
    *   The access result.
    */
   public function access(AccountInterface $account) {
-    // Check the headers here and allow if headers cehck out
+    // Access checks are done when entities are loaded above,
+    // which calls Drupal\openy_gated_content\SegmentContentAccessCheck.
     return AccessResult::allowed();
   }
 
