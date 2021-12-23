@@ -4,8 +4,13 @@ namespace Drupal\openy_gc_shared_content\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Datetime\DateFormatter;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Access\AccessResult;
+use Drupal\media\Plugin\media\Source\Image;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\Serializer;
 
 /**
  * The SharedContentController class.
@@ -20,13 +25,23 @@ class SharedContentController extends ControllerBase {
   protected $dateFormatter;
 
   /**
+   * The serializer.
+   *
+   * @var \Symfony\Component\Serializer\Serializer
+   */
+  protected $serializer;
+
+  /**
    * SharedContentController constructor.
    *
    * @param \Drupal\Core\Datetime\DateFormatter $date_formatter
    *   The date formatter.
+   * @param \Symfony\Component\Serializer\Serializer $serializer
+   *   The serializer.
    */
-  public function __construct(DateFormatter $date_formatter) {
+  public function __construct(DateFormatter $date_formatter, Serializer $serializer) {
     $this->dateFormatter = $date_formatter;
+    $this->serializer = $serializer;
   }
 
   /**
@@ -34,7 +49,8 @@ class SharedContentController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('date.formatter')
+      $container->get('date.formatter'),
+      $container->get('serializer')
     );
   }
 
@@ -49,10 +65,10 @@ class SharedContentController extends ControllerBase {
       return new JsonResponse(['error' => ['code' => '400']], 400);
     }
 
-    return new JsonResponse([
-      'data' => $this->getData($type),
-      'method' => 'GET',
-      'status' => 200,
+    return new JsonResponse(
+      $this->getData($type) + [
+        'method' => 'GET',
+        'status' => 200,
     ]);
   }
 
@@ -64,64 +80,81 @@ class SharedContentController extends ControllerBase {
    */
   public function getData($type) {
     $node_storage = $this->entityTypeManager()->getStorage('node');
+    $serializer = $this->serializer;
 
     $result = [];
+    $included = [];
+
+    // Fetch all nodes of $type that are published and shared.
     $query = $node_storage->getQuery()
       ->condition('type', $type)
-      ->sort('nid', 'ASC');
+      ->condition('field_gc_share', 1)
+      ->condition('status', 1)
+      ->sort('created', 'DESC');
     $nodes_ids = $query->execute();
+
     if ($nodes_ids) {
       foreach ($nodes_ids as $node_id) {
         /** @var Drupal\node\Entity\Node $node */
         $node = $node_storage->load($node_id);
 
-        $attributes = [
-          "nid" => $node->id(),
-          "title" => $node->getTitle(),
-          "created" => $this->dateFormatter->format(
-            $node->getCreatedTime(),
-            'custom',
-            'c'
-          ),
-          "changed" => $this->dateFormatter->format(
-            $node->getChangedTime(),
-            'custom',
-            'c'
-          ),
-          "status" => $node->isPublished(),
-        ];
+        // Load each node then normalize it into a JSON-formatted array.
+        $result[] = $serializer->normalize($node, 'json', ['plugin_id' => 'entity']);
 
-        switch ($type) {
-          case "gc_video":
-            $result[] = $attributes + [
-              "field_gc_video_instructor" => $node->field_gc_video_instructor->value,
-              "field_gc_video_media_id" => $node->field_gc_video_media->entity ?
-                $node->field_gc_video_media->entity->uuid() : NULL,
-              "field_gc_video_description" => $node->field_gc_video_description->value,
-              "field_gc_video_duration" => $node->field_gc_video_duration->value,
-              "field_gc_video_image_id" => $node->field_gc_video_image->entity ?
-                $node->field_gc_video_image->entity->uuid() : NULL,
-              "field_gc_video_category_id" => $node->field_gc_video_category->entity ?
-                $node->field_gc_video_category->entity->uuid() : NULL,
-              "field_gc_video_equipment_id" => $node->field_gc_video_equipment->entity ?
-                $node->field_gc_video_equipment->entity->uuid() : NULL,
-              "field_gc_video_level_id" => $node->field_gc_video_level->entity ?
-                $node->field_gc_video_level->entity->uuid() : NULL,
-            ];
-            break;
-
-          case "vy_blog_post":
-            $result[] = $attributes + [
-              "field_vy_blog_description" => $node->field_vy_blog_description->value,
-              "field_vy_blog_image_id" => $node->field_vy_blog_image->entity ?
-                $node->field_vy_blog_image->entity->uuid() : NULL,
-            ];
-            break;
+        // Mimic JSON:API's 'include' section by recording any referenced items.
+        foreach (end($result) as $field => $values) {
+          if (strstr($field, 'field_')) {
+            foreach ($values as $value) {
+              if (isset($value['target_type']) && in_array($value['target_type'], ['taxonomy_term', 'media'])) {
+                // We don't need this back-reference.
+                unset($value['target_uuid']);
+                // Start building the array with field names as the key.
+                $included[$field][] = $value;
+              }
+            }
+          }
         }
-
       }
+
+      // Dedupe each set of included entities.
+      foreach ($included as $field => $values) {
+        $included[$field] = array_values(array_unique($values, SORT_REGULAR));
+      }
+
+      // Recurse through the references and load the actual entities.
+      $included_loaded = [];
+      foreach ($included as $field => $values) {
+        foreach ($values as $value) {
+          // Load the entity, then normalize it to an array.
+          $entity = $this->entityTypeManager()
+            ->getStorage($value['target_type'])->load($value['target_id']);
+          $included_loaded[$field][] = $serializer->normalize($entity, 'json');
+
+          // If this is a media entity, extract the file and load it too.
+          if (strstr($field, '_image') && $entity->getSource() instanceof Image) {
+            $fid = $entity->getSource()->getSourceFieldValue($entity);
+            $file = $this->entityTypeManager()->getStorage('file')->load($fid);
+            $included_loaded['file'][] = $serializer->normalize($file, 'json');
+          }
+        }
+      }
+
     }
-    return $result;
+    return ['data' => $result, 'included' => $included_loaded];
+  }
+
+  /**
+   * Checks access for a specific request.
+   *
+   * @param \Drupal\Core\Session\AccountInterface $account
+   *   Run access checks for this account.
+   *
+   * @return \Drupal\Core\Access\AccessResultInterface
+   *   The access result.
+   */
+  public function access(AccountInterface $account) {
+    // Check the headers here and allow if headers cehck out
+    return AccessResult::allowed();
   }
 
 }

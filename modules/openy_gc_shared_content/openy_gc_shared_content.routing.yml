@@ -72,7 +72,7 @@ shared_content_source.shared:
     _controller: '\Drupal\openy_gc_shared_content\Controller\SharedContentController::index'
     _title: 'Shared content'
   requirements:
-    _access: 'TRUE'
+    _custom_access: '\Drupal\openy_gc_shared_content\Controller\SharedContentController::access'
   options:
     parameters:
       type:
