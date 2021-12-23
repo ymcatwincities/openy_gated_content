@@ -2,10 +2,10 @@
 
 namespace Drupal\openy_gc_shared_content\Controller;
 
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Datetime\DateFormatter;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\Access\AccessResult;
 use Drupal\media\Plugin\media\Source\Image;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -112,7 +112,8 @@ class SharedContentController extends ControllerBase {
         foreach (end($result) as $field => $values) {
           if (strstr($field, 'field_')) {
             foreach ($values as $value) {
-              if (isset($value['target_type']) && in_array($value['target_type'], ['taxonomy_term', 'media'])) {
+              if (isset($value['target_type']) && in_array(
+                $value['target_type'], ['taxonomy_term', 'media'])) {
                 // We don't need this back-reference.
                 unset($value['target_uuid']);
                 // Start building the array with field names as the key.
