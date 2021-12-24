@@ -74,7 +74,7 @@ class SourceMigrationDeriver extends DeriverBase implements DeriverInterface, Co
     $sources = SharedContentSource::loadMultiple($ids);
     $urls = $tokens = [];
     foreach ($sources as $source) {
-      $urls[] = $source->getUrl();
+      $urls[$source->getUrl()] = $source->getApiUpdated();
       $tokens[$source->getUrl()] = $source->getToken();
     }
 
@@ -88,11 +88,15 @@ class SourceMigrationDeriver extends DeriverBase implements DeriverInterface, Co
     ];
 
     $jsonapi_uri = '/jsonapi/node/' . $base_plugin_definition['source']['entity_type'] . '?' . http_build_query($params);
+    $custom_uri = '/api/virtual-y/shared-content-source/' . $base_plugin_definition['source']['entity_type'];
 
-    foreach ($urls as $url) {
+    foreach ($urls as $url => $updated) {
 
       $url_long = $url . $jsonapi_uri;
-      $derivative = $this->getDerivativeValues($base_plugin_definition, $url_long, $url, $tokens[$url]);
+      if ($updated) {
+        $url_long = $url . $custom_uri;
+      }
+      $derivative = $this->getDerivativeValues($base_plugin_definition, $url_long, $url, $tokens[$url], $updated);
       $this->derivatives[$this->getKey($url)] = $derivative;
     }
 
@@ -110,12 +114,15 @@ class SourceMigrationDeriver extends DeriverBase implements DeriverInterface, Co
    *   Dynamic url for every Virtual Y content source.
    * @param string $token
    *   Server check token.
+   * @param bool $updated
+   *   If the server api is updated.
    *
    * @return array
    *   Updated plugin data.
    */
-  private function getDerivativeValues(array $base_plugin_definition, $url_long, $url, $token) {
+  private function getDerivativeValues(array $base_plugin_definition, $url_long, $url, $token, $updated) {
 
+    // @todo Add $updated logic here to modify the migrations.
     $base_plugin_definition['source']['urls'] = $url_long;
     $base_plugin_definition['source']['headers']['x-shared-referer'] = $this
       ->request

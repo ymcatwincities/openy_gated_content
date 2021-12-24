@@ -132,6 +132,13 @@ class SharedContentSource extends ContentEntityBase {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function getApiUpdated() {
+    return (bool) $this->get('api_updated')->value;
+  }
+
+  /**
    * {@inheritDoc}
    */
   public function isUpdated() {
@@ -151,6 +158,8 @@ class SharedContentSource extends ContentEntityBase {
     if ($status == '200') {
       return TRUE;
     }
+
+    return FALSE;
   }
 
   /**
