@@ -20,6 +20,7 @@ class SharedContentSourceListBuilder extends EntityListBuilder {
     $header['id'] = $this->t('Shared content source ID');
     $header['status'] = $this->t('Status');
     $header['sync_enabled'] = $this->t('Sync Enabled');
+    $header['api_updated'] = $this->t('API Version');
     $header['name'] = $this->t('Name');
     $header['url'] = $this->t('Url');
     return $header + parent::buildHeader();
@@ -55,6 +56,25 @@ class SharedContentSourceListBuilder extends EntityListBuilder {
     }
 
     $row['sync_enabled']['data'] = [
+      '#type' => 'inline_template',
+      '#template' => '<span style="color: ' . $color . ';">{{ content }}</span>',
+      '#context' => [
+        'content' => $text,
+      ],
+    ];
+
+    $color = '#ff0000';
+    $text = $this->t('Old');
+    if ($entity->api_updated->value == 1) {
+      $color = '#008000';
+      $text = $this->t('New');
+    }
+    if ($entity->api_updated->value == 0 && $entity->isUpdated()) {
+      $color = '#ffa500';
+      $text = $this->t('Updatable!');
+    }
+
+    $row['api_updated']['data'] = [
       '#type' => 'inline_template',
       '#template' => '<span style="color: ' . $color . ';">{{ content }}</span>',
       '#context' => [
