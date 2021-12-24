@@ -10,26 +10,34 @@
    */
   Drupal.behaviors.OpenyRoseAffixClassForPrimaryMenu = {
     attach: function (context, settings) {
-      var originalAddClassMethod    = jQuery.fn.addClass;
-      var originalRemoveClassMethod = jQuery.fn.removeClass;
+      let originalAddClassMethod    = jQuery.fn.addClass;
+      let originalRemoveClassMethod = jQuery.fn.removeClass;
+      let trackClassChange = $(".top-navs", context).attr('class')
+
       jQuery.fn.addClass            = function () {
-        var result = originalAddClassMethod.apply(this, arguments);
-        jQuery(this).trigger('classChanged');
+        let result = originalAddClassMethod.apply(this, arguments);
+        jQuery(this, context).trigger('classChanged');
         return result;
       }
       jQuery.fn.removeClass         = function () {
-        var result = originalRemoveClassMethod.apply(this, arguments);
-        jQuery(this).trigger('classChanged');
+        let result = originalRemoveClassMethod.apply(this, arguments);
+        jQuery(this, context).trigger('classChanged');
         return result;
       }
 
-      $(".top-navs.hidden-xs").on(
+      $(".top-navs", context).on(
         "classChanged", function () {
-          if ($('.top-navs.hidden-xs').hasClass('affix')
-            && !$('body').hasClass('primary-menu-minimize')) {
-            $('body').addClass('primary-menu-minimize');
-          } else if ($('body').hasClass('primary-menu-minimize')) {
-            $('body').removeClass('primary-menu-minimize');
+          let newClasses = $(this, context).attr('class')
+
+          // Process only if classes are different. Reduce a number of processing for admin user.
+          if (newClasses !== trackClassChange) {
+            if ($('.top-navs', context).hasClass('affix')
+              && !$('body', context).hasClass('primary-menu-minimize')) {
+              $('body', context).addClass('primary-menu-minimize');
+            } else if ($('body', context).hasClass('primary-menu-minimize')) {
+              $('body', context).removeClass('primary-menu-minimize');
+            }
+            trackClassChange = newClasses;
           }
         });
     }
