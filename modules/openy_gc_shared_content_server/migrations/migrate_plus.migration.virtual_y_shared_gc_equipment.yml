@@ -12,8 +12,8 @@ deriver: Drupal\openy_gc_shared_content_server\SourceMigrationDeriver
 label: 'GC Equipment'
 source:
   entity_type: gc_video
-  json_includes:
-    - field_gc_video_equipment
+  # json_includes:
+  #   - field_gc_video_equipment
   plugin: url
   data_fetcher_plugin: http
   # Specifies the JSON parser plugin.
@@ -28,14 +28,14 @@ source:
   urls: replace_me
   constants:
     DOMAIN: replace_me
-  item_selector: included/
+  item_selector: included/field_gc_video_equipment
   fields:
     - name: id
       label: 'id'
-      selector: /id
+      selector: /uuid/0/value
     - name: title
       label: 'title'
-      selector: /attributes/name
+      selector: /name/0/value
   ids:
     id:
       type: string

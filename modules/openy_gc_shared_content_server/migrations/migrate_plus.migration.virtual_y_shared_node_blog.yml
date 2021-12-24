@@ -28,25 +28,25 @@ source:
   fields:
     - name: nid
       label: 'nid'
-      selector: /attributes/drupal_internal__nid
+      selector: /nid/0/value
     - name: title
       label: 'Title'
-      selector: /attributes/title
+      selector: /title/0/value
     - name: created
       label: 'Created'
-      selector: /attributes/created
+      selector: /created/0/value
     - name: changed
       label: 'Changed'
-      selector: /attributes/changed
+      selector: /changed/0/value
     - name: status
       label: 'Status'
-      selector: /attributes/status
+      selector: /status/0/value
     - name: field_vy_blog_image_id
       label: 'Image'
-      selector: /relationships/field_vy_blog_image/data/id
+      selector: /field_vy_blog_image/0/target_uuid
     - name: field_vy_blog_description
       label: 'Blog description'
-      selector: /attributes/field_vy_blog_description/value
+      selector: /field_vy_blog_description/0/value
   ids:
     nid:
       type: integer

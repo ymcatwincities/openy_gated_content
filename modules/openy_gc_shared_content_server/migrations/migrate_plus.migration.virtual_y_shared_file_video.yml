@@ -8,8 +8,8 @@ label: 'Import Shared VirtualY files'
 migration_group: virtual_y_shared
 source:
   entity_type: gc_video
-  json_includes:
-    - field_gc_video_image.field_media_image
+  # json_includes:
+  #   - field_gc_video_image.field_media_image
   plugin: url
   data_fetcher_plugin: http
   # Specifies the JSON parser plugin.
@@ -22,32 +22,32 @@ source:
     x-shared-referer: SHARED_CONTENT_REFERRER_WEBSITE
     authorization: SHARED_CONTENT_CONNECTION_TOKEN
   urls: replace_me
-  item_selector: included/
+  item_selector: included/file
   fields:
     - name: id
       label: 'id'
-      selector: /id
-    - name: type
-      label: 'Include type'
-      selector: /type
+      selector: /uuid/0/value
+    # - name: type
+    #   label: 'Include type'
+    #   selector: /type
     - name: created
       label: 'Created'
-      selector: /attributes/created
+      selector: /created/0/value
     - name: changed
       label: 'Changed'
-      selector: /attributes/changed
+      selector: /changed/0/value
     - name: status
       label: 'Status'
-      selector: /attributes/status
+      selector: /status/0/value
     - name: filename
       label: 'FileName'
-      selector: /attributes/filename
+      selector: /filename/0/value
     - name: filemime
       label: 'FileMIME'
-      selector: /attributes/filemime
+      selector: /filemime/0/value
     - name: url
       label: 'File url'
-      selector: /attributes/uri/url
+      selector: /uri/0/url
   ids:
     id:
       type: string
@@ -55,11 +55,11 @@ source:
     DOMAIN: replace_me
     DRUPAL_FILE_DIRECTORY: 'public://virtual-y-shared-images/'
 process:
-  type:
-    plugin: skip_on_value
-    method: row
-    source: type
-    value: media--image
+  # type:
+  #   plugin: skip_on_value
+  #   method: row
+  #   source: type
+  #   value: media--image
   langcode:
     plugin: default_value
     source: language
