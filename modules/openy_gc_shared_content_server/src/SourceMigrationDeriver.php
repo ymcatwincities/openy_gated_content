@@ -203,6 +203,13 @@ class SourceMigrationDeriver extends DeriverBase implements DeriverInterface, Co
       $base_plugin_definition['migration_dependencies']['required'][] = $migration;
     }
 
+    // Rewrite fields for backwards-compatibility.
+    if (!$updated) {
+      if (isset($base_plugin_definition["source"]["fields"])) {
+        $base_plugin_definition = $this->rewriteFieldSelectors($base_plugin_definition);
+      }
+    }
+
     return $base_plugin_definition;
   }
 
@@ -233,6 +240,54 @@ class SourceMigrationDeriver extends DeriverBase implements DeriverInterface, Co
     $url_key = str_replace('https://', '', $url_key);
     $url_key = str_replace(['.', '-'], '_', $url_key);
     return $url_key;
+  }
+
+  /**
+   * Helper function to rewrite fields to old values.
+   *
+   * @param array $base_plugin_definition
+   *   Migration array.
+   *
+   * @return array
+   *   Updated plugin data.
+   */
+  private function rewriteFieldSelectors(array $base_plugin_definition) {
+    $selectors = [
+      '/attributes/changed' => '/changed/0/value',
+      '/attributes/created' => '/created/0/value',
+      '/attributes/drupal_internal__nid' => '/nid/0/value',
+      '/attributes/field_gc_video_description/value' => '/field_gc_video_description/0/value',
+      '/attributes/field_gc_video_duration' => '/field_gc_video_duration/0/value',
+      '/attributes/field_gc_video_instructor' => '/field_gc_video_instructor/0/value',
+      '/attributes/field_media_in_library' => '/field_media_in_library/0/value',
+      '/attributes/field_media_source' => '/field_media_source/0/value',
+      '/attributes/field_media_video_embed_field' => '/field_media_video_embed_field/0/value',
+      '/attributes/field_media_video_id' => '/field_media_video_id/0/value',
+      '/attributes/field_vy_blog_description/value' => '/field_vy_blog_description/0/value',
+      '/attributes/filemime' => '/filemime/0/value',
+      '/attributes/filename' => '/filename/0/value',
+      '/attributes/name' => '/name/0/value',
+      '/attributes/status' => '/status/0/value',
+      '/attributes/title' => '/title/0/value',
+      '/attributes/uri/url' => '/uri/0/url',
+      '/id' => '/uuid/0/value',
+      '/relationships/field_gc_video_category/data/id' => '/field_gc_video_category/0/target_uuid',
+      '/relationships/field_gc_video_equipment/data/id' => '/field_gc_video_equipment/0/target_uuid',
+      '/relationships/field_gc_video_image/data/id' => '/field_gc_video_image/0/target_uuid',
+      '/relationships/field_gc_video_level/data/id' => '/field_gc_video_level/0/target_uuid',
+      '/relationships/field_gc_video_media/data/id' => '/field_gc_video_media/0/target_uuid',
+      '/relationships/field_media_image/data/id' => '/field_media_image/0/target_uuid',
+      '/relationships/field_vy_blog_image/data/id' => '/field_vy_blog_image/0/target_uuid',
+    ];
+    $old_values = array_keys($selectors);
+    $new_values = array_values($selectors);
+
+    foreach ($base_plugin_definition["source"]["fields"] as $index => $field) {
+      $replacement = str_replace($new_values, $old_values, $field['selector']);
+      $base_plugin_definition["source"]["fields"][$index]['selector'] = $replacement;
+    }
+
+    return $base_plugin_definition;
   }
 
 }
