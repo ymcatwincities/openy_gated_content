@@ -287,6 +287,10 @@ class SourceMigrationDeriver extends DeriverBase implements DeriverInterface, Co
       $base_plugin_definition["source"]["fields"][$index]['selector'] = $replacement;
     }
 
+    if (strstr($base_plugin_definition["source"]["item_selector"], 'included/')) {
+      $base_plugin_definition["source"]["item_selector"] = 'included/';
+    }
+
     return $base_plugin_definition;
   }
 
