@@ -82,7 +82,7 @@ class SharedContentController extends ControllerBase {
     $serializer = $this->serializer;
 
     $result = [];
-    $included = [];
+    $included = $included_loaded = [];
     $meta = [];
     $access_denied = FALSE;
 
@@ -130,7 +130,6 @@ class SharedContentController extends ControllerBase {
       }
 
       // Recurse through the references and load the actual entities.
-      $included_loaded = [];
       foreach ($included as $field => $values) {
         foreach ($values as $value) {
           // Load the entity, then normalize it to an array.
