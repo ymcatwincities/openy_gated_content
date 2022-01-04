@@ -40,9 +40,10 @@ source:
     - name: status
       label: 'Status'
       selector: /status/0/value
-    # - name: type
-    #   label: 'Type'
-    #   selector: /type
+    # Retained for backwards-compatibility.
+    - name: type
+      label: 'Type'
+      selector: /type
     - name: field_media_in_library
       label: 'Media in library'
       selector: /field_media_in_library/0/value

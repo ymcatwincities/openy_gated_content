@@ -29,9 +29,10 @@ source:
     - name: id
       label: 'id'
       selector: /uuid/0/value
-    # - name: type
-    #   label: 'Include type'
-    #   selector: /type
+    # Retained for backwards-compatibility.
+    - name: type
+      label: 'Include type'
+      selector: /type
     - name: name
       label: 'Media Name'
       selector: /name/0/value
@@ -64,11 +65,12 @@ process:
     source: changed
     callable: strtotime
   name: name
-  # type:
-  #   plugin: skip_on_value
-  #   method: row
-  #   source: type
-  #   value: file--file
+  # Retained for backwards-compatibility.
+  type:
+    plugin: skip_on_value
+    method: row
+    source: type
+    value: file--file
   bundle:
     plugin: default_value
     default_value: image
