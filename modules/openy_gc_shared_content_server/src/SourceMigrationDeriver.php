@@ -78,24 +78,26 @@ class SourceMigrationDeriver extends DeriverBase implements DeriverInterface, Co
       $tokens[$source->getUrl()] = $source->getToken();
     }
 
-    $params = [
-      'include' => implode(',', $this->getRemoteRelationshipsList($base_plugin_definition)),
-      'sort[sortByDate][path]' => 'created',
-      'sort[sortByDate][direction]' => 'DESC',
-      'filter[status]' => 1,
-      'filter[field_gc_share]' => 1,
-      // Use 'XDEBUG_SESSION_START' => 'PHPSTORM' to test.
-    ];
-
-    $jsonapi_uri = '/jsonapi/node/' . $base_plugin_definition['source']['entity_type'] . '?' . http_build_query($params);
-    $custom_uri = '/api/virtual-y/shared-content-source/' . $base_plugin_definition['source']['entity_type'];
-
     foreach ($urls as $url => $updated) {
 
-      $url_long = $url . $jsonapi_uri;
-      if ($updated) {
-        $url_long = $url . $custom_uri;
+      // Set the path to the new API version which only takes the type arg.
+      $path = '/api/virtual-y/shared-content-source/' . $base_plugin_definition['source']['entity_type'];
+      // Reset the path using the old logic if it's not updated.
+      if (!$updated) {
+        $params = [
+          'include' => implode(',', $this->getRemoteRelationshipsList($base_plugin_definition)),
+          'sort[sortByDate][path]' => 'created',
+          'sort[sortByDate][direction]' => 'DESC',
+          'filter[status]' => 1,
+          'filter[field_gc_share]' => 1,
+          // Use 'XDEBUG_SESSION_START' => 'PHPSTORM' to test.
+        ];
+
+        $path = '/jsonapi/node/' . $base_plugin_definition['source']['entity_type'] . '?' . http_build_query($params);
       }
+
+      $url_long = $url . $path;
+
       $derivative = $this->getDerivativeValues($base_plugin_definition, $url_long, $url, $tokens[$url], $updated);
       $this->derivatives[$this->getKey($url)] = $derivative;
     }
@@ -205,9 +207,7 @@ class SourceMigrationDeriver extends DeriverBase implements DeriverInterface, Co
 
     // Rewrite fields for backwards-compatibility.
     if (!$updated) {
-      if (isset($base_plugin_definition["source"]["fields"])) {
-        $base_plugin_definition = $this->rewriteFieldSelectors($base_plugin_definition);
-      }
+      $base_plugin_definition = $this->revertToJsonApi($base_plugin_definition);
     }
 
     return $base_plugin_definition;
@@ -243,7 +243,7 @@ class SourceMigrationDeriver extends DeriverBase implements DeriverInterface, Co
   }
 
   /**
-   * Helper function to rewrite fields to old values.
+   * Helper function to rewrite migration to JSON:API values.
    *
    * @param array $base_plugin_definition
    *   Migration array.
@@ -251,7 +251,7 @@ class SourceMigrationDeriver extends DeriverBase implements DeriverInterface, Co
    * @return array
    *   Updated plugin data.
    */
-  private function rewriteFieldSelectors(array $base_plugin_definition) {
+  private function revertToJsonApi(array $base_plugin_definition) {
     $selectors = [
       '/attributes/changed' => '/changed/0/value',
       '/attributes/created' => '/created/0/value',
@@ -279,11 +279,11 @@ class SourceMigrationDeriver extends DeriverBase implements DeriverInterface, Co
       '/relationships/field_media_image/data/id' => '/field_media_image/0/target_uuid',
       '/relationships/field_vy_blog_image/data/id' => '/field_vy_blog_image/0/target_uuid',
     ];
-    $old_values = array_keys($selectors);
-    $new_values = array_values($selectors);
+    $old_selectors = array_keys($selectors);
+    $new_selectors = array_values($selectors);
 
     foreach ($base_plugin_definition["source"]["fields"] as $index => $field) {
-      $replacement = str_replace($new_values, $old_values, $field['selector']);
+      $replacement = str_replace($new_selectors, $old_selectors, $field['selector']);
       $base_plugin_definition["source"]["fields"][$index]['selector'] = $replacement;
     }
 

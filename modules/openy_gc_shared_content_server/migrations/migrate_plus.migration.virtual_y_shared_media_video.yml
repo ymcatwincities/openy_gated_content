@@ -8,8 +8,9 @@ label: Import Virtual Y videos
 deriver: Drupal\openy_gc_shared_content_server\SourceMigrationDeriver
 source:
   entity_type: gc_video
-  # json_includes:
-  #   - field_gc_video_media
+  # Retained for backwards-compatibility.
+  json_includes:
+    - field_gc_video_media
   plugin: url
   track_changes: true
   data_fetcher_plugin: http

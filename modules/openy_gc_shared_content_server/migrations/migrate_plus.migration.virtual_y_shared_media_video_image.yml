@@ -9,8 +9,9 @@ deriver: Drupal\openy_gc_shared_content_server\SourceMigrationDeriver
 label: Fetch Image
 source:
   entity_type: gc_video
-  # json_includes:
-  #   - field_gc_video_image.field_media_image
+  # Retained for backwards-compatibility.
+  json_includes:
+    - field_gc_video_image.field_media_image
   plugin: url
   data_fetcher_plugin: http
   # Specifies the JSON parser plugin.
