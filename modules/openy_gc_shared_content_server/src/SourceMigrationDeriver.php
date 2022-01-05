@@ -282,17 +282,17 @@ class SourceMigrationDeriver extends DeriverBase implements DeriverInterface, Co
     $old_selectors = array_keys($selectors);
     $new_selectors = array_values($selectors);
 
-    foreach ($base_plugin_definition["source"]["fields"] as $index => $field) {
+    foreach ($base_plugin_definition['source']['fields'] as $index => $field) {
       $replacement = str_replace($new_selectors, $old_selectors, $field['selector']);
-      $base_plugin_definition["source"]["fields"][$index]['selector'] = $replacement;
+      $base_plugin_definition['source']['fields'][$index]['selector'] = $replacement;
     }
 
-    if (strstr($base_plugin_definition["source"]["item_selector"], 'included/')) {
-      $base_plugin_definition["source"]["item_selector"] = 'included/';
+    if (strstr($base_plugin_definition['source']['item_selector'], 'included/')) {
+      $base_plugin_definition['source']['item_selector'] = 'included/';
     }
 
-    foreach ($base_plugin_definition["process"] as $name => $keys) {
-      if ($keys['plugin'] == 'sub_process') {
+    foreach ($base_plugin_definition['process'] as $name => $keys) {
+      if (isset($keys['plugin']) && $keys['plugin'] == 'sub_process') {
         $base_plugin_definition['process'][$name]['process']['target_id']['source'] = 'id';
       }
     }
