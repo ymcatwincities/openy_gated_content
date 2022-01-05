@@ -393,7 +393,7 @@ class SharedContentFetchForm extends EntityForm {
       ->setInitMessage($this->t('Initializing.'))
       ->setProgressMessage($this->t('Completed @current of @total.'))
       ->setErrorMessage($this->t('An error has occurred.'));
-    $this->batchBuilder->setFile(drupal_get_path('module', 'openy_gc_shared_content') . '/src/Form/SharedContentFetchForm.php');
+    $this->batchBuilder->setFile(\Drupal::service('extension.list.module')->getPath('openy_gc_shared_content') . '/src/Form/SharedContentFetchForm.php');
     foreach ($to_create as $uuid) {
       $this->batchBuilder->addOperation([$this, 'processItem'], [
         $this->entity->getUrl(),

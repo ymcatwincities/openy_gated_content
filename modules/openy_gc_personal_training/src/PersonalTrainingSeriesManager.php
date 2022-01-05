@@ -389,7 +389,7 @@ class PersonalTrainingSeriesManager implements PersonalTrainingSeriesManagerInte
         ->setProgressMessage($this->t('Completed @current of @total.'))
         ->setErrorMessage($this->t('An error has occurred.'))
         ->setProgressive(TRUE);
-      $this->batchBuilder->setFile(drupal_get_path('module', 'openy_gc_personal_training') . '/src/PersonalTrainingSeriesManager.php');
+      $this->batchBuilder->setFile(\Drupal::service('extension.list.module')->getPath('openy_gc_personal_training') . '/src/PersonalTrainingSeriesManager.php');
       foreach ($methods as $method) {
         $this->batchBuilder->addOperation([$this, $method], [$id]);
       }
