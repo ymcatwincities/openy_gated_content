@@ -185,14 +185,13 @@ class SourceMigrationDeriver extends DeriverBase implements DeriverInterface, Co
       $base_plugin_definition['migration_dependencies']['required'][] = $migration;
     }
 
-    if (!empty($base_plugin_definition['process']['field_gc_video_equipment'])) {
+    if (!empty($base_plugin_definition['process']['field_gc_video_equipment']['process']['target_id'])) {
       $migration = str_replace(
         'REPLACE_ME',
         $this->getKey($url),
-        $base_plugin_definition['process']['field_gc_video_equipment']['migration']
+        $base_plugin_definition['process']['field_gc_video_equipment']['process']['target_id']['migration']
       );
-      $base_plugin_definition['process']['field_gc_video_equipment']['migration'] = $migration;
-      $base_plugin_definition['migration_dependencies']['required'][] = $migration;
+      $base_plugin_definition['process']['field_gc_video_equipment']['process']['target_id']['migration'] = $migration;
     }
 
     if (!empty($base_plugin_definition['process']['field_gc_video_level'])) {
