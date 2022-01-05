@@ -272,6 +272,7 @@ class SourceMigrationDeriver extends DeriverBase implements DeriverInterface, Co
       '/id' => '/uuid/0/value',
       '/relationships/field_gc_video_category/data/id' => '/field_gc_video_category/0/target_uuid',
       '/relationships/field_gc_video_equipment/data/id' => '/field_gc_video_equipment/0/target_uuid',
+      '/relationships/field_gc_video_equipment/data' => '/field_gc_video_equipment',
       '/relationships/field_gc_video_image/data/id' => '/field_gc_video_image/0/target_uuid',
       '/relationships/field_gc_video_level/data/id' => '/field_gc_video_level/0/target_uuid',
       '/relationships/field_gc_video_media/data/id' => '/field_gc_video_media/0/target_uuid',
@@ -288,6 +289,12 @@ class SourceMigrationDeriver extends DeriverBase implements DeriverInterface, Co
 
     if (strstr($base_plugin_definition["source"]["item_selector"], 'included/')) {
       $base_plugin_definition["source"]["item_selector"] = 'included/';
+    }
+
+    foreach ($base_plugin_definition["process"] as $name => $keys) {
+      if ($keys['plugin'] == 'sub_process') {
+        $base_plugin_definition['process'][$name]['process']['target_id']['source'] = 'id';
+      }
     }
 
     return $base_plugin_definition;
