@@ -58,7 +58,7 @@ source:
       selector: /field_gc_video_image/0/target_uuid
     - name: field_gc_video_category_id
       label: 'Category'
-      selector: /field_gc_video_category/0/target_uuid
+      selector: /field_gc_video_category
     - name: field_gc_video_equipment_id
       label: 'Equipment'
       selector: /field_gc_video_equipment
@@ -105,9 +105,13 @@ process:
     migration: virtual_y_shared_media_video_image:REPLACE_ME
     source: field_gc_video_image_id
   field_gc_video_category:
-    plugin: migration_lookup
-    migration: virtual_y_shared_gc_category:REPLACE_ME
+    plugin: sub_process
     source: field_gc_video_category_id
+    process:
+      target_id:
+        plugin: migration_lookup
+        migration: virtual_y_shared_gc_category:REPLACE_ME
+        source: target_uuid
   field_gc_video_equipment:
     plugin: sub_process
     source: field_gc_video_equipment_id

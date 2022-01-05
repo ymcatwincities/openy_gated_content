@@ -175,13 +175,13 @@ class SourceMigrationDeriver extends DeriverBase implements DeriverInterface, Co
       $base_plugin_definition['migration_dependencies']['required'][] = $migration;
     }
 
-    if (!empty($base_plugin_definition['process']['field_gc_video_category'])) {
+    if (!empty($base_plugin_definition['process']['field_gc_video_category']['process']['target_id'])) {
       $migration = str_replace(
         'REPLACE_ME',
         $this->getKey($url),
-        $base_plugin_definition['process']['field_gc_video_category']['migration']
+        $base_plugin_definition['process']['field_gc_video_category']['process']['target_id']['migration']
       );
-      $base_plugin_definition['process']['field_gc_video_category']['migration'] = $migration;
+      $base_plugin_definition['process']['field_gc_video_category']['process']['target_id']['migration'] = $migration;
       $base_plugin_definition['migration_dependencies']['required'][] = $migration;
     }
 
@@ -192,6 +192,7 @@ class SourceMigrationDeriver extends DeriverBase implements DeriverInterface, Co
         $base_plugin_definition['process']['field_gc_video_equipment']['process']['target_id']['migration']
       );
       $base_plugin_definition['process']['field_gc_video_equipment']['process']['target_id']['migration'] = $migration;
+      $base_plugin_definition['migration_dependencies']['required'][] = $migration;
     }
 
     if (!empty($base_plugin_definition['process']['field_gc_video_level'])) {
@@ -270,8 +271,7 @@ class SourceMigrationDeriver extends DeriverBase implements DeriverInterface, Co
       '/attributes/title' => '/title/0/value',
       '/attributes/uri/url' => '/uri/0/url',
       '/id' => '/uuid/0/value',
-      '/relationships/field_gc_video_category/data/id' => '/field_gc_video_category/0/target_uuid',
-      '/relationships/field_gc_video_equipment/data/id' => '/field_gc_video_equipment/0/target_uuid',
+      '/relationships/field_gc_video_category/data' => '/field_gc_video_category',
       '/relationships/field_gc_video_equipment/data' => '/field_gc_video_equipment',
       '/relationships/field_gc_video_image/data/id' => '/field_gc_video_image/0/target_uuid',
       '/relationships/field_gc_video_level/data/id' => '/field_gc_video_level/0/target_uuid',
