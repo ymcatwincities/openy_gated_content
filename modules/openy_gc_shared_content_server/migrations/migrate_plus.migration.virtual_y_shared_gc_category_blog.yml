@@ -1,0 +1,57 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - openy_gc_shared_content_server
+id: virtual_y_shared_gc_category_blog
+migration_group: virtual_y_shared
+deriver: Drupal\openy_gc_shared_content_server\SourceMigrationDeriver
+label: 'GC Category (for Blogs)'
+source:
+  entity_type: vy_blog_post
+  # Retained for backwards-compatibility.
+  json_includes:
+    - field_gc_video_category
+  plugin: url
+  data_fetcher_plugin: http
+  # Specifies the JSON parser plugin.
+  data_parser_plugin: virtualy_json
+  track_changes: true
+  headers:
+    Accept: 'application/json; charset=utf-8'
+    Content-Type: 'application/json'
+    x-shared-content: 1
+    x-shared-referer: SHARED_CONTENT_REFERRER_WEBSITE
+    authorization: SHARED_CONTENT_CONNECTION_TOKEN
+  urls: replace_me
+  constants:
+    DOMAIN: replace_me
+  item_selector: included/field_gc_video_category
+  fields:
+    - name: id
+      label: 'id'
+      selector: /uuid/0/value
+    - name: title
+      label: 'title'
+      selector: /name/0/value
+  ids:
+    id:
+      type: string
+process:
+  langcode:
+    plugin: default_value
+    source: language
+    default_value: en
+  status:
+    plugin: default_value
+    default_value: 1
+  name: title
+  # @todo: This creates duplicate entries with video categories. Need process
+  # plugin to skip import if term already exists.
+destination:
+  plugin: entity:taxonomy_term
+  default_bundle: gc_category
+
+migration_dependencies:
+  optional: {  }
