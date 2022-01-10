@@ -93,13 +93,14 @@ class SharedContentController extends ControllerBase {
       ->condition('status', 1)
       ->sort('created', 'DESC')
       ->accessCheck(TRUE);
-    $nodes_ids = $query->execute();
+    $node_ids = $query->execute();
 
-    if ($nodes_ids) {
-      foreach ($nodes_ids as $node_id) {
-        /** @var Drupal\node\Entity\Node $node */
-        $node = $node_storage->load($node_id);
+    // Make sure nodes have been returned as loadMultiple will load all
+    // entities on a null parameter.
+    if (!empty($node_ids)) {
+      $nodes = $node_storage->loadMultiple($node_ids);
 
+      foreach ($nodes as $node) {
         if (!$node->access('view')) {
           $access_denied = TRUE;
           break;
@@ -145,7 +146,6 @@ class SharedContentController extends ControllerBase {
           }
         }
       }
-
     }
 
     if ($access_denied) {
