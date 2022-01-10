@@ -7,11 +7,11 @@ use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\DependencyInjection\DependencySerializationTrait;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 use Drupal\openy_gc_personal_training\Entity\PersonalTrainingInterface;
-use Drupal\Core\Extension\ModuleExtensionList;
 
 /**
  * Personal Trainings Series Manager.
@@ -53,7 +53,8 @@ class PersonalTrainingSeriesManager implements PersonalTrainingSeriesManagerInte
 
   /**
    * The module list.
-   *  @var \Drupal\Core\Extension\ModuleExtensionList
+   *
+   * @var \Drupal\Core\Extension\ModuleExtensionList
    */
   protected $moduleList;
 

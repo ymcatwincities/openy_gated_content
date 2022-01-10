@@ -8,6 +8,7 @@ use Drupal\Core\Batch\BatchBuilder;
 use Drupal\Core\Datetime\DateFormatter;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Entity\EntityRepository;
+use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Pager\PagerManagerInterface;
 use Drupal\Core\Render\Element;
@@ -15,7 +16,6 @@ use Drupal\Core\Url;
 use Drupal\user\UserDataInterface;
 use Drupal\user\UserStorageInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Extension\ModuleExtensionList;
 
 /**
  * Displays Shared Content Fetch UI.
@@ -84,7 +84,8 @@ class SharedContentFetchForm extends EntityForm {
 
   /**
    * The module list.
-   *  @var \Drupal\Core\Extension\ModuleExtensionList
+   *
+   * @var \Drupal\Core\Extension\ModuleExtensionList
    */
   protected $moduleList;
 
