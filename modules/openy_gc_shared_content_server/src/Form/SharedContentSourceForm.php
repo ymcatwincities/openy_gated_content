@@ -41,14 +41,14 @@ class SharedContentSourceForm extends ContentEntityForm {
     $entity = $this->entity;
 
     // If the source api is not updated, check to see if it's capable.
-    if (!empty($entity->getUrl()) && isset($form["api_updated"]) &&
-        $form["api_updated"]["widget"]["value"]["#default_value"] !== TRUE) {
+    if (!empty($entity->getUrl()) && isset($form['api_updated']) &&
+        $form['api_updated']['widget']['value']['#default_value'] !== TRUE) {
       $title = $form['api_updated']['widget']['#title']->__toString();
       $updated = $entity->isUpdated();
 
       // If the source isn't updated, don't allow the field to be modified.
       $status = new FormattableMarkup('<em class="color-warning">@status</em>', ['@status' => 'Nope.']);
-      $form["api_updated"]["#disabled"] = 'disabled';
+      $form['api_updated']['#disabled'] = 'disabled';
 
       // If it is updated, yay!
       if ($updated) {
@@ -56,7 +56,7 @@ class SharedContentSourceForm extends ContentEntityForm {
           '<em class="color-success">@status</em>',
           ['@status' => 'New API Available!']
         );
-        unset($form["api_updated"]["#disabled"]);
+        unset($form['api_updated']['#disabled']);
       }
       $form['api_updated']['widget']['value']['#title'] =
         $this->t('@title - @status', ['@title' => $title, '@status' => $status]);
