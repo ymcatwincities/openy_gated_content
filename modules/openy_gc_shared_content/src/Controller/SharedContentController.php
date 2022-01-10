@@ -149,7 +149,7 @@ class SharedContentController extends ControllerBase {
     }
 
     if ($access_denied) {
-      $meta = ['omitted' => ["detail" => $this->t("Some resources have been omitted because of insufficient authorization.")]];
+      $meta = ['omitted' => ['detail' => $this->t('Some resources have been omitted because of insufficient authorization.')]];
     }
 
     return ['data' => $result, 'included' => $included_loaded, 'meta' => $meta];
