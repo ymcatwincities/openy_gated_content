@@ -11,6 +11,7 @@ use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 use Drupal\openy_gc_personal_training\Entity\PersonalTrainingInterface;
+use Drupal\Core\Extension\ModuleExtensionList;
 
 /**
  * Personal Trainings Series Manager.
@@ -51,6 +52,12 @@ class PersonalTrainingSeriesManager implements PersonalTrainingSeriesManagerInte
   private $config;
 
   /**
+   * The module list.
+   *  @var \Drupal\Core\Extension\ModuleExtensionList
+   */
+  protected $moduleList;
+
+  /**
    * PersonalTrainingSeriesManager constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -59,16 +66,20 @@ class PersonalTrainingSeriesManager implements PersonalTrainingSeriesManagerInte
    *   The messenger.
    * @param \Drupal\Core\Config\ConfigFactory $configFactory
    *   ConfigFactory.
+   * @param \Drupal\Core\Extension\ModuleExtensionList $module_list
+   *   The module list.
    */
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
     MessengerInterface $messenger,
-    ConfigFactory $configFactory
+    ConfigFactory $configFactory,
+    ModuleExtensionList $module_list
   ) {
     $this->entityTypeManager = $entity_type_manager;
     $this->batchBuilder = new BatchBuilder();
     $this->messenger = $messenger;
     $this->config = $configFactory;
+    $this->moduleList = $module_list;
   }
 
   /**
@@ -389,7 +400,7 @@ class PersonalTrainingSeriesManager implements PersonalTrainingSeriesManagerInte
         ->setProgressMessage($this->t('Completed @current of @total.'))
         ->setErrorMessage($this->t('An error has occurred.'))
         ->setProgressive(TRUE);
-      $this->batchBuilder->setFile(\Drupal::service('extension.list.module')->getPath('openy_gc_personal_training') . '/src/PersonalTrainingSeriesManager.php');
+      $this->batchBuilder->setFile($this->moduleList->getPath('openy_gc_personal_training') . '/src/PersonalTrainingSeriesManager.php');
       foreach ($methods as $method) {
         $this->batchBuilder->addOperation([$this, $method], [$id]);
       }
