@@ -117,3 +117,10 @@ function openy_gc_shared_content_server_update_8003() {
 
   $definition_update_manager->installFieldStorageDefinition('api_updated', 'shared_content_source', 'shared_content_source', $status);
 }
+
+/**
+ * Enable big_pipe.
+ */
+function openy_gc_shared_content_server_update_8004() {
+  \Drupal::service('module_installer')->install(['big_pipe'], TRUE);
+}

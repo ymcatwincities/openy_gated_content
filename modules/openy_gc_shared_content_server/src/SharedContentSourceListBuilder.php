@@ -5,13 +5,22 @@ namespace Drupal\openy_gc_shared_content_server;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityListBuilder;
 use Drupal\Core\Link;
+use Drupal\Core\Security\TrustedCallbackInterface;
+use Drupal\Core\Render\Markup;
 
 /**
  * Defines a class to build a listing of Shared content source entities.
  *
  * @ingroup openy_gc_shared_content_server
  */
-class SharedContentSourceListBuilder extends EntityListBuilder {
+class SharedContentSourceListBuilder extends EntityListBuilder implements TrustedCallbackInterface {
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function trustedCallbacks() {
+    return ['isUpdated'];
+  }
 
   /**
    * {@inheritdoc}
@@ -63,23 +72,12 @@ class SharedContentSourceListBuilder extends EntityListBuilder {
       ],
     ];
 
-    $color = '#ff0000';
-    $text = $this->t('Old');
-    if ($entity->api_updated->value == 1) {
-      $color = '#008000';
-      $text = $this->t('New');
-    }
-    if ($entity->api_updated->value == 0 && $entity->isUpdated()) {
-      $color = '#ffa500';
-      $text = $this->t('Updatable!');
-    }
-
     $row['api_updated']['data'] = [
-      '#type' => 'inline_template',
-      '#template' => '<span style="color: ' . $color . ';">{{ content }}</span>',
-      '#context' => [
-        'content' => $text,
+      '#lazy_builder' => [
+        get_class() . '::isUpdated',
+        [$entity->getUrl(), $entity->api_updated->value],
       ],
+      '#create_placeholder' => TRUE,
     ];
 
     $row['name'] = Link::createFromRoute(
@@ -89,6 +87,49 @@ class SharedContentSourceListBuilder extends EntityListBuilder {
     );
     $row['url'] = $entity->getUrl();
     return $row + parent::buildRow($entity);
+  }
+
+  /**
+   * #lazy_builder callback; replaces placeholder with messages.
+   *
+   * @param string $url
+   *   The url to check
+   * @param bool $is_updated
+   *   If the source server has already been updated to the new version.
+   *
+   * @return array
+   *   A renderable array containing the messages.
+   */
+  public static function isUpdated($url, $is_updated) {
+    $response = [];
+
+    // Attempt to hit the new endpoint and get the status code.
+    // Without the proper headers it will still return 200, but no content.
+    $url .= '/api/virtual-y/shared-content-source/gc_video';
+
+    $color = '#ff0000';
+    $text = t('Old');
+    if ($is_updated == 1) {
+      $color = '#008000';
+      $text = t('New');
+    }
+    else {
+      $client = \Drupal::httpClient();
+      $status = $client->get($url, ['http_errors' => FALSE])->getStatusCode();
+
+      if ($status == '200') {
+        $color = '#ffa500';
+        $text = t('Updatable!');
+      }
+    }
+
+    $response = [
+      '#prefix' => Markup::create("<span style='color:$color;'>"),
+      '#markup' => $text,
+      '#suffix' => Markup::create('</span>'),
+    ];
+
+    return $response;
   }
 
 }
