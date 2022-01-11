@@ -5,8 +5,8 @@ namespace Drupal\openy_gc_shared_content_server;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityListBuilder;
 use Drupal\Core\Link;
-use Drupal\Core\Security\TrustedCallbackInterface;
 use Drupal\Core\Render\Markup;
+use Drupal\Core\Security\TrustedCallbackInterface;
 
 /**
  * Defines a class to build a listing of Shared content source entities.
@@ -90,10 +90,10 @@ class SharedContentSourceListBuilder extends EntityListBuilder implements Truste
   }
 
   /**
-   * #lazy_builder callback; replaces placeholder with messages.
+   * The #lazy_builder callback; replaces placeholder with messages.
    *
    * @param string $url
-   *   The url to check
+   *   The url to check.
    * @param bool $is_updated
    *   If the source server has already been updated to the new version.
    *
