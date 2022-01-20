@@ -1,0 +1,15 @@
+entity.personal_training.add_form:
+  route_name: entity.personal_training.add_form
+  title: 'Add 1on1 Meeting'
+  route_parameters:
+    personal_training_type: personal_training
+  appears_on:
+    - entity.personal_training.collection
+
+entity.personal_training.add_series_form:
+  route_name: entity.personal_training.add_form
+  title: 'Add 1on1 Meeting Series'
+  route_parameters:
+    personal_training_type: training_series
+  appears_on:
+    - entity.personal_training.collection

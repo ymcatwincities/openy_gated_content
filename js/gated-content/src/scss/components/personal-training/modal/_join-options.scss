@@ -1,0 +1,181 @@
+.personal-training-page {
+  .modal-join-options {
+    .modal-container {
+      background-color: $black;
+      color:            $white;
+
+      @include median(width, 72vw, null, 100vw);
+      @include median(max-height, 80vh, 100vh);
+
+      .modal-header, .modal-footer {
+        display: none;
+      }
+
+      .modal-body {
+        display:    grid;
+        margin:     0;
+        padding:    0;
+        overflow-y: initial;
+
+        @include median(grid-template-columns, 1fr 0.5fr, 1fr);
+
+        .header, .controls, .join {
+          @include median(grid-column, 2, 1);
+        }
+
+        .video {
+          background-image:    url('assets/img/join-options-video.png');
+          background-repeat:   no-repeat;
+          background-position: center;
+          background-size:     cover;
+          grid-column:         1;
+          position:            relative;
+
+          @include median(margin, 24px, 12px);
+          @include median(min-height, 307px, 100px);
+          @include median(grid-row, 1/span 3, 2);
+
+          video {
+            transform: scaleX(-1);
+            width:     100%;
+
+            @include median(height, 100%, initial);
+          }
+        }
+
+        .header {
+          display:     flex;
+          align-items: flex-start;
+          margin-top:  11px;
+          grid-row:    1;
+
+          @include median(margin-left, null, 12px);
+
+          button {
+            margin-left:      auto;
+            outline:          none;
+            border:           none;
+            background-color: transparent;
+            padding:          0 17px;
+            color:            $white;
+          }
+        }
+
+        .controls {
+          display:         flex;
+          align-items:     center;
+          justify-content: space-around;
+
+          .mic, .cam, .settings {
+            display:        flex;
+            flex-direction: column;
+            align-items:    center;
+            cursor:         pointer;
+
+            .svg-container {
+              border-radius:    50%;
+              background-color: $red;
+              padding:          13px;
+              font-size:        26px;
+            }
+
+            .switch-icon {
+              margin-left: 12px;
+              font-size:   52px;
+            }
+
+            > div {
+              display: flex;
+            }
+
+            > span {
+              padding-top: 6px;
+              font-size:   10px;
+            }
+
+            &.enabled {
+              .svg-container {
+                background-color: $camarone;
+              }
+            }
+          }
+
+          .settings {
+            .svg-container {
+              background-color: $black;
+            }
+          }
+        }
+
+        .join {
+          .error-message {
+            @include median(margin-top, 30px, 15px);
+          }
+
+          .indigo-button {
+            &.disabled {
+              border-color:     #636466;
+              background-color: #000000;
+              color:            #636466 !important;
+            }
+          }
+        }
+      }
+
+      @media (max-width: 823px) and (max-height: 500px) and (orientation: landscape) {
+        width:      100vw;
+        height:     100vh;
+        max-height: initial;
+
+        .modal-body {
+          grid-template-columns: 1fr 200px;
+
+          .header, .controls, .join {
+            grid-column: 2;
+          }
+
+          .video {
+            align-self:  center;
+            grid-column: 1;
+            grid-row:    1/span 3;
+          }
+        }
+      }
+
+      @media (max-width: 500px) and (max-height: 823px) and (orientation: portrait) {
+        .modal-body {
+          .video {
+            video {
+              height: 50vh;
+            }
+          }
+        }
+      }
+    }
+
+    @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 1),
+    only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2),
+    only screen and (min-device-width: 834px) and (max-device-width: 834px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2),
+    only screen and (min-device-width: 1024px) and (max-device-width: 1024px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
+      .modal-body {
+        grid-template-columns: 1fr 1fr;
+
+        .header {
+          grid-column: 1/span2;
+        }
+
+        .controls, .join {
+          grid-column: 2;
+        }
+
+        .video {
+          grid-row: 2/span 2;
+
+          video {
+            max-height: 500px;
+          }
+        }
+      }
+    }
+  }
+}

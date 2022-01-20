@@ -9,6 +9,7 @@
         <div class="video gated-containerV2 px--20-10 pt-40-20">
           <MediaPlayer
             :media="video.attributes.field_gc_video_media"
+            :autoplay="!!config.components.gc_video.autoplay_videos"
             @playerEvent="logPlaybackEvent($event)"
           />
         </div>
@@ -34,12 +35,19 @@
               {{ date }}
             </div>
             <div
-              v-if="video.attributes.field_gc_video_instructor"
+              v-if="video.attributes.field_gc_instructor_reference.length > 0"
               class="video-footer__block">
               <SvgIcon icon="instructor-icon"
                        class="fill-white"
                        :growByHeight=false></SvgIcon>
-              {{ video.attributes.field_gc_video_instructor }}
+              <ul>
+                <li v-for="instructor in video.attributes.field_gc_instructor_reference"
+                    :key="instructor.drupal_internal__tid">
+                  <router-link :to="{ name: 'Instructor', params: { id: instructor.uuid }}">
+                    {{ instructor.name }}
+                  </router-link>
+                </li>
+              </ul>
             </div>
             <div
               class="video-footer__block"
@@ -48,25 +56,19 @@
               <SvgIcon icon="difficulty-icon-white" :css-fill="false"></SvgIcon>
               {{ video.attributes.field_gc_video_level.name | capitalize }}
             </div>
-            <div
-              v-if="video.attributes.field_gc_video_category &&
-              video.attributes.field_gc_video_category.length > 0"
-              class="video-footer__block video-footer__category">
+            <div v-if="videoCategories" class="video-footer__block video-footer__category">
               <SvgIcon icon="categories"
                        class="fill-white"
                        :growByHeight=false></SvgIcon>
-              <span v-for="(category, index) in video.attributes.field_gc_video_category"
-                    :key="category.drupal_internal__tid">
-                <router-link :to="{
-                  name: 'Category',
-                  params: {
-                    cid: video.relationships.field_gc_video_category.data[index].id,
-                    type: 'video'
-                  }
-                }">
-                  {{ category.name }}
-                </router-link>
-              </span>
+              <ul>
+                <li
+                  v-for="tid in videoCategories"
+                  class="video-footer__category-list-item"
+                  :key="tid"
+                >
+                  <CategoryLinks :tid="tid" />
+                </li>
+              </ul>
             </div>
             <div
               v-if="video.attributes.field_gc_video_equipment.length > 0"
@@ -89,10 +91,10 @@
         </div>
       </div>
       <VideoListing
-        v-if="firstCategory"
+        v-if="videoCategories"
         :title="config.components.gc_video.up_next_title"
         :excluded-video-id="video.id"
-        :category="firstCategory"
+        :categories="videoCategories"
         :viewAll="true"
         :limit="8"
       />
@@ -101,6 +103,7 @@
 </template>
 
 <script>
+import dayjs from 'dayjs';
 import client from '@/client';
 import AddToFavorite from '@/components/AddToFavorite.vue';
 import Spinner from '@/components/Spinner.vue';
@@ -109,7 +112,7 @@ import MediaPlayer from '@/components/MediaPlayer.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
 import { SettingsMixin } from '@/mixins/SettingsMixin';
 import SvgIcon from '@/components/SvgIcon.vue';
-import dayjs from 'dayjs';
+import CategoryLinks from '@/components/category/CategoryLinks.vue';
 
 export default {
   name: 'VideoPage',
@@ -120,6 +123,7 @@ export default {
     VideoListing,
     Spinner,
     AddToFavorite,
+    CategoryLinks,
   },
   props: {
     id: {
@@ -138,6 +142,7 @@ export default {
         'field_gc_video_media',
         'field_gc_video_equipment',
         'field_gc_video_level',
+        'field_gc_instructor_reference',
       ],
     };
   },
@@ -148,17 +153,15 @@ export default {
     await this.load();
   },
   computed: {
-    firstCategory() {
-      if (
-        !this.video.relationships.field_gc_video_category.data
-        || this.video.relationships.field_gc_video_category.data.length === 0
-      ) {
+    videoCategories() {
+      const fieldValues = this.video.attributes.field_gc_video_category;
+      if (!fieldValues || fieldValues.length === 0) {
         return null;
       }
-      return this.video.relationships.field_gc_video_category.data[0].id;
+      return fieldValues.map((category) => category.drupal_internal__tid);
     },
     date() {
-      return dayjs(this.video.attributes.created).format('dddd, MMMM Do, YYYY');
+      return this.$dayjs.date(this.video.attributes.created).format('dddd, MMMM Do, YYYY');
     },
     video_length() {
       const sec = this.video.attributes.field_gc_video_duration;

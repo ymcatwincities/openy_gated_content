@@ -9,9 +9,10 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\openy_gated_content\GCUserService;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Defines the base plugin for GCIdentityProvider classes.
@@ -33,11 +34,11 @@ abstract class GCIdentityProviderPluginBase extends PluginBase implements GCIden
   protected $configFactory;
 
   /**
-   * The entity type manager.
+   * The user storage.
    *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   * @var \Drupal\user\UserStorageInterface
    */
-  protected $entityTypeManager;
+  protected $userStorage;
 
   /**
    * The form builder service.
@@ -62,7 +63,7 @@ abstract class GCIdentityProviderPluginBase extends PluginBase implements GCIden
     // We use pre-saved configuration here.
     $configuration = $this->configFactory->get($this->getConfigName())->get();
     $this->setConfiguration($configuration);
-    $this->entityTypeManager = $entity_type_manager;
+    $this->userStorage = $entity_type_manager->getStorage('user');
     $this->formBuilder = $form_builder;
     $this->gcUserService = $gc_user_service;
   }
@@ -165,6 +166,33 @@ abstract class GCIdentityProviderPluginBase extends PluginBase implements GCIden
       $configuration->setData($this->configuration);
       $configuration->save();
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getMemberNotificationEmail(int $uid): string {
+    // Basic implementation of this method returns just drupal user email.
+    // Override this method in case your provider store fake emails on
+    // the Drupal side.
+    /** @var \Drupal\Core\Session\AccountInterface $user */
+    $user = $this->userStorage->load($uid);
+    return $user ? $user->getEmail() : '';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function sendWelcomeEmail(AccountInterface $user) {
+    $to = $this->getMemberNotificationEmail($user->id());
+    if (empty($to)) {
+      return;
+    }
+    $this->gcUserService->sendEmail(
+      'welcome_email',
+      $to,
+      ['user' => $user]
+    );
   }
 
 }

@@ -2,21 +2,23 @@
   <div class="gated-containerV2 px--20-10">
     <div class="listing-header">
       <h2 class="title text-gray" v-if="title !== 'none'">{{ title }}</h2>
-      <router-link
-        :to="{ name: 'BlogsListing', query: { type: category } }"
-        v-if="viewAll && listingIsNotEmpty"
-        class="view-all"
-      >
-        More
-      </router-link>
-      <slot name="filterButton"></slot>
+      <template v-if="hasMoreItems">
+        <router-link
+          :to="{ name: 'BlogsListing', query: { type: categories ? categories[0] : 'all' } }"
+          v-if="viewAll && listingIsNotEmpty"
+          class="view-all"
+        >
+          More
+        </router-link>
+        <slot name="filterButton"></slot>
+      </template>
     </div>
     <div v-if="loading" class="text-center">
       <Spinner></Spinner>
     </div>
     <template v-else-if="listingIsNotEmpty">
       <div v-if="error">Error loading</div>
-      <div v-else class="four-columns">
+      <div v-else :class="layoutClass">
         <BlogTeaser
           v-for="blog in listing"
           :key="blog.id"
@@ -25,7 +27,7 @@
       </div>
     </template>
     <div v-else class="empty-listing">
-      Blog posts not found.
+      {{ emptyBlockMsg }}
     </div>
     <Pagination
       v-if="pagination"
@@ -35,17 +37,18 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import client from '@/client';
 import BlogTeaser from '@/components/blog/BlogTeaser.vue';
 import Spinner from '@/components/Spinner.vue';
 import Pagination from '@/components/Pagination.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
-import { SettingsMixin } from '@/mixins/SettingsMixin';
 import { FavoritesMixin } from '@/mixins/FavoritesMixin';
+import { ListingMixin } from '@/mixins/ListingMixin';
 
 export default {
   name: 'BlogListing',
-  mixins: [JsonApiCombineMixin, SettingsMixin, FavoritesMixin],
+  mixins: [JsonApiCombineMixin, FavoritesMixin, ListingMixin],
   components: {
     BlogTeaser,
     Spinner,
@@ -54,16 +57,15 @@ export default {
   props: {
     title: {
       type: String,
-      default: 'Blog posts',
+      default: 'Blog Posts',
     },
     excludedId: {
       type: String,
       default: '',
     },
-    msg: String,
-    viewAll: {
-      type: Boolean,
-      default: false,
+    msg: {
+      type: String,
+      default: 'No blog posts found.',
     },
     featured: {
       type: Boolean,
@@ -75,26 +77,16 @@ export default {
         return { path: 'created', direction: 'DESC' };
       },
     },
-    pagination: {
-      type: Boolean,
-      default: false,
-    },
-    limit: {
-      type: Number,
-      default: 0,
-    },
-    category: {
-      type: String,
-      default: '',
+    categories: {
+      type: Array,
+      default: null,
     },
   },
   data() {
     return {
+      component: 'vy_blog_post',
       loading: true,
       error: false,
-      listing: [],
-      links: {},
-      featuredLocal: false,
       params: [
         'field_vy_blog_image',
         'field_vy_blog_image.field_media_image',
@@ -105,17 +97,21 @@ export default {
     $route: 'load',
     excludedVideoId: 'load',
     sort: 'load',
+    isCategoriesLoaded() {
+      if (this.categories !== null) {
+        this.load();
+      }
+    },
+  },
+  computed: {
+    ...mapGetters([
+      'isCategoriesLoaded',
+    ]),
   },
   async mounted() {
     // By default emit that listing not empty to the parent component.
     this.$emit('listing-not-empty', true);
-    this.featuredLocal = this.featured;
     await this.load();
-  },
-  computed: {
-    listingIsNotEmpty() {
-      return this.listing !== null && this.listing.length > 0;
-    },
   },
   methods: {
     async load() {
@@ -125,9 +121,10 @@ export default {
         params.include = this.params.join(',');
       }
 
-      params.sort = {
-        sortBy: this.sort,
-      };
+      params.sort = this.featured
+        ? { featured: { path: 'field_gc_video_featured', direction: 'DESC' } }
+        : {};
+      params.sort.sortBy = this.sort;
 
       params.filter = {};
       if (this.excludedId.length > 0) {
@@ -154,25 +151,30 @@ export default {
         };
       }
 
-      if (this.category) {
-        params.filter['field_gc_video_category.id'] = this.category;
-      }
-      if (this.featuredLocal) {
-        params.filter.field_gc_video_featured = 1;
-      }
       params.filter.status = 1;
-      if (this.pagination) {
-        const currentPage = parseInt(this.$route.query.page, 10) || 0;
-        params.page = {
-          limit: this.config.pager_limit,
-          offset: currentPage * this.config.pager_limit,
-        };
-      } else if (this.limit !== 0) {
-        params.page = {
-          limit: this.limit,
+
+      params.page = this.getPageParam;
+
+      if (this.categories !== null) {
+        if (!this.isCategoriesLoaded) {
+          return;
+        }
+        const termsIds = [];
+        this.categories.forEach((tid) => {
+          const subcategories = this.$store.getters.getSubcategories(tid);
+          termsIds.push(tid, ...this.$store.getters.getNestedTids(subcategories));
+        });
+        params.filter.in = {
+          condition: {
+            path: 'field_gc_video_category.entity.tid',
+            operator: 'IN',
+            value: termsIds,
+          },
         };
       }
-
+      this.loadFromJsonApi(params);
+    },
+    loadFromJsonApi(params) {
       client
         .get('jsonapi/node/vy_blog_post', { params })
         .then((response) => {
@@ -182,12 +184,7 @@ export default {
             response.data.included,
             this.params,
           );
-          if (this.featuredLocal === true && this.listing.length === 0) {
-            // Load one more time without featured filter.
-            this.featuredLocal = false;
-            this.load();
-          }
-          if (this.listing === null || this.listing.length === 0) {
+          if (!this.listingIsNotEmpty) {
             // Emit that listing empty to the parent component.
             this.$emit('listing-not-empty', false);
           }

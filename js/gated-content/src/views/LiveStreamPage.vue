@@ -9,6 +9,7 @@
         <div class="video gated-containerV2 px--20-10 pt-40-20">
           <MediaPlayer
             :media="media"
+            :autoplay="!!config.components.live_stream.autoplay_videos"
             @playerEvent="logPlaybackEvent($event)"
           />
         </div>
@@ -42,9 +43,15 @@
               <SvgIcon icon="clock-regular" class="fill-gray" :growByHeight=false></SvgIcon>
               {{ time }} ({{ duration }})
             </div>
-            <div class="video-footer__block" v-if="instructor">
+            <div class="video-footer__block" v-if="instructors && instructors.length > 0">
               <SvgIcon icon="instructor-icon" class="fill-gray" :growByHeight=false></SvgIcon>
-              {{ instructor }}
+              <ul>
+                <li v-for="instructor in instructors" :key="instructor.drupal_internal__tid">
+                  <router-link :to="{ name: 'Instructor', params: { id: instructor.uuid }}">
+                    {{ instructor.name }}
+                  </router-link>
+                </li>
+              </ul>
             </div>
             <div
               class="video-footer__block"
@@ -56,8 +63,15 @@
             <div class="video-footer__block video-footer__category"
                  v-if="category && category.length > 0">
               <SvgIcon icon="categories" class="fill-gray" :growByHeight=false></SvgIcon>
-              <span v-for="(category_data, index) in category"
-                    :key="index">{{ category_data.name }}</span>
+              <ul>
+                <li
+                  v-for="tid in category.map(item => item.drupal_internal__tid)"
+                  class="video-footer__category-list-item"
+                  :key="tid"
+                >
+                  <CategoryLinks :tid="tid" />
+                </li>
+              </ul>
             </div>
             <div
               v-if="video.attributes.equipment.length > 0"
@@ -77,7 +91,6 @@
             class="verdana-16-14"
             v-html="descriptionProcessed"
           ></div>
-
         </div>
       </div>
       <EventListing
@@ -85,7 +98,6 @@
         :excluded-video-id="video.id"
         :viewAll="true"
         :limit="8"
-        :msg="'Live streams not found.'"
       />
     </template>
   </div>
@@ -98,13 +110,15 @@ import Spinner from '@/components/Spinner.vue';
 import MediaPlayer from '@/components/MediaPlayer.vue';
 import EventListing from '@/components/event/EventListing.vue';
 import AddToCalendar from '@/components/event/AddToCalendar.vue';
+import CategoryLinks from '@/components/category/CategoryLinks.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
 import { EventMixin } from '@/mixins/EventMixin';
+import { SeriesEventMixin } from '@/mixins/SeriesEventMixin';
 import SvgIcon from '@/components/SvgIcon.vue';
 
 export default {
   name: 'LiveStreamPage',
-  mixins: [JsonApiCombineMixin, EventMixin],
+  mixins: [JsonApiCombineMixin, EventMixin, SeriesEventMixin],
   components: {
     SvgIcon,
     AddToFavorite,
@@ -112,6 +126,7 @@ export default {
     EventListing,
     AddToCalendar,
     Spinner,
+    CategoryLinks,
   },
   props: {
     id: {
@@ -129,11 +144,13 @@ export default {
         'field_ls_category',
         'field_ls_media',
         'field_ls_level',
+        'field_gc_instructor_reference',
         // Data from parent (series).
         'category',
         'media',
         'level',
         'equipment',
+        'instructor_reference',
       ],
     };
   },
@@ -169,21 +186,7 @@ export default {
         .get(`jsonapi/eventinstance/live_stream/${this.id}`, { params })
         .then((response) => {
           this.video = this.combine(response.data.data, response.data.included, this.params);
-          // We need here small hack for equipment.
-          // In included we have all referenced items, but in relationship only one.
-          // So we need manually pass this items to this.video.attributes.equipment.
-          this.video.attributes.equipment = [];
-          this.video.attributes.category = [];
-          if (response.data.included.length > 0) {
-            response.data.included.forEach((ref) => {
-              if (ref.type === 'taxonomy_term--gc_equipment') {
-                this.video.attributes.equipment.push(ref.attributes);
-              }
-              if (ref.type === 'taxonomy_term--gc_category') {
-                this.video.attributes.category.push(ref.attributes);
-              }
-            });
-          }
+          this.multipleReferencesWorkaround(response);
           this.loading = false;
         }).then(() => {
           this.logPlaybackEvent('entityView');

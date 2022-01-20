@@ -55,14 +55,14 @@
     <VideoListing
       :title="'none'"
       :pagination="true"
-      :category="selectedComponent === 'all' ? '' : selectedComponent"
-      :sort="filterQuery[selectedSort]"
+      :categories="selectedComponent === 'all' ? null : [selectedComponent]"
+      :sort="sortData('node', 'gc_video')"
     />
   </div>
 </template>
 
 <script>
-import client from '@/client';
+import { mapGetters } from 'vuex';
 import VideoListing from '@/components/video/VideoListing.vue';
 import { SettingsMixin } from '@/mixins/SettingsMixin';
 import { FilterAndSortMixin } from '@/mixins/FilterAndSortMixin';
@@ -73,73 +73,35 @@ export default {
   components: { VideoListing },
   data() {
     return {
-      defaultTypeOptions: [
-        { value: 'all', label: 'Show All' },
-      ],
+      defaultTypeOptions: { value: 'all', label: 'Show All' },
       contentTypeOptions: [],
     };
   },
-  watch: {
-    '$route.query': function $routeQuery(newQuery, oldQuery) {
-      if (newQuery !== oldQuery) {
-        this.selectedComponent = newQuery.type ? newQuery.type : 'all';
-        this.preSelectedComponent = newQuery.type ? newQuery.type : 'all';
-        this.selectedSort = newQuery.sort ? newQuery.sort : 'date_desc';
-        this.preSelectedSort = newQuery.sort ? newQuery.sort : 'date_desc';
-        this.$forceUpdate();
-      }
-    },
-  },
   created() {
-    if (this.$route.query.type) {
-      this.selectedComponent = this.$route.query.type;
-      this.preSelectedComponent = this.$route.query.type;
-    }
-    if (this.$route.query.sort) {
-      this.selectedSort = this.$route.query.sort;
-      this.preSelectedSort = this.$route.query.sort;
-    }
     this.loadCategories();
+    this.initSelectedFilters();
+  },
+  watch: {
+    isCategoriesLoaded: 'loadCategories',
+  },
+  computed: {
+    ...mapGetters([
+      'isCategoriesLoaded',
+    ]),
   },
   methods: {
     loadCategories() {
-      const params = {
-        sort: { sortBy: { path: 'name', direction: 'ASC' } },
-      };
-      client({
-        url: '/api/categories-list',
-        method: 'get',
-        params: { type: 'node', bundle: 'gc_video' },
-      })
-        .then((response) => {
-          params.filter = {};
-          if (response.data.length > 0) {
-            params.filter.excludeSelf = {
-              condition: { path: 'id', operator: 'IN', value: response.data },
-            };
-
-            client
-              .get('jsonapi/taxonomy_term/gc_category', { params })
-              .then((response2) => {
-                if (response2.data.data) {
-                  const options = [];
-                  response2.data.data.forEach((category) => {
-                    options.push({
-                      value: category.id,
-                      label: category.attributes.name,
-                    });
-                  });
-                  this.contentTypeOptions = [...this.defaultTypeOptions, ...options];
-                }
-              })
-              .catch((error) => {
-                console.error(error);
-              });
-          }
+      const options = this.$store.getters.getCategoriesByBundle('gc_video')
+        .sort((a, b) => {
+          if (a.label < b.label) return -1;
+          if (a.label > b.label) return 1;
+          return 0;
         })
-        .catch((error) => {
-          console.error(error);
-        });
+        .map((category) => ({
+          value: category.tid,
+          label: category.label,
+        }));
+      this.contentTypeOptions = [this.defaultTypeOptions, ...options];
     },
   },
 };

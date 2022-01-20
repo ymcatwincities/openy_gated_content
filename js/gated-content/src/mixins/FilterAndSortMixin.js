@@ -10,8 +10,8 @@ export const FilterAndSortMixin = {
       DEFAULT_SELECT: 'all',
       DEFAULT_SORT: 'date_desc',
       selectedComponent: this.DEFAULT_SELECT,
-      preSelectedComponent: this.DEFAULT_SELECT,
-      selectedSort: this.DEFAULT_SORT,
+      preSelectedComponent: this.selectedComponent,
+      selectedSort: null,
       preSelectedSort: this.DEFAULT_SORT,
       contentTypeOptions: [
         { value: 'all', label: 'Show All' },
@@ -26,39 +26,71 @@ export const FilterAndSortMixin = {
         { value: 'title_asc', label: 'By title (A-Z)' },
         { value: 'title_desc', label: 'By title (Z-A)' },
       ],
-      filterQuery: {
-        date_desc: { path: 'created', direction: 'DESC' },
-        date_asc: { path: 'created', direction: 'ASC' },
-        title_asc: { path: 'title', direction: 'ASC' },
-        title_desc: { path: 'title', direction: 'DESC' },
+      filterQueryByTypes: {
+        node: {
+          date_desc: { path: 'created', direction: 'DESC' },
+          date_asc: { path: 'created', direction: 'ASC' },
+          title_asc: { path: 'title', direction: 'ASC' },
+          title_desc: { path: 'title', direction: 'DESC' },
+        },
+        eventinstance: {
+          date_desc: { path: 'date.value', direction: 'DESC' },
+          date_asc: { path: 'date.value', direction: 'ASC' },
+          title_asc: { path: 'eventseries_id.title', direction: 'ASC' },
+          title_desc: { path: 'eventseries_id.title', direction: 'DESC' },
+        },
+        taxonomy_term: {
+          date_desc: { path: 'weight', direction: 'DESC' },
+          date_asc: { path: 'weight', direction: 'ASC' },
+          title_asc: { path: 'name', direction: 'ASC' },
+          title_desc: { path: 'name', direction: 'DESC' },
+        },
+        personal_training: {
+          date_desc: { path: 'date.value', direction: 'DESC' },
+          date_asc: { path: 'date.value', direction: 'ASC' },
+          title_asc: { path: 'title', direction: 'ASC' },
+          title_desc: { path: 'title', direction: 'DESC' },
+        },
       },
     };
   },
   watch: {
-    $route: 'initSelectedFilters',
+    '$route.query': function $routeQuery(newQuery, oldQuery) {
+      if (newQuery !== oldQuery) {
+        this.initSelectedFilters();
+      }
+    },
   },
   created() {
     this.initSelectedFilters();
   },
+  computed: {
+    selectedBundle() {
+      return this.selectedComponent === 'all' ? '' : this.selectedComponent;
+    },
+  },
   methods: {
     initSelectedFilters() {
-      this.selectedComponent = this.$route.query.type
-        ? this.$route.query.type : this.DEFAULT_SELECT;
-      this.preSelectedComponent = this.$route.query.type
-        ? this.$route.query.type : this.DEFAULT_SELECT;
-      this.selectedSort = this.$route.query.sort ? this.$route.query.sort : this.DEFAULT_SORT;
-      this.preSelectedSort = this.$route.query.sort ? this.$route.query.sort : this.DEFAULT_SORT;
+      this.selectedComponent = this.$route.query.type || this.DEFAULT_SELECT;
+      this.preSelectedComponent = this.selectedComponent;
+      this.selectedSort = this.$route.query.sort || null;
+      this.preSelectedSort = this.selectedSort || this.DEFAULT_SORT;
     },
     applyFilters() {
-      this.selectedComponent = this.preSelectedComponent;
-      this.selectedSort = this.preSelectedSort;
       this.$router.push({
         query: {
-          type: this.selectedComponent,
-          sort: this.selectedSort,
+          type: this.preSelectedComponent,
+          sort: this.preSelectedSort,
         },
       });
       this.showModal = false;
+    },
+    sortData(type, contentType = null) {
+      let sort = this.selectedSort;
+      if (sort === null) {
+        sort = contentType ? this.config.components[contentType].default_sort : this.DEFAULT_SORT;
+      }
+      return this.filterQueryByTypes[type][sort];
     },
   },
 };

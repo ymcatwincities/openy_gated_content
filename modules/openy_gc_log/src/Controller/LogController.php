@@ -6,9 +6,9 @@ use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\openy_gc_log\Entity\LogEntity;
+use Drupal\openy_gc_log\Logger;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Drupal\openy_gc_log\Logger;
 
 /**
  * Log Controller class.
@@ -64,17 +64,38 @@ class LogController extends ControllerBase {
   public function index(Request $request) {
     $content = $request->getContent();
     $params = json_decode($content, TRUE);
+    // We should be sure we are logging activity of the current user.
+    $params['uid'] = $this->currentUser()->id();
+    $params['email'] = $this->currentUser()->getEmail();
     $status = $this->gcLogger->addLog($params);
     if ($status instanceof LogEntity) {
       return new AjaxResponse([
         'status' => 'ok',
       ]);
     }
-    else {
+
+    return new AjaxResponse([
+      'status' => 'error',
+    ], AjaxResponse::HTTP_INTERNAL_SERVER_ERROR);
+  }
+
+  /**
+   * Track activity.
+   *
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   *   Return status
+   */
+  public function trackActivity(Request $request) {
+    $status = $this->gcLogger->trackActivity($this->currentUser()->id());
+    if ($status instanceof LogEntity) {
       return new AjaxResponse([
-        'status' => 'error',
-      ], AjaxResponse::HTTP_INTERNAL_SERVER_ERROR);
+        'status' => 'ok',
+      ]);
     }
+
+    return new AjaxResponse([
+      'status' => 'error',
+    ], AjaxResponse::HTTP_INTERNAL_SERVER_ERROR);
   }
 
 }

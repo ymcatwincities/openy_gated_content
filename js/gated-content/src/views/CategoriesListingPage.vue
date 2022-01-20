@@ -54,10 +54,8 @@
 
     <CategoriesListing
       :title="'none'"
-      :type="selectedType"
       :bundle="selectedBundle"
-      :sort="filterQuery[selectedSort]"
-      :limit="50"
+      :sort="sortData('taxonomy_term')"
     />
   </div>
 </template>
@@ -75,52 +73,20 @@ export default {
   },
   data() {
     return {
-      DEFAULT_SORT: 'weight_asc',
+      DEFAULT_SORT: 'date_asc',
       filterOptions: [
         { value: 'title_asc', label: 'By title (A-Z)' },
         { value: 'title_desc', label: 'By title (Z-A)' },
       ],
-      filterQuery: {
-        weight_asc: { path: 'weight', direction: 'ASC' },
-        weight_desc: { path: 'weight', direction: 'DESC' },
-        title_asc: { path: 'name', direction: 'ASC' },
-        title_desc: { path: 'name', direction: 'DESC' },
-      },
     };
   },
   computed: {
-    selectedType() {
-      switch (this.selectedComponent) {
-        case 'gc_video':
-        case 'vy_blog_post':
-          return 'node';
-        case 'live_stream':
-        case 'virtual_meeting':
-          return 'eventinstance';
-        default:
-          return 'all';
-      }
-    },
-    selectedBundle() {
-      return this.selectedComponent === 'all' ? '' : this.selectedComponent;
-    },
     title() {
       if (this.selectedComponent === 'all' || typeof this.config.components[this.selectedComponent] === 'undefined') {
         return 'Categories';
       }
 
       return `${this.config.components[this.selectedComponent].title} Categories`;
-    },
-  },
-  watch: {
-    '$route.query': function $routeQuery(newQuery, oldQuery) {
-      if (newQuery !== oldQuery) {
-        this.selectedComponent = newQuery.type ? newQuery.type : 'all';
-        this.preSelectedComponent = newQuery.type ? newQuery.type : 'all';
-        this.selectedSort = newQuery.sort ? newQuery.sort : 'weight_asc';
-        this.preSelectedSort = newQuery.sort ? newQuery.sort : 'weight_asc';
-        this.$forceUpdate();
-      }
     },
   },
 };

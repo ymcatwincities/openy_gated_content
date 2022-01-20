@@ -2,9 +2,12 @@
 
 namespace Drupal\openy_gated_content\EventSubscriber;
 
+use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Cache\CacheableResponseInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
 
@@ -33,10 +36,10 @@ class GatedContentSubscriber implements EventSubscriberInterface {
   /**
    * Check Access to Virtual Y contend entities pages.
    *
-   * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
-   *   The GetResponseEvent to process.
+   * @param \Symfony\Component\HttpKernel\Event\RequestEvent $event
+   *   The RequestEvent to process.
    */
-  public function accessCheck(GetResponseEvent $event) {
+  public function accessCheck(RequestEvent $event) {
     $request = $event->getRequest();
     $route_name = $request->get('_route');
     $protected_routes = [
@@ -81,11 +84,38 @@ class GatedContentSubscriber implements EventSubscriberInterface {
   }
 
   /**
+   * Adds a cache context for x-shared-referer header.
+   *
+   * @param \Symfony\Component\HttpKernel\Event\ResponseEvent $event
+   *   The event to process.
+   */
+  public function onRespond(ResponseEvent $event) {
+    if (!$event->isMasterRequest() || !$this->currentUser->isAnonymous()) {
+      return;
+    }
+
+    $response = $event->getResponse();
+    if (!$response instanceof CacheableResponseInterface) {
+      return;
+    }
+
+    if ($event->getRequest()->headers->has('x-shared-referer')) {
+      // We need this to avoid situations with cached JSON API response
+      // for shared content clients.
+      $context_for_anon = new CacheableMetadata();
+      $context_for_anon->setCacheContexts(['headers:x-shared-referer']);
+      $response->addCacheableDependency($context_for_anon);
+    }
+  }
+
+  /**
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
     // We need to have a priority of 31 or less to have the route available.
     $events[KernelEvents::REQUEST][] = ['accessCheck', 30];
+    // @see \Drupal\Core\EventSubscriber\AnonymousUserResponseSubscriber.
+    $events[KernelEvents::RESPONSE][] = ['onRespond', 6];
     return $events;
   }
 

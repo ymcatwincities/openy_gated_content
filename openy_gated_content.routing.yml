@@ -22,6 +22,22 @@ openy_gated_content.settings:
   requirements:
     _permission: 'administer gated content configuration'
 
+openy_gated_content.welcome_email_settings:
+  path: '/admin/openy/virtual-ymca/welcome-email-settings'
+  defaults:
+    _form: '\Drupal\openy_gated_content\Form\WelcomeEmailSettingsForm'
+    _title: 'Virtual Y welcome email settings'
+  requirements:
+    _permission: 'administer gated content configuration'
+
+openy_gated_content.test_welcome_email:
+  path: '/admin/openy/virtual-ymca/welcome-email-settings/test'
+  defaults:
+    _form: '\Drupal\openy_gated_content\Form\TestWelcomeEmail'
+    _title: 'Test Virtual Y welcome email'
+  requirements:
+    _permission: 'administer gated content configuration'
+
 openy_gated_content.categories.list:
   path: '/api/categories-list'
   defaults:
@@ -32,6 +48,16 @@ openy_gated_content.categories.list:
     _role: 'authenticated'
   options:
     no_cache: TRUE
+
+openy_gated_content.events.list:
+  path: '/virtual-y/api/events'
+  defaults:
+    _title: 'Virtual Y Events'
+    _controller: '\Drupal\openy_gated_content\Controller\EventsController::list'
+  methods: ['GET']
+  requirements:
+    _permission: 'access content'
+    _role: 'authenticated'
 
 openy_gated_content.favorites.list:
   path: '/api/favorites'
@@ -62,3 +88,11 @@ openy_gated_content.favorites.delete:
   requirements:
     _permission: 'access content'
     _role: 'authenticated'
+
+openy_gated_content.duration.rebuild:
+  path: '/admin/virtual-y/rebuild-durations'
+  defaults:
+    _form: '\Drupal\openy_gated_content\Form\RebuildDurationsForm'
+    _title: 'Rebuild Duration references'
+  requirements:
+    _permission: 'edit any gc_video content'

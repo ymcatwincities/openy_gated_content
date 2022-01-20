@@ -1,0 +1,25 @@
+{{ attach_library('date_recur_modular/date_recur_modular_alpha_widget') }}
+
+<div{{ attributes.addClass('date-recur-modular-alpha-widget') }}>
+  <div class="container-inline">
+    {{ widget.mode }}
+    {{ widget.daily_count }}
+  </div>
+  <div class="dates">
+    <div class="date start-date">{{ widget.start_date }}</div>
+    <div class="date start">{{ widget.start }}</div>
+    <div class="date end">{{ widget.end }}</div>
+    <div class="date time-zone">{{ widget.time_zone }}</div>
+  </div>
+  {{ widget.weekdays }}
+  {{ widget.ordinals }}
+  <div class="ends">
+    <div>
+      {{ widget.ends_mode }}
+    </div>
+    <div>
+      {{ widget.ends_count }}
+      {{ widget.ends_date }}
+    </div>
+  </div>
+</div>

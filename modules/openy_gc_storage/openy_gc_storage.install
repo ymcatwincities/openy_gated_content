@@ -22,6 +22,15 @@ function openy_gc_storage_install() {
   $config = $config_factory->getEditable('jsonapi_image_styles.settings');
   $config->set('image_styles.gated_content_teaser', 'gated_content_teaser');
   $config->save(TRUE);
+
+  _openy_gc_storage_add_banner_image_style();
+}
+
+function _openy_gc_storage_add_banner_image_style() {
+  $config_factory = \Drupal::configFactory();
+  $config = $config_factory->getEditable('jsonapi_image_styles.settings');
+  $config->set('image_styles.carnation_banner_1920_700', 'carnation_banner_1920_700');
+  $config->save(TRUE);
 }
 
 /**
@@ -153,6 +162,7 @@ function openy_gc_storage_update_8006() {
  * Hide category field on event view display.
  */
 function openy_gc_storage_update_8007() {
+  /* These configs will be updated in openy_gc_storage_update_8016.
   $config_dir = drupal_get_path('module', 'openy_gc_storage');
   $config_dir .= '/config/install/';
   // Import new configuration.
@@ -162,6 +172,7 @@ function openy_gc_storage_update_8007() {
     'core.entity_view_display.eventinstance.live_stream.default',
     'core.entity_view_display.eventinstance.virtual_meeting.default',
   ]);
+  */
 }
 
 /**
@@ -191,5 +202,135 @@ function openy_gc_storage_update_8009() {
   $config_importer->importConfigs([
     'field.field.node.gc_video.field_gc_video_media',
     'field.field.eventseries.live_stream.field_ls_media',
+  ]);
+}
+
+/**
+ * Enabling scheduler module.
+ */
+function openy_gc_storage_update_8011() {
+  $config_dir = drupal_get_path('module', 'openy_gc_storage') . '/config/install/';
+  // Update multiple configurations.
+  $configs = [
+    'node.type.gc_video' => [
+      'dependencies.module',
+      'third_party_settings.scheduler',
+    ],
+    'node.type.vy_blog_post' => [
+      'dependencies.module',
+      'third_party_settings.scheduler',
+    ],
+  ];
+  $config_updater = \Drupal::service('openy_upgrade_tool.param_updater');
+  foreach ($configs as $config_name => $params) {
+    $config = $config_dir . $config_name . '.yml';
+    foreach ($params as $param) {
+      $config_updater->update($config, $config_name, $param);
+    }
+  }
+}
+
+/**
+ * Update image fields required.
+ */
+function openy_gc_storage_update_8013() {
+  $config_dir = drupal_get_path('module', 'openy_gc_storage');
+  $config_dir .= '/config/install/';
+  // Import new configuration.
+  $config_importer = \Drupal::service('openy_upgrade_tool.importer');
+  $config_importer->setDirectory($config_dir);
+  $config_importer->importConfigs([
+    'field.field.eventseries.live_stream.field_ls_image',
+    'field.field.eventseries.virtual_meeting.field_ls_image',
+  ]);
+}
+
+/**
+ * Reimport event and event series views. Skip 8012-13 and do not copy code.
+ */
+function openy_gc_storage_update_8014() {
+  $config_dir = drupal_get_path('module', 'openy_gc_storage');
+  $config_dir .= '/config/install/';
+  $config_importer = \Drupal::service('openy_upgrade_tool.importer');
+  $config_importer->setDirectory($config_dir);
+  $config_importer->importConfigs([
+    'views.view.virtual_y_event_series',
+    'views.view.virtual_y_events',
+  ]);
+}
+
+/**
+ * Add banner image style to use with the JSON:API.
+ */
+function openy_gc_storage_update_8015() {
+  _openy_gc_storage_add_banner_image_style();
+}
+
+/**
+ * Update and create configs related to the Instructor reference field.
+ */
+function openy_gc_storage_update_8016() {
+  $config_dir = drupal_get_path('module', 'openy_gc_storage');
+  $config_dir .= '/config/install/';
+  // Update configuration.
+  $config_importer = \Drupal::service('openy_upgrade_tool.importer');
+  $config_importer->setDirectory($config_dir);
+  $config_importer->importConfigs([
+    'taxonomy.vocabulary.gc_instructor',
+    'language.content_settings.taxonomy_term.gc_instructor',
+    'field.storage.taxonomy_term.field_gc_instructor_photo',
+    'field.storage.taxonomy_term.field_gc_instructor_categories',
+    'field.storage.taxonomy_term.field_gc_instructor_difficulty',
+    'field.field.taxonomy_term.gc_instructor.field_gc_instructor_photo',
+    'field.field.taxonomy_term.gc_instructor.field_gc_instructor_categories',
+    'field.field.taxonomy_term.gc_instructor.field_gc_instructor_difficulty',
+    'core.entity_form_display.taxonomy_term.gc_instructor.default',
+    'core.entity_view_display.taxonomy_term.gc_instructor.default',
+    'field.storage.eventseries.field_gc_instructor_reference',
+    'field.storage.eventinstance.field_gc_instructor_reference',
+    'field.storage.node.field_gc_instructor_reference',
+    'field.field.eventseries.live_stream.field_gc_instructor_reference',
+    'field.field.eventseries.virtual_meeting.field_gc_instructor_reference',
+    'field.field.eventinstance.live_stream.field_gc_instructor_reference',
+    'field.field.eventinstance.virtual_meeting.field_gc_instructor_reference',
+    'field.field.node.gc_video.field_gc_instructor_reference',
+    'field_inheritance.field_inheritance.eventinstance_virtual_meeting_instructor_reference',
+    'field_inheritance.field_inheritance.eventinstance_live_stream_instructor_reference',
+    'core.entity_form_display.eventinstance.live_stream.default',
+    'core.entity_form_display.eventinstance.virtual_meeting.default',
+    'core.entity_form_display.eventseries.live_stream.default',
+    'core.entity_form_display.eventseries.virtual_meeting.default',
+    'core.entity_view_display.eventinstance.live_stream.default',
+    'core.entity_view_display.eventinstance.virtual_meeting.default',
+    'core.entity_view_display.eventseries.live_stream.default',
+    'core.entity_view_display.eventseries.virtual_meeting.default',
+  ]);
+}
+
+/**
+ * Update/create configs related to Duration reference field.
+ */
+function openy_gc_storage_update_8017() {
+  $config_dir = drupal_get_path('module', 'openy_gc_storage');
+  $config_dir .= '/config/install/';
+  // Update configuration.
+  $config_importer = \Drupal::service('openy_upgrade_tool.importer');
+  $config_importer->setDirectory($config_dir);
+  $config_importer->importConfigs([
+    'taxonomy.vocabulary.gc_duration',
+    'language.content_settings.taxonomy_term.gc_duration',
+    'field.storage.taxonomy_term.field_gc_duration_max',
+    'field.storage.taxonomy_term.field_gc_duration_min',
+    'field.storage.taxonomy_term.field_gc_duration_media',
+    'field.storage.node.field_gc_duration_reference',
+    'field.field.taxonomy_term.gc_duration.field_gc_duration_max',
+    'field.field.taxonomy_term.gc_duration.field_gc_duration_min',
+    'field.field.taxonomy_term.gc_duration.field_gc_duration_media',
+    'field.field.node.gc_video.field_gc_duration_reference',
+    'core.entity_form_display.taxonomy_term.gc_duration.default',
+    'core.entity_form_display.node.gc_video.default',
+    'core.entity_view_display.taxonomy_term.gc_duration.default',
+    'core.entity_view_display.node.gc_video.default',
+    'core.entity_view_display.node.gc_video.teaser',
   ]);
 }

@@ -2,7 +2,7 @@
 
 namespace Drupal\openy_gc_auth\Event;
 
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * Event that is fired when a user logs out from GC.

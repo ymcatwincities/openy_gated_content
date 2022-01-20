@@ -3,19 +3,52 @@
     "description": "Open Y Virtual Y Content",
     "type": "drupal-module",
     "require": {
-        "drupal/recurring_events": "<2.0.0-beta3",
+        "ymcatwincities/openy": "9.* || dev-9.x-2.x || dev-*",
+        "drupal/recurring_events": "^2.0@beta",
         "ymcatwincities/daxko_sso": "*",
-        "drupal/jsonapi_image_styles": "^1.0@beta",
+        "drupal/jsonapi_image_styles": "^2.0.0",
         "drupal/csv_serialization": "^2.0",
+        "drupal/simple_recaptcha": "^1.0",
+        "drupal/date_recur": "^2.0|^3.0",
+        "drupal/date_recur_modular": "^2.0|^3.0",
+        "drupal/state_machine": "^1.4",
+        "drupal/views_data_export": "^1.0",
         "ext-json": "*",
         "ext-zlib": "*"
     },
     "license": "GPL-2.0+",
     "minimum-stability": "dev",
+    "prefer-stable": true,
     "extra": {
         "patches": {
             "drupal/recurring_events": {
-                "Publishing Series Workflow Should Be Reflected in Instances [3178669]": "https://www.drupal.org/files/issues/2020-10-28/recurring_events-status_changes-3178669-5.patch"
+                "Event edit and clone issue if the authored user is deleted. https://www.drupal.org/i/3229674": "https://git.drupalcode.org/project/recurring_events/-/commit/53177212e980eb3ef5b73d683d1ae2f3e51cd314.patch",
+                "Event instances created by migration may not be structured correctly. https://www.drupal.org/i/3206960": "https://git.drupalcode.org/project/recurring_events/-/commit/c0abc6a754f2b048e9b49568b33929378bb31492.patch",
+                "Disable custom event series destination migrate plugin": "https://gist.githubusercontent.com/NightHunterSV/528da326b854f5b5ecc57bb37cba75f6/raw/4301ee75cbfdc61058f52cc8589ed883c4f35153/disable_custom_event_series_destination_migrate_plugin.patch"
+            },
+            "drupal/search_api": {
+                "Add a \"Role-based access\" processor [2898334]": "https://www.drupal.org/files/issues/2021-01-31/2898334-30--role_based_access_check.patch"
+            },
+            "ymcatwincities/openy": {
+                "[PRODDEV-240] Display search input field for the lily theme": "https://patch-diff.githubusercontent.com/raw/ymcatwincities/openy/pull/2420.patch"
+            },
+            "drupal/jsonapi_image_styles": {
+                "ParseError: syntax error, unexpected 'EntityTypeManagerInterface' (3229668)": "https://www.drupal.org/files/issues/2021-08-24/3229668-2.patch",
+                "TypeError: Argument 1 passed to Drupal\\jsonapi_image_styles\\EventSubscriber\\ConfigSubscriber::onResponse() must be an instance of Symfony\\Component\\HttpKernel\\Event\\ResponseEvent (3229545)": "https://git.drupalcode.org/project/jsonapi_image_styles/-/merge_requests/2/diffs.patch"
+            },
+            "drupal/core": {
+                "Enable disabling tableselect element options https://www.drupal.org/i/2895352": "https://www.drupal.org/files/issues/2019-12-03/2895352-42-8.8.x.patch",
+                "[PRODDEV-484] An error occurs after admin indexes the data https://dgo.to/3138528": "https://www.drupal.org/files/issues/2020-05-21/getentitiestoview_change_the_interface_of_the_first_argument_3138528_3.patch"
+            },
+            "drupal/blazy": {
+                "[PRODDEV-484] An error occurs after admin indexes the data https://dgo.to/3252140": "https://git.drupalcode.org/project/blazy/-/merge_requests/6.diff"
+            }
+        },
+        "patches-ignore": {
+            "ymcatwincities/openy": {
+                "drupal/search_api": {
+                    "2898334 - Add a Role-based access processor": "https://www.drupal.org/files/issues/2021-01-31/2898334-30--role_based_access_check.patch"
+                }
             }
         }
     }

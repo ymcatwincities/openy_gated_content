@@ -7,7 +7,7 @@
     <template v-else>
       <div
         class="virtual-meeting-page__image"
-        v-bind:style="{ backgroundImage: `url(${image})` }"
+        :style="coverStyle"
       >
         <div class="virtual-meeting-page__link">
           <a :href="meetingLink.uri" target="_blank" class="btn btn-lg btn-primary">
@@ -44,9 +44,15 @@
               <SvgIcon icon="clock-regular" class="fill-gray" :growByHeight=false></SvgIcon>
               {{ time }} ({{ duration }})
             </div>
-            <div class="video-footer__block" v-if="instructor">
+            <div class="video-footer__block" v-if="instructors && instructors.length > 0">
               <SvgIcon icon="instructor-icon" class="fill-gray" :growByHeight=false></SvgIcon>
-              {{ instructor }}
+              <ul>
+                <li v-for="instructor in instructors" :key="instructor.drupal_internal__tid">
+                  <router-link :to="{ name: 'Instructor', params: { id: instructor.uuid }}">
+                    {{ instructor.name }}
+                  </router-link>
+                </li>
+              </ul>
             </div>
             <div
               class="video-footer__block"
@@ -58,8 +64,15 @@
             <div class="video-footer__block video-footer__category"
                  v-if="category && category.length > 0">
               <SvgIcon icon="categories" class="fill-gray" :growByHeight=false></SvgIcon>
-              <span v-for="(category_data, index) in category"
-                    :key="index">{{ category_data.name }}</span>
+              <ul>
+                <li
+                  v-for="tid in category.map(item => item.drupal_internal__tid)"
+                  class="video-footer__category-list-item"
+                  :key="tid"
+                >
+                  <CategoryLinks :tid="tid" />
+                </li>
+              </ul>
             </div>
             <div
               v-if="video.attributes.equipment.length > 0"
@@ -87,7 +100,6 @@
         :eventType="'virtual_meeting'"
         :viewAll="true"
         :limit="8"
-        :msg="'Virtual Meetings not found.'"
       />
     </template>
   </div>
@@ -99,19 +111,23 @@ import AddToFavorite from '@/components/AddToFavorite.vue';
 import Spinner from '@/components/Spinner.vue';
 import EventListing from '@/components/event/EventListing.vue';
 import AddToCalendar from '@/components/event/AddToCalendar.vue';
+import CategoryLinks from '@/components/category/CategoryLinks.vue';
 import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
 import { EventMixin } from '@/mixins/EventMixin';
+import { SeriesEventMixin } from '@/mixins/SeriesEventMixin';
+import { ImageStyleMixin } from '@/mixins/ImageStyleMixin';
 import SvgIcon from '@/components/SvgIcon.vue';
 
 export default {
   name: 'VirtualMeetingPage',
-  mixins: [JsonApiCombineMixin, EventMixin],
+  mixins: [JsonApiCombineMixin, EventMixin, SeriesEventMixin, ImageStyleMixin],
   components: {
     SvgIcon,
     AddToFavorite,
     EventListing,
     AddToCalendar,
     Spinner,
+    CategoryLinks,
   },
   props: {
     id: {
@@ -130,12 +146,14 @@ export default {
         'field_ls_level',
         'field_ls_image',
         'field_ls_image.field_media_image',
+        'field_gc_instructor_reference',
         // Data from parent (series).
         'category',
         'level',
         'equipment',
         'image',
         'image.field_media_image',
+        'instructor_reference',
       ],
     };
   },
@@ -143,13 +161,12 @@ export default {
     // This values most of all from parent (series), but can be overridden by item,
     // so ve need to check this here and use correct value.
     image() {
-      if (this.video.attributes['field_ls_image.field_media_image']) {
-        return this.video.attributes['field_ls_image.field_media_image'].uri.url;
-      }
-      if (this.video.attributes['image.field_media_image']) {
-        return this.video.attributes['image.field_media_image'].uri.url;
-      }
-      return null;
+      return this.video.attributes['field_ls_image.field_media_image']
+        ?? this.video.attributes['image.field_media_image'];
+    },
+    coverStyle() {
+      if (!this.image) { return null; }
+      return { backgroundImage: `url(${this.getStyledUrl(this.image, 'carnation_banner_1920_700')})` };
     },
     meetingLink() {
       const link = {
@@ -194,21 +211,7 @@ export default {
         .get(`jsonapi/eventinstance/virtual_meeting/${this.id}`, { params })
         .then((response) => {
           this.video = this.combine(response.data.data, response.data.included, this.params);
-          // We need here small hack for equipment.
-          // In included we have all referenced items, but in relationship only one.
-          // So we need manually pass this items to this.video.attributes.equipment.
-          this.video.attributes.equipment = [];
-          this.video.attributes.category = [];
-          if (response.data.included.length > 0) {
-            response.data.included.forEach((ref) => {
-              if (ref.type === 'taxonomy_term--gc_equipment') {
-                this.video.attributes.equipment.push(ref.attributes);
-              }
-              if (ref.type === 'taxonomy_term--gc_category') {
-                this.video.attributes.category.push(ref.attributes);
-              }
-            });
-          }
+          this.multipleReferencesWorkaround(response);
           this.loading = false;
         }).then(() => {
           this.$log.trackEvent('entityView', 'series', 'virtual_meeting', this.video.attributes.drupal_internal__id);

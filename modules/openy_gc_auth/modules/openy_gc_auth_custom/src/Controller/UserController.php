@@ -6,9 +6,13 @@ use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Flood\FloodInterface;
 use Drupal\openy_gc_auth\GCUserAuthorizer;
+use Drupal\openy_gc_auth\GCVerificationTrait;
+use Drupal\user\Entity\User;
+use Drupal\user\UserDataInterface;
 use Drupal\user\UserStorageInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -17,6 +21,8 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
  * Controller routines for user routes.
  */
 class UserController extends ControllerBase {
+
+  use GCVerificationTrait;
 
   /**
    * The user storage.
@@ -54,6 +60,13 @@ class UserController extends ControllerBase {
   protected $gcUserAuthorizer;
 
   /**
+   * The user data service.
+   *
+   * @var \Drupal\user\UserDataInterface
+   */
+  protected $userData;
+
+  /**
    * Constructs a UserController object.
    *
    * @param \Drupal\user\UserStorageInterface $user_storage
@@ -66,13 +79,23 @@ class UserController extends ControllerBase {
    *   The time service.
    * @param \Drupal\openy_gc_auth\GCUserAuthorizer $gcUserAuthorizer
    *   The Gated User Authorizer.
+   * @param \Drupal\user\UserDataInterface $user_data
+   *   The user data service.
    */
-  public function __construct(UserStorageInterface $user_storage, LoggerInterface $logger, FloodInterface $flood, TimeInterface $datetime, GCUserAuthorizer $gcUserAuthorizer) {
+  public function __construct(
+    UserStorageInterface $user_storage,
+    LoggerInterface $logger,
+    FloodInterface $flood,
+    TimeInterface $datetime,
+    GCUserAuthorizer $gcUserAuthorizer,
+    UserDataInterface $user_data
+  ) {
     $this->userStorage = $user_storage;
     $this->logger = $logger;
     $this->flood = $flood;
     $this->datetime = $datetime;
     $this->gcUserAuthorizer = $gcUserAuthorizer;
+    $this->userData = $user_data;
   }
 
   /**
@@ -84,7 +107,8 @@ class UserController extends ControllerBase {
       $container->get('logger.factory')->get('user'),
       $container->get('flood'),
       $container->get('datetime.time'),
-      $container->get('openy_gc_auth.user_authorizer')
+      $container->get('openy_gc_auth.user_authorizer'),
+      $container->get('user.data')
     );
   }
 
@@ -133,14 +157,25 @@ class UserController extends ControllerBase {
       $this->messenger()->addError($this->t('You have tried to use a one-time login link that has expired. Please request a new one using the form below.'));
       return new RedirectResponse($vy_settings->get('virtual_y_login_url'), 302);
     }
-    elseif ($user->isAuthenticated() && ($timestamp >= $user->getLastLoginTime()) && ($timestamp <= $current) && hash_equals($hash, user_pass_rehash($user, $timestamp))) {
+
+    if (($user instanceof User) &&
+      $user->isAuthenticated() &&
+      ($timestamp >= $user->getLastLoginTime()) &&
+      ($timestamp <= $current) &&
+      hash_equals($hash, user_pass_rehash($user, $timestamp))
+    ) {
+      $token = $this->saveVerification($request, $user, $current);
+
       $this->gcUserAuthorizer->authorizeUser($user->getAccountName(), $user->getEmail());
       // Clear any flood events for this IP.
       $this->flood->clear('openy_gc_auth_custom.login');
-      return new RedirectResponse($vy_settings->get('virtual_y_url'), 302);
+      $response = new RedirectResponse($vy_settings->get('virtual_y_url'), 302);
+      $response->headers->setCookie(new Cookie('Drupal_visitor_gc_auth_authorized', $token));
+      return $response;
     }
 
-    $this->messenger()->addError($this->t('You have tried to use a one-time login link that has either been used or is no longer valid. Please request a new one using the form below.'));
+    $provider_config = $this->config('openy_gc_auth.provider.custom');
+    $this->messenger()->addError($provider_config->get('one_time_link_invalid_message'));
     return new RedirectResponse($vy_settings->get('virtual_y_login_url'), 302);
   }
 

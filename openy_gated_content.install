@@ -10,31 +10,39 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\openy_gated_content\Entity\VyFavoriteItem;
 
 /**
  * Virtual Y install.
  */
 function openy_gated_content_install() {
-  $field_permission = BaseFieldDefinition::create('string')
-    ->setLabel(t('Virtual Y Access Group'))
-    ->setSetting('max_length', 255)
-    ->setDefaultValue('virtual_y,virtual_y_premium')
-    ->setRequired(FALSE)
-    ->setRevisionable(FALSE)
-    ->setTranslatable(FALSE)
-    ->setDisplayConfigurable('view', FALSE)
-    ->setDisplayConfigurable('form', TRUE)
-    ->setDisplayOptions('form', [
-      'type' => 'virtual_y_roles_select',
-      'settings' => [
-        'size' => '255',
-      ],
-    ]);
-
   $definition_manager = \Drupal::entityDefinitionUpdateManager();
-  $definition_manager->installFieldStorageDefinition('field_vy_permission', 'node', 'openy_gated_content', $field_permission);
-  $definition_manager->installFieldStorageDefinition('field_vy_permission', 'eventseries', 'openy_gated_content', $field_permission);
-  $definition_manager->installFieldStorageDefinition('field_vy_permission', 'eventinstance', 'openy_gated_content', $field_permission);
+
+  $field_name = 'field_vy_permission';
+  $entity_type_ids = [
+    'node',
+    'eventseries',
+    'eventinstance',
+  ];
+  foreach ($entity_type_ids as $entity_type_id) {
+    $entity_type = $definition_manager->getEntityType($entity_type_id);
+    $definitions = openy_gated_content_entity_field_storage_info($entity_type);
+    $definition_manager->installFieldStorageDefinition($field_name, $entity_type_id, 'openy_gated_content', $definitions[$field_name]);
+  }
+}
+
+/**
+ * Implements hook_update_dependencies().
+ */
+function openy_gated_content_update_dependencies() {
+  // Run openy_gated_content_update_8022 after colorapi enabled.
+  $dependencies['openy_gated_content'] = [
+    8022 => [
+      'openy_txnm_color' => 8005,
+    ],
+  ];
+
+  return $dependencies;
 }
 
 /**
@@ -103,8 +111,10 @@ function openy_gated_content_update_8004() {
  * Remove field_link_to_gated_content_app completely.
  */
 function openy_gated_content_update_8005() {
-  FieldConfig::loadByName('paragraph', 'gated_content_login', 'field_link_to_gated_content_app')->delete();
-  FieldStorageConfig::loadByName('paragraph', 'field_link_to_gated_content_app')->delete();
+  FieldConfig::loadByName('paragraph', 'gated_content_login', 'field_link_to_gated_content_app')
+    ->delete();
+  FieldStorageConfig::loadByName('paragraph', 'field_link_to_gated_content_app')
+    ->delete();
 }
 
 /**
@@ -242,4 +252,275 @@ function openy_gated_content_update_8012() {
         'created' => 'created',
       ],
     ]));
+}
+
+/**
+ * Added empty block components settings.
+ */
+function openy_gated_content_update_8013() {
+  $config_importer = \Drupal::service('openy_upgrade_tool.param_updater');
+  $config = drupal_get_path('module', 'openy_gated_content');
+  $config .= '/config/install/';
+  $config .= 'openy_gated_content.settings.yml';
+  $components = [
+    'gc_video',
+    'live_stream',
+    'virtual_meeting',
+    'vy_blog_post',
+  ];
+  foreach ($components as $id) {
+    $config_importer->update(
+      $config,
+      'openy_gated_content.settings',
+      'components.' . $id . '.empty_block_text'
+    );
+  }
+}
+
+/**
+ * Add components weight settings to openy_gated_content.settings.
+ */
+function openy_gated_content_update_8014() {
+  // Update multiple params.
+  $params = [
+    'components.gc_video.weight',
+    'components.live_stream.weight',
+    'components.virtual_meeting.weight',
+    'components.vy_blog_post.weight',
+  ];
+  $config_updater = \Drupal::service('openy_upgrade_tool.param_updater');
+  $config_dir = drupal_get_path('module', 'openy_gated_content') . '/config/install/';
+  $config_name = 'openy_gated_content.settings';
+  $config = $config_dir . $config_name . '.yml';
+  foreach ($params as $param) {
+    $config_updater->update($config, $config_name, $param);
+  }
+}
+
+/**
+ * Add components sorting settings to openy_gated_content.settings.
+ */
+function openy_gated_content_update_8015() {
+  $config_updater = \Drupal::service('openy_upgrade_tool.param_updater');
+  $config_dir = drupal_get_path('module', 'openy_gated_content') . '/config/install/';
+  $config_name = 'openy_gated_content.settings';
+  $config = $config_dir . $config_name . '.yml';
+  $components = [
+    'gc_video',
+    'live_stream',
+    'virtual_meeting',
+    'vy_blog_post',
+  ];
+  foreach ($components as $id) {
+    $config_updater->update($config, $config_name, "components.$id.default_sort");
+  }
+}
+
+/**
+ * Add components show covers settings to openy_gated_content.settings.
+ */
+function openy_gated_content_update_8016() {
+  $config_updater = \Drupal::service('openy_upgrade_tool.param_updater');
+  $config_dir = drupal_get_path('module', 'openy_gated_content') . '/config/install/';
+  $config_name = 'openy_gated_content.settings';
+  $config = $config_dir . $config_name . '.yml';
+  $components = [
+    'gc_video',
+    'live_stream',
+    'virtual_meeting',
+    'vy_blog_post',
+  ];
+  foreach ($components as $id) {
+    $config_updater->update($config, $config_name, "components.$id.show_covers");
+  }
+}
+
+/**
+ * Add components autoplay settings to openy_gated_content.settings.
+ */
+function openy_gated_content_update_8017() {
+  $config_updater = \Drupal::service('openy_upgrade_tool.param_updater');
+  $config_dir = drupal_get_path('module', 'openy_gated_content') . '/config/install/';
+  $config_name = 'openy_gated_content.settings';
+  $config = $config_dir . $config_name . '.yml';
+  $components = [
+    'gc_video',
+    'live_stream',
+  ];
+  foreach ($components as $id) {
+    $config_updater->update($config, $config_name, "components.$id.autoplay_videos");
+  }
+}
+
+/**
+ * Install/update vy_favorite_item entity type fields' definitions.
+ */
+function openy_gated_content_update_8018() {
+  $definition_manager = \Drupal::entityDefinitionUpdateManager();
+
+  $entity_type_id = 'vy_favorite_item';
+  $entity_type = $definition_manager->getEntityType($entity_type_id);
+  $entity_type->setClass(VyFavoriteItem::class);
+  $definitions = VyFavoriteItem::baseFieldDefinitions($entity_type);
+  foreach ($definitions as $name => $definition) {
+    if ($original = $definition_manager->getFieldStorageDefinition($name, $entity_type_id)) {
+      $definition_manager->updateFieldStorageDefinition($original);
+    }
+    else {
+      $definition_manager->installFieldStorageDefinition($name, $entity_type_id, 'openy_gated_content', $definition);
+    }
+  }
+}
+
+/**
+ * Update field_vy_permission fields' definitions for VY-related entity types.
+ */
+function openy_gated_content_update_8019() {
+  $definition_manager = \Drupal::entityDefinitionUpdateManager();
+  $database = \Drupal::database();
+
+  $field_name = 'field_vy_permission';
+  $entity_type_ids = [
+    'node',
+    'eventseries',
+    'eventinstance',
+  ];
+  foreach ($entity_type_ids as $entity_type_id) {
+    $entity_type = $definition_manager->getEntityType($entity_type_id);
+    $definitions = openy_gated_content_entity_field_storage_info($entity_type);
+    if (!$definition_manager->getFieldStorageDefinition($field_name, $entity_type_id)) {
+      $definition_manager->installFieldStorageDefinition($field_name, $entity_type_id, 'openy_gated_content', $definitions[$field_name]);
+      continue;
+    }
+
+    $table_name = $entity_type_id . '_field_data';
+    // Retrieve existing field data.
+    $id_field_name = $entity_type->getKey('id');
+    $permission_values = $database->select($table_name, 'et')
+      ->fields('et', [$id_field_name, $field_name])
+      ->execute()
+      ->fetchAllKeyed();
+
+    // Remove data from the storage.
+    $database->update($table_name)
+      ->fields([$field_name => NULL])
+      ->execute();
+
+    // Update definitions and schema.
+    $definition_manager->updateFieldStorageDefinition($definitions[$field_name]);
+
+    // Restore entity data in the new schema.
+    foreach ($permission_values as $id => $permission_value) {
+      $database->update($table_name)
+        ->fields([$field_name => $permission_value])
+        ->condition($id_field_name, $id)
+        ->execute();
+    }
+  }
+}
+
+/**
+ * Include new components to the Virtual Y configuration.
+ */
+function openy_gated_content_update_8020() {
+  /** @var \Drupal\openy_upgrade_tool\ConfigParamUpgradeTool $config_updater */
+  $config_updater = \Drupal::service('openy_upgrade_tool.param_updater');
+  $config_dir = drupal_get_path('module', 'openy_gated_content') . '/config/install/';
+  $config_name = 'openy_gated_content.settings';
+  $config = $config_dir . $config_name . '.yml';
+  $components = [
+    'categories',
+    'instructors',
+    'duration',
+    'latest_content',
+  ];
+  foreach ($components as $id) {
+    $config_updater->update($config, $config_name, "components.$id");
+  }
+
+  $config_updater->update($config, $config_name, "switch_legacy_view");
+}
+
+/*
+ * Add field_vy_permission info to the bundles map.
+ */
+function openy_gated_content_update_8021() {
+  $gc_config = \Drupal::config('openy_gated_content.settings')->getRawData();
+  if (!empty($gc_config['permissions_entities'])) {
+    $permissions_entities = $gc_config['permissions_entities'];
+  }
+  $field_name = 'field_vy_permission';
+  $entity_type_ids = [
+    'node',
+    'eventseries',
+    'eventinstance',
+  ];
+  $persistent_map = \Drupal::keyValue('entity.definitions.bundle_field_map');
+  $map = $persistent_map->getAll();
+  $entity_field_manager = \Drupal::service('entity_field.manager');
+  foreach ($entity_type_ids as $entity_type_id) {
+    if (!isset($permissions_entities[$entity_type_id])) {
+      continue;
+    }
+    $managed_bundles = $permissions_entities[$entity_type_id];
+    foreach ($managed_bundles as $bundle) {
+      $field_definitions = $entity_field_manager->getFieldDefinitions($entity_type_id, $bundle);
+      $map[$entity_type_id][$field_name]['type'] = $field_definitions[$field_name]->getType();
+      $map[$entity_type_id][$field_name]['bundles'][$bundle] = $bundle;
+    }
+  }
+  // Delete former incorrect map.
+  $persistent_map->deleteAll();
+  // Add a recent map.
+  $persistent_map->setMultiple($map);
+
+}
+
+/**
+ * Enable views_data_export.
+ */
+function openy_gated_content_update_8022() {
+  \Drupal::service('module_installer')->install(['views_data_export'], TRUE);
+}
+
+/**
+ * Add Virtual Y User logs views.
+ */
+function openy_gated_content_update_8023() {
+  $path = drupal_get_path('module', 'openy_gated_content') . '/config/install/';
+  $config_importer = \Drupal::service('config_import.importer');
+  $config_importer->setDirectory($path);
+  $config_importer->importConfigs(['views.view.virtual_y_users_log']);
+}
+
+/**
+ * Install initial settings for the welcome email.
+ */
+function openy_gated_content_update_8024() {
+  $config_dir = drupal_get_path('module', 'openy_gated_content');
+  $config_dir .= '/config/install/';
+  $config_importer = \Drupal::service('openy_upgrade_tool.importer');
+  $config_importer->setDirectory($config_dir);
+  $config_importer->importConfigs([
+    'openy_gated_content.welcome_email_settings',
+  ]);
+}
+
+/**
+ * Set Top Items Visibility Default Settings.
+ */
+function openy_gated_content_update_8025() {
+  $config_updater = \Drupal::service('openy_upgrade_tool.param_updater');
+  $config_dir = drupal_get_path('module', 'openy_gated_content') . '/config/install/';
+  $config_name = 'openy_gated_content.settings';
+  $config = $config_dir . $config_name . '.yml';
+  $config_updater->update($config, $config_name, 'menu_config');
+  $components = [
+    'schedule',
+    'favorites',
+    'categories',
+  ];
+  foreach ($components as $id) {
+    $config_updater->update($config, $config_name, "menu_config.$id");
+  }
 }

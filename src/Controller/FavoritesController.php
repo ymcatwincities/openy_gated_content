@@ -92,6 +92,11 @@ class FavoritesController extends ControllerBase {
       ],
       'taxonomy_term' => [
         'gc_category' => [],
+        'gc_duration' => [],
+        'gc_instructor' => [],
+      ],
+      'personal_training' => [
+        'personal_training' => [],
       ],
     ];
 
@@ -196,7 +201,7 @@ class FavoritesController extends ControllerBase {
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   The request.
    *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   * @return \Symfony\Component\HttpFoundation\JsonResponse|array
    *   Json Array with favorites items grouped by entity type and bundle.
    */
   protected function getData(Request $request) {

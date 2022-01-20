@@ -27,7 +27,9 @@ source:
         -Dumbell Rows<br>
         -Squats and Plies<br>
         ...and SO much more!</p>
-      instructor: 'Jennifer, Robin'
+      instructor:
+        - 1
+        - 2
       duration: 1512
       featured: 1
       video: 1
@@ -38,6 +40,7 @@ source:
       level: 4
       image: 0
       created: '-1 day'
+      duration_entity: 4
     -
       id: 2
       title: 'Senior Fitness Workout from Home!'
@@ -50,7 +53,8 @@ source:
         get our bodies moving after eating some Turkey and sharing time with
         friends and family, whether in-person or online.</p>
         <p>Watch our trainers to modify any movements.</p>
-      instructor: 'Amy'
+      instructor:
+        - 3
       duration: 1336
       featured: 1
       video: 2
@@ -62,6 +66,7 @@ source:
       level: 2
       image: 0
       created: '-2 days'
+      duration_entity: 4
     -
       id: 3
       title: 'Bodyweight Bootcamp with Jen - Four by Five, it’s Good to be Alive!'
@@ -71,7 +76,7 @@ source:
         then a challenge at the end! With no equipment needed, you can do this
         workout anywhere. We will warm you up, work you out, cool you down and
         motivate you throughout this sweat session!</p>
-      instructor: 'Jen'
+      instructor: 4
       duration: 1926
       featured: 1
       video: 3
@@ -81,6 +86,7 @@ source:
       level: 3
       image: 0
       created: '-3 days'
+      duration_entity: 5
     -
       id: 4
       title: 'Strength Turkey Burner with Sarah at the Y!'
@@ -99,7 +105,7 @@ source:
         making them a little bit higher. If you want that extra push, stick with
         Jennifer.<\p>
         <p>We even have a DJ today!</p>
-      instructor: 'Sarah'
+      instructor: 5
       duration: 1926
       featured: 1
       video: 4
@@ -112,6 +118,7 @@ source:
       level: 3
       image: 0
       created: '-4 days'
+      duration_entity: 5
     -
       id: 5
       title: 'Bodyweight Bootcamp Workout to Burn off the Holiday Weight!'
@@ -122,7 +129,7 @@ source:
         the creme brulee.<\p>
         <p>Enough about the food. Join us for this intense workout as we burn
         off some calories and move our bodies to some upbeat music.</p>
-      instructor: 'Amy'
+      instructor: 3
       duration: 1321
       featured: 0
       video: 5
@@ -133,12 +140,13 @@ source:
       level: 3
       image: 0
       created: '-5 days'
+      duration_entity: 4
     -
       id: 6
       title: 'Barre Fusion Class with Jennifer!'
       description: |
         <p>Follow this free online workout class with Jennifer and Sally!</p>
-      instructor: 'Jennifer'
+      instructor: 1
       duration: 1298
       featured: 0
       video: 6
@@ -150,6 +158,7 @@ source:
       level: 3
       image: 0
       created: '-6 days'
+      duration_entity: 3
     -
       id: 7
       title: 'Senior Fitness! A ForeverWell Combo Workout with Jennifer!'
@@ -160,7 +169,7 @@ source:
         Don't forget your bottle of water!</p>
         <p>Use basic movements to engage your core, lift your heart, and get
         your heartbeat going!</p>
-      instructor: 'Jennifer'
+      instructor: 1
       duration: 1528
       featured: 1
       video: 7
@@ -172,6 +181,7 @@ source:
       level: 3
       image: 0
       created: '-7 days'
+      duration_entity: 4
     -
       id: 8
       title: 'Cardio Workout with Jennifer'
@@ -180,7 +190,7 @@ source:
         taking it to the mat. This workout is going to burn a ton of calories.
         This cardio exercise will jump-start your endurance and leave every
         muscle worked!</p>
-      instructor: 'Jennifer'
+      instructor: 1
       duration: 1330
       featured: 1
       video: 8
@@ -190,6 +200,7 @@ source:
       level: 3
       image: 0
       created: '-8 days'
+      duration_entity: 4
     -
       id: 9
       title: 'Yoga Flow on Gratitude'
@@ -211,7 +222,7 @@ source:
         our breath around our body, mind, and spirit...and the spirit of
         gratitude around our heart center as we notice our breath and take you
         on a journey through gratitude.</p>
-      instructor: 'Jennifer'
+      instructor: 1
       duration: 1610
       featured: 0
       video: 9
@@ -221,6 +232,7 @@ source:
       level: 3
       image: 0
       created: '-9 days'
+      duration_entity: 4
     -
       id: 10
       title: 'Daily Meditation: Discomfort and the Necessity to Grow'
@@ -238,7 +250,7 @@ source:
         new way to visualize what that means for our body and mind.<\p>
         <p>Breathe deeply today and let's grow together as we adapt to the
         feelings of discomfort.</p>
-      instructor: 'Chance'
+      instructor: 6
       duration: 755
       featured: 0
       video: 10
@@ -248,6 +260,7 @@ source:
       level: 3
       image: 0
       created: '-10 days'
+      duration_entity: 2
     -
       id: 11
       title: 'Daily Meditation with Chance - Show up with your "A" Game!'
@@ -268,7 +281,7 @@ source:
         positive attitude to any situation.<\p>
         <p>"The world is not coming at you, as much as it's coming from
         you."</p>
-      instructor: 'Chance'
+      instructor: 6
       duration: 788
       featured: 0
       video: 11
@@ -278,6 +291,7 @@ source:
       level: 3
       image: 0
       created: '-11 days'
+      duration_entity: 2
     -
       id: 12
       title: 'Meditation with Chance York "You are Light"'
@@ -294,7 +308,7 @@ source:
         weigh you down. They grip. They block. Those thoughts don't feel good,
         even though they may feel comfortable.<\p>
         <p>Journey with me today as we experience lightness.</p>
-      instructor: 'Chance'
+      instructor: 6
       duration: 676
       featured: 0
       video: 12
@@ -304,6 +318,7 @@ source:
       level: 2
       image: 0
       created: '-12 days'
+      duration_entity: 2
     -
       id: 13
       title: 'Yoga with Jen - "Creating Space for What You Need!"'
@@ -316,7 +331,7 @@ source:
         and to be. Just take a moment with your eyes closed and think about what
         you might want to create space for in our practice today.<\p>
         <p>We'll start with our mat in a comfortable cross-legged position.</p>
-      instructor: 'Jennifer'
+      instructor: 1
       duration: 2127
       featured: 0
       video: 13
@@ -326,6 +341,7 @@ source:
       level: 3
       image: 0
       created: '-13 days'
+      duration_entity: 5
     -
       id: 14
       title: 'THE BEST Blueberry Banana Smoothie for a Healthy Day'
@@ -346,7 +362,7 @@ source:
         smoothie is too thick.<br>
            6. Trick your kids with leafy greens!<br>
            7. Enjoy your smoothie!</p>
-      instructor: 'Sally'
+      instructor: 7
       duration: 382
       featured: 1
       video: 14
@@ -361,6 +377,7 @@ source:
       level: 1
       image: 0
       created: '-14 days'
+      duration_entity: 1
     -
       id: 15
       title: 'Joy Guided Meditation'
@@ -371,7 +388,7 @@ source:
         being.<\p>
         <p>This peaceful guided meditation will remind you of the radiant energy
         of life in you, and in all things.</p>
-      instructor: 'Sally'
+      instructor: 7
       duration: 1881
       featured: 1
       video: 15
@@ -381,6 +398,7 @@ source:
       level: 2
       image: 0
       created: '-15 days'
+      duration_entity: 4
   ids:
     id:
       type: integer
@@ -425,7 +443,11 @@ process:
     plugin: default_value
     default_value: full_html
   field_gc_video_duration: duration
-  field_gc_video_instructor: instructor
+  field_gc_instructor_reference:
+    -
+      plugin: migration_lookup
+      migration: virtual_y_gc_instructor
+      source: instructor
   field_gc_video_featured: featured
   field_gc_video_media:
     -
@@ -465,6 +487,11 @@ process:
       plugin: callback
       callable: strtotime
       source: created
+  field_gc_duration_reference:
+    -
+      plugin: migration_lookup
+      migration: virtual_y_gc_duration
+      source: duration_entity
 destination:
   plugin: 'entity:node'
   default_bundle: gc_video
@@ -476,4 +503,5 @@ migration_dependencies:
     - virtual_y_gc_category
     - virtual_y_gc_equipment
     - virtual_y_gc_level
+    - virtual_y_gc_instructor
   optional: {  }

@@ -3,6 +3,9 @@ import Vuex from 'vuex';
 import settings from './modules/settings';
 import headline from './modules/headline';
 import favorites from './modules/favorites';
+import categories from './modules/categories';
+import personalTraining from './modules/personalTraining';
+import debugLog from './modules/debugLog';
 
 Vue.use(Vuex);
 
@@ -14,5 +17,8 @@ export default new Vuex.Store({
     settings,
     headline,
     favorites,
+    categories,
+    personalTraining,
+    debugLog,
   },
 });

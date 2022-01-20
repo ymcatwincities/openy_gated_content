@@ -2,12 +2,12 @@
 
 namespace Drupal\openy_gc_auth\Controller;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Routing\TrustedRedirectResponse;
 use Drupal\Core\Url;
 use Drupal\openy_gc_auth\Event\GCUserLogoutEvent;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Config\ConfigFactoryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -68,7 +68,7 @@ class GCAuthController extends ControllerBase {
     // Instantiate GC logout user event.
     $event = new GCUserLogoutEvent();
     // Dispatch the event.
-    $this->eventDispatcher->dispatch(GCUserLogoutEvent::EVENT_NAME, $event);
+    $this->eventDispatcher->dispatch($event, GCUserLogoutEvent::EVENT_NAME);
     // Logout user from Drupal.
     user_logout();
     // Optionally redirect user after logout.

@@ -6,9 +6,9 @@ use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountProxyInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Drupal\openy_gc_auth\GCIdentityProviderManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Provides a 'Virtual Y login' block.
@@ -77,7 +77,6 @@ class VirtualYLoginBlock extends BlockBase implements ContainerFactoryPluginInte
    * {@inheritdoc}
    */
   public function build() {
-
     $virtual_y_config = $this->configFactory->get('openy_gc_auth.settings');
     $active_provider = $virtual_y_config->get('active_provider');
     $plugin_definition = $this->identityProviderManager->getDefinition($virtual_y_config->get('active_provider'), FALSE);
@@ -103,6 +102,7 @@ class VirtualYLoginBlock extends BlockBase implements ContainerFactoryPluginInte
     }
     // phpcs:enable
 
+    $form['#attached']['library'][] = 'openy_gc_auth/auth_destination';
     return $form;
   }
 

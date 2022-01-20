@@ -84,19 +84,22 @@
         &:first-child {
           padding-top: 0;
         }
+
+        ul {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+        }
       }
 
       .video-footer__category {
-        span:not(:first-child) + span::before {
-          display: inline;
-          content: ', ';
-        }
+        .video-footer__category-list-item {
+          li {
+            display: inline;
 
-        a {
-          color: $white;
-
-          &:hover {
-            color: darken(white, 20);
+            &:not(:last-of-type):after {
+              content: ' > ';
+            }
           }
         }
       }
@@ -109,6 +112,18 @@
 
         li:before {
           content: '+';
+        }
+      }
+    }
+
+    &.bg-black {
+      .video-footer__block {
+        a {
+          color: $white;
+
+          &:hover {
+            color: darken(white, 20);
+          }
         }
       }
     }

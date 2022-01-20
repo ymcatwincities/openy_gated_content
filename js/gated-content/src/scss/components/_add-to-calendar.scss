@@ -1,7 +1,6 @@
 .add-to-calendar {
   button {
     margin-right:     10px;
-    outline:          none;
     border:           2px solid $concrete;
     border-radius:    50%;
     background-color: $white;
@@ -10,6 +9,10 @@
     height:           50px;
     line-height:      1px;
     font-size:        18px;
+
+    &:focus {
+      outline:        none;
+    }
   }
 
   .dropdown-menu {

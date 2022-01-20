@@ -14,6 +14,10 @@
   color: $gray !important;
 }
 
+.text-red {
+  color: $red !important;
+}
+
 .bg-black {
   background-color: $black !important;
 }
@@ -22,12 +26,24 @@
   background-color: $white !important;
 }
 
+.bg-red {
+  background-color: $red !important;
+}
+
 .fill-white {
   fill: $white !important;
 }
 
 .fill-gray {
   fill: $gray !important;
+}
+
+.fill-red {
+  fill: $red !important;
+}
+
+.fill-camarone {
+  fill: $camarone !important;
 }
 
 .border-thunder {

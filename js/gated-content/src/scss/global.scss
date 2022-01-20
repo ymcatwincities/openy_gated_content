@@ -19,7 +19,10 @@
 @import "widgets/video-level";
 @import "widgets/button";
 @import "widgets/timer";
+@import "widgets/private";
+@import "widgets/canceled";
 @import "widgets/adjust-button";
+@import "widgets/accordion-tab";
 @import "components/pagination";
 @import "components/svg-icon";
 @import "components/top-menu";
@@ -27,6 +30,8 @@
 @import "components/video-teaser";
 @import "components/event-teaser";
 @import "components/category-teaser";
+@import "components/duration-teaser";
+@import "components/instructor-teaser";
 @import "components/blog-teaser";
 @import "components/add-to-calendar";
 @import "components/favorites";
@@ -34,6 +39,16 @@
 @import "components/adjust-modal";
 @import "components/spinner";
 @import "components/paragraph-headline";
+@import "components/personal-training-listing";
+@import "components/personal-training/meeting";
+@import "components/personal-training/meeting/join-meeting";
+@import "components/personal-training/meeting/meeting-player";
+@import "components/personal-training/meeting/control-panel";
+@import "components/personal-training/modal/join-options";
+@import "components/personal-training/modal/view-options";
+@import "components/personal-training/modal/leave-meeting";
+@import "components/personal-training/modal/chat.scss";
+@import "components/personal-training/modal/device-manager.scss";
 @import "views/favorites_page";
 @import "views/video-page";
 @import "views/category-page";

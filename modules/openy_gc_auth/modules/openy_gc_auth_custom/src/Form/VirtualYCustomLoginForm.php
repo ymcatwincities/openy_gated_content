@@ -11,6 +11,10 @@ use Drupal\Core\Mail\MailManagerInterface;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\Core\Url;
 use Drupal\openy_gc_auth\GCUserAuthorizer;
+use Drupal\openy_gc_auth\GCVerificationTrait;
+use Drupal\simple_recaptcha\SimpleReCaptchaFormManager;
+use Drupal\user\Entity\User;
+use Drupal\user\UserDataInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -20,6 +24,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
  * @package Drupal\openy_gc_auth_custom\Form
  */
 class VirtualYCustomLoginForm extends FormBase {
+
+  use GCVerificationTrait;
 
   /**
    * The current request.
@@ -59,7 +65,7 @@ class VirtualYCustomLoginForm extends FormBase {
   /**
    * Private storage.
    *
-   * @var \Drupal\Core\TempStore\PrivateTempStoreFactory
+   * @var \Drupal\Core\TempStore\PrivateTempStore
    */
   protected $privateTempStore;
 
@@ -71,6 +77,20 @@ class VirtualYCustomLoginForm extends FormBase {
   protected $gcUserAuthorizer;
 
   /**
+   * Form manager service from simple_recaptcha module.
+   *
+   * @var \Drupal\simple_recaptcha\SimpleReCaptchaFormManager
+   */
+  protected $reCaptchaFormManager;
+
+  /**
+   * The user data service.
+   *
+   * @var \Drupal\user\UserDataInterface
+   */
+  protected $userData;
+
+  /**
    * {@inheritdoc}
    */
   public function __construct(
@@ -80,7 +100,9 @@ class VirtualYCustomLoginForm extends FormBase {
     MailManagerInterface $mail_manager,
     FloodInterface $flood,
     PrivateTempStoreFactory $private_temp_store,
-    GCUserAuthorizer $gcUserAuthorizer
+    GCUserAuthorizer $gcUserAuthorizer,
+    SimpleReCaptchaFormManager $reCaptchaFormManager,
+    UserDataInterface $user_data
   ) {
     $this->currentRequest = $requestStack->getCurrentRequest();
     $this->configFactory = $config_factory;
@@ -89,6 +111,8 @@ class VirtualYCustomLoginForm extends FormBase {
     $this->flood = $flood;
     $this->privateTempStore = $private_temp_store->get('openy_gc_auth.provider.custom');
     $this->gcUserAuthorizer = $gcUserAuthorizer;
+    $this->reCaptchaFormManager = $reCaptchaFormManager;
+    $this->userData = $user_data;
   }
 
   /**
@@ -102,7 +126,9 @@ class VirtualYCustomLoginForm extends FormBase {
       $container->get('plugin.manager.mail'),
       $container->get('flood'),
       $container->get('tempstore.private'),
-      $container->get('openy_gc_auth.user_authorizer')
+      $container->get('openy_gc_auth.user_authorizer'),
+      $container->get('simple_recaptcha.form_manager'),
+      $container->get('user.data')
     );
   }
 
@@ -139,17 +165,13 @@ class VirtualYCustomLoginForm extends FormBase {
       '#required' => TRUE,
     ];
 
-    if ($provider_config->get('enable_recaptcha')) {
-      $form['captcha'] = [
-        '#type' => 'captcha',
-        '#captcha_type' => 'recaptcha/reCAPTCHA',
-        '#captcha_validate' => 'recaptcha_captcha_validation',
-      ];
-    }
-
     $form['actions'] = [
       '#type' => 'actions',
     ];
+
+    if ($provider_config->get('enable_recaptcha')) {
+      $this->reCaptchaFormManager->addReCaptchaCheckbox($form, $this->getFormId());
+    }
 
     $form['actions']['submit'] = [
       '#type' => 'submit',
@@ -218,15 +240,22 @@ class VirtualYCustomLoginForm extends FormBase {
       ->loadByProperties(['mail' => $mail]);
     $user = reset($users);
 
-    if ($provider_config->get('enable_email_verification')) {
-      if ($provider_config->get('require_email_verification') || !$user->isActive()) {
-        // Send email verification if user is blocked or if enabled required
-        // email verification.
-        $this->sendEmailVerification($user, $provider_config, $mail);
-        $form_state->setValue('verified', TRUE);
-        $form_state->setRebuild(TRUE);
-        return;
-      }
+    if (($user instanceof User) &&
+      $provider_config->get('enable_email_verification') &&
+      (
+        !$user->isActive() ||
+        (
+          $provider_config->get('require_email_verification') &&
+          $this->isVerificationNeeded($user)
+        )
+      )
+    ) {
+      // Send email verification if user is blocked or if enabled required
+      // email verification and the browser is not yet verified.
+      $this->sendEmailVerification($user, $provider_config, $mail);
+      $form_state->setValue('verified', TRUE);
+      $form_state->setRebuild(TRUE);
+      return;
     }
 
     $this->gcUserAuthorizer->authorizeUser($user->getAccountName(), $mail);

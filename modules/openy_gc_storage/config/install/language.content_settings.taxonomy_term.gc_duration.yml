@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.gc_duration
+id: taxonomy_term.gc_duration
+target_entity_type_id: taxonomy_term
+target_bundle: gc_duration
+default_langcode: site_default
+language_alterable: false
