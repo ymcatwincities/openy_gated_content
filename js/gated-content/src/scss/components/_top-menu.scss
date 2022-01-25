@@ -2,8 +2,11 @@
   position:         fixed;
   background-color: black;
   width:            100%;
+  z-index: 1030;
 
-  @include median(z-index, 1030, 39);
+  @include media-breakpoint-down(md) {
+    z-index: 39 !important;
+  }
 
   > div {
     display:         flex;
