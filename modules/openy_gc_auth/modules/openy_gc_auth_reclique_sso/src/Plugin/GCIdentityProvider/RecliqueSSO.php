@@ -8,6 +8,7 @@ use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Messenger\MessengerTrait;
 use Drupal\Core\Url;
+use Drupal\openy_gated_content\GCUserService;
 use Drupal\openy_gc_auth\GCIdentityProviderPluginBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -64,9 +65,10 @@ class RecliqueSSO extends GCIdentityProviderPluginBase {
     ConfigFactoryInterface $config,
     EntityTypeManagerInterface $entity_type_manager,
     RequestStack $requestStack,
-    FormBuilderInterface $form_builder
+    FormBuilderInterface $form_builder,
+    GCUserService $gc_user_service
   ) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $config, $entity_type_manager, $form_builder);
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $config, $entity_type_manager, $form_builder, $gc_user_service);
     $this->request = $requestStack->getCurrentRequest();
   }
 
@@ -81,7 +83,8 @@ class RecliqueSSO extends GCIdentityProviderPluginBase {
       $container->get('config.factory'),
       $container->get('entity_type.manager'),
       $container->get('request_stack'),
-      $container->get('form_builder')
+      $container->get('form_builder'),
+      $container->get('openy_gated_content.user_service')
     );
   }
 
