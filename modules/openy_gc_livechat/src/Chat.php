@@ -2,14 +2,17 @@
 
 namespace Drupal\openy_gc_livechat;
 
-use Ratchet\MessageComponentInterface;
 use Ratchet\ConnectionInterface;
+use Ratchet\MessageComponentInterface;
 
 /**
- * Chat class.
+ * Provides Chat class based on Ratchet component.
  */
 class Chat implements MessageComponentInterface {
 
+  /**
+   * Clients connected to websocket server.
+   */
   protected $clients;
 
   /**
@@ -33,7 +36,7 @@ class Chat implements MessageComponentInterface {
    * {@inheritdoc}
    */
   public function onMessage(ConnectionInterface $from, $msg) {
-    $data = json_decode($msg, true);
+    $data = json_decode($msg, TRUE);
 
     $db = \Drupal::database();
     $db->insert('openy_gc_livechat__chat_history')
@@ -42,12 +45,14 @@ class Chat implements MessageComponentInterface {
         'uid',
         'username',
         'message',
-        'created'
+        'created',
       ])
       ->values([
         'cid' => $data['chatroom_id'],
-        'uid' => 'test_uid', // @todo: pass from client side.
-        'username' => 'test_username', // @todo: pass from client side.
+        // @todo Pass uid from client side.
+        'uid' => 'test_uid',
+        // @todo Pass username from client side.
+        'username' => 'test_username',
         'message' => $data['msg'],
         'created' => time(),
       ])
@@ -61,7 +66,8 @@ class Chat implements MessageComponentInterface {
         $data['from'] = 'Me';
       }
       else {
-        $data['from'] = '$user_name'; // @todo: pass from client side.
+        // @todo: Pass username from client side.
+        $data['from'] = '$user_name';
       }
       // Send message only to clients connected to the same chatroom.
       if ($info['chatroom_id'] == $data['chatroom_id']) {

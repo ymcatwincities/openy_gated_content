@@ -2,12 +2,12 @@
 
 namespace Drupal\openy_gc_livechat;
 
-use Ratchet\Server\IoServer;
 use Ratchet\Http\HttpServer;
+use Ratchet\Server\IoServer;
 use Ratchet\WebSocket\WsServer;
 
 /**
- * Class SocketServer.
+ * Provides SocketServer class for running websocket server.
  *
  * @package Drupal\openy_gc_livechat
  */
