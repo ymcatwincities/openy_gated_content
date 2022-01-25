@@ -8,6 +8,7 @@ label: Import Virtual Y videos
 deriver: Drupal\openy_gc_shared_content_server\SourceMigrationDeriver
 source:
   entity_type: gc_video
+  # Retained for backwards-compatibility.
   json_includes:
     - field_gc_video_media
   plugin: url
@@ -22,38 +23,39 @@ source:
     x-shared-referer: SHARED_CONTENT_REFERRER_WEBSITE
     authorization: SHARED_CONTENT_CONNECTION_TOKEN
   urls: replace_me
-  item_selector: included/
+  item_selector: included/field_gc_video_media
   fields:
     - name: id
       label: 'id'
-      selector: /id
+      selector: /uuid/0/value
     - name: name
       label: 'Name'
-      selector: /attributes/name
+      selector: /name/0/value
     - name: created
       label: 'Created'
-      selector: /attributes/created
+      selector: /created/0/value
     - name: changed
       label: 'Changed'
-      selector: /attributes/changed
+      selector: /changed/0/value
     - name: status
       label: 'Status'
-      selector: /attributes/status
+      selector: /status/0/value
+    # Retained for backwards-compatibility.
     - name: type
       label: 'Type'
       selector: /type
     - name: field_media_in_library
       label: 'Media in library'
-      selector: /attributes/field_media_in_library
+      selector: /field_media_in_library/0/value
     - name: field_media_source
       label: 'Media source'
-      selector: /attributes/field_media_source
+      selector: /field_media_source/0/value
     - name: field_media_video_embed_field
       label: 'Video Embed'
-      selector: /attributes/field_media_video_embed_field
+      selector: /field_media_video_embed_field/0/value
     - name: field_media_video_id
       label: 'Video ID'
-      selector: /attributes/field_media_video_id
+      selector: /field_media_video_id/0/value
   ids:
     id:
       type: string
