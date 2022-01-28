@@ -13,6 +13,7 @@
             @playerEvent="logPlaybackEvent($event)"
           />
         </div>
+        <ChatRoom></ChatRoom>
       </div>
       <div class="video-footer-wrapper bg-white">
         <div class="video-footer gated-containerV2 px--20-10 py-40-20 text-black">
@@ -33,6 +34,7 @@
                 Starts in {{ startsIn }}
               </template>
             </div>
+            <ChatRoomItem></ChatRoomItem>
           </div>
           <div class="verdana-14-12 text-thunder">
             <div class="video-footer__block">
@@ -115,6 +117,8 @@ import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
 import { EventMixin } from '@/mixins/EventMixin';
 import { SeriesEventMixin } from '@/mixins/SeriesEventMixin';
 import SvgIcon from '@/components/SvgIcon.vue';
+import ChatRoom from '@/components/chat-room/modal/ChatRoom.vue';
+import ChatRoomItem from '@/components/chat-room/live-stream/ChatRoomItem.vue';
 
 export default {
   name: 'LiveStreamPage',
@@ -127,6 +131,8 @@ export default {
     AddToCalendar,
     Spinner,
     CategoryLinks,
+    ChatRoom,
+    ChatRoomItem,
   },
   props: {
     id: {
