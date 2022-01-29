@@ -10,7 +10,7 @@
     "dev": "vue-cli-service build --target lib --formats umd-min --name gated-content src/main.js --watch"
   },
   "dependencies": {
-    "@vue/babel-preset-app": "^3.12.1",
+    "@vue/babel-preset-app": "^4.5.15",
     "axios": "^0.21.1",
     "babel-polyfill": "^6.26.0",
     "bootstrap": "^4.5.3",
