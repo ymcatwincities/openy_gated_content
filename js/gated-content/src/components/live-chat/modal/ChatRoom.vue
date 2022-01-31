@@ -1,16 +1,16 @@
 <template>
   <Modal
     class="modal-chat text-black"
-    :style="{'display': isShowChatModal ? 'table' : 'none'}"
-    @close="toggleShowChatModal"
+    :style="{'display': isShowLiveChatModal ? 'table' : 'none'}"
+    @close="toggleShowLiveChatModal"
   >
     <template #header><span>Chat</span></template>
     <template #body>
       <div
-        v-for="(msg, index) in chatSession"
+        v-for="(msg, index) in liveChatSession"
         :key="index"
         class="message"
-        :class="{'d-right': msg.author === localName, 'd-left': msg.author !== localName}"
+        :class="{'d-right': msg.author === liveChatLocalName, 'd-left': msg.author !== liveChatLocalName}"
       >
         <div class="user-icon">
           <span>{{ getMsgAuthor(msg.author, true) }}</span>
@@ -55,25 +55,24 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'isShowChatModal',
-      'chatSession',
-      'unreadMessagesCount',
-      'localName',
-      'isInstructorRole',
+      'isShowLiveChatModal',
+      'liveChatSession',
+      'unreadLiveChatMessagesCount',
+      'liveChatLocalName',
       'getAppSettings',
     ]),
   },
   watch: {
-    unreadMessagesCount: 'beep',
+    unreadLiveChatMessagesCount: 'beep',
   },
   methods: {
     ...mapActions([
-      'toggleShowChatModal',
-      'sendChatMessage',
+      'toggleShowLiveChatModal',
+      'sendLiveChatMessage',
     ]),
     messageEnterEvent(message) {
       this.newMessage = '';
-      this.sendChatMessage(message);
+      this.sendLiveChatMessage(message);
     },
     formatDate(date) {
       return this.$dayjs.date(date).format('ddd, MMM D, YYYY @ h:mm a');
@@ -82,14 +81,32 @@ export default {
       if (short) {
         return author.slice(0, 1);
       }
-      return author === this.localName ? 'Me' : author;
+      return author === this.liveChatLocalName ? 'Me' : author;
     },
-    beep() {
-      if (this.unreadMessagesCount !== 0 && this.getAppSettings.newMessageSound) {
-        const snd = new Audio(this.getAppSettings.newMessageSound);
-        snd.play();
-      }
-    },
+  },
+  mounted() {
+    const serverURL = `${window.location.host}:8081`;
+
+    const { liveChatMeetingId } = context.getters;
+    const ws = new WebSocket(`ws://${serverURL}/${liveChatMeetingId}`);
+
+    conn.onmessage = function (e) {
+      const data = JSON.parse(e.data);
+      $('.chat-messages').append('<p>' + data.from + ': ' + data.msg + '</p>');
+    };
+
+    const $form = $('#chat-form');
+    $('body').on('submit', $form, function(e) {
+      e.preventDefault();
+      const textarea = $('#edit-chat-message');
+      const message = textarea.val();
+      const data = {
+        chatroom_id : window.location.pathname + window.location.hash.replace('#', ''),
+        msg : message
+      };
+      conn.send(JSON.stringify(data));
+      textarea.val('');
+    });
   },
 };
 </script>
