@@ -117,8 +117,8 @@ import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
 import { EventMixin } from '@/mixins/EventMixin';
 import { SeriesEventMixin } from '@/mixins/SeriesEventMixin';
 import SvgIcon from '@/components/SvgIcon.vue';
-import ChatRoom from '@/components/chat-room/modal/ChatRoom.vue';
-import ChatRoomItem from '@/components/chat-room/live-stream/ChatRoomItem.vue';
+import ChatRoom from '@/components/live-chat/modal/ChatRoom.vue';
+import ChatRoomItem from '@/components/live-chat/live-stream/ChatRoomItem.vue';
 
 export default {
   name: 'LiveStreamPage',
