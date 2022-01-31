@@ -19,7 +19,7 @@ export default {
       };
 
       context.commit('addLiveChatMessage', chatRoomObj);
-      context.dispatch('sendRatchetData', { action: 'receiveChatMessage', payload: msgObj });
+      context.dispatch('sendRatchetData', msgObj);
     },
     async receiveChatMessage(context, msgObj) {
       context.commit('addLiveChatMessage', msgObj);

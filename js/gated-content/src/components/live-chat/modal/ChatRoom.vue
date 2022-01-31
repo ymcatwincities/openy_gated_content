@@ -69,6 +69,7 @@ export default {
     ...mapActions([
       'toggleShowLiveChatModal',
       'sendLiveChatMessage',
+      'initRatchetServer',
     ]),
     messageEnterEvent(message) {
       this.newMessage = '';
@@ -85,28 +86,7 @@ export default {
     },
   },
   mounted() {
-    const serverURL = `${window.location.host}:8081`;
-
-    const { liveChatMeetingId } = context.getters;
-    const ws = new WebSocket(`ws://${serverURL}/${liveChatMeetingId}`);
-
-    conn.onmessage = function (e) {
-      const data = JSON.parse(e.data);
-      $('.chat-messages').append('<p>' + data.from + ': ' + data.msg + '</p>');
-    };
-
-    const $form = $('#chat-form');
-    $('body').on('submit', $form, function(e) {
-      e.preventDefault();
-      const textarea = $('#edit-chat-message');
-      const message = textarea.val();
-      const data = {
-        chatroom_id : window.location.pathname + window.location.hash.replace('#', ''),
-        msg : message
-      };
-      conn.send(JSON.stringify(data));
-      textarea.val('');
-    });
+    this.initRatchetServer();
   },
 };
 </script>
