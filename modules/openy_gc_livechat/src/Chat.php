@@ -30,6 +30,19 @@ class Chat implements MessageComponentInterface {
     $path = $conn->httpRequest->getUri()->getPath();
     $info['chatroom_id'] = $path;
     $this->clients->attach($conn, $info);
+
+    // Get chat history and pass to all clients connected to this chat.
+    $history = $this->loadHistory($path);
+    if ($history) {
+      $data['message_type'] = 'history';
+      $data['history'] = $history;
+      foreach ($this->clients as $client) {
+        // Send chat history only for newly connected user.
+        if ($client->resourceId == $conn->resourceId) {
+          $client->send(json_encode($data));
+        }
+      }
+    }
   }
 
   /**
@@ -90,6 +103,18 @@ class Chat implements MessageComponentInterface {
    */
   public function onError(ConnectionInterface $conn, \Exception $e) {
     $conn->close();
+  }
+
+  /**
+   * Method for retrieving chat history by passed chat id.
+   */
+  private function loadHistory($cid) {
+    return \Drupal::database()->select('openy_gc_livechat__chat_history', 'ch')
+      ->fields('ch')
+      ->condition('cid', $cid)
+      ->orderBy('ch.created')
+      ->execute()
+      ->fetchAll();
   }
 
 }
