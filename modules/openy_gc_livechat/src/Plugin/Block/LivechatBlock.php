@@ -21,11 +21,16 @@ class LivechatBlock extends BlockBase {
   public function build() {
     return [
       '#title' => 'Chat block',
-      '#theme' => 'chat_block',
+      '#theme' => 'livechat_block',
       '#form' => \Drupal::formBuilder()->getForm('\Drupal\openy_gc_livechat\Form\LivechatForm'),
       '#attached' => [
         'library' => [
           'openy_gc_livechat/chat',
+        ],
+        'drupalSettings' => [
+          'openy_gc_livechat' => [
+            'port' => \Drupal::service('config.factory')->get('openy_gc_livechat.settings')->get('port'),
+          ]
         ],
       ],
     ];

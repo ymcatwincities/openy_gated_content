@@ -23,7 +23,7 @@ class SocketServer {
           new Chat()
         )
       ),
-      8081
+      \Drupal::service('config.factory')->get('openy_gc_livechat.settings')->get('port'),
     );
 
     $server->run();
