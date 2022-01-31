@@ -62,11 +62,9 @@ class Chat implements MessageComponentInterface {
       ])
       ->values([
         'cid' => $data['chatroom_id'],
-        // @todo Pass uid from client side.
-        'uid' => 'test_uid',
-        // @todo Pass username from client side.
-        'username' => 'test_username',
-        'message' => $data['msg'],
+        'uid' => $data['uid'],
+        'username' => $data['username'],
+        'message' => $data['message'],
         'created' => time(),
       ])
       ->execute();
