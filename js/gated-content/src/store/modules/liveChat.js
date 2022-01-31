@@ -17,13 +17,13 @@ export default {
     },
     async updateLiveChatLocalName(context, payload) {
       return client({
-        url: 'livechat/update-user-name',
+        url: 'personal-training/update-user-name',
         method: 'post',
         params: {
           _format: 'json',
         },
         data: {
-          liveStreamName: payload,
+          name: payload,
         },
       }).then(() => {
         context.commit('setLiveChatLocalName', payload);
