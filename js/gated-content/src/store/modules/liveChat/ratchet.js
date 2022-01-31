@@ -5,33 +5,30 @@ export default {
   },
   actions: {
     async initRatchetServer(context) {
+      const serverURL = `${window.location.host}:8081${window.location.hash.replace('#', '')}`;
 
-      const serverURL = `${window.location.host}:8081`;
-      const { liveChatMeetingId } = context.getters;
-      const ws = new WebSocket(`ws://${serverURL}/${liveChatMeetingId}`);
+      const ws = new WebSocket(`wss://${serverURL}`);
 
-      console.log(ws);
-
-      ws.addEventListener('onopen', () => {
+      ws.onopen = () => {
         context.commit('setRatchetServerConnected', true);
-        console.log(ws);
-      });
+        console.log(context.getters.ratchetServerConnected);
+      };
 
-      ws.addEventListener('onmessage', () => {
-        context.commit('livestreamChatMessage', true);
-        console.log(ws);
-      });
+      ws.onmessage = (event) => {
+        context.dispatch('receiveChatMessage', event.data);
+        console.log(event.data);
+      };
 
-      ws.addEventListener('close', () => {
+      ws.onclose = () => {
         context.commit('setRatchetServerConnected', false);
         _.delay(() => {
           context.dispatch('initRatchetServer');
         }, 1000);
-      });
+      };
 
       context.commit('setRatchetServer', ws);
     },
-    async sendRatchetData(context, message) {
+    async sendLiveChatData(context, message) {
       if (context.getters.ratchetServerConnected) {
         context.getters.ratchetServer.send(JSON.stringify(message));
       }
@@ -47,5 +44,6 @@ export default {
   },
   getters: {
     ratchetServer: (state) => state.ratchetServer,
+    ratchetServerConnected: (state) => state.ratchetServerConnected,
   },
 };

@@ -44,9 +44,9 @@ export default {
   },
   created() {
     client
-      .get('livechat/get-user-name')
+      .get('personal-training/get-user-name')
       .then((response) => {
-        this.liveChatLocalName = response.data.liveStreamName;
+        this.liveChatLocalName = response.data.name;
       });
   },
   methods: {
