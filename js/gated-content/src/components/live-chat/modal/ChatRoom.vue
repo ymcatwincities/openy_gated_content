@@ -85,8 +85,5 @@ export default {
       return author === this.liveChatLocalName ? 'Me' : author;
     },
   },
-  mounted() {
-    this.initRatchetServer();
-  },
 };
 </script>

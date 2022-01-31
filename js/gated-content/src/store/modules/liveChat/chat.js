@@ -14,7 +14,7 @@ export default {
       const msgObj = {
         chatroom_id: context.getters.liveChatMeetingId,
         username: context.getters.liveChatLocalName,
-        user_id: window.drupalSettings.user.uid,
+        uid: window.drupalSettings.user.uid,
         message,
       };
 

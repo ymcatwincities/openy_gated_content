@@ -196,6 +196,13 @@ export default {
           this.loading = false;
         }).then(() => {
           this.logPlaybackEvent('entityView');
+        }).then(() => {
+          this.$store.dispatch('setLiveChatMetaData', {
+            liveChatMeetingId: this.id,
+            liveChatMeetingDate: this.$dayjs.date(this.video.attributes.date.end_value),
+          }).then(() => {
+            this.$store.dispatch('initRatchetServer');
+          });
         })
         .catch((error) => {
           this.error = true;
