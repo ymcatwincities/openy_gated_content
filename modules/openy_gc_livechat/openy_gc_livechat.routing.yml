@@ -1,0 +1,7 @@
+openy_gc_livechat.settings:
+  path: '/admin/openy/virtual-ymca/gc-livechat-settings'
+  defaults:
+    _form: '\Drupal\openy_gc_livechat\Form\SettingsForm'
+    _title: 'Virtual YMCA Livechat settings'
+  requirements:
+    _permission: 'administer gated content configuration'
