@@ -19,6 +19,7 @@ class LivechatBlock extends BlockBase {
    * {@inheritdoc}
    */
   public function build() {
+    $settings = \Drupal::service('config.factory')->get('openy_gc_livechat.settings');
     return [
       '#title' => 'Chat block',
       '#theme' => 'livechat_block',
@@ -29,7 +30,8 @@ class LivechatBlock extends BlockBase {
         ],
         'drupalSettings' => [
           'openy_gc_livechat' => [
-            'port' => \Drupal::service('config.factory')->get('openy_gc_livechat.settings')->get('port'),
+            'port' => $settings->get('port'),
+            'mode' => $settings->get('mode'),
           ]
         ],
       ],
