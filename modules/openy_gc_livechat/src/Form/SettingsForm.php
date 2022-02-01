@@ -56,7 +56,7 @@ class SettingsForm extends ConfigFormBase {
     $form['cert_path'] = [
       '#title' => $this->t('Path to public key:'),
       '#type' => 'textfield',
-      '#description' => $this->t('Path to https certificate (public) in .pem format.'),
+      '#description' => $this->t('Path to https certificate (public) on your server (in .pem format).'),
       '#default_value' => $this->config('openy_gc_livechat.settings')->get('cert_path'),
     ];
     $form['key_path'] = [
