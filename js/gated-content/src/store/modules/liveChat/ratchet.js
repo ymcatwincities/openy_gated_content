@@ -12,15 +12,31 @@ export default {
 
       ws.onopen = () => {
         context.commit('setRatchetServerConnected', true);
-        console.log(context.getters.ratchetServerConnected);
       };
 
       ws.onmessage = (event) => {
         const data = JSON.parse(event.data);
         if (data.message_type === 'history') {
-          context.commit('addLiveChatMessage', data);
+          const { history } = data;
+
+          // eslint-disable-next-line array-callback-return
+          history.map((value) => {
+            const chatRoomMsg = {
+              author: value.username,
+              message: value.message,
+              date: value.created,
+            };
+
+            context.commit('addLiveChatMessage', chatRoomMsg);
+          });
         } else {
-          context.dispatch('receiveChatMessage', data);
+          const chatRoomMsg = {
+            author: data.username,
+            message: data.message,
+            date: new Date(),
+          };
+
+          context.dispatch('receiveChatMessage', chatRoomMsg);
         }
       };
 
