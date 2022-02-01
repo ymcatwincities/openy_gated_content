@@ -12,6 +12,8 @@ class Chat implements MessageComponentInterface {
 
   /**
    * Clients connected to websocket server.
+   *
+   * @var \SplObjectStorage
    */
   protected $clients;
 
