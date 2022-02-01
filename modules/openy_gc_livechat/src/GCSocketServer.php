@@ -5,16 +5,16 @@ namespace Drupal\openy_gc_livechat;
 use Ratchet\Http\HttpServer;
 use Ratchet\Server\IoServer;
 use Ratchet\WebSocket\WsServer;
-use React\EventLoop\Factory;
+use React\EventLoop\Loop;
 use React\Socket\SecureServer;
-use React\Socket\Server;
+use React\Socket\SocketServer;
 
 /**
  * Provides SocketServer class for running websocket server.
  *
  * @package Drupal\openy_gc_livechat
  */
-class SocketServer {
+class GCSocketServer {
 
   /**
    * Starts websocket server.
@@ -22,9 +22,9 @@ class SocketServer {
   public static function run() {
     $settings = \Drupal::service('config.factory')->get('openy_gc_livechat.settings');
     if ($settings->get('mode') == 'https') {
-      $loop = Factory::create();
+      $loop = Loop::get();
       $webSock = new SecureServer(
-        new Server('0.0.0.0:' . $settings->get('port'), $loop),
+        new SocketServer('0.0.0.0:' . $settings->get('port'), [], $loop),
         $loop,
         [
           'local_cert' => $settings->get('cert_path'),
