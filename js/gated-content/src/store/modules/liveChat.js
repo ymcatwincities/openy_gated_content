@@ -9,15 +9,20 @@ export default {
     liveChatMeetingId: false,
     liveChatMeetingDate: null,
     liveChatLocalName: null,
+    liveChatUserId: null,
+    liveChatRatchetConfigs: null,
   },
   actions: {
-    async setLiveChatMetaData(context, payload) {
+    async setLiveChatData(context, payload) {
       context.commit('setLiveChatMeetingId', payload.liveChatMeetingId);
       context.commit('setLiveChatMeetingDate', payload.liveChatMeetingDate);
+      context.commit('setLiveChatLocalName', payload.liveChatLocalName);
+      context.commit('setLiveChatUserId', payload.liveChatUserId);
+      context.commit('setLiveChatRatchetConfigs', payload.liveChatRatchetConfigs);
     },
     async updateLiveChatLocalName(context, payload) {
       return client({
-        url: 'personal-training/update-user-name',
+        url: 'livechat/update-user-name',
         method: 'post',
         params: {
           _format: 'json',
@@ -40,11 +45,19 @@ export default {
     setLiveChatLocalName(state, value) {
       state.liveChatLocalName = value;
     },
+    setLiveChatUserId(state, value) {
+      state.liveChatUserId = value;
+    },
+    setLiveChatRatchetConfigs(state, value) {
+      state.liveChatRatchetConfigs = value;
+    },
   },
   getters: {
     isLiveChatMeetingComplete: (state) => dayjs().isAfter(state.liveChatMeetingDate),
     liveChatMeetingId: (state) => state.liveChatMeetingId,
     liveChatLocalName: (state) => state.liveChatLocalName,
+    liveChatUserId: (state) => state.liveChatUserId,
+    liveChatRatchetConfigs: (state) => state.liveChatRatchetConfigs,
   },
   modules: {
     liveChat,

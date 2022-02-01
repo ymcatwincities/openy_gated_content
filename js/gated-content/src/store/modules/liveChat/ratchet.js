@@ -5,10 +5,13 @@ export default {
   },
   actions: {
     async initRatchetServer(context) {
-      const serverURL = `${window.location.host}:8081`;
-
       const { liveChatMeetingId } = context.getters;
-      const ws = new WebSocket(`ws://${serverURL}/${liveChatMeetingId}`);
+      const { port, mode } = context.getters.liveChatRatchetConfigs;
+
+      const protocol = mode === 'https' ? 'wss://' : 'ws://';
+      const serverURL = `${window.location.host}:${port}`;
+
+      const ws = new WebSocket(`${protocol}${serverURL}/${liveChatMeetingId}`);
 
       ws.onopen = () => {
         context.commit('setRatchetServerConnected', true);
@@ -23,8 +26,10 @@ export default {
           history.map((value) => {
             const chatRoomMsg = {
               author: value.username,
+              uid: value.uid,
               message: value.message,
-              date: value.created,
+              // eslint-disable-next-line radix
+              date: parseInt(value.created),
             };
 
             context.commit('addLiveChatMessage', chatRoomMsg);
@@ -32,6 +37,7 @@ export default {
         } else {
           const chatRoomMsg = {
             author: data.username,
+            uid: data.uid,
             message: data.message,
             date: new Date(),
           };

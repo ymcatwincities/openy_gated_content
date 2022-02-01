@@ -6,8 +6,8 @@
     >
       <SvgIcon icon="question_answer_black_24dp"></SvgIcon>
       <span v-if="unreadLiveChatMessagesCount" class="unread-count">
-                  {{ unreadLiveChatMessagesCount }}
-                </span>
+        {{ unreadLiveChatMessagesCount }}
+      </span>
     </div>
     <LiveChatUserName></LiveChatUserName>
   </div>
