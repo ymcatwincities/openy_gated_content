@@ -30,7 +30,7 @@ class SocketServer {
           'local_cert' => $settings->get('cert_path'),
           'local_pk' => $settings->get('key_path'),
           'allow_self_signed' => !$settings->get('env') == 'local',
-          'verify_peer' => FALSE
+          'verify_peer' => FALSE,
         ]
       );
       $server = new IoServer(

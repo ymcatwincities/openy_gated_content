@@ -12,6 +12,8 @@ class Chat implements MessageComponentInterface {
 
   /**
    * Clients connected to websocket server.
+   *
+   * @var \SplObjectStorage
    */
   protected $clients;
 
@@ -79,7 +81,7 @@ class Chat implements MessageComponentInterface {
         $data['from'] = 'Me';
       }
       else {
-        // @todo: Pass username from client side.
+        // @todo Pass username from client side.
         $data['from'] = '$user_name';
       }
       // Send message only to clients connected to the same chatroom.

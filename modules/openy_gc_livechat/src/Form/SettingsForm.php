@@ -32,8 +32,8 @@ class SettingsForm extends ConfigFormBase {
       '#title' => $this->t('Mode:'),
       '#type' => 'radios',
       '#options' => [
-        'http' => 'Http',
-        'https' => 'Https'
+        'http' => $this->t('Http'),
+        'https' => $this->t('Https'),
       ],
       '#default_value' => $this->config('openy_gc_livechat.settings')->get('mode'),
     ];
@@ -41,28 +41,28 @@ class SettingsForm extends ConfigFormBase {
       '#title' => $this->t('Environment:'),
       '#type' => 'radios',
       '#options' => [
-        'local' => 'Local',
-        'prod' => 'Production'
+        'local' => $this->t('Local'),
+        'prod' => $this->t('Production'),
       ],
-      '#description' => 'Use when https mode is enabled for any live server.',
+      '#description' => $this->t('Use when https mode is enabled for any live server.'),
       '#default_value' => $this->config('openy_gc_livechat.settings')->get('env'),
     ];
     $form['port'] = [
       '#title' => $this->t('Port:'),
       '#type' => 'textfield',
-      '#description' => 'Port using by Websocket server for making connections.',
+      '#description' => $this->t('Port using by Websocket server for making connections.'),
       '#default_value' => $this->config('openy_gc_livechat.settings')->get('port'),
     ];
     $form['cert_path'] = [
       '#title' => $this->t('Path to public key:'),
       '#type' => 'textfield',
-      '#description' => 'Path to https certificate (public) in .pem format.',
+      '#description' => $this->t('Path to https certificate (public) in .pem format.'),
       '#default_value' => $this->config('openy_gc_livechat.settings')->get('cert_path'),
     ];
     $form['key_path'] = [
       '#title' => $this->t('Path to private key:'),
       '#type' => 'textfield',
-      '#description' => 'Path to https certificate (private) in .pem format.',
+      '#description' => $this->t('Path to https certificate (private) in .pem format.'),
       '#default_value' => $this->config('openy_gc_livechat.settings')->get('key_path'),
     ];
     $form['actions']['#type'] = 'actions';
