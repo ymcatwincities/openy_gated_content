@@ -5,18 +5,39 @@ export default {
   },
   actions: {
     async initRatchetServer(context) {
-      const serverURL = `${window.location.host}:8081${window.location.hash.replace('#', '')}`;
+      const serverURL = `${window.location.host}:8081`;
 
-      const ws = new WebSocket(`wss://${serverURL}`);
+      const { liveChatMeetingId } = context.getters;
+      const ws = new WebSocket(`ws://${serverURL}/${liveChatMeetingId}`);
 
       ws.onopen = () => {
         context.commit('setRatchetServerConnected', true);
-        console.log(context.getters.ratchetServerConnected);
       };
 
       ws.onmessage = (event) => {
-        context.dispatch('receiveChatMessage', event.data);
-        console.log(event.data);
+        const data = JSON.parse(event.data);
+        if (data.message_type === 'history') {
+          const { history } = data;
+
+          // eslint-disable-next-line array-callback-return
+          history.map((value) => {
+            const chatRoomMsg = {
+              author: value.username,
+              message: value.message,
+              date: value.created,
+            };
+
+            context.commit('addLiveChatMessage', chatRoomMsg);
+          });
+        } else {
+          const chatRoomMsg = {
+            author: data.username,
+            message: data.message,
+            date: new Date(),
+          };
+
+          context.dispatch('receiveChatMessage', chatRoomMsg);
+        }
       };
 
       ws.onclose = () => {

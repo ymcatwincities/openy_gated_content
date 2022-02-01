@@ -5,20 +5,13 @@ export default {
   },
   actions: {
     sendLiveChatMessage(context, message) {
-      const chatRoomObj = {
-        author: context.getters.liveChatLocalName,
-        message,
-        date: new Date(),
-      };
-
       const msgObj = {
         chatroom_id: context.getters.liveChatMeetingId,
         username: context.getters.liveChatLocalName,
-        user_id: window.drupalSettings.user.uid,
+        uid: window.drupalSettings.user.uid,
         message,
       };
 
-      context.commit('addLiveChatMessage', chatRoomObj);
       context.dispatch('sendLiveChatData', msgObj);
     },
     async receiveChatMessage(context, msgObj) {
