@@ -6,7 +6,7 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Class LivechatForm.
+ * Class LivechatForm provides form for Chat block.
  *
  * @package Drupal\openy_gc_livechat\Form
  */
@@ -40,7 +40,7 @@ class LivechatForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    \Drupal::messenger()->addMessage($this->t('Your message was submitted!'));
+    $this->messenger()->addMessage($this->t('Your message was submitted!'));
   }
 
 }
