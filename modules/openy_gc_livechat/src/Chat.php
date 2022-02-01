@@ -28,6 +28,7 @@ class Chat implements MessageComponentInterface {
   public function onOpen(ConnectionInterface $conn) {
     // Set request's path as chatroom's ID.
     $path = $conn->httpRequest->getUri()->getPath();
+    $path = str_replace('/', '', $path);
     $info['chatroom_id'] = $path;
     $this->clients->attach($conn, $info);
 
@@ -78,7 +79,7 @@ class Chat implements MessageComponentInterface {
       }
       else {
         // @todo: Pass username from client side.
-        $data['from'] = '$user_name';
+        $data['from'] = $data['username'];
       }
       // Send message only to clients connected to the same chatroom.
       if ($info['chatroom_id'] == $data['chatroom_id']) {
