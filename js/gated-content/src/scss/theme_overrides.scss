@@ -1,3 +1,6 @@
+.toolbar .toolbar-tray {
+  z-index: 1031;
+}
 .openy_carnation-based.openy-gated-content {
   main > div > div {
     > .banner {
@@ -384,47 +387,73 @@
       margin-top: 100px !important;
     }
 
-    @media (max-width: 991px) {
+    @include media-breakpoint-down(md) {
       #gated-content .top-menu {
         top: 109px;
+      }
+
+      &.primary-menu-minimize {
+        #gated-content .top-menu {
+          top: 70px;
+        }
       }
 
       .viewport {
         margin-top: 86px;
       }
     }
-
-    @media (max-width: 609px) {
-      #gated-content .top-menu {
-        top: 109px;
-      }
-    }
   }
 
-  &.toolbar-tray-open #gated-content {
-    .top-menu {
-      top: calc(165px + 79px);
+  &.toolbar-fixed {
+    #gated-content {
+      .top-menu {
+        top: calc(165px + 39px);
+      }
+
+      .gated-content-schedule-page {
+        padding-top: 48px;
+      }
+
+      .date-filter {
+        top: 329px;
+      }
+
+      .calendar .desktop .slot.dates {
+        top: 377px;
+      }
     }
 
-    .gated-content-schedule-page {
-      padding-top: 48px;
+    &.toolbar-tray-open {
+      #gated-content {
+        .top-menu {
+          top: calc(165px + 79px);
+        }
+      }
     }
 
-    .date-filter {
-      top: 329px;
-    }
+    &.primary-menu-minimize {
+      #gated-content {
+        .top-menu {
+          top: calc(42px + 39px);
 
-    .calendar .desktop .slot.dates {
-      top: 377px;
+          @include media-breakpoint-down(md) {
+            top: 70px !important;
+          }
+        }
+      }
+
+      &.toolbar-tray-open {
+        #gated-content {
+          .top-menu {
+            top: calc(42px + 79px);
+          }
+        }
+      }
     }
   }
 
   &.primary-menu-minimize {
     #gated-content {
-      .top-menu {
-        @include median(top, 42px, 109px);
-      }
-
       .gated-content-schedule-page {
         padding-top: 0;
       }
@@ -440,9 +469,6 @@
 
     &.toolbar-fixed {
       #gated-content {
-        .top-menu {
-          top: calc(42px + 39px);
-        }
 
         .date-filter {
           top: 166px;
