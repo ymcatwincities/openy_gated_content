@@ -107,6 +107,7 @@
 
 <script>
 import client from '@/client';
+import dayjs from 'dayjs';
 import AddToFavorite from '@/components/AddToFavorite.vue';
 import Spinner from '@/components/Spinner.vue';
 import MediaPlayer from '@/components/MediaPlayer.vue';
@@ -203,9 +204,9 @@ export default {
           this.multipleReferencesWorkaround(response);
           this.loading = false;
 
-          const currentDate = new Date();
-          const startDate = new Date(this.video.attributes.date.value);
-          const endDate = new Date(this.video.attributes.date.end_value);
+          const currentDate = dayjs().toDate();
+          const startDate = dayjs(this.video.attributes.date.value).toDate();
+          const endDate = dayjs(this.video.attributes.date.end_value).toDate();
 
           this.isStreamExpired = !(currentDate <= endDate && currentDate >= startDate);
         }).then(() => {

@@ -1,4 +1,3 @@
-import dayjs from 'dayjs';
 import liveChat from '@/store/modules/liveChat/chat';
 import liveChatModal from '@/store/modules/liveChat/modal';
 import liveChatRatchet from '@/store/modules/liveChat/ratchet';
