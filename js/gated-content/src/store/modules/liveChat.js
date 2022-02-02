@@ -1,4 +1,3 @@
-import dayjs from 'dayjs';
 import liveChat from '@/store/modules/liveChat/chat';
 import liveChatModal from '@/store/modules/liveChat/modal';
 import liveChatRatchet from '@/store/modules/liveChat/ratchet';
@@ -7,7 +6,6 @@ import client from '@/client';
 export default {
   state: {
     liveChatMeetingId: false,
-    liveChatMeetingDate: null,
     liveChatLocalName: null,
     liveChatUserId: null,
     liveChatRatchetConfigs: null,
@@ -15,7 +13,6 @@ export default {
   actions: {
     async setLiveChatData(context, payload) {
       context.commit('setLiveChatMeetingId', payload.liveChatMeetingId);
-      context.commit('setLiveChatMeetingDate', payload.liveChatMeetingDate);
       context.commit('setLiveChatLocalName', payload.liveChatLocalName);
       context.commit('setLiveChatUserId', payload.liveChatUserId);
       context.commit('setLiveChatRatchetConfigs', payload.liveChatRatchetConfigs);
@@ -53,7 +50,6 @@ export default {
     },
   },
   getters: {
-    isLiveChatMeetingComplete: (state) => dayjs().isAfter(state.liveChatMeetingDate),
     liveChatMeetingId: (state) => state.liveChatMeetingId,
     liveChatLocalName: (state) => state.liveChatLocalName,
     liveChatUserId: (state) => state.liveChatUserId,

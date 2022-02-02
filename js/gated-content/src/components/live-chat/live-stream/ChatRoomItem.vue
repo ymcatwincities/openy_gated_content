@@ -22,7 +22,6 @@ export default {
   components: { SvgIcon, LiveChatUserName },
   computed: {
     ...mapGetters([
-      'isLiveChatMeetingComplete',
       'unreadLiveChatMessagesCount',
       'isOpenLiveChatNameModal',
     ]),
