@@ -2,7 +2,9 @@
 
 namespace Drupal\openy_gc_livechat\Controller;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Controller\ControllerBase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -10,6 +12,32 @@ use Symfony\Component\HttpFoundation\Request;
  * Provide actions to update current user name.
  */
 class LiveChatController extends ControllerBase {
+
+  /**
+   * Config factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
+   * LiveChatController constructor.
+   *
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
+   *   Config factory.
+   */
+  public function __construct(ConfigFactoryInterface $configFactory) {
+    $this->configFactory = $configFactory;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('config.factory')
+    );
+  }
 
   /**
    * Get current user name.
@@ -23,7 +51,7 @@ class LiveChatController extends ControllerBase {
   public function getLiveChatData() {
     $user_storage = $this->entityTypeManager()->getStorage('user');
     $user = $user_storage->load($this->currentUser()->id());
-    $ratchet_settings = \Drupal::config('openy_gc_livechat.settings');
+    $ratchet_settings = $this->configFactory->get('openy_gc_livechat.settings');
 
     $data = [
       'name' => $user->getAccountName(),
