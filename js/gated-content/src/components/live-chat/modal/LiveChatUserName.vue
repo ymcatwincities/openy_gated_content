@@ -11,13 +11,13 @@
           type="text"
           class="form-control w-100"
           id="meetingLiveChatUserNameInput"
-          v-model="liveChatLocalName">
+          v-model="liveChatName">
         <span v-if="error" class="text-red verdana-14-12">{{ error }}</span>
       </div>
       <button
         @click="submit"
         class="gc-button"
-        :disabled="!liveChatLocalName">
+        :disabled="!liveChatName">
         Next
       </button>
     </template>
@@ -34,7 +34,7 @@ export default {
   data() {
     return {
       error: null,
-      liveChatLocalName: '',
+      liveChatName: '',
     };
   },
   computed: {
@@ -44,9 +44,9 @@ export default {
   },
   created() {
     client
-      .get('personal-training/get-user-name')
+      .get('livechat/get-livechat-data')
       .then((response) => {
-        this.liveChatLocalName = response.data.name;
+        this.liveChatName = response.data.name;
       });
   },
   methods: {
@@ -58,9 +58,9 @@ export default {
     async submit() {
       this.error = '';
       await this.$store
-        .dispatch('updateLiveChatLocalName', this.liveChatLocalName)
+        .dispatch('updateLiveChatLocalName', this.liveChatName)
         .then(() => {
-          this.toggleShowLiveChatUserNameModal();
+          this.toggleShowLiveChatUserNameModal(true);
           this.toggleShowLiveChatModal();
         })
         .catch((error) => {

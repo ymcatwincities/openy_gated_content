@@ -5,3 +5,27 @@ openy_gc_livechat.settings:
     _title: 'Virtual YMCA Livechat settings'
   requirements:
     _permission: 'administer gated content configuration'
+
+openy_gc_livechat.get_livechat_data:
+  path: '/livechat/get-livechat-data'
+  methods: [GET]
+  defaults:
+    _controller: '\Drupal\openy_gc_livechat\Controller\LiveChatController::getLiveChatData'
+    _title: 'Get user name'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+    _format: 'json'
+    _permission: 'access content'
+    _role: 'authenticated'
+
+openy_gc_livechat.update_user_name:
+  path: '/livechat/update-user-name'
+  methods: [POST]
+  defaults:
+    _controller: '\Drupal\openy_gc_livechat\Controller\LiveChatController::updateName'
+    _title: 'Update user name'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+    _format: 'json'
+    _permission: 'access content'
+    _role: 'authenticated'

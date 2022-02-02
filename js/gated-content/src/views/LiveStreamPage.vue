@@ -146,6 +146,7 @@ export default {
       error: false,
       video: null,
       response: null,
+      liveChatData: null,
       params: [
         'field_ls_category',
         'field_ls_media',
@@ -189,6 +190,12 @@ export default {
         params.include = this.params.join(',');
       }
       client
+        .get('livechat/get-livechat-data')
+        .then((response) => {
+          this.liveChatData = response.data;
+        });
+
+      client
         .get(`jsonapi/eventinstance/live_stream/${this.id}`, { params })
         .then((response) => {
           this.video = this.combine(response.data.data, response.data.included, this.params);
@@ -197,9 +204,12 @@ export default {
         }).then(() => {
           this.logPlaybackEvent('entityView');
         }).then(() => {
-          this.$store.dispatch('setLiveChatMetaData', {
+          this.$store.dispatch('setLiveChatData', {
             liveChatMeetingId: this.id,
             liveChatMeetingDate: this.$dayjs.date(this.video.attributes.date.end_value),
+            liveChatLocalName: this.liveChatData.name,
+            liveChatUserId: this.liveChatData.user_id,
+            liveChatRatchetConfigs: this.liveChatData.ratchet,
           }).then(() => {
             this.$store.dispatch('initRatchetServer');
           });

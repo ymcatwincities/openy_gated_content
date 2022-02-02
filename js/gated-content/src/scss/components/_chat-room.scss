@@ -1,4 +1,9 @@
 .chat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
   margin-left: 10px;
   .svg-container {
     margin-right: 10px;
@@ -16,6 +21,23 @@
       svg {
         fill: $white;
       }
+    }
+  }
+  &.unread {
+    .unread-count {
+      position: absolute;
+      top: -2px;
+      width: 24px;
+      height: 24px;
+      text-align: center;
+      background-color: red;
+      border-radius: 12px;
+      font-weight: bold;
+      font-size: 12px;
+      line-height: 20px;
+      padding: 2px;
+
+      @include median(right, 4px, 4px, 35px);
     }
   }
 }

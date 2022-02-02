@@ -10,14 +10,14 @@
         v-for="(msg, index) in liveChatSession"
         :key="index"
         class="message"
-        :class="{'d-right': msg.author === liveChatLocalName, 'd-left': msg.author !== liveChatLocalName}"
+        :class="{'d-right': msg.uid === liveChatUserId, 'd-left': msg.uid !== liveChatUserId}"
       >
         <div class="user-icon">
-          <span>{{ getMsgAuthor(msg.author, true) }}</span>
+          <span>{{ getMsgAuthor(msg.uid, msg.author, true) }}</span>
         </div>
         <div class="message-card">
           <div class="message-header">
-            <h4 class="message-author mb-0">{{ getMsgAuthor(msg.author) }}</h4>
+            <h4 class="message-author mb-0">{{ getMsgAuthor(msg.uid, msg.author) }}</h4>
             <div class="message-time">{{ formatDate(msg.date) }}</div>
           </div>
           <div class="message-body">{{ msg.message }}</div>
@@ -58,12 +58,9 @@ export default {
       'isShowLiveChatModal',
       'liveChatSession',
       'unreadLiveChatMessagesCount',
-      'liveChatLocalName',
+      'liveChatUserId',
       'getAppSettings',
     ]),
-  },
-  watch: {
-    unreadLiveChatMessagesCount: 'beep',
   },
   methods: {
     ...mapActions([
@@ -78,11 +75,11 @@ export default {
     formatDate(date) {
       return this.$dayjs.date(date).format('ddd, MMM D, YYYY @ h:mm a');
     },
-    getMsgAuthor(author, short = false) {
+    getMsgAuthor(uid, author, short = false) {
       if (short) {
         return author.slice(0, 1);
       }
-      return author === this.liveChatLocalName ? 'Me' : author;
+      return uid === this.liveChatUserId ? 'Me' : author;
     },
   },
 };
