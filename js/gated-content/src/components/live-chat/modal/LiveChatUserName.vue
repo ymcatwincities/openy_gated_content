@@ -40,7 +40,6 @@ export default {
   computed: {
     ...mapGetters([
       'isShowLiveChatUserNameModal',
-      'liveChatLocalName',
     ]),
   },
   created() {
@@ -61,7 +60,7 @@ export default {
       await this.$store
         .dispatch('updateLiveChatLocalName', this.liveChatName)
         .then(() => {
-          this.toggleShowLiveChatUserNameModal();
+          this.toggleShowLiveChatUserNameModal(true);
           this.toggleShowLiveChatModal();
         })
         .catch((error) => {
