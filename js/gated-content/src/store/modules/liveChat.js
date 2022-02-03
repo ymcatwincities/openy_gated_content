@@ -7,6 +7,8 @@ import client from '@/client';
 export default {
   state: {
     liveChatMeetingId: false,
+    liveChatMeetingTitle: null,
+    liveChatMeetingStart: null,
     liveChatMeetingDate: null,
     liveChatLocalName: null,
     liveChatUserId: null,
@@ -15,6 +17,8 @@ export default {
   actions: {
     async setLiveChatData(context, payload) {
       context.commit('setLiveChatMeetingId', payload.liveChatMeetingId);
+      context.commit('setLiveChatMeetingTitle', payload.liveChatMeetingTitle);
+      context.commit('setLiveChatMeetingStart', payload.liveChatMeetingStart);
       context.commit('setLiveChatMeetingDate', payload.liveChatMeetingDate);
       context.commit('setLiveChatLocalName', payload.liveChatLocalName);
       context.commit('setLiveChatUserId', payload.liveChatUserId);
@@ -39,6 +43,12 @@ export default {
     setLiveChatMeetingId(state, value) {
       state.liveChatMeetingId = value;
     },
+    setLiveChatMeetingTitle(state, value) {
+      state.liveChatMeetingTitle = value;
+    },
+    setLiveChatMeetingStart(state, value) {
+      state.liveChatMeetingStart = value;
+    },
     setLiveChatMeetingDate(state, value) {
       state.liveChatMeetingDate = value;
     },
@@ -55,6 +65,8 @@ export default {
   getters: {
     isLiveChatMeetingComplete: (state) => dayjs().isAfter(state.liveChatMeetingDate),
     liveChatMeetingId: (state) => state.liveChatMeetingId,
+    liveChatMeetingTitle: (state) => state.liveChatMeetingTitle,
+    liveChatMeetingStart: (state) => state.liveChatMeetingStart,
     liveChatLocalName: (state) => state.liveChatLocalName,
     liveChatUserId: (state) => state.liveChatUserId,
     liveChatRatchetConfigs: (state) => state.liveChatRatchetConfigs,
