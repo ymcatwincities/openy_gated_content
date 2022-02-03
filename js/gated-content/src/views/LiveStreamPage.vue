@@ -13,7 +13,7 @@
             @playerEvent="logPlaybackEvent($event)"
           />
         </div>
-        <ChatRoom></ChatRoom>
+        <ChatRoom v-if="!isStreamExpired"></ChatRoom>
       </div>
       <div class="video-footer-wrapper bg-white">
         <div class="video-footer gated-containerV2 px--20-10 py-40-20 text-black">
@@ -34,7 +34,7 @@
                 Starts in {{ startsIn }}
               </template>
             </div>
-            <ChatRoomItem></ChatRoomItem>
+            <ChatRoomItem v-if="!isStreamExpired"></ChatRoomItem>
           </div>
           <div class="verdana-14-12 text-thunder">
             <div class="video-footer__block">
@@ -107,6 +107,7 @@
 
 <script>
 import client from '@/client';
+import dayjs from 'dayjs';
 import AddToFavorite from '@/components/AddToFavorite.vue';
 import Spinner from '@/components/Spinner.vue';
 import MediaPlayer from '@/components/MediaPlayer.vue';
@@ -147,6 +148,7 @@ export default {
       video: null,
       response: null,
       liveChatData: null,
+      isStreamExpired: true,
       params: [
         'field_ls_category',
         'field_ls_media',
@@ -201,6 +203,12 @@ export default {
           this.video = this.combine(response.data.data, response.data.included, this.params);
           this.multipleReferencesWorkaround(response);
           this.loading = false;
+
+          const currentDate = dayjs().toDate();
+          const startDate = dayjs(this.video.attributes.date.value).toDate();
+          const endDate = dayjs(this.video.attributes.date.end_value).toDate();
+
+          this.isStreamExpired = !(currentDate <= endDate && currentDate >= startDate);
         }).then(() => {
           this.logPlaybackEvent('entityView');
         }).then(() => {
@@ -213,7 +221,9 @@ export default {
             liveChatUserId: this.liveChatData.user_id,
             liveChatRatchetConfigs: this.liveChatData.ratchet,
           }).then(() => {
-            this.$store.dispatch('initRatchetServer');
+            if (!this.isStreamExpired) {
+              this.$store.dispatch('initRatchetServer');
+            }
           });
         })
         .catch((error) => {

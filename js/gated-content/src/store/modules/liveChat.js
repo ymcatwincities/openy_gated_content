@@ -1,4 +1,3 @@
-import dayjs from 'dayjs';
 import liveChat from '@/store/modules/liveChat/chat';
 import liveChatModal from '@/store/modules/liveChat/modal';
 import liveChatRatchet from '@/store/modules/liveChat/ratchet';
@@ -63,7 +62,6 @@ export default {
     },
   },
   getters: {
-    isLiveChatMeetingComplete: (state) => dayjs().isAfter(state.liveChatMeetingDate),
     liveChatMeetingId: (state) => state.liveChatMeetingId,
     liveChatMeetingTitle: (state) => state.liveChatMeetingTitle,
     liveChatMeetingStart: (state) => state.liveChatMeetingStart,
