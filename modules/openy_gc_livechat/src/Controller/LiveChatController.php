@@ -4,12 +4,13 @@ namespace Drupal\openy_gc_livechat\Controller;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Datetime\DrupalDateTime;
+use Drupal\Core\Link;
+use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Drupal\Core\Link;
-use Drupal\Core\Url;
 
 /**
  * Provide actions to update current user name.
@@ -24,13 +25,34 @@ class LiveChatController extends ControllerBase {
   protected $configFactory;
 
   /**
+   * The database connection used to store flood event information.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  protected $connection;
+
+  /**
+   * The currently active request object.
+   *
+   * @var \Symfony\Component\HttpFoundation\Request
+   */
+  protected $request;
+
+  /**
    * LiveChatController constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   Config factory.
+   * @param \Drupal\Core\Database\Connection $connection
+   *   The database connection which will be used to store the flood event
+   *   information.
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   The currently active request object.
    */
-  public function __construct(ConfigFactoryInterface $configFactory) {
+  public function __construct(ConfigFactoryInterface $configFactory, Connection $connection, Request $request) {
     $this->configFactory = $configFactory;
+    $this->connection = $connection;
+    $this->request = $request;
   }
 
   /**
@@ -38,7 +60,9 @@ class LiveChatController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('config.factory')
+      $container->get('config.factory'),
+      $container->get('database'),
+      $container->get('request_stack')->getCurrentRequest()
     );
   }
 
@@ -107,9 +131,9 @@ class LiveChatController extends ControllerBase {
    * List logs for chats.
    */
   public function logsOverview() {
-    $title = \Drupal::request()->query->get('title');
-    $start_from = \Drupal::request()->query->get('start_from');
-    $start_to = \Drupal::request()->query->get('start_to');
+    $title = $this->request->query->get('title');
+    $start_from = $this->request->query->get('start_from');
+    $start_to = $this->request->query->get('start_to');
 
     $form['form'] = $this->formBuilder()->getForm('Drupal\openy_gc_livechat\Form\LogsSearchForm');
 
@@ -122,12 +146,12 @@ class LiveChatController extends ControllerBase {
     $form['table'] = [
       '#type' => 'table',
       '#header' => $header,
-      '#rows' => self::getChatlogs($title, $start_from, $start_to),
+      '#rows' => $this->getChatlogs($title, $start_from, $start_to),
       '#empty' => $this->t('No records found'),
     ];
 
     $form['pager'] = [
-      '#type' => 'pager'
+      '#type' => 'pager',
     ];
 
     return $form;
@@ -137,7 +161,7 @@ class LiveChatController extends ControllerBase {
    * List chat messages of provided chat.
    */
   public function logDetailsOverview(Request $request, $cid) {
-    $query = \Drupal::database()->select('openy_gc_livechat__chat_history', 'ch')
+    $query = $this->connection->select('openy_gc_livechat__chat_history', 'ch')
       ->extend('\Drupal\Core\Database\Query\PagerSelectExtender')
       ->limit(50);
     $query->fields('ch');
@@ -170,9 +194,9 @@ class LiveChatController extends ControllerBase {
   /**
    * Get unique chat logs records.
    */
-  private function getChatlogs($title = null, $start_from = null, $start_to = null) {
+  private function getChatlogs($title = NULL, $start_from = NULL, $start_to = NULL) {
     $list = [];
-    $query = \Drupal::database()->select('openy_gc_livechat__chat_history', 'ch')
+    $query = $this->connection->select('openy_gc_livechat__chat_history', 'ch')
       ->extend('\Drupal\Core\Database\Query\PagerSelectExtender')
       ->limit(10);
     $query->distinct();
@@ -188,14 +212,19 @@ class LiveChatController extends ControllerBase {
     }
     $results = $query->execute()->fetchAll();
     foreach ($results as $row) {
-      $view = Link::fromTextAndUrl(t('View'), Url::fromUserInput('/admin/virtual-y/chats/' . $row->cid));
+      $view = Link::fromTextAndUrl($this->t('View'), Url::fromUserInput('/admin/virtual-y/chats/' . $row->cid));
 
       $list[] = [
         'title' => $row->title,
-        'start' => $row->start,
+        'start' => DrupalDateTime::createFromFormat(
+          'Y-m-d\TH:i:s',
+          str_replace('.000Z', '', $row->start),
+          date_default_timezone_get())->format('m/d/Y H:i'
+        ),
         'view' => $view,
       ];
     }
     return $list;
   }
+
 }
