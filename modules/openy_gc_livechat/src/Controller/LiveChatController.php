@@ -191,6 +191,7 @@ class LiveChatController extends ControllerBase {
       '#empty' => $this->t('No records found'),
     ];
   }
+
   /**
    * Get unique chat logs records.
    */
