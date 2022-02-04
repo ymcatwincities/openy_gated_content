@@ -7,6 +7,8 @@ export default {
     sendLiveChatMessage(context, message) {
       const msgObj = {
         chatroom_id: context.getters.liveChatMeetingId,
+        title: context.getters.liveChatMeetingTitle,
+        start: context.getters.liveChatMeetingStart,
         username: context.getters.liveChatLocalName,
         uid: window.drupalSettings.user.uid,
         message,
