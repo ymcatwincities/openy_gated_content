@@ -26,8 +26,8 @@
               class="rounded-border border-concrete"
             ></AddToFavorite>
             <AddToCalendar :event="event"></AddToCalendar>
-            <div class="timer" :class="{live: isOnAir}">
-              <template v-if="isOnAir">
+            <div class="timer" :class="{live: isStreamExpired}">
+              <template v-if="!isStreamExpired">
                 LIVE!
               </template>
               <template v-else>
@@ -203,12 +203,6 @@ export default {
           this.video = this.combine(response.data.data, response.data.included, this.params);
           this.multipleReferencesWorkaround(response);
           this.loading = false;
-
-          const currentDate = dayjs().toDate();
-          const startDate = dayjs(this.video.attributes.date.value).toDate();
-          const endDate = dayjs(this.video.attributes.date.end_value).toDate();
-
-          this.isStreamExpired = !(currentDate <= endDate && currentDate >= startDate);
         }).then(() => {
           this.logPlaybackEvent('entityView');
         }).then(() => {
@@ -218,17 +212,25 @@ export default {
             liveChatUserId: this.liveChatData.user_id,
             liveChatRatchetConfigs: this.liveChatData.ratchet,
           }).then(() => {
-            if (!this.isStreamExpired) {
-              this.$store.dispatch('initRatchetServer');
-            }
+            this.expiredStream();
           });
         })
         .catch((error) => {
           this.error = true;
           this.loading = false;
-          console.error(error);
           throw error;
         });
+
+      setInterval(() => {
+        this.expiredStream();
+      }, 5000);
+    },
+    expiredStream() {
+      const currentDate = dayjs().toDate();
+      const startDate = dayjs(this.video.attributes.date.value).toDate();
+      const endDate = dayjs(this.video.attributes.date.end_value).toDate();
+
+      this.isStreamExpired = !(currentDate <= endDate && currentDate >= startDate);
     },
     logPlaybackEvent(eventType) {
       this.$log.trackEvent(eventType, 'series', 'live_stream', this.video.attributes.drupal_internal__id);

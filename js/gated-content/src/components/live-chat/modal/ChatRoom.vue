@@ -60,6 +60,7 @@ export default {
       'unreadLiveChatMessagesCount',
       'liveChatUserId',
       'getAppSettings',
+      'ratchetServerConnected',
     ]),
   },
   methods: {
@@ -81,6 +82,11 @@ export default {
       }
       return uid === this.liveChatUserId ? 'Me' : author;
     },
+  },
+  mounted() {
+    if (!this.ratchetServerConnected) {
+      this.initRatchetServer();
+    }
   },
 };
 </script>
