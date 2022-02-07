@@ -3,3 +3,5 @@ mode: http
 env: local
 cert_path: /var/www/openy.docksal.crt.pem
 key_path: /var/www/openy.docksal.key.pem
+scheduled: '01:00'
+interval: 30

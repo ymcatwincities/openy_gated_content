@@ -65,6 +65,20 @@ class SettingsForm extends ConfigFormBase {
       '#description' => $this->t('Path to https the private certificate on your server (in .pem format).'),
       '#default_value' => $this->config('openy_gc_livechat.settings')->get('key_path'),
     ];
+    $form['scheduled'] = [
+      '#title' => $this->t('Scheduled time of cron run:'),
+      '#type' => 'textfield',
+      '#description' => $this->t('Default is set to 01:00.'),
+      '#placeholder' => '01:00',
+      '#default_value' => $this->config('openy_gc_livechat.settings')->get('scheduled'),
+    ];
+    $form['interval'] = [
+      '#title' => $this->t('How many days chat logs must be saved?'),
+      '#type' => 'textfield',
+      '#description' => $this->t('Default is set to 30 days.'),
+      '#placeholder' => '30',
+      '#default_value' => $this->config('openy_gc_livechat.settings')->get('interval'),
+    ];
     $form['actions']['#type'] = 'actions';
     $form['actions']['submit'] = [
       '#type' => 'submit',
@@ -85,6 +99,8 @@ class SettingsForm extends ConfigFormBase {
     $settings->set('port', $form_state->getValue('port'));
     $settings->set('cert_path', $form_state->getValue('cert_path'));
     $settings->set('key_path', $form_state->getValue('key_path'));
+    $settings->set('scheduled', $form_state->getValue('scheduled'));
+    $settings->set('interval', $form_state->getValue('interval'));
     $settings->save();
     parent::submitForm($form, $form_state);
   }
