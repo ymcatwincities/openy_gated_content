@@ -82,7 +82,7 @@ class LivechatCron {
     if (empty($scheduled)) {
       $scheduled = '01:00';
     }
-    $timezone = new \DateTimeZone(date_default_timezone_get());
+    $timezone = new \DateTimeZone($this->configFactory->get('system.date')->get('timezone')['default']);
 
     $timestamp_last = $this->state->get('openy_gc_livechat.last_cron') ?? 0;
     $last = DrupalDateTime::createFromFormat('U', $timestamp_last)
