@@ -284,7 +284,6 @@ function _openy_gated_content_form_eventseries_live_stream_submit(&$form, FormSt
  */
 function openy_gated_content_page_attachments(array &$attachments) {
   $attachments['#attached']['library'][] = 'openy_gated_content/admin_ui_styles';
-  $attachments['#attached']['drupalSettings']['isLiveChatModuleEnabled'] = \Drupal::service('module_handler')->moduleExists('openy_gc_livechat');
 }
 
 /**
