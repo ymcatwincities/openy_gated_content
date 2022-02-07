@@ -51,7 +51,7 @@ class LivechatCron {
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   Config factory.
    * @param \Drupal\Core\Database\Connection $connection
-   *   The database connection which will be used to store the flood event
+   *   The database connection.
    */
   public function __construct(StateInterface $state, TimeInterface $time, ConfigFactoryInterface $configFactory, Connection $connection) {
     $this->state = $state;
@@ -64,7 +64,7 @@ class LivechatCron {
    * Main cron method.
    */
   public function cron() {
-    $now =  $this->time->getRequestTime();
+    $now = $this->time->getRequestTime();
     if ($this->shouldRun($now)) {
       $this->queueTasks();
       $this->state->set('openy_gc_livechat.last_cron', $now);
