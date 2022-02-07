@@ -9,6 +9,7 @@ use Drupal\Core\Messenger\MessengerTrait;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Driver\Exception\Exception;
+use Drupal\file\FileRepository;
 use Drupal\jsonapi\JsonApiResource\JsonApiDocumentTopLevel;
 use Drupal\jsonapi\ResourceType\ResourceTypeRepositoryInterface;
 use Drupal\openy_gc_shared_content\Entity\SharedContentSourceServer;
@@ -73,6 +74,13 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
   protected $requestStack;
 
   /**
+   * File repository service.
+   *
+   * @var \Drupal\file\FileRepository
+   */
+  protected $fileRepository;
+
+  /**
    * {@inheritdoc}
    */
   public function __construct(
@@ -84,7 +92,8 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
     EntityFieldManagerInterface $entity_field_manager,
     ResourceTypeRepositoryInterface $resource_type_repository,
     SerializerInterface $serializer,
-    RequestStack $requestStack
+    RequestStack $requestStack,
+    FileRepository $file_repository
     ) {
 
     parent::__construct($configuration, $plugin_id, $plugin_definition);
@@ -94,6 +103,7 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
     $this->resourceTypeRepository = $resource_type_repository;
     $this->serializer = $serializer;
     $this->requestStack = $requestStack->getCurrentRequest();
+    $this->fileRepository = $file_repository;
   }
 
   /**
@@ -111,7 +121,8 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
       $container->get('entity_field.manager'),
       $container->get('jsonapi.resource_type.repository'),
       $container->get('jsonapi.serializer'),
-      $container->get('request_stack')
+      $container->get('request_stack'),
+      $container->get('file.repository')
     );
   }
 
@@ -478,7 +489,7 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
       if (!$file_temp) {
         return [];
       }
-      $file = file_save_data($file_temp, $file_data['attributes']['uri']['value']);
+      $file = $this->fileRepository->writeData($file_temp, $file_data['attributes']['uri']['value']);
       if (!$file) {
         return [];
       }

@@ -34,7 +34,7 @@ function _openy_gc_log_check_files_route() {
   }
 
   if ($moduleHandler->moduleExists('file') && !in_array('view.files.page_1', $routes)) {
-    $config_path = drupal_get_path('module', 'file') . '/config/optional';
+    $config_path = \Drupal::service('extension.list.module')->getPath('file') . '/config/optional';
     $config_source = new FileStorage($config_path);
     \Drupal::service('config.installer')->installOptionalConfig($config_source);
   }
@@ -44,7 +44,7 @@ function _openy_gc_log_check_files_route() {
  * Update logs view.
  */
 function openy_gc_log_update_8002() {
-  $config_dir = drupal_get_path('module', 'openy_gc_log');
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_gc_log');
   $config_dir .= '/config/install/';
   $config_importer = \Drupal::service('openy_upgrade_tool.importer');
   $config_importer->setDirectory($config_dir);
@@ -69,7 +69,7 @@ function openy_gc_log_update_8003() {
     $fields[$field_name]
   );
   // Update the logs view.
-  $config_dir = drupal_get_path('module', 'openy_gc_log');
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_gc_log');
   $config_dir .= '/config/install/';
   $config_importer = \Drupal::service('openy_upgrade_tool.importer');
   $config_importer->setDirectory($config_dir);
@@ -83,7 +83,7 @@ function openy_gc_log_update_8003() {
  */
 function openy_gc_log_update_8004() {
   // Update the logs view.
-  $config_dir = drupal_get_path('module', 'openy_gc_log');
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_gc_log');
   $config_dir .= '/config/install/';
   $config_importer = \Drupal::service('openy_upgrade_tool.importer');
   $config_importer->setDirectory($config_dir);
@@ -97,7 +97,7 @@ function openy_gc_log_update_8004() {
  */
 function openy_gc_log_update_8005() {
   // Update the logs view.
-  $config_dir = drupal_get_path('module', 'openy_gc_log');
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_gc_log');
   $config_dir .= '/config/install/';
   $config_importer = \Drupal::service('openy_upgrade_tool.importer');
   $config_importer->setDirectory($config_dir);
@@ -110,7 +110,7 @@ function openy_gc_log_update_8005() {
  * Import configs and update entity.
  */
 function openy_gc_log_update_8006() {
-  $config_dir = drupal_get_path('module', 'openy_gc_log');
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_gc_log');
   $config_dir .= '/config/install/';
   $config_importer = \Drupal::service('openy_upgrade_tool.importer');
   $config_importer->setDirectory($config_dir);
@@ -152,7 +152,7 @@ function openy_gc_log_update_8007() {
  * Import logs view config.
  */
 function openy_gc_log_update_8008() {
-  $config_dir = drupal_get_path('module', 'openy_gc_log');
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_gc_log');
   $config_dir .= '/config/install/';
   $config_importer = \Drupal::service('openy_upgrade_tool.importer');
   $config_importer->setDirectory($config_dir);
@@ -165,7 +165,7 @@ function openy_gc_log_update_8008() {
  * Import activity logs view config.
  */
 function openy_gc_log_update_8009() {
-  $config_dir = drupal_get_path('module', 'openy_gc_log');
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_gc_log');
   $config_dir .= '/config/install/';
   $config_importer = \Drupal::service('openy_upgrade_tool.importer');
   $config_importer->setDirectory($config_dir);
@@ -178,7 +178,7 @@ function openy_gc_log_update_8009() {
  * Import updated logs view config.
  */
 function openy_gc_log_update_8010() {
-  $config_dir = drupal_get_path('module', 'openy_gc_log');
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_gc_log');
   $config_dir .= '/config/install/';
   $config_importer = \Drupal::service('openy_upgrade_tool.importer');
   $config_importer->setDirectory($config_dir);
@@ -191,7 +191,7 @@ function openy_gc_log_update_8010() {
  * Import updated logs view config.
  */
 function openy_gc_log_update_8011() {
-  $config_dir = drupal_get_path('module', 'openy_gc_log');
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_gc_log');
   $config_dir .= '/config/install/';
   $config_importer = \Drupal::service('openy_upgrade_tool.importer');
   $config_importer->setDirectory($config_dir);

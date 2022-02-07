@@ -45,7 +45,7 @@ function openy_gc_auth_custom_update_8001() {
  * Set proper permissions to access the new rest endpoint.
  */
 function openy_gc_auth_custom_update_8002() {
-  $config_dir = drupal_get_path('module', 'openy_gc_auth_custom');
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_gc_auth_custom');
   $config_dir .= '/config/install/';
   // Import new configuration.
   $config_importer = \Drupal::service('openy_upgrade_tool.importer');
@@ -82,7 +82,7 @@ function _openy_gc_auth_custom_update_user_permissions() {
  * Use 'administer gated content configuration' permission in virtual_y_users.
  */
 function openy_gc_auth_custom_update_8003() {
-  $config_dir = drupal_get_path('module', 'openy_gc_auth_custom');
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_gc_auth_custom');
   $config_dir .= '/config/install/';
   // Import new configuration.
   $config_importer = \Drupal::service('openy_upgrade_tool.importer');
@@ -96,7 +96,7 @@ function openy_gc_auth_custom_update_8003() {
  * Use user entity instead of custom im migration.
  */
 function openy_gc_auth_custom_update_8004() {
-  $config_dir = drupal_get_path('module', 'openy_gc_auth_custom');
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_gc_auth_custom');
   $config_dir .= '/config/install/';
   // Import new configuration.
   $config_importer = \Drupal::service('openy_upgrade_tool.importer');
@@ -116,7 +116,7 @@ function openy_gc_auth_custom_update_8004() {
  * Update migration configs according to migrate_source_csv:v3.
  */
 function openy_gc_auth_custom_update_8006() {
-  $config_dir = drupal_get_path('module', 'openy_gc_auth_custom');
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_gc_auth_custom');
   $config_dir .= '/config/install/';
   // Import new configuration.
   $config_importer = \Drupal::service('openy_upgrade_tool.importer');
@@ -152,7 +152,7 @@ function openy_gc_auth_custom_update_8008(&$sandbox) {
  * Add SkipRowIfEmailExcluded migrate process plugin to csv migration.
  */
 function openy_gc_auth_custom_update_8009(&$sandbox) {
-  $config_dir = drupal_get_path('module', 'openy_gc_auth_custom');
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_gc_auth_custom');
   $config_dir .= '/config/install/';
   // Update multiple configurations.
   $configs = [

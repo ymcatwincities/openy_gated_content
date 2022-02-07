@@ -82,7 +82,7 @@ function openy_gated_content_preprocess_paragraph(&$variables) {
     }
 
     if (empty($backgroundImage)) {
-      $file = 'base://' . drupal_get_path('module', 'openy_gated_content') . '/assets/img/paragraph-headline.png';
+      $file = 'base://' . \Drupal::service('extension.list.module')->getPath('openy_gated_content') . '/assets/img/paragraph-headline.png';
       $backgroundImage = Url::fromUri($file)->setAbsolute()->toString();
     }
 
