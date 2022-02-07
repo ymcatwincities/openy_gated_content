@@ -121,7 +121,8 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
       $container->get('entity_field.manager'),
       $container->get('jsonapi.resource_type.repository'),
       $container->get('jsonapi.serializer'),
-      $container->get('request_stack')
+      $container->get('request_stack'),
+      $container->get('file.repository')
     );
   }
 
