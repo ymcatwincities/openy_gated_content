@@ -13,7 +13,7 @@
             @playerEvent="logPlaybackEvent($event)"
           />
         </div>
-        <ChatRoom v-if="!isStreamExpired"></ChatRoom>
+        <ChatRoom v-if="!isStreamExpired && liveChatModuleEnabled"></ChatRoom>
       </div>
       <div class="video-footer-wrapper bg-white">
         <div class="video-footer gated-containerV2 px--20-10 py-40-20 text-black">
@@ -34,7 +34,7 @@
                 Starts in {{ startsIn }}
               </template>
             </div>
-            <ChatRoomItem v-if="!isStreamExpired"></ChatRoomItem>
+            <ChatRoomItem v-if="!isStreamExpired && liveChatModuleEnabled"></ChatRoomItem>
           </div>
           <div class="verdana-14-12 text-thunder">
             <div class="video-footer__block">
@@ -146,6 +146,7 @@ export default {
     return {
       loading: true,
       error: false,
+      liveChatModuleEnabled: false,
       video: null,
       response: null,
       liveChatData: null,
@@ -195,11 +196,16 @@ export default {
       if (this.params) {
         params.include = this.params.join(',');
       }
-      client
-        .get('livechat/get-livechat-data')
-        .then((response) => {
-          this.liveChatData = response.data;
-        });
+
+      this.liveChatModuleEnabled = window.drupalSettings.isLiveChatModuleEnabled;
+
+      if (this.liveChatModuleEnabled) {
+        client
+          .get('livechat/get-livechat-data')
+          .then((response) => {
+            this.liveChatData = response.data;
+          });
+      }
 
       client
         .get(`jsonapi/eventinstance/live_stream/${this.id}`, { params })
@@ -210,14 +216,16 @@ export default {
         }).then(() => {
           this.logPlaybackEvent('entityView');
         }).then(() => {
-          this.$store.dispatch('setLiveChatData', {
-            liveChatMeetingId: this.id,
-            liveChatLocalName: this.liveChatData.name,
-            liveChatUserId: this.liveChatData.user_id,
-            liveChatRatchetConfigs: this.liveChatData.ratchet,
-          }).then(() => {
-            this.expiredStream();
-          });
+          if (this.liveChatModuleEnabled) {
+            this.$store.dispatch('setLiveChatData', {
+              liveChatMeetingId: this.id,
+              liveChatLocalName: this.liveChatData.name,
+              liveChatUserId: this.liveChatData.user_id,
+              liveChatRatchetConfigs: this.liveChatData.ratchet,
+            }).then(() => {
+              this.expiredStream();
+            });
+          }
         })
         .catch((error) => {
           this.error = true;
