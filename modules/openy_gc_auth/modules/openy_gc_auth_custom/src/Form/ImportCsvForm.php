@@ -9,6 +9,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\file\FileUsage\FileUsageInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\file\FileRepository;
 
 /**
  * Import form.
@@ -39,6 +40,13 @@ class ImportCsvForm extends FormBase {
   protected $fileSystem;
 
   /**
+   * File repository service.
+   *
+   * @var \Drupal\file\FileRepository
+   */
+  protected $fileRepository;
+
+  /**
    * Constructs the ImportCsvForm.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -47,11 +55,14 @@ class ImportCsvForm extends FormBase {
    *   The file usage service.
    * @param \Drupal\Core\File\FileSystemInterface $file_system
    *   The file system service.
+   * @param \Drupal\file\FileRepository $fileRepository
+   *   File repository service.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, FileUsageInterface $file_usage, FileSystemInterface $file_system) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, FileUsageInterface $file_usage, FileSystemInterface $file_system, FileRepository $file_repository) {
     $this->entityTypeManager = $entity_type_manager;
     $this->fileUsage = $file_usage;
     $this->fileSystem = $file_system;
+    $this->fileRepository = $file_repository;
   }
 
   /**
@@ -61,7 +72,8 @@ class ImportCsvForm extends FormBase {
     return new static(
       $container->get('entity_type.manager'),
       $container->get('file.usage'),
-      $container->get('file_system')
+      $container->get('file_system'),
+      $container->get('file.repository')
     );
   }
 
@@ -139,7 +151,7 @@ class ImportCsvForm extends FormBase {
     if ($fid && $file = $file_storage->load($fid)) {
       // Rename file.
       $this->fileSystem->prepareDirectory($dir, FileSystemInterface::CREATE_DIRECTORY);
-      $file = file_move($file, $file_path, FileSystemInterface::EXISTS_REPLACE);
+      $file = $this->fileRepository->move($file, $file_path, FileSystemInterface::EXISTS_REPLACE);
       $this->fileUsage->add($file, 'openy_gc_auth_custom', 'migration', 'gc_auth_custom_users');
     }
   }

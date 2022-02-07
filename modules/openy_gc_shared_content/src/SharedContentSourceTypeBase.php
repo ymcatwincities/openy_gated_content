@@ -21,6 +21,7 @@ use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 use Symfony\Component\Serializer\SerializerInterface;
+use Drupal\file\FileRepository;
 
 /**
  * Defines the base plugin for SharedContentSourceType classes.
@@ -73,6 +74,13 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
   protected $requestStack;
 
   /**
+   * File repository service.
+   *
+   * @var \Drupal\file\FileRepository
+   */
+  protected $fileRepository;
+
+  /**
    * {@inheritdoc}
    */
   public function __construct(
@@ -84,7 +92,8 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
     EntityFieldManagerInterface $entity_field_manager,
     ResourceTypeRepositoryInterface $resource_type_repository,
     SerializerInterface $serializer,
-    RequestStack $requestStack
+    RequestStack $requestStack,
+    FileRepository $file_repository
     ) {
 
     parent::__construct($configuration, $plugin_id, $plugin_definition);
@@ -94,6 +103,7 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
     $this->resourceTypeRepository = $resource_type_repository;
     $this->serializer = $serializer;
     $this->requestStack = $requestStack->getCurrentRequest();
+    $this->fileRepository = $file_repository;
   }
 
   /**
@@ -478,7 +488,7 @@ class SharedContentSourceTypeBase extends PluginBase implements SharedContentSou
       if (!$file_temp) {
         return [];
       }
-      $file = file_save_data($file_temp, $file_data['attributes']['uri']['value']);
+      $file = $this->fileRepository->writeData($file_temp, $file_data['attributes']['uri']['value']);
       if (!$file) {
         return [];
       }
