@@ -175,7 +175,7 @@ class SegmentContentAccessCheck implements ContainerInjectionInterface {
   private function isValidSharedClient() {
     // Validate by field_gc_share.
     $query = $this->request->query->all();
-    if (!isset($query['filter']['field_gc_share']) && !(bool) $query['filter']['field_gc_share']) {
+    if (strstr($this->request->getPathInfo(), 'jsonapi') && !isset($query['filter']['field_gc_share']) && !(bool) $query['filter']['field_gc_share']) {
       return FALSE;
     }
 

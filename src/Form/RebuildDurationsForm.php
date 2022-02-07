@@ -47,7 +47,7 @@ class RebuildDurationsForm extends ConfirmFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $batch_builder = new BatchBuilder();
     $batch_builder
-      ->setFile(drupal_get_path('module', 'openy_gc_storage') . '/openy_gc_storage.post_update.php')
+      ->setFile(\Drupal::service('extension.list.module')->getPath('openy_gc_storage') . '/openy_gc_storage.post_update.php')
       ->addOperation('_openy_gc_storage_build_duration_references')
       ->setFinishCallback([$this, 'finished']);
 

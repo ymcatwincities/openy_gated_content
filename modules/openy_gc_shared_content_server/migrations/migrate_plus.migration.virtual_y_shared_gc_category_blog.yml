@@ -4,17 +4,15 @@ dependencies:
   enforced:
     module:
       - openy_gc_shared_content_server
-id: virtual_y_shared_gc_equipment
-migration_tags:
-  - openy_complete_installation
+id: virtual_y_shared_gc_category_blog
 migration_group: virtual_y_shared
 deriver: Drupal\openy_gc_shared_content_server\SourceMigrationDeriver
-label: 'GC Equipment'
+label: 'GC Category (for Blogs)'
 source:
-  entity_type: gc_video
+  entity_type: vy_blog_post
   # Retained for backwards-compatibility.
   json_includes:
-    - field_gc_video_equipment
+    - field_gc_video_category
   plugin: url
   data_fetcher_plugin: http
   # Specifies the JSON parser plugin.
@@ -29,7 +27,7 @@ source:
   urls: replace_me
   constants:
     DOMAIN: replace_me
-  item_selector: included/field_gc_video_equipment
+  item_selector: included/field_gc_video_category
   fields:
     - name: id
       label: 'id'
@@ -49,6 +47,11 @@ process:
     plugin: default_value
     default_value: 1
   name: title
+  # @todo: This creates duplicate entries with video categories. Need process
+  # plugin to skip import if term already exists.
 destination:
   plugin: entity:taxonomy_term
-  default_bundle: gc_equipment
+  default_bundle: gc_category
+
+migration_dependencies:
+  optional: {  }

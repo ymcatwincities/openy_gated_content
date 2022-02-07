@@ -8,6 +8,7 @@ use Drupal\Core\Batch\BatchBuilder;
 use Drupal\Core\Datetime\DateFormatter;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Entity\EntityRepository;
+use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Pager\PagerManagerInterface;
 use Drupal\Core\Render\Element;
@@ -82,6 +83,13 @@ class SharedContentFetchForm extends EntityForm {
   protected $time;
 
   /**
+   * The module list.
+   *
+   * @var \Drupal\Core\Extension\ModuleExtensionList
+   */
+  protected $moduleList;
+
+  /**
    * {@inheritdoc}
    */
   public function __construct(
@@ -91,7 +99,8 @@ class SharedContentFetchForm extends EntityForm {
       PagerManagerInterface $pager_manager,
       UserStorageInterface $user_storage,
       UserDataInterface $user_data,
-      TimeInterface $time
+      TimeInterface $time,
+      ModuleExtensionList $module_list
     ) {
     $this->dateFormatter = $date_formatter;
     $this->entityRepository = $entity_repository;
@@ -101,6 +110,7 @@ class SharedContentFetchForm extends EntityForm {
     $this->userStorage = $user_storage;
     $this->userData = $user_data;
     $this->time = $time;
+    $this->moduleList = $module_list;
   }
 
   /**
@@ -114,7 +124,8 @@ class SharedContentFetchForm extends EntityForm {
       $container->get('pager.manager'),
       $container->get('entity_type.manager')->getStorage('user'),
       $container->get('user.data'),
-      $container->get('datetime.time')
+      $container->get('datetime.time'),
+      $container->get('extension.list.module')
     );
   }
 
@@ -393,7 +404,7 @@ class SharedContentFetchForm extends EntityForm {
       ->setInitMessage($this->t('Initializing.'))
       ->setProgressMessage($this->t('Completed @current of @total.'))
       ->setErrorMessage($this->t('An error has occurred.'));
-    $this->batchBuilder->setFile(drupal_get_path('module', 'openy_gc_shared_content') . '/src/Form/SharedContentFetchForm.php');
+    $this->batchBuilder->setFile($this->moduleList->getPath('openy_gc_shared_content') . '/src/Form/SharedContentFetchForm.php');
     foreach ($to_create as $uuid) {
       $this->batchBuilder->addOperation([$this, 'processItem'], [
         $this->entity->getUrl(),
