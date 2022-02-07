@@ -1,115 +1,167 @@
 .gated-content-video-page {
-  .modal-chat {
-    .modal-wrapper {
-      display: block;
-
-      .modal-container {
+  .video-wrapper {
+    &.chat-open {
+      .video {
+        position: fixed;
+        top: 0;
         height: 100%;
-        max-height: 100%;
-        position: absolute;
-        right: 0;
-
-        @include median(width, 430px, null, 100%)
-      }
-      .modal-header {
-        align-items: center;
-        padding: 24px;
-        color: $gray;
-        font-weight: bold;
-
-        button {
-          border: none;
-          background: none;
-          font-size: 30px;
-          height: 30px;
-          line-height: 0;
-        }
-      }
-      .modal-body {
+        width: 100%;
+        max-width: 70% !important;
+        z-index: 9999;
         margin: 0;
-        background-color: $light-gray;
-        position: relative;
-        flex: 1 1 auto;
-        padding: 1rem;
-      }
-      .modal-footer {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        border-top: 1px solid $silver-chalice;
-        border-bottom-right-radius: calc(0.3rem - 1px);
-        border-bottom-left-radius: calc(0.3rem - 1px);
-        justify-content: space-between;
-        @include median(padding, 24px, 10px, 10px);
-
-        input {
-          width: 80%;
-          padding: 12px;
-          border-radius: 0;
-          border: 1px solid $gray;
+        padding: 0;
+        & > div {
+          position: initial !important;
         }
-        button {
-          width: 50px;
-          height: 50px;
-          background-color: $indigo;
-          border: none;
-          border-radius: 6px;
-          transition: opacity 0.4s;
+      }
+      .modal-chat {
+        .modal-wrapper {
+          display: block;
 
-          &:hover,
-          &:disabled {
-            opacity: 0.7;
+          .modal-container {
+            height: 100%;
+            max-height: 100%;
+            position: absolute;
+            right: 0;
+
+            @include median(width, 30%, null, 100%)
+          }
+          .modal-header {
+            align-items: center;
+            padding: 24px;
+            color: $gray;
+            font-weight: bold;
+
+            .indicator {
+              margin: 0 10px;
+              font-weight: initial;
+              font-size: 12px;
+              &:before {
+                content: '';
+                display: inline-block;
+                width: 8px;
+                height: 8px;
+                border-radius: 4px;
+              }
+              &.offline {
+                &:before {
+                  background-color: $red;
+                }
+              }
+              &.online {
+                &:before {
+                  background-color: $green;
+                }
+              }
+            }
+
+            button {
+              border: none;
+              background: none;
+              font-size: 30px;
+              height: 30px;
+              line-height: 0;
+            }
+          }
+          .modal-body {
+            margin: 0;
+            background-color: $light-gray;
+            position: relative;
+            flex: 1 1 auto;
+            padding: 1rem;
+          }
+          .modal-footer {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            border-top: 1px solid $silver-chalice;
+            border-bottom-right-radius: calc(0.3rem - 1px);
+            border-bottom-left-radius: calc(0.3rem - 1px);
+            justify-content: space-between;
+            @include median(padding, 24px, 10px, 10px);
+
+            input {
+              width: 80%;
+              padding: 12px;
+              border-radius: 0;
+              border: 1px solid $gray;
+            }
+            button {
+              width: 50px;
+              height: 50px;
+              background-color: $indigo;
+              border: none;
+              border-radius: 6px;
+              transition: opacity 0.4s;
+
+              &:hover,
+              &:disabled {
+                opacity: 0.7;
+              }
+            }
+          }
+        }
+
+        .message {
+          display: flex;
+          justify-content: left;
+          margin: 0 10px 24px;
+
+          .user-icon {
+            min-width: 48px;
+            height: 48px;
+            margin: 0 10px 0 0;
+            text-align: center;
+            line-height: 48px;
+            font-weight: bold;
+            border-radius: 24px;
+            border: 2px solid $gray;
+            color: $gray;
+            background-color: $white;
+          }
+
+          .message-card {
+            .message-header {
+              margin-bottom: 12px;
+            }
+            .message-author {
+              font-size: 12px;
+              font-weight: bold;
+            }
+            .message-time {
+              font-size: 10px;
+            }
+            .message-body {
+              font-size: 14px;
+            }
+          }
+
+          &.d-right {
+            justify-content: space-between;
+            flex-direction: row-reverse;
+
+            .user-icon {
+              margin: 0 0 0 10px;
+              color: $white;
+              background-color: $gray;
+            }
+            .message-card {
+              float: right;
+            }
           }
         }
       }
-    }
-
-    .message {
-      display: flex;
-      justify-content: left;
-      margin: 0 10px 24px;
-
-      .user-icon {
-        min-width: 48px;
-        height: 48px;
-        margin: 0 10px 0 0;
-        text-align: center;
-        line-height: 48px;
-        font-weight: bold;
-        border-radius: 24px;
-        border: 2px solid $gray;
-        color: $gray;
-        background-color: $white;
+      // horizontal
+      @media (max-width: 1023px) and (min-width: 426px) and (max-device-height: 550px) {
+        @include horizontalLiveChat;
       }
-
-      .message-card {
-        .message-header {
-          margin-bottom: 12px;
-        }
-        .message-author {
-          font-size: 12px;
-          font-weight: bold;
-        }
-        .message-time {
-          font-size: 10px;
-        }
-        .message-body {
-          font-size: 14px;
-        }
+      // vertical
+      @media (max-width: 1023px) and (min-width: 426px) and (min-device-height: 551px) {
+        @include verticalLiveChat;
       }
-
-      &.d-right {
-        justify-content: space-between;
-        flex-direction: row-reverse;
-
-        .user-icon {
-          margin: 0 0 0 10px;
-          color: $white;
-          background-color: $gray;
-        }
-        .message-card {
-          float: right;
-        }
+      // vertical
+      @media (max-width: 425px) {
+        @include verticalLiveChat;
       }
     }
   }

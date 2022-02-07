@@ -5,7 +5,7 @@
     </div>
     <div v-else-if="error">Error loading</div>
     <template v-else>
-      <div class="video-wrapper bg-white">
+      <div class="video-wrapper bg-white" :class="{ 'chat-open': isShowLiveChatModal && !isStreamExpired }">
         <div class="video gated-containerV2 px--20-10 pt-40-20">
           <MediaPlayer
             :media="media"
@@ -26,7 +26,7 @@
               class="rounded-border border-concrete"
             ></AddToFavorite>
             <AddToCalendar :event="event"></AddToCalendar>
-            <div class="timer" :class="{live: isStreamExpired}">
+            <div class="timer" :class="{live: !isStreamExpired}">
               <template v-if="!isStreamExpired">
                 LIVE!
               </template>
@@ -106,6 +106,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import client from '@/client';
 import dayjs from 'dayjs';
 import AddToFavorite from '@/components/AddToFavorite.vue';
@@ -164,6 +165,9 @@ export default {
     };
   },
   computed: {
+    ...mapGetters([
+      'isShowLiveChatModal',
+    ]),
     // This values most of all from parent (series), but can be overridden by item,
     // so ve need to check this here and use correct value.
     media() {

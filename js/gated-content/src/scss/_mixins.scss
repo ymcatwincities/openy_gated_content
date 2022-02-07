@@ -14,3 +14,47 @@
     }
   }
 }
+
+@mixin horizontalLiveChat() {
+  .video {
+    max-width: 60% !important;
+  }
+  .modal-chat {
+    .modal-wrapper {
+      .modal-container {
+        width: 40% !important;
+        .modal-footer {
+          input {
+            margin-right: 10px;
+            width: 75%;
+          }
+          button {
+            width: 20%;
+            svg {
+              height: 40px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@mixin verticalLiveChat() {
+  .video {
+    max-width: 100% !important;
+    height: 40%;
+    & > div {
+      padding: 0;
+    }
+  }
+  .modal-chat {
+    height: 60%;
+    top: 40%;
+    .modal-wrapper {
+      .modal-container {
+        width: 100% !important;
+      }
+    }
+  }
+}
