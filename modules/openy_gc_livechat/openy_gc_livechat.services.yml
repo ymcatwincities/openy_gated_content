@@ -1,0 +1,4 @@
+services:
+  openy_gc_livechat.cron:
+    class: Drupal\openy_gc_livechat\LivechatCron
+    arguments: ['@state', '@datetime.time', '@config.factory', '@database']
