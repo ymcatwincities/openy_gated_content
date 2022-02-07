@@ -9,6 +9,7 @@ services:
       - '@entity_type.manager'
       - '@messenger'
       - '@config.factory'
+      - '@extension.list.module'
 
   personal_training_canceled.subscriber:
     class: Drupal\openy_gc_personal_training\EventSubscriber\PersonalTrainingCanceledSubscriber

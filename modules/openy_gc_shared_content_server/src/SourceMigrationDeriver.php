@@ -74,25 +74,31 @@ class SourceMigrationDeriver extends DeriverBase implements DeriverInterface, Co
     $sources = SharedContentSource::loadMultiple($ids);
     $urls = $tokens = [];
     foreach ($sources as $source) {
-      $urls[] = $source->getUrl();
+      $urls[$source->getUrl()] = $source->getApiUpdated();
       $tokens[$source->getUrl()] = $source->getToken();
     }
 
-    $params = [
-      'include' => implode(',', $this->getRemoteRelationshipsList($base_plugin_definition)),
-      'sort[sortByDate][path]' => 'created',
-      'sort[sortByDate][direction]' => 'DESC',
-      'filter[status]' => 1,
-      'filter[field_gc_share]' => 1,
-      // Use 'XDEBUG_SESSION_START' => 'PHPSTORM' to test.
-    ];
+    foreach ($urls as $url => $updated) {
 
-    $jsonapi_uri = '/jsonapi/node/' . $base_plugin_definition['source']['entity_type'] . '?' . http_build_query($params);
+      // Set the path to the new API version which only takes the type arg.
+      $path = '/api/virtual-y/shared-content-source/' . $base_plugin_definition['source']['entity_type'];
+      // Reset the path using the old logic if it's not updated.
+      if (!$updated) {
+        $params = [
+          'include' => implode(',', $this->getRemoteRelationshipsList($base_plugin_definition)),
+          'sort[sortByDate][path]' => 'created',
+          'sort[sortByDate][direction]' => 'DESC',
+          'filter[status]' => 1,
+          'filter[field_gc_share]' => 1,
+          // Use 'XDEBUG_SESSION_START' => 'PHPSTORM' to test.
+        ];
 
-    foreach ($urls as $url) {
+        $path = '/jsonapi/node/' . $base_plugin_definition['source']['entity_type'] . '?' . http_build_query($params);
+      }
 
-      $url_long = $url . $jsonapi_uri;
-      $derivative = $this->getDerivativeValues($base_plugin_definition, $url_long, $url, $tokens[$url]);
+      $url_long = $url . $path;
+
+      $derivative = $this->getDerivativeValues($base_plugin_definition, $url_long, $url, $tokens[$url], $updated);
       $this->derivatives[$this->getKey($url)] = $derivative;
     }
 
@@ -110,12 +116,15 @@ class SourceMigrationDeriver extends DeriverBase implements DeriverInterface, Co
    *   Dynamic url for every Virtual Y content source.
    * @param string $token
    *   Server check token.
+   * @param bool $updated
+   *   If the server api is updated.
    *
    * @return array
    *   Updated plugin data.
    */
-  private function getDerivativeValues(array $base_plugin_definition, $url_long, $url, $token) {
+  private function getDerivativeValues(array $base_plugin_definition, $url_long, $url, $token, $updated) {
 
+    // @todo Add $updated logic here to modify the migrations.
     $base_plugin_definition['source']['urls'] = $url_long;
     $base_plugin_definition['source']['headers']['x-shared-referer'] = $this
       ->request
@@ -166,23 +175,23 @@ class SourceMigrationDeriver extends DeriverBase implements DeriverInterface, Co
       $base_plugin_definition['migration_dependencies']['required'][] = $migration;
     }
 
-    if (!empty($base_plugin_definition['process']['field_gc_video_category'])) {
+    if (!empty($base_plugin_definition['process']['field_gc_video_category']['process']['target_id'])) {
       $migration = str_replace(
         'REPLACE_ME',
         $this->getKey($url),
-        $base_plugin_definition['process']['field_gc_video_category']['migration']
+        $base_plugin_definition['process']['field_gc_video_category']['process']['target_id']['migration']
       );
-      $base_plugin_definition['process']['field_gc_video_category']['migration'] = $migration;
+      $base_plugin_definition['process']['field_gc_video_category']['process']['target_id']['migration'] = $migration;
       $base_plugin_definition['migration_dependencies']['required'][] = $migration;
     }
 
-    if (!empty($base_plugin_definition['process']['field_gc_video_equipment'])) {
+    if (!empty($base_plugin_definition['process']['field_gc_video_equipment']['process']['target_id'])) {
       $migration = str_replace(
         'REPLACE_ME',
         $this->getKey($url),
-        $base_plugin_definition['process']['field_gc_video_equipment']['migration']
+        $base_plugin_definition['process']['field_gc_video_equipment']['process']['target_id']['migration']
       );
-      $base_plugin_definition['process']['field_gc_video_equipment']['migration'] = $migration;
+      $base_plugin_definition['process']['field_gc_video_equipment']['process']['target_id']['migration'] = $migration;
       $base_plugin_definition['migration_dependencies']['required'][] = $migration;
     }
 
@@ -194,6 +203,11 @@ class SourceMigrationDeriver extends DeriverBase implements DeriverInterface, Co
       );
       $base_plugin_definition['process']['field_gc_video_level']['migration'] = $migration;
       $base_plugin_definition['migration_dependencies']['required'][] = $migration;
+    }
+
+    // Rewrite fields for backwards-compatibility.
+    if (!$updated) {
+      $base_plugin_definition = $this->revertToJsonApi($base_plugin_definition);
     }
 
     return $base_plugin_definition;
@@ -226,6 +240,64 @@ class SourceMigrationDeriver extends DeriverBase implements DeriverInterface, Co
     $url_key = str_replace('https://', '', $url_key);
     $url_key = str_replace(['.', '-'], '_', $url_key);
     return $url_key;
+  }
+
+  /**
+   * Helper function to rewrite migration to JSON:API values.
+   *
+   * @param array $base_plugin_definition
+   *   Migration array.
+   *
+   * @return array
+   *   Updated plugin data.
+   */
+  private function revertToJsonApi(array $base_plugin_definition) {
+    $selectors = [
+      '/attributes/changed' => '/changed/0/value',
+      '/attributes/created' => '/created/0/value',
+      '/attributes/drupal_internal__nid' => '/nid/0/value',
+      '/attributes/field_gc_video_description/value' => '/field_gc_video_description/0/value',
+      '/attributes/field_gc_video_duration' => '/field_gc_video_duration/0/value',
+      '/attributes/field_gc_video_instructor' => '/field_gc_video_instructor/0/value',
+      '/attributes/field_media_in_library' => '/field_media_in_library/0/value',
+      '/attributes/field_media_source' => '/field_media_source/0/value',
+      '/attributes/field_media_video_embed_field' => '/field_media_video_embed_field/0/value',
+      '/attributes/field_media_video_id' => '/field_media_video_id/0/value',
+      '/attributes/field_vy_blog_description/value' => '/field_vy_blog_description/0/value',
+      '/attributes/filemime' => '/filemime/0/value',
+      '/attributes/filename' => '/filename/0/value',
+      '/attributes/name' => '/name/0/value',
+      '/attributes/status' => '/status/0/value',
+      '/attributes/title' => '/title/0/value',
+      '/attributes/uri/url' => '/uri/0/url',
+      '/id' => '/uuid/0/value',
+      '/relationships/field_gc_video_category/data' => '/field_gc_video_category',
+      '/relationships/field_gc_video_equipment/data' => '/field_gc_video_equipment',
+      '/relationships/field_gc_video_image/data/id' => '/field_gc_video_image/0/target_uuid',
+      '/relationships/field_gc_video_level/data/id' => '/field_gc_video_level/0/target_uuid',
+      '/relationships/field_gc_video_media/data/id' => '/field_gc_video_media/0/target_uuid',
+      '/relationships/field_media_image/data/id' => '/field_media_image/0/target_uuid',
+      '/relationships/field_vy_blog_image/data/id' => '/field_vy_blog_image/0/target_uuid',
+    ];
+    $old_selectors = array_keys($selectors);
+    $new_selectors = array_values($selectors);
+
+    foreach ($base_plugin_definition['source']['fields'] as $index => $field) {
+      $replacement = str_replace($new_selectors, $old_selectors, $field['selector']);
+      $base_plugin_definition['source']['fields'][$index]['selector'] = $replacement;
+    }
+
+    if (strstr($base_plugin_definition['source']['item_selector'], 'included/')) {
+      $base_plugin_definition['source']['item_selector'] = 'included/';
+    }
+
+    foreach ($base_plugin_definition['process'] as $name => $keys) {
+      if (isset($keys['plugin']) && $keys['plugin'] == 'sub_process') {
+        $base_plugin_definition['process'][$name]['process']['target_id']['source'] = 'id';
+      }
+    }
+
+    return $base_plugin_definition;
   }
 
 }

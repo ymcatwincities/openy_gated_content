@@ -86,7 +86,7 @@ function openy_gc_personal_training_update_8001() {
  * Import types, fields and forms configs.
  */
 function openy_gc_personal_training_update_8002() {
-  $config_dir = drupal_get_path('module', 'openy_gc_personal_training');
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_gc_personal_training');
   $config_dir .= '/config/install/';
   // Import new configuration.
   $config_importer = \Drupal::service('openy_upgrade_tool.importer');
@@ -137,7 +137,7 @@ function openy_gc_personal_training_update_8003() {
  * Add email settings.
  */
 function openy_gc_personal_training_update_8004(&$sandbox) {
-  $config_dir = drupal_get_path('module', 'openy_gc_personal_training');
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_gc_personal_training');
   $config_dir .= '/config/install/';
   $configs = [
     'openy_gc_personal_training.settings' => [
@@ -248,7 +248,7 @@ function openy_gc_personal_training_update_8009() {
  * Import view config.
  */
 function openy_gc_personal_training_update_8010() {
-  $config_dir = drupal_get_path('module', 'openy_gc_personal_training');
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_gc_personal_training');
   $config_dir .= '/config/install/';
   // Import new configuration.
   $config_importer = \Drupal::service('openy_upgrade_tool.importer');
@@ -269,7 +269,7 @@ function openy_gc_personal_training_update_8011() {
  * Updated views with personal_trainings.
  */
 function openy_gc_personal_training_update_8013() {
-  $config_dir = drupal_get_path('module', 'openy_gc_personal_training');
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_gc_personal_training');
   $config_dir .= '/config/install/';
   // Import new configuration.
   $config_importer = \Drupal::service('openy_upgrade_tool.importer');

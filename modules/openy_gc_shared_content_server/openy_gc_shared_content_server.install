@@ -95,3 +95,32 @@ function openy_gc_shared_content_server_update_8002() {
 
   $definition_update_manager->installFieldStorageDefinition('sync_enabled', 'shared_content_source', 'shared_content_source', $status);
 }
+
+/**
+ * Add `api_updated` field to 'shared_content_source' entity type.
+ */
+function openy_gc_shared_content_server_update_8003() {
+  $definition_update_manager = \Drupal::entityDefinitionUpdateManager();
+
+  $status = BaseFieldDefinition::create('boolean')
+    ->setLabel(t('API Updated'))
+    ->setDescription(t('Indicates whether the Shared content source is using the updated API.'))
+    ->setDisplayOptions('form', [
+      'type' => 'boolean_checkbox',
+      'settings' => [
+        'display_label' => TRUE,
+      ],
+      'weight' => 5,
+    ])
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDefaultValue(0);
+
+  $definition_update_manager->installFieldStorageDefinition('api_updated', 'shared_content_source', 'shared_content_source', $status);
+}
+
+/**
+ * Enable big_pipe.
+ */
+function openy_gc_shared_content_server_update_8004() {
+  \Drupal::service('module_installer')->install(['big_pipe'], TRUE);
+}

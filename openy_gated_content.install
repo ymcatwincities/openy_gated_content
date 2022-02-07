@@ -49,7 +49,7 @@ function openy_gated_content_update_dependencies() {
  * Add virtual_ymca_editor user role.
  */
 function openy_gated_content_update_8001() {
-  $config_dir = drupal_get_path('module', 'openy_gc_storage');
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_gc_storage');
   $config_dir .= '/config/install/';
   // Import new configuration.
   $config_importer = \Drupal::service('openy_upgrade_tool.importer');
@@ -66,7 +66,7 @@ function openy_gated_content_update_8001() {
  */
 function openy_gated_content_update_8002() {
   $config_importer = \Drupal::service('openy_upgrade_tool.param_updater');
-  $config = drupal_get_path('module', 'openy_gated_content');
+  $config = \Drupal::service('extension.list.module')->getPath('openy_gated_content');
   $config .= '/config/install/';
   $config .= 'openy_gated_content.settings.yml';
   $config_importer->update(
@@ -81,7 +81,7 @@ function openy_gated_content_update_8002() {
  */
 function openy_gated_content_update_8003() {
   $config_importer = \Drupal::service('openy_upgrade_tool.param_updater');
-  $config = drupal_get_path('module', 'openy_gated_content');
+  $config = \Drupal::service('extension.list.module')->getPath('openy_gated_content');
   $config .= '/config/install/';
   $config .= 'openy_gated_content.settings.yml';
   $config_importer->update(
@@ -95,7 +95,7 @@ function openy_gated_content_update_8003() {
  * Add new Virtual YMCA user roles.
  */
 function openy_gated_content_update_8004() {
-  $config_dir = drupal_get_path('module', 'openy_gated_content');
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_gated_content');
   $config_dir .= '/config/install/';
   // Import new configuration.
   $config_importer = \Drupal::service('openy_upgrade_tool.importer');
@@ -147,7 +147,7 @@ function openy_gated_content_update_8006() {
  * Add virtual y permissions settings.
  */
 function openy_gated_content_update_8007() {
-  $config_dir = drupal_get_path('module', 'openy_gated_content') . '/config/install/';
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_gated_content') . '/config/install/';
   // Update multiple configurations.
   $configs = [
     'openy_gated_content.settings' => [
@@ -167,7 +167,7 @@ function openy_gated_content_update_8007() {
  * Update virtual_ymca_editor user role.
  */
 function openy_gated_content_update_8008() {
-  $config_dir = drupal_get_path('module', 'openy_gated_content');
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_gated_content');
   $config_dir .= '/config/install/';
   $config_importer = \Drupal::service('openy_upgrade_tool.importer');
   $config_importer->setDirectory($config_dir);
@@ -180,7 +180,7 @@ function openy_gated_content_update_8008() {
  * Add virtual y logout url.
  */
 function openy_gated_content_update_8009() {
-  $config_dir = drupal_get_path('module', 'openy_gated_content') . '/config/install/';
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_gated_content') . '/config/install/';
   $configs = [
     'openy_gated_content.settings' => [
       'virtual_y_logout_url',
@@ -199,7 +199,7 @@ function openy_gated_content_update_8009() {
  * Install new fields for gated_content paragraph.
  */
 function openy_gated_content_update_8010() {
-  $config_dir = drupal_get_path('module', 'openy_gated_content');
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_gated_content');
   $config_dir .= '/config/install/';
   $config_importer = \Drupal::service('openy_upgrade_tool.importer');
   $config_importer->setDirectory($config_dir);
@@ -219,7 +219,7 @@ function openy_gated_content_update_8010() {
  */
 function openy_gated_content_update_8011() {
   $config_importer = \Drupal::service('openy_upgrade_tool.param_updater');
-  $config = drupal_get_path('module', 'openy_gated_content');
+  $config = \Drupal::service('extension.list.module')->getPath('openy_gated_content');
   $config .= '/config/install/';
   $config .= 'openy_gated_content.settings.yml';
   $config_importer->update(
@@ -259,7 +259,7 @@ function openy_gated_content_update_8012() {
  */
 function openy_gated_content_update_8013() {
   $config_importer = \Drupal::service('openy_upgrade_tool.param_updater');
-  $config = drupal_get_path('module', 'openy_gated_content');
+  $config = \Drupal::service('extension.list.module')->getPath('openy_gated_content');
   $config .= '/config/install/';
   $config .= 'openy_gated_content.settings.yml';
   $components = [
@@ -289,7 +289,7 @@ function openy_gated_content_update_8014() {
     'components.vy_blog_post.weight',
   ];
   $config_updater = \Drupal::service('openy_upgrade_tool.param_updater');
-  $config_dir = drupal_get_path('module', 'openy_gated_content') . '/config/install/';
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_gated_content') . '/config/install/';
   $config_name = 'openy_gated_content.settings';
   $config = $config_dir . $config_name . '.yml';
   foreach ($params as $param) {
@@ -302,7 +302,7 @@ function openy_gated_content_update_8014() {
  */
 function openy_gated_content_update_8015() {
   $config_updater = \Drupal::service('openy_upgrade_tool.param_updater');
-  $config_dir = drupal_get_path('module', 'openy_gated_content') . '/config/install/';
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_gated_content') . '/config/install/';
   $config_name = 'openy_gated_content.settings';
   $config = $config_dir . $config_name . '.yml';
   $components = [
@@ -321,7 +321,7 @@ function openy_gated_content_update_8015() {
  */
 function openy_gated_content_update_8016() {
   $config_updater = \Drupal::service('openy_upgrade_tool.param_updater');
-  $config_dir = drupal_get_path('module', 'openy_gated_content') . '/config/install/';
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_gated_content') . '/config/install/';
   $config_name = 'openy_gated_content.settings';
   $config = $config_dir . $config_name . '.yml';
   $components = [
@@ -340,7 +340,7 @@ function openy_gated_content_update_8016() {
  */
 function openy_gated_content_update_8017() {
   $config_updater = \Drupal::service('openy_upgrade_tool.param_updater');
-  $config_dir = drupal_get_path('module', 'openy_gated_content') . '/config/install/';
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_gated_content') . '/config/install/';
   $config_name = 'openy_gated_content.settings';
   $config = $config_dir . $config_name . '.yml';
   $components = [
@@ -425,7 +425,7 @@ function openy_gated_content_update_8019() {
 function openy_gated_content_update_8020() {
   /** @var \Drupal\openy_upgrade_tool\ConfigParamUpgradeTool $config_updater */
   $config_updater = \Drupal::service('openy_upgrade_tool.param_updater');
-  $config_dir = drupal_get_path('module', 'openy_gated_content') . '/config/install/';
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_gated_content') . '/config/install/';
   $config_name = 'openy_gated_content.settings';
   $config = $config_dir . $config_name . '.yml';
   $components = [
@@ -487,7 +487,7 @@ function openy_gated_content_update_8022() {
  * Add Virtual Y User logs views.
  */
 function openy_gated_content_update_8023() {
-  $path = drupal_get_path('module', 'openy_gated_content') . '/config/install/';
+  $path = \Drupal::service('extension.list.module')->getPath('openy_gated_content') . '/config/install/';
   $config_importer = \Drupal::service('config_import.importer');
   $config_importer->setDirectory($path);
   $config_importer->importConfigs(['views.view.virtual_y_users_log']);
@@ -497,7 +497,7 @@ function openy_gated_content_update_8023() {
  * Install initial settings for the welcome email.
  */
 function openy_gated_content_update_8024() {
-  $config_dir = drupal_get_path('module', 'openy_gated_content');
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_gated_content');
   $config_dir .= '/config/install/';
   $config_importer = \Drupal::service('openy_upgrade_tool.importer');
   $config_importer->setDirectory($config_dir);
@@ -511,7 +511,7 @@ function openy_gated_content_update_8024() {
  */
 function openy_gated_content_update_8025() {
   $config_updater = \Drupal::service('openy_upgrade_tool.param_updater');
-  $config_dir = drupal_get_path('module', 'openy_gated_content') . '/config/install/';
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_gated_content') . '/config/install/';
   $config_name = 'openy_gated_content.settings';
   $config = $config_dir . $config_name . '.yml';
   $config_updater->update($config, $config_name, 'menu_config');

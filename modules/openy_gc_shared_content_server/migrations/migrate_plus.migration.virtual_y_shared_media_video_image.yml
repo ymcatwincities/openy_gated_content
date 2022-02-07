@@ -9,6 +9,7 @@ deriver: Drupal\openy_gc_shared_content_server\SourceMigrationDeriver
 label: Fetch Image
 source:
   entity_type: gc_video
+  # Retained for backwards-compatibility.
   json_includes:
     - field_gc_video_image.field_media_image
   plugin: url
@@ -23,29 +24,30 @@ source:
     x-shared-referer: SHARED_CONTENT_REFERRER_WEBSITE
     authorization: SHARED_CONTENT_CONNECTION_TOKEN
   urls: replace_me
-  item_selector: included/
+  item_selector: included/field_gc_video_image
   fields:
     - name: id
       label: 'id'
-      selector: /id
+      selector: /uuid/0/value
+    # Retained for backwards-compatibility.
     - name: type
       label: 'Include type'
       selector: /type
     - name: name
       label: 'Media Name'
-      selector: /attributes/name
+      selector: /name/0/value
     - name: created
       label: 'Created'
-      selector: /attributes/created
+      selector: /created/0/value
     - name: changed
       label: 'Changed'
-      selector: /attributes/changed
+      selector: /changed/0/value
     - name: status
       label: 'Status'
-      selector: /attributes/status
+      selector: /status/0/value
     - name: field_media_image
       label: 'File'
-      selector: /relationships/field_media_image/data/id
+      selector: /field_media_image/0/target_uuid
   ids:
     id:
       type: string
@@ -63,6 +65,7 @@ process:
     source: changed
     callable: strtotime
   name: name
+  # Retained for backwards-compatibility.
   type:
     plugin: skip_on_value
     method: row
