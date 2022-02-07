@@ -4,7 +4,12 @@
     :style="{'display': isShowLiveChatModal ? 'table' : 'none'}"
     @close="toggleShowLiveChatModal"
   >
-    <template #header><span>Chat</span></template>
+    <template #header>
+      <span>Chat</span>
+      <span class="indicator" :class="{online: ratchetServerConnected, offline: !ratchetServerConnected}">
+        {{ ratchetServerConnected ? 'online' : 'offline' }}
+      </span>
+    </template>
     <template #body>
       <div
         v-for="(msg, index) in liveChatSession"
@@ -29,6 +34,7 @@
         type="text"
         placeholder="Message"
         v-model.trim="newMessage"
+        :disabled="!ratchetServerConnected"
         @keyup.enter="messageEnterEvent(newMessage)"
       />
       <button
@@ -60,6 +66,7 @@ export default {
       'unreadLiveChatMessagesCount',
       'liveChatUserId',
       'getAppSettings',
+      'ratchetServerConnected',
     ]),
   },
   methods: {
@@ -81,6 +88,11 @@ export default {
       }
       return uid === this.liveChatUserId ? 'Me' : author;
     },
+  },
+  mounted() {
+    if (!this.ratchetServerConnected) {
+      this.initRatchetServer();
+    }
   },
 };
 </script>

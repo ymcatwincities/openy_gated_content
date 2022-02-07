@@ -63,8 +63,6 @@ export default {
   },
   getters: {
     liveChatMeetingId: (state) => state.liveChatMeetingId,
-    liveChatMeetingTitle: (state) => state.liveChatMeetingTitle,
-    liveChatMeetingStart: (state) => state.liveChatMeetingStart,
     liveChatLocalName: (state) => state.liveChatLocalName,
     liveChatUserId: (state) => state.liveChatUserId,
     liveChatRatchetConfigs: (state) => state.liveChatRatchetConfigs,

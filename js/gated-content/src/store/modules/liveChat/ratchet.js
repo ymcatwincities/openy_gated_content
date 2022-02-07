@@ -22,18 +22,20 @@ export default {
         if (data.message_type === 'history') {
           const { history } = data;
 
-          // eslint-disable-next-line array-callback-return
-          history.map((value) => {
-            const chatRoomMsg = {
-              author: value.username,
-              uid: value.uid,
-              message: value.message,
-              // eslint-disable-next-line radix
-              date: parseInt(value.created),
-            };
+          if (!context.getters.liveChatSession.length) {
+            // eslint-disable-next-line array-callback-return
+            history.map((value) => {
+              const chatRoomMsg = {
+                author: value.username,
+                uid: value.uid,
+                message: value.message,
+                // eslint-disable-next-line radix
+                date: parseInt(value.created),
+              };
 
-            context.commit('addLiveChatMessage', chatRoomMsg);
-          });
+              context.commit('addLiveChatMessage', chatRoomMsg);
+            });
+          }
         } else {
           const chatRoomMsg = {
             author: data.username,
@@ -51,6 +53,10 @@ export default {
         _.delay(() => {
           context.dispatch('initRatchetServer');
         }, 1000);
+      };
+
+      ws.onerror = () => {
+        context.commit('setRatchetServerConnected', false);
       };
 
       context.commit('setRatchetServer', ws);

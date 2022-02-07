@@ -5,7 +5,7 @@
     </div>
     <div v-else-if="error">Error loading</div>
     <template v-else>
-      <div class="video-wrapper bg-white">
+      <div class="video-wrapper bg-white" :class="{ 'chat-open': isShowLiveChatModal && !isStreamExpired }">
         <div class="video gated-containerV2 px--20-10 pt-40-20">
           <MediaPlayer
             :media="media"
@@ -13,7 +13,7 @@
             @playerEvent="logPlaybackEvent($event)"
           />
         </div>
-        <ChatRoom v-if="!isStreamExpired"></ChatRoom>
+        <ChatRoom v-if="!isStreamExpired && liveChatModuleEnabled"></ChatRoom>
       </div>
       <div class="video-footer-wrapper bg-white">
         <div class="video-footer gated-containerV2 px--20-10 py-40-20 text-black">
@@ -26,15 +26,15 @@
               class="rounded-border border-concrete"
             ></AddToFavorite>
             <AddToCalendar :event="event"></AddToCalendar>
-            <div class="timer" :class="{live: isOnAir}">
-              <template v-if="isOnAir">
+            <div class="timer" :class="{live: !isStreamExpired}">
+              <template v-if="!isStreamExpired">
                 LIVE!
               </template>
               <template v-else>
                 Starts in {{ startsIn }}
               </template>
             </div>
-            <ChatRoomItem v-if="!isStreamExpired"></ChatRoomItem>
+            <ChatRoomItem v-if="!isStreamExpired && liveChatModuleEnabled"></ChatRoomItem>
           </div>
           <div class="verdana-14-12 text-thunder">
             <div class="video-footer__block">
@@ -106,6 +106,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import client from '@/client';
 import dayjs from 'dayjs';
 import AddToFavorite from '@/components/AddToFavorite.vue';
@@ -145,6 +146,7 @@ export default {
     return {
       loading: true,
       error: false,
+      liveChatModuleEnabled: false,
       video: null,
       response: null,
       liveChatData: null,
@@ -164,6 +166,9 @@ export default {
     };
   },
   computed: {
+    ...mapGetters([
+      'isShowLiveChatModal',
+    ]),
     // This values most of all from parent (series), but can be overridden by item,
     // so ve need to check this here and use correct value.
     media() {
@@ -191,11 +196,16 @@ export default {
       if (this.params) {
         params.include = this.params.join(',');
       }
-      client
-        .get('livechat/get-livechat-data')
-        .then((response) => {
-          this.liveChatData = response.data;
-        });
+
+      this.liveChatModuleEnabled = window.drupalSettings.isLiveChatModuleEnabled;
+
+      if (this.liveChatModuleEnabled) {
+        client
+          .get('livechat/get-livechat-data')
+          .then((response) => {
+            this.liveChatData = response.data;
+          });
+      }
 
       client
         .get(`jsonapi/eventinstance/live_stream/${this.id}`, { params })
@@ -203,35 +213,36 @@ export default {
           this.video = this.combine(response.data.data, response.data.included, this.params);
           this.multipleReferencesWorkaround(response);
           this.loading = false;
-
-          const currentDate = dayjs().toDate();
-          const startDate = dayjs(this.video.attributes.date.value).toDate();
-          const endDate = dayjs(this.video.attributes.date.end_value).toDate();
-
-          this.isStreamExpired = !(currentDate <= endDate && currentDate >= startDate);
         }).then(() => {
           this.logPlaybackEvent('entityView');
         }).then(() => {
-          this.$store.dispatch('setLiveChatData', {
-            liveChatMeetingId: this.id,
-            liveChatMeetingTitle: this.event.title,
-            liveChatMeetingStart: this.event.start,
-            liveChatMeetingDate: this.$dayjs.date(this.video.attributes.date.end_value),
-            liveChatLocalName: this.liveChatData.name,
-            liveChatUserId: this.liveChatData.user_id,
-            liveChatRatchetConfigs: this.liveChatData.ratchet,
-          }).then(() => {
-            if (!this.isStreamExpired) {
-              this.$store.dispatch('initRatchetServer');
-            }
-          });
+          if (this.liveChatModuleEnabled) {
+            this.$store.dispatch('setLiveChatData', {
+              liveChatMeetingId: this.id,
+              liveChatLocalName: this.liveChatData.name,
+              liveChatUserId: this.liveChatData.user_id,
+              liveChatRatchetConfigs: this.liveChatData.ratchet,
+            }).then(() => {
+              this.expiredStream();
+            });
+          }
         })
         .catch((error) => {
           this.error = true;
           this.loading = false;
-          console.error(error);
           throw error;
         });
+
+      setInterval(() => {
+        this.expiredStream();
+      }, 5000);
+    },
+    expiredStream() {
+      const currentDate = dayjs().toDate();
+      const startDate = dayjs(this.video.attributes.date.value).toDate();
+      const endDate = dayjs(this.video.attributes.date.end_value).toDate();
+
+      this.isStreamExpired = !(currentDate <= endDate && currentDate >= startDate);
     },
     logPlaybackEvent(eventType) {
       this.$log.trackEvent(eventType, 'series', 'live_stream', this.video.attributes.drupal_internal__id);

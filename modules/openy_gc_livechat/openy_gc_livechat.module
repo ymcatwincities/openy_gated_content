@@ -28,3 +28,10 @@ function openy_gc_livechat_cron() {
     ->condition('created', time() - 2592000, '<=')
     ->execute();
 }
+
+/**
+ * Implements hook_page_attachments().
+ */
+function openy_gc_livechat_page_attachments(array &$attachments) {
+  $attachments['#attached']['drupalSettings']['isLiveChatModuleEnabled'] = TRUE;
+}
