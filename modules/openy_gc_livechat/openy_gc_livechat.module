@@ -23,8 +23,5 @@ function openy_gc_livechat_theme() {
  * Implements hook_cron().
  */
 function openy_gc_livechat_cron() {
-  // Delete chat messages older than 30 days.
-  \Drupal::database()->delete('openy_gc_livechat__chat_history')
-    ->condition('created', time() - 2592000, '<=')
-    ->execute();
+  \Drupal::service('openy_gc_livechat.cron')->cron();
 }
