@@ -6,6 +6,25 @@ openy_gc_livechat.settings:
   requirements:
     _permission: 'administer gated content configuration'
 
+openy_gc_livechat.logs:
+  path: '/admin/virtual-y/chats'
+  defaults:
+    _controller: '\Drupal\openy_gc_livechat\Controller\LiveChatController::logsOverview'
+    _title: 'Virtual Meeting Chat Logs'
+  requirements:
+    _permission: 'administer gated content configuration'
+
+openy_gc_livechat.log:
+  path: '/admin/virtual-y/chats/{cid}'
+  defaults:
+    _controller: '\Drupal\openy_gc_livechat\Controller\LiveChatController::logDetailsOverview'
+    _title: 'Virtual Meeting Chat Log'
+  requirements:
+    _permission: 'administer gated content configuration'
+  parameters:
+    required_param:
+      cid: string
+
 openy_gc_livechat.get_livechat_data:
   path: '/livechat/get-livechat-data'
   methods: [GET]

@@ -34,7 +34,7 @@ class Chat implements MessageComponentInterface {
     $info['chatroom_id'] = $path;
     $this->clients->attach($conn, $info);
 
-    // Get chat history and pass to all clients connected to this chat.
+    // Get chat history.
     $history = $this->loadHistory($path);
     if ($history) {
       $data['message_type'] = 'history';
@@ -58,6 +58,8 @@ class Chat implements MessageComponentInterface {
     $db->insert('openy_gc_livechat__chat_history')
       ->fields([
         'cid',
+        'title',
+        'start',
         'uid',
         'username',
         'message',
@@ -65,6 +67,8 @@ class Chat implements MessageComponentInterface {
       ])
       ->values([
         'cid' => $data['chatroom_id'],
+        'title' => $data['title'],
+        'start' => $data['start'],
         'uid' => $data['uid'],
         'username' => $data['username'],
         'message' => $data['message'],
@@ -80,7 +84,6 @@ class Chat implements MessageComponentInterface {
         $data['from'] = 'Me';
       }
       else {
-        // @todo: Pass username from client side.
         $data['from'] = $data['username'];
       }
       // Send message only to clients connected to the same chatroom.
