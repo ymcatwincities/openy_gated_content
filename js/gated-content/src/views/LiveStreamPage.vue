@@ -220,6 +220,9 @@ export default {
           if (this.liveChatModuleEnabled) {
             this.$store.dispatch('setLiveChatData', {
               liveChatMeetingId: this.id,
+              liveChatMeetingTitle: this.event.title,
+              liveChatMeetingStart: this.event.start,
+              liveChatMeetingDate: this.$dayjs.date(this.video.attributes.date.end_value),
               liveChatLocalName: this.liveChatData.name,
               liveChatUserId: this.liveChatData.user_id,
               liveChatRatchetConfigs: this.liveChatData.ratchet,
