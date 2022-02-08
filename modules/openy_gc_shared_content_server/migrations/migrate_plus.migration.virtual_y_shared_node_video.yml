@@ -28,43 +28,43 @@ source:
   fields:
     - name: nid
       label: 'nid'
-      selector: /attributes/drupal_internal__nid
+      selector: /nid/0/value
     - name: title
       label: 'Title'
-      selector: /attributes/title
+      selector: /title/0/value
     - name: created
       label: 'Created'
-      selector: /attributes/created
+      selector: /created/0/value
     - name: changed
       label: 'Changed'
-      selector: /attributes/changed
+      selector: /changed/0/value
     - name: status
       label: 'Status'
-      selector: /attributes/status
+      selector: /status/0/value
     - name: field_gc_video_instructor
       label: 'Instructor Name'
-      selector: /attributes/field_gc_video_instructor
+      selector: /field_gc_video_instructor/0/value
     - name: field_gc_video_media_id
       label: 'Video'
-      selector: /relationships/field_gc_video_media/data/id
+      selector: /field_gc_video_media/0/target_uuid
     - name: field_gc_video_description
       label: 'Video description'
-      selector: /attributes/field_gc_video_description/value
+      selector: /field_gc_video_description/0/value
     - name: field_gc_video_duration
       label: 'Duration'
-      selector: /attributes/field_gc_video_duration
+      selector: /field_gc_video_duration/0/value
     - name: field_gc_video_image_id
       label: 'Teaser image'
-      selector: /relationships/field_gc_video_image/data/id
+      selector: /field_gc_video_image/0/target_uuid
     - name: field_gc_video_category_id
       label: 'Category'
-      selector: /relationships/field_gc_video_category/data/id
+      selector: /field_gc_video_category
     - name: field_gc_video_equipment_id
       label: 'Equipment'
-      selector: /relationships/field_gc_video_equipment/data/id
+      selector: /field_gc_video_equipment
     - name: field_gc_video_level_id
       label: 'Level'
-      selector: /relationships/field_gc_video_level/data/id
+      selector: /field_gc_video_level/0/target_uuid
   ids:
     nid:
       type: integer
@@ -105,13 +105,21 @@ process:
     migration: virtual_y_shared_media_video_image:REPLACE_ME
     source: field_gc_video_image_id
   field_gc_video_category:
-    plugin: migration_lookup
-    migration: virtual_y_shared_gc_category:REPLACE_ME
+    plugin: sub_process
     source: field_gc_video_category_id
+    process:
+      target_id:
+        plugin: migration_lookup
+        migration: virtual_y_shared_gc_category:REPLACE_ME
+        source: target_uuid
   field_gc_video_equipment:
-    plugin: migration_lookup
-    migration: virtual_y_shared_gc_equipment:REPLACE_ME
+    plugin: sub_process
     source: field_gc_video_equipment_id
+    process:
+      target_id:
+        plugin: migration_lookup
+        migration: virtual_y_shared_gc_equipment:REPLACE_ME
+        source: target_uuid
   field_gc_video_level:
     plugin: migration_lookup
     migration: virtual_y_shared_gc_level:REPLACE_ME

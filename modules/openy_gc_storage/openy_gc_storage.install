@@ -37,7 +37,7 @@ function _openy_gc_storage_add_banner_image_style() {
  * Add event link field description.
  */
 function openy_gc_storage_update_8001() {
-  $config_dir = drupal_get_path('module', 'openy_gc_storage');
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_gc_storage');
   $config_dir .= '/config/install/';
   // Import new configuration.
   $config_importer = \Drupal::service('openy_upgrade_tool.importer');
@@ -52,7 +52,7 @@ function openy_gc_storage_update_8001() {
  * Add teaser image field to video.
  */
 function openy_gc_storage_update_8002() {
-  $config_dir = drupal_get_path('module', 'openy_gc_storage');
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_gc_storage');
   $config_dir .= '/config/install/';
   // Import new configuration.
   $config_importer = \Drupal::service('openy_upgrade_tool.importer');
@@ -70,7 +70,7 @@ function openy_gc_storage_update_8002() {
  * Make video category multiple.
  */
 function openy_gc_storage_update_8003() {
-  $config_dir = drupal_get_path('module', 'openy_gc_storage');
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_gc_storage');
   $config_dir .= '/config/install/';
   // Update configuration.
   $config_importer = \Drupal::service('openy_upgrade_tool.importer');
@@ -84,7 +84,7 @@ function openy_gc_storage_update_8003() {
  * Add category field to blog post + Make event category multiple.
  */
 function openy_gc_storage_update_8004() {
-  $config_dir = drupal_get_path('module', 'openy_gc_storage');
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_gc_storage');
   $config_dir .= '/config/install/';
   // Update configuration.
   $config_importer = \Drupal::service('openy_upgrade_tool.importer');
@@ -129,7 +129,7 @@ function openy_gc_storage_update_8004() {
  * Add recurring event series config to set interval and start time.
  */
 function openy_gc_storage_update_8005() {
-  $config_dir = drupal_get_path('module', 'openy_gc_storage');
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_gc_storage');
   $config_dir .= '/config/install/';
   // Update configuration.
   $config_importer = \Drupal::service('openy_upgrade_tool.importer');
@@ -163,7 +163,7 @@ function openy_gc_storage_update_8006() {
  */
 function openy_gc_storage_update_8007() {
   /* These configs will be updated in openy_gc_storage_update_8016.
-  $config_dir = drupal_get_path('module', 'openy_gc_storage');
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_gc_storage');
   $config_dir .= '/config/install/';
   // Import new configuration.
   $config_importer = \Drupal::service('openy_upgrade_tool.importer');
@@ -179,7 +179,7 @@ function openy_gc_storage_update_8007() {
  * Update event link field description.
  */
 function openy_gc_storage_update_8008() {
-  $config_dir = drupal_get_path('module', 'openy_gc_storage');
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_gc_storage');
   $config_dir .= '/config/install/';
   // Import new configuration.
   $config_importer = \Drupal::service('openy_upgrade_tool.importer');
@@ -194,7 +194,7 @@ function openy_gc_storage_update_8008() {
  * Update media descriptions.
  */
 function openy_gc_storage_update_8009() {
-  $config_dir = drupal_get_path('module', 'openy_gc_storage');
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_gc_storage');
   $config_dir .= '/config/install/';
   // Import new configuration.
   $config_importer = \Drupal::service('openy_upgrade_tool.importer');
@@ -209,7 +209,7 @@ function openy_gc_storage_update_8009() {
  * Enabling scheduler module.
  */
 function openy_gc_storage_update_8011() {
-  $config_dir = drupal_get_path('module', 'openy_gc_storage') . '/config/install/';
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_gc_storage') . '/config/install/';
   // Update multiple configurations.
   $configs = [
     'node.type.gc_video' => [
@@ -234,7 +234,7 @@ function openy_gc_storage_update_8011() {
  * Update image fields required.
  */
 function openy_gc_storage_update_8013() {
-  $config_dir = drupal_get_path('module', 'openy_gc_storage');
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_gc_storage');
   $config_dir .= '/config/install/';
   // Import new configuration.
   $config_importer = \Drupal::service('openy_upgrade_tool.importer');
@@ -249,7 +249,7 @@ function openy_gc_storage_update_8013() {
  * Reimport event and event series views. Skip 8012-13 and do not copy code.
  */
 function openy_gc_storage_update_8014() {
-  $config_dir = drupal_get_path('module', 'openy_gc_storage');
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_gc_storage');
   $config_dir .= '/config/install/';
   $config_importer = \Drupal::service('openy_upgrade_tool.importer');
   $config_importer->setDirectory($config_dir);
@@ -270,7 +270,7 @@ function openy_gc_storage_update_8015() {
  * Update and create configs related to the Instructor reference field.
  */
 function openy_gc_storage_update_8016() {
-  $config_dir = drupal_get_path('module', 'openy_gc_storage');
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_gc_storage');
   $config_dir .= '/config/install/';
   // Update configuration.
   $config_importer = \Drupal::service('openy_upgrade_tool.importer');
@@ -311,7 +311,7 @@ function openy_gc_storage_update_8016() {
  * Update/create configs related to Duration reference field.
  */
 function openy_gc_storage_update_8017() {
-  $config_dir = drupal_get_path('module', 'openy_gc_storage');
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_gc_storage');
   $config_dir .= '/config/install/';
   // Update configuration.
   $config_importer = \Drupal::service('openy_upgrade_tool.importer');

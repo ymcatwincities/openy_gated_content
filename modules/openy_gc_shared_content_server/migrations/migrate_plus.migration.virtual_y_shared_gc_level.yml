@@ -12,6 +12,7 @@ deriver: Drupal\openy_gc_shared_content_server\SourceMigrationDeriver
 label: 'GC Level'
 source:
   entity_type: gc_video
+  # Retained for backwards-compatibility.
   json_includes:
     - field_gc_video_level
   plugin: url
@@ -28,14 +29,14 @@ source:
   urls: replace_me
   constants:
     DOMAIN: replace_me
-  item_selector: included/
+  item_selector: included/field_gc_video_level
   fields:
     - name: id
       label: 'id'
-      selector: /id
+      selector: /uuid/0/value
     - name: title
       label: 'title'
-      selector: /attributes/name
+      selector: /name/0/value
   ids:
     id:
       type: string

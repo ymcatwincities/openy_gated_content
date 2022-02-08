@@ -65,3 +65,15 @@ entity.shared_content_source_server.preview:
         type: string
       uuid:
         type: string
+
+shared_content_source.shared:
+  path: '/api/virtual-y/shared-content-source/{type}'
+  defaults:
+    _controller: '\Drupal\openy_gc_shared_content\Controller\SharedContentController::index'
+    _title: 'Shared content'
+  requirements:
+    _custom_access: '\Drupal\openy_gc_shared_content\Controller\SharedContentController::access'
+  options:
+    parameters:
+      type:
+        type: string

@@ -10,6 +10,7 @@ use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Messenger\MessengerTrait;
 use Drupal\Core\Url;
 use Drupal\daxko_sso\DaxkoSSOClient;
+use Drupal\openy_gated_content\GCUserService;
 use Drupal\openy_gc_auth\GCIdentityProviderPluginBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -71,9 +72,10 @@ class DaxkoSSO extends GCIdentityProviderPluginBase {
     DaxkoSSOClient $daxkoSSOClient,
     RequestStack $requestStack,
     FormBuilderInterface $form_builder,
-    LoggerChannelInterface $daxko_logger_channel
+    LoggerChannelInterface $daxko_logger_channel,
+    GCUserService $gc_user_service
   ) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $config, $entity_type_manager, $form_builder);
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $config, $entity_type_manager, $form_builder, $gc_user_service);
     $this->daxkoClient = $daxkoSSOClient;
     $this->request = $requestStack->getCurrentRequest();
     $this->daxkoLoggerChannel = $daxko_logger_channel;
@@ -92,7 +94,8 @@ class DaxkoSSO extends GCIdentityProviderPluginBase {
       $container->get('daxko_sso.client'),
       $container->get('request_stack'),
       $container->get('form_builder'),
-      $container->get('logger.factory')->get('daxko_sso')
+      $container->get('logger.factory')->get('daxko_sso'),
+      $container->get('openy_gated_content.user_service')
     );
   }
 
@@ -131,6 +134,13 @@ class DaxkoSSO extends GCIdentityProviderPluginBase {
       ],
     ];
 
+    $form['virtual_branch_check_in'] = [
+      '#title' => $this->t('Virtual Branch Check In'),
+      '#type' => 'checkbox',
+      '#default_value' => $config['virtual_branch_check_in'],
+      '#description' => $this->t('Record each user login as a Virtual Branch Check In.'),
+    ];
+
     return $form;
   }
 
@@ -142,6 +152,7 @@ class DaxkoSSO extends GCIdentityProviderPluginBase {
       $this->configuration['redirect_url'] = $form_state->getValue('redirect_url');
       $this->configuration['error_accompanying_message'] = $form_state->getValue('error_accompanying_message');
       $this->configuration['login_mode'] = $form_state->getValue('login_mode');
+      $this->configuration['virtual_branch_check_in'] = $form_state->getValue('virtual_branch_check_in');
 
       $baseUrl = $this->request->getSchemeAndHttpHost();
 

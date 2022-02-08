@@ -9,6 +9,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Url;
+use Drupal\openy_gated_content\GCUserService;
 use Drupal\openy_gc_auth\GCIdentityProviderPluginBase;
 use Drupal\personify\PersonifyClient;
 use Drupal\personify\PersonifySSO;
@@ -75,9 +76,10 @@ class Personify extends GCIdentityProviderPluginBase {
     PersonifySSO $personifySSO,
     PersonifyClient $personifyClient,
     FormBuilderInterface $form_builder,
-    RequestStack $requestStack
+    RequestStack $requestStack,
+    GCUserService $gc_user_service
   ) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $config, $entity_type_manager, $form_builder);
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $config, $entity_type_manager, $form_builder, $gc_user_service);
     $this->messenger = $messenger;
     $this->personifySSO = $personifySSO;
     $this->personifyClient = $personifyClient;
@@ -98,7 +100,8 @@ class Personify extends GCIdentityProviderPluginBase {
       $container->get('personify.sso_client'),
       $container->get('personify.client'),
       $container->get('form_builder'),
-      $container->get('request_stack')
+      $container->get('request_stack'),
+      $container->get('openy_gated_content.user_service')
     );
   }
 

@@ -134,6 +134,37 @@ class SharedContentSource extends ContentEntityBase {
   /**
    * {@inheritdoc}
    */
+  public function getApiUpdated() {
+    return (bool) $this->get('api_updated')->value;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public function isUpdated() {
+    $url = $this->getUrl();
+
+    // If there's no url then we're done.
+    if (empty($url)) {
+      return FALSE;
+    }
+
+    // Attempt to hit the new endpoint and get the status code.
+    // Without the proper headers it will still return 200, but no content.
+    $url .= '/api/virtual-y/shared-content-source/gc_video';
+    $client = \Drupal::httpClient();
+    $status = $client->get($url, ['http_errors' => FALSE])->getStatusCode();
+
+    if ($status == '200') {
+      return TRUE;
+    }
+
+    return FALSE;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function preSave(EntityStorageInterface $storage) {
     $token = Crypt::hashBase64($this->getUrl() . Settings::getHashSalt());
     $this->setToken($token);
@@ -229,6 +260,19 @@ class SharedContentSource extends ContentEntityBase {
     $fields['sync_enabled'] = BaseFieldDefinition::create('boolean')
       ->setLabel(t('Sync Enabled'))
       ->setDescription(t('Indicating whether the Shared content source enabled for sync.'))
+      ->setDisplayOptions('form', [
+        'type' => 'boolean_checkbox',
+        'settings' => [
+          'display_label' => TRUE,
+        ],
+        'weight' => 5,
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDefaultValue(0);
+
+    $fields['api_updated'] = BaseFieldDefinition::create('boolean')
+      ->setLabel(t('API Updated'))
+      ->setDescription(t('Indicates whether the Shared content source is using the updated API.'))
       ->setDisplayOptions('form', [
         'type' => 'boolean_checkbox',
         'settings' => [
