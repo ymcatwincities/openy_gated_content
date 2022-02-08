@@ -9,7 +9,7 @@
  * Update configuration.
  */
 function openy_gc_auth_personify_update_8001(&$sandbox) {
-  $config_dir = drupal_get_path('module', 'openy_gc_auth_personify') . '/config/install/';
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_gc_auth_personify') . '/config/install/';
   // Update multiple configurations.
   $configs = [
     'openy_gc_auth.provider.personify' => [
@@ -30,7 +30,7 @@ function openy_gc_auth_personify_update_8001(&$sandbox) {
  * Update configuration.
  */
 function openy_gc_auth_personify_update_8002(&$sandbox) {
-  $config_dir = drupal_get_path('module', 'openy_gc_auth_personify') . '/config/install/';
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_gc_auth_personify') . '/config/install/';
   // Update multiple configurations.
   $configs = [
     'openy_gc_auth.provider.personify' => [
