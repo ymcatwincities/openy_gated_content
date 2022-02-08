@@ -134,6 +134,13 @@ class DaxkoSSO extends GCIdentityProviderPluginBase {
       ],
     ];
 
+    $form['virtual_branch_check_in'] = [
+      '#title' => $this->t('Virtual Branch Check In'),
+      '#type' => 'checkbox',
+      '#default_value' => $config['virtual_branch_check_in'],
+      '#description' => $this->t('Record each user login as a Virtual Branch Check In.'),
+    ];
+
     return $form;
   }
 
@@ -145,6 +152,7 @@ class DaxkoSSO extends GCIdentityProviderPluginBase {
       $this->configuration['redirect_url'] = $form_state->getValue('redirect_url');
       $this->configuration['error_accompanying_message'] = $form_state->getValue('error_accompanying_message');
       $this->configuration['login_mode'] = $form_state->getValue('login_mode');
+      $this->configuration['virtual_branch_check_in'] = $form_state->getValue('virtual_branch_check_in');
 
       $baseUrl = $this->request->getSchemeAndHttpHost();
 
