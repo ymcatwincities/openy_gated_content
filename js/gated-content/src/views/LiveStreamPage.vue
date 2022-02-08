@@ -5,7 +5,8 @@
     </div>
     <div v-else-if="error">Error loading</div>
     <template v-else>
-      <div class="video-wrapper bg-white" :class="{ 'chat-open': isShowLiveChatModal && !isStreamExpired }">
+      <div class="video-wrapper bg-white"
+           :class="{ 'chat-open': isShowLiveChatModal && !isStreamExpired }">
         <div class="video gated-containerV2 px--20-10 pt-40-20">
           <MediaPlayer
             :media="media"
