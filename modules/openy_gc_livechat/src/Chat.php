@@ -36,14 +36,15 @@ class Chat implements MessageComponentInterface {
 
     // Get chat history.
     $history = $this->loadHistory($path);
-    if ($history) {
-      $data['message_type'] = 'history';
-      $data['history'] = $history;
-      foreach ($this->clients as $client) {
-        // Send chat history only for newly connected user.
-        if ($client->resourceId == $conn->resourceId) {
-          $client->send(json_encode($data));
-        }
+    $data = [
+      'count' => count($this->clients),
+      'message_type' => 'history',
+      'history' => $history,
+    ];
+    foreach ($this->clients as $client) {
+      // Send chat history only for newly connected user.
+      if ($client->resourceId == $conn->resourceId) {
+        $client->send(json_encode($data));
       }
     }
   }
@@ -77,6 +78,7 @@ class Chat implements MessageComponentInterface {
       ->execute();
 
     $this->clients->rewind();
+    $data['count'] = count($this->clients);
     while ($this->clients->valid()) {
       $client = $this->clients->current();
       $info   = $this->clients->getInfo();
