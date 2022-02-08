@@ -6,7 +6,8 @@
   >
     <template #header>
       <span>Chat</span>
-      <span class="indicator" :class="{online: ratchetServerConnected, offline: !ratchetServerConnected}">
+      <span class="indicator"
+            :class="{online: ratchetServerConnected, offline: !ratchetServerConnected}">
         {{ ratchetServerConnected ? 'online' : 'offline' }}
       </span>
     </template>

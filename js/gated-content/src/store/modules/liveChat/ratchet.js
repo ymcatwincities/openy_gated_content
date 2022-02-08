@@ -50,6 +50,7 @@ export default {
 
       ws.onclose = () => {
         context.commit('setRatchetServerConnected', false);
+        // eslint-disable-next-line no-undef
         _.delay(() => {
           context.dispatch('initRatchetServer');
         }, 1000);
