@@ -1,8 +1,9 @@
 <template>
   <Modal
     class="modal-leave-meeting text-black"
+    :class="{'user-config': isOpenLiveChatConfigNameModal}"
     :style="{'display': isShowLiveChatUserNameModal ? 'table' : 'none'}"
-    @close="toggleShowLiveChatUserNameModal">
+    @close="toggleShowLiveChatUserNameModal(false)">
 
     <template #header>Specify your name</template>
     <template #body>
@@ -40,6 +41,7 @@ export default {
   computed: {
     ...mapGetters([
       'isShowLiveChatUserNameModal',
+      'isOpenLiveChatConfigNameModal',
     ]),
   },
   created() {
@@ -54,14 +56,19 @@ export default {
       'toggleShowLiveChatModal',
       'toggleShowLiveChatUserNameModal',
       'updateLiveChatLocalName',
+      'toggleShowLiveChatConfigNameModal',
     ]),
     async submit() {
       this.error = '';
       await this.$store
         .dispatch('updateLiveChatLocalName', this.liveChatName)
         .then(() => {
-          this.toggleShowLiveChatUserNameModal(true);
-          this.toggleShowLiveChatModal();
+          if (this.isOpenLiveChatConfigNameModal) {
+            this.toggleShowLiveChatConfigNameModal(true);
+          } else {
+            this.toggleShowLiveChatModal();
+            this.toggleShowLiveChatUserNameModal(true);
+          }
         })
         .catch((error) => {
           this.error = error.response.data.message;

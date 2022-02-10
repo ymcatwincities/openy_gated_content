@@ -5,10 +5,11 @@
     @close="toggleShowLiveChatModal"
   >
     <template #header>
+      <font-awesome-icon icon="fas fa-users-cog" @click="toggleShowLiveChatConfigNameModal(false)"/>
       <span>Chat</span>
       <span class="indicator"
             :class="{online: ratchetServerConnected, offline: !ratchetServerConnected}">
-        {{ ratchetServerConnected ? 'online' : 'offline' }}
+        {{ ratchetServerConnected ? onlineClientCount + ' people online' : 'offline' }}
       </span>
     </template>
     <template #body>
@@ -58,27 +59,43 @@ export default {
   data() {
     return {
       newMessage: '',
+      chatBody: null,
     };
   },
   computed: {
     ...mapGetters([
       'isShowLiveChatModal',
       'liveChatSession',
-      'unreadLiveChatMessagesCount',
       'liveChatUserId',
       'getAppSettings',
       'ratchetServerConnected',
+      'bottomScrollOn',
+      'onlineClientCount',
     ]),
+  },
+  watch: {
+    liveChatSession: {
+      handler() {
+        if (this.bottomScrollOn) {
+          this.scrollDown();
+        }
+      },
+      deep: true,
+    },
   },
   methods: {
     ...mapActions([
       'toggleShowLiveChatModal',
       'sendLiveChatMessage',
       'initRatchetServer',
+      'updateBottomScrollOn',
+      'toggleShowLiveChatConfigNameModal',
     ]),
     messageEnterEvent(message) {
-      this.newMessage = '';
-      this.sendLiveChatMessage(message);
+      if (message.length) {
+        this.newMessage = '';
+        this.sendLiveChatMessage(message);
+      }
     },
     formatDate(date) {
       return this.$dayjs.date(date).format('ddd, MMM D, YYYY @ h:mm a');
@@ -89,11 +106,35 @@ export default {
       }
       return uid === this.liveChatUserId ? 'Me' : author;
     },
+    handleScroll() {
+      const scrollY = this.chatBody.scrollTop;
+
+      if ((scrollY + this.chatBody.clientHeight) < this.chatBody.scrollHeight) {
+        this.updateBottomScrollOn(false);
+      } else {
+        this.updateBottomScrollOn(true);
+      }
+    },
+    scrollDown() {
+      this.chatBody.scrollTop = this.chatBody.scrollHeight;
+    },
+  },
+  destroyed() {
+    this.chatBody.removeEventListener('scroll', this.handleScroll);
   },
   mounted() {
+    this.chatBody = this.$el.querySelector('.modal-body');
+    this.chatBody.addEventListener('scroll', this.handleScroll);
+
     if (!this.ratchetServerConnected) {
       this.initRatchetServer();
     }
+  },
+  updated() {
+    // eslint-disable-next-line func-names
+    this.$nextTick(function () {
+      this.scrollDown();
+    });
   },
 };
 </script>

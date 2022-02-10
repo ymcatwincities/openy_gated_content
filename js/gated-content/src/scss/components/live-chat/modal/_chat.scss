@@ -32,6 +32,9 @@
             color: $gray;
             font-weight: bold;
 
+            svg {
+              margin-right: 10px;
+            }
             .indicator {
               margin: 0 10px;
               font-weight: initial;
@@ -163,6 +166,11 @@
       @media (max-width: 425px) {
         @include verticalLiveChat;
       }
+    }
+  }
+  .modal-mask {
+    &.user-config {
+      z-index: 9999;
     }
   }
 }

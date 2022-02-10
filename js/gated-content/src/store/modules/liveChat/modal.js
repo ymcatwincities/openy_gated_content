@@ -3,6 +3,7 @@ export default {
     showLiveChatUserNameModal: false,
     showLiveChatModal: false,
     openLiveChatNameModal: false,
+    openLiveChatConfigNameModal: false,
   },
   actions: {
     toggleShowLiveChatModal(context) {
@@ -20,6 +21,13 @@ export default {
         }
       }
     },
+    toggleShowLiveChatConfigNameModal(context, modal) {
+      if (modal) {
+        context.commit('updateOpenLiveChatNameModal', !context.state.openLiveChatNameModal);
+      }
+      context.commit('showLiveChatUserNameModal', !context.state.showLiveChatUserNameModal);
+      context.commit('updateOpenLiveChatConfigNameModal', !context.state.openLiveChatConfigNameModal);
+    },
   },
   mutations: {
     showLiveChatUserNameModal(state, value) {
@@ -31,10 +39,14 @@ export default {
     updateOpenLiveChatNameModal(state, value) {
       state.openLiveChatNameModal = value;
     },
+    updateOpenLiveChatConfigNameModal(state, value) {
+      state.openLiveChatConfigNameModal = value;
+    },
   },
   getters: {
     isShowLiveChatUserNameModal: (state) => state.showLiveChatUserNameModal,
     isShowLiveChatModal: (state) => state.showLiveChatModal,
     isOpenLiveChatNameModal: (state) => state.openLiveChatNameModal,
+    isOpenLiveChatConfigNameModal: (state) => state.openLiveChatConfigNameModal,
   },
 };
