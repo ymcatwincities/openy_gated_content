@@ -5,7 +5,7 @@
     @close="toggleShowLiveChatModal"
   >
     <template #header>
-      <font-awesome-icon icon="fas fa-users-cog" @click="toggleShowLiveChatConfigNameModal(false)"/>
+      <ChatUserPreferences v-on:click.native="toggleShowLiveChatConfigNameModal(false)"/>
       <span>Chat</span>
       <span class="indicator"
             :class="{online: ratchetServerConnected, offline: !ratchetServerConnected}">
@@ -53,9 +53,10 @@
 import { mapGetters, mapActions } from 'vuex';
 import Modal from '@/components/modal/Modal.vue';
 import SendIcon from '@/components/svg/SendIcon.vue';
+import ChatUserPreferences from '@/components/svg/ChatUserPreferences.vue';
 
 export default {
-  components: { Modal, SendIcon },
+  components: {ChatUserPreferences, Modal, SendIcon },
   data() {
     return {
       newMessage: '',

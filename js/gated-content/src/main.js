@@ -5,9 +5,6 @@ import updateLocale from 'dayjs/plugin/updateLocale';
 import duration from 'dayjs/plugin/duration';
 import advancedFormat from 'dayjs/plugin/advancedFormat';
 import dayjs from 'dayjs';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faUsersCog } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import App from './GatedContent.vue';
 import router from './router';
 import store from './store';
@@ -16,10 +13,6 @@ import Log from './plugins/log';
 import DayjsHelper from './plugins/DayjsHelper';
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
-
-library.add(faUsersCog);
-
-Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 Vue.use(VueCookies);
 Vue.use(Log);
