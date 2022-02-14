@@ -4,7 +4,7 @@
     "type": "drupal-module",
     "require": {
         "ymcatwincities/openy": "9.* || dev-9.x-2.x || dev-*",
-        "drupal/recurring_events": "^2.0@beta",
+        "drupal/recurring_events": "2.0.0-rc2",
         "ymcatwincities/daxko_sso": "*",
         "drupal/jsonapi_image_styles": "^2.0.0",
         "drupal/csv_serialization": "^2.0",

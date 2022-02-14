@@ -2,6 +2,8 @@ export default {
   state: {
     liveChatSession: [],
     unreadLiveChatMessages: 0,
+    bottomScrollOn: true,
+    onlineClientCount: 0,
   },
   actions: {
     sendLiveChatMessage(context, message) {
@@ -23,6 +25,12 @@ export default {
         context.commit('incUnreadLiveChatMessages');
       }
     },
+    updateBottomScrollOn(context, scrollStatus) {
+      context.commit('setBottomScrollOn', scrollStatus);
+    },
+    updateOnlineClientCount(context, count) {
+      context.commit('setOnlineClientCount', count);
+    },
   },
   mutations: {
     addLiveChatMessage(state, message) {
@@ -34,9 +42,17 @@ export default {
     resetUnreadLiveChatMessages(state) {
       state.unreadLiveChatMessages = 0;
     },
+    setBottomScrollOn(state, value) {
+      state.bottomScrollOn = value;
+    },
+    setOnlineClientCount(state, value) {
+      state.onlineClientCount = value;
+    },
   },
   getters: {
     liveChatSession: (state) => state.liveChatSession,
     unreadLiveChatMessagesCount: (state) => state.unreadLiveChatMessages,
+    bottomScrollOn: (state) => state.bottomScrollOn,
+    onlineClientCount: (state) => state.onlineClientCount,
   },
 };

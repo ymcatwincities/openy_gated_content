@@ -5,11 +5,14 @@
     @close="toggleShowLiveChatModal"
   >
     <template #header>
-      <span>Chat</span>
-      <span class="indicator"
-            :class="{online: ratchetServerConnected, offline: !ratchetServerConnected}">
-        {{ ratchetServerConnected ? 'online' : 'offline' }}
+      <div class="header-info">
+        <ChatUserPreferences v-on:click.native="toggleShowLiveChatConfigNameModal"/>
+        <span>Chat</span>
+        <span class="indicator"
+              :class="{online: ratchetServerConnected, offline: !ratchetServerConnected}">
+        {{ ratchetServerConnected ? onlineClientCount + ' people online' : 'offline' }}
       </span>
+      </div>
     </template>
     <template #body>
       <div
@@ -52,33 +55,50 @@
 import { mapGetters, mapActions } from 'vuex';
 import Modal from '@/components/modal/Modal.vue';
 import SendIcon from '@/components/svg/SendIcon.vue';
+import ChatUserPreferences from '@/components/svg/ChatUserPreferences.vue';
 
 export default {
-  components: { Modal, SendIcon },
+  components: { ChatUserPreferences, Modal, SendIcon },
   data() {
     return {
       newMessage: '',
+      chatBody: null,
     };
   },
   computed: {
     ...mapGetters([
       'isShowLiveChatModal',
       'liveChatSession',
-      'unreadLiveChatMessagesCount',
       'liveChatUserId',
       'getAppSettings',
       'ratchetServerConnected',
+      'bottomScrollOn',
+      'onlineClientCount',
     ]),
+  },
+  watch: {
+    liveChatSession: {
+      handler() {
+        if (this.bottomScrollOn) {
+          this.scrollDown();
+        }
+      },
+      deep: true,
+    },
   },
   methods: {
     ...mapActions([
       'toggleShowLiveChatModal',
       'sendLiveChatMessage',
       'initRatchetServer',
+      'updateBottomScrollOn',
+      'toggleShowLiveChatConfigNameModal',
     ]),
     messageEnterEvent(message) {
-      this.newMessage = '';
-      this.sendLiveChatMessage(message);
+      if (message.length) {
+        this.newMessage = '';
+        this.sendLiveChatMessage(message);
+      }
     },
     formatDate(date) {
       return this.$dayjs.date(date).format('ddd, MMM D, YYYY @ h:mm a');
@@ -89,11 +109,35 @@ export default {
       }
       return uid === this.liveChatUserId ? 'Me' : author;
     },
+    handleScroll() {
+      const scrollY = this.chatBody.scrollTop;
+
+      if ((scrollY + this.chatBody.clientHeight) < this.chatBody.scrollHeight) {
+        this.updateBottomScrollOn(false);
+      } else {
+        this.updateBottomScrollOn(true);
+      }
+    },
+    scrollDown() {
+      this.chatBody.scrollTop = this.chatBody.scrollHeight;
+    },
+  },
+  destroyed() {
+    this.chatBody.removeEventListener('scroll', this.handleScroll);
   },
   mounted() {
+    this.chatBody = this.$el.querySelector('.modal-body');
+    this.chatBody.addEventListener('scroll', this.handleScroll);
+
     if (!this.ratchetServerConnected) {
       this.initRatchetServer();
     }
+  },
+  updated() {
+    // eslint-disable-next-line func-names
+    this.$nextTick(function () {
+      this.scrollDown();
+    });
   },
 };
 </script>

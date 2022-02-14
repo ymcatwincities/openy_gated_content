@@ -19,6 +19,11 @@ export default {
 
       ws.onmessage = (event) => {
         const data = JSON.parse(event.data);
+
+        if (data.count) {
+          context.dispatch('updateOnlineClientCount', data.count);
+        }
+
         if (data.message_type === 'history') {
           const { history } = data;
 
