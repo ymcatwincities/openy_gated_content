@@ -58,7 +58,7 @@ import SendIcon from '@/components/svg/SendIcon.vue';
 import ChatUserPreferences from '@/components/svg/ChatUserPreferences.vue';
 
 export default {
-  components: {ChatUserPreferences, Modal, SendIcon },
+  components: { ChatUserPreferences, Modal, SendIcon },
   data() {
     return {
       newMessage: '',
