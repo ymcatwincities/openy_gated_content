@@ -31,39 +31,43 @@
             padding: 24px;
             color: $gray;
             font-weight: bold;
-
-            svg {
-              margin-right: 10px;
-            }
-            .indicator {
-              margin: 0 10px;
-              font-weight: initial;
-              font-size: 12px;
-              &:before {
-                content: '';
-                display: inline-block;
-                width: 8px;
-                height: 8px;
-                border-radius: 4px;
+            display: flex;
+            .header-info {
+              display: flex;
+              width: 90%;
+              svg {
+                margin-right: 10px;
               }
-              &.offline {
+              .indicator {
+                margin: auto 10px;
+                font-weight: initial;
+                font-size: 12px;
                 &:before {
-                  background-color: $red;
+                  content: '';
+                  display: inline-block;
+                  width: 8px;
+                  height: 8px;
+                  border-radius: 4px;
+                }
+                &.offline {
+                  &:before {
+                    background-color: $red;
+                  }
+                }
+                &.online {
+                  &:before {
+                    background-color: $green;
+                  }
                 }
               }
-              &.online {
-                &:before {
-                  background-color: $green;
-                }
-              }
-            }
 
-            button {
-              border: none;
-              background: none;
-              font-size: 30px;
-              height: 30px;
-              line-height: 0;
+              button {
+                border: none;
+                background: none;
+                font-size: 30px;
+                height: 30px;
+                line-height: 0;
+              }
             }
           }
           .modal-body {

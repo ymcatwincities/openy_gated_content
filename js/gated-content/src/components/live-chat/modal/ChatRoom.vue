@@ -5,12 +5,14 @@
     @close="toggleShowLiveChatModal"
   >
     <template #header>
-      <ChatUserPreferences v-on:click.native="toggleShowLiveChatConfigNameModal(false)"/>
-      <span>Chat</span>
-      <span class="indicator"
-            :class="{online: ratchetServerConnected, offline: !ratchetServerConnected}">
+      <div class="header-info">
+        <ChatUserPreferences v-on:click.native="toggleShowLiveChatConfigNameModal(false)"/>
+        <span>Chat</span>
+        <span class="indicator"
+              :class="{online: ratchetServerConnected, offline: !ratchetServerConnected}">
         {{ ratchetServerConnected ? onlineClientCount + ' people online' : 'offline' }}
       </span>
+      </div>
     </template>
     <template #body>
       <div
