@@ -34,12 +34,12 @@
             display: flex;
             .header-info {
               display: flex;
-              width: 90%;
+              width: 99%;
               svg {
                 margin-right: 10px;
               }
               .indicator {
-                margin: auto 10px;
+                margin: 0 10px;
                 font-weight: initial;
                 font-size: 12px;
                 &:before {

@@ -2,7 +2,8 @@
   <Modal
     class="modal-leave-meeting text-black"
     :class="{'user-config': isOpenLiveChatConfigNameModal}"
-    :style="{'display': isShowLiveChatUserNameModal ? 'table' : 'none'}"
+    :style="{'display': isShowLiveChatUserNameModal || isOpenLiveChatConfigNameModal ?
+             'table' : 'none'}"
     @close="toggleShowLiveChatUserNameModal(false)">
 
     <template #header>Specify your name</template>
@@ -64,7 +65,7 @@ export default {
         .dispatch('updateLiveChatLocalName', this.liveChatName)
         .then(() => {
           if (this.isOpenLiveChatConfigNameModal) {
-            this.toggleShowLiveChatConfigNameModal(true);
+            this.toggleShowLiveChatConfigNameModal();
           } else {
             this.toggleShowLiveChatModal();
             this.toggleShowLiveChatUserNameModal(true);

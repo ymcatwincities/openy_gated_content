@@ -19,12 +19,12 @@ export default {
         if (modal) {
           context.commit('updateOpenLiveChatNameModal', true);
         }
+      } else {
+        context.commit('showLiveChatUserNameModal', !context.state.showLiveChatUserNameModal);
+        context.commit('updateOpenLiveChatConfigNameModal', false);
       }
     },
-    toggleShowLiveChatConfigNameModal(context, modal) {
-      if (modal) {
-        context.commit('updateOpenLiveChatNameModal', !context.state.openLiveChatNameModal);
-      }
+    toggleShowLiveChatConfigNameModal(context) {
       context.commit('showLiveChatUserNameModal', !context.state.showLiveChatUserNameModal);
       context.commit('updateOpenLiveChatConfigNameModal', !context.state.openLiveChatConfigNameModal);
     },

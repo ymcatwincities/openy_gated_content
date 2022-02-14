@@ -6,7 +6,7 @@
   >
     <template #header>
       <div class="header-info">
-        <ChatUserPreferences v-on:click.native="toggleShowLiveChatConfigNameModal(false)"/>
+        <ChatUserPreferences v-on:click.native="toggleShowLiveChatConfigNameModal"/>
         <span>Chat</span>
         <span class="indicator"
               :class="{online: ratchetServerConnected, offline: !ratchetServerConnected}">
