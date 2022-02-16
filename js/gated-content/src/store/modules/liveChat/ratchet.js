@@ -23,8 +23,11 @@ export default {
         if (data.count) {
           context.dispatch('updateOnlineClientCount', data.count);
         }
-
-        if (data.message_type === 'history') {
+        if (data.message_type === 'disableChat') {
+          context.commit('setIsDisabledLivechat', true);
+        } else if (data.message_type === 'enableChat') {
+          context.commit('setIsDisabledLivechat', false);
+        } else if (data.message_type === 'history') {
           const { history } = data;
 
           if (!context.getters.liveChatSession.length) {

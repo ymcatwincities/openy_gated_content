@@ -12,6 +12,8 @@ export default {
     liveChatLocalName: null,
     liveChatUserId: null,
     liveChatRatchetConfigs: null,
+    roleInstructor: false,
+    disabledLivechat: false,
   },
   actions: {
     async setLiveChatData(context, payload) {
@@ -22,6 +24,8 @@ export default {
       context.commit('setLiveChatLocalName', payload.liveChatLocalName);
       context.commit('setLiveChatUserId', payload.liveChatUserId);
       context.commit('setLiveChatRatchetConfigs', payload.liveChatRatchetConfigs);
+      context.commit('setRoleIsInstructor', payload.roleInstructor);
+      context.commit('setIsDisabledLivechat', payload.disabledLivechat);
     },
     async updateLiveChatLocalName(context, payload) {
       return client({
@@ -60,6 +64,12 @@ export default {
     setLiveChatRatchetConfigs(state, value) {
       state.liveChatRatchetConfigs = value;
     },
+    setRoleIsInstructor(state, value) {
+      state.roleInstructor = value;
+    },
+    setIsDisabledLivechat(state, value) {
+      state.disabledLivechat = value;
+    },
   },
   getters: {
     liveChatMeetingId: (state) => state.liveChatMeetingId,
@@ -68,6 +78,8 @@ export default {
     liveChatLocalName: (state) => state.liveChatLocalName,
     liveChatUserId: (state) => state.liveChatUserId,
     liveChatRatchetConfigs: (state) => state.liveChatRatchetConfigs,
+    roleIsInstructor: (state) => state.roleInstructor,
+    isDisabledLivechat: (state) => state.disabledLivechat,
   },
   modules: {
     liveChat,

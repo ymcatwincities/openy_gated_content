@@ -7,6 +7,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Link;
+use Drupal\Core\State\StateInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -39,6 +40,13 @@ class LiveChatController extends ControllerBase {
   protected $request;
 
   /**
+   * The state service.
+   *
+   * @var \Drupal\Core\State\StateInterface
+   */
+  protected $state;
+
+  /**
    * LiveChatController constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
@@ -48,11 +56,14 @@ class LiveChatController extends ControllerBase {
    *   information.
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   The currently active request object.
+   * @param \Drupal\Core\State\StateInterface $state
+   *   The state service.
    */
-  public function __construct(ConfigFactoryInterface $configFactory, Connection $connection, Request $request) {
+  public function __construct(ConfigFactoryInterface $configFactory, Connection $connection, Request $request, StateInterface $state) {
     $this->configFactory = $configFactory;
     $this->connection = $connection;
     $this->request = $request;
+    $this->state = $state;
   }
 
   /**
@@ -62,7 +73,8 @@ class LiveChatController extends ControllerBase {
     return new static(
       $container->get('config.factory'),
       $container->get('database'),
-      $container->get('request_stack')->getCurrentRequest()
+      $container->get('request_stack')->getCurrentRequest(),
+      $container->get('state')
     );
   }
 
@@ -79,10 +91,16 @@ class LiveChatController extends ControllerBase {
     $user_storage = $this->entityTypeManager()->getStorage('user');
     $user = $user_storage->load($this->currentUser()->id());
     $ratchet_settings = $this->configFactory->get('openy_gc_livechat.settings');
-
+    $user_roles = $this->currentUser()->getRoles();
+    $isInstructorRole = FALSE;
+    if (in_array('virtual_trainer', $user_roles)) {
+      $isInstructorRole = TRUE;
+    }
     $data = [
       'name' => $user->getAccountName(),
       'user_id' => $this->currentUser()->id(),
+      'isInstructorRole' => $isInstructorRole,
+      'disabledLivechats' => $this->state->get('disabledVirtualChatrooms', []),
       'ratchet' => [
         'port' => $ratchet_settings->get('port'),
         'mode' => $ratchet_settings->get('mode'),

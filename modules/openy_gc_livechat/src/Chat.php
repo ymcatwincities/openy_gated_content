@@ -55,6 +55,50 @@ class Chat implements MessageComponentInterface {
   public function onMessage(ConnectionInterface $from, $msg) {
     $data = json_decode($msg, TRUE);
 
+    if (
+      (isset($data['disableChat']) && $data['disableChat']) ||
+      (isset($data['enableChat']) && $data['enableChat'])
+    ) {
+      // Check if request sent by instructor role only.
+      $user_storage = \Drupal::service('entity_type.manager')->getStorage('user');
+      $user = $user_storage->load($data['uid']);
+      $user_roles = $user->getRoles();
+
+      if (in_array('virtual_trainer', $user_roles)) {
+        $this->clients->rewind();
+
+        $disabledVirtualChatrooms = \Drupal::state()->get('disabledVirtualChatrooms', []);
+
+        if (isset($data['enableChat']) && $data['enableChat']) {
+          $data['message_type'] = 'enableChat';
+          unset($disabledVirtualChatrooms[$data['chatroom_id']]);
+          \Drupal::state()->set('disabledVirtualChatrooms', $disabledVirtualChatrooms);
+        }
+
+        if (isset($data['disableChat']) && $data['disableChat']) {
+          $data['message_type'] = 'disableChat';
+          // Delete history of the chat.
+          $db = \Drupal::database();
+          $db->delete('openy_gc_livechat__chat_history')
+            ->condition('cid', $data['chatroom_id'])
+            ->execute();
+
+          $disabledVirtualChatrooms[$data['chatroom_id']] = $data['chatroom_id'];
+          \Drupal::state()->set('disabledVirtualChatrooms', $disabledVirtualChatrooms);
+        }
+
+        while ($this->clients->valid()) {
+          $client = $this->clients->current();
+          $info = $this->clients->getInfo();
+          // Disable chat only for clients connected to the same chatroom.
+          if ($info['chatroom_id'] == $data['chatroom_id']) {
+            $client->send(json_encode($data));
+          }
+          $this->clients->next();
+        }
+      }
+    }
+
     $db = \Drupal::database();
     $db->insert('openy_gc_livechat__chat_history')
       ->fields([
