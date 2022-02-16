@@ -19,10 +19,11 @@ export default {
       context.dispatch('sendLiveChatData', msgObj);
     },
     sendLiveChatTechMessage(context, message) {
-      message.chatroom_id = context.getters.liveChatMeetingId;
-      message.uid = window.drupalSettings.user.uid;
+      const msg = message;
+      msg.chatroom_id = context.getters.liveChatMeetingId;
+      msg.uid = window.drupalSettings.user.uid;
 
-      context.dispatch('sendLiveChatData', message);
+      context.dispatch('sendLiveChatData', msg);
     },
     async receiveChatMessage(context, msgObj) {
       context.commit('addLiveChatMessage', msgObj);

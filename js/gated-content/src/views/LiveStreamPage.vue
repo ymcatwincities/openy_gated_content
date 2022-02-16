@@ -233,7 +233,7 @@ export default {
         }).then(() => {
           if (this.liveChatModuleEnabled) {
             let isDisabledLivechat = false;
-            // eslint-disable-next-line no-restricted-syntax
+            // eslint-disable-next-line no-restricted-syntax, prefer-const
             for (let i in this.liveChatData.disabledLivechats) {
               if (this.liveChatData.disabledLivechats[i] === this.id) {
                 isDisabledLivechat = true;
