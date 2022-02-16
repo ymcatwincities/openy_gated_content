@@ -5,9 +5,9 @@
         <div class="modal-container">
           <div class="modal-header">
             <slot name="header"></slot>
-            <button class="modal-default-button" @click="$emit('close')">
+            <a class="modal-default-button" @click="$emit('close')">
               &times;
-            </button>
+            </a>
           </div>
           <div class="modal-body">
             <slot name="body"></slot>

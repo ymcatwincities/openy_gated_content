@@ -80,7 +80,9 @@ export default {
     liveChatSession: {
       handler() {
         if (this.bottomScrollOn) {
-          this.scrollDown();
+          this.$nextTick(() => {
+            this.scrollDown();
+          });
         }
       },
       deep: true,
@@ -135,7 +137,7 @@ export default {
   },
   updated() {
     // eslint-disable-next-line func-names
-    this.$nextTick(function () {
+    this.$nextTick(() => {
       this.scrollDown();
     });
   },
