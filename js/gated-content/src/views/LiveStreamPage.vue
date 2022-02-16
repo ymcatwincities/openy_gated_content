@@ -35,7 +35,17 @@
                 Starts in {{ startsIn }}
               </template>
             </div>
-            <ChatRoomItem v-if="!isStreamExpired && liveChatModuleEnabled"></ChatRoomItem>
+            <ChatRoomItem v-if="
+              !isStreamExpired &&
+              liveChatModuleEnabled &&
+              !isDisabledLivechat"
+            ></ChatRoomItem>
+            <ChatRoomItemRestart v-if="
+              !isStreamExpired &&
+              liveChatModuleEnabled &&
+              isDisabledLivechat &&
+              roleIsInstructor"
+            ></ChatRoomItemRestart>
           </div>
           <div class="verdana-14-12 text-thunder">
             <div class="video-footer__block">
@@ -122,6 +132,7 @@ import { SeriesEventMixin } from '@/mixins/SeriesEventMixin';
 import SvgIcon from '@/components/SvgIcon.vue';
 import ChatRoom from '@/components/live-chat/modal/ChatRoom.vue';
 import ChatRoomItem from '@/components/live-chat/live-stream/ChatRoomItem.vue';
+import ChatRoomItemRestart from '@/components/live-chat/live-stream/ChatRoomItemRestart.vue';
 
 export default {
   name: 'LiveStreamPage',
@@ -136,6 +147,7 @@ export default {
     CategoryLinks,
     ChatRoom,
     ChatRoomItem,
+    ChatRoomItemRestart,
   },
   props: {
     id: {
@@ -169,6 +181,8 @@ export default {
   computed: {
     ...mapGetters([
       'isShowLiveChatModal',
+      'roleIsInstructor',
+      'isDisabledLivechat',
     ]),
     // This values most of all from parent (series), but can be overridden by item,
     // so ve need to check this here and use correct value.
@@ -218,6 +232,13 @@ export default {
           this.logPlaybackEvent('entityView');
         }).then(() => {
           if (this.liveChatModuleEnabled) {
+            let isDisabledLivechat = false;
+            // eslint-disable-next-line no-restricted-syntax
+            for (let i in this.liveChatData.disabledLivechats) {
+              if (this.liveChatData.disabledLivechats[i] === this.id) {
+                isDisabledLivechat = true;
+              }
+            }
             this.$store.dispatch('setLiveChatData', {
               liveChatMeetingId: this.id,
               liveChatMeetingTitle: this.event.title,
@@ -226,6 +247,8 @@ export default {
               liveChatLocalName: this.liveChatData.name,
               liveChatUserId: this.liveChatData.user_id,
               liveChatRatchetConfigs: this.liveChatData.ratchet,
+              roleInstructor: this.liveChatData.isInstructorRole,
+              disabledLivechat: isDisabledLivechat,
             }).then(() => {
               this.expiredStream();
             });

@@ -13,6 +13,13 @@
         {{ ratchetServerConnected ? onlineClientCount + ' people online' : 'offline' }}
       </span>
       </div>
+      <button
+        v-if="roleIsInstructor"
+        class="disable-chat-button"
+        @click="disableChat()"
+      >
+        Disable Chat
+      </button>
     </template>
     <template #body>
       <div
@@ -74,6 +81,7 @@ export default {
       'ratchetServerConnected',
       'bottomScrollOn',
       'onlineClientCount',
+      'roleIsInstructor',
     ]),
   },
   watch: {
@@ -90,6 +98,7 @@ export default {
     ...mapActions([
       'toggleShowLiveChatModal',
       'sendLiveChatMessage',
+      'sendLiveChatTechMessage',
       'initRatchetServer',
       'updateBottomScrollOn',
       'toggleShowLiveChatConfigNameModal',
@@ -99,6 +108,12 @@ export default {
         this.newMessage = '';
         this.sendLiveChatMessage(message);
       }
+    },
+    disableChat() {
+      const message = {
+        disableChat: 1,
+      };
+      this.sendLiveChatTechMessage(message);
     },
     formatDate(date) {
       return this.$dayjs.date(date).format('ddd, MMM D, YYYY @ h:mm a');
