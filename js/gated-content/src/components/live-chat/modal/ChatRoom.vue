@@ -9,12 +9,14 @@
         <ChatUserPreferences v-on:click.native="toggleShowLiveChatConfigNameModal"/>
         <span>Chat</span>
         <span class="indicator"
-              :class="{online: ratchetServerConnected, offline: !ratchetServerConnected}">
-        {{ ratchetServerConnected ? onlineClientCount + ' people online' : 'offline' }}
+              :class="{online: ratchetServerConnected && !isDisabledLivechat,
+                       offline: !ratchetServerConnected || isDisabledLivechat}">
+        {{ ratchetServerConnected && !isDisabledLivechat ?
+          onlineClientCount + ' people online' : 'offline' }}
       </span>
       </div>
       <button
-        v-if="roleIsInstructor"
+        v-if="roleIsInstructor && ratchetServerConnected && !isDisabledLivechat"
         class="disable-chat-button"
         @click="disableChat()"
       >
@@ -39,13 +41,22 @@
           <div class="message-body">{{ msg.message }}</div>
         </div>
       </div>
+      <div v-if="roleIsInstructor && isDisabledLivechat">
+        Chat was disabled by you. You can enabled it again on this stream page (right of chat icon)
+      </div>
+      <div v-else-if="isDisabledLivechat">
+        Instructor disabled chat for users
+      </div>
+      <div v-else-if="!ratchetServerConnected">
+        Sorry, chat is not working at current moment
+      </div>
     </template>
     <template #footer>
       <input
         type="text"
         placeholder="Message"
         v-model.trim="newMessage"
-        :disabled="!ratchetServerConnected"
+        :disabled="!ratchetServerConnected || isDisabledLivechat"
         @keyup.enter="messageEnterEvent(newMessage)"
       />
       <button
@@ -82,6 +93,7 @@ export default {
       'bottomScrollOn',
       'onlineClientCount',
       'roleIsInstructor',
+      'isDisabledLivechat',
     ]),
   },
   watch: {
