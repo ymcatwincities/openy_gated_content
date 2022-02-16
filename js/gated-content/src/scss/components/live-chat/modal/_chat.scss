@@ -1,4 +1,21 @@
 .gated-content-video-page {
+  .modal-leave-meeting {
+    .modal-wrapper {
+      .modal-container {
+        .modal-header {
+          display: flex;
+          align-items: center;
+          .header-info {
+            width: 99%;
+            flex-grow: 2;
+          }
+        }
+        .modal-footer {
+          display: none;
+        }
+      }
+    }
+  }
   .video-wrapper {
     &.chat-open {
       .video {
@@ -28,7 +45,7 @@
           }
           .modal-header {
             align-items: center;
-            padding: 24px;
+            padding: 18px;
             color: $gray;
             font-weight: bold;
             display: flex;
@@ -37,9 +54,10 @@
               width: 99%;
               svg {
                 margin-right: 10px;
+                margin-top: 2px;
               }
               .indicator {
-                margin: 0 10px;
+                margin: 3px 10px;
                 font-weight: initial;
                 font-size: 12px;
                 &:before {
@@ -80,7 +98,7 @@
             background-color: $light-gray;
             position: relative;
             flex: 1 1 auto;
-            padding: 1rem;
+            padding: 16px;
           }
           .modal-footer {
             display: flex;
@@ -90,17 +108,18 @@
             border-bottom-right-radius: calc(0.3rem - 1px);
             border-bottom-left-radius: calc(0.3rem - 1px);
             justify-content: space-between;
-            @include median(padding, 24px, 10px, 10px);
+            @include median(padding, 16px, 10px, 10px);
 
             input {
-              width: 80%;
-              padding: 12px;
+              flex-grow: 2;
+              padding: 8px;
               border-radius: 0;
               border: 1px solid $gray;
+              margin-right: 10px;
             }
             button {
-              width: 50px;
-              height: 50px;
+              width: 40px;
+              height: 40px;
               background-color: $indigo;
               border: none;
               border-radius: 6px;
