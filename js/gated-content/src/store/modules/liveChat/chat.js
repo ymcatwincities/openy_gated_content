@@ -43,6 +43,9 @@ export default {
     addLiveChatMessage(state, message) {
       state.liveChatSession.push(message);
     },
+    clearLiveChatMessage(state) {
+      state.liveChatSession = [];
+    },
     incUnreadLiveChatMessages(state) {
       state.unreadLiveChatMessages += 1;
     },

@@ -25,6 +25,7 @@ export default {
         }
         if (data.message_type === 'disableChat') {
           context.commit('setIsDisabledLivechat', true);
+          context.commit('clearLiveChatMessage');
         } else if (data.message_type === 'enableChat') {
           context.commit('setIsDisabledLivechat', false);
         } else if (data.message_type === 'history') {
