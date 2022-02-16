@@ -6,7 +6,11 @@
              'table' : 'none'}"
     @close="toggleShowLiveChatUserNameModal(false)">
 
-    <template #header>Specify your name</template>
+    <template #header>
+      <div class="header-info">
+        <span>Specify your name</span>
+      </div>
+    </template>
     <template #body>
       <div class="select">
         <input
