@@ -36,9 +36,12 @@ class Chat implements MessageComponentInterface {
 
     // Get chat history.
     $history = $this->loadHistory($path);
+    $isChatDisabled = $this->isChatDisabled($path);
+
     $data = [
       'message_type' => 'history',
       'history' => $history,
+      'is_chat_disabled' => $isChatDisabled,
     ];
 
     $counters = [];
@@ -194,6 +197,13 @@ class Chat implements MessageComponentInterface {
       ->orderBy('ch.created')
       ->execute()
       ->fetchAll();
+  }
+
+  /**
+   * Method for checking if chat is disabled.
+   */
+  private function isChatDisabled($cid) {
+    return in_array($cid, \Drupal::state()->get('disabledVirtualChatrooms', []));
   }
 
 }
