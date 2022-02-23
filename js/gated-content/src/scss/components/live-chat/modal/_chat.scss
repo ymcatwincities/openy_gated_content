@@ -13,6 +13,10 @@
         .modal-footer {
           display: none;
         }
+        @media (max-width: 425px) {
+          max-width: 94%;
+          width: 100%;
+        }
       }
     }
   }
