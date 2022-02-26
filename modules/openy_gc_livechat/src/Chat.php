@@ -36,16 +36,38 @@ class Chat implements MessageComponentInterface {
 
     // Get chat history.
     $history = $this->loadHistory($path);
+    $isChatDisabled = $this->isChatDisabled($path);
+
     $data = [
-      'count' => count($this->clients),
       'message_type' => 'history',
       'history' => $history,
+      'is_chat_disabled' => $isChatDisabled,
     ];
-    foreach ($this->clients as $client) {
-      // Send chat history only for newly connected user.
+
+    $counters = [];
+    $this->clients->rewind();
+    while ($this->clients->valid()) {
+      $client = $this->clients->current();
+      $info = $this->clients->getInfo();
+      // Count user connections per room.
+      $counters[$info['chatroom_id']][] = $client->resourceId;
+      $this->clients->next();
+    }
+
+    $this->clients->rewind();
+    while ($this->clients->valid()) {
+      $client = $this->clients->current();
+      $info = $this->clients->getInfo();
+      // Send chat history, counter only for newly connected user.
       if ($client->resourceId == $conn->resourceId) {
         $client->send(json_encode($data));
       }
+      // Send connected users counter to all clients per room.
+      if (isset($counters[$info['chatroom_id']])) {
+        $data['count'] = count($counters[$info['chatroom_id']]);
+        $client->send(json_encode($data));
+      }
+      $this->clients->next();
     }
   }
 
@@ -121,8 +143,17 @@ class Chat implements MessageComponentInterface {
       ])
       ->execute();
 
+    $counters = [];
     $this->clients->rewind();
-    $data['count'] = count($this->clients);
+    while ($this->clients->valid()) {
+      $client = $this->clients->current();
+      $info = $this->clients->getInfo();
+      // Count user connections per room.
+      $counters[$info['chatroom_id']][] = $client->resourceId;
+      $this->clients->next();
+    }
+
+    $this->clients->rewind();
     while ($this->clients->valid()) {
       $client = $this->clients->current();
       $info   = $this->clients->getInfo();
@@ -134,6 +165,7 @@ class Chat implements MessageComponentInterface {
       }
       // Send message only to clients connected to the same chatroom.
       if ($info['chatroom_id'] == $data['chatroom_id']) {
+        $data['count'] = count($counters[$info['chatroom_id']]);
         $client->send(json_encode($data));
       }
 
@@ -165,6 +197,13 @@ class Chat implements MessageComponentInterface {
       ->orderBy('ch.created')
       ->execute()
       ->fetchAll();
+  }
+
+  /**
+   * Method for checking if chat is disabled.
+   */
+  private function isChatDisabled($cid) {
+    return in_array($cid, \Drupal::state()->get('disabledVirtualChatrooms', []));
   }
 
 }
