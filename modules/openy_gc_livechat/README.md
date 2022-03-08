@@ -42,5 +42,10 @@ Disabling the chat automatically erases its history.
 
 # Chats history
 
+Each Livestream saves its history for a certain amount of time (by default - 30 days).
 
+All saved chats have admin interface, where you could use search and filter functionality
+to get history of a certain Livestream or a group of the Livestreams.
+
+URI for chat history overview page is: `/admin/virtual-y/chats`
 
