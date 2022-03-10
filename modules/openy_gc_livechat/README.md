@@ -41,7 +41,7 @@ Before that, chat feature will be marked as `disabled`.
 
 Every user that have `virtual_trainer` role can disable chat any time.
 Disabling the chat automatically erases its history.
-![Disable button for admin](/modules/openy_gc_livachat/images/vy_chat_disable.png "Livechat disable button")
+![Disable button for admin](/modules/openy_gc_livechat/images/vy_chat_disable.png "Livechat disable button")
 
 # Chats history
 
