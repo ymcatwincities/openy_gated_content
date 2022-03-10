@@ -48,4 +48,3 @@ All saved chats have admin interface, where you could use search and filter func
 to get history of a certain Livestream or a group of the Livestreams.
 
 URI for chat history overview page is: `/admin/virtual-y/chats`
-
