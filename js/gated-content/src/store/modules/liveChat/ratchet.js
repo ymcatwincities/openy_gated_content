@@ -29,7 +29,14 @@ export default {
         } else if (data.message_type === 'enableChat') {
           context.commit('setIsDisabledLivechat', false);
         } else if (data.message_type === 'history') {
-          const { history } = data;
+          // eslint-disable-next-line camelcase
+          const { history, is_chat_disabled } = data;
+
+          // eslint-disable-next-line camelcase
+          if (is_chat_disabled) {
+            context.commit('setIsDisabledLivechat', true);
+            context.commit('clearLiveChatMessage');
+          }
 
           if (!context.getters.liveChatSession.length) {
             // eslint-disable-next-line array-callback-return
