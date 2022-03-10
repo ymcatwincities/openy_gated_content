@@ -37,8 +37,11 @@ Once you enable it, you could start using livechat at any Virtual Y Livestream p
 Your users could start using the chat once your virtual meeting is started.
 Before that, chat feature will be marked as `disabled`.
 
+# Disable chat
+
 Every user that have `virtual_trainer` role can disable chat any time.
 Disabling the chat automatically erases its history.
+![Disable button for admin](/modules/openy_gc_livachat/images/vy_chat_disable.png "Livechat disable button")
 
 # Chats history
 
