@@ -220,6 +220,7 @@ class LiveChatController extends ControllerBase {
       ->limit(10);
     $query->distinct();
     $query->fields('ch', ['cid', 'title', 'start']);
+    $start_to = DrupalDateTime::createFromFormat('Y-m-d', $start_to)->modify('+1 day')->format('Y-m-d');
     if (!empty($title)) {
       $query->condition('title', $title);
     }
@@ -227,7 +228,7 @@ class LiveChatController extends ControllerBase {
       $query->condition('start', $start_from, '>=');
     }
     if (!empty($start_to)) {
-      $query->condition('start', $start_to, '<=');
+      $query->condition('start', $start_to, '<');
     }
     $results = $query->execute()->fetchAll();
     foreach ($results as $row) {
