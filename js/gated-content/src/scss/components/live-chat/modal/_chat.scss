@@ -13,6 +13,10 @@
         .modal-footer {
           display: none;
         }
+        @media (max-width: 425px) {
+          max-width: 94%;
+          width: 100%;
+        }
       }
     }
   }
@@ -183,11 +187,11 @@
         }
       }
       // horizontal
-      @media (max-width: 1023px) and (min-width: 426px) and (max-device-height: 550px) {
+      @media (max-width: 1023px) and (min-width: 426px) and (max-device-width: 550px) {
         @include horizontalLiveChat;
       }
       // vertical
-      @media (max-width: 1023px) and (min-width: 426px) and (min-device-height: 551px) {
+      @media (max-width: 1023px) and (min-width: 426px) and (min-device-width: 551px) {
         @include verticalLiveChat;
       }
       // vertical

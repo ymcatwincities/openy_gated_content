@@ -271,9 +271,29 @@ export default {
 
       this.isStreamExpired = !(currentDate <= endDate && currentDate >= startDate);
     },
+    handleResize() {
+      if (this.$el.querySelector('.modal-mask')) {
+        const height = window.innerHeight;
+        const width = window.innerWidth;
+        this.$el.querySelector('.modal-mask.modal-leave-meeting').style.height = `${height}px`;
+
+        // eslint-disable-next-line no-restricted-globals
+        if ((width < 426) || (screen.width > 550 && width < 1024)) {
+          this.$el.querySelector('.modal-mask.modal-chat').style.height = `${height * 0.6}px`;
+        } else {
+          this.$el.querySelector('.modal-mask.modal-chat').style.height = `${height}px`;
+        }
+      }
+    },
     logPlaybackEvent(eventType) {
       this.$log.trackEvent(eventType, 'series', 'live_stream', this.video.attributes.drupal_internal__id);
     },
+  },
+  destroyed() {
+    window.removeEventListener('resize', this.handleResize);
+  },
+  mounted() {
+    window.addEventListener('resize', this.handleResize);
   },
 };
 </script>
