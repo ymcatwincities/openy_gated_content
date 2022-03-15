@@ -1,0 +1,42 @@
+.chat {
+  display: flex;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  margin-left: 10px;
+  .svg-container {
+    margin-right: 10px;
+    border: 2px solid $light-gray;
+    border-radius: 50%;
+    background-color: $white;
+    padding: 14px;
+    width: 50px;
+    height: 50px;
+    line-height: 1px;
+    font-size: 18px;
+    &:hover {
+      background-color: $black;
+      color: $white;
+      svg {
+        fill: $white;
+      }
+    }
+  }
+  &.unread {
+    .unread-count {
+      position: absolute;
+      top: -2px;
+      width: 24px;
+      height: 24px;
+      text-align: center;
+      background-color: red;
+      border-radius: 12px;
+      font-weight: bold;
+      font-size: 12px;
+      line-height: 20px;
+      padding: 2px;
+
+      @include median(right, 4px, 4px, 35px);
+    }
+  }
+}

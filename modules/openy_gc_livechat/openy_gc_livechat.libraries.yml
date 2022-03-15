@@ -1,0 +1,5 @@
+chat:
+  js:
+    js/chat.js: {}
+  dependencies:
+    - core/jquery

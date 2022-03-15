@@ -1,0 +1,13 @@
+openy_gc_livechat.settings:
+  title: 'Livechat settings'
+  route_name: openy_gc_livechat.settings
+  description: 'Settings form for GC Livechat'
+  parent: openy_gated_content.settings
+  weight: 20
+
+openy_gc_livechat.logs:
+  title: 'Virtual Meeting Chat Logs'
+  route_name: openy_gc_livechat.logs
+  description: 'Provides list of chat logs'
+  parent: openy_gated_content.openy
+  weight: 50

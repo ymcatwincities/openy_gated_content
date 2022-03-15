@@ -1,0 +1,34 @@
+<?php
+
+/**
+ * @file
+ * Contains openy_gc_livechat.module.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function openy_gc_livechat_theme() {
+  return [
+    'livechat_block' => [
+      'variables' => [
+        'form' => '',
+      ],
+      'template' => 'block--livechat-block',
+    ],
+  ];
+}
+
+/**
+ * Implements hook_cron().
+ */
+function openy_gc_livechat_cron() {
+  \Drupal::service('openy_gc_livechat.cron')->cron();
+}
+
+/**
+ * Implements hook_page_attachments().
+ */
+function openy_gc_livechat_page_attachments(array &$attachments) {
+  $attachments['#attached']['drupalSettings']['isLiveChatModuleEnabled'] = TRUE;
+}
