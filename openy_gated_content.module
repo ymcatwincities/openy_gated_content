@@ -524,16 +524,20 @@ function openy_gated_content_entity_bundle_field_info(EntityTypeInterface $entit
   }
   $fields = [];
   $persistent_map = \Drupal::keyValue('entity.definitions.bundle_field_map');
-  $map = $persistent_map->getAll();
   foreach (openy_gated_content_entity_field_storage_info($entity_type) as $name => $definition) {
     $fields[$name] = $definition;
-    $map[$entity_type_id][$name]['type'] = $definition->getType();
-    $map[$entity_type_id][$name]['bundles'][$bundle] = $bundle;
+    $bundle_field_map = $persistent_map->get($entity_type_id);
+    if (!isset($bundle_field_map[$name])) {
+      // This field did not exist yet, initialize it with the type and empty
+      // bundle list.
+      $bundle_field_map[$name] = [
+        'type' => $definition->getType(),
+        'bundles' => [],
+      ];
+    }
+    $bundle_field_map[$name]['bundles'][$bundle] = $bundle;
+    $persistent_map->set($entity_type_id, $bundle_field_map);
   }
-  // Delete former incorrect map.
-  $persistent_map->deleteAll();
-  // Add a recent map.
-  $persistent_map->setMultiple($map);
   return $fields;
 }
 

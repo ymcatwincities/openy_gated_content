@@ -1,0 +1,6 @@
+services:
+    gc_auth_daxko_user_login:
+      class: '\Drupal\openy_gc_auth_daxko_sso\EventSubscriber\GCAuthDaxkoSsoLoginSubscriber'
+      arguments: ['@daxko_sso.client', '@config.factory']
+      tags:
+        - { name: 'event_subscriber' }

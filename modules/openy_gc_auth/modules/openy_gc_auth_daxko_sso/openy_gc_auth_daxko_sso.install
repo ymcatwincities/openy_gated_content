@@ -65,3 +65,24 @@ function openy_gc_auth_daxko_sso_update_8003(&$sandbox) {
     ]);
   }
 }
+
+/**
+ * Add value for virtual_branch_check_in variable.
+ */
+function openy_gc_auth_daxko_sso_update_8004(&$sandbox) {
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_gc_auth_daxko_sso') . '/config/install/';
+  // Update multiple configurations.
+  $configs = [
+    'openy_gc_auth.provider.daxko_sso' => [
+      'virtual_branch_check_in',
+    ],
+  ];
+
+  $config_updater = \Drupal::service('openy_upgrade_tool.param_updater');
+  foreach ($configs as $config_name => $params) {
+    $config = $config_dir . $config_name . '.yml';
+    foreach ($params as $param) {
+      $config_updater->update($config, $config_name, $param);
+    }
+  }
+}
