@@ -191,7 +191,7 @@
 
   #gated-content {
     .top-menu {
-      @include median(top, 162px, 80px);
+      @include median(top, 162px !important, 80px !important);
     }
 
     .gated-content-schedule-page {
