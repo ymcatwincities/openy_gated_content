@@ -16,6 +16,12 @@ openy_carnation_styles:
     theme:
       assets/css/openy_carnation.css: {}
 
+openy_gated_content_styles:
+  version: 0.1
+  css:
+    theme:
+      assets/css/openy_gated_content.css: {}
+
 openy-rose-menu:
   version: 0.1
   js:

@@ -1,8 +1,23 @@
-.openy_lily-based.openy-gated-content #gated-content {
-  padding-top: 86px;
+.openy_lily-based.tiny-header .layout-content #gated-content {
+  padding-top: 64px;
 }
-@media (max-width: 2149px) {
-  .openy_lily-based.openy-gated-content #block-openy-lily-content #gated-content .top-menu {
-    top: 182px;
+@media (max-width: 991px) {
+  .openy_lily-based.openy-gated-content .layout-content #gated-content {
+    padding-top: 0;
+  }
+  .openy_lily-based.openy-gated-content .layout-content #gated-content .gated-content-schedule-page {
+    padding-top: 48px;
+  }
+  .openy_lily-based.openy-gated-content .layout-content #gated-content .gated-content-schedule-page .calendar .mobile {
+    margin-top: 52px;
   }
 }
+@media (min-width: 992px) {
+  .openy_lily-based.openy-gated-content.toolbar-fixed .page-head.tiny .primary_menu {
+    margin-top: 54px;
+  }
+  .openy_lily-based.openy-gated-content .layout-content #gated-content {
+    padding-top: 26px;
+  }
+}
+
