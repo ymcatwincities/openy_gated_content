@@ -17,7 +17,7 @@
   top: auto !important;
 }
 .openy-gated-content .layout-content #gated-content .gated-content-schedule-page, .openy-gated-content .layout-content #gated-content .gated-content-favorites-page, .openy-gated-content .layout-content #gated-content .gated-content-categories-page, .openy-gated-content .layout-content #gated-content .gated-content-video-page {
-  padding-top: 86px;
+  padding-top: 86px !important;
 }
 .openy-gated-content .layout-content #gated-content .gated-content-schedule-page .date-filter, .openy-gated-content .layout-content #gated-content .gated-content-schedule-page .calendar .desktop .slot {
   top: auto !important;
