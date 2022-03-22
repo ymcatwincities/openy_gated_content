@@ -1,0 +1,8 @@
+.openy_lily-based.openy-gated-content #gated-content {
+  padding-top: 86px;
+}
+@media (max-width: 2149px) {
+  .openy_lily-based.openy-gated-content #block-openy-lily-content #gated-content .top-menu {
+    top: 182px;
+  }
+}

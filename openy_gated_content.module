@@ -284,6 +284,10 @@ function _openy_gated_content_form_eventseries_live_stream_submit(&$form, FormSt
  */
 function openy_gated_content_page_attachments(array &$attachments) {
   $attachments['#attached']['library'][] = 'openy_gated_content/admin_ui_styles';
+
+  if (openy_gated_content_get_base_theme() === 'openy_lily') {
+    $attachments['#attached']['library'][] = 'openy_gated_content/openy_lily_styles';
+  }
 }
 
 /**

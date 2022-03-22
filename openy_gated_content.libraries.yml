@@ -4,6 +4,12 @@ admin_ui_styles:
     theme:
       assets/css/admin_ui_styles.css: {}
 
+openy_lily_styles:
+  version: 0.1
+  css:
+    theme:
+      assets/css/openy_lily.css: {}
+
 openy-rose-menu:
   version: 0.1
   js:
