@@ -10,6 +10,12 @@ openy_lily_styles:
     theme:
       assets/css/openy_lily.css: {}
 
+openy_carnation_styles:
+  version: 0.1
+  css:
+    theme:
+      assets/css/openy_carnation.css: {}
+
 openy-rose-menu:
   version: 0.1
   js:

@@ -53,34 +53,38 @@
           </template>
         </div>
         <div class="desktop">
-          <div class="slot dates">
-            <div class="hour-row">
-              <div v-for="(day, index) in listing" :key="index" class="event-cell date"
-                   :class="{'active': currentDay(day.date)}">
-                <div class="weekday">{{ day.date | weekday }}</div>
-                <div class="date">{{ day.date | month }} {{ day.date | day }}</div>
-              </div>
-            </div>
-          </div>
-          <template v-for="(eventsCount, hour) in hours">
-            <div v-if="typeof eventsCount !== 'undefined'" class="slot" :key="hour">
-              <div class="caption">
-                <template v-for="(day, index) in listing">
-                  <div class="hour-card" :class="{'active': currentDay(day.date)}" :key="index">
-                    <template v-if="outputHours(index)">{{ hour | hour }}</template>
-                  </div>
-                </template>
-              </div>
-              <div v-for="slotPlace in eventsCount" :key="slotPlace" class="hour-row">
-                <div v-for="(day, index) in listing" :key="index" class="event-cell">
-                  <ScheduleEventCard
-                    v-if="typeof day.hourSlots[hour] !== 'undefined'
-                      && typeof day.hourSlots[hour][slotPlace - 1] !== 'undefined'"
-                    :event="day.hourSlots[hour][slotPlace - 1]"/>
+          <div class="header">
+            <div class="slot dates">
+              <div class="hour-row">
+                <div v-for="(day, index) in listing" :key="index" class="event-cell date"
+                     :class="{'active': currentDay(day.date)}">
+                  <div class="weekday">{{ day.date | weekday }}</div>
+                  <div class="date">{{ day.date | month }} {{ day.date | day }}</div>
                 </div>
               </div>
             </div>
-          </template>
+          </div>
+          <div class="content">
+            <template v-for="(eventsCount, hour) in hours">
+              <div v-if="typeof eventsCount !== 'undefined'" class="slot" :key="hour">
+                <div class="caption">
+                  <template v-for="(day, index) in listing">
+                    <div class="hour-card" :class="{'active': currentDay(day.date)}" :key="index">
+                      <template v-if="outputHours(index)">{{ hour | hour }}</template>
+                    </div>
+                  </template>
+                </div>
+                <div v-for="slotPlace in eventsCount" :key="slotPlace" class="hour-row">
+                  <div v-for="(day, index) in listing" :key="index" class="event-cell">
+                    <ScheduleEventCard
+                      v-if="typeof day.hourSlots[hour] !== 'undefined'
+                      && typeof day.hourSlots[hour][slotPlace - 1] !== 'undefined'"
+                      :event="day.hourSlots[hour][slotPlace - 1]"/>
+                  </div>
+                </div>
+              </div>
+            </template>
+          </div>
         </div>
         <div v-if="listingIsEmpty" class="empty-listing">No events scheduled for this week.</div>
       </div>

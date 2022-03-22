@@ -288,6 +288,9 @@ function openy_gated_content_page_attachments(array &$attachments) {
   if (openy_gated_content_get_base_theme() === 'openy_lily') {
     $attachments['#attached']['library'][] = 'openy_gated_content/openy_lily_styles';
   }
+  if (openy_gated_content_get_base_theme() === 'openy_carnation') {
+    $attachments['#attached']['library'][] = 'openy_gated_content/openy_carnation_styles';
+  }
 }
 
 /**
