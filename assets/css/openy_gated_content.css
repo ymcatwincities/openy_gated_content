@@ -8,9 +8,7 @@
 .openy-gated-content.toolbar-fixed .layout-content #gated-content .gated-content-video-page {
   padding-top: 84px !important;
 }
-.openy-gated-content.toolbar-fixed .layout-content #gated-content .top-menu {
-  top: auto;
-}
+.openy-gated-content.toolbar-fixed .layout-content #gated-content .top-menu,
 .openy-gated-content.toolbar-fixed .layout-content #gated-content .gated-content-schedule-page .date-filter,
 .openy-gated-content.toolbar-fixed .layout-content #gated-content .gated-content-schedule-page .calendar .desktop .header .slot {
   top: auto;
