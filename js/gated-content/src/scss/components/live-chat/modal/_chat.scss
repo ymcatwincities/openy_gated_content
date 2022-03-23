@@ -34,6 +34,11 @@
         & > div {
           position: initial !important;
         }
+        div {
+          height: 100%;
+          background-color: $black;
+          padding: 0 !important;
+        }
       }
       .modal-chat {
         .modal-wrapper {
