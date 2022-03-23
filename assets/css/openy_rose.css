@@ -1,0 +1,39 @@
+.viewport .page-head .top-navs,
+.viewport .page-head .nav-global > .container > .row,
+.viewport .page-head .nav-global > .container > .row .header-content {
+  min-height: 210px;
+}
+.openy_rose-based.openy-gated-content.toolbar-fixed .layout-content #gated-content .top-menu {
+  z-index: auto;
+}
+.openy_rose-based.openy-gated-content.toolbar-fixed.primary-menu-minimize .layout-content #gated-content .top-menu {
+  top: 158px !important;
+}
+.openy_rose-based.openy-gated-content.toolbar-fixed.primary-menu-minimize .layout-content #gated-content .gated-content-schedule-page .date-filter {
+  top: 242px !important;
+}
+.openy_rose-based.openy-gated-content.toolbar-fixed.primary-menu-minimize .layout-content #gated-content .gated-content-schedule-page .calendar .desktop .header .slot {
+  top: 290px !important;
+}
+.openy_rose-based.openy-gated-content.toolbar-fixed.primary-menu-minimize .layout-content #gated-content .gated-content-schedule-page .calendar .desktop .content {
+  margin-top: 114px;
+}
+.openy_rose-based.openy-gated-content.primary-menu-minimize .viewport .top-navs.affix {
+  min-height: 80px;
+  height: 80px;
+}
+.openy_rose-based.openy-gated-content.primary-menu-minimize .layout-content #gated-content .top-menu {
+  top: 80px !important;
+}
+.openy_rose-based.openy-gated-content.primary-menu-minimize .layout-content #gated-content .gated-content-schedule-page .date-filter {
+  top: 166px !important;
+}
+.openy_rose-based.openy-gated-content.primary-menu-minimize .layout-content #gated-content .gated-content-schedule-page .calendar .desktop .header .slot {
+  top: 214px !important;
+}
+.openy_rose-based.openy-gated-content.primary-menu-minimize .layout-content #gated-content .gated-content-schedule-page .calendar .desktop .content {
+  margin-top: 194px;
+}
+.openy_rose-based.openy-gated-content .layout-content #block-openy-rose-content #gated-content {
+  padding-top: 14px;
+}
