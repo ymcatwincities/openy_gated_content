@@ -1,4 +1,6 @@
-.viewport .page-head .top-navs, .viewport .page-head .nav-global > .container > .row, .viewport .page-head .nav-global > .container > .row .header-content {
+.viewport .page-head .top-navs,
+.viewport .page-head .nav-global > .container > .row,
+.viewport .page-head .nav-global > .container > .row .header-content {
   min-height: 210px;
 }
 .openy_rose-based.openy-gated-content.toolbar-fixed .layout-content #gated-content .top-menu {

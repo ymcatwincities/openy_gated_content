@@ -13,13 +13,16 @@
   .openy_carnation.openy-gated-content.toolbar-fixed #block-openy-carnation-content #gated-content .top-menu {
     margin-top: 6px;
   }
-  .openy_carnation.openy-gated-content.toolbar-fixed #block-openy-carnation-content #gated-content .gated-content-favorites-page, .openy_carnation.openy-gated-content.toolbar-fixed #block-openy-carnation-content #gated-content .gated-content-categories-page, .openy_carnation.openy-gated-content.toolbar-fixed #block-openy-carnation-content #gated-content .gated-content-video-page {
+  .openy_carnation.openy-gated-content.toolbar-fixed #block-openy-carnation-content #gated-content .gated-content-favorites-page,
+  .openy_carnation.openy-gated-content.toolbar-fixed #block-openy-carnation-content #gated-content .gated-content-categories-page,
+  .openy_carnation.openy-gated-content.toolbar-fixed #block-openy-carnation-content #gated-content .gated-content-video-page {
     padding-top: 88px;
   }
   .openy_carnation.openy-gated-content.toolbar-fixed #block-openy-carnation-content #gated-content .gated-content-schedule-page {
     padding-top: 196px;
   }
-  .openy_carnation.openy-gated-content article, .openy_carnation.openy-gated-content .openy-page-tabs {
+  .openy_carnation.openy-gated-content article,
+  .openy_carnation.openy-gated-content .openy-page-tabs {
     display: none;
   }
   .openy_carnation.openy-gated-content .header-content .logo {
