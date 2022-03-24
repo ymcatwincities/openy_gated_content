@@ -32,7 +32,7 @@
     @include carnation_median(padding-top, 80px, 85px, 45px);
 
     .top-menu {
-      @include carnation_median(top, 130px, 78px);
+      @include carnation_median(top, 130px !important, 78px !important);
       @include carnation_median(z-index, 1030, 39);
 
       &.menuOpen {
