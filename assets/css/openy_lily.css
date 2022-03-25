@@ -1,8 +1,9 @@
 .openy_lily-based.tiny-header .layout-content #gated-content {
   padding-top: 44px;
-}.openy_lily-based.toolbar-fixed.tiny-header .layout-content #gated-content {
-   padding-top: 0;
- }
+}
+.openy_lily-based.toolbar-fixed.tiny-header .layout-content #gated-content {
+  padding-top: 0;
+}
 @media (max-width: 991px) {
   .openy_lily-based.openy-gated-content .layout-content #gated-content {
     padding-top: 0;
