@@ -36,4 +36,7 @@
   .openy_carnation.openy-gated-content .header-content .nav-desktop .navbar li {
     margin: 0 5px;
   }
+  .openy_carnation-based.openy-gated-content #gated-content .top-menu {
+    top: 78px !important;
+  }
 }

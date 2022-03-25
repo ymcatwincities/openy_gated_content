@@ -1,5 +1,8 @@
 .openy_lily-based.tiny-header .layout-content #gated-content {
-  padding-top: 64px;
+  padding-top: 44px;
+}
+.openy_lily-based.toolbar-fixed.tiny-header .layout-content #gated-content {
+  padding-top: 0;
 }
 @media (max-width: 991px) {
   .openy_lily-based.openy-gated-content .layout-content #gated-content {
@@ -11,12 +14,18 @@
   .openy_lily-based.openy-gated-content .layout-content #gated-content .gated-content-schedule-page .calendar .mobile {
     margin-top: 52px;
   }
+  .openy_lily-based.openy-gated-content .layout-content #gated-content .gated-content-schedule-page,
+  .openy_lily-based.openy-gated-content .layout-content #gated-content .gated-content-favorites-page,
+  .openy_lily-based.openy-gated-content .layout-content #gated-content .gated-content-categories-page,
+  .openy_lily-based.openy-gated-content .layout-content #gated-content .gated-content-video-page {
+    padding-top: 46px !important;
+  }
 }
 @media (min-width: 992px) {
+  .openy_lily-based.openy-gated-content.toolbar-fixed .page-head .primary_menu {
+    margin-top: 18px;
+  }
   .openy_lily-based.openy-gated-content.toolbar-fixed .page-head.tiny .primary_menu {
     margin-top: 54px;
-  }
-  .openy_lily-based.openy-gated-content .layout-content #gated-content {
-    padding-top: 26px;
   }
 }
