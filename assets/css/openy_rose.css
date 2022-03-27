@@ -1,7 +1,11 @@
-.viewport .page-head .top-navs,
-.viewport .page-head .nav-global > .container > .row,
-.viewport .page-head .nav-global > .container > .row .header-content {
+.rose_based_theme .viewport .page-head .top-navs,
+.rose_based_theme .viewport .page-head .nav-global > .container > .row,
+.rose_based_theme .viewport .page-head .nav-global > .container > .row .header-content {
   min-height: 210px;
+}
+.openy_rose-based.openy-gated-content .layout-content,
+.rose_based_theme .layout-container {
+  padding-top: 45px;
 }
 .openy_rose-based.openy-gated-content.toolbar-fixed .layout-content #gated-content .top-menu {
   z-index: auto;
@@ -18,6 +22,7 @@
 .openy_rose-based.openy-gated-content.toolbar-fixed.primary-menu-minimize .layout-content #gated-content .gated-content-schedule-page .calendar .desktop .content {
   margin-top: 114px;
 }
+.rose_based_theme .viewport .page-head .top-navs.affix,
 .openy_rose-based.openy-gated-content.primary-menu-minimize .viewport .top-navs.affix {
   min-height: 80px;
   height: 80px;
@@ -33,9 +38,6 @@
 }
 .openy_rose-based.openy-gated-content.primary-menu-minimize .layout-content #gated-content .gated-content-schedule-page .calendar .desktop .content {
   margin-top: 194px;
-}
-.openy_rose-based.openy-gated-content .layout-content #block-openy-rose-content #gated-content {
-  padding-top: 44px;
 }
 @media (max-width: 991px) {
   .openy_rose-based.openy-gated-content .layout-content #block-openy-rose-content #gated-content {
