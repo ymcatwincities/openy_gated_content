@@ -10,10 +10,18 @@
 .openy_lily-based.openy-gated-content.toolbar-fixed #gated-content .top-menu {
   top: 275px !important;
 }
+.openy_lily-based.openy-gated-content.toolbar-fixed .layout-content #gated-content .gated-content-schedule-page,
+.openy_lily-based.openy-gated-content.toolbar-fixed .layout-content #gated-content .gated-content-favorites-page,
+.openy_lily-based.openy-gated-content.toolbar-fixed .layout-content #gated-content .gated-content-categories-page,
+.openy_lily-based.openy-gated-content.toolbar-fixed .layout-content #gated-content .gated-content-video-page,
+.openy_lily-based.openy-gated-content.toolbar-fixed .layout-content #gated-content .home {
+  padding-top: 86px !important;
+}
 .openy_lily-based.openy-gated-content .layout-content #gated-content .gated-content-schedule-page,
 .openy_lily-based.openy-gated-content .layout-content #gated-content .gated-content-favorites-page,
 .openy_lily-based.openy-gated-content .layout-content #gated-content .gated-content-categories-page,
-.openy_lily-based.openy-gated-content .layout-content #gated-content .gated-content-video-page {
+.openy_lily-based.openy-gated-content .layout-content #gated-content .gated-content-video-page,
+.openy_lily-based.openy-gated-content .layout-content #gated-content .home  {
   padding-top: 32px !important;
 }
 @media (max-width: 991px) {
@@ -31,6 +39,14 @@
   .openy_lily-based.openy-gated-content .layout-content #gated-content .gated-content-categories-page,
   .openy_lily-based.openy-gated-content .layout-content #gated-content .gated-content-video-page {
     padding-top: 46px !important;
+  }
+  .openy_lily-based.openy-gated-content.toolbar-fixed #gated-content .top-menu,
+  .openy_lily-based.openy-gated-content.toolbar-fixed.tiny-header #gated-content .top-menu {
+    top: 120px !important;
+  }
+  .openy_lily-based.openy-gated-content.toolbar-fixed.toolbar-tray-open #gated-content .top-menu,
+  .openy_lily-based.openy-gated-content.toolbar-fixed.toolbar-tray-open.tiny-header #gated-content .top-menu {
+    top: 154px !important;
   }
 }
 @media (min-width: 992px) {
