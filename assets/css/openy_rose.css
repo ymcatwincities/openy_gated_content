@@ -3,15 +3,20 @@
 .rose_based_theme .viewport .page-head .nav-global > .container > .row .header-content {
   min-height: 210px;
 }
-.openy_rose-based.openy-gated-content .layout-content,
+.openy_rose-based.openy-gated-content .layout-content {
+  padding-top: 0;
+}
+.openy_rose-based.openy-gated-content .layout-content #gated-content .home {
+  padding-top: 86px;
+}
 .rose_based_theme .layout-container {
   padding-top: 45px;
 }
 .openy_rose-based.openy-gated-content.toolbar-fixed .layout-content #gated-content .top-menu {
-  z-index: auto;
+  z-index: 5;
 }
 .openy_rose-based.openy-gated-content.toolbar-fixed.primary-menu-minimize .layout-content #gated-content .top-menu {
-  top: 158px !important;
+  top: 118px !important;
 }
 .openy_rose-based.openy-gated-content.toolbar-fixed.primary-menu-minimize .layout-content #gated-content .gated-content-schedule-page .date-filter {
   top: 242px !important;
@@ -40,6 +45,21 @@
   margin-top: 194px;
 }
 @media (max-width: 991px) {
+  .rose_based_theme .layout-container {
+    padding-top: 18px;
+  }
+  .openy_rose-based.openy-gated-content.toolbar-fixed .layout-content #gated-content .top-menu {
+    top: 108px !important;
+  }
+  .openy_rose-based.openy-gated-content.toolbar-fixed .layout-content #block-openy-rose-content #gated-content {
+    padding-top: 20px;
+  }
+  .openy_rose-based.openy-gated-content.toolbar-fixed #gated-content .gated-content-schedule-page .calendar {
+    padding-top: 48px;
+  }
+  .openy_rose-based.openy-gated-content.toolbar-fixed .viewport {
+    margin-top: 0;
+  }
   .openy_rose-based.openy-gated-content .layout-content #block-openy-rose-content #gated-content {
     padding-top: 0;
   }
@@ -49,9 +69,18 @@
   .openy_rose-based.openy-gated-content ≈#gated-content .date-filter {
     top: 116px !important;
   }
+  .openy_rose-based.openy-gated-content .layout-content #gated-content .gated-content-schedule-page {
+    padding-top: 0 !important;
+  }
   .openy_rose-based.openy-gated-content .layout-content #gated-content .gated-content-favorites-page,
   .openy_rose-based.openy-gated-content .layout-content #gated-content .gated-content-categories-page,
   .openy_rose-based.openy-gated-content .layout-content #gated-content .gated-content-video-page {
     padding-top: 46px !important;
+  }
+  .openy_rose-based.openy-gated-content .layout-content #gated-content .gated-content-schedule-page {
+    padding-top: 46px !important;
+  }
+  .openy_rose-based.openy-gated-content.primary-menu-minimize .layout-content #gated-content .gated-content-schedule-page .date-filter {
+    top: 116px !important;
   }
 }

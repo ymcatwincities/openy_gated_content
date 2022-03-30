@@ -11,15 +11,15 @@
     width: 80px;
   }
   .openy_carnation.openy-gated-content.toolbar-fixed #block-openy-carnation-content #gated-content .top-menu {
-    margin-top: 6px;
+    margin-top: 86px;
   }
   .openy_carnation.openy-gated-content.toolbar-fixed #block-openy-carnation-content #gated-content .gated-content-favorites-page,
   .openy_carnation.openy-gated-content.toolbar-fixed #block-openy-carnation-content #gated-content .gated-content-categories-page,
   .openy_carnation.openy-gated-content.toolbar-fixed #block-openy-carnation-content #gated-content .gated-content-video-page {
-    padding-top: 88px;
+    padding-top: 50px;
   }
   .openy_carnation.openy-gated-content.toolbar-fixed #block-openy-carnation-content #gated-content .gated-content-schedule-page {
-    padding-top: 196px;
+    padding-top: 156px;
   }
   .openy_carnation.openy-gated-content article,
   .openy_carnation.openy-gated-content .openy-page-tabs {
@@ -38,5 +38,41 @@
   }
   .openy_carnation-based.openy-gated-content #gated-content .top-menu {
     top: 78px !important;
+  }
+}
+
+@media (max-width: 991px) {
+  .openy_carnation-based.openy-gated-content #gated-content .top-menu {
+    top: 78px !important;
+  }
+}
+
+@media (max-width: 1059px) {
+  .openy_carnation-based.openy-gated-content.toolbar-fixed #gated-content {
+    padding-top: 88px;
+  }
+  .openy_carnation-based.openy-gated-content.toolbar-fixed #gated-content .top-menu {
+    top: 116px !important;
+  }
+  .openy_carnation-based.openy-gated-content.toolbar-fixed.toolbar-tray-open #gated-content .top-menu {
+    top: 156px !important;
+  }
+  .openy_carnation-based.openy-gated-content.toolbar-fixed.toolbar-tray-open #gated-content {
+    padding-top: 48px;
+  }
+  .openy_carnation-based.openy-gated-content.toolbar-fixed #gated-content .date-filter {
+    top: 202px !important;
+  }
+  .openy_carnation-based.openy-gated-content.toolbar-tray-open #gated-content .date-filter {
+    top: 242px !important;
+  }
+  .openy_carnation-based.openy-gated-content.toolbar-tray-open #gated-content .calendar .desktop .slot.dates {
+    top: 288px !important;
+  }
+  .openy_carnation-based.openy-gated-content.toolbar-fixed #gated-content .gated-content-schedule-page {
+    padding-top: 112px;
+  }
+  .openy_carnation-based.openy-gated-content.toolbar-fixed.toolbar-tray-open #gated-content .gated-content-schedule-page {
+    padding-top: 108px;
   }
 }
