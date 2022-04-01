@@ -4,7 +4,11 @@
     :style="{'display': isShowViewOptionsModal ? 'table' : 'none'}"
     @close="toggleViewOptionsModal"
   >
-    <template #header><div class="cachet-book-18">View Options</div></template>
+    <template #header>
+      <div class="header-info">
+        <span class="cachet-book-18">View Options</span>
+      </div>
+    </template>
     <template #body>
       <div class="verdana-14-12"
         :class="{selected: view === 'view-inset'}"
