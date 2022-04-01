@@ -16,10 +16,10 @@
   .openy_carnation.openy-gated-content.toolbar-fixed #block-openy-carnation-content #gated-content .gated-content-favorites-page,
   .openy_carnation.openy-gated-content.toolbar-fixed #block-openy-carnation-content #gated-content .gated-content-categories-page,
   .openy_carnation.openy-gated-content.toolbar-fixed #block-openy-carnation-content #gated-content .gated-content-video-page {
-    padding-top: 50px;
+    padding-top: 8px;
   }
   .openy_carnation.openy-gated-content.toolbar-fixed #block-openy-carnation-content #gated-content .gated-content-schedule-page {
-    padding-top: 156px;
+    padding-top: 108px;
   }
   .openy_carnation.openy-gated-content article,
   .openy_carnation.openy-gated-content .openy-page-tabs {
@@ -39,15 +39,36 @@
   .openy_carnation-based.openy-gated-content #gated-content .top-menu {
     top: 78px !important;
   }
+  .openy_carnation-based.openy-gated-content.toolbar-fixed #gated-content {
+    padding-top: 50px;
+  }
+  .openy_carnation-based.openy-gated-content #gated-content .gated-content-schedule-page {
+    padding-top: 114px;
+  }
 }
 
 @media (max-width: 991px) {
-  .openy_carnation-based.openy-gated-content #gated-content .top-menu {
-    top: 78px !important;
+  .openy_carnation-based.openy-gated-content #gated-content .date-filter {
+    top: 125px !important;
+  }
+  .openy_carnation-based.openy-gated-content #gated-content .gated-content-schedule-page {
+    padding-top: 16px;
   }
 }
 
 @media (max-width: 1059px) {
+  .openy_carnation-based.openy-gated-content .viewport #gated-content .top-menu {
+    top: 78px !important;
+  }
+  .openy_carnation-based.openy-gated-content #gated-content {
+    padding-top: 78px;
+  }
+  .openy_carnation-based.openy-gated-content #gated-content .date-filter {
+    top: 156px;
+  }
+  .openy_carnation-based.openy-gated-content #gated-content .calendar .desktop .slot.dates {
+    top: 204px;
+  }
   .openy_carnation-based.openy-gated-content.toolbar-fixed #gated-content {
     padding-top: 88px;
   }
@@ -56,9 +77,6 @@
   }
   .openy_carnation-based.openy-gated-content.toolbar-fixed.toolbar-tray-open #gated-content .top-menu {
     top: 156px !important;
-  }
-  .openy_carnation-based.openy-gated-content.toolbar-fixed.toolbar-tray-open #gated-content {
-    padding-top: 48px;
   }
   .openy_carnation-based.openy-gated-content.toolbar-fixed #gated-content .date-filter {
     top: 202px !important;
@@ -73,6 +91,28 @@
     padding-top: 112px;
   }
   .openy_carnation-based.openy-gated-content.toolbar-fixed.toolbar-tray-open #gated-content .gated-content-schedule-page {
-    padding-top: 108px;
+    padding-top: 158px;
+  }
+  .openy_carnation-based.openy-gated-content.toolbar-fixed #gated-content .gated-content-schedule-page,
+  .openy_carnation-based.openy-gated-content.toolbar-fixed #gated-content .gated-content-favorites-page,
+  .openy_carnation-based.openy-gated-content.toolbar-fixed #gated-content .gated-content-categories-page,
+  .openy_carnation-based.openy-gated-content.toolbar-fixed #gated-content .gated-content-category-page,
+  .openy_carnation-based.openy-gated-content.toolbar-fixed #gated-content .gated-content-instructor-page,
+  .openy_carnation-based.openy-gated-content.toolbar-fixed #gated-content .gated-content-video-page,
+  .openy_carnation-based.openy-gated-content.toolbar-fixed #gated-content .gated-content-duration-page,
+  .openy_carnation-based.openy-gated-content.toolbar-fixed #gated-content .gated-content-videos-page,
+  .openy_carnation-based.openy-gated-content.toolbar-fixed #gated-content .home {
+    padding-top: 46px;
+  }
+  .openy_carnation-based.openy-gated-content #gated-content .gated-content-schedule-page,
+  .openy_carnation-based.openy-gated-content #gated-content .gated-content-favorites-page,
+  .openy_carnation-based.openy-gated-content #gated-content .gated-content-categories-page,
+  .openy_carnation-based.openy-gated-content #gated-content .gated-content-category-page,
+  .openy_carnation-based.openy-gated-content #gated-content .gated-content-instructor-page,
+  .openy_carnation-based.openy-gated-content #gated-content .gated-content-duration-page,
+  .openy_carnation-based.openy-gated-content #gated-content .gated-content-videos-page,
+  .openy_carnation-based.openy-gated-content #gated-content .gated-content-video-page,
+  .openy_carnation-based.openy-gated-content #gated-content .home {
+    padding-top: 0;
   }
 }
