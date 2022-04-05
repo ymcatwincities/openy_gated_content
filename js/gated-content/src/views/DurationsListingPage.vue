@@ -2,8 +2,6 @@
   <div class="gated-content-categories-page">
     <div class="gated-containerV2 my-40-20 px--20-10 title-wrapper">
       <div class="title cachet-book-32-28 text-gray">{{ title }}</div>
-      <button type="button"
-              class="adjust-button" @click="showModal = true">Filter</button>
     </div>
 
     <DurationsListing
