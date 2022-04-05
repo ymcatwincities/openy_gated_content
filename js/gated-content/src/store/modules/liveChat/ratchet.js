@@ -69,7 +69,7 @@ export default {
         context.commit('setRatchetServerConnected', false);
         // eslint-disable-next-line no-undef
         _.delay(() => {
-          if (context.getters.ratchetServer) {
+          if (!context.getters.ratchetServer) {
             context.dispatch('initRatchetServer');
           }
         }, 1000);
