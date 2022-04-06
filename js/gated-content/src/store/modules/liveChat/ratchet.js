@@ -15,6 +15,7 @@ export default {
 
       ws.onopen = () => {
         context.commit('clearLiveChatMessage');
+        context.commit('resetUnreadLiveChatMessages');
         context.commit('setRatchetServerConnected', liveChatMeetingId);
       };
 
