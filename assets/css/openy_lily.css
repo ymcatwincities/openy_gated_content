@@ -4,40 +4,68 @@
 .openy_lily-based.toolbar-fixed.tiny-header .layout-content #gated-content {
   padding-top: 0;
 }
+.openy_lily-based.openy-gated-content.alerts #openy_alerts_app_header {
+  padding-top: 86px;
+}
+.openy_lily-based.openy-gated-content.alerts .layout-content #gated-content .gated-content-schedule-page .calendar .desktop {
+  padding-top: 0;
+}
+.openy_lily-based.openy-gated-content.alerts .layout-content #gated-content .gated-content-schedule-page .calendar .desktop .content {
+  margin-top: 0;
+}
+.openy_lily-based.openy-gated-content.alerts.tiny-header #gated-content .gated-content-schedule-page .date-filter,
+.openy_lily-based.openy-gated-content.alerts.tiny-header #gated-content .gated-content-schedule-page .calendar .desktop .slot.dates {
+  position: fixed !important;
+}
+.openy_lily-based.openy-gated-content.alerts.tiny-header #gated-content .gated-content-schedule-page .date-filter {
+  top: 248px !important;
+}
+.openy_lily-based.openy-gated-content.alerts.tiny-header #gated-content .gated-content-schedule-page .calendar .desktop .slot.dates {
+  top: 296px !important;
+}
+.openy_lily-based.openy-gated-content .status-message__alert {
+  height: 0;
+}
+.openy_lily-based.openy-gated-content .layout-content #gated-content .gated-content-schedule-page .calendar .desktop .content {
+  margin-top: 24px;
+}
 .openy_lily-based.openy-gated-content.toolbar-fixed.tiny-header #gated-content .top-menu {
   top: 236px !important;
 }
 .openy_lily-based.openy-gated-content.toolbar-fixed #gated-content .top-menu {
   top: 275px !important;
 }
-.openy_lily-based.openy-gated-content.toolbar-fixed .layout-content #gated-content .gated-content-schedule-page,
-.openy_lily-based.openy-gated-content.toolbar-fixed .layout-content #gated-content .gated-content-favorites-page,
-.openy_lily-based.openy-gated-content.toolbar-fixed .layout-content #gated-content .gated-content-categories-page,
-.openy_lily-based.openy-gated-content.toolbar-fixed .layout-content #gated-content .gated-content-video-page,
-.openy_lily-based.openy-gated-content.toolbar-fixed .layout-content #gated-content .home {
+.openy_lily-based.openy-gated-content.toolbar-fixed #gated-content .date-filter {
+  top: 322px !important;
+}
+.openy_lily-based.openy-gated-content.toolbar-fixed #gated-content .calendar .desktop .slot.dates {
+  top: 370px !important;
+}
+.openy_lily-based.openy-gated-content .layout-content #gated-content .gated-content-schedule-page {
   padding-top: 86px !important;
 }
-.openy_lily-based.openy-gated-content .layout-content #gated-content .gated-content-schedule-page,
-.openy_lily-based.openy-gated-content .layout-content #gated-content .gated-content-favorites-page,
-.openy_lily-based.openy-gated-content .layout-content #gated-content .gated-content-categories-page,
-.openy_lily-based.openy-gated-content .layout-content #gated-content .gated-content-video-page,
-.openy_lily-based.openy-gated-content .layout-content #gated-content .home {
-  padding-top: 32px !important;
+.openy_lily-based.openy-gated-content.alerts #gated-content .gated-content-schedule-page,
+.openy_lily-based.openy-gated-content.alerts #gated-content .gated-content-favorites-page,
+.openy_lily-based.openy-gated-content.alerts #gated-content .gated-content-categories-page,
+.openy_lily-based.openy-gated-content.alerts #gated-content .gated-content-category-page,
+.openy_lily-based.openy-gated-content.alerts #gated-content .gated-content-instructor-page,
+.openy_lily-based.openy-gated-content.alerts #gated-content .gated-content-duration-page,
+.openy_lily-based.openy-gated-content.alerts #gated-content .gated-content-videos-page,
+.openy_lily-based.openy-gated-content.alerts #gated-content .gated-content-video-page,
+.openy_lily-based.openy-gated-content.alerts #gated-content .home {
+  padding-top: 0;
 }
 @media (max-width: 991px) {
   .openy_lily-based.openy-gated-content .layout-content #gated-content {
     padding-top: 0;
   }
   .openy_lily-based.openy-gated-content .layout-content #gated-content .gated-content-schedule-page {
-    padding-top: 48px;
+    padding-top: 46px;
   }
   .openy_lily-based.openy-gated-content .layout-content #gated-content .gated-content-schedule-page .calendar .mobile {
     margin-top: 52px;
   }
-  .openy_lily-based.openy-gated-content .layout-content #gated-content .gated-content-schedule-page,
-  .openy_lily-based.openy-gated-content .layout-content #gated-content .gated-content-favorites-page,
-  .openy_lily-based.openy-gated-content .layout-content #gated-content .gated-content-categories-page,
-  .openy_lily-based.openy-gated-content .layout-content #gated-content .gated-content-video-page {
+  .openy_lily-based.openy-gated-content .layout-content #gated-content div .home {
     padding-top: 46px !important;
   }
   .openy_lily-based.openy-gated-content.toolbar-fixed #gated-content .top-menu,
@@ -47,6 +75,22 @@
   .openy_lily-based.openy-gated-content.toolbar-fixed.toolbar-tray-open #gated-content .top-menu,
   .openy_lily-based.openy-gated-content.toolbar-fixed.toolbar-tray-open.tiny-header #gated-content .top-menu {
     top: 154px !important;
+  }
+  .openy_lily-based.openy-gated-content.toolbar-fixed #gated-content .date-filter {
+    top: 200px !important;
+  }
+  .openy_lily-based.openy-gated-content.alerts .layout-container #openy_alerts_app_header {
+    padding-top: 46px;
+  }
+  .openy_lily-based.openy-gated-content .layout-content #gated-content .home {
+    padding-top: 0 !important;
+  }
+  .openy_lily-based.openy-gated-content.alerts.vy-route-Schedule.tiny-header #gated-content .gated-content-schedule-page .date-filter {
+    position: fixed;
+    top: 126px !important;
+  }
+  .openy_lily-based.openy-gated-content #gated-content .top-menu {
+    z-index: 100 !important;
   }
 }
 @media (min-width: 992px) {

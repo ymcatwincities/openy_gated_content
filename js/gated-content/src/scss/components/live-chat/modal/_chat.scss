@@ -1,5 +1,24 @@
 .gated-content-video-page {
-  .modal-leave-meeting {
+  .personal-training-meeting {
+    .chat {
+      .svg-container {
+        background-color: $black;
+      }
+    }
+    .modal-view-options {
+      .modal-wrapper {
+        .modal-container {
+          .modal-header {
+            .modal-default-button {
+              color: $white;
+            }
+          }
+        }
+      }
+    }
+  }
+  .modal-leave-meeting,
+  .modal-view-options {
     .modal-wrapper {
       .modal-container {
         .modal-header {

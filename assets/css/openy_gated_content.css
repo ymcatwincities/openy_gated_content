@@ -2,11 +2,16 @@
 .openy-gated-content.toolbar-fixed .one-column-clean {
   display: none;
 }
-.openy-gated-content.toolbar-fixed .layout-content #gated-content .gated-content-schedule-page,
-.openy-gated-content.toolbar-fixed .layout-content #gated-content .gated-content-favorites-page,
-.openy-gated-content.toolbar-fixed .layout-content #gated-content .gated-content-categories-page,
-.openy-gated-content.toolbar-fixed .layout-content #gated-content .gated-content-video-page {
-  padding-top: 84px !important;
+.openy-gated-content.toolbar-fixed #gated-content .gated-content-schedule-page,
+.openy-gated-content.toolbar-fixed #gated-content .gated-content-favorites-page,
+.openy-gated-content.toolbar-fixed #gated-content .gated-content-categories-page,
+.openy-gated-content.toolbar-fixed #gated-content .gated-content-category-page,
+.openy-gated-content.toolbar-fixed #gated-content .gated-content-instructor-page,
+.openy-gated-content.toolbar-fixed #gated-content .gated-content-video-page,
+.openy-gated-content.toolbar-fixed #gated-content .gated-content-duration-page,
+.openy-gated-content.toolbar-fixed #gated-content .gated-content-videos-page,
+.openy-gated-content.toolbar-fixed #gated-content .home {
+  padding-top: 84px;
 }
 .openy-gated-content.toolbar-fixed .layout-content #gated-content .top-menu,
 .openy-gated-content.toolbar-fixed .layout-content #gated-content .gated-content-schedule-page .date-filter,
@@ -21,15 +26,34 @@
 .openy-gated-content .layout-content #gated-content .gated-content-schedule-page .calendar .desktop .slot {
   top: auto !important;
 }
-.openy-gated-content .layout-content #gated-content .gated-content-schedule-page,
-.openy-gated-content .layout-content #gated-content .gated-content-favorites-page,
-.openy-gated-content .layout-content #gated-content .gated-content-categories-page,
-.openy-gated-content .layout-content #gated-content .gated-content-video-page {
-  padding-top: 86px !important;
+.openy-gated-content #gated-content .gated-content-schedule-page,
+.openy-gated-content #gated-content .gated-content-favorites-page,
+.openy-gated-content #gated-content .gated-content-categories-page,
+.openy-gated-content #gated-content .gated-content-category-page,
+.openy-gated-content #gated-content .gated-content-instructor-page,
+.openy-gated-content #gated-content .gated-content-duration-page,
+.openy-gated-content #gated-content .gated-content-videos-page,
+.openy-gated-content #gated-content .gated-content-video-page,
+.openy-gated-content #gated-content .home {
+  padding-top: 86px;
 }
 .openy-gated-content .layout-content #gated-content .gated-content-schedule-page .calendar .desktop {
   padding-top: 48px;
 }
 .openy-gated-content .layout-content #gated-content .gated-content-schedule-page .calendar .desktop .content {
   margin-top: 64px;
+}
+
+@media (max-width: 991px) {
+  .openy-gated-content .layout-content #gated-content .gated-content-schedule-page,
+  .openy-gated-content .layout-content #gated-content .gated-content-favorites-page,
+  .openy-gated-content .layout-content #gated-content .gated-content-categories-page,
+  .openy-gated-content .layout-content #gated-content .gated-content-category-page,
+  .openy-gated-content .layout-content #gated-content .gated-content-instructor-page,
+  .openy-gated-content .layout-content #gated-content .gated-content-duration-page,
+  .openy-gated-content .layout-content #gated-content .gated-content-videos-page,
+  .openy-gated-content .layout-content #gated-content .gated-content-video-page,
+  .openy-gated-content .layout-content #gated-content .home {
+    padding-top: 46px;
+  }
 }

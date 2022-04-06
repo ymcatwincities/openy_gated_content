@@ -4,7 +4,11 @@
     :style="{'display': isShowUserNameModal ? 'table' : 'none'}"
     @close="toggleShowUserNameModal"
   >
-    <template #header>Specify your name</template>
+    <template #header>
+      <div class="header-info">
+        <span>Specify your name</span>
+      </div>
+    </template>
     <template #body>
       <div class="select">
         <input
