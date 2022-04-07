@@ -14,7 +14,9 @@ export default {
       const ws = new WebSocket(`${protocol}${serverURL}/${liveChatMeetingId}`);
 
       ws.onopen = () => {
-        context.commit('setRatchetServerConnected', true);
+        context.commit('clearLiveChatMessage');
+        context.commit('resetUnreadLiveChatMessages');
+        context.commit('setRatchetServerConnected', liveChatMeetingId);
       };
 
       ws.onmessage = (event) => {
@@ -68,7 +70,9 @@ export default {
         context.commit('setRatchetServerConnected', false);
         // eslint-disable-next-line no-undef
         _.delay(() => {
-          context.dispatch('initRatchetServer');
+          if (!context.getters.ratchetServerConnected) {
+            context.dispatch('initRatchetServer');
+          }
         }, 1000);
       };
 

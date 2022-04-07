@@ -94,6 +94,8 @@ export default {
       'onlineClientCount',
       'roleIsInstructor',
       'isDisabledLivechat',
+      'ratchetServer',
+      'liveChatMeetingId',
     ]),
   },
   watch: {
@@ -157,8 +159,12 @@ export default {
   mounted() {
     this.chatBody = this.$el.querySelector('.modal-body');
     this.chatBody.addEventListener('scroll', this.handleScroll);
-
-    if (!this.ratchetServerConnected) {
+    // Check if user switched to another virtual meeting.
+    if (this.ratchetServerConnected !== this.liveChatMeetingId) {
+      // Close previously opened connection before initializing a new one.
+      if (this.ratchetServer) {
+        this.ratchetServer.close();
+      }
       this.initRatchetServer();
     }
   },
