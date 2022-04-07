@@ -239,10 +239,6 @@
   }
 
   &.alerts {
-    #openy_alerts_app_header {
-      @include median(margin-top, 85px, 47px);
-    }
-
     #gated-content {
       padding-top: 0;
     }
