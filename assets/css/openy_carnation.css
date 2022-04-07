@@ -9,9 +9,6 @@
 .openy_carnation-based.openy-gated-content #gated-content .home {
   padding-top: 0;
 }
-.openy_carnation-based.openy-gated-content.alerts #gated-content .gated-content-schedule-page .calendar .desktop .slot.dates {
-
-}
 @media (min-width: 1060px) {
   .openy_carnation .desktop-menu .page-head__main-menu .navbar > li > a {
     font-size: 14px;
