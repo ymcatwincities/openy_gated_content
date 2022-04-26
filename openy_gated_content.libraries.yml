@@ -4,6 +4,30 @@ admin_ui_styles:
     theme:
       assets/css/admin_ui_styles.css: {}
 
+openy_lily_styles:
+  version: 0.1
+  css:
+    theme:
+      assets/css/openy_lily.css: {}
+
+openy_carnation_styles:
+  version: 0.1
+  css:
+    theme:
+      assets/css/openy_carnation.css: {}
+
+openy_rose_styles:
+  version: 0.1
+  css:
+    theme:
+      assets/css/openy_rose.css: {}
+
+openy_gated_content_styles:
+  version: 0.1
+  css:
+    theme:
+      assets/css/openy_gated_content.css: {}
+
 openy-rose-menu:
   version: 0.1
   js:

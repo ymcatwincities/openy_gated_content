@@ -4,7 +4,11 @@
     :style="{'display': isShowLeaveMeetingModal ? 'table' : 'none'}"
     @close="toggleShowLeaveMeetingModal"
   >
-    <template #header>Leave meeting?</template>
+    <template #header>
+      <div class="header-info">
+        <span>Leave meeting?</span>
+      </div>
+    </template>
     <template #body>
       <div
         class="button"

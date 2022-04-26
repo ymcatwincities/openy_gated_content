@@ -1,0 +1,76 @@
+<?php
+
+/**
+ * @file
+ * Contains openy_gc_livechat.install.
+ */
+
+use Drupal\Core\Database\Database;
+
+/**
+ * Implements hook_install().
+ */
+function openy_gc_livechat_install() {
+  $spec = [
+    'description' => 'Table for storing chatrooms history in Virtual Y',
+    'fields' => [
+      'cid' => [
+        'description' => 'Chatroom identifier.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ],
+      'title' => [
+        'description' => 'Event series title.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ],
+      'start' => [
+        'description' => 'Event series start datetime.',
+        'type' => 'varchar',
+        'length' => 24,
+        'not null' => TRUE,
+        'default' => '',
+      ],
+      'uid' => [
+        'description' => 'User uid.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ],
+      'username' => [
+        'description' => 'User name.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ],
+      'message' => [
+        'description' => 'Message text send by a user.',
+        'type' => 'text',
+        'size' => 'big',
+        'not null' => FALSE,
+      ],
+      'created' => [
+        'description' => 'A timestamp indicating when message was created.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+    ],
+  ];
+  $schema = Database::getConnection()->schema();
+  $schema->createTable('openy_gc_livechat__chat_history', $spec);
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function openy_gc_livechat_uninstall() {
+  $schema = Database::getConnection()->schema();
+  $schema->dropTable('openy_gc_livechat__chat_history');
+}

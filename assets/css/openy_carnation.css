@@ -1,0 +1,124 @@
+.openy_carnation-based.openy-gated-content #gated-content .gated-content-schedule-page,
+.openy_carnation-based.openy-gated-content #gated-content .gated-content-favorites-page,
+.openy_carnation-based.openy-gated-content #gated-content .gated-content-categories-page,
+.openy_carnation-based.openy-gated-content #gated-content .gated-content-category-page,
+.openy_carnation-based.openy-gated-content #gated-content .gated-content-instructor-page,
+.openy_carnation-based.openy-gated-content #gated-content .gated-content-duration-page,
+.openy_carnation-based.openy-gated-content #gated-content .gated-content-videos-page,
+.openy_carnation-based.openy-gated-content #gated-content .gated-content-video-page,
+.openy_carnation-based.openy-gated-content #gated-content .home {
+  padding-top: 0;
+}
+@media (min-width: 1060px) {
+  .openy_carnation .desktop-menu .page-head__main-menu .navbar > li > a {
+    font-size: 14px;
+    padding-left: 2px;
+    padding-right: 2px;
+  }
+  .openy_carnation .desktop-menu .page-head__main-menu .menu-item-home {
+    max-width: 80px;
+  }
+  .openy_carnation .desktop-menu .page-head__main-menu .menu-item-home a {
+    width: 80px;
+  }
+  .openy_carnation.openy-gated-content.toolbar-fixed #block-openy-carnation-content #gated-content .top-menu {
+    margin-top: 86px;
+  }
+  .openy_carnation.openy-gated-content.toolbar-fixed #block-openy-carnation-content #gated-content .gated-content-favorites-page,
+  .openy_carnation.openy-gated-content.toolbar-fixed #block-openy-carnation-content #gated-content .gated-content-categories-page,
+  .openy_carnation.openy-gated-content.toolbar-fixed #block-openy-carnation-content #gated-content .gated-content-category-page,
+  .openy_carnation.openy-gated-content.toolbar-fixed #block-openy-carnation-content #gated-content .gated-content-instructor-page,
+  .openy_carnation.openy-gated-content.toolbar-fixed #block-openy-carnation-content #gated-content .gated-content-duration-page,
+  .openy_carnation.openy-gated-content.toolbar-fixed #block-openy-carnation-content #gated-content .gated-content-videos-page,
+  .openy_carnation.openy-gated-content.toolbar-fixed #block-openy-carnation-content #gated-content .gated-content-video-page,
+  .openy_carnation.openy-gated-content.toolbar-fixed #block-openy-carnation-content #gated-content .home,
+  .openy_carnation.openy-gated-content.toolbar-fixed #block-openy-carnation-content #gated-content .gated-content-schedule-page .calendar .desktop .content {
+    padding-top: 88px;
+  }
+  .openy_carnation.openy-gated-content.toolbar-fixed #block-openy-carnation-content #gated-content .gated-content-schedule-page {
+    padding-top: 108px;
+  }
+  .openy_carnation.openy-gated-content article,
+  .openy_carnation.openy-gated-content .openy-page-tabs {
+    display: none;
+  }
+  .openy_carnation.openy-gated-content .header-content .logo {
+    flex: 0 0 10%;
+    max-width: 10%;
+  }
+  .openy_carnation.openy-gated-content .header-content .nav-desktop {
+    flex: 0 0 90%;
+    max-width: 90%;
+  }
+  .openy_carnation.openy-gated-content .header-content .nav-desktop .navbar li {
+    margin: 0 5px;
+  }
+  .openy_carnation-based.openy-gated-content #gated-content .top-menu {
+    top: 78px !important;
+  }
+  .openy_carnation-based.openy-gated-content.toolbar-fixed #gated-content {
+    padding-top: 50px;
+  }
+  .openy_carnation-based.openy-gated-content #gated-content .gated-content-schedule-page {
+    padding-top: 114px;
+  }
+}
+
+@media (max-width: 991px) {
+  .openy_carnation-based.openy-gated-content #gated-content .date-filter {
+    top: 125px !important;
+  }
+  .openy_carnation-based.openy-gated-content #gated-content .gated-content-schedule-page {
+    padding-top: 16px;
+  }
+}
+
+@media (max-width: 1059px) {
+  .openy_carnation-based.openy-gated-content .viewport #gated-content .top-menu {
+    top: 78px !important;
+  }
+  .openy_carnation-based.openy-gated-content #gated-content {
+    padding-top: 78px;
+  }
+  .openy_carnation-based.openy-gated-content #gated-content .date-filter {
+    top: 156px;
+  }
+  .openy_carnation-based.openy-gated-content #gated-content .calendar .desktop .slot.dates {
+    top: 204px;
+  }
+  .openy_carnation-based.openy-gated-content.toolbar-fixed #gated-content {
+    padding-top: 88px;
+  }
+  .openy_carnation-based.openy-gated-content.toolbar-fixed #gated-content .top-menu {
+    top: 116px !important;
+  }
+  .openy_carnation-based.openy-gated-content.toolbar-fixed.toolbar-tray-open #gated-content .top-menu {
+    top: 156px !important;
+  }
+  .openy_carnation-based.openy-gated-content.toolbar-fixed #gated-content .date-filter {
+    top: 202px !important;
+  }
+  .openy_carnation-based.openy-gated-content.toolbar-tray-open #gated-content .date-filter {
+    top: 242px !important;
+  }
+  .openy_carnation-based.openy-gated-content.toolbar-tray-open #gated-content .calendar .desktop .slot.dates {
+    top: 288px !important;
+  }
+  .openy_carnation-based.openy-gated-content.toolbar-fixed #gated-content .gated-content-schedule-page {
+    padding-top: 112px;
+  }
+  .openy_carnation-based.openy-gated-content.toolbar-fixed.toolbar-tray-open #gated-content .gated-content-schedule-page {
+    padding-top: 158px;
+  }
+  .openy_carnation-based.openy-gated-content.toolbar-fixed #gated-content .gated-content-schedule-page,
+  .openy_carnation-based.openy-gated-content.toolbar-fixed #gated-content .gated-content-favorites-page,
+  .openy_carnation-based.openy-gated-content.toolbar-fixed #gated-content .gated-content-categories-page,
+  .openy_carnation-based.openy-gated-content.toolbar-fixed #gated-content .gated-content-category-page,
+  .openy_carnation-based.openy-gated-content.toolbar-fixed #gated-content .gated-content-instructor-page,
+  .openy_carnation-based.openy-gated-content.toolbar-fixed #gated-content .gated-content-video-page,
+  .openy_carnation-based.openy-gated-content.toolbar-fixed #gated-content .gated-content-duration-page,
+  .openy_carnation-based.openy-gated-content.toolbar-fixed #gated-content .gated-content-videos-page,
+  .openy_carnation-based.openy-gated-content.toolbar-fixed #gated-content .home {
+    padding-top: 46px;
+  }
+}

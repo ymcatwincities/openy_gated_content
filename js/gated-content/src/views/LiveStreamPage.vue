@@ -5,7 +5,8 @@
     </div>
     <div v-else-if="error">Error loading</div>
     <template v-else>
-      <div class="video-wrapper bg-white">
+      <div class="video-wrapper bg-white"
+           :class="{ 'chat-open': isShowLiveChatModal && !isStreamExpired }">
         <div class="video gated-containerV2 px--20-10 pt-40-20">
           <MediaPlayer
             :media="media"
@@ -13,6 +14,7 @@
             @playerEvent="logPlaybackEvent($event)"
           />
         </div>
+        <ChatRoom v-if="!isStreamExpired && liveChatModuleEnabled"></ChatRoom>
       </div>
       <div class="video-footer-wrapper bg-white">
         <div class="video-footer gated-containerV2 px--20-10 py-40-20 text-black">
@@ -25,14 +27,25 @@
               class="rounded-border border-concrete"
             ></AddToFavorite>
             <AddToCalendar :event="event"></AddToCalendar>
-            <div class="timer" :class="{live: isOnAir}">
-              <template v-if="isOnAir">
+            <div class="timer" :class="{live: !isStreamExpired}">
+              <template v-if="!isStreamExpired">
                 LIVE!
               </template>
               <template v-else>
                 Starts in {{ startsIn }}
               </template>
             </div>
+            <ChatRoomItem v-if="
+              !isStreamExpired &&
+              liveChatModuleEnabled &&
+              !isDisabledLivechat"
+            ></ChatRoomItem>
+            <ChatRoomItemRestart v-if="
+              !isStreamExpired &&
+              liveChatModuleEnabled &&
+              isDisabledLivechat &&
+              roleIsInstructor"
+            ></ChatRoomItemRestart>
           </div>
           <div class="verdana-14-12 text-thunder">
             <div class="video-footer__block">
@@ -104,7 +117,9 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import client from '@/client';
+import dayjs from 'dayjs';
 import AddToFavorite from '@/components/AddToFavorite.vue';
 import Spinner from '@/components/Spinner.vue';
 import MediaPlayer from '@/components/MediaPlayer.vue';
@@ -115,6 +130,9 @@ import { JsonApiCombineMixin } from '@/mixins/JsonApiCombineMixin';
 import { EventMixin } from '@/mixins/EventMixin';
 import { SeriesEventMixin } from '@/mixins/SeriesEventMixin';
 import SvgIcon from '@/components/SvgIcon.vue';
+import ChatRoom from '@/components/live-chat/modal/ChatRoom.vue';
+import ChatRoomItem from '@/components/live-chat/live-stream/ChatRoomItem.vue';
+import ChatRoomItemRestart from '@/components/live-chat/live-stream/ChatRoomItemRestart.vue';
 
 export default {
   name: 'LiveStreamPage',
@@ -127,6 +145,9 @@ export default {
     AddToCalendar,
     Spinner,
     CategoryLinks,
+    ChatRoom,
+    ChatRoomItem,
+    ChatRoomItemRestart,
   },
   props: {
     id: {
@@ -138,8 +159,11 @@ export default {
     return {
       loading: true,
       error: false,
+      liveChatModuleEnabled: false,
       video: null,
       response: null,
+      liveChatData: null,
+      isStreamExpired: true,
       params: [
         'field_ls_category',
         'field_ls_media',
@@ -155,6 +179,11 @@ export default {
     };
   },
   computed: {
+    ...mapGetters([
+      'isShowLiveChatModal',
+      'roleIsInstructor',
+      'isDisabledLivechat',
+    ]),
     // This values most of all from parent (series), but can be overridden by item,
     // so ve need to check this here and use correct value.
     media() {
@@ -182,6 +211,17 @@ export default {
       if (this.params) {
         params.include = this.params.join(',');
       }
+
+      this.liveChatModuleEnabled = window.drupalSettings.isLiveChatModuleEnabled;
+
+      if (this.liveChatModuleEnabled) {
+        client
+          .get('livechat/get-livechat-data')
+          .then((response) => {
+            this.liveChatData = response.data;
+          });
+      }
+
       client
         .get(`jsonapi/eventinstance/live_stream/${this.id}`, { params })
         .then((response) => {
@@ -190,17 +230,70 @@ export default {
           this.loading = false;
         }).then(() => {
           this.logPlaybackEvent('entityView');
+        }).then(() => {
+          if (this.liveChatModuleEnabled) {
+            let isDisabledLivechat = false;
+            // eslint-disable-next-line no-restricted-syntax, prefer-const
+            for (let i in this.liveChatData.disabledLivechats) {
+              if (this.liveChatData.disabledLivechats[i] === this.id) {
+                isDisabledLivechat = true;
+              }
+            }
+            this.$store.dispatch('setLiveChatData', {
+              liveChatMeetingId: this.id,
+              liveChatMeetingTitle: this.event.title,
+              liveChatMeetingStart: this.event.start,
+              liveChatMeetingDate: this.$dayjs.date(this.video.attributes.date.end_value),
+              liveChatLocalName: this.liveChatData.name,
+              liveChatUserId: this.liveChatData.user_id,
+              liveChatRatchetConfigs: this.liveChatData.ratchet,
+              roleInstructor: this.liveChatData.isInstructorRole,
+              disabledLivechat: isDisabledLivechat,
+            }).then(() => {
+              this.expiredStream();
+            });
+          }
         })
         .catch((error) => {
           this.error = true;
           this.loading = false;
-          console.error(error);
           throw error;
         });
+
+      setInterval(() => {
+        this.expiredStream();
+      }, 5000);
+    },
+    expiredStream() {
+      const currentDate = dayjs().toDate();
+      const startDate = dayjs(this.video.attributes.date.value).toDate();
+      const endDate = dayjs(this.video.attributes.date.end_value).toDate();
+
+      this.isStreamExpired = !(currentDate <= endDate && currentDate >= startDate);
+    },
+    handleResize() {
+      if (this.$el.querySelector('.modal-mask')) {
+        const height = window.innerHeight;
+        const width = window.innerWidth;
+        this.$el.querySelector('.modal-mask.modal-leave-meeting').style.height = `${height}px`;
+
+        // eslint-disable-next-line no-restricted-globals
+        if ((width < 426) || (screen.width > 550 && width < 1024)) {
+          this.$el.querySelector('.modal-mask.modal-chat').style.height = `${height * 0.6}px`;
+        } else {
+          this.$el.querySelector('.modal-mask.modal-chat').style.height = `${height}px`;
+        }
+      }
     },
     logPlaybackEvent(eventType) {
       this.$log.trackEvent(eventType, 'series', 'live_stream', this.video.attributes.drupal_internal__id);
     },
+  },
+  destroyed() {
+    window.removeEventListener('resize', this.handleResize);
+  },
+  mounted() {
+    window.addEventListener('resize', this.handleResize);
   },
 };
 </script>

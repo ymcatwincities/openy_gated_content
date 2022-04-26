@@ -104,8 +104,14 @@ function openy_gc_personal_training_openy_gated_content_list_events_alter(&$resu
       'title' => $item['title'],
       'host_name' => $item['name'],
       'date' => [
-        'value' => (new DrupalDateTime($item['date__value']))->format('c'),
-        'end_value' => (new DrupalDateTime($item['date__end_value']))->format('c'),
+        'value' => (new DrupalDateTime(
+          $item['date__value'],
+          DateTimeItemInterface::STORAGE_TIMEZONE
+        ))->format('c'),
+        'end_value' => (new DrupalDateTime(
+          $item['date__end_value'],
+          DateTimeItemInterface::STORAGE_TIMEZONE
+        ))->format('c'),
       ],
     ];
   }

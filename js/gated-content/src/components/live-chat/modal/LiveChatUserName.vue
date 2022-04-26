@@ -1,9 +1,11 @@
 <template>
   <Modal
     class="modal-leave-meeting text-black"
-    :style="{'display': isShowUserNameModal ? 'table' : 'none'}"
-    @close="toggleShowUserNameModal"
-  >
+    :class="{'user-config': isOpenLiveChatConfigNameModal}"
+    :style="{'display': isShowLiveChatUserNameModal || isOpenLiveChatConfigNameModal ?
+             'table' : 'none'}"
+    @close="toggleShowLiveChatUserNameModal(false)">
+
     <template #header>
       <div class="header-info">
         <span>Specify your name</span>
@@ -14,19 +16,18 @@
         <input
           type="text"
           class="form-control w-100"
-          id="meetingUserNameInput"
-          v-model="name"
-        >
+          id="meetingLiveChatUserNameInput"
+          v-model="liveChatName">
         <span v-if="error" class="text-red verdana-14-12">{{ error }}</span>
       </div>
       <button
         @click="submit"
         class="gc-button"
-        :disabled="!name"
-      >
+        :disabled="!liveChatName">
         Next
       </button>
     </template>
+
   </Modal>
 </template>
 <script>
@@ -39,34 +40,40 @@ export default {
   data() {
     return {
       error: null,
-      name: '',
+      liveChatName: '',
     };
   },
   computed: {
     ...mapGetters([
-      'isShowUserNameModal',
+      'isShowLiveChatUserNameModal',
+      'isOpenLiveChatConfigNameModal',
     ]),
   },
   created() {
     client
-      .get('personal-training/get-user-name')
+      .get('livechat/get-livechat-data')
       .then((response) => {
-        this.name = response.data.name;
+        this.liveChatName = response.data.name;
       });
   },
   methods: {
     ...mapActions([
-      'toggleShowUserNameModal',
-      'toggleShowJoinOptionsModal',
-      'updateLocalName',
+      'toggleShowLiveChatModal',
+      'toggleShowLiveChatUserNameModal',
+      'updateLiveChatLocalName',
+      'toggleShowLiveChatConfigNameModal',
     ]),
     async submit() {
       this.error = '';
       await this.$store
-        .dispatch('updateLocalName', this.name)
+        .dispatch('updateLiveChatLocalName', this.liveChatName)
         .then(() => {
-          this.toggleShowUserNameModal();
-          this.toggleShowJoinOptionsModal();
+          if (this.isOpenLiveChatConfigNameModal) {
+            this.toggleShowLiveChatConfigNameModal();
+          } else {
+            this.toggleShowLiveChatModal();
+            this.toggleShowLiveChatUserNameModal(true);
+          }
         })
         .catch((error) => {
           this.error = error.response.data.message;
