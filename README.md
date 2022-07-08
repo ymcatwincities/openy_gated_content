@@ -2,7 +2,7 @@
 
 Virtual Y is a package for Open Y and consists of features, needed to organize gated content for Y clients.
 
-Active development is currently happening at [fivejars/openy_gated_content](https://github.com/fivejars/openy_gated_content). Pull requests should be submitted there. They will be pulled into this repo as they are reviewed and released.
+Active development is currently happening at [YUSA fork](https://github.com/YCloudYUSA/yusaopeny_gated_content). Pull requests should be submitted there. They will be pulled into this repo as they are reviewed and released.
 
 ## Server requirements
 In order to work Virtual Y requires HTTP server to allow
